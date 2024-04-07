@@ -54,6 +54,17 @@
   --bs-light: #e9ecef;
   --bs-dark: #344767;
   --bs-white: #fff;
+  --first-color: #003473;
+  --first-color-hover:#01234d;
+  --second-color: #FF284A;
+  --second-color-hover: #af2136;
+  --third-color: #FFD200;
+  --first-color-light: #8fb5e4;
+  --white-color: #F7F6FB;
+  --black-color:#232E33;
+  --input-file-color: grey;
+  --input-file-hover-color: black;
+  --green-color:#0F7300 ;
   --bs-primary-rgb: 203, 12, 159;
   --bs-secondary-rgb: 131, 146, 171;
   --bs-success-rgb: 130, 214, 22;
@@ -2772,9 +2783,9 @@ progress {
 .form-control:focus {
   color: #495057;
   background-color: #fff;
-  border-color: #e293d3;
+  border-color: var(--first-color);
   outline: 0;
-  box-shadow: 0 0 0 2px #e9aede;
+  box-shadow: 0 0 0 2px var(--first-color);
 }
 
 .form-control::-webkit-date-and-time-value {
@@ -2930,9 +2941,9 @@ textarea.form-control-lg {
 }
 
 .form-select:focus {
-  border-color: #e293d3;
+  border-color: var(--first-color);
   outline: 0;
-  box-shadow: 0 0 0 2px #e9aede;
+  box-shadow: 0 0 0 2px var(--first-color);
 }
 
 .form-select[multiple],
@@ -21738,7 +21749,7 @@ label,
 }
 
 .bg-gradient-primary {
-  background-image: linear-gradient(310deg, #7928CA 0%, #FF0080 100%);
+  background-image: linear-gradient(310deg, var(--first-color) 0%, #FF0080 100%);
 }
 
 .bg-gradient-secondary {
@@ -21766,7 +21777,7 @@ label,
 }
 
 .bg-gradient-dark {
-  background-image: linear-gradient(310deg, #141727 0%, #3A416F 100%);
+  background-image: linear-gradient(310deg, #141727 0%, var(--first-color) 100%);
 }
 
 .bg-gradient-faded-primary {
@@ -23332,7 +23343,7 @@ html {
 }
 
 .navbar-vertical .navbar-nav>.nav-item .nav-link.active .icon {
-  background-image: linear-gradient(310deg, #cb0c9f 0%, #cb0c9f 100%);
+  background-image: linear-gradient(310deg, #cb0c9f 0%, var(--first-color) 100%);
 }
 
 .navbar-vertical .navbar-nav>.nav-item .nav-link.active .icon svg .color-background,
@@ -26694,5 +26705,94 @@ pre[class*="language-"] {
     overflow: auto !important;
   }
 }
+
+.btn-band{
+    
+  font-size: 1.5rem;
+  padding: 5px;
+  margin: 5px;
+  border-radius: 5px;
+  background-color: var(--first-color);
+  color: white;
+}
+
+.btn-adress{
+
+  font-size: 1.5rem;
+  padding: 5px;
+  margin: 5px;
+  border-radius: 5px;
+  background-color: var(--first-color);
+  color: white;
+}
+.btn-vend{
+    
+  font-size: 1.5rem;
+  padding: 5px;
+  margin: 5px;
+  border-radius: 5px;
+  background-color: var(--green-color);
+  color: white;
+}
+
+.btn-nvend{
+  
+  font-size: 1.5rem;
+  padding: 5px;
+  margin: 5px;
+  border-radius: 5px;
+  background-color: var(--second-color);
+  color: white;
+}
+
+.btn-sep{
+  
+  font-size: 1.5rem;
+  padding: 5px;
+  margin: 5px;
+  border-radius: 5px;
+  background-color: var(--first-color);
+  color: white;
+}
+
+.btn-total{
+  
+  font-size: 1.5rem;
+  padding: 5px;
+  margin: 5px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  background-color: var(--first-color);
+  color: white;
+}
+
+  /* Estilos para la etiqueta del input de tipo file */
+  .label-img {
+    width: 100%;
+    height: 100px; 
+    border: 2px dashed var(--input-file-color);
+    border-radius: 5px;
+    display: block;
+    padding: 1.2em;
+    transition: border 300ms ease;
+    cursor: pointer;
+    text-align: center;
+  }
+
+  /* Estilos para el grupo de formularios */
+  .form-group {
+    /* background: tomato; */
+    padding: 1em;
+    /* margin: 1em; */
+  }
+
+  /* Estilos para el input de tipo file */
+  input[type=file] {
+    outline: 0;
+    opacity: 0;
+    pointer-events: none;
+    user-select: none;
+  }
 
 /*# sourceMappingURL=dashboard-free.css.map */
