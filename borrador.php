@@ -76,7 +76,7 @@
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link active" href="../../pages/proyectos/index.html">
+          <a class="nav-link active" href="../projects/index.php">
             <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
               <svg width="12px" height="12px" viewBox="0 0 42 42" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <title>office</title>
@@ -269,7 +269,18 @@
     <div class="sidenav-footer mx-3 ">
       <div class="card card-background shadow-none card-background-mask-secondary" id="sidenavCard">
         <div class="full-background" style="background-image: url('../../assets/img/curved-images/white-curved.jpg')"></div>
+        <div class="card-body text-start p-3 w-100">
+          <div class="icon icon-shape icon-sm bg-white shadow text-center mb-3 d-flex align-items-center justify-content-center border-radius-md">
+            <i class="ni ni-diamond text-dark text-gradient text-lg top-0" aria-hidden="true" id="sidenavCardIcon"></i>
+          </div>
+          <div class="docs-info">
+            <h6 class="text-white up mb-0">Need help?</h6>
+            <p class="text-xs font-weight-bold">Please check our docs</p>
+            <a href="https://www.creative-tim.com/learning-lab/bootstrap/license/soft-ui-dashboard" target="_blank" class="btn btn-white btn-sm w-100 mb-0">Documentation</a>
+          </div>
+        </div>
       </div>
+      <a class="btn bg-gradient-primary mt-3 w-100" href="https://www.creative-tim.com/product/soft-ui-dashboard-pro?ref=sidebarfree">Upgrade to pro</a>
     </div>
   </aside>
   <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg ">
@@ -279,9 +290,10 @@
         <nav aria-label="breadcrumb">
           <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
             <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="../dashboard.html">Inicio</a></li>
-            <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Proyectos</li>
+            <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="../dashboard.html">Proyectos</a></li>
+            <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Editar proyecto</li>
           </ol>
-          <h6 class="font-weight-bolder mb-0">PROYECTOS</h6>
+          <h6 class="font-weight-bolder mb-0">EDITAR PROYECTO</h6>
         </nav>
         <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
           <div class="ms-md-auto pe-md-3 d-flex align-items-center">
@@ -292,7 +304,7 @@
           </div>
           <ul class="navbar-nav  justify-content-end">
             <li class="nav-item d-flex align-items-center">
-              <a class="btn btn-outline-success btn-sm mb-0 me-3" target="_blank" href="./add.php">AGREGAR PROYECTO</a>
+              <a class="btn btn-outline-success btn-sm mb-0 me-3" target="_blank" href="https://www.creative-tim.com/builder?ref=navbar-soft-ui-dashboard">AGREGAR PROYECTO</a>
             </li>
             <li class="nav-item d-flex align-items-center">
               <a href="javascript:;" class="nav-link text-body font-weight-bold px-0">
@@ -395,13 +407,10 @@
     <!-- End Navbar -->
     <div class="container py-4">
 
-      <!-- RENDER -->
-      <div class="row mt-4" id="card-project">
 
-        <!-- CARD PROYECTOS -->
-      </div>
+    <!-- CONTENIDO -->
 
-      <footer class="footer pt-3  ">
+    <footer class="footer pt-3  ">
         <div class="container-fluid">
           <div class="row align-items-center justify-content-lg-between">
             <div class="col-lg-6 mb-lg-0 mb-4">
@@ -473,6 +482,9 @@
       </div>
     </div>
   </div>
+  <!-- SWEET ALERT -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
   <!--   Core JS Files   -->
   <script src="../../assets/js/core/popper.min.js"></script>
   <script src="../../assets/js/core/bootstrap.min.js"></script>
@@ -480,207 +492,10 @@
   <script src="../../assets/js/plugins/smooth-scrollbar.min.js"></script>
   <script src="../../assets/js/plugins/chartjs.min.js"></script>
   <script src="../../assets/js/globalFunctions.js"></script>
-  <script>
-
-    const global = new FunGlobal();
-
-    const $ = id => global.$(id);
-    const $All = id => global.$All(id);
-
-    const cardProject = $("#card-project");
-    const inCodigo = $("#in-codigo");
-
-    let dataProject;            //VARIABLE QUE ALMACENA LOS DATOS OBTENIDOS DE LA CONSULTA
-    
-    let timer;
-
-    /**
-     * FUNCION QUE CONTIENE EL RENDER DE LOS CARDS
-     */
-     async function renderCard(item){
-        
-        let newCard = ``;
-    
-        let newImage = item.imagen == null ? "NoImage.jpg" : item.imagen;
-
-        let code = btoa(item.idproyecto);   //=>CODFICA EL VALOR EN BASE 64
-        let name = btoa(item.denominacion);   //=>CODFICA EL VALOR
-
-        let options = item.l_total == 0 ? `
-            <li><a class="dropdown-item border-radius-md" href='./set_project.php?id=${code}'><img src="../../assets/img/iconos/lapiz-blue.png" style="width: 24px;"> Editar</a></li>
-            <li><a class="dropdown-item border-radius-md" href="./delete_project.php?id=${code}"><img src="../../assets/img/iconos/delete.png"style="width: 24px;"> Eliminar</a></li>` :
-            `<li><a class="dropdown-item border-radius-md" href='./set_project.php?id=${code}'><img src="../../assets/img/iconos/lapiz-blue.png" style="width: 24px;"> Editar</a></li>`;
-
-            newCard = `
-          <div class="col-lg-6 mb-lg-0 mb-4 mt-4">
-            <div class="card">
-              <div class="col-lg-12 col-12 my-auto text-end p-2">
-                <div class="dropdown float-lg-end pe-4" style="z-index: 100;">
-                  <a class="cursor-pointer" id="dropdownTable" data-bs-toggle="dropdown" aria-expanded="false">
-                    <i class="fa fa-ellipsis-v text-secondary"></i>
-                  </a>
-                  <ul class="dropdown-menu px-2 py-3 ms-sm-n4 ms-n5" aria-labelledby="dropdownTable">
-                    ${options}
-                    <li><a class="dropdown-item border-radius-md "href="./${item.idproyecto}"><img src="../../assets/img/iconos/planet-earth.png" style="width: 24px;"> Mapa</a></li>
-                  </ul>
-                </div>
-              </div>
-              <div class="card-body" style="padding: 50px">
-                <div class="row">
-                  <div class="col-lg-6">
-                    <div class="d-flex flex-column h-100">
-                      <p class="mb-1 pt-2 text-bold">${item.denominacion}</p>
-                      <h5 class="font-weight-bolder"></h5>
-                      <p class="card-text"><strong><i class="bi bi-signpost-2 btn-adress"></i> </strong>${item.direccion}</p>
-                      <p class="card-text"><i class="bi bi-flag btn-band"></i>${item.distrito}-${item.provincia}-${item.departamento}</p>
-                      <p style="margin-top: 3rem; margin-bottom: 1rem;"><i class="bi bi-building-fill-slash btn-nvend"></i>${item.l_noVendidos} <i class="bi bi-building-fill-lock btn-sep"></i>${item.l_separados} 
-                      <i class="bi bi-building-fill-check btn-vend"></i>${item.l_vendidos} <i class="bi bi-houses-fill btn-total"></i>${item.l_total}</p>
-                      <a class="text-body text-sm font-weight-bold mb-0 icon-move-right mt-auto" href="../activos/index_asset.php?id=${code}&name=${name}">
-                        Ver más
-                        <i class="fas fa-arrow-right text-sm ms-1" aria-hidden="true"></i>
-                      </a>
-                    </div>
-                  </div>
-                  <div class="col-lg-5 ms-auto text-center mt-5 mt-lg-0">
-                    
-                    <span>${item.codigo}</span>
-                    <div class="bg-gradient-primary border-radius-lg h-100">
-                      <img src="../../assets/img/shapes/waves-white.svg" class="position-absolute h-100 w-50 top-0 d-lg-block d-none" alt="waves">
-                      
-                      <div class="position-relative d-flex align-items-center justify-content-center h-100">
-                        <img class="w-100 position-relative z-index-2 pt-4" src="../../media/logos/${newImage}" alt="${item.imagen}">
-                        </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-            `;
-            cardProject.innerHTML += newCard;
-
-    }
-
-    /**
-     * RENDERIZA EL CARD DE ERROR (ALERTA)
-     */
-    async function renderCardError(header,body){
-        let newCardErr = ``;
-
-        newCardErr = `
-            <div class="alert alert-danger m-4 text-white" role="alert">
-                <strong class="text-white">${header}</strong> ${body}
-            </div>
-            `;
-            cardProject.innerHTML += newCardErr;   
-    }
-
-    /**
-     * Función para listar los proyectos
-     */
-    async function listProyects(){
-
-      try{
-        
-        let url = `../../controllers/project.controller.php`
-        let params = new FormData();
-
-        params.append("action","listProject");
-
-        let results = await global.sendAction(url, params);
-
-        if(results){
-
-          dataProject = results;
-
-            if(dataProject.length > 0){
-
-              cardProject.innerHTML = "";
-
-              for(let project of dataProject){
-                console.log(project);
-
-                await renderCard(project);
-              }
-              
-            }else{
-              renderCardError("Hemos tenido porblemas con la conexión","Recarga la página o vuelve a intentarlo después.")
-          } 
-        }
-
-      }catch(e){
-        console.error(e);
-      }
-    }
-    
-    
-    /**
-     * Función para renderizar los cards según su código
-     */
-    async function searchProject(code){
-
-      try{
-
-        let url = `../../Controllers/project.controller.php`;
-        let params = new FormData();
-  
-        params.append("action","listProjectCode");
-        params.append("codigo",code);
-
-        results = await global.sendAction(url ,params);
-
-        if(results){
-
-          if(results.length > 0){
-
-            for(result of results){
-
-            //console.log(data);
-            await renderCard(result);
-
-            }
-          }else{
-
-            await renderCardError("El código ingresado no existe","Asgurate de haber el escrito el código correcto.")
-          }
-        }
-      }
-      catch(e){
-        console.error(e);
-      }
-    }
-
-
-    /**
-     * Evento input en la caja de texto "in-codigo" => Ejecuta el debounce
-     */
-    $("#in-codigo").addEventListener("input",()=>{
-
-        clearTimeout(timer); //RESETEA EL TIEMPO
-
-        timer = setTimeout(()=>{ //CONSIGURA EL TIEMPO
-
-            let codigo = $("#in-codigo").value;
-
-            if(codigo != ""){  //SI EL INPUT ESTÀ VACÍO
-
-                cardProject.innerHTML = "";
-                searchProject(codigo);
-            }else{
-                listProyects();
-            }
-
-        }, 500);
-    });
-
-
-
-    listProyects();
-
-
-    
-
-  </script>
+  <script src="../../assets/js/sweetAlert.js"></script>
+  <script src="../../assets/js/projects/interactionForms.js"></script>
+  <script src="../../assets/js/renderUbigeo.js"></script>
+  <script></script>
   <script>
     var win = navigator.platform.indexOf('Win') > -1;
     if (win && document.querySelector('#sidenav-scrollbar')) {

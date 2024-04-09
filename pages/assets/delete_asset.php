@@ -76,7 +76,7 @@
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link active" href="../../pages/proyectos/index.html">
+          <a class="nav-link active" href="../projects/index.php">
             <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
               <svg width="12px" height="12px" viewBox="0 0 42 42" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <title>office</title>
@@ -290,9 +290,10 @@
         <nav aria-label="breadcrumb">
           <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
             <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="../dashboard.html">Inicio</a></li>
-            <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Proyectos</li>
+            <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="../dashboard.html">Proyectos</a></li>
+            <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Editar proyecto</li>
           </ol>
-          <h6 class="font-weight-bolder mb-0">PROYECTOS</h6>
+          <h6 class="font-weight-bolder mb-0">EDITAR PROYECTO</h6>
         </nav>
         <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
           <div class="ms-md-auto pe-md-3 d-flex align-items-center">
@@ -412,190 +413,92 @@
             <div class="card">
               <div class="card-body" style="padding: 50px">
                 <div class="row">
-                  <div class="col-lg-6">
+                  <div class="col-lg-12">
                     <div class="d-flex flex-column h-100">
                       <form class="row needs-validation" id="form-add-project" novalidate>
-                            <div class="row">
+                        <div class="row">
+                          <div class="col-md-12">
+
+                            <!-- REGISTRO -->
+                              <div  class="card-title m-4"><h2 style="text-align: center; text-transform: uppercase;"><strong  id="card-title"></strong></h2></div>
+                              <hr>
+                              <div class="row mt-4">
                                 <div class="col-md-6">
-
-                                    <!-- DATOS GENERALES -->
-                                    
-                                    <!-- DEPARTEMENTO -->
-                                    <div class="mt-4">
-                                      <label for="iddepartamento" class="form-label">Departamento</label>
-                                        <select class="form-select custom-select-scroll" id="iddepartamento" required>
-                                            <option selected disabled value="">Departamento</option>
-                                        </select>
-                                        <div class="invalid-feedback">
-                                            Necesitas escojer un departamento.
-                                        </div>
-                                        <div class="valid-feedback">
-                                            Departamento escojido correctamente.
-                                        </div>
-                                    </div>
-    
-                                    <!-- PROVINCIA -->
-                                    <div class="mt-4">
-                                        <label for="idprovincia" class="form-label">Provincia</label>
-                                        <select class="form-select custom-select-scroll" id="idprovincia" required>
-                                            <option selected disabled value="">Provincia</option>
-                                        </select>
-                                        <div class="invalid-feedback">
-                                            Necesitas escojer una provincia.
-                                        </div>
-                                        <div class="valid-feedback">
-                                            Provincia escojida correctamente.
-                                        </div>
-                                    </div>
-    
-                                    <!-- DISTRITO -->
-                                    <div class="mt-4">
-                                        <label for="iddistrito" class="form-label">Distrito</label>
-                                        <select class="form-select custom-select-scroll" id="iddistrito" required>
-                                            <option selected disabled value="">Distrito</option>
-                                        </select>
-                                        <div class="invalid-feedback">
-                                            Necesitas escojer un distrito.
-                                        </div>
-                                        <div class="valid-feedback">
-                                            Distrito escojido correctamente.
-                                        </div>
-                                    </div>
-
-                                    <!-- IDDIRECCIÓN -->
-                                    <div class="mt-4">
-                                        <label for="iddireccion" class="form-label">Sede</label>
-                                        <select class="form-select custom-select-scroll" id="iddireccion" required>
-                                            <option selected disabled value="">Sede</option>                                            
-                                        </select>
-                                        <div class="invalid-feedback">
-                                            Necesitas escojer una sede.
-                                        </div>
-                                        <div class="valid-feedback">
-                                            Sede escojida correctament
-                                        </div>
-                                    </div>
-
-                                    <!-- CODIGO -->
-                                    <div class="mt-4">
-                                        <label for="codigo" class="form-label">Código</label>
-                                        <input type="text" class="form-control" id="codigo" placeholder="Código" required autofocus>
-                                        <div class="invalid-feedback">
-                                            Necesitas ingresar un código.
-                                        </div>
-                                        <div class="valid-feedback">
-                                            Código registrado correctamente.
-                                        </div>
-                                    </div>
-    
-                                    <!-- DENOMINACÓN -->
-                                    <div class="mt-4">
-                                        <label for="denominacion" class="form-label">Denominación</label>
-                                        <input type="text" class="form-control" id="denominacion" placeholder="Denominación" readonly required>
-                                        <div class="invalid-feedback">
-                                            Necesitas ingresar una denominación.
-                                        </div>
-                                        <div class="valid-feedback">
-                                            Denominación ingresada correctamente.
-                                        </div>
-                                    </div>
-    
-                                    <!-- DIRECCIÓN -->
-                                    <div class="mt-4">
-                                        <label for="direccion" class="form-label">Dirección</label>
-                                        <input type="text" class="form-control" id="direccion" placeholder="Dirección" readonly required>
-                                        <div class="invalid-feedback">
-                                            Necesitas ingresar una dirección.
-                                        </div>
-                                        <div class="valid-feedback">
-                                            Dirección ingresada correctamente.
-                                        </div>
-                                    </div>
-    
-    
-                                    <!-- IMAGEN -->
-                                    <div class="form-group">
-                                        <label for="in-image" class="label-img">
-                                            <i class="material-icons"></i>
-                                            <span class="title">Agregar imagen</span>
-                                            <input type="file" accept=".jpg" id="in-image">
-                                        </label>
-                                    </div>
+                                  <h3><strong>Código:</strong></h3>
                                 </div>
-    
                                 <div class="col-md-6">
+                                    <h4 id="codigo"> ---- </h4>
+                                </div>
+                              </div>
 
-                                    <!-- UBICACIÓN Y MEDIDAS-->
-    
-                                    <!-- LATITUD -->
-                                    <div class="mt-4">
-                                        <label for="latitud" class="form-label">Latitud</label>                                  
-                                        <input type="text" class="form-control" id="latitud">
-                                        <div class="valid-feedback">
-                                            <!-- -- -->
-                                        </div>
-                                    </div>
-        
-                                    <!-- LONGITUD -->
-                                    <div class="mt-4">
-                                        <label for="longitud" class="form-label">Longitud</label>
-                                        <input type="text" class="form-control" id="longitud">
-                                        <div class="valid-feedback">
-                                            <!-- -- -->
-                                        </div>
-                                    </div>
-        
-                                    <!-- PERÍMETRO -->                                    
-                                    <div class="mt-4" id="perim">
-                                        <label for="perimetro" class="form-label">Perímetro (Coordenadas)</label>
-                                        <hr>
-                                        <div id="patern">
-                                            <div class="row">
-                                                <div class="col-md-11">
-                                                    <div class="row">
-                                                        <div class="col-md-6">
-                                                            <input type="text" class="form-control perim-key" name="clave" id="clave">
-                                                        </div>
-                                                        <div class="col-md-6">
-                                                            <input type="text" class="form-control perim-value" name="valor" id="valor">
-                                                        </div>
-                                                    </div>                                               
-                                                </div>
-                                                <div class="col-md-1">
-                                                    <button type="button" class="btn btn-success pluss" id="add-textBox">+</button>
-                                                </div>
-                                            </div>
-                                            <div class="valid-feedback">
-                                                <!-- -- -->
-                                            </div>
-                                        </div>
-                                      </div>
-                                    <div class="m-4 col-md-12">
-                                        <div class="d-grid">
+                              <div class="row">
+                                  <div class="col-md-6">
+                                    <h3><strong>Denominación: </strong></h3>
+                                  </div>
+                                  <div class="col-md-6">
+                                    <h4 id="denominacion"> --- </h4>
+                                  </div>                                    
+                              </div>
 
-                                            <button class="btn btn-success" type="submit" id="guardar" disabled>Guardar</button>
-                                        </div>
-                                    </div>
-                                    
-                                </div>                                    
-                            </div>
-                        </form>
-                    </div>
-                  </div>
-                  <div class="col-lg-5 ms-auto text-center mt-5 mt-lg-0">
-                    
-                    <div class="bg-gradient-primary border-radius-lg h-50" style="display: flex; ">
-                      
-                      <div class="position-relative d-flex align-items-center justify-content-center h-100">
-                        <img class="w-100 position-relative z-index-2 pt-4" id="file-view" src="" alt="">
+                              <div class="row">
+                                  <div class="col-md-6">
+                                    <h3><strong>Ubigeo :</strong></h3>
+                                  </div>
+                                  <div class="col-md-6">
+                                    <h4 id="ubigeo"> ---- </h4>
+                                  </div>
+                              </div>
+                            
+                              <div class="row">
+                                <div class="col-md-6">
+                                    <h3><strong>Latitud :</strong></h3>
+                                </div>
+                                <div class="col-md-6">
+                                    <h4 id="latitud"> ---- </h4>
+                                </div>
+                              </div>
+                            
+                              <div class="row">
+                                <div class="col-md-6">
+                                    <h3><strong>Longitud: </strong></h3>
+                                </div>
+                                <div class="col-md-6">
+                                    <h4 id="longitud"> ---- </h4>
+                                </div>
+                              </div>
+
+                              <div class="row">
+                                <div class="col-md-6">
+                                    <h3><strong>Perímetro: </strong></h3>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="m-4" id="perimetro">
+
+                                    </div>                                     
+                                </div>
+                              </div>
+                              <div class="m-4" style="display:flex; justify-content: center;">
+                                <h4 class="ask-footer text-danger">¿Deseas eliminarlo?</h4>
+                              </div>
+                              <div style ="display: flex; justify-content: center;">
+                                <div>
+                                  <div class="btn-group">                                    
+                                      <button type="button" class="btn btn-danger" id="eliminar">Eliminar</button>
+                                      <button type="button" class="btn btn-success" id="cancelar">Cancelar</button>
+                                  </div>
+                                </div>
+                                
+                              </div>
+                          </div>                                    
                         </div>
+                      </form>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-      </div>     
+      </div>       
 
 
       <footer class="footer pt-3  ">
@@ -681,216 +584,139 @@
   <script src="../../assets/js/plugins/chartjs.min.js"></script>
   <script src="../../assets/js/globalFunctions.js"></script>
   <script src="../../assets/js/sweetAlert.js"></script>
-  <script src="../../assets/js/projects/interactionForms.js"></script>
-  <script src="../../assets/js/renderUbigeo.js"></script>
   <script>
 
-    const global = new FunGlobal();
-    const sAlert = new Alert();
+  const global = new FunGlobal();
+  const sAlert = new Alert();
 
-    const $ = id => global.$(id);
-    const $All = id => global.$All(id);
+  const $ = id => global.$(id);
+  const $All = id => global.$All(id);
 
-    const cardProject = $("#card-project");
-    const inCodigo = $("#in-codigo");
+  //OBTIENE EL ID DEL URL
+  const stringQuery = window.location.search;
 
-    let dataProject;            //VARIABLE QUE ALMACENA LOS DATOS OBTENIDOS DE LA CONSULTA
-    
-    let timer;
-    
-    /**
-     * FUNCIÓN PARA OBETENR LOS DATOS DEL PROYECTO
-     */
-    async function getData(){
-    
-      try{
+  const url = new URLSearchParams(stringQuery);
 
-        let url = `../../Controllers/project.controller.php`;
-        
-        let params = new FormData();
-        params.append("action","listProject");
+  const code = url.get("id");
 
-        let results = await global.sendAction(url, params);
-        
-        if(results){
+  const idProyecto = atob(code);
 
-          dataProject = results;
+  let Patern = $("#patern");
+
+  let oldImage;
+  let dataProject;
+  let AllProjects;
+
+  function renderInput(keys, values){
+
+    keys.forEach((key, index)=>{
+
+        let value = values[index];
+
+        if(key != "" || value != ""){
+
+            let newText = ``;
+
+            newText = `
+                <div class="row">
+                    <div class="col-md-6">
+                        <h4>${key}</h4>
+                    </div>
+                    <div class="col-md-6">
+                        <h4>${key}</h4>
+                    </div>
+                </div>
+            `;
+
+            $("#perimetro").innerHTML += newText;
         }
+    });
+  }
 
-      }
-      catch(e){
+  async function getData(id){
 
-        console.error(e);
-      }
-    };
-    
-    /**
-     * FUCIÓN PARA COMPARAR LA INFORMACIÓN DE LOS INPUTS
-     * @param {array} array 
-     * @param {string} column 
-     * @param {object} param 
-     */
-    async function searchInfo(array, column, param){
-      
-      return new Promise((resolve, reject) => {
-        
-        if(column == "codigo"){
+    try{
 
-          const found = array.find(element => element[column] == param)
-
-          if(found){
-            
-            sAlert.sweetWarning("Se ha encontrado coincidencias", `"${param}" ya existe, ingresa otro`);
-            $("#denominacion").setAttribute("readonly",true);
-
-            reject();
-
-          }else{
-            
-            $("#codigo").removeAttribute("autofocus");
-            $("#denominacion").removeAttribute("readonly");
-            $("#denominacion").focus();
-            resolve()
-          }
-      
-        }else if(column = "denominacion"){
-
-          const found = array.find(element => element[column] == param);
-
-          if(found){
-
-            sAlert.sweetWarning("Se ha encontrado coincidencias", `"${param}" ya existe, ingresa otro`);
-            reject();
-
-          }else{
-
-            $("#denominacion").removeAttribute("autofocus");
-            $("#direccion").removeAttribute("readonly");
-            $("#direccion").focus();
-            resolve();
-          }
-        }
-      })
-    };
-    
-    /**
-    * FUNCIÓN PARA ENVIAR DATOS 
-    */
-    async function sendData(){
-
-      try{
-
-        //Otengo uun json de las cajas
-        let classKey = ".form-control.perim-key";
-        let classValue = ".form-control.perim-value";
-
-        let perim = global.getJson(classKey,classValue);
-
-        //Realizo la operación
-        let params = new FormData()
-        let url = `../../Controllers/project.controller.php`;
+      let url = "../../Controllers/project.controller.php";
   
-        params.append("action","addProject");
-        params.append("imagen",$("#in-image").files[0]);
-        params.append("iddireccion",$("#iddireccion").value);
-        params.append("codigo",$("#codigo").value);
-        params.append("denominacion",$("#denominacion").value);
-        params.append("latitud",$("#latitud").value);
-        params.append("longitud",$("#longitud").value);
-        params.append("perimetro",perim);
-        params.append("iddistrito",$("#iddistrito").value);
-        params.append("direccion",$("#direccion").value);
-
-        let result = await global.sendAction(url, params);
-
-        if(result.filasAfect > 0){
-            sAlert.sweetConfirmAdd("El registro fué exitoso","¿Deseas volver a registrar?",
-            ()=>{
-                $("#form-add-project").reset();
-                $("#form-add-project").classList.remove("was-validated");
+      let params = new FormData();
   
-            },()=>{
-                window.location.href = "./index.php";
-            })
-        }else{
-            sweetAlert.alertError("No se termiado el registro","Vuelve a intentarlo");
-        }
-      }
-      catch(e){
+      params.append("action","listProjectId");
+      params.append("idproyecto",id);
+  
+      let result = await global.sendAction(url, params)
 
-        console.error(e);
+      if(result){
+        
+        let perimetro = JSON.parse(result.perimetro);
+    
+        let keys = perimetro.clave;
+        let values = perimetro.valor;
+        
+        renderInput(keys, values);
+    
+        $("#card-title").innerText = result.denominacion;
+        $("#codigo").innerText = result.codigo;
+        $("#denominacion").innerText = result.denominacion;
+        $("#ubigeo").innerText = `${result.departamento} - ${result.provincia} - ${result.distrito}`;
+        $("#latitud").innerText = result.latitud;
+        $("#longitud").innerText = result.longitud;
       }
     }
+    catch(e){
+      console.error(e);
+    }
+}
+
+/**
+ * FUNCIÓN PARA ELIMINAR UN PROYECTO
+ */
+async function deleteProject(){
+
+  try{
     
-    $("#direccion").addEventListener("keypress",(e)=>{
-        
-        if(e.keyCode == 13){ //TECLA ENTER
+    let url = "../../Controllers/project.controller.php";
+  
+    let params = new FormData();
+  
+    params.append("action","inactiveProject");
+    params.append("idproyecto",idProyecto);
 
-            $("#guardar").removeAttribute("disabled");
-        }
-    });
+    let result = await global.sendAction(url, params);
+
+    if(result){
+      
+      if(result.filasAfect > 0){
     
-    $("#denominacion").addEventListener("keypress",(e)=>{
-
-        if(e.keyCode == 13){
-
-            let denominacion = $("#denominacion").value;
+          sAlert.sweetSuccess("Se elminó el registro","El registro se ha eliminado de forma exitosa",()=>{
     
-            if(denominacion != ""){
+              window.location.href = "./index.php";
+          });                    
+          
+      }else{
     
-                searchInfo(dataProject,"denominacion",denominacion);
-            }
-        }
-    });
-    
-    $("#codigo").addEventListener("keypress",(e)=>{
-    
-        if(e.keyCode == 13){
+          sAlert.sweetError("No se eliminó el registro","Vuelve a intentarlo");
+      }
+    }
+  }
+  catch(e){
+    console.error(e);
+  }
+}
 
-            let code = $("#codigo").value;
-            
-            if(code != ""){
-    
-                searchInfo(dataProject,"codigo",code);
-            }
-        } 
+$("#eliminar").addEventListener("click",()=>{
 
-    });
+    deleteProject();
+});
 
-    
-    // FUNCIÓN DE BOOTSTRAP PARA LAVALIDACIÓN
+$("#cancelar").addEventListener("click",()=>{
 
-    //ESTA EESTRUCTUARA INDICA AL NAVEGADOR QUE CUANDO LEA ESTA FUNCION, LA EJECUTE INMEDIATAMENTE
-    (() => {
-        'use strict' //=> USO ESTRICTO POR POLITICAS DE SEGURIDAD EN EL FORMULARIO
+    window.location.href = "./index.php";
+});
 
-         //SELECCIONA TODOS LOS ELEMENTOS DEL FORMULARIO QUE TIENE LA CLASE "needs-validation
-        const forms = document.querySelectorAll('.needs-validation')
+getData(idProyecto);
 
-        // TOMA EL ELEMENTO "FORMS" Y LO CONVIERTE A UN ARRAY
-        // SE INCLUYE EN UN FOREAH PARA ITERAR SOBRE SUS ELEMENTOS
 
-        Array.from(forms).forEach(form => {
-            form.addEventListener('submit', event => {
-
-                //SI LA VALIDACIÓN DEL FORMULARIO ES FALSE
-                if (!form.checkValidity()) {
-                event.preventDefault()      //=> FRENA EL ENVÍO DEL FORMULARIO
-                event.stopPropagation()     //=> FRENA LA PROPAGACIÓN DE DATOS EN EL FORMULARIO
-            }else{
-                event.preventDefault();
-                sAlert.sweetConfirm("Datos nuevos","¿Desea crear el nuevo registro?",()=>{
-
-                    sendData();
-                })
-            }
-
-            form.classList.add('was-validated') //=> AGREGA ESTA CLASE A LOS ELEMENTOS DEL FORMULARIO(MUESTRA LOS COMENTARIOS)
-            }, false) //=> ESTE TERCER ARGUMENTO INDICA QUE EL EVENTO NO SE ESTA CAPTURANDO EN LA ""FASE DE CAPTURA" SINO EN "PROPAGACIÓN NORMAL"
-        })  
-    })()
-    
-    getData();
   </script>
   <script>
     var win = navigator.platform.indexOf('Win') > -1;

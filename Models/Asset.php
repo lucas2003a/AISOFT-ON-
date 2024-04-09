@@ -48,51 +48,17 @@ class Asset extends Conection{
     /**
      * Método para lista un activo por el idproyecto y el código del activo
      */
-    public function listAssetPAcode($dataAsset = []){
+    public function listAssetPASublote($dataAsset = []){
 
         try{
 
-            $query = $this->conection->prepare("CALL spu_list_assets_by_code(?,?)");
+            $query = $this->conection->prepare("CALL spu_list_assets_by_sublote(?,?)");
             $query->execute(
                 array(
                     $dataAsset["idproyecto"],
-                    $dataAsset["codigo"],
+                    $dataAsset["sublote"],
                 )
             );
-
-            return $query->fetchAll(PDO::FETCH_ASSOC);
-
-        }catch(Exception $e){
-            die($e->getMessage());
-        }
-    }
-
-    /**
-     * Método para listar los activos que están inactivos
-     */
-    public function listAssetDrop(){
-
-        try{
-
-            $query = $this->conection->prepare("CALL spu_list_inactive_assets()");
-            $query->execute();
-
-            return $query->fetchAll(PDO::FETCH_ASSOC);
-
-        }catch(Exception $e){
-            die($e->getMessage());
-        }
-    }
-
-    /**
-     * Método para listar los activos que está inactivos (por código)
-     */
-    public function listAssetDropCode($codigo = ""){
-
-        try{
-
-            $query = $this->conection->prepare("CALL spu_list_inactive_assets_by_code(?)");
-            $query->execute(array($codigo));
 
             return $query->fetchAll(PDO::FETCH_ASSOC);
 
@@ -108,14 +74,13 @@ class Asset extends Conection{
 
         try{
 
-            $query = $this->conection->prepare("CALL spu_add_assets(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+            $query = $this->conection->prepare("CALL spu_add_assets(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
             $query->execute(
                 array(
                     $dataAsset["idproyecto"],
                     $dataAsset["tipo_activo"],
                     $dataAsset["imagen"],
                     $dataAsset["estado"],
-                    $dataAsset["codigo"],
                     $dataAsset["sublote"],
                     $dataAsset["direccion"],
                     $dataAsset["moneda_venta"],
@@ -145,7 +110,7 @@ class Asset extends Conection{
          
         try{
 
-            $query = $this->conection->prepare("CALL spu_set_assets(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+            $query = $this->conection->prepare("CALL spu_set_assets(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
             $query->execute(
                 array(
                     $dataAsset["idactivo"],
@@ -153,7 +118,6 @@ class Asset extends Conection{
                     $dataAsset["tipo_activo"],
                     $dataAsset["imagen"],
                     $dataAsset["estado"],
-                    $dataAsset["codigo"],
                     $dataAsset["sublote"],
                     $dataAsset["direccion"],
                     $dataAsset["moneda_venta"],

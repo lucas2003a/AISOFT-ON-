@@ -19,10 +19,10 @@ if(isset($_POST["action"])){
             
                 $dataObtained = [
                     "idproyecto"    =>  $_POST["idproyecto"],
-                    "codigo"        =>  $_POST["codigo"]
+                    "sublote"        =>  $_POST["sublote"]
                 ];
 
-                echo json_encode($asset->listAssetPAcode($dataObtained));
+                echo json_encode($asset->listAssetPASublote($dataObtained));
             break;
 
         case "listAssetId":
@@ -30,20 +30,6 @@ if(isset($_POST["action"])){
                 $idactivo = $_POST["idactivo"];
 
                 echo json_encode($asset->listAssetId($idactivo));
-
-            break;
-
-        case "listAssetDrop": 
-            
-                echo json_encode($asset->listAssetDrop());
-
-            break;
-
-        case "listAssetDropCode": 
-            
-                $codigo = $_POST["codigo"];
-
-                echo json_encode($asset->listAssetDropCode($codigo));
 
             break;
         
@@ -57,7 +43,6 @@ if(isset($_POST["action"])){
                     "tipo_activo"   => $_POST["tipo_activo"],
                     "imagen"        => $nom_img, //se tiene que modificar el proceso de subir una imagen
                     "estado"        => $_POST["estado"],
-                    "codigo"        => $_POST["codigo"],
                     "sublote"       => $_POST["sublote"],
                     "direccion"     => $_POST["direccion"],
                     "moneda_venta"  => $_POST["moneda_venta"],
@@ -101,7 +86,6 @@ if(isset($_POST["action"])){
                     "tipo_activo"   => $_POST["tipo_activo"],
                     "imagen"        => $nom_img, //se tiene que modificar el proceso de subir una imagen
                     "estado"        => $_POST["estado"],
-                    "codigo"        => $_POST["codigo"],
                     "sublote"       => $_POST["sublote"],
                     "direccion"     => $_POST["direccion"],
                     "moneda_venta"  => $_POST["moneda_venta"],

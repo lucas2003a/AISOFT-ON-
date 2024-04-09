@@ -3627,7 +3627,7 @@ textarea.form-control.is-invalid {
   --bs-btn-padding-x: 1.5rem;
   --bs-btn-padding-y: 0.75rem;
   --bs-btn-font-family: ;
-  --bs-btn-font-size: 0.75rem;
+  --bs-btn-font-size: 1rem;
   --bs-btn-font-weight: 700;
   --bs-btn-line-height: 1.4;
   --bs-btn-color: #67748e;
@@ -20418,7 +20418,7 @@ fieldset:disabled .btn {
 
 .btn.btn-sm i,
 .btn-group-sm>.btn i {
-  font-size: 0.5rem;
+  font-size: 0.7rem;
 }
 
 .btn.btn-lg.btn-icon-only,
@@ -26795,4 +26795,11 @@ pre[class*="language-"] {
     user-select: none;
   }
 
+  .tab{
+    display: none;
+  }
+
+  .tab.active{
+    display: block;
+  }
 /*# sourceMappingURL=dashboard-free.css.map */
