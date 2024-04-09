@@ -139,8 +139,6 @@ document.addEventListener("DOMContentLoaded",()=>{
         reader.readAsDataURL(file);
     }
 
-
-
     $("#in-image").addEventListener("change",(e)=>{
 
         console.log(e);

@@ -415,7 +415,7 @@
                 <div class="row">
                   <div class="col-lg-12">
                     <div class="d-flex flex-column h-100">
-                      <form class="row needs-validation" id="form-set-asset" novalidate>
+                      <form class="row needs-validation" id="form-multisetps" novalidate>
                             <div class="tab">
                               <div class="row">
                                 <div class="col-md-6">
@@ -538,7 +538,6 @@
                                         </select>
 
                                     </div>
-    
                                     
                                     <!-- PRECIO VENTA -->
                                     <div class="mt-4">
@@ -564,8 +563,6 @@
                                         Partida electrónica registrada correctamente.
                                         </div>
                                     </div>
-                                    
-                                    
                                 </div>
                                 
                                 <div class="col-md-6">
@@ -631,7 +628,7 @@
             </div>
           </div>
       </div>     
-
+      <!-- /FORMULARIO -->
 
       <footer class="footer pt-3  ">
         <div class="container-fluid">
@@ -720,6 +717,7 @@
   <script src="../../assets/js/plugins/chartjs.min.js"></script>
   <script src="../../assets/js/globalFunctions.js"></script>
   <script src="../../assets/js/sweetAlert.js"></script>
+  <script src="../../assets/js/formMultiSteps.js"></script>
   <!-- <script src="../../assets/js/projects/interactionForms.js"></script>
   <script src="../../assets/js/renderUbigeo.js"></script> -->
   <script>
@@ -737,113 +735,179 @@
 
   const code = url.get("id");
 
-  const idProyecto = atob(code);
+  const idActivo = atob(code);
 
   let Patern = $("#patern");
+  
+  let dataAsset;
 
   let oldImage;
   let dataProject;
-  let AllProjects
-  let formData = {};
- let currentTab = 0;
+  let idProyecto;
 
-  const form = $("#form-set-asset");
-  const tabs = $All(".tab");
+  function renderInputs(key, value){
 
-  function showTab(tabIndex){
+    /*INPUT KEY */
+    let inputKey = document.createElement("input");
+    inputKey.classList.add("form-control","perim-key")
+    inputKey.value = key;
 
-    tabs.forEach((tab, index) => {
-      
-      if(index == tabIndex){
+    /* INPUT VALUE */
+    let inputValue = document.createElement("input");
+    inputValue.classList.add("form-control","perim-value");
+    inputValue.value = value;
 
-        tab.classList.add("active");
-      }else{
-        tab.classList.remove("active");
-      }
-    });
-  }
+    /* DIV KEY */
+    let divKey = document.createElement("div");
+    divKey.classList.add("col-md-6");
 
-  function nexTab(){
+    /* DIV VALUE */
+    let divValue = document.createElement("div");
+    divValue.classList.add("col-md-6");
 
-    if(currentTab < tabs.length -1){
+    divKey.appendChild(inputKey);
+    divValue.appendChild(inputValue);
 
-      const inputs = tabs[currentTab].querySelectorAll("input, select, textarea");
-
-      let isValid = true;
-
-      inputs.forEach(input =>{
-
-        if(!input.checkValidity()){
-          form.classList.add('was-validated'), //MUESTRA LOS LABELS EN ROJO
-          isValid = false;
-
-          input.reportValidity();
-          console.log("no valido")
-
-        }else{
-
-          formData[input.name] = input.value;
-          console.log(formData);
-        }
-      });
-
-      if(isValid){
-        
-        currentTab++;
-        showTab(currentTab);
-      }
-    }
-  }
-
-  function prevTab(){
-
-    if(currentTab > 0){
-
-      currentTab--;
-      showTab(currentTab);
-    }
-  }
-
-  function submitForm(){
-
-    const inputs = tabs[currentTab].querySelectorAll("input, select, textarea");
-    let isValid = true;
-
-    inputs.forEach(input => {
-
-      if(!input.checkValidity()){
-        form.classList.add('was-validated'), //MUESTRA LOS LABELS EN ROJO
-        isValid = false;
-        input.reportValidity();
-
-      }else{
-
-        formData[input.name] = input.value;
-      }
-
-      if(isValid){
-
-        console.log("datos del fomulario: ", formData)
-      }
-    });
-  }
-
-  form.querySelectorAll(".submit").forEach(button =>{
-
-    button.addEventListener("click", submitForm);
-  });
-
-  form.querySelectorAll(".prevBtn").forEach(button =>{
     
-    button.addEventListener("click", prevTab);
-  });
+    let rowInputs = document.createElement("div");
+    rowInputs.classList.add("row","mt.2");
+    
+    rowInputs.appendChild(divKey);
+    rowInputs.appendChild(divValue);
 
-  form.querySelectorAll(".nextBtn").forEach(button =>{
+    let divInputs = document.createElement("div");
+    divInputs.classList.add("col-md-11");
 
-    button.addEventListener("click", nexTab);
-  });
+    divInputs.appendChild(rowInputs);
 
- showTab(currentTab);
+    /* -------------------------------------------------- */
+
+    /* BOTÓN "-" */
+    let buttonLess = document.createElement("button");
+    buttonLess.classList.add("button-less","mt-2","active");
+    buttonLess.setAttribute("id","add-textBox");
+    buttonLess.setAttribute("type","button");
+    buttonLess.innerText = "-";
+    
+    let divButton = document.createElement("div");
+    divButton.classList.add("col-md-1");
+
+    divButton.appendChild(buttonLess);
+
+    /* -------------------------------------------------- */
+
+    let rowMaster = document.createElement("div");
+    rowMaster.classList.add("row");
+
+    rowMaster.appendChild(divInputs);
+    rowMaster.appendChild(divButton);
+
+    let firstRow = $("#perimetro-asset").firstChild;
+    $("#perimetro-asset").insertBefore(rowMaster,firstRow);  
+  }  
+
+  /**
+  * Funcion para obtener los lotes asociados a un idproyecto
+  */
+ async function getAssetsAll(id){
+  
+  try{
+    
+    let url = "../../Controllers/asset.controller.php";
+    let params = new FormData();
+  
+    params.append("action","listAssetProjectId");
+    params.append("idproyecto",id);
+
+    let results = await global.sendAction(url, params);
+
+    if(results){
+      
+      console.log(results);
+      /*console.log(asset);
+      assetObtained = asset;
+    
+      idProyecto = asset.idproyecto;
+    
+      oldImage = asset.imagen;
+      let img = asset.imagen != null ? asset.imagen : "NoImage.jpg";
+    
+      $("#cabezera").innerText += ` ${asset.sublote} - ${asset.denominacion}`;
+    
+      FORMULARIO DATOS GENERALES 
+      $("#ubigeo").value = `${asset.distrito} - ${asset.provincia} - ${asset.departamento}`;
+      $("#estado").value = asset.estado;
+      $("#tipo-activo").value = asset.tipo_activo;
+      $("#codigo").value = asset.codigo;
+      $("#sublote").value = asset.sublote;
+      $("#direccion").value = asset.direccion;
+      $("#view-image").setAttribute("src",`../../logos_proyectos/${img}`);
+    
+       FORMULARIO DESCRIPCIÓN 
+      $("#area").value = asset.area_terreno;
+      $("#z-comunes").value = asset.zcomunes_porcent;
+      $("#moneda-venta").value = asset.moneda_venta;
+      $("#precio-venta").value = asset.precio_venta;
+      $("#partida-elect").value = asset.partida_elect;
+      $("#latitud").value = asset.latitud;
+      $("#longitud").value = asset.longitud;
+    
+      const perimetro = JSON.parse(asset.perimetro);
+    
+      let arrayKey = perimetro.clave;
+      let arrayValue = perimetro.valor;
+    
+      arrayKey.forEach((key, index)=>{
+    
+          let value = arrayValue[index];
+    
+          if(key != "" || value != ""){
+    
+              renderInputs(key, value);
+          }
+      });
+    
+      console.log(perimetro);
+      renderDescription(asset);
+      renderJson(det_casa); 
+      getClient(idActivo);*/
+    }
+  }
+  catch(e){
+    console.error(e);
+  }
+ };
+  
+  /**
+   * Funciòn para obtener la data de un lote por su ID
+   */
+  async function getAsset(id){
+
+    try{
+      
+      let url ="../../Controllers/asset.controller.php";
+      let params = new FormData();
+  
+      params.append("action","listAssetId");
+      params.append("idactivo",id);
+
+      let result =  await global.sendAction(url, params);
+
+      if(result){
+
+        dataAsset = result;
+
+        getAssetsAll(dataAsset.idproyecto);
+
+      }
+    }
+    catch(e){
+      console.error(e);
+    }
+ };
+
+  getAsset(idActivo);
+
   </script>
   <script>
     var win = navigator.platform.indexOf('Win') > -1;
