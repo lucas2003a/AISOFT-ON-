@@ -61,7 +61,7 @@ if(isset($_POST["action"])){
                 if(isset($_FILES["imagen"]) && $_FILES["imagen"]["size"] > 0){
 
                     $nom_img = sha1($today) . "jpg";
-                    $ruta_img = "../logos_proyectos/" . $nom_img;
+                    $ruta_img = "../media/lotes/" . $nom_img;
 
                     if(move_uploaded_file($_FILES["imagen"]["tmp_name"], $ruta_img)){
 
@@ -105,7 +105,7 @@ if(isset($_POST["action"])){
 
                     $nom_img = sha1($today) . ".jpg";
 
-                    $ruta_img = "../logos_proyectos/" . $nom_img;
+                    $ruta_img = "../media/lotes/" . $nom_img;
 
                     if(move_uploaded_file($_FILES["imagen"]["tmp_name"], $ruta_img)){
 

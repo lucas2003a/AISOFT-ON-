@@ -65,4 +65,28 @@ class FunGlobal{
         }
     }
 
+    /**
+     * Método que tansforma un json a un objeto y renderiza sus valores
+     * @param {object} JSONobj 
+     */
+    JSONtoObject(JSONobj){
+
+        const json = JSON.parse(JSONobj);
+
+        let arrayKey = json.clave;
+        let arrayValue = json.valor;
+    
+        arrayKey.forEach((key, index)=>{
+    
+          let value = arrayValue[index];
+    
+          if(key != "" || value != ""){
+    
+              renderInputs(key, value);
+          }
+        });
+
+        return json;
+    }
+
 }

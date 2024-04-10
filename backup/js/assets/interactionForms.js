@@ -9,12 +9,8 @@ const $All = id => document.querySelectorAll(id);
 /* TABLINKS */
 const btnDGeneral = $("#btn-DGeneral");
 const btnDescription = $("#btn-description");
-const viewImage = $("#view-image");
-const viewImageDesc = $("#view-image-descrip");
+const viewImage = $("#file-view");
 
-/* TABCONTENT */
-const contentDGeneral = $("#DGeneral");
-const contentDescription = $("#Description");
 
 function renderInputs(){
     
@@ -24,7 +20,7 @@ function renderInputs(){
 
         /* INPUT VALUE */
         let inputValue = document.createElement("input");
-        inputValue.classList.add("form-control","perim-key");        
+        inputValue.classList.add("form-control","perim-value");        
 
         /* DIV KEY */
         let divKey = document.createElement("div");
@@ -53,7 +49,7 @@ function renderInputs(){
 
         /* BOTÓN "+" */
         let buttonPluss = document.createElement("button");
-        buttonPluss.classList.add("button-addPlus","mt-2","active");
+        buttonPluss.classList.add("btn","btn-danger","less","mt-2","active");
         buttonPluss.setAttribute("id","add-textBox");
         buttonPluss.setAttribute("type","button");
         buttonPluss.innerText = "+";
@@ -183,7 +179,6 @@ function readFile(event){
 
 $("#in-image").addEventListener("change",(e)=>{
 
-    console.log(e)
     readFile(e);
 });
 

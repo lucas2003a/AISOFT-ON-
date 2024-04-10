@@ -291,7 +291,8 @@
           <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
             <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="../dashboard.html">Inicio</a></li>
             <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="../projects/index.php">Proyectos</a></li>
-            <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Lotes </li>
+            <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="../assets/index.php">Lotes</a></li>
+            <li class="breadcrumb-item text-sm text-dark active" aria-current="page"> Lotes </li>
           </ol>
           <h6 class="font-weight-bolder mb-0" id="cabezera">LOTES - </h6>
         </nav>
@@ -299,12 +300,12 @@
           <div class="ms-md-auto pe-md-3 d-flex align-items-center">
             <div class="input-group">
               <span class="input-group-text text-body"><i class="fas fa-search" aria-hidden="true"></i></span>
-              <input type="text" class="form-control" placeholder="Escribe el códgo..." id="in-codigo")>
+              <input type="text" class="form-control" placeholder="Escribe el códgo..." id="in-sublote">
             </div>
           </div>
           <ul class="navbar-nav  justify-content-end">
             <li class="nav-item d-flex align-items-center">
-              <a class="btn btn-outline-success btn-sm mb-0 me-3" target="_blank" href="https://www.creative-tim.com/builder?ref=navbar-soft-ui-dashboard">AGREGAR PROYECTO</a>
+              <a class="btn btn-outline-success btn-sm mb-0 me-3" target="_blank" href="./add_asset.php" id="add-asset">AGREGAR LOTE</a>
             </li>
             <li class="nav-item d-flex align-items-center">
               <a href="javascript:;" class="nav-link text-body font-weight-bold px-0">
@@ -543,9 +544,62 @@ document.addEventListener("DOMContentLoaded",()=>{
   const name = atob(codeName);
   console.log(idProyecto,name);
 
+  function renderAssets(sublote){
+
+    let numberRow = 1;
+    $("#table-assets tbody").innerHTML = "";
+
+    results.forEach(asset =>{
+      
+      let newRow = ``;
+      let code = btoa(asset.idactivo) //CODIFICACIÓN
+
+      let IconStatus = asset.estado == "SIN VENDER" ?  `<span class="badge badge-sm bg-gradient-danger">${asset.estado}</span>` : 
+                                      asset.estado = "VENDIDO" ? `<span class="badge badge-sm bg-gradient-success">${asset.estado}</span>`: 
+                                                                `<span class="badge badge-sm bg-gradient-secondary">${asset.estado}</span>` ;
+
+      newRow = `
+              <tr>
+                <td>
+                  <div class="d-flex px-2 py-1">
+                    <div class="d-flex flex-column justify-content-center">
+                      <h6 class="mb-0 text-sm">${numberRow}</h6>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <p class="text-xs font-weight-bold mb-0">${asset.denominacion}</p>
+                  </td>
+                  <td class="align-middle text-center text-sm">
+                    ${IconStatus}
+                  </td>
+                  <td>
+                    <p class="text-xs font-weight-bold mb-0">${asset.sublote}</p>
+                  </td>
+                <td>
+                  <p class="text-xs font-weight-bold mb-0">${asset.direccion}</p>
+                </td>
+                <td class="align-middle">
+                  <div class="btn-group">
+                      <a type="button" href="./delete_asset.php?id=${code}" class="btn btn-danger btn-sm" id="btn-delete"><i class="bi bi-trash-fill"></i></a>
+                      <a type="button" href="./edit_asset.php?id=${code}" class="btn btn-primary btn-sm" id="btn-edit"><i class="bi bi-pencil-fill"></i></a>
+                      <a type="button" href="./detail_asset.php?id=${code}" class="btn btn-success btn-sm"><i class="bi bi-arrow-right-square"></i></a>
+                      </div>
+                  </td>
+              </tr>           
+      `;
+      numberRow ++;
+
+      $("#table-assets tbody").innerHTML += newRow;
+    });
+  }
+
+
   async function getAssets(id){
 
     try{
+
+      $("#add-asset").setAttribute("href",`./add_asset.php?idproy=${code}&name=${codeName}`);
 
       let url ="../../Controllers/asset.controller.php";
       let params = new FormData();
@@ -558,53 +612,7 @@ document.addEventListener("DOMContentLoaded",()=>{
       if(results){
 
         $("#cabezera").innerText +=` ${name}`;
-    
-        let numberRow = 1;
-        $("#table-assets tbody").innerHTML = "";
-    
-        results.forEach(asset =>{
-    
-            let newRow = ``;
-            let code = btoa(asset.idactivo) //CODIFICACIÓN
-
-            let IconStatus = asset.estado == "SIN VENDER" ?  `<span class="badge badge-sm bg-gradient-danger">${asset.estado}</span>` : 
-                                            asset.estado = "VENDIDO" ? `<span class="badge badge-sm bg-gradient-success">${asset.estado}</span>`: 
-                                                                      `<span class="badge badge-sm bg-gradient-secondary">${asset.estado}</span>` ;
-    
-            newRow = `
-                    <tr>
-                      <td>
-                        <div class="d-flex px-2 py-1">
-                          <div class="d-flex flex-column justify-content-center">
-                            <h6 class="mb-0 text-sm">${numberRow}</h6>
-                          </div>
-                        </div>
-                      </td>
-                      <td>
-                        <p class="text-xs font-weight-bold mb-0">${asset.denominacion}</p>
-                        </td>
-                        <td class="align-middle text-center text-sm">
-                          ${IconStatus}
-                        </td>
-                        <td>
-                          <p class="text-xs font-weight-bold mb-0">${asset.sublote}</p>
-                        </td>
-                      <td>
-                        <p class="text-xs font-weight-bold mb-0">${asset.direccion}</p>
-                      </td>
-                      <td class="align-middle">
-                        <div class="btn-group">
-                            <a type="button" href="./delete_asset.php?id=${code}" class="btn btn-danger btn-sm" id="btn-delete"><i class="bi bi-trash-fill"></i></a>
-                            <a type="button" href="./edit_asset.php?id=${code}" class="btn btn-primary btn-sm" id="btn-edit"><i class="bi bi-pencil-fill"></i></a>
-                            <a type="button" href="./detail_asset.php?id=${code}" class="btn btn-success btn-sm"><i class="bi bi-arrow-right-square"></i></a>
-                            </div>
-                        </td>
-                    </tr>           
-            `;
-            numberRow ++;
-    
-            $("#table-assets tbody").innerHTML += newRow;
-        });
+        renderAssets(results);
 
       }
     }

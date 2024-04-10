@@ -290,21 +290,22 @@
         <nav aria-label="breadcrumb">
           <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
             <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="../dashboard.html">Inicio</a></li>
-            <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="../dashboard.html">Proyectos</a></li>
-            <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Editar proyecto</li>
+            <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="../projects/index.php">Proyectos</a></li>
+            <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="../assets/index.php">Lotes</a></li>
+            <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Editar lote</li>
           </ol>
-          <h6 class="font-weight-bolder mb-0">EDITAR PROYECTO</h6>
+          <h6 class="font-weight-bolder mb-0" id ="cabezera">EDITAR LOTE - </h6>
         </nav>
         <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
           <div class="ms-md-auto pe-md-3 d-flex align-items-center">
             <div class="input-group">
               <span class="input-group-text text-body"><i class="fas fa-search" aria-hidden="true"></i></span>
-              <input type="text" class="form-control" placeholder="Escribe el códgo..." id="in-codigo")>
+              <input type="text" class="form-control" placeholder="Escribe el códgo..." id="in-codigo">
             </div>
           </div>
           <ul class="navbar-nav  justify-content-end">
             <li class="nav-item d-flex align-items-center">
-              <a class="btn btn-outline-success btn-sm mb-0 me-3" target="_blank" href="https://www.creative-tim.com/builder?ref=navbar-soft-ui-dashboard">AGREGAR PROYECTO</a>
+              <a class="btn btn-outline-success btn-sm mb-0 me-3" target="_blank" href="./add_asset.php">AGREGAR LOTE</a>
             </li>
             <li class="nav-item d-flex align-items-center">
               <a href="javascript:;" class="nav-link text-body font-weight-bold px-0">
@@ -415,7 +416,7 @@
                 <div class="row">
                   <div class="col-lg-12">
                     <div class="d-flex flex-column h-100">
-                      <form class="row needs-validation" id="form-multisetps" novalidate>
+                      <form class="row needs-validation" id="form-assset-set" novalidate>
                             <div class="tab">
                               <div class="row">
                                 <div class="col-md-6">
@@ -441,19 +442,6 @@
                                       <label for="tipo-activo" class="form-label">Tipo activo</label>
                                         <input type="text" class="form-control" id="tipo-activo" readonly>
 
-                                    </div>
-    
-                                    
-                                    <!-- CODIGO -->
-                                    <div class="mt-4">
-                                        <label for="codigo" class="form-label">Código</label>
-                                        <input type="text" class="form-control" id="codigo" placeholder="Código" maxlength="7" minlength="7" required autofocus>
-                                        <div class="invalid-feedback">
-                                            Necesitas ingresar un código.
-                                        </div>
-                                        <div class="valid-feedback">
-                                            Código registrado correctamente.
-                                        </div>
                                     </div>
     
                                     <!-- SUBLOTE -->
@@ -495,7 +483,7 @@
                                     <div class="bg-gradient-primary border-radius-lg h-100" style="display: flex; justify-content: center;">
                                     
                                       <div class="position-relative d-flex align-items-center justify-content-center h-100">
-                                        <img class="w-100 position-relative z-index-2 pt-4" style="width: 100%;" id="file-view" src="" alt="">
+                                        <img class="w-100 position-relative z-index-2 pt-4" id="file-view" style="min-height: max-content; padding: 2rem;" src="" alt="">
                                       </div>
                                     </div>
                                   </div>
@@ -542,7 +530,7 @@
                                     <!-- PRECIO VENTA -->
                                     <div class="mt-4">
                                         <label for="precio-venta" class="form-label">Precio de venta</label>
-                                        <input type="number" class="form-control" id="precio-venta" placeholder="Código" maxlength="7" minlength="7" required autofocus>
+                                        <input type="number" class="form-control" id="precio-venta" placeholder="Precio de venta" maxlength="7" minlength="7" required autofocus>
                                         <div class="invalid-feedback">
                                             Necesitas ingresar un código.
                                         </div>
@@ -594,7 +582,9 @@
                                     </div>
                                     <!-- PERIMTETRO -->
                                     <label for="longitud" class="form-label">Perímetro</label>
-                                    <div id="perimetro-asset">
+                                    <div id="perim">
+                                      <div id="patern">
+                                        
                                         <div class="row">
                                             <div class="col-md-11">
 
@@ -608,15 +598,16 @@
                                                 </div>
                                             </div>
                                             <div class="col-md-1">
-                                                <button type="button" class="btn btn-success" id="add-textBox">+</button>
+                                                <button type="button" class="btn btn-success pluss" id="add-textBox">+</button>
                                             </div>
                                         </div>
                                     </div>                                    
+                                      </div>
                                 </div>
                               </div>
                               <div class="btn-group mt-4">
                                 <button type="button" class="btn btn-secondary prevBtn">Anterior</button>
-                                <button type="button" class="btn btn-success submit">Guardar</button>
+                                <button type="submit" class="btn btn-success submit" id="guardar">Guardar</button>
                               </div>
                             </div>
                         </form> 
@@ -718,12 +709,16 @@
   <script src="../../assets/js/globalFunctions.js"></script>
   <script src="../../assets/js/sweetAlert.js"></script>
   <script src="../../assets/js/formMultiSteps.js"></script>
-  <!-- <script src="../../assets/js/projects/interactionForms.js"></script>
-  <script src="../../assets/js/renderUbigeo.js"></script> -->
+  <script src="../../assets/js/projects/interactionForms.js"></script>
+  <!-- <script src="../../assets/js/renderUbigeo.js"></script>  -->
   <script>
 
   const global = new FunGlobal();
   const sAlert = new Alert();
+
+  //formulario
+  const idform = "#form-assset-set" 
+  const formMS = new multiStepsForm(idform);
 
   const $ = id => global.$(id);
   const $All = id => global.$All(id);
@@ -735,14 +730,15 @@
 
   const code = url.get("id");
 
+  const codePr = url.get("idproy");
+  const nameProy = url.get("name");
+
   const idActivo = atob(code);
 
-  let Patern = $("#patern");
-  
   let dataAsset;
 
   let oldImage;
-  let dataProject;
+  let AllDataAssets;
   let idProyecto;
 
   function renderInputs(key, value){
@@ -784,7 +780,7 @@
 
     /* BOTÓN "-" */
     let buttonLess = document.createElement("button");
-    buttonLess.classList.add("button-less","mt-2","active");
+    buttonLess.classList.add("btn","btn-danger","less","mt-2","active");
     buttonLess.setAttribute("id","add-textBox");
     buttonLess.setAttribute("type","button");
     buttonLess.innerText = "-";
@@ -802,8 +798,8 @@
     rowMaster.appendChild(divInputs);
     rowMaster.appendChild(divButton);
 
-    let firstRow = $("#perimetro-asset").firstChild;
-    $("#perimetro-asset").insertBefore(rowMaster,firstRow);  
+    let firstRow = $("#perim").firstChild;
+    $("#perim").insertBefore(rowMaster,firstRow);  
   }  
 
   /**
@@ -823,54 +819,7 @@
 
     if(results){
       
-      console.log(results);
-      /*console.log(asset);
-      assetObtained = asset;
-    
-      idProyecto = asset.idproyecto;
-    
-      oldImage = asset.imagen;
-      let img = asset.imagen != null ? asset.imagen : "NoImage.jpg";
-    
-      $("#cabezera").innerText += ` ${asset.sublote} - ${asset.denominacion}`;
-    
-      FORMULARIO DATOS GENERALES 
-      $("#ubigeo").value = `${asset.distrito} - ${asset.provincia} - ${asset.departamento}`;
-      $("#estado").value = asset.estado;
-      $("#tipo-activo").value = asset.tipo_activo;
-      $("#codigo").value = asset.codigo;
-      $("#sublote").value = asset.sublote;
-      $("#direccion").value = asset.direccion;
-      $("#view-image").setAttribute("src",`../../logos_proyectos/${img}`);
-    
-       FORMULARIO DESCRIPCIÓN 
-      $("#area").value = asset.area_terreno;
-      $("#z-comunes").value = asset.zcomunes_porcent;
-      $("#moneda-venta").value = asset.moneda_venta;
-      $("#precio-venta").value = asset.precio_venta;
-      $("#partida-elect").value = asset.partida_elect;
-      $("#latitud").value = asset.latitud;
-      $("#longitud").value = asset.longitud;
-    
-      const perimetro = JSON.parse(asset.perimetro);
-    
-      let arrayKey = perimetro.clave;
-      let arrayValue = perimetro.valor;
-    
-      arrayKey.forEach((key, index)=>{
-    
-          let value = arrayValue[index];
-    
-          if(key != "" || value != ""){
-    
-              renderInputs(key, value);
-          }
-      });
-    
-      console.log(perimetro);
-      renderDescription(asset);
-      renderJson(det_casa); 
-      getClient(idActivo);*/
+      AllDataAssets = results;
     }
   }
   catch(e){
@@ -878,13 +827,54 @@
   }
  };
   
-  /**
+ /**
+  * Función para renderizar los datos obtenidos
+  * */
+ async function renderData(asset){
+  
+  try{
+    console.log(asset);
+    
+    oldImage = asset.imagen;
+    let img = asset.imagen != null ? asset.imagen : "NoImage.jpg";
+    
+    $("#cabezera").innerText += ` ${asset.sublote} - ${asset.denominacion}`;
+    
+    /* FORMULARIO DATOS GENERALES  */
+    $("#ubigeo").value = `${asset.distrito} - ${asset.provincia} - ${asset.departamento}`;
+    $("#estado").value = asset.estado;
+    $("#tipo-activo").value = asset.tipo_activo;
+    $("#sublote").value = asset.sublote;
+    $("#direccion").value = asset.direccion;
+    $("#file-view").setAttribute("src",`../../media/lotes/${img}`);
+    
+    /* FORMULARIO DESCRIPCIÓN  */
+    $("#area").value = asset.area_terreno;
+    $("#z-comunes").value = asset.zcomunes_porcent;
+    $("#moneda-venta").value = asset.moneda_venta;
+    $("#precio-venta").value = asset.precio_venta;
+    $("#partida-elect").value = asset.partida_elect;
+    $("#latitud").value = asset.latitud;
+    $("#longitud").value = asset.longitud;
+    
+    const perimetro = await global.JSONtoObject(asset.perimetro);
+    
+      console.log(perimetro);
+  }
+  catch(e){
+    console.error(e);
+  }
+ }
+ 
+ /**
    * Funciòn para obtener la data de un lote por su ID
    */
   async function getAsset(id){
 
     try{
       
+      $("#add-asset").setAttribute("href",`./add_asset.php?idproy=${codePr}&name=${nameProy}`);
+
       let url ="../../Controllers/asset.controller.php";
       let params = new FormData();
   
@@ -896,8 +886,11 @@
       if(result){
 
         dataAsset = result;
+        idProyecto = dataAsset.idproyecto;
+        console.log(dataAsset);
 
-        getAssetsAll(dataAsset.idproyecto);
+        getAssetsAll(idProyecto);
+        renderData(dataAsset);
 
       }
     }
@@ -906,7 +899,149 @@
     }
  };
 
+ /**
+  * FUNCIÓN PARA COMPARA INFORMACIÓN
+  */
+  async function searchInfo(array, column, param){
+  
+     if(column == "sublote"){
+      
+      return new Promise((resolve, reject) => {
+        
+        for(let element of array){
+          
+          const found = array.find(element => element[column] == param);
+
+          if(found){
+  
+              sAlert.sweetWarning("Se ha encontrado coincidencias", `"${param}" ya existe, ingresa otro`);
+
+              reject();
+          }else{
+              
+              $("#sublote").removeAttribute("autofocus");
+              $("#direccion").removeAttribute("readonly");
+              $("#direccion").focus();
+
+              resolve();
+          }
+        }
+      });
+    }
+  };
+
+  async function setAsset(id){
+
+    try{
+
+      const keyClass = ".form-control.perim-key";
+      const keyValue = ".form-control.perim-value";
+  
+      const json = await global.getJson(keyClass, keyValue)
+
+      let url = "../../Controllers/asset.controller.php";
+  
+      let params = new FormData();
+
+      let img = $("#in-image").files[0] != null ? $("#in-image").files[0] : oldImage;
+  
+      params.append("action","setAsset");
+      params.append("idactivo",id);
+      params.append("idproyecto",idProyecto);
+      params.append("tipo_activo",dataAsset.tipo_activo);
+      params.append("imagen",img);
+      params.append("estado",dataAsset.estado);
+      params.append("sublote",$("#sublote").value);
+      params.append("direccion",$("#direccion").value);
+      params.append("moneda_venta",$("#moneda-venta").value);
+      params.append("precio_venta",$("#precio-venta").value);
+      params.append("area_terreno",$("#area").value);
+      params.append("zcomunes_porcent",$("#z-comunes").value);
+      params.append("partida_elect",$("#partida-elect").value);
+      params.append("latitud",$("#latitud").value);
+      params.append("longitud",$("#longitud").value);
+      params.append("perimetro",json);
+      params.append("det_casa",`{"clave" :[""], "valor":[""]}`);
+
+      let results = await global.sendAction(url, params);
+
+      if(results){
+
+        console.log(results);
+
+        if(results.filasAfect > 0){
+           
+          let codeName = btoa(dataAsset.denominacion)
+          let codeid = btoa(idProyecto);
+           sAlert.sweetSuccess("Registro actualizado","El registro se ha actualizado correctamente",()=>{
+    
+                window.location.href = `./index.php?id=${codeid}&name=${codeName}`;
+            });
+        }else{
+            sAlert.alertError("No se actualizó el registro","Vuelve a intentarlo");
+        }
+      }
+
+    }
+    catch(e){
+      console.error(e);
+    }
+  }
+  
+  $("#sublote").addEventListener("keypress",(e)=>{
+
+    if(e.keyCode == 13){
+
+      let sublote = $("#sublote").value;
+
+      if(sublote != dataAsset.sublote){
+
+        searchInfo(AllDataAssets,"sublote",sublote);
+
+      }else{
+
+        $("#direccion").removeAttribute("readonly");
+        $("#direccion").focus();
+      }
+    }
+  });
+
+
+  
   getAsset(idActivo);
+
+
+  /* --------------------------------- FUNCIÓN DE VALIDACIÓN --------------------------------------------------------- */
+  
+  (() => {
+    'use strict' //=> USO ESTRICTO POR POLITICAS DE SEGURIDAD EN EL FORMULARIO
+
+     //SELECCIONA TODOS LOS ELEMENTOS DEL FORMULARIO QUE TIENE LA CLASE "needs-validation
+    const forms = document.querySelectorAll('.needs-validation')
+
+    // TOMA EL ELEMENTO "FORMS" Y LO CONVIERTE A UN ARRAY
+    // SE INCLUYE EN UN FOREAH PARA ITERAR SOBRE SUS ELEMENTOS
+
+    Array.from(forms).forEach(form => {
+        form.addEventListener('submit', event => {
+
+            //SI LA VALIDACIÓN DEL FORMULARIO ES FALSE
+            if (!form.checkValidity()) {
+            event.preventDefault()      //=> FRENA EL ENVÍO DEL FORMULARIO
+            event.stopPropagation()     //=> FRENA LA PROPAGACIÓN DE DATOS EN EL FORMULARIO
+            form.reportValidity();
+        }else{
+            event.preventDefault();
+            sAlert.sweetConfirm("Datos nuevos","¿Deseas actualizar el registro?",()=>{
+                
+              setAsset(idActivo); //Ejecuta la función
+            });
+        }
+
+        form.classList.add('was-validated') //=> AGREGA ESTA CLASE A LOS ELEMENTOS DEL FORMULARIO(MUESTRA LOS COMENTARIOS)
+        }, false) //=> ESTE TERCER ARGUMENTO INDICA QUE EL EVENTO NO SE ESTA CAPTURANDO EN LA ""FASE DE CAPTURA" SINO EN "PROPAGACIÓN NORMAL"
+    })  
+  })();
 
   </script>
   <script>
