@@ -289,9 +289,8 @@
       <div class="container-fluid py-1 px-3">
         <nav aria-label="breadcrumb">
           <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
-            <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="../dashboard.html">Inicio</a></li>
-            <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="../projects/index.php">Proyectos</a></li>
-            <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="../assets/index.php">Lotes</a></li>
+          <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="#" id="goDashboard">Dashboard</a></li>
+            <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="#" id="goProjects">Proyectos</a></li>
             <li class="breadcrumb-item text-sm text-dark active" aria-current="page"> Lotes </li>
           </ol>
           <h6 class="font-weight-bolder mb-0" id="cabezera">LOTES - </h6>
@@ -300,7 +299,7 @@
           <div class="ms-md-auto pe-md-3 d-flex align-items-center">
             <div class="input-group">
               <span class="input-group-text text-body"><i class="fas fa-search" aria-hidden="true"></i></span>
-              <input type="text" class="form-control" placeholder="Escribe el códgo..." id="in-sublote">
+              <input type="text" class="form-control" placeholder="Escribe el Sublote..." id="in-sublote">
             </div>
           </div>
           <ul class="navbar-nav  justify-content-end">
@@ -542,56 +541,72 @@ document.addEventListener("DOMContentLoaded",()=>{
 
   const idProyecto = atob(code); //DECOFICA EL VALOR
   const name = atob(codeName);
-  console.log(idProyecto,name);
 
-  function renderAssets(sublote){
+  let timer;
+
+  function renderAssets(results){
 
     let numberRow = 1;
+
     $("#table-assets tbody").innerHTML = "";
 
-    results.forEach(asset =>{
+    let newRow = ``;
+
+    if(results.length > 0){
       
-      let newRow = ``;
-      let code = btoa(asset.idactivo) //CODIFICACIÓN
-
-      let IconStatus = asset.estado == "SIN VENDER" ?  `<span class="badge badge-sm bg-gradient-danger">${asset.estado}</span>` : 
-                                      asset.estado = "VENDIDO" ? `<span class="badge badge-sm bg-gradient-success">${asset.estado}</span>`: 
-                                                                `<span class="badge badge-sm bg-gradient-secondary">${asset.estado}</span>` ;
-
-      newRow = `
-              <tr>
-                <td>
-                  <div class="d-flex px-2 py-1">
-                    <div class="d-flex flex-column justify-content-center">
-                      <h6 class="mb-0 text-sm">${numberRow}</h6>
+      results.forEach(asset =>{
+        
+        let code = btoa(asset.idactivo) //CODIFICACIÓN
+  
+        let IconStatus = asset.estado == "SIN VENDER" ?  `<span class="badge badge-sm bg-gradient-danger">${asset.estado}</span>` : 
+                                        asset.estado = "VENDIDO" ? `<span class="badge badge-sm bg-gradient-success">${asset.estado}</span>`: 
+                                                                  `<span class="badge badge-sm bg-gradient-secondary">${asset.estado}</span>` ;
+  
+        newRow = `
+                <tr>
+                  <td>
+                    <div class="d-flex px-2 py-1">
+                      <div class="d-flex flex-column justify-content-center">
+                        <h6 class="mb-0 text-sm">${numberRow}</h6>
+                      </div>
                     </div>
-                  </div>
-                </td>
-                <td>
-                  <p class="text-xs font-weight-bold mb-0">${asset.denominacion}</p>
-                  </td>
-                  <td class="align-middle text-center text-sm">
-                    ${IconStatus}
                   </td>
                   <td>
-                    <p class="text-xs font-weight-bold mb-0">${asset.sublote}</p>
+                    <p class="text-xs font-weight-bold mb-0">${asset.denominacion}</p>
+                    </td>
+                    <td class="align-middle text-center text-sm">
+                      ${IconStatus}
+                    </td>
+                    <td>
+                      <p class="text-xs font-weight-bold mb-0">${asset.sublote}</p>
+                    </td>
+                  <td>
+                    <p class="text-xs font-weight-bold mb-0">${asset.direccion}</p>
                   </td>
-                <td>
-                  <p class="text-xs font-weight-bold mb-0">${asset.direccion}</p>
-                </td>
-                <td class="align-middle">
-                  <div class="btn-group">
-                      <a type="button" href="./delete_asset.php?id=${code}" class="btn btn-danger btn-sm" id="btn-delete"><i class="bi bi-trash-fill"></i></a>
-                      <a type="button" href="./edit_asset.php?id=${code}" class="btn btn-primary btn-sm" id="btn-edit"><i class="bi bi-pencil-fill"></i></a>
-                      <a type="button" href="./detail_asset.php?id=${code}" class="btn btn-success btn-sm"><i class="bi bi-arrow-right-square"></i></a>
-                      </div>
-                  </td>
-              </tr>           
-      `;
-      numberRow ++;
+                  <td class="align-middle">
+                    <div class="btn-group">
+                        <a type="button" href="./delete_asset.php?id=${code}" class="btn btn-danger btn-sm" id="btn-delete"><i class="bi bi-trash-fill"></i></a>
+                        <a type="button" href="./edit_asset.php?id=${code}" class="btn btn-primary btn-sm" id="btn-edit"><i class="bi bi-pencil-fill"></i></a>
+                        <a type="button" href="./detail_asset.php?id=${code}" class="btn btn-success btn-sm"><i class="bi bi-arrow-right-square"></i></a>
+                        </div>
+                    </td>
+                </tr>           
+        `;
+        numberRow ++;
 
+        $("#table-assets tbody").innerHTML += newRow;
+      });
+
+    }else{
+      newRow =`
+      <div class="alert alert-danger m-4 text-white" role="alert">
+          <strong class="text-white">El sublote ingresado no existe</strong> Asgurate de haber el escrito el código correcto.
+      </div>
+      `;
       $("#table-assets tbody").innerHTML += newRow;
-    });
+    }
+    
+
   }
 
 
@@ -619,7 +634,62 @@ document.addEventListener("DOMContentLoaded",()=>{
     catch(e){
       console.error(e);
     }
+  }
+
+  async function searchAsset(idproy,sublote){
+    try{
+
+      let url = `../../Controllers/asset.controller.php`;
+      let params = new FormData();
+
+      params.append("action", "listAssetPAcode");
+      params.append("idproyecto",idproy);
+      params.append("sublote",sublote);
+
+      let results = await global.sendAction(url, params);
+
+      if(results){
+        console.log(results)
+        renderAssets(results);
+      }
     }
+    catch(e){
+      console.error(e);
+    }
+  }
+
+  $("#in-sublote").addEventListener("input",()=>{
+
+      clearTimeout(timer);
+
+        timer = setTimeout(()=>{
+
+          let sublote = $("#in-sublote").value;
+
+          if(sublote != ""){
+
+            searchAsset(idProyecto,sublote);
+
+          }else{
+
+            getAssets(idProyecto);
+          }
+        },1500)
+    });
+
+    //Menù */*/*/
+    $("#goDashboard").addEventListener("click",()=>{
+    
+    window.location.href = `../dashboard.php?id=${code}&name=${codeName}`;
+    
+  });
+
+  $("#goProjects").addEventListener("click",()=>{
+    
+    window.location.href = `../projects/index.php?id=${code}&name=${codeName}`;
+    
+  });
+      
 
     getAssets(idProyecto);
 });

@@ -289,9 +289,9 @@
       <div class="container-fluid py-1 px-3">
         <nav aria-label="breadcrumb">
           <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
-            <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="../dashboard.html">Inicio</a></li>
-            <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="../projects/index.php">Proyectos</a></li>
-            <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="../assets/index.php">Lotes</a></li>
+          <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="#" id="goDashboard">Dashboard</a></li>
+            <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="#" id="goProjects">Proyectos</a></li>
+            <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="#" id="goLots">Lotes</a></li>
             <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Eliminar lote</li>
           </ol>
           <h6 class="font-weight-bolder mb-0">ELIMINAR LOTE</h6>
@@ -620,32 +620,6 @@
   let dataProject;
   let AllProjects;
 
-  function renderInput(keys, values){
-
-    keys.forEach((key, index)=>{
-
-        let value = values[index];
-
-        if(key != "" || value != ""){
-
-            let newText = ``;
-
-            newText = `
-                <div class="row">
-                    <div class="col-md-6">
-                        <h4>${key}</h4>
-                    </div>
-                    <div class="col-md-6">
-                        <h4>${key}</h4>
-                    </div>
-                </div>
-            `;
-
-            $("#perimetro").innerHTML += newText;
-        }
-    });
-  }
-
   async function getData(id){
 
     try{
@@ -655,13 +629,13 @@
   
       let params = new FormData();
   
-      params.append("action","inactiveAsset");
+      params.append("action","listAssetId");
       params.append("idactivo",id);
   
       let result = await global.sendAction(url, params)
 
       if(result){
-    
+        console.log(result);
         $("#card-title").innerText = result.denominacion;
         $("#sublote").innerText = result.sublote;
         $("#estado").innerText = result.estado;
@@ -680,16 +654,16 @@
 /**
  * FUNCIÓN PARA ELIMINAR UN PROYECTO
  */
-async function deleteProject(){
+async function deleteAsset(){
 
   try{
     
-    let url = "../../Controllers/project.controller.php";
+    let url = "../../Controllers/asset.controller.php";
   
     let params = new FormData();
   
-    params.append("action","inactiveProject");
-    params.append("idproyecto",idProyecto);
+    params.append("action","inactiveAsset");
+    params.append("idactivo",idActivo);
 
     let result = await global.sendAction(url, params);
 
@@ -715,7 +689,7 @@ async function deleteProject(){
 
 $("#eliminar").addEventListener("click",()=>{
 
-    deleteProject();
+    deleteAsset();
 });
 
 $("#cancelar").addEventListener("click",()=>{
@@ -723,6 +697,22 @@ $("#cancelar").addEventListener("click",()=>{
     window.location.href = "./index.php";
 });
 
+$("#goDashboard").addEventListener("click",()=>{
+    
+    window.location.href = `../dashboard.php?id=${code}&name=${codeName}`;
+    
+  });
+  $("#goProjects").addEventListener("click",()=>{
+    
+    window.location.href = `../projects/index.php?id=${code}&name=${codeName}`;
+    
+  });
+  $("#goLots").addEventListener("click",()=>{
+    
+    window.location.href = `./index.php?id=${code}&name=${codeName}`;
+    
+  });
+    
 getData(idActivo);
 
 

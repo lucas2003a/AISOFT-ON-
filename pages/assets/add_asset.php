@@ -289,9 +289,9 @@
       <div class="container-fluid py-1 px-3">
         <nav aria-label="breadcrumb">
           <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
-            <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="../dashboard.html">Inicio</a></li>
-            <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="../projects/index.php">Proyectos</a></li>
-            <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="../assets/index.php">Lotes</a></li>
+            <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="#" id="goDashboard">Dashboard</a></li>
+            <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="#" id="goProjects">Proyectos</a></li>
+            <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="#" id="goLots">Lotes</a></li>
             <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Agregar lotes</li>
           </ol>
           <h6 class="font-weight-bolder mb-0" id ="cabezera">AGREGAR LOTE - </h6>
@@ -619,6 +619,7 @@
             </div>
           </div>
       </div>     
+      
       <!-- /FORMULARIO -->
 
       <footer class="footer pt-3  ">
@@ -961,6 +962,22 @@
     }
   });
 
+  $("#goDashboard").addEventListener("click",()=>{
+    
+    window.location.href = `../dashboard.php?id=${code}&name=${codeName}`;
+    
+  });
+  $("#goProjects").addEventListener("click",()=>{
+    
+    window.location.href = `../projects/index.php?id=${code}&name=${codeName}`;
+    
+  });
+  $("#goLots").addEventListener("click",()=>{
+    
+    window.location.href = `./index.php?id=${code}&name=${codeName}`;
+    
+  });
+    
 
   getProjects(idProyecto);
   getAssetsAll(idProyecto);

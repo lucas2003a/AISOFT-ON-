@@ -814,15 +814,14 @@
         const keys = perimetro.clave;
         const values = perimetro.valor;
     
-        oldImage = project.imagen;
+        let img = project.imagen !=  null ? project.imagen : "NoImage.jpg";
     
-        let imgView = oldImage = null ? oldImage : "NoImage.jpg";
         $("#codigo").value = project.codigo;
         $("#denominacion").value = project.denominacion;
         $("#direccion").value = project.direccion;
         $("#latitud").value = project.latitud;
         $("#longitud").value = project.longitud;
-        $("#file-view").setAttribute("src",`../../media/logos/${imgView}`);
+        $("#file-view").setAttribute("src",`../../media/logos/${img}`);
     
         keys.forEach((key, index) => {
             const value = values[index];
@@ -832,6 +831,12 @@
                 renderInputs(key,value);
             }
         });
+
+        let ruta = ($("#file-view").src).split("/")
+        let sinExtend = ruta[ruta.length -1].split(".jpg")
+        console.log(sinExtend[0]);
+
+        oldImage = sinExtend[0];
       }
     }
     catch(e){
@@ -883,7 +888,6 @@
   }
 
   async function setData(){
-
     try{
       
       let keyClass = ".form-control.perim-key";
@@ -894,7 +898,7 @@
       let url = `../../Controllers/project.controller.php`;
 
       //Guarda la imagen anterior
-      let img = $("#in-image").files[0] ? $("#in-image").files[0] : oldImage;
+      let img = $("#in-image").files.length > 0? $("#in-image").files[0] : $("#in-image").files[0] = oldImage;
 
       //Iniica la operacion
       let params = new FormData();

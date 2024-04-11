@@ -100,7 +100,7 @@ if(isset($_POST["action"])){
                     "idusuario"     => 1
                     /* "idusuario"     => $_POST["idusuario"] */
                 ];
-
+                
                 if(isset($_FILES["imagen"]) && $_FILES["imagen"]["size"] > 0){
 
                     $nom_img = sha1($today) . ".jpg";

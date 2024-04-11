@@ -289,12 +289,13 @@
       <div class="container-fluid py-1 px-3">
         <nav aria-label="breadcrumb">
           <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
-          <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="#" id="goDashboard">Dashboard</a></li>
+            <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="#" id="goDashboard">Dashboard</a></li>
             <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="#" id="goProjects">Proyectos</a></li>
             <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="#" id="goLots">Lotes</a></li>
-            <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Editar lote</li>
+            <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="#" id=></a>Detalles</li>
+            <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Detalles del lote</li>
           </ol>
-          <h6 class="font-weight-bolder mb-0" id ="cabezera">EDITAR LOTE - </h6>
+          <h6 class="font-weight-bolder mb-0" id ="cabezera">DETALLES DEL LOTE - </h6>
         </nav>
         <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
           <div class="ms-md-auto pe-md-3 d-flex align-items-center">
@@ -305,7 +306,7 @@
           </div>
           <ul class="navbar-nav  justify-content-end">
             <li class="nav-item d-flex align-items-center">
-              <a class="btn btn-outline-success btn-sm mb-0 me-3" target="_blank" href="./add_asset.php" id="add-asset">AGREGAR LOTE</a>
+              <a class="btn btn-outline-success btn-sm mb-0 me-3" target="_blank" href="./add_asset.php"id="add-asset">AGREGAR LOTE</a>
             </li>
             <li class="nav-item d-flex align-items-center">
               <a href="javascript:;" class="nav-link text-body font-weight-bold px-0">
@@ -408,220 +409,232 @@
     <!-- End Navbar -->
     <div class="container py-4">
 
-      <!-- FORMULARIO -->
-      <div>
-        <div class="col-lg-12 mb-lg-0 mb-4 mt-4">
-            <div class="card">
-              <div class="card-body" style="padding: 50px">
-                <div class="row">
-                  <div class="col-lg-12">
-                    <div class="d-flex flex-column h-100">
-                      <form class="row needs-validation" id="form-assset-set" novalidate>
-                            <div class="tab">
-                              <div class="row">
-                                <div class="col-md-6">
-
-                                    <!-- DATOS GENERALES -->
-                                    
-                                    <!-- UBIGEO -->
-                                    <div >
-                                      <label for="ubigeo" class="form-label">Ubigeo</label>
-                                        <input type="text" class="form-control" id="ubigeo" readonly>
-
-                                    </div>
-
-                                    <!-- ESTADO -->
-                                    <div class="mt-4">
-                                      <label for="estado" class="form-label">Estado</label>
-                                        <input type="text" class="form-control" id="estado" readonly>
-
-                                    </div>
-    
-                                    <!-- ESTADO -->
-                                    <div class="mt-4">
-                                      <label for="tipo-activo" class="form-label">Tipo activo</label>
-                                        <input type="text" class="form-control" id="tipo-activo" readonly>
-
-                                    </div>
-    
-                                    <!-- SUBLOTE -->
-                                    <div class="mt-4">
-                                        <label for="sublote" class="form-label">Sublote</label>
-                                        <input type="text" class="form-control" id="sublote" placeholder="Sublote" required>
-                                        <div class="invalid-feedback">
-                                            Necesitas ingresar el sublote.
-                                        </div>
-                                        <div class="valid-feedback">
-                                            Sublote registrado correctamente.
-                                        </div>
-                                    </div>
-                                    
-                                    <!-- DIRECCIÓN -->
-                                    <div class="mt-4">
-                                        <label for="direccion" class="form-label">Dirección</label>
-                                        <input type="text" class="form-control" id="direccion" placeholder="Dirección" required>
-                                        <div class="invalid-feedback">
-                                            Necesitas ingresar una dirección.
-                                        </div>
-                                        <div class="valid-feedback">
-                                            Dirección ingresada correctamente.
-                                        </div>
-                                    </div>
-
-                                    <!-- IMAGEN -->
-                                    <div class="form-group">
-                                        <label for="in-image" class="label-img">
-                                            <i class="material-icons"></i>
-                                            <span class="title">Agregar imagen</span>
-                                            <input type="file" accept=".jpg" id="in-image">
-                                        </label>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                  
-                                  <div class="col-lg-12 ms-auto text-center mt-5 mt-lg-0">
-                                    <div class="bg-gradient-primary border-radius-lg h-100" style="display: flex; justify-content: center;">
-                                    
-                                      <div class="position-relative d-flex align-items-center justify-content-center h-100">
-                                        <img class="w-100 position-relative z-index-2 pt-4" id="file-view" style="min-height: max-content; padding: 2rem;" src="" alt="">
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                              <div class="btn-group">
-                                <button type="button" class="btn btn-secondary prevBtn" disabled>Anterior</button>
-                                <button type="button" class="btn btn-success nextBtn">Siguiente</button>
-                              </div>
-                            </div>
-                            
-                            <div class="tab">
-                              <div class="row">
-                                <div class="col-md-6">
-
-                                    <!-- DESCRPCIÓN -->
-                                    
-                                    <!-- ÁREA -->
-                                    <div>
-                                      <label for="area" class="form-label">Área</label>
-                                        <input type="number" class="form-control" id="area" min="0" value="000.00" placeholder="Àrea (m2)" required>
-
-                                    </div>
-
-                                    <!-- ZONAS COMUNES -->
-                                    <div class="mt-4">
-                                      <label for="z-comunes" class="form-label">Zonas comunes</label>
-                                        <input type="number" class="form-control" id="z-comunes" min="0" max="100" placeholder="Zonas comúnes (%)" required>
-
-                                    </div>
-
-    
-                                    <!-- MONEDA VENTA -->
-                                    <div class="mt-4">
-                                      <label for="moneda-venta" class="form-label">Moneda de venta</label>
-                                        <select class="form-control custom-select-scroll" id="moneda-venta" required>
-                                            <option value="">Tipo moneda</option>
-                                            <option value="USD">Dólares</option>
-                                            <option value="SOL">Soles</option>
-                                        </select>
-
-                                    </div>
-                                    
-                                    <!-- PRECIO VENTA -->
-                                    <div class="mt-4">
-                                        <label for="precio-venta" class="form-label">Precio de venta</label>
-                                        <input type="number" class="form-control" id="precio-venta" placeholder="Precio de venta" maxlength="7" minlength="7" required autofocus>
-                                        <div class="invalid-feedback">
-                                            Necesitas ingresar un código.
-                                        </div>
-                                        <div class="valid-feedback">
-                                            Código registrado correctamente.
-                                        </div>
-                                    </div>
-    
-                                    <!-- SUBLOTE -->
-                                    <div class="mt-4">
-                                        <label for="partida-elect" class="form-label">Partida electrónica</label>
-                                        
-                                        <textarea name="partida-elect" class="form-control" id="partida-elect" cols="38" rows="3" required></textarea>
-                                        <div class="invalid-feedback">
-                                            Necesitas ingresar la partida electrónica.
-                                        </div>
-                                        <div class="valid-feedback">
-                                        Partida electrónica registrada correctamente.
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <div class="col-md-6">
-                                    
-                                    <!-- LATITUD -->
-                                    <div>
-                                        <label for="latitud" class="form-label">Latitud</label>
-                                        
-                                        <input type="text" name="partida-elect" class="form-control" id="latitud" placeholder="Latitud">
-                                        <div class="invalid-feedback">
-                                            Necesitas ingresar la latitud.
-                                        </div>
-                                        <div class="valid-feedback">
-                                            Latitud registrada correctamente.
-                                        </div>
-                                    </div>
-    
-                                    <!-- LONGITUD -->
-                                    <div class="mt-4">
-                                        <label for="longitud" class="form-label">Longitud</label>
-                                        
-                                        <input type="text" name="longitud" class="form-control" id="longitud" placeholder="Longitud">
-                                        <div class="invalid-feedback">
-                                            Necesitas ingresar la longitud.
-                                        </div>
-                                        <div class="valid-feedback">
-                                            Longitud registrada correctamente.
-                                        </div>
-                                    </div>
-                                    <!-- PERIMTETRO -->
-                                    <label for="longitud" class="form-label">Perímetro</label>
-                                    <div id="perim">
-                                      <div id="patern">
-                                        
-                                        <div class="row">
-                                            <div class="col-md-11">
-
-                                                <div class="row">
-                                                    <div class="col-md-6">
-                                                        <input type="text" class="form-control perim-key" name="clave" id="clave">
-                                                    </div>
-                                                    <div class="col-md-6">
-                                                        <input type="text" class="form-control perim-value" name="valor" id="valor">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-1">
-                                                <button type="button" class="btn btn-success pluss" id="add-textBox">+</button>
-                                            </div>
-                                        </div>
-                                    </div>                                    
-                                      </div>
-                                </div>
-                              </div>
-                              <div class="btn-group mt-4">
-                                <button type="button" class="btn btn-secondary prevBtn">Anterior</button>
-                                <button type="submit" class="btn btn-success submit" id="guardar">Guardar</button>
-                              </div>
-                            </div>
-                        </form> 
-                      
-                    </div>
+        <!-- CONTENIDO -->
+        <div class="row">
+        <div class="col-lg-8">
+          
+          <!-- BOTONES -->
+          <div class="col-xl-12">
+            <div class="row">
+              <div class="mb-4 mt-4">
+                <div class="card">
+                  <div class="card-header mx-4 p-3 text-start">
+                    <button type="button" class="btn bg-gradient-danger btn-lg" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Generar contrato PDF" id="generatePDF">
+                      <i class="fa-regular fa-file-pdf opacity-10"></i>
+                    </button>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-      </div>     
-      <!-- /FORMULARIO -->
 
-      <footer class="footer pt-3  ">
+          <!-- IMAGEN -->
+          <div class="row">
+            <div class="col-xl-6 mb-xl-0 mb-4">
+              <div class="card bg-transparent shadow-xl">
+                <div class="overflow-hidden position-relative border-radius-xl" style="background-image: url('../../assets/img/curved-images/curved14.jpg');height:12rem;">
+                  <span class="mask bg-gradient-dark"></span>
+                  <div class="card-body position-relative z-index-1 p-3">
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- CABEZERA DEL DETALLE -->
+
+            <div class="col-xl-6">
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="card">
+                    <div class="card-header mx-4 p-3 text-center">
+                      <div class="icon icon-shape icon-lg bg-gradient-primary shadow text-center border-radius-lg">
+                      <i class="fa-solid fa-coins opacity-10"></i>
+                      </div>
+                    </div>
+                    <div class="card-body pt-0 p-3 text-center">
+                      <h6 class="text-center mb-0">Moneda de venta</h6>
+                      <hr class="horizontal dark my-3">
+                      <h5 class="mb-0">USD</h5>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6 mt-md-0 mt-4">
+                  <div class="card">
+                    <div class="card-header mx-4 p-3 text-center">
+                      <div class="icon icon-shape icon-lg bg-gradient-primary shadow text-center border-radius-lg">
+                      <i class="fa-solid fa-hand-holding-dollar opacity-10"></i>
+                      </div>
+                    </div>
+                    <div class="card-body pt-0 p-3 text-center">
+                      <h6 class="text-center mb-0">Precio de venta</h6>
+                      <hr class="horizontal dark my-3">
+                      <h5 class="mb-0">$455.00</h5>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- /CABEZERA DEL DETALLE -->
+
+            <!-- CLIENTES --> 
+
+            <div class="col-md-12 mb-lg-0 mb-4">
+              <div class="card mt-4">
+                <div class="card-header pb-0 p-3">
+                  <div class="row">
+                    <div class="col-6 d-flex align-items-center">
+                      <h6 class="mb-0">Clientes</h6>
+                    </div>
+                  </div>
+                </div>
+                <div class="card-body p-3">
+                  <div class="row">
+                    <div class="table-responsive">
+                      <table class="table align-items-center mb-0" id="nuevos-clientes">
+                        <thead>
+                          <tr>
+                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Apellidos</th>
+                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Nombres</th>
+                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Tipo de documento</th>
+                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Nº de documento</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                    
+                        <!-- RENDER NUEVOS CLIENTES  -->
+                        
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+          <!-- /CLIENTES -->
+
+         
+        <!-- ---------- -->  
+        </div>
+        <div class="col-lg-4">
+          <div class="card h-100">
+            <div class="card-header pb-0 p-3">
+              <div class="row">
+                <div class="col-6 d-flex align-items-center">
+                  <h6 class="mb-0">Características</h6>
+                </div>
+              </div>
+            </div>
+            <div class="card-body p-3 pb-0">
+              <ul class="list-group" id="list-group">
+                <li class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg">
+                  <div class="d-flex flex-column">
+                    <h6 class="mb-1 text-dark font-weight-bold text-sm">Precio</h6>
+                  </div>
+                  <div class="d-flex align-items-center text-sm">
+                    $180
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+
+        <!-- DETALLES DE CONSTRUCCI´N -->
+
+        <div class="col-md-12 mb-lg-0 mb-4">
+          <div class="card mt-4">
+            <div class="card-header pb-0 p-3">
+              <div class="row">
+                <div class="col-6 d-flex align-items-center">
+                  <h6 class="mb-0">Detalles de constricción</h6>
+                  </div>
+                <div class="col-6 text-end btn-group">
+                  <a class="btn bg-gradient-dark mb-0" href="javascript:;" id="add"><i class="fas fa-plus"></i>&nbsp;&nbsp;Agregar</a>
+                  <a class="btn bg-gradient-info mb-0" href="javascript:;" id="save"><i class="fa-solid fa-floppy-disk"></i> Guardar</a>
+                </div>
+              </div>
+            </div>
+            <div class="card-body p-3">
+            <div class="card-body pt-4 p-3">
+              <ul class="list-group">
+                
+                <li class="list-group-item border-0 d-flex p-4 mb-2 bg-gray-100 border-radius-lg">
+
+                  <div class="row">
+
+                    <div class="col-md-9">
+                      <div class="d-flex flex-column">
+                        <h6 class="mb-3 text-sm text-key">Oliver Liam</h6>
+                        <span class="mb-2 text-xs text-value"><span class="text-dark font-weight-bold ms-sm-2">Lorem ipsum dolor sit amet consectetur adipisicing elit. Minus aut in ad vitae error nesciunt reprehenderit, eos cum quibusdam fuga deserunt assumenda explicabo eligendi nisi qui autem. Architecto, vel ipsam? Lorem ipsum dolor sit amet consectetur adipisicing elit. Explicabo numquam in reprehenderit quos nobis possimus perferendis maxime, facilis aliquam vel delectus ea minima dolore aut odit. Autem veritatis maxime perferendis? Lorem ipsum dolor sit amet consectetur adipisicing elit. Vel nihil molestiae deserunt voluptate rerum ipsa inventore rem laborum cumque error laboriosam quos dolor ullam corrupti suscipit molestias aliquam, debitis minus? Lorem ipsum, dolor sit amet consectetur adipisicing elit. Unde quae tempora ad explicabo eum illo aliquam provident velit ducimus? Eveniet perferendis eum nulla, mollitia asperiores veritatis repudiandae quia nemo provident?</span></span>
+                      </div>
+                    </div>
+
+                    <div class="col-md-3">
+                      <div class="ms-auto text-end">
+                        <a class="btn btn-link text-danger text-gradient px-3 mb-0 delete" href="javascript:;"><i class="far fa-trash-alt me-2"></i>Delete</a>
+                        <a class="btn btn-link text-dark px-3 mb-0 edit" href="javascript:;"><i class="fas fa-pencil-alt text-dark me-2" aria-hidden="true"></i>Edit</a>
+                      </div>
+                    </div>
+
+                  </div>
+
+                </li>
+                <li class="list-group-item border-0 d-flex p-4 mb-2 bg-gray-100 border-radius-lg">
+
+                  <div class="row">
+
+                    <div class="col-md-9">
+                      <div class="d-flex flex-column">
+                        <h6 class="mb-3 text-sm text-key">Oliver Liam</h6>
+                        <span class="mb-2 text-xs text-value"><span class="text-dark font-weight-bold ms-sm-2">Lorem ipsum dolor sit amet consectetur adipisicing elit. Minus aut in ad vitae error nesciunt reprehenderit, eos cum quibusdam fuga deserunt assumenda explicabo eligendi nisi qui autem. Architecto, vel ipsam? Lorem ipsum dolor sit amet consectetur adipisicing elit. Explicabo numquam in reprehenderit quos nobis possimus perferendis maxime, facilis aliquam vel delectus ea minima dolore aut odit. Autem veritatis maxime perferendis? Lorem ipsum dolor sit amet consectetur adipisicing elit. Vel nihil molestiae deserunt voluptate rerum ipsa inventore rem laborum cumque error laboriosam quos dolor ullam corrupti suscipit molestias aliquam, debitis minus? Lorem ipsum, dolor sit amet consectetur adipisicing elit. Unde quae tempora ad explicabo eum illo aliquam provident velit ducimus? Eveniet perferendis eum nulla, mollitia asperiores veritatis repudiandae quia nemo provident?</span></span>
+                      </div>
+                    </div>
+
+                    <div class="col-md-3">
+                      <div class="ms-auto text-end">
+                        <a class="btn btn-link text-danger text-gradient px-3 mb-0 delete" href="javascript:;"><i class="far fa-trash-alt me-2"></i>Delete</a>
+                        <a class="btn btn-link text-dark px-3 mb-0 edit" href="javascript:;"><i class="fas fa-pencil-alt text-dark me-2" aria-hidden="true"></i>Edit</a>
+                      </div>
+                    </div>
+
+                  </div>
+
+                </li>
+                <li class="list-group-item border-0 d-flex p-4 mb-2 bg-gray-100 border-radius-lg">
+
+                  <div class="row">
+
+                    <div class="col-md-9">
+                      <div class="d-flex flex-column">
+                        <h6 class="mb-3 text-sm text-key">Oliver Liam</h6>
+                        <span class="mb-2 text-xs text-value"><span class="text-dark font-weight-bold ms-sm-2">Lorem ipsum dolor sit amet consectetur adipisicing elit. Minus aut in ad vitae error nesciunt reprehenderit, eos cum quibusdam fuga deserunt assumenda explicabo eligendi nisi qui autem. Architecto, vel ipsam? Lorem ipsum dolor sit amet consectetur adipisicing elit. Explicabo numquam in reprehenderit quos nobis possimus perferendis maxime, facilis aliquam vel delectus ea minima dolore aut odit. Autem veritatis maxime perferendis? Lorem ipsum dolor sit amet consectetur adipisicing elit. Vel nihil molestiae deserunt voluptate rerum ipsa inventore rem laborum cumque error laboriosam quos dolor ullam corrupti suscipit molestias aliquam, debitis minus? Lorem ipsum, dolor sit amet consectetur adipisicing elit. Unde quae tempora ad explicabo eum illo aliquam provident velit ducimus? Eveniet perferendis eum nulla, mollitia asperiores veritatis repudiandae quia nemo provident?</span></span>
+                      </div>
+                    </div>
+
+                    <div class="col-md-3">
+                      <div class="ms-auto text-end">
+                        <a class="btn btn-link text-danger text-gradient px-3 mb-0 delete" href="javascript:;"><i class="far fa-trash-alt me-2"></i>Delete</a>
+                        <a class="btn btn-link text-dark px-3 mb-0 edit" href="javascript:;"><i class="fas fa-pencil-alt text-dark me-2" aria-hidden="true"></i>Edit</a>
+                      </div>
+                    </div>
+
+                  </div>
+
+                </li>
+
+              </ul>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    
+    <footer class="footer pt-3  ">
         <div class="container-fluid">
           <div class="row align-items-center justify-content-lg-between">
             <div class="col-lg-6 mb-lg-0 mb-4">
@@ -708,365 +721,111 @@
   <script src="../../assets/js/plugins/chartjs.min.js"></script>
   <script src="../../assets/js/globalFunctions.js"></script>
   <script src="../../assets/js/sweetAlert.js"></script>
-  <script src="../../assets/js/formMultiSteps.js"></script>
-  <script src="../../assets/js/projects/interactionForms.js"></script>
+  <!-- <script src="../../assets/js/formMultiSteps.js"></script>
+  <script src="../../assets/js/projects/interactionForms.js"></script> -->
   <!-- <script src="../../assets/js/renderUbigeo.js"></script>  -->
   <script>
 
   const global = new FunGlobal();
   const sAlert = new Alert();
 
-  //formulario
-  const idform = "#form-assset-set" 
-  const formMS = new multiStepsForm(idform);
-
   const $ = id => global.$(id);
   const $All = id => global.$All(id);
 
-  //OBTIENE EL ID DEL URL
-  const stringQuery = window.location.search;
+  const btnsEdit = $All(".edit");
 
-  const url = new URLSearchParams(stringQuery);
-
-  const code = url.get("id");
-
-  const codePr = url.get("idproy");
-  const nameProy = url.get("name");
-
-  const idActivo = atob(code);
-
-  let dataAsset;
-
-  let oldImage;
-  let AllDataAssets;
-  let idProyecto;
-
-  function renderInputs(key, value){
-
-    /*INPUT KEY */
-    let inputKey = document.createElement("input");
-    inputKey.classList.add("form-control","perim-key")
-    inputKey.value = key;
-
-    /* INPUT VALUE */
-    let inputValue = document.createElement("input");
-    inputValue.classList.add("form-control","perim-value");
-    inputValue.value = value;
-
-    /* DIV KEY */
-    let divKey = document.createElement("div");
-    divKey.classList.add("col-md-6");
-
-    /* DIV VALUE */
-    let divValue = document.createElement("div");
-    divValue.classList.add("col-md-6");
-
-    divKey.appendChild(inputKey);
-    divValue.appendChild(inputValue);
-
-    
-    let rowInputs = document.createElement("div");
-    rowInputs.classList.add("row","mt.2");
-    
-    rowInputs.appendChild(divKey);
-    rowInputs.appendChild(divValue);
-
-    let divInputs = document.createElement("div");
-    divInputs.classList.add("col-md-11");
-
-    divInputs.appendChild(rowInputs);
-
-    /* -------------------------------------------------- */
-
-    /* BOTÓN "-" */
-    let buttonLess = document.createElement("button");
-    buttonLess.classList.add("btn","btn-danger","less","mt-2","active");
-    buttonLess.setAttribute("id","add-textBox");
-    buttonLess.setAttribute("type","button");
-    buttonLess.innerText = "-";
-    
-    let divButton = document.createElement("div");
-    divButton.classList.add("col-md-1");
-
-    divButton.appendChild(buttonLess);
-
-    /* -------------------------------------------------- */
-
-    let rowMaster = document.createElement("div");
-    rowMaster.classList.add("row");
-
-    rowMaster.appendChild(divInputs);
-    rowMaster.appendChild(divButton);
-
-    let firstRow = $("#perim").firstChild;
-    $("#perim").insertBefore(rowMaster,firstRow);  
-  }  
-
-  /**
-  * Funcion para obtener los lotes asociados a un idproyecto
-  */
- async function getAssetsAll(id){
   
-  try{
     
-    let url = "../../Controllers/asset.controller.php";
-    let params = new FormData();
-  
-    params.append("action","listAssetProjectId");
-    params.append("idproyecto",id);
-
-    let results = await global.sendAction(url, params);
-
-    if(results){
+    btnsEdit.forEach(btnEdit => {
       
-      AllDataAssets = results;
-    }
-  }
-  catch(e){
-    console.error(e);
-  }
- };
+      btnEdit.addEventListener("click",function(){
   
- /**
-  * Función para renderizar los datos obtenidos
-  * */
- async function renderData(asset){
-  
-  try{
-    console.log(asset);
-    
-    oldImage = asset.imagen;
-    let img = asset.imagen != null ? asset.imagen : "NoImage.jpg";
-    
-    $("#cabezera").innerText += ` ${asset.sublote} - ${asset.denominacion}`;
-    
-    /* FORMULARIO DATOS GENERALES  */
-    $("#ubigeo").value = `${asset.distrito} - ${asset.provincia} - ${asset.departamento}`;
-    $("#estado").value = asset.estado;
-    $("#tipo-activo").value = asset.tipo_activo;
-    $("#sublote").value = asset.sublote;
-    $("#direccion").value = asset.direccion;
-    $("#file-view").setAttribute("src",`../../media/lotes/${img}`);
-    
-    /* FORMULARIO DESCRIPCIÓN  */
-    $("#area").value = asset.area_terreno;
-    $("#z-comunes").value = asset.zcomunes_porcent;
-    $("#moneda-venta").value = asset.moneda_venta;
-    $("#precio-venta").value = asset.precio_venta;
-    $("#partida-elect").value = asset.partida_elect;
-    $("#latitud").value = asset.latitud;
-    $("#longitud").value = asset.longitud;
-    
-    const perimetro = await global.JSONtoObject(asset.perimetro);
-    
-      console.log(perimetro);
-  }
-  catch(e){
-    console.error(e);
-  }
- }
- 
- /**
-   * Funciòn para obtener la data de un lote por su ID
-   */
-  async function getAsset(id){
-
-    try{
-      
-      $("#add-asset").setAttribute("href",`./add_asset.php?idproy=${codePr}&name=${nameProy}`);
-
-      let url ="../../Controllers/asset.controller.php";
-      let params = new FormData();
-  
-      params.append("action","listAssetId");
-      params.append("idactivo",id);
-
-      let result =  await global.sendAction(url, params);
-
-      if(result){
-
-        dataAsset = result;
-        idProyecto = dataAsset.idproyecto;
-        console.log(dataAsset);
-
-        getAssetsAll(idProyecto);
-        renderData(dataAsset);
-
-      }
-    }
-    catch(e){
-      console.error(e);
-    }
- };
-
- /**
-  * FUNCIÓN PARA COMPARA INFORMACIÓN
-  */
-  async function searchInfo(array, column, param){
-  
-     if(column == "sublote"){
-      
-      return new Promise((resolve, reject) => {
+        //reemplazando a una etiqueta input
+        const h6 = this.parentNode.parentNode.previousElementSibling.querySelector(".text-key");
         
-        for(let element of array){
-          
-          const found = array.find(element => element[column] == param);
-
-          if(found){
+        const input = document.createElement("input");
+        input.classList.add("form-control","mb-2", "text-dark", "font-weight-bold", "ms-sm-2,", "text-key");
   
-              sAlert.sweetWarning("Se ha encontrado coincidencias", `"${param}" ya existe, ingresa otro`);
+        input.value = h6.textContent;
+        console.log(input.value),
+  
+        h6.parentNode.replaceChild(input, h6);
 
-              reject();
-          }else{
-              
-              $("#sublote").removeAttribute("autofocus");
-              $("#direccion").removeAttribute("readonly");
-              $("#direccion").focus();
-
-              resolve();
-          }
-        }
+        //Remplazando a una etiqueta textarea
+        const span = this.parentNode.parentNode.previousElementSibling.querySelector(".text-value");
+  
+        const textarea = document.createElement("textarea");
+  
+        textarea.classList.add("form-control","mb-2", "text-dark", "font-weight-bold", "ms-sm-2,", "text-value");
+        textarea.setAttribute("cols","70");
+        textarea.setAttribute("rows","10");
+        textarea.value = span.textContent;
+  
+        span.parentNode.replaceChild(textarea, span);
+  
       });
-    }
-  };
-
-  async function setAsset(id){
-
-    try{
-
-      const keyClass = ".form-control.perim-key";
-      const keyValue = ".form-control.perim-value";
+    });
   
-      const json = await global.getJson(keyClass, keyValue)
 
-      let url = "../../Controllers/asset.controller.php";
-  
-      let params = new FormData();
+    async function restoreText(){
 
-      let img = $("#in-image").files[0] != null ? $("#in-image").files[0] : oldImage;
-  
-      params.append("action","setAsset");
-      params.append("idactivo",id);
-      params.append("idproyecto",idProyecto);
-      params.append("tipo_activo",dataAsset.tipo_activo);
-      params.append("imagen",img);
-      params.append("estado",dataAsset.estado);
-      params.append("sublote",$("#sublote").value);
-      params.append("direccion",$("#direccion").value);
-      params.append("moneda_venta",$("#moneda-venta").value);
-      params.append("precio_venta",$("#precio-venta").value);
-      params.append("area_terreno",$("#area").value);
-      params.append("zcomunes_porcent",$("#z-comunes").value);
-      params.append("partida_elect",$("#partida-elect").value);
-      params.append("latitud",$("#latitud").value);
-      params.append("longitud",$("#longitud").value);
-      params.append("perimetro",json);
-      params.append("det_casa",`{"clave" :[""], "valor":[""]}`);
+      const textareas = $All("textarea");
+      const inputs = $All("input");
 
-      let results = await global.sendAction(url, params);
+      inputs.forEach(input => {
 
-      if(results){
+        const h6 = document.createElement("h6");
+        h6.classList.add("mb-3" ,"text-sm" ,"text-key")
+        h6.textContent = input.value
 
-        console.log(results);
+        input.parentNode.replaceChild(h6, input);
+      });
 
-        if(results.filasAfect > 0){
-           
-          let codeName = btoa(dataAsset.denominacion)
-          let codeid = btoa(idProyecto);
-           sAlert.sweetSuccess("Registro actualizado","El registro se ha actualizado correctamente",()=>{
-    
-                window.location.href = `./index.php?id=${codeid}&name=${codeName}`;
-            });
-        }else{
-            sAlert.alertError("No se actualizó el registro","Vuelve a intentarlo");
-        }
-      }
+
+      textareas.forEach(textarea => {
+
+        const span = document.createElement("span");
+        span.classList.add("text-dark", "font-weight-bold","ms-sm-2");
+        span.textContent = textarea.value;
+
+        const spanParent = document.createElement("span");
+        spanParent.classList.add("mb-2", "text-xs", "text-value");
+
+        spanParent.appendChild(span)
+
+        textarea.parentNode.replaceChild(span, textarea);
+      });
 
     }
-    catch(e){
-      console.error(e);
-    }
-  }
-  
-  $("#sublote").addEventListener("keypress",(e)=>{
 
-    if(e.keyCode == 13){
+    async function getText(){
 
-      let sublote = $("#sublote").value;
+      const keyClass = ".text-key";
+      const valueClass = ".text-value";
 
-      if(sublote != dataAsset.sublote){
+      console.log($All(".text-key").textContent);
 
-        searchInfo(AllDataAssets,"sublote",sublote);
+      const textContent = await global.getJson(keyClass, valueClass);
+      
+      if(textContent){
 
+        console.log(textContent)
+        await restoreText();
       }else{
-
-        $("#direccion").removeAttribute("readonly");
-        $("#direccion").focus();
+        console.error("no hay datos")
       }
+      
     }
-  });
 
-  $("#goDashboard").addEventListener("click",()=>{
-    
-    window.location.href = `../dashboard.php?id=${code}&name=${codeName}`;
-    
-  });
-  $("#goProjects").addEventListener("click",()=>{
-    
-    window.location.href = `../projects/index.php?id=${code}&name=${codeName}`;
-    
-  });
-  $("#goLots").addEventListener("click",()=>{
-    
-    window.location.href = `./index.php?id=${code}&name=${codeName}`;
-    
-  });
-    
   
-  getAsset(idActivo);
 
+  $("#save").addEventListener("click",()=>{
 
-  /* --------------------------------- FUNCIÓN DE VALIDACIÓN --------------------------------------------------------- */
+    getText();
+  });
+
+  //OBTIENE EL ID DEL URL
   
-  (() => {
-    'use strict' //=> USO ESTRICTO POR POLITICAS DE SEGURIDAD EN EL FORMULARIO
-
-     //SELECCIONA TODOS LOS ELEMENTOS DEL FORMULARIO QUE TIENE LA CLASE "needs-validation
-    const forms = document.querySelectorAll('.needs-validation')
-
-    // TOMA EL ELEMENTO "FORMS" Y LO CONVIERTE A UN ARRAY
-    // SE INCLUYE EN UN FOREAH PARA ITERAR SOBRE SUS ELEMENTOS
-
-    Array.from(forms).forEach(form => {
-        form.addEventListener('submit', event => {
-
-            //SI LA VALIDACIÓN DEL FORMULARIO ES FALSE
-            if (!form.checkValidity()) {
-            event.preventDefault()      //=> FRENA EL ENVÍO DEL FORMULARIO
-            event.stopPropagation()     //=> FRENA LA PROPAGACIÓN DE DATOS EN EL FORMULARIO
-            form.reportValidity();
-        }else{
-            event.preventDefault();
-            sAlert.sweetConfirm("Datos nuevos","¿Deseas actualizar el registro?",()=>{
-                
-              setAsset(idActivo); //Ejecuta la función
-            });
-        }
-
-        form.classList.add('was-validated') //=> AGREGA ESTA CLASE A LOS ELEMENTOS DEL FORMULARIO(MUESTRA LOS COMENTARIOS)
-        }, false) //=> ESTE TERCER ARGUMENTO INDICA QUE EL EVENTO NO SE ESTA CAPTURANDO EN LA ""FASE DE CAPTURA" SINO EN "PROPAGACIÓN NORMAL"
-    })  
-  })();
-
-  </script>
-  <script>
-    var win = navigator.platform.indexOf('Win') > -1;
-    if (win && document.querySelector('#sidenav-scrollbar')) {
-      var options = {
-        damping: '0.5'
-      }
-      Scrollbar.init(document.querySelector('#sidenav-scrollbar'), options);
-    }
   </script>
   <!-- Github buttons -->
   <script async defer src="https://buttons.github.io/buttons.js"></script>
