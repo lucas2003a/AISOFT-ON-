@@ -744,9 +744,10 @@
         const h6 = this.parentNode.parentNode.previousElementSibling.querySelector(".text-key");
         
         const input = document.createElement("input");
-        input.classList.add("form-control","mb-2", "text-dark", "font-weight-bold", "ms-sm-2,", "text-key");
+        input.classList.add("form-control","mb-2", "text-dark", "font-weight-bold", "ms-sm-2", "text-key");
   
         input.value = h6.textContent;
+        input.innerHTML = h6.textContent;
         console.log(input.value),
   
         h6.parentNode.replaceChild(input, h6);
@@ -756,16 +757,36 @@
   
         const textarea = document.createElement("textarea");
   
-        textarea.classList.add("form-control","mb-2", "text-dark", "font-weight-bold", "ms-sm-2,", "text-value");
+        textarea.classList.add("form-control","mb-2", "text-dark", "font-weight-bold", "ms-sm-2", "text-value");
         textarea.setAttribute("cols","70");
         textarea.setAttribute("rows","10");
         textarea.value = span.textContent;
+        textarea.innerHTML = span.textContent;
   
         span.parentNode.replaceChild(textarea, span);
   
       });
     });
   
+    async function getText(){
+
+      const keyClass = ".list-group-item .text-key";
+      const valueClass = ".list-group-item .text-value";
+
+      const key = Array.from($All(keyClass));
+
+      console.log(key)
+
+      const textContent = await global.getJsonTxT(keyClass, valueClass);
+      
+      if(textContent){
+
+        console.log(textContent)
+      }else{
+        console.error("no hay datos")
+      }
+      
+    }
 
     async function restoreText(){
 
@@ -792,36 +813,17 @@
         spanParent.classList.add("mb-2", "text-xs", "text-value");
 
         spanParent.appendChild(span)
-
-        textarea.parentNode.replaceChild(span, textarea);
+        
+        textarea.parentNode.replaceChild(spanParent, textarea);
       });
 
+      await getText()
+
     }
-
-    async function getText(){
-
-      const keyClass = ".text-key";
-      const valueClass = ".text-value";
-
-      console.log($All(".text-key").textContent);
-
-      const textContent = await global.getJson(keyClass, valueClass);
-      
-      if(textContent){
-
-        console.log(textContent)
-        await restoreText();
-      }else{
-        console.error("no hay datos")
-      }
-      
-    }
-
-  
 
   $("#save").addEventListener("click",()=>{
 
-    getText();
+    restoreText();
   });
 
   //OBTIENE EL ID DEL URL

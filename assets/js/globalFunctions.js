@@ -27,7 +27,7 @@ class FunGlobal{
     };
 
     /**
-     * GETSON RETORNA UN JSON EN BASE A DOS CLASES
+     * GETSON RETORNA UN JSON EN BASE A DOS CLASES DE EIQUETAS INPUT
      * @param {string} keyClass 
      * @param {string} valueClass 
      * @returns 
@@ -47,6 +47,7 @@ class FunGlobal{
     
             //INDEX SE CREA DE FORMA AUTOMATICA ES EL INDICE DE LA ITERACIÓN
             Array.from(formKeys).forEach((keyInput, index)=>{
+
                 let key = keyInput.value.trim();
     
                 let indexValue = formValues[index]; //=>ASIGANMOS EL "VALOR" CORRESPONDIENTE AL INDICE DE LA ITERACION(GUARDA LA RELACIÓN KEY => VALUE)
@@ -55,6 +56,49 @@ class FunGlobal{
     
                 dataJson.clave[index] = key;
                 dataJson.valor[index] = value;
+            });
+    
+            return JSON.stringify(dataJson);
+        }
+        catch(e){
+
+            console.error(e);
+        }
+    }
+
+    /**
+     * GETSON RETORNA UN JSON EN BASE A DOS CLASES DE ETIQUETAS DE TEXTO
+     * @param {string} keyClass 
+     * @param {string} valueClass 
+     * @returns 
+     */
+    getJsonTxT(keyClass, valueClass){
+
+        try{
+            
+            let formKeys = document.querySelectorAll(keyClass);
+            let formValues = document.querySelectorAll(valueClass);
+            
+    
+            let dataJson ={
+                "clave": [],
+                "valor": []
+            };
+    
+            //INDEX SE CREA DE FORMA AUTOMATICA ES EL INDICE DE LA ITERACIÓN
+            Array.from(formKeys).forEach((keyInput, index)=>{
+
+                let key = keyInput.textContent.trim();
+    
+                let indexValue = formValues[index]; //=>ASIGANMOS EL "VALOR" CORRESPONDIENTE AL INDICE DE LA ITERACION(GUARDA LA RELACIÓN KEY => VALUE)
+
+                
+                let value = indexValue.firstChild.textContent.trim();
+
+                dataJson.clave[index] = key;
+                dataJson.valor[index] = value;
+
+                console.log(dataJson);
             });
     
             return JSON.stringify(dataJson);
