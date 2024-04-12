@@ -15,7 +15,12 @@ if(isset($_POST["action"])){
                 echo json_encode($asset->listAssetProjectId($idPObtained));
             break;
         
-        case "listAssetPAcode": 
+        case "
+        
+        
+        
+        
+        ": 
             
                 $dataObtained = [
                     "idproyecto"    =>  $_POST["idproyecto"],
@@ -114,7 +119,9 @@ if(isset($_POST["action"])){
 
                 }else{
 
-                    $dataObtained["imagen"] = $nom_img;
+                    $result = $asset->listAssetId($dataObtained["idactivo"]);
+
+                    $dataObtained["imagen"] = $result["imagen"];
                 }
 
                 echo json_encode($asset->setAsset($dataObtained));

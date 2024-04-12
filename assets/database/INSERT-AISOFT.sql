@@ -120,37 +120,37 @@ ALTER TABLE activos AUTO_INCREMENT = 0;
 SELECT * FROM activos;
 
 -- activos
-INSERT INTO activos (idproyecto, tipo_activo, codigo, sublote, direccion, moneda_venta, area_terreno, partida_elect, precio_venta, create_at, idusuario)
+INSERT INTO activos (idproyecto, tipo_activo, sublote, direccion, moneda_venta, area_terreno, partida_elect, precio_venta, create_at, idusuario)
 VALUES
-	(1, 'lote', 'AC00001', 1, 'Urbanización Alpha', 'USD', 300.00, 'Partida 001', 80000.00, CURDATE(), 1),
-	(2, 'lote', 'AC00003', 1, 'Urbanización Gamma', 'USD', 250.00, 'Partida 003', 100000.00, CURDATE(), 1),
-	(1, 'lote', 'AC00005', 3, 'Urbanización Epsilon', 'USD', 350.00, 'Partida 005', 90000.00, CURDATE(), 1),
-	(3, 'lote', 'AC00007', 2, 'Urbanización Eta', 'USD', 400.00, 'Partida 007', 120000.00, CURDATE(), 3),
-	(2, 'lote', 'AC00009', 3, 'Urbanización Iota', 'USD', 280.00, 'Partida 009', 110000.00, CURDATE(), 2),
-	(3, 'lote', 'AC00011', 5, 'Urbanización Lambda', 'USD', 320.00, 'Partida 011', 95000.00, CURDATE(), 2),
-	(4, 'lote', 'AC00013', 1, 'Urbanización Nu', 'USD', 300.00, 'Partida 013', 85000.00, CURDATE(), 2),
-	(4, 'lote', 'AC00015', 3, 'Urbanización Omicron', 'USD', 380.00, 'Partida 015', 110000.00, CURDATE(), 1),
-	(1, 'lote', 'AC00017', 7, 'Urbanización Rho', 'USD', 420.00, 'Partida 017', 105000.00, CURDATE(), 3),
-	(2,	'lote', 'AC00019', 9, 'Urbanización Tau', 'USD', 450.00, 'Partida 019', 115000.00, CURDATE(), 3),
-	(3, 'lote', 'AC00021', 11, 'Urbanización Phi', 'USD', 480.00, 'Partida 021', 100000.00, CURDATE(), 2),
-	(4, 'lote', 'AC00023', 13, 'Urbanización Psi', 'USD', 500.00, 'Partida 023', 120000.00, CURDATE(), 2),
-	(1, 'lote', 'AC00025', 15, 'Urbanización Beta', 'USD', 300.00, 'Partida 025', 90000.00, CURDATE(), 2);
+	(1, 'lote', 1, 'Urbanización Alpha', 'USD', 300.00, 'Partida 001', 80000.00, CURDATE(), 1),
+	(2, 'lote', 1, 'Urbanización Gamma', 'USD', 250.00, 'Partida 003', 100000.00, CURDATE(), 1),
+	(1, 'lote', 3, 'Urbanización Epsilon', 'USD', 350.00, 'Partida 005', 90000.00, CURDATE(), 1),
+	(3, 'lote', 2, 'Urbanización Eta', 'USD', 400.00, 'Partida 007', 120000.00, CURDATE(), 3),
+	(2, 'lote', 3, 'Urbanización Iota', 'USD', 280.00, 'Partida 009', 110000.00, CURDATE(), 2),
+	(3, 'lote', 5, 'Urbanización Lambda', 'USD', 320.00, 'Partida 011', 95000.00, CURDATE(), 2),
+	(4, 'lote', 1, 'Urbanización Nu', 'USD', 300.00, 'Partida 013', 85000.00, CURDATE(), 2),
+	(4, 'lote', 3, 'Urbanización Omicron', 'USD', 380.00, 'Partida 015', 110000.00, CURDATE(), 1),
+	(1, 'lote', 7, 'Urbanización Rho', 'USD', 420.00, 'Partida 017', 105000.00, CURDATE(), 3),
+	(2,	'lote', 9, 'Urbanización Tau', 'USD', 450.00, 'Partida 019', 115000.00, CURDATE(), 3),
+	(3, 'lote', 11, 'Urbanización Phi', 'USD', 480.00, 'Partida 021', 100000.00, CURDATE(), 2),
+	(4, 'lote', 13, 'Urbanización Psi', 'USD', 500.00, 'Partida 023', 120000.00, CURDATE(), 2),
+	(1, 'lote', 15, 'Urbanización Beta', 'USD', 300.00, 'Partida 025', 90000.00, CURDATE(), 2);
 
 -- CASAS
-INSERT INTO activos (idproyecto, tipo_activo, codigo, sublote, direccion, moneda_venta, area_terreno, partida_elect, idactivo, precio_venta, create_at, idusuario)
+INSERT INTO activos (idproyecto, tipo_activo, sublote, direccion, moneda_venta, area_terreno, partida_elect, idactivo, precio_venta, create_at, idusuario)
 VALUES
-	(1, 'casa', 'AC00002', 2, 'Urbanización Beta', 'USD', 200.00, 'Partida 002', 1, 150000.00, CURDATE(), 1),
-	(2, 'casa', 'AC00004', 2, 'Urbanización Delta', 'USD', 220.00, 'Partida 004', 2, 180000.00, CURDATE(), 1),
-	(1, 'casa', 'AC00006', 4, 'Urbanización Zeta', 'USD', 180.00, 'Partida 006', 3, 120000.00, CURDATE(), 2),
-	(3, 'casa', 'AC00008', 3, 'Urbanización Theta', 'USD', 250.00, 'Partida 008', 4, 200000.00, CURDATE(), 2),
-	(2, 'casa', 'AC00010', 4, 'Urbanización Kappa', 'USD', 230.00, 'Partida 010', 5, 190000.00, CURDATE(), 2),
-	(3, 'casa', 'AC00012', 6, 'Urbanización Mu', 'USD', 210.00, 'Partida 012', 6, 160000.00, CURDATE(), 2),
-	(4, 'casa', 'AC00014', 2, 'Urbanización Xi', 'USD', 240.00, 'Partida 014', 7, 175000.00, CURDATE(), 2),
-	(4, 'casa', 'AC00016', 4, 'Urbanización Pi', 'USD', 260.00, 'Partida 016', 8, 220000.00, CURDATE(), 3),
-	(1, 'casa', 'AC00018', 8, 'Urbanización Sigma', 'USD', 280.00, 'Partida 018', 9, 200000.00, CURDATE(), 3),
-	(2, 'casa', 'AC00020', 10, 'Urbanización Upsilon', 'USD', 300.00, 'Partida 020', 10, 210000.00, CURDATE(), 3),
-	(3, 'casa', 'AC00022', 12, 'Urbanización Chi', 'USD', 320.00, 'Partida 022', 11, 180000.00, CURDATE(), 2),
-	(4, 'casa', 'AC00024', 14, 'Urbanización Omega', 'USD', 350.00, 'Partida 024', 12, 190000.00, CURDATE(), 2);
+	(1, 'casa', 2, 'Urbanización Beta', 'USD', 200.00, 'Partida 002', 1, 150000.00, CURDATE(), 1),
+	(2, 'casa', 2, 'Urbanización Delta', 'USD', 220.00, 'Partida 004', 2, 180000.00, CURDATE(), 1),
+	(1, 'casa', 4, 'Urbanización Zeta', 'USD', 180.00, 'Partida 006', 3, 120000.00, CURDATE(), 2),
+	(3, 'casa', 3, 'Urbanización Theta', 'USD', 250.00, 'Partida 008', 4, 200000.00, CURDATE(), 2),
+	(2, 'casa', 4, 'Urbanización Kappa', 'USD', 230.00, 'Partida 010', 5, 190000.00, CURDATE(), 2),
+	(3, 'casa', 6, 'Urbanización Mu', 'USD', 210.00, 'Partida 012', 6, 160000.00, CURDATE(), 2),
+	(4, 'casa', 2, 'Urbanización Xi', 'USD', 240.00, 'Partida 014', 7, 175000.00, CURDATE(), 2),
+	(4, 'casa', 4, 'Urbanización Pi', 'USD', 260.00, 'Partida 016', 8, 220000.00, CURDATE(), 3),
+	(1, 'casa', 8, 'Urbanización Sigma', 'USD', 280.00, 'Partida 018', 9, 200000.00, CURDATE(), 3),
+	(2, 'casa', 10, 'Urbanización Upsilon', 'USD', 300.00, 'Partida 020', 10, 210000.00, CURDATE(), 3),
+	(3, 'casa', 12, 'Urbanización Chi', 'USD', 320.00, 'Partida 022', 11, 180000.00, CURDATE(), 2),
+	(4, 'casa', 14, 'Urbanización Omega', 'USD', 350.00, 'Partida 024', 12, 190000.00, CURDATE(), 2);
 
 
 SELECT * FROM activos;
@@ -208,6 +208,15 @@ INSERT INTO separaciones (
 		6, 1, 1, 150.5, '2024-03-08',
 		5, 'Activo', '2024-03-08', 1
 		);
+        
+INSERT INTO separaciones (
+    idactivo, idvend_representante, idcliente, separacion, fecha_pago,
+    penalidad_porcent, estado, create_at, idusuario
+	) 
+		VALUES (
+		7, 1, 2, 150.5, '2024-03-08',
+		5, 'Activo', '2024-03-08', 1
+		);        
 SELECT * FROM separaciones;
 
 -- SUSTENTO SEPARACIONES

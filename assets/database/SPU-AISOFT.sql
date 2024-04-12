@@ -239,7 +239,6 @@ BEGIN
         proy.denominacion,
         act.imagen,
         act.estado,
-        act.codigo,
         act.sublote,
         act.direccion,
         dist.distrito,
@@ -276,28 +275,12 @@ END $$
 DELIMITER ;
 
 DELIMITER $$
-CREATE PROCEDURE spu_list_assets_by_code(IN _idproyecto INT, IN _codigo CHAR(5)) -- => POR CÓDIGO DE LOTE
+CREATE PROCEDURE spu_list_assets_by_sublote(IN _idproyecto INT, IN _sublote CHAR(5)) -- => POR CÓDIGO DE LOTE
 BEGIN
 	SELECT * 
 		FROM vws_list_assets_short
-        WHERE codigo LIKE CONCAT(_codigo,"%")
-        AND idporyecto = _idproyecto;
-END $$
-DELIMITER ;
-
-DELIMITER $$
-CREATE PROCEDURE spu_list_inactive_assets()
-BEGIN
-	SELECT * FROM vws_list_inactive_assets ;
-END $$
-DELIMITER 
-
-DELIMITER $$
-CREATE PROCEDURE spu_list_inactive_assets_by_code(IN _codigo CHAR(5))
-BEGIN
-	SELECT * 
-		FROM vws_list_inactive_assets
-        WHERE codigo LIKE CONCAT(_codigo,"%");
+        WHERE sublote LIKE CONCAT(_sublote,"%")
+        AND idproyecto = _idproyecto;
 END $$
 DELIMITER ;
 
@@ -308,7 +291,6 @@ CREATE PROCEDURE spu_add_assets
 	IN _tipo_activo 	VARCHAR(10),
     IN _imagen  		VARCHAR(100),
     IN _estado	 		VARCHAR(10),
-    IN _codigo 			CHAR(7),
     IN _sublote 		TINYINT,
     IN _direccion 		CHAR(70),
     IN _moneda_venta 	VARCHAR(10),
@@ -324,12 +306,12 @@ CREATE PROCEDURE spu_add_assets
 )
 BEGIN
 	INSERT INTO activos (
-						idproyecto, tipo_activo, imagen, estado, codigo, sublote, direccion, moneda_venta, area_terreno, zcomunes_porcent, partida_elect,
+						idproyecto, tipo_activo, imagen, estado, sublote, direccion, moneda_venta, area_terreno, zcomunes_porcent, partida_elect,
 						latitud, longitud, perimetro, det_casa, precio_venta, idusuario
                         )
 			VALUES
 				(
-                _idproyecto, _tipo_activo, NULLIF(_imagen,""), _estado, _codigo, _sublote, _direccion, _moneda_venta, _area_terreno, _zcomunes_porcent, partida_elect,
+                _idproyecto, _tipo_activo, NULLIF(_imagen,""), _estado, _sublote, _direccion, _moneda_venta, _area_terreno, _zcomunes_porcent, partida_elect,
 				NULLIF(_latitud,""), NULLIF(_longitud, ""), NULLIF(_perimetro,""),NULLIF(_det_casa,""), _precio_venta, _idusuario
                 );
                 
@@ -345,7 +327,6 @@ CREATE PROCEDURE spu_set_assets
 	IN _tipo_activo 	VARCHAR(10),
     IN _imagen  		VARCHAR(100),
     IN _estado	 		VARCHAR(10),
-    IN _codigo 			CHAR(7),
     IN _sublote 		TINYINT,
     IN _direccion 		CHAR(70),
     IN _moneda_venta 	VARCHAR(10),
@@ -367,7 +348,6 @@ BEGIN
             tipo_activo		= _tipo_activo,
             imagen 			= NULLIF(_imagen,""),
             estado			= _estado,
-            codigo 			= _codigo,
             sublote 		= _sublote,
             direccion 		= _direccion,
             moneda_venta 	= _moneda_venta,

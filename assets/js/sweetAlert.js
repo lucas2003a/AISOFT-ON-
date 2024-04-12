@@ -5,19 +5,16 @@ class Alert{
      * @param {string} text 
      * @param {string} footer 
      */
-    async sweetError(text, footer){
-        
-        return new Promise((resolve, reject)=>{
-          
-          Swal.fire({
-              icon: "error",
-              title: "Oops...",
-              text: text,
-              footer: footer,
-              showConfirmButton: false,
-              timer:  1500
-            });
-        });
+    sweetError(text, footer){
+      
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: text,
+        footer: footer,
+        showConfirmButton: false,
+        timer:  1500
+      });
     };
 
     /**

@@ -62,7 +62,7 @@ CREATE VIEW vws_list_projects AS
         INNER JOIN usuarios AS usu ON usu.idusuario = proy.idusuario
         INNER JOIN metricas AS met ON met.idproyecto = proy.idproyecto
         WHERE proy.inactive_at IS NULL
-        ORDER BY codigo ASC;
+        ORDER BY proy.codigo ASC;
 $$
 DELIMITER ;
 
@@ -102,7 +102,6 @@ CREATE VIEW vws_list_assets_short AS
 		act.idactivo,
         proy.idproyecto,
         proy.denominacion,
-        act.codigo,
         act.estado,
         act.sublote,
         act.direccion,
@@ -117,7 +116,8 @@ CREATE VIEW vws_list_assets_short AS
         INNER JOIN departamentos AS dept ON dept.iddepartamento = prov.iddepartamento
         INNER JOIN usuarios AS usu ON usu.idusuario = act.idusuario
         WHERE act.tipo_activo = "LOTE"
-        ORDER BY CAST(SUBSTRING(act.codigo,3) AS UNSIGNED) ASC;
+        AND act.inactive_at IS NULL
+        ORDER BY act.sublote ASC;
 $$
 DELIMITER ;
 
@@ -128,7 +128,6 @@ CREATE VIEW vws_list_inactive_assets AS
 	SELECT
 		act.idactivo,
         proy.denominacion,
-        act.codigo,
         act.estado,
         act.sublote,
         act.direccion,

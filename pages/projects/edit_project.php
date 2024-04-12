@@ -703,7 +703,6 @@
 
   let Patern = $("#patern");
 
-  let oldImage;
   let dataProject;
   let AllProjects
 
@@ -814,7 +813,7 @@
         const keys = perimetro.clave;
         const values = perimetro.valor;
     
-        let img = project.imagen !=  null ? project.imagen : "NoImage.jpg";
+        let img = project.imagen ? project.imagen : "NoImage.jpg";
     
         $("#codigo").value = project.codigo;
         $("#denominacion").value = project.denominacion;
@@ -831,19 +830,13 @@
                 renderInputs(key,value);
             }
         });
-
-        let ruta = ($("#file-view").src).split("/")
-        let sinExtend = ruta[ruta.length -1].split(".jpg")
-        console.log(sinExtend[0]);
-
-        oldImage = sinExtend[0];
       }
     }
     catch(e){
 
       console.error(e);
     }
-};
+  };
 
   async function searchInfo(array, column, param){
 
@@ -897,15 +890,12 @@
 
       let url = `../../Controllers/project.controller.php`;
 
-      //Guarda la imagen anterior
-      let img = $("#in-image").files.length > 0? $("#in-image").files[0] : $("#in-image").files[0] = oldImage;
-
       //Iniica la operacion
       let params = new FormData();
   
       params.append("action","setProject");
       params.append("idproyecto",idProyecto);
-      params.append("imagen",img);
+      params.append("imagen",$("#in-image").files[0]);
       params.append("iddireccion",$("#iddireccion").value);
       params.append("codigo",$("#codigo").value);
       params.append("denominacion",$("#denominacion").value);
@@ -927,7 +917,7 @@
                 window.location.href = "./index.php";
             });
         }else{
-            sAlert.alertError("No se actualizó el registro","Vuelve a intentarlo");
+            sAlert.sweetError("No se actualizó el registro","Vuelve a intentarlo");
         }
       }
     }
@@ -984,41 +974,41 @@
         }
     });
 
-// FUNCIÓN DE BOOTSTRAP PARA LAVALIDACIÓN
-
-//ESTA EESTRUCTUARA INDICA AL NAVEGADOR QUE CUANDO LEA ESTA FUNCION, LA EJECUTE INMEDIATAMENTE
-(() => {
-    'use strict' //=> USO ESTRICTO POR POLITICAS DE SEGURIDAD EN EL FORMULARIO
-
-     //SELECCIONA TODOS LOS ELEMENTOS DEL FORMULARIO QUE TIENE LA CLASE "needs-validation
-    const forms = document.querySelectorAll('.needs-validation')
-
-    // TOMA EL ELEMENTO "FORMS" Y LO CONVIERTE A UN ARRAY
-    // SE INCLUYE EN UN FOREAH PARA ITERAR SOBRE SUS ELEMENTOS
-
-    Array.from(forms).forEach(form => {
-        form.addEventListener('submit', event => {
-
-            //SI LA VALIDACIÓN DEL FORMULARIO ES FALSE
-            if (!form.checkValidity()) {
-            event.preventDefault()      //=> FRENA EL ENVÍO DEL FORMULARIO
-            event.stopPropagation()     //=> FRENA LA PROPAGACIÓN DE DATOS EN EL FORMULARIO
-        }else{
-            event.preventDefault();
-            sAlert.sweetConfirm("Datos nuevos","¿Deseas actualizar el registro?",()=>{
-                
-                setData();
-            });
-        }
-
-        form.classList.add('was-validated') //=> AGREGA ESTA CLASE A LOS ELEMENTOS DEL FORMULARIO(MUESTRA LOS COMENTARIOS)
-        }, false) //=> ESTE TERCER ARGUMENTO INDICA QUE EL EVENTO NO SE ESTA CAPTURANDO EN LA ""FASE DE CAPTURA" SINO EN "PROPAGACIÓN NORMAL"
-    })  
-})();
-
-  getDataId(idProyecto);
-  getAllProjects();
-
+    
+    getDataId(idProyecto);
+    getAllProjects();
+    
+    // FUNCIÓN DE BOOTSTRAP PARA LAVALIDACIÓN
+    
+    //ESTA EESTRUCTUARA INDICA AL NAVEGADOR QUE CUANDO LEA ESTA FUNCION, LA EJECUTE INMEDIATAMENTE
+    (() => {
+        'use strict' //=> USO ESTRICTO POR POLITICAS DE SEGURIDAD EN EL FORMULARIO
+    
+         //SELECCIONA TODOS LOS ELEMENTOS DEL FORMULARIO QUE TIENE LA CLASE "needs-validation
+        const forms = document.querySelectorAll('.needs-validation')
+    
+        // TOMA EL ELEMENTO "FORMS" Y LO CONVIERTE A UN ARRAY
+        // SE INCLUYE EN UN FOREAH PARA ITERAR SOBRE SUS ELEMENTOS
+    
+        Array.from(forms).forEach(form => {
+            form.addEventListener('submit', event => {
+    
+                //SI LA VALIDACIÓN DEL FORMULARIO ES FALSE
+                if (!form.checkValidity()) {
+                event.preventDefault()      //=> FRENA EL ENVÍO DEL FORMULARIO
+                event.stopPropagation()     //=> FRENA LA PROPAGACIÓN DE DATOS EN EL FORMULARIO
+            }else{
+                event.preventDefault();
+                sAlert.sweetConfirm("Datos nuevos","¿Deseas actualizar el registro?",()=>{
+                    
+                    setData();
+                });
+            }
+    
+            form.classList.add('was-validated') //=> AGREGA ESTA CLASE A LOS ELEMENTOS DEL FORMULARIO(MUESTRA LOS COMENTARIOS)
+            }, false) //=> ESTE TERCER ARGUMENTO INDICA QUE EL EVENTO NO SE ESTA CAPTURANDO EN LA ""FASE DE CAPTURA" SINO EN "PROPAGACIÓN NORMAL"
+        })  
+    })();
   </script>
   <script>
     var win = navigator.platform.indexOf('Win') > -1;

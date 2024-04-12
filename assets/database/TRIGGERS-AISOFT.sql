@@ -1,4 +1,4 @@
-USE isoft;
+USE aisoft;
 
 DELIMITER $$
 CREATE TRIGGER trgr_add_project AFTER INSERT ON proyectos
@@ -94,5 +94,13 @@ BEGIN
 					WHERE idproyecto = proyecto_id;
 		END CASE;
     END IF;
+    CASE 
+		WHEN NEW.inactive_at IS NOT NULL THEN
+			UPDATE metricas
+				SET l_noVendidos = l_noVendidos -1,	
+					update_at = NOW()
+			WHERE idproyecto = proyecto_id;
+    END CASE;
 END $$
 DELIMITER ;		
+
