@@ -475,8 +475,8 @@
                 </div>
                 <div class="card-body p-3">
                   <div class="row">
-                    <div class="table-responsive">
-                      <table class="table align-items-center mb-0" id="nuevos-clientes">
+                    <div class="table-responsive table-responsive-lg">
+                      <table class="table align-items-center mb-0" id="table-clients">
                         <thead>
                           <tr>
                             <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Apellidos</th>
@@ -514,30 +514,6 @@
             </div>
             <div class="card-body p-3 pb-0">
               <ul class="list-group" id="caracteristicas">
-
-              <!-- DENOMINACION DEL PROYECTO -->
-                <li class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg">
-                  <div class="d-flex flex-column">
-                    <h6 class="mb-1 text-dark font-weight-bold text-sm">Proyecto</h6>
-                  </div>
-                  <div class="d-flex align-items-center text-sm" id="denominacion">
-                    
-                    <!-- RENDER -->
-
-                  </div>
-                </li>
-
-              <!-- SUBLOTE -->
-                <li class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg">
-                  <div class="d-flex flex-column">
-                    <h6 class="mb-1 text-dark font-weight-bold text-sm">Sublote</h6>
-                  </div>
-                  <div class="d-flex align-items-center text-sm" id="sublote">
-                    
-                    <!-- RENDER -->
-                    
-                  </div>
-                </li>
 
                 <!-- ESTADO -->
                   <li class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg">
@@ -812,6 +788,16 @@
       });
     }
 
+    function renderListError(id){
+
+      newDetail =`
+      <div class="alert alert-danger m-4 text-white" role="alert">
+          <strong class="text-white">No se han ecnontrado registros</strong> Aegurate que exista la conformidad de datos.
+      </div>
+      `;
+      $(id).innerHTML += newDetail;
+    }
+
     /**
      * Obtiene los detalles de cosntrucción
      */
@@ -829,27 +815,36 @@
 
         if(result){
 
-          console.log(result)
+          let notNullResult = Object.keys(result).reduce((acc, key) => { 
+              acc[key] = result[key] == null ? 0 : result[key]
+              return acc;
+            },{});
+
+          console.log(notNullResult);
 
           let imagen = result.imagen ? result.imagen : "NoImage.jpg";
-
+          
+          $("#cabezera").innerHTML += `${result.sublote} - ${result.denominacion}`;
+          
           $("#imagen").setAttribute("style",`background-image: url('../../media/lotes/${imagen}');background-size: cover; background-repeat: no-repeat; height:12rem; width: 100%`);
           $("#mask").classList.remove("bg-gradient-dark");
           $("#moneda_venta").innerText = result.moneda_venta;
           $("#precio_venta").innerText = result.precio_venta;
 
-          $("#denominacion").innerHTML = result.denominacion;
-          $("#sublote").innerHTML = result.sublote;
           $("#estado").innerHTML = result.estado;
           $("#ubigeo").innerHTML = `${result.distrito} - ${result.provincia}- ${result.departamento}`;
           $("#direccion").innerHTML = result.direccion;
           $("#tipo_activo").innerHTML = result.tipo_activo;
           $("#partida_elect").innerHTML = result.partida_elect;
-          $("#area_terreno").innerHTML = `${result.area_terreno} m2`;
-          $("#zcomunes_porcent").innerHTML = `${result.zcomunes_porcent} %`;
+          $("#area_terreno").innerHTML = `${notNullResult.area_terreno} m2`;
+          $("#zcomunes_porcent").innerHTML = `${notNullResult.zcomunes_porcent} %`;
 
           det_casaJSON = result.det_casa
           renderDetBuild(det_casaJSON);
+        
+        }else{
+
+          renderListError("#list-group");
         }
       }
       catch{
@@ -1108,6 +1103,63 @@
 
   }
 
+  function renderTable(idtable, data){
+  
+    newRow = `
+      <tr>
+        <td>
+          <p class="text-xs font-weight-bold mb-0">${data.apellidos}</p>
+        </td>
+        <td>
+          <p class="text-xs font-weight-bold mb-0">${data.nombres}</p>
+        </td>
+        <td>
+          <p class="text-xs font-weight-bold mb-0">${data.documento_tipo}</p>
+        </td>
+        <td>
+          <p class="text-xs font-weight-bold mb-0">${data.documento_nro}</p>
+        </td>
+        <td class="align-middle">
+          <div class="btn-group">
+            <a type="button" href="#" class="btn btn-success btn-sm"><i class="bi bi-arrow-right-square"></i> Ver más</a>
+          </div>
+        </td>
+      </tr>           
+        `;
+
+      $(idtable).innerHTML += newRow;
+  }
+
+  async function getClients(id){
+
+    try{
+
+      let url = "../../Controllers/separation.controller.php";
+
+      let params = new FormData();
+
+      params.append("action","listSeparaction");
+      params.append("idactivo",id);
+
+      let results = await global.sendAction(url, params);
+
+      $("#table-clients tbody").innerHTML = "";
+      if(results){
+
+        console.log(results);
+        renderTable("#table-clients tbody", results);
+      }else{
+        
+        renderListError("#table-clients tbody")
+      }
+    }
+    catch(e){
+      
+      console.error(e);
+
+    }
+  }
+
   $("#add").addEventListener("click",()=>{
 
     validateInputs(createIputText);
@@ -1144,6 +1196,7 @@
     }
   });
 
+  getClients(idActivo);
   getDetails(idActivo);
 
   </script>

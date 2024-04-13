@@ -30,8 +30,8 @@ CALL spu_list_drop_projects_by_code("b-20");
 CALL spu_restore_projects(6);
 
 -- ACTIVOS
-SELECT * FROM separaciones;
-CALL spu_list_assets_by_id(10); -- OBTENGO LOS ACTIVOS POR ID
+SELECT * FROM ACTIvos;
+CALL spu_list_assets_by_id(5); -- OBTENGO LOS ACTIVOS POR ID
 CALL spu_list_assets_short();
 CALL spu_list_assets_by_code("AC");
 CALL spu_list_inactive_assets();

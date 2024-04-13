@@ -917,9 +917,25 @@ DELIMITER ;
 DELIMITER $$
 CREATE PROCEDURE spu_list_separation_ByIdAsset(IN _idactivo INT)
 BEGIN
-	SELECT * FROM separaciones
-    WHERE idactivo = _idactivo
-    AND inactive_at IS NULL;
+	SELECT 
+		sep.idseparacion,
+        sep.idactivo,
+        sep.idvend_representante,
+        clie.apellidos,
+        clie.nombres,
+        clie.documento_tipo,
+        clie.documento_nro,
+        sep.separacion_monto,
+        sep.fecha_pago,
+        sep.penalidad_porcent,
+        sep.fecha_devolucion,
+        sep.estado,
+        sep.idusuario
+		FROM separaciones AS sep
+        INNER JOIN clientes AS clie ON clie.idcliente = sep.idcliente
+        INNER JOIN usuarios AS usu ON usu.idusuario = sep.idusuario
+		WHERE sep.idactivo = _idactivo
+		AND sep.inactive_at IS NULL;
 END $$
 DELIMITER ;
 

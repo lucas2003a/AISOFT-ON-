@@ -104,3 +104,25 @@ BEGIN
 END $$
 DELIMITER ;		
 
+DELIMITER $$
+CREATE TRIGGER trgr_asset_status_separation AFTER UPDATE ON separaciones
+FOR EACH ROW
+BEGIN
+	
+    UPDATE activos
+		SET 
+			estado = "SEPARADO"
+		WHERE 
+			idactivo = NEW.idactivo;
+	
+    IF NEW.inactive_at IS NOT NULL THEN
+		UPDATE activos
+			SET
+				estado = "SIN VENDER"
+			WHERE 
+				idactivo = NEW.idactivo;
+    END IF;
+    
+END $$
+DELIMITER ;
+

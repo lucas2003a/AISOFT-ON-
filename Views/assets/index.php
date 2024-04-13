@@ -413,12 +413,15 @@
         <div class="col-12">
           <div class="card mb-4">
             <div class="card-header pb-0">
-              <h6>Tabla - lotes</h6>
+              <div class="d-flex" style="justify-content: space-between">
+                <h6>Tabla - lotes</h6>
+                <button type="button" class="btn btn-lg bg-gradient-success opacity-10" id="generate-excel"><i class="fa-solid fa-file-excel"></i></button>
+              </div>
             </div>
             <div class="card-body px-0 pt-0 pb-2">
               <div class="table-responsive text-center p-0">
-                <table class="table align-items-center mb-0" id="table-assets">
-                  <thead>
+                  <table class="table align-items-center mb-0" id="table-assets">
+                    <thead>
                     <tr>
                       <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">#</th>
                       <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Denominación</th>
@@ -600,7 +603,7 @@ document.addEventListener("DOMContentLoaded",()=>{
     }else{
       newRow =`
       <div class="alert alert-danger m-4 text-white" role="alert">
-          <strong class="text-white">El sublote ingresado no existe</strong> Asgurate de haber el escrito el código correcto.
+          <strong class="text-white">No existe sublotes</strong> Asegurate de que existan los registros.
       </div>
       `;
       $("#table-assets tbody").innerHTML += newRow;

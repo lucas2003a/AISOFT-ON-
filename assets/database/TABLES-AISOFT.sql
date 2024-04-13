@@ -257,7 +257,7 @@ CREATE TABLE separaciones(
     idactivo				INT 			NOT NULL,
     idvend_representante 	INT  			NOT NULL,
     idcliente 				INT  			NOT NULL,
-    separacion				DECIMAL(5,2) 	NOT NULL,
+    separacion_monto				DECIMAL(5,2) 	NOT NULL,
     fecha_pago				DATE 			NOT NULL,
     penalidad_porcent 		TINYINT 		NOT NULL,
     fecha_devolucion		DATE 			NULL,
@@ -271,6 +271,8 @@ CREATE TABLE separaciones(
     CONSTRAINT fk_idcliente_sep FOREIGN KEY(idcliente) REFERENCES clientes(idcliente),
     CONSTRAINT fk_idusuario_sep FOREIGN KEY(idusuario) REFERENCES usuarios(idusuario)
 )ENGINE = INNODB;
+
+-- ALTER TABLE separaciones CHANGE separacion separacion_monto DECIMAL(5,2) 	NOT NULL;
 
 -- SUSTENTOS SEPARACIONES
 CREATE TABLE sustentos_sep(

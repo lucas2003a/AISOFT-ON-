@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 09-04-2024 a las 11:06:53
+-- Tiempo de generación: 13-04-2024 a las 10:26:26
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -399,7 +399,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_assets_by_sublote` (IN `_i
 	SELECT * 
 		FROM vws_list_assets_short
         WHERE sublote LIKE CONCAT(_sublote,"%")
-        AND idporyecto = _idproyecto;
+        AND idproyecto = _idproyecto;
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_assets_short_idpr` (IN `_idproyecto` INT)   BEGIN
@@ -506,16 +506,23 @@ END$$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_separation_ByIdAsset` (IN `_idactivo` INT)   BEGIN
 	SELECT 
 		sep.idseparacion,
-        cli.idcliente,
-        cli.apellidos,
-        cli.nombres,
-        cli.documento_tipo,
-        cli.documento_nro,
-        cli.estado_civil
-    FROM separaciones AS sep
-    INNER JOIN clientes AS cli ON cli.idcliente = sep.idcliente
-    WHERE sep.idactivo = _idactivo
-    AND sep.inactive_at IS NULL;
+        sep.idactivo,
+        sep.idvend_representante,
+        clie.apellidos,
+        clie.nombres,
+        clie.documento_tipo,
+        clie.documento_nro,
+        sep.separacion_monto,
+        sep.fecha_pago,
+        sep.penalidad_porcent,
+        sep.fecha_devolucion,
+        sep.estado,
+        sep.idusuario
+		FROM separaciones AS sep
+        INNER JOIN clientes AS clie ON clie.idcliente = sep.idcliente
+        INNER JOIN usuarios AS usu ON usu.idusuario = sep.idusuario
+		WHERE sep.idactivo = _idactivo
+		AND sep.inactive_at IS NULL;
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_lits_contracts_full_by_id` (IN `_idcontrato` INT)   BEGIN
@@ -695,7 +702,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_restore_projects` (IN `_idproye
 				idproyecto = _idproyecto;
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_set_assets` (IN `_idactivo` INT, IN `_idproyecto` INT, IN `_tipo_activo` VARCHAR(10), IN `_imagen` VARCHAR(100), IN `_estado` VARCHAR(10), IN `_sublote` TINYINT, IN `_direccion` CHAR(70), IN `_moneda_venta` VARCHAR(10), IN `_area_terreno` DECIMAL(5,2), IN `_zcomunes_porcent` TINYINT, IN `_partida_elect` VARCHAR(100), IN `_latitud` VARCHAR(20), IN `_longitud` VARCHAR(20), IN `_perimetro` JSON, IN `_det_casa` JSON, IN `_precio_venta` DECIMAL(8,2), IN `_idusuario` INT)   BEGIN
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_set_assets` (IN `_idactivo` INT, IN `_idproyecto` INT, IN `_tipo_activo` VARCHAR(10), IN `_imagen` VARCHAR(100), IN `_estado` VARCHAR(10), IN `_sublote` TINYINT, IN `_direccion` CHAR(70), IN `_moneda_venta` VARCHAR(10), IN `_area_terreno` DECIMAL(5,2), IN `_zcomunes_porcent` TINYINT, IN `_partida_elect` VARCHAR(100), IN `_latitud` VARCHAR(20), IN `_longitud` VARCHAR(20), IN `_perimetro` JSON, IN `_precio_venta` DECIMAL(8,2), IN `_idusuario` INT)   BEGIN
 	UPDATE activos
 		SET
 			idproyecto		= _idproyecto,
@@ -712,7 +719,6 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_set_assets` (IN `_idactivo` INT
             latitud 		= NULLIF(_latitud,""),
             longitud		= NULLIF(_longitud,""),
             perimetro 		= NULLIF(_perimetro, ""),
-            det_casa		= NULLIF(_det_casa,""),
             precio_venta	= _precio_venta,
             idusuario		= _idusuario,
             update_at		= CURDATE() 
@@ -756,6 +762,26 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_set_contracts` (IN `_idcontrato
 			idcontrato = _idcontrato;
 END$$
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_set_det_build` (IN `_idactivo` INT, IN `_det_casa` JSON)   BEGIN
+	DECLARE oldDetCasa JSON;
+    
+    SET oldDetCasa = (
+		SELECT det_casa FROM activos WHERE idactivo = _idactivo
+    );
+		
+	IF _det_casa != oldDetCasa THEN
+		UPDATE activos SET
+			det_casa = _det_casa,
+			update_at = CURDATE()
+		WHERE 
+			idactivo = _idactivo;
+        
+		SELECT ROW_COUNT() AS filasAfect;
+	ELSE 
+		(SELECT COUNT(*) -2 AS filasAfect FROM activos WHERE idactivo = 1);
+    END IF;
+END$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_set_projects` (IN `_idproyecto` INT, IN `_imagen` VARCHAR(100), IN `_iddireccion` INT, IN `_codigo` VARCHAR(20), IN `_denominacion` VARCHAR(30), IN `_latitud` VARCHAR(20), IN `_longitud` VARCHAR(20), IN `_perimetro` JSON, IN `_iddistrito` INT, IN `_direccion` VARCHAR(70), IN `_idusuario` INT)   BEGIN
 	UPDATE proyectos
 		SET
@@ -791,58 +817,41 @@ CREATE TABLE `activos` (
   `imagen` varchar(100) DEFAULT NULL,
   `estado` varchar(10) NOT NULL DEFAULT 'SIN VENDER',
   `sublote` tinyint(4) NOT NULL,
-  `direccion` varchar(60) DEFAULT NULL,
+  `direccion` varchar(70) NOT NULL,
   `moneda_venta` varchar(10) NOT NULL,
   `area_terreno` decimal(5,2) NOT NULL,
   `zcomunes_porcent` tinyint(4) DEFAULT NULL,
   `partida_elect` varchar(100) NOT NULL,
   `latitud` varchar(20) DEFAULT NULL,
   `longitud` varchar(20) DEFAULT NULL,
-  `perimetro` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`perimetro`)),
+  `perimetro` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL DEFAULT '{"clave" :[""], "valor":[""]}' CHECK (json_valid(`perimetro`)),
+  `det_casa` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL DEFAULT '{"clave" :[""], "valor":[""]}' CHECK (json_valid(`det_casa`)),
   `precio_venta` decimal(8,2) NOT NULL,
   `create_at` date NOT NULL DEFAULT curdate(),
   `update_at` date DEFAULT NULL,
   `inactive_at` date DEFAULT NULL,
-  `idusuario` int(11) NOT NULL,
-  `det_casa` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL DEFAULT '{"clave" :[""], "valor":[""]}' CHECK (json_valid(`det_casa`))
+  `idusuario` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `activos`
 --
 
-INSERT INTO `activos` (`idactivo`, `idproyecto`, `tipo_activo`, `imagen`, `estado`, `sublote`, `direccion`, `moneda_venta`, `area_terreno`, `zcomunes_porcent`, `partida_elect`, `latitud`, `longitud`, `perimetro`, `precio_venta`, `create_at`, `update_at`, `inactive_at`, `idusuario`, `det_casa`) VALUES
-(1, 1, 'casa', NULL, 'VENDIDO', 2, 'Urbanización Beta', 'USD', 200.00, NULL, 'Partida 002', NULL, NULL, NULL, 150000.00, '2024-03-23', NULL, NULL, 1, '{\"clave\": [\"tipo_construccion\",\"materiales\",\"dimensiones\",\"distribucion\",\"instalaciones\",\"acabados\",\"seguridad\",\"paisajismo\",\"mantenimiento\"],\"valor\": [\"Una casa de estilo contemporáneo construida con materiales modernos y sostenibles. Esta casa cuenta con un diseño único y funcional, pensado para proporcionar comodidad y estilo de vida moderno a sus residentes. La estructura está hecha principalmente de hormigón armado y acero, lo que garantiza su resistencia y durabilidad a lo largo del tiempo. Además, se han utilizado materiales ecológicos y reciclables en la construcción para minimizar el impacto ambiental.\",    \"Los materiales utilizados en la construcción de esta casa son de la más alta calidad y durabilidad. El hormigón utilizado para la estructura es de grado superior y se ha reforzado con barras de acero para garantizar su resistencia ante terremotos y otros desastres naturales. Las paredes exteriores están revestidas con un material especial que ayuda a mantener la temperatura interior de la casa constante, reduciendo así el consumo de energía.\",    \"La casa tiene una superficie total de 250 metros cuadrados, distribuidos en dos plantas. En la planta baja se encuentra el área social, que incluye la sala de estar, el comedor y la cocina, así como un baño de visitas y un área de servicio. En la planta superior se encuentran los dormitorios, cada uno con su propio baño completo y vestidor.\",    \"La distribución de la casa ha sido cuidadosamente planificada para aprovechar al máximo el espacio disponible y garantizar la funcionalidad de cada área. La planta baja cuenta con espacios abiertos y luminosos, mientras que la planta superior ofrece privacidad y comodidad en cada dormitorio.\",    \"Las instalaciones de la casa incluyen fontanería y cableado eléctrico nuevos, así como un sistema de calefacción central y aire acondicionado. Además, se ha instalado un sistema de energía solar para reducir el consumo de electricidad y minimizar el impacto ambiental.\",    \"Los acabados interiores de la casa son de alta calidad y elegancia. Los suelos son de mármol y madera noble, mientras que las paredes están pintadas en colores neutros para crear un ambiente cálido y acogedor. Los baños cuentan con accesorios de última generación y acabados en mármol y granito.\",    \"La seguridad de la casa ha sido una prioridad en su diseño y construcción. Se han instalado sistemas de alarma y videovigilancia en todas las áreas, así como cerraduras de alta seguridad en todas las puertas y ventanas. Además, la casa cuenta con un sistema de acceso controlado y una cerca perimetral electrificada para garantizar la privacidad y seguridad de sus residentes.\",    \"El paisajismo exterior de la casa ha sido diseñado para crear un ambiente tranquilo y relajante. Se han plantado árboles y arbustos nativos en el jardín, así como un césped bien cuidado y una variedad de flores y plantas ornamentales. Además, se ha construido una piscina y un área de recreación al aire libre, perfecta para disfrutar del clima cálido y soleado de la región.\",    \"El mantenimiento de la casa es mínimo gracias a los materiales de alta calidad utilizados en su construcción. La mayoría de los componentes de la casa tienen una vida útil de varios años y requieren poco o ningún mantenimiento. Además, se ha contratado a un equipo de profesionales para realizar inspecciones periódicas y realizar cualquier reparación o mantenimiento necesario.\"]}'),
-(2, 2, 'casa', NULL, 'SIN VENDER', 2, 'Urbanización Delta', 'USD', 220.00, NULL, 'Partida 004', NULL, NULL, NULL, 180000.00, '2024-03-23', NULL, NULL, 1, '{\"clave\" :[\"\"], \"valor\":[\"\"]}'),
-(3, 1, 'casa', NULL, 'SIN VENDER', 4, 'Urbanización Zeta', 'USD', 180.00, NULL, 'Partida 006', NULL, NULL, NULL, 120000.00, '2024-03-23', NULL, NULL, 2, '{\"clave\" :[\"\"], \"valor\":[\"\"]}'),
-(4, 3, 'casa', NULL, 'SIN VENDER', 3, 'Urbanización Theta', 'USD', 250.00, NULL, 'Partida 008', NULL, NULL, NULL, 200000.00, '2024-03-23', NULL, NULL, 2, '{\"clave\" :[\"\"], \"valor\":[\"\"]}'),
-(5, 2, 'casa', NULL, 'VENDIDO', 4, 'Urbanización Kappa', 'USD', 230.00, NULL, 'Partida 010', NULL, NULL, NULL, 190000.00, '2024-03-23', NULL, NULL, 2, '{\"clave\": [\"tipo_construccion\",\"materiales\",\"dimensiones\",\"distribucion\",\"instalaciones\",\"acabados\",\"seguridad\",\"paisajismo\",\"mantenimiento\"],\"valor\": [\"Una casa de estilo contemporáneo construida con materiales modernos y sostenibles. Esta casa cuenta con un diseño único y funcional, pensado para proporcionar comodidad y estilo de vida moderno a sus residentes. La estructura está hecha principalmente de hormigón armado y acero, lo que garantiza su resistencia y durabilidad a lo largo del tiempo. Además, se han utilizado materiales ecológicos y reciclables en la construcción para minimizar el impacto ambiental.\",    \"Los materiales utilizados en la construcción de esta casa son de la más alta calidad y durabilidad. El hormigón utilizado para la estructura es de grado superior y se ha reforzado con barras de acero para garantizar su resistencia ante terremotos y otros desastres naturales. Las paredes exteriores están revestidas con un material especial que ayuda a mantener la temperatura interior de la casa constante, reduciendo así el consumo de energía.\",    \"La casa tiene una superficie total de 250 metros cuadrados, distribuidos en dos plantas. En la planta baja se encuentra el área social, que incluye la sala de estar, el comedor y la cocina, así como un baño de visitas y un área de servicio. En la planta superior se encuentran los dormitorios, cada uno con su propio baño completo y vestidor.\",    \"La distribución de la casa ha sido cuidadosamente planificada para aprovechar al máximo el espacio disponible y garantizar la funcionalidad de cada área. La planta baja cuenta con espacios abiertos y luminosos, mientras que la planta superior ofrece privacidad y comodidad en cada dormitorio.\",    \"Las instalaciones de la casa incluyen fontanería y cableado eléctrico nuevos, así como un sistema de calefacción central y aire acondicionado. Además, se ha instalado un sistema de energía solar para reducir el consumo de electricidad y minimizar el impacto ambiental.\",    \"Los acabados interiores de la casa son de alta calidad y elegancia. Los suelos son de mármol y madera noble, mientras que las paredes están pintadas en colores neutros para crear un ambiente cálido y acogedor. Los baños cuentan con accesorios de última generación y acabados en mármol y granito.\",    \"La seguridad de la casa ha sido una prioridad en su diseño y construcción. Se han instalado sistemas de alarma y videovigilancia en todas las áreas, así como cerraduras de alta seguridad en todas las puertas y ventanas. Además, la casa cuenta con un sistema de acceso controlado y una cerca perimetral electrificada para garantizar la privacidad y seguridad de sus residentes.\",    \"El paisajismo exterior de la casa ha sido diseñado para crear un ambiente tranquilo y relajante. Se han plantado árboles y arbustos nativos en el jardín, así como un césped bien cuidado y una variedad de flores y plantas ornamentales. Además, se ha construido una piscina y un área de recreación al aire libre, perfecta para disfrutar del clima cálido y soleado de la región.\",    \"El mantenimiento de la casa es mínimo gracias a los materiales de alta calidad utilizados en su construcción. La mayoría de los componentes de la casa tienen una vida útil de varios años y requieren poco o ningún mantenimiento. Además, se ha contratado a un equipo de profesionales para realizar inspecciones periódicas y realizar cualquier reparación o mantenimiento necesario.\"]}'),
-(6, 3, 'casa', NULL, 'SIN VENDER', 6, 'Urbanización Mu', 'USD', 210.00, NULL, 'Partida 012', NULL, NULL, NULL, 160000.00, '2024-03-23', NULL, NULL, 2, '{\"clave\" :[\"\"], \"valor\":[\"\"]}'),
-(7, 4, 'casa', NULL, 'SIN VENDER', 2, 'Urbanización Xi', 'USD', 240.00, NULL, 'Partida 014', NULL, NULL, NULL, 175000.00, '2024-03-23', NULL, NULL, 2, '{\"clave\" :[\"\"], \"valor\":[\"\"]}'),
-(8, 4, 'casa', NULL, 'SIN VENDER', 4, 'Urbanización Pi', 'USD', 260.00, NULL, 'Partida 016', NULL, NULL, NULL, 220000.00, '2024-03-23', NULL, NULL, 3, '{\"clave\" :[\"\"], \"valor\":[\"\"]}'),
-(9, 1, 'casa', NULL, 'SIN VENDER', 8, 'Urbanización Sigma', 'USD', 280.00, NULL, 'Partida 018', NULL, NULL, NULL, 200000.00, '2024-03-23', NULL, NULL, 3, '{\"clave\" :[\"\"], \"valor\":[\"\"]}'),
-(10, 2, 'casa', NULL, 'SIN VENDER', 10, 'Urbanización Upsilon', 'USD', 300.00, NULL, 'Partida 020', NULL, NULL, NULL, 210000.00, '2024-03-23', NULL, NULL, 3, '{\"clave\" :[\"\"], \"valor\":[\"\"]}'),
-(11, 3, 'casa', NULL, 'SIN VENDER', 12, 'Urbanización Chi', 'USD', 320.00, NULL, 'Partida 022', NULL, NULL, NULL, 180000.00, '2024-03-23', NULL, NULL, 2, '{\"clave\" :[\"\"], \"valor\":[\"\"]}'),
-(12, 4, 'casa', NULL, 'SIN VENDER', 14, 'Urbanización Omega', 'USD', 350.00, NULL, 'Partida 024', NULL, NULL, NULL, 190000.00, '2024-03-23', NULL, NULL, 2, '{\"clave\" :[\"\"], \"valor\":[\"\"]}'),
-(27, 1, 'lote', NULL, 'SIN VENDER', 1, 'Urbanización Alpha', 'USD', 300.00, 0, 'Partida 001', '45', '55', '{\"clave\":[\"\"],\"valor\":[\"\"]}', 80000.00, '2024-03-23', '2024-04-04', NULL, 1, '{\"clave\" :[\"\"], \"valor\":[\"\"]}'),
-(28, 2, 'lote', NULL, 'VENDIDO', 1, 'Urbanización Gamma', 'USD', 250.00, NULL, 'Partida 003', NULL, NULL, NULL, 100000.00, '2024-03-23', '2024-03-23', NULL, 1, '{\"clave\": [\"tipo_construccion\",\"materiales\",\"dimensiones\",\"distribucion\",\"instalaciones\",\"acabados\",\"seguridad\",\"paisajismo\",\"mantenimiento\"],\"valor\": [\"Una casa de estilo contemporáneo construida con materiales modernos y sostenibles. Esta casa cuenta con un diseño único y funcional, pensado para proporcionar comodidad y estilo de vida moderno a sus residentes. La estructura está hecha principalmente de hormigón armado y acero, lo que garantiza su resistencia y durabilidad a lo largo del tiempo. Además, se han utilizado materiales ecológicos y reciclables en la construcción para minimizar el impacto ambiental.\",    \"Los materiales utilizados en la construcción de esta casa son de la más alta calidad y durabilidad. El hormigón utilizado para la estructura es de grado superior y se ha reforzado con barras de acero para garantizar su resistencia ante terremotos y otros desastres naturales. Las paredes exteriores están revestidas con un material especial que ayuda a mantener la temperatura interior de la casa constante, reduciendo así el consumo de energía.\",    \"La casa tiene una superficie total de 250 metros cuadrados, distribuidos en dos plantas. En la planta baja se encuentra el área social, que incluye la sala de estar, el comedor y la cocina, así como un baño de visitas y un área de servicio. En la planta superior se encuentran los dormitorios, cada uno con su propio baño completo y vestidor.\",    \"La distribución de la casa ha sido cuidadosamente planificada para aprovechar al máximo el espacio disponible y garantizar la funcionalidad de cada área. La planta baja cuenta con espacios abiertos y luminosos, mientras que la planta superior ofrece privacidad y comodidad en cada dormitorio.\",    \"Las instalaciones de la casa incluyen fontanería y cableado eléctrico nuevos, así como un sistema de calefacción central y aire acondicionado. Además, se ha instalado un sistema de energía solar para reducir el consumo de electricidad y minimizar el impacto ambiental.\",    \"Los acabados interiores de la casa son de alta calidad y elegancia. Los suelos son de mármol y madera noble, mientras que las paredes están pintadas en colores neutros para crear un ambiente cálido y acogedor. Los baños cuentan con accesorios de última generación y acabados en mármol y granito.\",    \"La seguridad de la casa ha sido una prioridad en su diseño y construcción. Se han instalado sistemas de alarma y videovigilancia en todas las áreas, así como cerraduras de alta seguridad en todas las puertas y ventanas. Además, la casa cuenta con un sistema de acceso controlado y una cerca perimetral electrificada para garantizar la privacidad y seguridad de sus residentes.\",    \"El paisajismo exterior de la casa ha sido diseñado para crear un ambiente tranquilo y relajante. Se han plantado árboles y arbustos nativos en el jardín, así como un césped bien cuidado y una variedad de flores y plantas ornamentales. Además, se ha construido una piscina y un área de recreación al aire libre, perfecta para disfrutar del clima cálido y soleado de la región.\",    \"El mantenimiento de la casa es mínimo gracias a los materiales de alta calidad utilizados en su construcción. La mayoría de los componentes de la casa tienen una vida útil de varios años y requieren poco o ningún mantenimiento. Además, se ha contratado a un equipo de profesionales para realizar inspecciones periódicas y realizar cualquier reparación o mantenimiento necesario.\"]}'),
-(29, 1, 'lote', NULL, 'SIN VENDER', 3, 'Urbanización Epsilon', 'USD', 350.00, 0, 'Partida 005', NULL, NULL, '{\"clave\":[\"\"],\"valor\":[\"\"]}', 90000.00, '2024-03-23', '2024-04-04', NULL, 1, '{\"clave\" :[\"\"], \"valor\":[\"\"]}'),
-(30, 3, 'lote', NULL, 'SIN VENDER', 2, 'Urbanización Eta', 'USD', 400.00, NULL, 'Partida 007', NULL, NULL, NULL, 120000.00, '2024-03-23', NULL, NULL, 3, '{\"clave\" :[\"\"], \"valor\":[\"\"]}'),
-(31, 2, 'lote', NULL, 'SIN VENDER', 3, 'Urbanización Iota', 'USD', 280.00, NULL, 'Partida 009', NULL, NULL, NULL, 110000.00, '2024-03-23', NULL, NULL, 2, '{\"clave\" :[\"\"], \"valor\":[\"\"]}'),
-(32, 3, 'lote', NULL, 'SIN VENDER', 5, 'Urbanización Lambda', 'USD', 320.00, NULL, 'Partida 011', NULL, NULL, NULL, 95000.00, '2024-03-23', NULL, NULL, 2, '{\"clave\" :[\"\"], \"valor\":[\"\"]}'),
-(33, 4, 'lote', NULL, 'SIN VENDER', 1, 'Urbanización Nu', 'USD', 300.00, NULL, 'Partida 013', NULL, NULL, NULL, 85000.00, '2024-03-23', NULL, NULL, 2, '{\"clave\" :[\"\"], \"valor\":[\"\"]}'),
-(34, 4, 'lote', NULL, 'SIN VENDER', 3, 'Urbanización Omicron', 'USD', 380.00, NULL, 'Partida 015', NULL, NULL, NULL, 110000.00, '2024-03-23', NULL, NULL, 1, '{\"clave\" :[\"\"], \"valor\":[\"\"]}'),
-(35, 1, 'lote', NULL, 'SIN VENDER', 7, 'Urbanización Rho', 'USD', 420.00, NULL, 'Partida 017', NULL, NULL, NULL, 105000.00, '2024-03-23', NULL, NULL, 3, '{\"clave\" :[\"\"], \"valor\":[\"\"]}'),
-(36, 2, 'lote', NULL, 'SIN VENDER', 9, 'Urbanización Tau', 'USD', 450.00, NULL, 'Partida 019', NULL, NULL, NULL, 115000.00, '2024-03-23', NULL, NULL, 3, '{\"clave\" :[\"\"], \"valor\":[\"\"]}'),
-(37, 3, 'lote', NULL, 'SIN VENDER', 11, 'Urbanización Phi', 'USD', 480.00, NULL, 'Partida 021', NULL, NULL, NULL, 100000.00, '2024-03-23', NULL, NULL, 2, '{\"clave\" :[\"\"], \"valor\":[\"\"]}'),
-(38, 4, 'lote', NULL, 'SIN VENDER', 13, 'Urbanización Psi', 'USD', 500.00, NULL, 'Partida 023', NULL, NULL, NULL, 120000.00, '2024-03-23', NULL, NULL, 2, '{\"clave\" :[\"\"], \"valor\":[\"\"]}'),
-(39, 1, 'lote', NULL, 'SIN VENDER', 15, 'Urbanización Beta', 'USD', 300.00, NULL, 'Partida 025', NULL, NULL, NULL, 90000.00, '2024-03-23', NULL, NULL, 2, '{\"clave\" :[\"\"], \"valor\":[\"\"]}'),
-(41, 1, 'LOTE', NULL, 'SIN VENDER', 4, 'av santa rosa#541', 'SOL', 300.00, 1, '', NULL, NULL, '{\"clave\":[\"\"],\"valor\":[\"\"]}', 0.00, '2024-04-04', '2024-04-04', NULL, 1, '{\"clave\" :[\"\"], \"valor\":[\"\"]}'),
-(42, 1, 'LOTE', NULL, 'SIN VENDER', 5, 'av santa rosa#541', 'SOL', 30.00, 20, '', '22', '13', '{\"clave\":[\"y\",\"x\",\"\"],\"valor\":[\"15\",\"16\",\"\"]}', 0.00, '2024-04-04', '2024-04-05', NULL, 1, '{\"clave\" :[\"\"], \"valor\":[\"\"]}'),
-(44, 1, 'LOTE', NULL, 'SIN VENDER', 65, 'av santa rosa#541', 'SOL', 300.00, 12, '', NULL, NULL, '{\"clave\":[\"\"],\"valor\":[\"\"]}', 0.00, '2024-04-05', NULL, NULL, 1, '50000'),
-(45, 1, 'LOTE', NULL, 'SIN VENDER', 123, 'av santa rosa#541', 'SOL', 300.00, 12, '12', NULL, NULL, '{\"clave\":[\"y\",\"x\",\"\"],\"valor\":[\"12\",\"15\",\"\"]}', 0.00, '2024-04-05', '2024-04-05', NULL, 1, '{\"clave\" :[\"\"], \"valor\":[\"\"]}'),
-(48, 1, 'LOTE', NULL, 'SIN VENDER', 127, 'av santa rosa#541', 'SOL', 360.00, 12, '', NULL, NULL, '{\"clave\":[\"\"],\"valor\":[\"\"]}', 0.00, '2024-04-05', NULL, NULL, 1, '1200000'),
-(49, 1, 'LOTE', NULL, 'SIN VENDER', 127, 'av santa rosa#541', 'SOL', 323.00, 12, '', NULL, NULL, '{\"clave\":[\"\"],\"valor\":[\"\"]}', 0.00, '2024-04-05', NULL, NULL, 1, '315');
+INSERT INTO `activos` (`idactivo`, `idproyecto`, `tipo_activo`, `imagen`, `estado`, `sublote`, `direccion`, `moneda_venta`, `area_terreno`, `zcomunes_porcent`, `partida_elect`, `latitud`, `longitud`, `perimetro`, `det_casa`, `precio_venta`, `create_at`, `update_at`, `inactive_at`, `idusuario`) VALUES
+(1, 1, 'lote', NULL, 'SEPARADO', 1, 'Urbanización Alpha', 'USD', 300.00, NULL, 'Partida 001', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 80000.00, '2024-04-10', NULL, '2024-04-10', 1),
+(2, 2, 'lote', 'e955ce16e116b15d6b476f9e84f2925cbf602788.jpg', 'SIN VENDER', 1, 'Urbanización Gamma', 'USD', 250.00, 10, 'Partida 003', NULL, NULL, '{\"clave\":[\"\"],\"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 100000.00, '2024-04-10', '2024-04-12', NULL, 1),
+(3, 1, 'lote', NULL, 'SIN VENDER', 3, 'Urbanización Epsilon', 'USD', 350.00, NULL, 'Partida 005', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 90000.00, '2024-04-10', NULL, NULL, 1),
+(4, 3, 'lote', NULL, 'SIN VENDER', 2, 'Urbanización Eta', 'USD', 400.00, NULL, 'Partida 007', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\":[],\"valor\":[]}', 120000.00, '2024-04-10', '2024-04-12', NULL, 3),
+(5, 2, 'lote', '3fb4e80fce39fa38e89d5968634b5f37ae44f1d3.jpg', 'SEPARADO', 3, 'Urbanización Iota', 'USD', 280.00, 10, 'Partida 009', NULL, NULL, '{\"clave\":[\"\"],\"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 110000.00, '2024-04-10', '2024-04-12', NULL, 1),
+(6, 3, 'lote', NULL, 'SEPARADO', 5, 'Urbanización Lambda', 'USD', 320.00, NULL, 'Partida 011', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 95000.00, '2024-04-10', NULL, NULL, 2),
+(7, 4, 'lote', NULL, 'SEPARADO', 1, 'Urbanización Nu', 'USD', 300.00, NULL, 'Partida 013', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 85000.00, '2024-04-10', NULL, NULL, 2),
+(8, 4, 'lote', NULL, 'SIN VENDER', 3, 'Urbanización Omicron', 'USD', 380.00, NULL, 'Partida 015', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 110000.00, '2024-04-10', NULL, NULL, 1),
+(9, 1, 'lote', NULL, 'SIN VENDER', 7, 'Urbanización Rho', 'USD', 420.00, NULL, 'Partida 017', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 105000.00, '2024-04-10', NULL, NULL, 3),
+(10, 2, 'lote', '933a6e704a77c358bfa6922a9ad8269c862ba30a.jpg', 'SIN VENDER', 9, 'Urbanización Tau', 'USD', 450.00, 15, 'Partida 019', NULL, NULL, '{\"clave\":[\"\"],\"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 115000.00, '2024-04-10', '2024-04-12', NULL, 1),
+(11, 3, 'lote', NULL, 'SIN VENDER', 11, 'Urbanización Phi', 'USD', 480.00, NULL, 'Partida 021', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 100000.00, '2024-04-10', NULL, NULL, 2),
+(12, 4, 'lote', NULL, 'SIN VENDER', 13, 'Urbanización Psi', 'USD', 500.00, NULL, 'Partida 023', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 120000.00, '2024-04-10', NULL, NULL, 2),
+(13, 1, 'lote', NULL, 'SIN VENDER', 15, 'Urbanización Beta', 'USD', 300.00, NULL, 'Partida 025', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 90000.00, '2024-04-10', NULL, NULL, 2),
+(14, 1, 'Lote', 'b56a102c2fb43d460d8a4231b0bb01e56202c558.jpg', 'SIN VENDER', 2, 'av santa rosa#541', 'SOL', 300.00, 56, 'PARTIDA ELECTRONICA NRO 2', NULL, NULL, '{\"clave\":[\"\"],\"valor\":[\"\"]}', '{\"clave\":[\"123\",\"nuevos\",\"valor creado\",\"veredas\"],\"valor\":[\"123\",\"nuevos\",\"valor creado\",\"La gasfitería, también conocida como fontanería en algunos lugares, es un campo crucial en la construcción y el mantenimiento de edificios, hogares e infraestructuras. Implica el diseño, instalación, reparación y mantenimiento de sistemas de tuberías y accesorios que transportan agua, gas y aguas residuales. La gasfitería juega un papel vital en la garantía de suministro de agua potable, el manejo adecuado de aguas residuales y la seguridad en el uso de sistemas de gas en diferentes entornos.\\n\\nLa construcción y reparación de sistemas de tuberías requiere conocimientos técnicos específicos y habilidades prácticas. Aquí hay una descripción detallada del proceso y las consideraciones importantes en el campo de la gasfitería:\\n\\n    Diseño del sistema: Antes de comenzar cualquier instalación, es crucial diseñar el sistema de tuberías de manera cuidadosa y precisa. Esto implica determinar la disposición de las tuberías, la ubicación de los accesorios, el diámetro de las tuberías y otros aspectos técnicos para garantizar un flujo de agua eficiente y seguro.\\n\\n    Selección de materiales: Se deben seleccionar materiales de alta calidad y durabilidad para las tuberías y accesorios. Los materiales comunes incluyen PVC, cobre, hierro galvanizado y PEX, cada uno con sus propias ventajas y desventajas en términos de costo, resistencia y facilidad de instalación.\\n\\n    Instalación de tuberías: Una vez que se ha diseñado el sistema y se han seleccionado los materiales adecuados, se procede a la instalación de las tuberías. Esto implica cortar, unir y ensamblar las tuberías y accesorios de acuerdo con el diseño previamente establecido.\\n\\n    Pruebas de presión y fugas: Después de completar la instalación, se realizan pruebas de presión y fugas para asegurarse de que el sistema esté funcionando correctamente y no haya escapes. Esto implica llenar el sistema con agua o aire y monitorear cualquier pérdida de presión o fugas durante un período de tiempo específico.\\n\\n    Instalaciones adicionales: Además de las tuberías de agua potable, la gasfitería también puede incluir la instalación de sistemas de calefacción, sistemas de rociadores contra incendios, sistemas de riego, sistemas de drenaje y sistemas de gas. Cada uno de estos sistemas tiene requisitos y consideraciones específicas que deben tenerse en cuenta durante la instalación.\\n\\n    Mantenimiento y reparación: Una vez que se ha completado la instalación, es importante realizar un mantenimiento regular y reparar cualquier problema que pueda surgir con el tiempo. Esto puede incluir la limpieza de tuberías obstruidas, la reparación de fugas, la sustitución de accesorios desgastados y la realización de inspecciones periódicas para garantizar el buen funcionamiento del sistema.\\n\\nEn resumen, la gasfitería es un campo diverso y especializado que abarca una amplia gama de tareas relacionadas con el suministro de agua, el manejo de aguas residuales y la seguridad en el uso de sistemas de gas. Un conocimiento sólido de los principios de diseño, instalación, mantenimiento y reparación es esencial para los profesionales de la gasfitería para garantizar la funcionalidad y seguridad de los sistemas de tuberías en cualquier entorno.\"]}', 0.00, '2024-04-10', '2024-04-12', NULL, 1);
 
 --
 -- Disparadores `activos`
@@ -929,6 +938,13 @@ CREATE TRIGGER `trgr_setmetrics_update` AFTER UPDATE ON `activos` FOR EACH ROW B
 					WHERE idproyecto = proyecto_id;
 		END CASE;
     END IF;
+    
+	IF NEW.inactive_at IS NOT NULL THEN
+		UPDATE metricas
+			SET l_noVendidos = l_noVendidos -1,	
+				update_at = NOW()
+		WHERE idproyecto = proyecto_id;
+    END IF;
 END
 $$
 DELIMITER ;
@@ -959,9 +975,9 @@ CREATE TABLE `clientes` (
 --
 
 INSERT INTO `clientes` (`idcliente`, `nombres`, `apellidos`, `documento_tipo`, `documento_nro`, `estado_civil`, `iddistrito`, `direccion`, `create_at`, `update_at`, `inactive_at`, `idusuario`) VALUES
-(1, 'Juan Carlos', 'Pérez García', 'DNI', '12345678', 'Soltero', 1007, 'Av. Primavera 123', '2024-03-23', NULL, NULL, 1),
-(2, 'María Luisa', 'Gómez Fernández', 'DNI', '23456789', 'Casada', 1007, 'Calle Flores 456', '2024-03-23', NULL, NULL, 2),
-(3, 'Pedro José', 'Ramírez Sánchez', 'DNI', '34567890', 'Soltero', 1007, 'Jr. Libertad 789', '2024-03-23', NULL, NULL, 3);
+(1, 'Juan Carlos', 'Pérez García', 'DNI', '12345678', 'Soltero', 1007, 'Av. Primavera 123', '2024-04-12', NULL, NULL, 1),
+(2, 'María Luisa', 'Gómez Fernández', 'DNI', '23456789', 'Casada', 1007, 'Calle Flores 456', '2024-04-12', NULL, NULL, 2),
+(3, 'Pedro José', 'Ramírez Sánchez', 'DNI', '34567890', 'Soltero', 1007, 'Jr. Libertad 789', '2024-04-12', NULL, NULL, 3);
 
 -- --------------------------------------------------------
 
@@ -985,17 +1001,6 @@ CREATE TABLE `contratos` (
   `inactive_at` date DEFAULT NULL,
   `idusuario` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Volcado de datos para la tabla `contratos`
---
-
-INSERT INTO `contratos` (`idcontrato`, `tipo_contrato`, `idcliente`, `idconyugue`, `idrepresentante_primario`, `idrepresentante_secundario`, `tipo_cambio`, `estado`, `detalles`, `fecha_contrato`, `create_at`, `update_at`, `inactive_at`, `idusuario`) VALUES
-(1, '', 1, NULL, 1, NULL, 3.500, 'VIGENTE', NULL, '2024-03-10', '2024-04-07', NULL, NULL, 1),
-(2, '', 2, NULL, 2, NULL, 3.500, 'VIGENTE', NULL, '2024-03-12', '2024-04-07', NULL, NULL, 2),
-(3, '', 3, NULL, 2, NULL, 3.500, 'VIGENTE', NULL, '2024-03-12', '2024-04-07', NULL, NULL, 3),
-(4, '', 1, NULL, 1, NULL, 3.500, 'VIGENTE', NULL, '2024-04-13', '2024-04-07', NULL, NULL, 4),
-(5, '', 2, NULL, 1, NULL, 3.500, 'VIGENTE', NULL, '2024-04-14', '2024-04-07', NULL, NULL, 5);
 
 -- --------------------------------------------------------
 
@@ -1079,14 +1084,6 @@ CREATE TABLE `desembolsos` (
   `idusuario` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Volcado de datos para la tabla `desembolsos`
---
-
-INSERT INTO `desembolsos` (`iddesembolso`, `idfinanciera`, `idactivo`, `monto_desemb`, `porcentaje`, `fecha_desembolso`, `create_at`, `update_at`, `inactive_at`, `idusuario`) VALUES
-(1, 1, 2, 5000.00, 10, '2024-03-23 19:34:42', '2024-03-23', NULL, NULL, 1),
-(2, 2, 5, 7000.00, 15, '2024-03-23 19:34:42', '2024-03-23', NULL, NULL, 1);
-
 -- --------------------------------------------------------
 
 --
@@ -1123,20 +1120,6 @@ CREATE TABLE `detalle_gastos` (
   `idusuario` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Volcado de datos para la tabla `detalle_gastos`
---
-
-INSERT INTO `detalle_gastos` (`iddetalle_gasto`, `idpresupuesto`, `tipo_gasto`, `nombre_gasto`, `descripcion`, `cantidad`, `precio_unitario`, `create_at`, `update_at`, `inactive_at`, `idusuario`) VALUES
-(1, 1, 'COSTO DIRECTO', 'Materiales de construcción', 'Compra de ladrillos', 100, 0.50, '2024-03-23', NULL, NULL, 1),
-(2, 1, 'COSTO INDIRECTO', 'Gastos administrativos', 'Alquiler de oficina', 1, 300.00, '2024-03-23', NULL, NULL, 1),
-(3, 1, 'COSTO DIRECTO', 'Materiales de construcción', 'Compra de cemento', 50, 8.00, '2024-03-23', NULL, NULL, 1),
-(4, 1, 'COSTO INDIRECTO', 'Gastos administrativos', 'Pago de servicios', 1, 150.00, '2024-03-23', NULL, NULL, 1),
-(5, 2, 'COSTO DIRECTO', 'Pago de mano de obra', 'Jornal de albañiles', 5, 50.00, '2024-03-23', NULL, NULL, 1),
-(6, 2, 'COSTO INDIRECTO', 'Accesorios de baño', 'Compra de grifería', 3, 120.00, '2024-03-23', NULL, NULL, 1),
-(7, 2, 'COSTO DIRECTO', 'Pago de mano de obra', 'Jornal de carpinteros', 3, 60.00, '2024-03-23', NULL, NULL, 1),
-(8, 2, 'COSTO INDIRECTO', 'Gastos de supervisión', 'Honorarios de arquitecto', 1, 500.00, '2024-03-23', NULL, NULL, 1);
-
 -- --------------------------------------------------------
 
 --
@@ -1159,12 +1142,12 @@ CREATE TABLE `direcciones` (
 --
 
 INSERT INTO `direcciones` (`iddireccion`, `idempresa`, `iddistrito`, `direccion`, `referencia`, `create_at`, `update_at`, `inactive_at`) VALUES
-(1, 1, 1007, 'MZA. A LOTE. 06 URB. JULIO ARBOLEDA', 'A 1/2 CUADRA DE MAESTRO', '2024-03-23', NULL, NULL),
-(2, 1, 1009, 'AV. LOS ALAMOS MZA. C LOTE. 25 URB. EL ROSAL', 'FRENTE AL PARQUE', '2024-03-23', NULL, NULL),
-(3, 1, 1010, 'CALLE LOS GIRASOLES MZA. E LOTE. 10 URB. LAS MARGARITAS', 'A 200 METROS DE LA AVENIDA PRINCIPAL', '2024-03-23', NULL, NULL),
-(4, 2, 1008, 'MZA. A LOTE. 06 URB. JULIO ARBOLEDA', 'A 1/2 CUADRA DE MAESTRO', '2024-03-23', NULL, NULL),
-(5, 2, 1010, 'AV. LOS ALAMOS MZA. C LOTE. 25 URB. EL ROSAL', 'FRENTE AL PARQUE', '2024-03-23', NULL, NULL),
-(6, 2, 1011, 'CALLE LOS GIRASOLES MZA. E LOTE. 10 URB. LAS MARGARITAS', 'A 200 METROS DE LA AVENIDA PRINCIPAL', '2024-03-23', NULL, NULL);
+(1, 1, 1007, 'MZA. A LOTE. 06 URB. JULIO ARBOLEDA', 'A 1/2 CUADRA DE MAESTRO', '2024-04-10', NULL, NULL),
+(2, 1, 1009, 'AV. LOS ALAMOS MZA. C LOTE. 25 URB. EL ROSAL', 'FRENTE AL PARQUE', '2024-04-10', NULL, NULL),
+(3, 1, 1010, 'CALLE LOS GIRASOLES MZA. E LOTE. 10 URB. LAS MARGARITAS', 'A 200 METROS DE LA AVENIDA PRINCIPAL', '2024-04-10', NULL, NULL),
+(4, 2, 1008, 'MZA. A LOTE. 06 URB. JULIO ARBOLEDA', 'A 1/2 CUADRA DE MAESTRO', '2024-04-10', NULL, NULL),
+(5, 2, 1010, 'AV. LOS ALAMOS MZA. C LOTE. 25 URB. EL ROSAL', 'FRENTE AL PARQUE', '2024-04-10', NULL, NULL),
+(6, 2, 1011, 'CALLE LOS GIRASOLES MZA. E LOTE. 10 URB. LAS MARGARITAS', 'A 200 METROS DE LA AVENIDA PRINCIPAL', '2024-04-10', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -3081,9 +3064,9 @@ CREATE TABLE `empresas` (
 --
 
 INSERT INTO `empresas` (`idempresa`, `razon_social`, `ruc`, `partida_elect`, `latitud`, `longitud`, `create_at`, `update_at`, `inactive_at`) VALUES
-(1, 'A.I. F CONTRATISTAS GENERALES S.A.C', '20494453003', '11013804 del Registro de Personas Jurídicas de CHINCHA-ICA', NULL, NULL, '2024-03-23', NULL, NULL),
-(2, 'XYZ Construcciones S.A.C.', '12345678901', '78901234 del Registro de Empresas de Arequipa', NULL, NULL, '2024-03-23', NULL, NULL),
-(3, 'Inversiones TechCorp S.A.', '98765432109', '56789012 del Registro de Empresas de Lima', NULL, NULL, '2024-03-23', NULL, NULL);
+(1, 'A.I. F CONTRATISTAS GENERALES S.A.C', '20494453003', '11013804 del Registro de Personas Jurídicas de CHINCHA-ICA', NULL, NULL, '2024-04-10', NULL, NULL),
+(2, 'XYZ Construcciones S.A.C.', '12345678901', '78901234 del Registro de Empresas de Arequipa', NULL, NULL, '2024-04-10', NULL, NULL),
+(3, 'Inversiones TechCorp S.A.', '98765432109', '56789012 del Registro de Empresas de Lima', NULL, NULL, '2024-04-10', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -3097,14 +3080,6 @@ CREATE TABLE `financieras` (
   `razon_social` varchar(60) NOT NULL,
   `direccion` varchar(70) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Volcado de datos para la tabla `financieras`
---
-
-INSERT INTO `financieras` (`idfinanciera`, `ruc`, `razon_social`, `direccion`) VALUES
-(1, '12345678901', 'Financiera ABC', 'Calle Principal 123'),
-(2, '98765432109', 'Financiera XYZ', 'Avenida Secundaria 456');
 
 -- --------------------------------------------------------
 
@@ -3126,16 +3101,11 @@ CREATE TABLE `metricas` (
 --
 
 INSERT INTO `metricas` (`idmetrica`, `idproyecto`, `l_vendidos`, `l_noVendidos`, `l_separados`, `update_at`) VALUES
-(1, 1, 1, 12, 0, '2024-04-05 06:52:51'),
-(2, 2, 2, 5, 0, '2024-04-05 06:52:09'),
-(3, 3, 0, 6, 0, '2024-03-23 19:32:21'),
-(4, 4, 0, 6, 0, '2024-03-23 19:32:21'),
-(17, 30, 0, 0, 0, '2024-03-28 16:16:27'),
-(35, 61, 0, 0, 0, '2022-03-31 00:17:49'),
-(36, 62, 0, 0, 0, '2023-04-05 03:42:32'),
-(37, 63, 0, 0, 0, '2024-04-07 18:22:17'),
-(38, 64, 0, 0, 0, '2024-04-07 18:25:06'),
-(39, 65, 0, 0, 0, '2024-04-07 18:26:17');
+(1, 1, 0, 2, 1, '2024-04-12 22:49:28'),
+(2, 2, 0, 2, 1, '2024-04-12 22:49:28'),
+(3, 3, 0, 2, 1, '2024-04-12 22:49:28'),
+(4, 4, 0, 2, 1, '2024-04-12 22:49:28'),
+(5, 5, 0, 0, 0, '2024-04-10 19:51:06');
 
 -- --------------------------------------------------------
 
@@ -3170,30 +3140,30 @@ CREATE TABLE `permisos` (
 --
 
 INSERT INTO `permisos` (`idpermiso`, `idrol`, `modulo`, `create_at`, `update_at`, `inactive_at`) VALUES
-(1, 1, 'LISTAR-activos', '2024-03-23', NULL, NULL),
-(2, 1, 'EDITAR-CLIENTES', '2024-03-23', NULL, NULL),
-(3, 1, 'CREAR-VENTAS', '2024-03-23', NULL, NULL),
-(4, 1, 'ELIMINAR-PROYECTOS', '2024-03-23', NULL, NULL),
-(5, 2, 'LISTAR-PROYECTOS', '2024-03-23', NULL, NULL),
-(6, 2, 'EDITAR-activos', '2024-03-23', NULL, NULL),
-(7, 2, 'CREAR-CLIENTES', '2024-03-23', NULL, NULL),
-(8, 2, 'ELIMINAR-VENTAS', '2024-03-23', NULL, NULL),
-(9, 3, 'LISTAR-CLIENTES', '2024-03-23', NULL, NULL),
-(10, 3, 'EDITAR-VENTAS', '2024-03-23', NULL, NULL),
-(11, 3, 'CREAR-activos', '2024-03-23', NULL, NULL),
-(12, 3, 'ELIMINAR-PROYECTOS', '2024-03-23', NULL, NULL),
-(13, 4, 'LISTAR-VENTAS', '2024-03-23', NULL, NULL),
-(14, 4, 'EDITAR-PROYECTOS', '2024-03-23', NULL, NULL),
-(15, 4, 'CREAR-CLIENTES', '2024-03-23', NULL, NULL),
-(16, 4, 'ELIMINAR-activos', '2024-03-23', NULL, NULL),
-(17, 5, 'LISTAR-PROYECTOS', '2024-03-23', NULL, NULL),
-(18, 5, 'EDITAR-activos', '2024-03-23', NULL, NULL),
-(19, 5, 'CREAR-VENTAS', '2024-03-23', NULL, NULL),
-(20, 5, 'ELIMINAR-CLIENTES', '2024-03-23', NULL, NULL),
-(21, 6, 'LISTAR-activos', '2024-03-23', NULL, NULL),
-(22, 6, 'EDITAR-CLIENTES', '2024-03-23', NULL, NULL),
-(23, 6, 'CREAR-VENTAS', '2024-03-23', NULL, NULL),
-(24, 6, 'ELIMINAR-PROYECTOS', '2024-03-23', NULL, NULL);
+(1, 1, 'LISTAR-activos', '2024-04-10', NULL, NULL),
+(2, 1, 'EDITAR-CLIENTES', '2024-04-10', NULL, NULL),
+(3, 1, 'CREAR-VENTAS', '2024-04-10', NULL, NULL),
+(4, 1, 'ELIMINAR-PROYECTOS', '2024-04-10', NULL, NULL),
+(5, 2, 'LISTAR-PROYECTOS', '2024-04-10', NULL, NULL),
+(6, 2, 'EDITAR-activos', '2024-04-10', NULL, NULL),
+(7, 2, 'CREAR-CLIENTES', '2024-04-10', NULL, NULL),
+(8, 2, 'ELIMINAR-VENTAS', '2024-04-10', NULL, NULL),
+(9, 3, 'LISTAR-CLIENTES', '2024-04-10', NULL, NULL),
+(10, 3, 'EDITAR-VENTAS', '2024-04-10', NULL, NULL),
+(11, 3, 'CREAR-activos', '2024-04-10', NULL, NULL),
+(12, 3, 'ELIMINAR-PROYECTOS', '2024-04-10', NULL, NULL),
+(13, 4, 'LISTAR-VENTAS', '2024-04-10', NULL, NULL),
+(14, 4, 'EDITAR-PROYECTOS', '2024-04-10', NULL, NULL),
+(15, 4, 'CREAR-CLIENTES', '2024-04-10', NULL, NULL),
+(16, 4, 'ELIMINAR-activos', '2024-04-10', NULL, NULL),
+(17, 5, 'LISTAR-PROYECTOS', '2024-04-10', NULL, NULL),
+(18, 5, 'EDITAR-activos', '2024-04-10', NULL, NULL),
+(19, 5, 'CREAR-VENTAS', '2024-04-10', NULL, NULL),
+(20, 5, 'ELIMINAR-CLIENTES', '2024-04-10', NULL, NULL),
+(21, 6, 'LISTAR-activos', '2024-04-10', NULL, NULL),
+(22, 6, 'EDITAR-CLIENTES', '2024-04-10', NULL, NULL),
+(23, 6, 'CREAR-VENTAS', '2024-04-10', NULL, NULL),
+(24, 6, 'ELIMINAR-PROYECTOS', '2024-04-10', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -3211,14 +3181,6 @@ CREATE TABLE `presupuestos` (
   `inactive_at` date DEFAULT NULL,
   `idusuario` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Volcado de datos para la tabla `presupuestos`
---
-
-INSERT INTO `presupuestos` (`idpresupuesto`, `idactivo`, `descripcion`, `fecha_program`, `create_at`, `update_at`, `inactive_at`, `idusuario`) VALUES
-(1, 2, 'Materiales de construcción', '2024-03-10', '2024-03-23', NULL, NULL, 1),
-(2, 5, 'Materiales de construcción', '2024-03-15', '2024-03-23', NULL, NULL, 1);
 
 -- --------------------------------------------------------
 
@@ -3448,30 +3410,25 @@ CREATE TABLE `proyectos` (
   `denominacion` varchar(30) NOT NULL,
   `latitud` varchar(20) DEFAULT NULL,
   `longitud` varchar(20) DEFAULT NULL,
+  `perimetro` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL DEFAULT '{"clave" :[""], "valor":[""]}' CHECK (json_valid(`perimetro`)),
   `iddistrito` int(11) NOT NULL,
   `direccion` varchar(70) NOT NULL,
   `create_at` date NOT NULL DEFAULT curdate(),
   `update_at` date DEFAULT NULL,
   `inactive_at` date DEFAULT NULL,
-  `idusuario` int(11) NOT NULL,
-  `perimetro` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL DEFAULT '{"clave" :[""], "valor":[""]}' CHECK (json_valid(`perimetro`))
+  `idusuario` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `proyectos`
 --
 
-INSERT INTO `proyectos` (`idproyecto`, `imagen`, `iddireccion`, `codigo`, `denominacion`, `latitud`, `longitud`, `iddistrito`, `direccion`, `create_at`, `update_at`, `inactive_at`, `idusuario`, `perimetro`) VALUES
-(1, NULL, 4, 'A-12 SAN BLAS', 'RESIDENCIAL SAN BLAS', NULL, NULL, 1008, 'Dirección A-12 SAN BLAS', '2024-03-23', '2024-04-05', NULL, 1, '{\"clave\":[\"\"],\"valor\":[\"\"]}'),
-(2, NULL, 1, 'A-17 SAN PEDRO', 'RESIDENCIAL SAN PABLO', NULL, NULL, 1007, 'Dirección A-17 SAN PEDRO', '2024-03-23', NULL, NULL, 2, '{\"clave\" :[\"\"], \"valor\":[\"\"]}'),
-(3, NULL, 1, 'A-13 Santo Domingo', 'RESIDENCIAL Santo Domingo', NULL, NULL, 1007, 'Dirección Santo Domingo', '2024-03-23', NULL, NULL, 3, '{\"clave\" :[\"\"], \"valor\":[\"\"]}'),
-(4, NULL, 1, 'A-14 Centenario II', 'RESIDENCIAL Centenario II', NULL, NULL, 1007, 'Dirección Centenario II', '2024-03-23', NULL, NULL, 4, '{\"clave\" :[\"\"], \"valor\":[\"\"]}'),
-(30, NULL, 1, 'A-AV AVN II', 'AVN PROYECTOS II', '13', '13', 1007, 'av santa rosa#541', '2024-03-28', NULL, NULL, 1, '{\"clave\" :[\"\"], \"valor\":[\"\"]}'),
-(61, NULL, 1, '8596', '4678', NULL, NULL, 1007, '12345', '2024-03-31', NULL, '2024-03-31', 1, '{\"clave\":[\"\"],\"valor\":[\"\"]}'),
-(62, 'c48595be5a783c242327a77047927d36be14c42b.jpg', 1, 'A-12 SAN BENITO', 'SAN BENITO', '28', '28', 1007, 'av santa rosa#541', '2024-04-05', '2024-04-08', '2024-04-08', 1, '{\"clave\":[\"Y\",\"12\",\"\"],\"valor\":[\"123123\",\"3\",\"\"]}'),
-(63, NULL, 4, 'AD-SAN FELIPE', 'SAN FELIPE', NULL, NULL, 1008, 'AV SAN JUAN', '2024-04-07', NULL, NULL, 1, '{\"clave\":[\"\"],\"valor\":[\"\"]}'),
-(64, 'f9cf350c978e1f22a8b09e8fb8d20d0aded6327a.jpg', 4, 'AF-SAN FELIPE', 'SAN FELIPE II', NULL, NULL, 1008, 'AV SAN FELIPE', '2024-04-07', NULL, '2024-04-08', 1, '{\"clave\":[\"\"],\"valor\":[\"\"]}'),
-(65, 'e9117f3e3dbcd9d342d4658ce32830f011bf8e32.jpg', 4, 'AF-SAN FELIPE MOLINA', 'SAN FELIPE III', NULL, NULL, 1008, 'AV SAN FELIPE 396', '2024-04-07', NULL, '2024-04-08', 1, '{\"clave\":[\"\"],\"valor\":[\"\"]}');
+INSERT INTO `proyectos` (`idproyecto`, `imagen`, `iddireccion`, `codigo`, `denominacion`, `latitud`, `longitud`, `perimetro`, `iddistrito`, `direccion`, `create_at`, `update_at`, `inactive_at`, `idusuario`) VALUES
+(1, 'a802b6eb27f580934bcdfed8f35fbb97a349ea2f.jpg', 1, 'A-12 SAN BLAS', 'RESIDENCIAL SAN BLAS', NULL, NULL, '{\"clave\":[\"\"],\"valor\":[\"\"]}', 1007, 'Dirección A-12 SAN BLAS', '2024-04-10', '2024-04-12', NULL, 1),
+(2, 'b3c9fe7649de230f5936266060a1cc7424cf0664.jpg', 5, 'A-17 SAN PEDRO', 'RESIDENCIAL SAN PABLO', NULL, NULL, '{\"clave\":[\"\"],\"valor\":[\"\"]}', 1010, 'Dirección A-17 SAN PEDRO', '2024-04-10', '2024-04-12', NULL, 1),
+(3, 'a37cc1e49c240058dcaaca9803c57c3ed9f1122d.jpg', 1, 'A-13 Santo Domingo', 'RESIDENCIAL Santo Domingo', NULL, NULL, '{\"clave\":[\"\"],\"valor\":[\"\"]}', 1007, 'Dirección Santo Domingo', '2024-04-10', '2024-04-12', NULL, 1),
+(4, 'e49f141aefae3e77f0854ec4273d4e43f7ccbe86.jpg', 5, 'A-14 Centenario II', 'RESIDENCIAL Centenario II', NULL, NULL, '{\"clave\":[\"\"],\"valor\":[\"\"]}', 1010, 'Dirección Centenario II', '2024-04-10', '2024-04-12', NULL, 1),
+(5, '5f8f38c780995a2b21baacecc10a7748cf2f429f.jpg', 6, 'A-15 Kalea Playa', 'Kalea Playa', NULL, NULL, '{\"clave\":[\"\"],\"valor\":[\"\"]}', 1011, 'Dirección Kalea Playa', '2024-04-10', '2024-04-12', NULL, 1);
 
 --
 -- Disparadores `proyectos`
@@ -3503,12 +3460,12 @@ CREATE TABLE `roles` (
 --
 
 INSERT INTO `roles` (`idrol`, `rol`, `estado`, `create_at`, `update_at`, `inactive_at`) VALUES
-(1, 'REPRESENTANTE DE VENTAS 1', '1', '2024-03-23', NULL, NULL),
-(2, 'REPRESENTANTE DE VENTAS 2', '1', '2024-03-23', NULL, NULL),
-(3, 'ADMINISTRADOR PRINCIPAL', '1', '2024-03-23', NULL, NULL),
-(4, 'ADMINISTRADOR AASISTENTE', '1', '2024-03-23', NULL, NULL),
-(5, 'ADMINISTRADOR SECUNDARIO', '1', '2024-03-23', NULL, NULL),
-(6, 'VENDEDOR', '1', '2024-03-23', NULL, NULL);
+(1, 'REPRESENTANTE DE VENTAS 1', '1', '2024-04-10', NULL, NULL),
+(2, 'REPRESENTANTE DE VENTAS 2', '1', '2024-04-10', NULL, NULL),
+(3, 'ADMINISTRADOR PRINCIPAL', '1', '2024-04-10', NULL, NULL),
+(4, 'ADMINISTRADOR AASISTENTE', '1', '2024-04-10', NULL, NULL),
+(5, 'ADMINISTRADOR SECUNDARIO', '1', '2024-04-10', NULL, NULL),
+(6, 'VENDEDOR', '1', '2024-04-10', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -3521,7 +3478,7 @@ CREATE TABLE `separaciones` (
   `idactivo` int(11) NOT NULL,
   `idvend_representante` int(11) NOT NULL,
   `idcliente` int(11) NOT NULL,
-  `separacion` decimal(5,2) NOT NULL,
+  `separacion_monto` decimal(5,2) NOT NULL,
   `fecha_pago` date NOT NULL,
   `penalidad_porcent` tinyint(4) NOT NULL,
   `fecha_devolucion` date DEFAULT NULL,
@@ -3536,11 +3493,35 @@ CREATE TABLE `separaciones` (
 -- Volcado de datos para la tabla `separaciones`
 --
 
-INSERT INTO `separaciones` (`idseparacion`, `idactivo`, `idvend_representante`, `idcliente`, `separacion`, `fecha_pago`, `penalidad_porcent`, `fecha_devolucion`, `estado`, `create_at`, `update_at`, `inactive_at`, `idusuario`) VALUES
-(1, 1, 1, 1, 150.50, '2024-03-08', 5, NULL, 'Activo', '2024-03-08', NULL, NULL, 1),
-(2, 5, 1, 1, 150.50, '2024-03-08', 5, NULL, 'Activo', '2024-03-08', NULL, NULL, 1),
-(3, 28, 1, 1, 150.50, '2024-03-08', 5, NULL, 'Activo', '2024-03-08', NULL, NULL, 1),
-(4, 7, 1, 2, 150.50, '2024-03-08', 5, NULL, 'Activo', '2024-03-08', NULL, NULL, 1);
+INSERT INTO `separaciones` (`idseparacion`, `idactivo`, `idvend_representante`, `idcliente`, `separacion_monto`, `fecha_pago`, `penalidad_porcent`, `fecha_devolucion`, `estado`, `create_at`, `update_at`, `inactive_at`, `idusuario`) VALUES
+(3, 1, 1, 1, 150.50, '2024-03-08', 5, NULL, 'Activo', '2024-03-08', NULL, NULL, 1),
+(4, 5, 1, 1, 150.50, '2024-03-08', 5, NULL, 'Activo', '2024-03-08', NULL, NULL, 1),
+(5, 6, 1, 1, 150.50, '2024-03-08', 5, NULL, 'Activo', '2024-03-08', NULL, NULL, 1),
+(6, 7, 1, 2, 150.50, '2024-03-08', 5, NULL, 'Activo', '2024-03-08', NULL, NULL, 1);
+
+--
+-- Disparadores `separaciones`
+--
+DELIMITER $$
+CREATE TRIGGER `trgr_asset_status_separation` AFTER UPDATE ON `separaciones` FOR EACH ROW BEGIN
+	
+    UPDATE activos
+		SET 
+			estado = "SEPARADO"
+		WHERE 
+			idactivo = NEW.idactivo;
+	
+    IF NEW.inactive_at IS NOT NULL THEN
+		UPDATE activos
+			SET
+				estado = "SIN VENDER"
+			WHERE 
+				idactivo = NEW.idactivo;
+    END IF;
+    
+END
+$$
+DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -3574,16 +3555,6 @@ CREATE TABLE `sustentos_sep` (
   `idusuario` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Volcado de datos para la tabla `sustentos_sep`
---
-
-INSERT INTO `sustentos_sep` (`idsustento_sep`, `idseparacion`, `ruta`, `create_at`, `update_at`, `inactive_at`, `idusuario`) VALUES
-(1, 1, '/ruta/del/sustento1.pdf', '2024-03-23', NULL, NULL, 1),
-(2, 1, '/ruta/del/sustento2.pdf', '2024-03-23', NULL, NULL, 2),
-(3, 1, '/ruta/del/sustento3.pdf', '2024-03-23', NULL, NULL, 1),
-(4, 1, '/ruta/del/sustento4.pdf', '2024-03-23', NULL, NULL, 2);
-
 -- --------------------------------------------------------
 
 --
@@ -3616,20 +3587,20 @@ CREATE TABLE `usuarios` (
 --
 
 INSERT INTO `usuarios` (`idusuario`, `imagen`, `nombres`, `apellidos`, `documento_tipo`, `documento_nro`, `estado_civil`, `iddistrito`, `direccion`, `correo`, `contraseña`, `codigo`, `idrol`, `iddireccion`, `partida_elect`, `create_at`, `update_at`, `inactive_at`) VALUES
-(1, NULL, 'Juan Carlos', 'González Pérez', 'DNI', '11111111', 'Soltero', 1, 'Calle A 123', 'juancarlos@gmail.com', 'contraseña1', NULL, 1, 1, NULL, '2024-03-23', NULL, NULL),
-(2, NULL, 'María José', 'Hernández López', 'DNI', '22222222', 'Casada', 2, 'Calle B 456', 'mariajose@gmail.com', 'contraseña2', NULL, 2, 1, NULL, '2024-03-23', NULL, NULL),
-(3, NULL, 'Pedro Luis', 'Díaz Martínez', 'DNI', '33333333', 'Divorciado', 3, 'Calle C 789', 'pedroluis@gmail.com', 'contraseña3', NULL, 3, 1, NULL, '2024-03-23', NULL, NULL),
-(4, NULL, 'Ana Sofía', 'López Sánchez', 'DNI', '44444444', 'Soltera', 4, 'Calle D 012', 'anasofia@gmail.com', 'contraseña4', NULL, 4, 1, NULL, '2024-03-23', NULL, NULL),
-(5, NULL, 'José María', 'Martínez Gómez', 'DNI', '55555555', 'Viuda', 5, 'Calle E 345', 'josemaria@gmail.com', 'contraseña5', NULL, 5, 1, NULL, '2024-03-23', NULL, NULL),
-(6, NULL, 'Luisa Elena', 'Gómez Rodríguez', 'DNI', '66666666', 'Casado', 6, 'Calle F 678', 'luisaelena@gmail.com', 'contraseña6', NULL, 6, 1, NULL, '2024-03-23', NULL, NULL),
-(7, NULL, 'Jorge Pablo', 'Rodríguez García', 'DNI', '77777777', 'Soltera', 7, 'Calle G 901', 'jorgepablo@gmail.com', 'contraseña7', NULL, 6, 1, NULL, '2024-03-23', NULL, NULL),
-(8, NULL, 'Carlos Antonio', 'Fernández Martín', 'DNI', '88888888', 'Casado', 8, 'Calle H 234', 'carlosantonio@gmail.com', 'contraseña8', NULL, 1, 2, NULL, '2024-03-23', NULL, NULL),
-(9, NULL, 'María Carmen', 'Sánchez López', 'DNI', '99999999', 'Soltera', 9, 'Calle I 567', 'mariacarmen@gmail.com', 'contraseña9', NULL, 2, 2, NULL, '2024-03-23', NULL, NULL),
-(10, NULL, 'Francisco Javier', 'Gómez Rodríguez', 'DNI', '10101010', 'Divorciado', 10, 'Calle J 890', 'franciscojavier@gmail.com', 'contraseña10', NULL, 3, 2, NULL, '2024-03-23', NULL, NULL),
-(11, NULL, 'Elena Isabel', 'Díaz García', 'DNI', '11111112', 'Casado', 11, 'Calle K 111', 'elenaisabel@gmail.com', 'contraseña11', NULL, 4, 2, NULL, '2024-03-23', NULL, NULL),
-(12, NULL, 'Pedro Luis', 'Martínez López', 'DNI', '12121212', 'Soltera', 12, 'Calle L 222', 'pedroluis2@gmail.com', 'contraseña12', NULL, 5, 2, NULL, '2024-03-23', NULL, NULL),
-(13, NULL, 'María Isabel', 'García Pérez', 'DNI', '13131313', 'Casado', 13, 'Calle M 333', 'mariaisabel@gmail.com', 'contraseña13', NULL, 6, 2, NULL, '2024-03-23', NULL, NULL),
-(14, NULL, 'Antonio José', 'Hernández Martín', 'DNI', '14141414', 'Soltera', 14, 'Calle N 444', 'antoniojose@gmail.com', 'contraseña14', NULL, 6, 2, NULL, '2024-03-23', NULL, NULL);
+(1, NULL, 'Juan Carlos', 'González Pérez', 'DNI', '11111111', 'Soltero', 1, 'Calle A 123', 'juancarlos@gmail.com', 'contraseña1', NULL, 1, 1, NULL, '2024-04-10', NULL, NULL),
+(2, NULL, 'María José', 'Hernández López', 'DNI', '22222222', 'Casada', 2, 'Calle B 456', 'mariajose@gmail.com', 'contraseña2', NULL, 2, 1, NULL, '2024-04-10', NULL, NULL),
+(3, NULL, 'Pedro Luis', 'Díaz Martínez', 'DNI', '33333333', 'Divorciado', 3, 'Calle C 789', 'pedroluis@gmail.com', 'contraseña3', NULL, 3, 1, NULL, '2024-04-10', NULL, NULL),
+(4, NULL, 'Ana Sofía', 'López Sánchez', 'DNI', '44444444', 'Soltera', 4, 'Calle D 012', 'anasofia@gmail.com', 'contraseña4', NULL, 4, 1, NULL, '2024-04-10', NULL, NULL),
+(5, NULL, 'José María', 'Martínez Gómez', 'DNI', '55555555', 'Viuda', 5, 'Calle E 345', 'josemaria@gmail.com', 'contraseña5', NULL, 5, 1, NULL, '2024-04-10', NULL, NULL),
+(6, NULL, 'Luisa Elena', 'Gómez Rodríguez', 'DNI', '66666666', 'Casado', 6, 'Calle F 678', 'luisaelena@gmail.com', 'contraseña6', NULL, 6, 1, NULL, '2024-04-10', NULL, NULL),
+(7, NULL, 'Jorge Pablo', 'Rodríguez García', 'DNI', '77777777', 'Soltera', 7, 'Calle G 901', 'jorgepablo@gmail.com', 'contraseña7', NULL, 6, 1, NULL, '2024-04-10', NULL, NULL),
+(8, NULL, 'Carlos Antonio', 'Fernández Martín', 'DNI', '88888888', 'Casado', 8, 'Calle H 234', 'carlosantonio@gmail.com', 'contraseña8', NULL, 1, 2, NULL, '2024-04-10', NULL, NULL),
+(9, NULL, 'María Carmen', 'Sánchez López', 'DNI', '99999999', 'Soltera', 9, 'Calle I 567', 'mariacarmen@gmail.com', 'contraseña9', NULL, 2, 2, NULL, '2024-04-10', NULL, NULL),
+(10, NULL, 'Francisco Javier', 'Gómez Rodríguez', 'DNI', '10101010', 'Divorciado', 10, 'Calle J 890', 'franciscojavier@gmail.com', 'contraseña10', NULL, 3, 2, NULL, '2024-04-10', NULL, NULL),
+(11, NULL, 'Elena Isabel', 'Díaz García', 'DNI', '11111112', 'Casado', 11, 'Calle K 111', 'elenaisabel@gmail.com', 'contraseña11', NULL, 4, 2, NULL, '2024-04-10', NULL, NULL),
+(12, NULL, 'Pedro Luis', 'Martínez López', 'DNI', '12121212', 'Soltera', 12, 'Calle L 222', 'pedroluis2@gmail.com', 'contraseña12', NULL, 5, 2, NULL, '2024-04-10', NULL, NULL),
+(13, NULL, 'María Isabel', 'García Pérez', 'DNI', '13131313', 'Casado', 13, 'Calle M 333', 'mariaisabel@gmail.com', 'contraseña13', NULL, 6, 2, NULL, '2024-04-10', NULL, NULL),
+(14, NULL, 'Antonio José', 'Hernández Martín', 'DNI', '14141414', 'Soltera', 14, 'Calle N 444', 'antoniojose@gmail.com', 'contraseña14', NULL, 6, 2, NULL, '2024-04-10', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -3652,8 +3623,8 @@ CREATE TABLE `vend_representantes` (
 --
 
 INSERT INTO `vend_representantes` (`idvend_representante`, `idvendedor`, `idrepresentante`, `create_at`, `update_at`, `inactive_at`, `idusuario`) VALUES
-(1, 6, 1, '2024-03-23', NULL, NULL, 1),
-(2, 7, 2, '2024-03-23', NULL, NULL, 2);
+(1, 6, 1, '2024-04-12', NULL, NULL, 1),
+(2, 7, 2, '2024-04-12', NULL, NULL, 2);
 
 -- --------------------------------------------------------
 
@@ -3667,7 +3638,7 @@ CREATE TABLE `vws_list_assets_short` (
 ,`denominacion` varchar(30)
 ,`estado` varchar(10)
 ,`sublote` tinyint(4)
-,`direccion` varchar(60)
+,`direccion` varchar(70)
 ,`distrito` varchar(45)
 ,`provincia` varchar(45)
 ,`departamento` varchar(45)
@@ -3736,7 +3707,7 @@ CREATE TABLE `vws_list_inactive_assets` (
 ,`denominacion` varchar(30)
 ,`estado` varchar(10)
 ,`sublote` tinyint(4)
-,`direccion` varchar(60)
+,`direccion` varchar(70)
 ,`distrito` varchar(45)
 ,`provincia` varchar(45)
 ,`departamento` varchar(45)
@@ -3812,7 +3783,7 @@ CREATE TABLE `vws_ubigeo` (
 --
 DROP TABLE IF EXISTS `vws_list_assets_short`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vws_list_assets_short`  AS SELECT `act`.`idactivo` AS `idactivo`, `proy`.`idproyecto` AS `idproyecto`, `proy`.`denominacion` AS `denominacion`, `act`.`estado` AS `estado`, `act`.`sublote` AS `sublote`, `act`.`direccion` AS `direccion`, `dist`.`distrito` AS `distrito`, `prov`.`provincia` AS `provincia`, `dept`.`departamento` AS `departamento`, `usu`.`nombres` AS `usuario` FROM (((((`activos` `act` join `proyectos` `proy` on(`proy`.`idproyecto` = `act`.`idproyecto`)) join `distritos` `dist` on(`dist`.`iddistrito` = `proy`.`iddistrito`)) join `provincias` `prov` on(`prov`.`idprovincia` = `dist`.`idprovincia`)) join `departamentos` `dept` on(`dept`.`iddepartamento` = `prov`.`iddepartamento`)) join `usuarios` `usu` on(`usu`.`idusuario` = `act`.`idusuario`)) WHERE `act`.`tipo_activo` = 'LOTE' ORDER BY `act`.`sublote` ASC ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vws_list_assets_short`  AS SELECT `act`.`idactivo` AS `idactivo`, `proy`.`idproyecto` AS `idproyecto`, `proy`.`denominacion` AS `denominacion`, `act`.`estado` AS `estado`, `act`.`sublote` AS `sublote`, `act`.`direccion` AS `direccion`, `dist`.`distrito` AS `distrito`, `prov`.`provincia` AS `provincia`, `dept`.`departamento` AS `departamento`, `usu`.`nombres` AS `usuario` FROM (((((`activos` `act` join `proyectos` `proy` on(`proy`.`idproyecto` = `act`.`idproyecto`)) join `distritos` `dist` on(`dist`.`iddistrito` = `proy`.`iddistrito`)) join `provincias` `prov` on(`prov`.`idprovincia` = `dist`.`idprovincia`)) join `departamentos` `dept` on(`dept`.`iddepartamento` = `prov`.`iddepartamento`)) join `usuarios` `usu` on(`usu`.`idusuario` = `act`.`idusuario`)) WHERE `act`.`tipo_activo` = 'LOTE' AND `act`.`inactive_at` is null ORDER BY `act`.`sublote` ASC ;
 
 -- --------------------------------------------------------
 
@@ -3886,8 +3857,8 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 ALTER TABLE `activos`
   ADD PRIMARY KEY (`idactivo`),
-  ADD KEY `fk_idusuario_lotes` (`idusuario`),
-  ADD KEY `fk_idproyecto_lotes` (`idproyecto`);
+  ADD KEY `fk_idproyecto_lotes` (`idproyecto`),
+  ADD KEY `fk_idusuario_lotes` (`idusuario`);
 
 --
 -- Indices de la tabla `clientes`
@@ -4086,7 +4057,7 @@ ALTER TABLE `vend_representantes`
 -- AUTO_INCREMENT de la tabla `activos`
 --
 ALTER TABLE `activos`
-  MODIFY `idactivo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=51;
+  MODIFY `idactivo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT de la tabla `clientes`
@@ -4098,7 +4069,7 @@ ALTER TABLE `clientes`
 -- AUTO_INCREMENT de la tabla `contratos`
 --
 ALTER TABLE `contratos`
-  MODIFY `idcontrato` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `idcontrato` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `cuotas`
@@ -4116,7 +4087,7 @@ ALTER TABLE `departamentos`
 -- AUTO_INCREMENT de la tabla `desembolsos`
 --
 ALTER TABLE `desembolsos`
-  MODIFY `iddesembolso` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `iddesembolso` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `detalles_contratos`
@@ -4128,7 +4099,7 @@ ALTER TABLE `detalles_contratos`
 -- AUTO_INCREMENT de la tabla `detalle_gastos`
 --
 ALTER TABLE `detalle_gastos`
-  MODIFY `iddetalle_gasto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `iddetalle_gasto` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `direcciones`
@@ -4152,13 +4123,13 @@ ALTER TABLE `empresas`
 -- AUTO_INCREMENT de la tabla `financieras`
 --
 ALTER TABLE `financieras`
-  MODIFY `idfinanciera` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `idfinanciera` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `metricas`
 --
 ALTER TABLE `metricas`
-  MODIFY `idmetrica` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
+  MODIFY `idmetrica` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT de la tabla `metricas_contratos`
@@ -4176,7 +4147,7 @@ ALTER TABLE `permisos`
 -- AUTO_INCREMENT de la tabla `presupuestos`
 --
 ALTER TABLE `presupuestos`
-  MODIFY `idpresupuesto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `idpresupuesto` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `provincias`
@@ -4188,7 +4159,7 @@ ALTER TABLE `provincias`
 -- AUTO_INCREMENT de la tabla `proyectos`
 --
 ALTER TABLE `proyectos`
-  MODIFY `idproyecto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=66;
+  MODIFY `idproyecto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT de la tabla `roles`
@@ -4200,7 +4171,7 @@ ALTER TABLE `roles`
 -- AUTO_INCREMENT de la tabla `separaciones`
 --
 ALTER TABLE `separaciones`
-  MODIFY `idseparacion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `idseparacion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT de la tabla `sustentos_cuotas`
@@ -4212,7 +4183,7 @@ ALTER TABLE `sustentos_cuotas`
 -- AUTO_INCREMENT de la tabla `sustentos_sep`
 --
 ALTER TABLE `sustentos_sep`
-  MODIFY `idsustento_sep` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `idsustento_sep` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `usuarios`
