@@ -174,7 +174,7 @@ INSERT INTO contratos (idcliente, idconyugue, idrepresentante_primario, idrepres
 				(2, NULL, 1, NULL, 3.500, 'VIGENTE', '2024-03-14', 5);
 
 SELECT * FROM contratos;
-
+select * from activos;
 -- VENDEDORES REPRESENTANTE
 INSERT INTO vend_representantes (idvendedor, idrepresentante, idusuario)
 			VALUES

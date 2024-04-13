@@ -110,7 +110,7 @@ class Asset extends Conection{
          
         try{
 
-            $query = $this->conection->prepare("CALL spu_set_assets(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+            $query = $this->conection->prepare("CALL spu_set_assets(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
             $query->execute(
                 array(
                     $dataAsset["idactivo"],
@@ -127,7 +127,6 @@ class Asset extends Conection{
                     $dataAsset["latitud"],
                     $dataAsset["longitud"],
                     $dataAsset["perimetro"],
-                    $dataAsset["det_casa"],
                     $dataAsset["precio_venta"],
                     $dataAsset["idusuario"]
                 )
@@ -170,6 +169,30 @@ class Asset extends Conection{
             return $query->fetch(PDO::FETCH_ASSOC);
             
         }catch(Exception $e){
+            die($e->getMessage());
+        }
+    }
+
+    /**
+     * Método para actualizar los detalles de la casa de un lote
+     * 
+     */
+    public function setDetAssetBuid($dataAsset = []){
+
+        try{
+
+            $query =  $this->conection->prepare("CALL spu_set_det_build(?,?)");
+            $query->execute(
+                array(
+
+                    $dataAsset["idactivo"],
+                    $dataAsset["det_casa"],
+                )
+            );
+
+            return $query->fetch(PDO::FETCH_ASSOC);
+        }
+        catch(Exception $e){
             die($e->getMessage());
         }
     }

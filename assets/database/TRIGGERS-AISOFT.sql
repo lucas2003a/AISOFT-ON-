@@ -94,13 +94,13 @@ BEGIN
 					WHERE idproyecto = proyecto_id;
 		END CASE;
     END IF;
-    CASE 
-		WHEN NEW.inactive_at IS NOT NULL THEN
-			UPDATE metricas
-				SET l_noVendidos = l_noVendidos -1,	
-					update_at = NOW()
-			WHERE idproyecto = proyecto_id;
-    END CASE;
+    
+	IF NEW.inactive_at IS NOT NULL THEN
+		UPDATE metricas
+			SET l_noVendidos = l_noVendidos -1,	
+				update_at = NOW()
+		WHERE idproyecto = proyecto_id;
+    END IF;
 END $$
 DELIMITER ;		
 

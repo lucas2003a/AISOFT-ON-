@@ -56,6 +56,9 @@ CALL spu_inactve_clients(3);
 CALL spu_restore_clientes(3);
 SELECT * FROM clientes;
 
+-- SEPRARCIONES
+CALL spu_list_separation_ByIdAsset(1);
+
 -- CONTRATOS
 SELECT * FROM contratos;
 SELECT * FROM detalles_contratos;

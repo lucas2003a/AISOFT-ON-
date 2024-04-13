@@ -336,7 +336,6 @@ CREATE PROCEDURE spu_set_assets
     IN _latitud			VARCHAR(20),
     IN _longitud 		VARCHAR(20),
     IN _perimetro      	JSON,
-    IN _det_casa		JSON,
     IN _precio_venta	DECIMAL(8,2),
     IN _idusuario 		INT
 )
@@ -357,7 +356,6 @@ BEGIN
             latitud 		= NULLIF(_latitud,""),
             longitud		= NULLIF(_longitud,""),
             perimetro 		= NULLIF(_perimetro, ""),
-            det_casa		= NULLIF(_det_casa,""),
             precio_venta	= _precio_venta,
             idusuario		= _idusuario,
             update_at		= CURDATE() 
@@ -366,6 +364,29 @@ BEGIN
             
 		SELECT ROW_COUNT() AS filasAfect;
 END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE PROCEDURE spu_set_det_build(IN _idactivo INT, IN _det_casa JSON)
+BEGIN
+	DECLARE oldDetCasa JSON;
+    
+    SET oldDetCasa = (
+		SELECT det_casa FROM activos WHERE idactivo = _idactivo
+    );
+		
+	IF _det_casa != oldDetCasa THEN
+		UPDATE activos SET
+			det_casa = _det_casa,
+			update_at = CURDATE()
+		WHERE 
+			idactivo = _idactivo;
+        
+		SELECT ROW_COUNT() AS filasAfect;
+	ELSE 
+		(SELECT COUNT(*) -2 AS filasAfect FROM activos WHERE idactivo = 1);
+    END IF;
+END $$
 DELIMITER ;
 
 DELIMITER $$
