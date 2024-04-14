@@ -38,7 +38,7 @@ foreach($data as $register){
 }
 
 
-$spreadsheet->getProperties()->setCreator("A.I.F Contratistas Generales S.A.C")->setTitle("Resporte de estado de lotes - " . $denominacion);
+$spreadsheet->getProperties()->setCreator("A.I.F Contratistas Generales S.A.C")->setTitle("Reporte de estado de lotes - " . $denominacion);
 
 $spreadsheet->setActiveSheetIndex(0);       //PRIMERA HOJA
 $sheet = $spreadsheet->getActiveSheet();    //HOJA DE TRABAO
