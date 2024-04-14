@@ -94,6 +94,28 @@ BEGIN
 END $$
 DELIMITER ;
 
+DELIMITER $$
+CREATE PROCEDURE spu_get_lot_reports(IN _idproyecto INT)
+BEGIN
+	SELECT 
+		proy.denominacion,
+        proy.codigo,
+        act.sublote,
+        act.estado,
+        act.moneda_venta,
+        act.precio_venta,
+        act.area_terreno,
+        met.l_vendidos,
+        met.l_noVendidos,
+        met.l_separados,
+        (l_vendidos + l_noVendidos + l_separados) AS l_total
+        FROM activos AS act
+        INNER JOIN proyectos AS proy ON proy.idproyecto = act.idproyecto
+        INNER JOIN metricas AS met ON met.idproyecto = proy.idproyecto
+        WHERE act.idproyecto = _idproyecto
+        ORDER BY act.sublote ASC;
+END $$
+DELIMITER ;
 call spu_get_most_separations();
 update proyectos set imagen = null;
 

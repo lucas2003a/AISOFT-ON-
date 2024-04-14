@@ -196,5 +196,22 @@ class Asset extends Conection{
             die($e->getMessage());
         }
     }
+    
+    /**
+     * Método para listar los lotes para los reportes
+     */
+    public function getLotsReports($idproyecto = 0){
+
+        try{
+            
+            $query = $this->conection->prepare("CALL spu_get_lot_reports(?)");
+            $query->execute(array($idproyecto));
+
+            return $query->fetchAll(PDO::FETCH_ASSOC);
+
+        }catch(Exception $e){
+            die($e->getMessage());
+        }
+    }
 }
 ?>
