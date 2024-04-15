@@ -434,9 +434,39 @@ END$$
 DELIMITER ;
 
 DELIMITER $$
-CREATE PROCEDURE spu_list_inactive_clients()
+CREATE PROCEDURE spu_list_clients_tpersona(IN _tipo_persona VARCHAR(10))
 BEGIN
-	SELECT * FROM vws_list_inactive_clients;
+	IF _tipo_persona = "JURÍDICA" THEN
+		SELECT
+			idcliente,
+            documento_tipo,
+            documento_nro,
+            razon_social,
+            tipo_persona,
+            direccion,
+            distrito,
+            provincia,
+            departamento,
+            usuario
+			FROM vws_list_clients
+            WHERE tipo_persona = _tipo_persona;
+	ELSE
+		SELECT
+			idcliente,
+			nombres,
+            apellidos,
+            documento_tipo,
+            documento_nro,
+            tipo_persona,
+            estado_civil,
+            direccion,
+            distrito,
+            provincia,
+            departamento,
+            usuario
+			FROM vws_list_clients
+            WHERE tipo_persona = _tipo_persona;
+	END IF;
 END $$
 DELIMITER ;
 

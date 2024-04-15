@@ -158,6 +158,8 @@ CREATE VIEW vws_list_clients AS
         clien.documento_nro,
         clien.apellidos,
         clien.nombres,
+        clien.razon_social,
+        clien.tipo_persona,
         clien.estado_civil,
         dist.distrito,
         prov.provincia,
@@ -170,7 +172,7 @@ CREATE VIEW vws_list_clients AS
         INNER JOIN departamentos AS dept ON dept.iddepartamento = prov.iddepartamento
         INNER JOIN usuarios AS usu ON usu.idusuario = clien.idusuario
         WHERE clien.inactive_at IS NULL
-        ORDER BY clien.apellidos ASC;
+        ORDER BY clien.documento_nro ASC;
 $$
 DELIMITER ;
 

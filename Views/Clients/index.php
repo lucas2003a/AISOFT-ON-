@@ -76,7 +76,7 @@
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link active" href="../projects/index.php">
+          <a class="nav-link" href="../projects/index.php">
             <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
               <svg width="12px" height="12px" viewBox="0 0 42 42" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <title>office</title>
@@ -96,7 +96,7 @@
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="../Clients/index.php">
+          <a class="nav-link  active" href="../Clients/index.php">
             <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
               <svg width="12px" height="12px" viewBox="0 0 42 42" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <title>office</title>
@@ -295,24 +295,21 @@
       <div class="container-fluid py-1 px-3">
         <nav aria-label="breadcrumb">
           <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
-            <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="#">Dashboard</a></li>
-            <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="#">Proyectos</a></li>
-            <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="#">Lotes</a></li>
-            <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="#"></a>Detalles</li>
-            <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Detalles del lote</li>
+          <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="#">Dashboard</a></li>
+            <li class="breadcrumb-item text-sm text-dark active" aria-current="page">CLientes</li>
           </ol>
-          <h6 class="font-weight-bolder mb-0" id ="cabezera">DETALLES DEL LOTE - </h6>
+          <h6 class="font-weight-bolder mb-0" id="cabezera">CIENTES </h6>
         </nav>
         <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
           <div class="ms-md-auto pe-md-3 d-flex align-items-center">
             <div class="input-group">
               <span class="input-group-text text-body"><i class="fas fa-search" aria-hidden="true"></i></span>
-              <input type="text" class="form-control" placeholder="Escribe el códgo..." id="in-codigo">
+              <input type="text" class="form-control" placeholder="Escribe el Sublote..." id="in-sublote">
             </div>
           </div>
           <ul class="navbar-nav  justify-content-end">
             <li class="nav-item d-flex align-items-center">
-              <a class="btn btn-outline-success btn-sm mb-0 me-3" target="_blank" href="./add_asset.php"id="add-asset">AGREGAR LOTE</a>
+              <a class="btn btn-outline-success btn-sm mb-0 me-3" target="_blank" href="./add_asset.php" id="add-asset">AGREGAR CLIENTE</a>
             </li>
             <li class="nav-item d-flex align-items-center">
               <a href="javascript:;" class="nav-link text-body font-weight-bold px-0">
@@ -343,7 +340,7 @@
                   <a class="dropdown-item border-radius-md" href="javascript:;">
                     <div class="d-flex py-1">
                       <div class="my-auto">
-                        <img src="../../assets/img/team-2.jpg" class="avatar avatar-sm  me-3 ">
+                        <img src="../../../../assets/img/team-2.jpg" class="avatar avatar-sm  me-3 ">
                       </div>
                       <div class="d-flex flex-column justify-content-center">
                         <h6 class="text-sm font-weight-normal mb-1">
@@ -361,7 +358,7 @@
                   <a class="dropdown-item border-radius-md" href="javascript:;">
                     <div class="d-flex py-1">
                       <div class="my-auto">
-                        <img src="../../assets/img/small-logos/logo-spotify.svg" class="avatar avatar-sm bg-gradient-dark  me-3 ">
+                        <img src="../../../../assets/img/small-logos/logo-spotify.svg" class="avatar avatar-sm bg-gradient-dark  me-3 ">
                       </div>
                       <div class="d-flex flex-column justify-content-center">
                         <h6 class="text-sm font-weight-normal mb-1">
@@ -415,231 +412,59 @@
     <!-- End Navbar -->
     <div class="container py-4">
 
-        <!-- CONTENIDO -->
-        <div class="row">
-        <div class="col-lg-8">
+    <!-- CONTENIDO -->
 
-          <!-- IMAGEN -->
-          <div class="row">
-            <div class="col-xl-6 mb-xl-0 mb-4">
-              <div class="card bg-transparent shadow-xl">
-                <div class="overflow-hidden position-relative border-radius-xl" style="background-image: url('../../assets/img/curved-images/curved14.jpg');height:12rem;" id="imagen">
-                  <span class="mask bg-gradient-dark" id="mask"></span>
-                  <div class="card-body position-relative z-index-1 p-3">
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- CABEZERA DEL DETALLE -->
-
-            <div class="col-xl-6">
+    <div class="row">
+        <div class="col-12">
+          <div class="card mb-4">
+            <div class="card-header pb-0">
               <div class="row">
                 <div class="col-md-6">
-                  <div class="card">
-                    <div class="card-header mx-4 p-3 text-center">
-                      <div class="icon icon-shape icon-lg bg-gradient-primary shadow text-center border-radius-lg">
-                      <i class="fa-solid fa-coins opacity-10"></i>
-                      </div>
-                    </div>
-                    <div class="card-body pt-0 p-3 text-center">
-                      <h6 class="text-center mb-0">Moneda de venta</h6>
-                      <hr class="horizontal dark my-3">
-                      <h5 class="mb-0" id="moneda_venta">--</h5>
-                    </div>
-                  </div>
+
+                  <h6>Tabla - clientes</h6>
                 </div>
-                <div class="col-md-6 mt-md-0 mt-4">
-                  <div class="card">
-                    <div class="card-header mx-4 p-3 text-center">
-                      <div class="icon icon-shape icon-lg bg-gradient-primary shadow text-center border-radius-lg">
-                      <i class="fa-solid fa-hand-holding-dollar opacity-10"></i>
-                      </div>
-                    </div>
-                    <div class="card-body pt-0 p-3 text-center">
-                      <h6 class="text-center mb-0">Precio de venta</h6>
-                      <hr class="horizontal dark my-3">
-                      <h5 class="mb-0" id="precio_venta">--</h5>
-                    </div>
+                <div class="col-md-6">
+                  <div class="text-end">
+                    <button type="button" class="btn btn-lg bg-gradient-success opacity-10" id="generate-excel"><i class="fa-solid fa-file-excel"></i></button>
+                    <button type="button" class="btn btn-lg bg-gradient-danger opacity-10" id="generate-pdf"><i class="bi bi-filetype-pdf"></i></button>
                   </div>
                 </div>
               </div>
-            </div>
-
-            <!-- /CABEZERA DEL DETALLE -->
-
-            <!-- CLIENTES --> 
-
-            <div class="col-md-12 mb-lg-0 mb-4">
-              <div class="card mt-4">
-                <div class="card-header pb-0 p-3">
-                  <div class="row">
-                    <div class="col-6 d-flex align-items-center">
-                      <h6 class="mb-0">Clientes</h6>
-                    </div>
-                  </div>
-                </div>
-                <div class="card-body p-3">
-                  <div class="row">
-                    <div class="table-responsive table-responsive-lg">
-                      <table class="table align-items-center mb-0" id="table-clients">
-                        <thead>
-                          <tr>
-                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Apellidos</th>
-                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Nombres</th>
-                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Tipo de documento</th>
-                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Nº de documento</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                    
-                        <!-- RENDER NUEVOS CLIENTES  -->
-                        
-                        </tbody>
-                      </table>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-          </div>
-          <!-- /CLIENTES -->
-
-         
-        <!-- ---------- -->  
-        </div>
-        <div class="col-lg-4">
-          <div class="card h-100">
-            <div class="card-header pb-0 p-3">
               <div class="row">
-                <div class="col-6 d-flex align-items-center">
-                  <h6 class="mb-0">Características</h6>
+                <div class="col-md-3">
+                  
+                  <select name="tipo_persona" class="form-select" id="documento_tipo">
+                    <option value="NATURAL">Tipo de persona</option>
+                  </select>
                 </div>
               </div>
             </div>
-            <div class="card-body p-3 pb-0">
-              <ul class="list-group" id="caracteristicas">
-
-                <!-- ESTADO -->
-                  <li class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg">
-                    <div class="d-flex flex-column">
-                      <h6 class="mb-1 text-dark font-weight-bold text-sm">Estado </h6>
-                    </div>
-                    <div class="d-flex align-items-center text-sm" id="estado">
-                      
-                      <!-- RENDER -->
-  
-                    </div>
-                  </li>
-
-              <!-- UBIGEO -->
-                <li class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg">
-                  <div class="d-flex flex-column">
-                    <h6 class="mb-1 text-dark font-weight-bold text-sm">Ubigeo</h6>
-                  </div>
-                  <div class="d-flex align-items-center text-sm" id="ubigeo">
+            <div class="card-body px-0 pt-0 pb-2">
+              <div class="table-responsive text-center p-0">
+                  <table class="table align-items-center mb-0" id="table-assets">
+                    <thead>
+                    <tr>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">#</th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Denominación</th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Estado</th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Sublote</th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Direccion</th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Operaciones</th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10"></th>
+                    </tr>
+                  </thead>
+                  <tbody>
                     
-                    <!-- RENDER -->
-                    
-                  </div>
-                </li>
+                  <!-- RENDER -->
 
-              <!-- DIRECCION -->
-                <li class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg">
-                  <div class="d-flex flex-column">
-                    <h6 class="mb-1 text-dark font-weight-bold text-sm">Dirección</h6>
-                  </div>
-                  <div class="d-flex align-items-center text-sm" id="direccion">
-                    
-                    <!-- RENDER -->
-
-                  </div>
-                </li>
-
-              <!-- TIPO ACTIVO -->
-                <li class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg">
-                  <div class="d-flex flex-column">
-                    <h6 class="mb-1 text-dark font-weight-bold text-sm">Tipo </h6>
-                  </div>
-                  <div class="d-flex align-items-center text-sm" id="tipo_activo">
-                    
-                    <!-- RENDER -->
-
-                  </div>
-                </li>
-
-              <!-- PARTIDA ELECTRÓNICA -->
-                <li class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg">
-                  <div class="d-flex flex-column">
-                    <h6 class="mb-1 text-dark font-weight-bold text-sm">Partida electrónica</h6>
-                  </div>
-                  <div class="d-flex align-items-center text-sm" id="partida_elect">
-                    
-                    <!-- RENDER -->
-
-                  </div>
-                </li>
-
-              <!-- PARTIDA ELECTRÓNICA -->
-                <li class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg">
-                  <div class="d-flex flex-column">
-                    <h6 class="mb-1 text-dark font-weight-bold text-sm">Área del terreno</h6>
-                  </div>
-                  <div class="d-flex align-items-center text-sm" id="area_terreno">
-                    
-                    <!-- RENDER -->
-
-                  </div>
-                </li>
-
-              <!-- ZONAS COMUNES -->
-                <li class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg">
-                  <div class="d-flex flex-column">
-                    <h6 class="mb-1 text-dark font-weight-bold text-sm">Zonas comunes</h6>
-                  </div>
-                  <div class="d-flex align-items-center text-sm" id="zcomunes_porcent">
-                    
-                    <!-- RENDER -->
-
-                  </div>
-                </li>
-
-              </ul>
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
         </div>
       </div>
-      <div class="row">
 
-        <!-- DETALLES DE CONSTRUCCIÓN -->
-
-        <div class="col-md-12 mb-lg-0 mb-4">
-          <div class="card mt-4">
-            <div class="card-header pb-0 p-3">
-              <div class="row">
-                <div class="col-6 d-flex align-items-center">
-                  <h6 class="mb-0">Detalles de constricción</h6>
-                  </div>
-                  <div class="col-6 text-end">
-                    <a class="btn bg-gradient-dark mb-0" href="#" id="add"><i class="fas fa-plus"></i>&nbsp;&nbsp;Agregar</a>
-                    <a class="btn bg-gradient-info mb-0" href="#" id="save"><i class="fa-solid fa-floppy-disk"></i> Guardar</a>
-                </div>
-              </div>
-            </div>
-            <div class="card-body p-3">
-            <div class="card-body pt-4 p-3">
-              <ul class="list-group"id="list-group">
-                
-                <!-- RENDER DETALLES DE CONSTRUCCIÓN -->
-
-              </ul>
-            </div>
-          </div>
-        </div>
-
-      </div>
-    
     <footer class="footer pt-3  ">
         <div class="container-fluid">
           <div class="row align-items-center justify-content-lg-between">
@@ -712,504 +537,227 @@
       </div>
     </div>
   </div>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-
   <!-- SWEET ALERT -->
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
   <!--   Core JS Files   -->
-  <script src="../../assets/js/core/popper.min.js"></script>
-  <script src="../../assets/js/core/bootstrap.min.js"></script>
-  <script src="../../assets/js/core/bootstrap.bundle.min.js"></script>
-  <script src="../../assets/js/plugins/perfect-scrollbar.min.js"></script>
-  <script src="../../assets/js/plugins/smooth-scrollbar.min.js"></script>
-  <script src="../../assets/js/plugins/chartjs.min.js"></script>
-  <script src="../../assets/js/globalFunctions.js"></script>
-  <script src="../../assets/js/sweetAlert.js"></script>
-  <!-- <script src="../../assets/js/formMultiSteps.js"></script>
-  <script src="../../assets/js/projects/interactionForms.js"></script> -->
-  <!-- <script src="../../assets/js/renderUbigeo.js"></script>  -->
+  <script src="../../../../assets/js/core/popper.min.js"></script>
+  <script src="../../../../assets/js/core/bootstrap.min.js"></script>
+  <script src="../../../../assets/js/plugins/perfect-scrollbar.min.js"></script>
+  <script src="../../../../assets/js/plugins/smooth-scrollbar.min.js"></script>
+  <script src="../../../../assets/js/plugins/chartjs.min.js"></script>
+  <script src="../../../../assets/js/globalFunctions.js"></script>
+  <script src="../../../../assets/js/sweetAlert.js"></script>
   <script>
+document.addEventListener("DOMContentLoaded",()=>{
 
+  /* INSTANCIAS */
   const global = new FunGlobal();
-  const sAlert = new Alert();
 
   const $ = id => global.$(id);
   const $All = id => global.$All(id);
 
-  const queryString = window.location.search;
-  const url = new URLSearchParams(queryString);
-  
+  /* VALOR EN LA URL */
+  const stringQuery = window.location.search;
+  const url = new URLSearchParams(stringQuery);
   const code = url.get("id");
+  const codeName = url.get("name");
 
-  const idActivo = atob(code);
+  const idProyecto = atob(code); //DECOFICA EL VALOR
+  const name = atob(codeName);
 
-  const btnsEdit = $All(".edit");
+  let timer;
 
-  let det_casaJSON;
-    
-    /**
-     * Renderiza los de talles de la construcción - recive un JSON
-     */
-    function renderDetBuild(json){
+  function renderAssets(results){
 
-      const jsonObj = JSON.parse(json);
+    let numberRow = 1;
 
-      const keys = jsonObj.clave;
-      const values = jsonObj.valor;
+    $("#table-assets tbody").innerHTML = "";
 
-      keys.forEach((key, index) => {
+    let newRow = ``;
 
-        const value = values[index];
+    if(results.length > 0){
+      
+      results.forEach(asset =>{
+        
+        let code = btoa(asset.idactivo) //CODIFICACIÓN
+  
+        let IconStatus = asset.estado == "SIN VENDER" ?  `<span class="badge badge-sm bg-gradient-danger">${asset.estado}</span>` : 
+                                        asset.estado = "VENDIDO" ? `<span class="badge badge-sm bg-gradient-success">${asset.estado}</span>`: 
+                                                                  `<span class="badge badge-sm bg-gradient-secondary">${asset.estado}</span>` ;
+  
+        newRow = `
+                <tr>
+                  <td>
+                    <div class="d-flex px-2 py-1">
+                      <div class="d-flex flex-column justify-content-center">
+                        <h6 class="mb-0 text-sm">${numberRow}</h6>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <p class="text-xs font-weight-bold mb-0">${asset.denominacion}</p>
+                    </td>
+                    <td class="align-middle text-center text-sm">
+                      ${IconStatus}
+                    </td>
+                    <td>
+                      <p class="text-xs font-weight-bold mb-0">${asset.sublote}</p>
+                    </td>
+                  <td>
+                    <p class="text-xs font-weight-bold mb-0">${asset.direccion}</p>
+                  </td>
+                  <td class="align-middle">
+                    <div class="btn-group">
+                        <a type="button" href="./delete_asset.php?id=${code}" class="btn btn-danger btn-sm" id="btn-delete"><i class="bi bi-trash-fill"></i></a>
+                        <a type="button" href="./edit_asset.php?id=${code}" class="btn btn-primary btn-sm" id="btn-edit"><i class="bi bi-pencil-fill"></i></a>
+                        <a type="button" href="./detail_asset.php?id=${code}" class="btn btn-success btn-sm"><i class="bi bi-arrow-right-square"></i></a>
+                        </div>
+                    </td>
+                </tr>           
+        `;
+        numberRow ++;
 
-        if(key != "" || value != ""){
-          
-          let newDetail = 
-          `
-            <li class="list-group-item border-0 p-4 mb-2 bg-gray-100 border-radius-lg">
-    
-              <div class="row">
-                <div class="col-md-9">
-                  <div class="d-flex flex-column">
-                    <h6 class="mb-3 text-sm text-key">${key}</h6>
-                    <span class="mb-2 text-xs text-value"><span class="text-dark font-weight-bold ms-sm-2">${value}</span></span>
-                  </div>
-                </div>
-    
-                <div class="col-md-3">
-                  <div class="ms-auto text-end">
-                    <a class="btn btn-link text-danger text-gradient px-3 mb-0 delete" href="javascript:;"><i class="far fa-trash-alt me-2"></i>Eliminar</a>
-                    <a class="btn btn-link text-dark px-3 mb-0 edit" href="javascript:;"><i class="fas fa-pencil-alt text-dark me-2" aria-hidden="true"></i>Editar</a>
-                  </div>
-                </div>
-    
-              </div>
-    
-            </li>
-          `;
-    
-          $("#list-group").innerHTML += newDetail;
-        }
+        $("#table-assets tbody").innerHTML += newRow;
       });
-    }
 
-    function renderListError(id){
-
-      newDetail =`
+    }else{
+      newRow =`
       <div class="alert alert-danger m-4 text-white" role="alert">
-          <strong class="text-white">No se han ecnontrado registros</strong> Aegurate que exista la conformidad de datos.
+          <strong class="text-white">No existe sublotes</strong> Asegurate de que existan los registros.
       </div>
       `;
-      $(id).innerHTML += newDetail;
-    }
-
-    /**
-     * Obtiene los detalles de cosntrucción
-     */
-    async function getDetails(id){
-
-      try{
-        let url = "../../Controllers/asset.controller.php";
-
-        let params = new FormData();
-
-        params.append("action","listAssetId")
-        params.append("idactivo",id)
-
-        let result =  await global.sendAction(url, params);
-
-        if(result){
-
-          let notNullResult = Object.keys(result).reduce((acc, key) => { 
-              acc[key] = result[key] == null ? 0 : result[key]
-              return acc;
-            },{});
-
-          console.log(notNullResult);
-
-          let imagen = result.imagen ? result.imagen : "NoImage.jpg";
-          
-          $("#cabezera").innerHTML += `${result.sublote} - ${result.denominacion}`;
-          
-          $("#imagen").setAttribute("style",`background-image: url('../../media/lotes/${imagen}');background-size: cover; background-repeat: no-repeat; height:12rem; width: 100%`);
-          $("#mask").classList.remove("bg-gradient-dark");
-          $("#moneda_venta").innerText = result.moneda_venta;
-          $("#precio_venta").innerText = result.precio_venta;
-
-          $("#estado").innerHTML = result.estado;
-          $("#ubigeo").innerHTML = `${result.distrito} - ${result.provincia}- ${result.departamento}`;
-          $("#direccion").innerHTML = result.direccion;
-          $("#tipo_activo").innerHTML = result.tipo_activo;
-          $("#partida_elect").innerHTML = result.partida_elect;
-          $("#area_terreno").innerHTML = `${notNullResult.area_terreno} m2`;
-          $("#zcomunes_porcent").innerHTML = `${notNullResult.zcomunes_porcent} %`;
-
-          det_casaJSON = result.det_casa
-          renderDetBuild(det_casaJSON);
-        
-        }else{
-
-          renderListError("#list-group");
-        }
-      }
-      catch{
-
-      }
+      $("#table-assets tbody").innerHTML += newRow;
     }
     
-    /**
-     * Actualiza los detalles de construcción
-     */
-    async function setDetAssetBuild(id, json){
-
-      try{
-        
-        let url = "../../Controllers/asset.controller.php"
-        let params = new FormData();
-
-        params.append("action","setDetAssetBuild");
-        params.append("idactivo",id);
-        params.append("det_casa",json);
-
-        let result = await global.sendAction(url, params);
-
-        if(result){
-          
-          if(result.filasAfect > 0){
-              sAlert.sweetSuccess("Registro actualizado","El registro se ha actualizado correctamente",()=>{
-
-             });
-          }else if(result.filasAfect == 0){
-
-            sAlert.sweetError("No se actualizó el registro","Vuelve a intentarlo");
-
-          }else{
-
-            sAlert.sweetWarning("No hay actualizaciones", "No hay datos nuevos para actualizar");
-          }
-        }
-      }
-      catch(e){
-
-        console.error(e);
-      }
-    }
-
-    /**
-     *Obtentine el constenido de etiquetas de texto y las convierte a etiquetas el tipo input
-     */
-    async function getText(){
-
-      const keyClass = ".list-group-item .text-key";
-      const valueClass = ".list-group-item .text-value";
-
-      const textContent = await global.getJsonTxT(keyClass, valueClass); // => Contenido del texto econvertido a JSON
-      
-      if(textContent){
-
-        setDetAssetBuild(idActivo, textContent);
-
-      }else{
-        console.error("no hay datos")
-      }
-      
-    }
-
-    /**
-     * Transforma las etiquetas del tipo inputa a etiquetas de texto
-     */
-    async function restoreText(){
-
-      const textareas = $All("textarea");
-      const inputs = $All("input");
-
-      inputs.forEach(input => {
-
-        const h6 = document.createElement("h6");
-        h6.classList.add("mb-3" ,"text-sm" ,"text-key")
-        h6.textContent = input.value
-
-        input.parentNode.replaceChild(h6, input);
-      });
-
-
-      textareas.forEach(textarea => {
-
-        const span = document.createElement("span");
-        span.classList.add("text-dark", "font-weight-bold","ms-sm-2");
-        span.textContent = textarea.value;
-
-        const spanParent = document.createElement("span");
-        spanParent.classList.add("mb-2", "text-xs", "text-value");
-
-        spanParent.appendChild(span)
-        
-        textarea.parentNode.replaceChild(spanParent, textarea);
-      });
-
-      await getText()
-
-    }
-
-    /**
-     * Elimina la etiqueta Li del botón seleccionado
-     */
-    async function dropTextli(event){
-
-      let li = event.target.closest(".list-group-item");
-
-      li.remove();
-
-      getText();
-    }
-
-    /**
-     *Reemplaza las etiquetas de texto a una etiqueta input
-     */
-    function replaceTextLabel(e){
-
-      //reemplazando a una etiqueta input
-      const h6 = e.target.parentNode.parentNode.previousElementSibling.querySelector(".text-key");
-        
-      const input = document.createElement("input");
-      input.classList.add("form-control","mb-2", "text-dark", "font-weight-bold", "ms-sm-2", "text-key");
-      input.setAttribute("required",true);
-  
-      input.value = h6.textContent;
-      input.innerHTML = h6.textContent;
-      console.log(input.value),
-  
-      h6.parentNode.replaceChild(input, h6);
-
-      //Remplazando a una etiqueta textarea
-      const span = e.target.parentNode.parentNode.previousElementSibling.querySelector(".text-value");
-  
-      const textarea = document.createElement("textarea");
-  
-      textarea.classList.add("form-control","mb-2", "text-dark", "font-weight-bold", "ms-sm-2", "text-value");
-      textarea.setAttribute("cols","70");
-      textarea.setAttribute("rows","10");
-      textarea.value = span.textContent;
-      textarea.innerHTML = span.textContent;
-  
-      span.parentNode.replaceChild(textarea, span);
-    }
-
-    function createIputText(){
-
-      //CREA EL INPUT
-      const input = document.createElement("input");
-      input.classList.add("form-control","mb-2", "text-dark", "font-weight-bold", "ms-sm-2", "text-key");
-
-      //Crea el TEXTAREA
-      const textarea = document.createElement("textarea");
-  
-      textarea.classList.add("form-control","mb-2", "text-dark", "font-weight-bold", "ms-sm-2", "text-value");
-      textarea.setAttribute("cols","70");
-      textarea.setAttribute("rows","10");
-
-      //Div flex-column
-      const flexColumn = document.createElement("div");
-      flexColumn.classList.add("d-flex", "flex-column");
-
-      flexColumn.appendChild(input);
-      flexColumn.appendChild(textarea);
-
-      //Div col-md-9
-      const colMd9 = document.createElement("div");
-      colMd9.classList.add("col-md-9");
-
-      colMd9.appendChild(flexColumn);
-
-      //Botón edit
-      const btnDelete = document.createElement("a");
-      btnDelete.classList.add("btn", "btn-link","text-danger", "text-gradient", "px-3", "mb-0" ,"delete");
-      btnDelete.setAttribute("href","#");
-      btnDelete.innerText = "Eliminar";
-
-      const iconTrash = document.createElement("i");
-      iconTrash.classList.add("far", "fa-trash-alt", "me-2");
-
-      btnDelete.insertBefore(iconTrash, btnDelete.firstChild);
-
-      //Botón edit
-      const btnEdit = document.createElement("a");
-      btnEdit.classList.add("btn", "btn-link", "text-dark", "px-3", "mb-0", "edit");
-      btnEdit.setAttribute("href","#");
-      btnEdit.innerText = "Editar";
-      
-      const iconPencil = document.createElement("i");
-      iconPencil.classList.add("fas", "fa-pencil-alt", "text-dark", "me-2");
-      iconPencil.setAttribute("aria-hidden",true);
-      
-
-      btnEdit.insertBefore(iconPencil, btnEdit.firstChild);
-
-      //Div ms-auto
-      const msAuto = document.createElement("div");
-      msAuto.classList.add("ms-auto", "text-end")
-
-      msAuto.appendChild(btnDelete);
-      msAuto.appendChild(btnEdit);
-
-      //Div col-md-3
-      const colMd3 = document.createElement("div");
-      colMd3.classList.add("col-md-3")
-
-      colMd3.appendChild(msAuto);
-
-      //Div row
-      const row = document.createElement("div");
-      row.classList.add("row");
-
-      row.appendChild(colMd9);
-      row.appendChild(colMd3);
-
-      //Etiqueta LI 
-      const li = document.createElement("li");
-      li.classList.add("list-group-item", "border-0", "p-4", "mb-2", "bg-gray-100", "border-radius-lg");
-
-      li.appendChild(row);
-
-      let firstList = $("#list-group").firstChild;
-
-      $("#list-group").insertBefore(li, firstList);
-    }
-
-    //FUnción para validar si las cajas están vacías
-  function validateInputs(callback){
-    
-    const form = $All(".list-group input, textarea");
-
-    let isValid = true;
-    
-    Array.from(form).forEach(input => {
-      
-      if(input.value == ""){
-
-        input.classList.add('was-validated'), //MUESTRA LOS LABELS EN ROJO
-        isValid = false;
-
-        input.reportValidity();
-
-        sAlert.sweetWarning("Cajas vacías", "Necesitas completar los campos");
-      }else{
-
-        input.classList.remove('was-validated');
-        isValid = true;
-
-      }
-    });
-
-    if(isValid){
-
-      callback();
-    }
 
   }
 
-  function renderTable(idtable, data){
-  
-    newRow = `
-      <tr>
-        <td>
-          <p class="text-xs font-weight-bold mb-0">${data.apellidos}</p>
-        </td>
-        <td>
-          <p class="text-xs font-weight-bold mb-0">${data.nombres}</p>
-        </td>
-        <td>
-          <p class="text-xs font-weight-bold mb-0">${data.documento_tipo}</p>
-        </td>
-        <td>
-          <p class="text-xs font-weight-bold mb-0">${data.documento_nro}</p>
-        </td>
-        <td class="align-middle">
-          <div class="btn-group">
-            <a type="button" href="#" class="btn btn-success btn-sm"><i class="bi bi-arrow-right-square"></i> Ver más</a>
-          </div>
-        </td>
-      </tr>           
-        `;
 
-      $(idtable).innerHTML += newRow;
-  }
-
-  async function getClients(id){
+  async function getAssets(id){
 
     try{
 
-      let url = "../../Controllers/separation.controller.php";
+      $("#add-asset").setAttribute("href",`./add_asset.php?idproy=${code}&name=${codeName}`);
 
+      let url ="../../../../Controllers/asset.controller.php";
       let params = new FormData();
+  
+      params.append("action","listAssetProjectId");
+      params.append("idproyecto",id);
 
-      params.append("action","listSeparaction");
-      params.append("idactivo",id);
+      results = await global.sendAction(url, params);
 
-      let results = await global.sendAction(url, params);
-
-      $("#table-clients tbody").innerHTML = "";
       if(results){
 
-        console.log(results);
-        renderTable("#table-clients tbody", results);
-      }else{
-        
-        renderListError("#table-clients tbody")
+        $("#cabezera").innerText +=` ${name}`;
+        renderAssets(results);
+
       }
     }
     catch(e){
-      
       console.error(e);
-
     }
   }
 
-  $("#add").addEventListener("click",()=>{
+  async function searchAsset(idproy,sublote){
+    try{
 
-    validateInputs(createIputText);
+      let url = `../../../../Controllers/asset.controller.php`;
+      let params = new FormData();
+
+      params.append("action", "listAssetPAcode");
+      params.append("idproyecto",idproy);
+      params.append("sublote",sublote);
+
+      let results = await global.sendAction(url, params);
+
+      if(results){
+        console.log(results)
+        renderAssets(results);
+      }
+    }
+    catch(e){
+      console.error(e);
+    }
+  }
+
+  //Genera u archivo PDF
+  async function generatePdf(id){
+
+    let codeID = btoa(id);
+    let url = `../../../../reports/reports_pdf.php?action=reportLots&idproyecto=${codeID}`;
+
+    window.location.href = url;
+  }
+
+  //Genera un archivo excel
+  async function generateExcel(id){
+
+    let codeID = btoa(id);
+    let url = `../../../../reports/reports_excel.php?idproyecto=${codeID}`;
+
+    window.location.href = url;
+  }
+
+  $("#in-sublote").addEventListener("input",()=>{
+
+      clearTimeout(timer);
+
+        timer = setTimeout(()=>{
+
+          let sublote = $("#in-sublote").value;
+
+          if(sublote != ""){
+
+            searchAsset(idProyecto,sublote);
+
+          }else{
+
+            getAssets(idProyecto);
+          }
+        },1500)
+    });
+
+    //Menù */*/*/
+    $("#goDashboard").addEventListener("click",()=>{
+    
+    window.location.href = `../../dashboard.php?id=${code}&name=${codeName}`;
     
   });
 
-  $("#save").addEventListener("click",()=>{
-
-    const form = $All(".list-group input, textarea");
-
-    if(form.length > 0){
-      
-      validateInputs(restoreText);
-      
-    }else{
-
-      sAlert.sweetWarning("No hay actualizaciones", "No hay datos nuevos para actualizar");
-    }
+  $("#goProjects").addEventListener("click",()=>{
+    
+    window.location.href = `../../projects/index.php?id=${code}&name=${codeName}`;
     
   });
+      
+  $("#generate-excel").addEventListener("click",()=>{
 
-  $("#list-group").addEventListener("click",(e)=>{
-
-    if(e.target.classList.contains("edit")){
-
-      replaceTextLabel(e);
-
-    }else if(e.target.classList.contains("delete")){
-
-      sAlert.sweetConfirm("¿Deseas eliminar esta especifiación?","Una vez borrado no se podrá recuperar",()=>{
-        
-        dropTextli(e);
-      })
-    }
+    generateExcel(idProyecto);
   });
 
-  getClients(idActivo);
-  getDetails(idActivo);
+  $("#generate-pdf").addEventListener("click",()=>{
 
+    generatePdf(idProyecto);
+  });
+
+    getAssets(idProyecto);
+});
+  </script>
+  <script>
+    var win = navigator.platform.indexOf('Win') > -1;
+    if (win && document.querySelector('#sidenav-scrollbar')) {
+      var options = {
+        damping: '0.5'
+      }
+      Scrollbar.init(document.querySelector('#sidenav-scrollbar'), options);
+    }
   </script>
   <!-- Github buttons -->
   <script async defer src="https://buttons.github.io/buttons.js"></script>
   <!-- Control Center for Soft Dashboard: parallax effects, scripts for the example Views etc -->
-  <script src="../../assets/js/soft-ui-dashboard.min.js?v=1.0.7"></script>
+  <script src="../../../../assets/js/soft-ui-dashboard.min.js?v=1.0.7"></script>
 </body>
 
 </html>

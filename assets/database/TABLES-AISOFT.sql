@@ -169,8 +169,10 @@ CREATE TABLE activos(
 -- CLIENTES
 CREATE TABLE clientes(
 	idcliente			INT PRIMARY KEY AUTO_INCREMENT,
-    nombres				VARCHAR(40) 	NOT NULL,
-    apellidos			VARCHAR(40) 	NOT NULL,
+    nombres				VARCHAR(40) 	NULL,
+    apellidos			VARCHAR(40) 	NULL,
+    razon_social 		VARCHAR(60)		NULL,
+    tipo_persona		VARCHAR(10) 	NOT NULL,
     documento_tipo		VARCHAR(20) 	NOT NULL,
     documento_nro		VARCHAR(12)   	NOT NULL,
     estado_civil 		VARCHAR(20) 	NOT NULL,

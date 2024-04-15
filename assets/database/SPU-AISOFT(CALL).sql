@@ -48,6 +48,7 @@ SET estado_venta = "VENDIDO";
 
 -- CLIENTES
 CALL spu_list_clients();
+CALL spu_list_clients_tpersona("NATURAL");
 CALL spu_list_inactive_clients();
 CALL spu_list_clients_by_docNro("12");
 CALL spu_add_clients('Juan Carlos',' Perez Gomez', 'DNI', '77345678', 'Soltero', 1, 'Calle 123', 1);

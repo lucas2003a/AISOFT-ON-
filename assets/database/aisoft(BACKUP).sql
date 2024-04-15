@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 13-04-2024 a las 10:26:26
+-- Tiempo de generación: 15-04-2024 a las 11:28:36
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -185,6 +185,26 @@ select
     sum(l_separados) as l_separados
 	from metricas 
 	where YEAR(update_at) = YEAR(NOW());
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_get_lot_reports` (IN `_idproyecto` INT)   BEGIN
+	SELECT 
+		proy.denominacion,
+        proy.codigo,
+        act.sublote,
+        act.estado,
+        act.moneda_venta,
+        act.precio_venta,
+        act.area_terreno,
+        met.l_vendidos,
+        met.l_noVendidos,
+        met.l_separados,
+        (l_vendidos + l_noVendidos + l_separados) AS l_total
+        FROM activos AS act
+        INNER JOIN proyectos AS proy ON proy.idproyecto = act.idproyecto
+        INNER JOIN metricas AS met ON met.idproyecto = proy.idproyecto
+        WHERE act.idproyecto = _idproyecto
+        ORDER BY act.sublote ASC;
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_get_most_separations` ()   BEGIN
@@ -416,6 +436,40 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_clients_by_docNro` (IN `_d
     WHERE documento_nro =_documento_nro;
 END$$
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_clients_tpersona` (IN `_tipo_persona` VARCHAR(10))   BEGIN
+	IF _tipo_persona = "JURÍDICA" THEN
+		SELECT
+			idcliente,
+            documento_tipo,
+            documento_nro,
+            razon_social,
+            tipo_persona,
+            direccion,
+            distrito,
+            provincia,
+            departamento,
+            usuario
+			FROM vws_list_clients
+            WHERE tipo_persona = _tipo_persona;
+	ELSE
+		SELECT
+			idcliente,
+			nombres,
+            apellidos,
+            documento_tipo,
+            documento_nro,
+            tipo_persona,
+            estado_civil,
+            direccion,
+            distrito,
+            provincia,
+            departamento,
+            usuario
+			FROM vws_list_clients
+            WHERE tipo_persona = _tipo_persona;
+	END IF;
+END$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_companies` ()   BEGIN
 	SELECT * FROM vws_list_companies
     ORDER BY 2;
@@ -478,8 +532,36 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_drop_projects_by_code` (IN
         WHERE codigo LIKE CONCAT("%", _codigo,"%");
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_inactive_clients` ()   BEGIN
-	SELECT * FROM vws_list_inactive_clients;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_inactive_clients_tpersona` (IN `_tipo_persona` VARCHAR(10))   BEGIN
+	IF _tipo_persona = "JURÍDICA" THEN
+		SELECT
+			idcliente,
+            documento_tipo,
+            documento_nro,
+            razon_social,
+            tipo_persona,
+            direccion,
+            distrito,
+            provincia,
+            departamento,
+            usuario
+			FROM vws_list_inactive_clients;
+	ELSE
+		SELECT
+			idcliente,
+			nombres,
+            apellidos,
+            documento_tipo,
+            documento_nro,
+            tipo_persona,
+            estado_civil,
+            direccion,
+            distrito,
+            provincia,
+            departamento,
+            usuario
+			FROM vws_list_inactive_clients;
+	END IF;
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_projects` ()   BEGIN
@@ -851,7 +933,57 @@ INSERT INTO `activos` (`idactivo`, `idproyecto`, `tipo_activo`, `imagen`, `estad
 (11, 3, 'lote', NULL, 'SIN VENDER', 11, 'Urbanización Phi', 'USD', 480.00, NULL, 'Partida 021', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 100000.00, '2024-04-10', NULL, NULL, 2),
 (12, 4, 'lote', NULL, 'SIN VENDER', 13, 'Urbanización Psi', 'USD', 500.00, NULL, 'Partida 023', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 120000.00, '2024-04-10', NULL, NULL, 2),
 (13, 1, 'lote', NULL, 'SIN VENDER', 15, 'Urbanización Beta', 'USD', 300.00, NULL, 'Partida 025', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 90000.00, '2024-04-10', NULL, NULL, 2),
-(14, 1, 'Lote', 'b56a102c2fb43d460d8a4231b0bb01e56202c558.jpg', 'SIN VENDER', 2, 'av santa rosa#541', 'SOL', 300.00, 56, 'PARTIDA ELECTRONICA NRO 2', NULL, NULL, '{\"clave\":[\"\"],\"valor\":[\"\"]}', '{\"clave\":[\"123\",\"nuevos\",\"valor creado\",\"veredas\"],\"valor\":[\"123\",\"nuevos\",\"valor creado\",\"La gasfitería, también conocida como fontanería en algunos lugares, es un campo crucial en la construcción y el mantenimiento de edificios, hogares e infraestructuras. Implica el diseño, instalación, reparación y mantenimiento de sistemas de tuberías y accesorios que transportan agua, gas y aguas residuales. La gasfitería juega un papel vital en la garantía de suministro de agua potable, el manejo adecuado de aguas residuales y la seguridad en el uso de sistemas de gas en diferentes entornos.\\n\\nLa construcción y reparación de sistemas de tuberías requiere conocimientos técnicos específicos y habilidades prácticas. Aquí hay una descripción detallada del proceso y las consideraciones importantes en el campo de la gasfitería:\\n\\n    Diseño del sistema: Antes de comenzar cualquier instalación, es crucial diseñar el sistema de tuberías de manera cuidadosa y precisa. Esto implica determinar la disposición de las tuberías, la ubicación de los accesorios, el diámetro de las tuberías y otros aspectos técnicos para garantizar un flujo de agua eficiente y seguro.\\n\\n    Selección de materiales: Se deben seleccionar materiales de alta calidad y durabilidad para las tuberías y accesorios. Los materiales comunes incluyen PVC, cobre, hierro galvanizado y PEX, cada uno con sus propias ventajas y desventajas en términos de costo, resistencia y facilidad de instalación.\\n\\n    Instalación de tuberías: Una vez que se ha diseñado el sistema y se han seleccionado los materiales adecuados, se procede a la instalación de las tuberías. Esto implica cortar, unir y ensamblar las tuberías y accesorios de acuerdo con el diseño previamente establecido.\\n\\n    Pruebas de presión y fugas: Después de completar la instalación, se realizan pruebas de presión y fugas para asegurarse de que el sistema esté funcionando correctamente y no haya escapes. Esto implica llenar el sistema con agua o aire y monitorear cualquier pérdida de presión o fugas durante un período de tiempo específico.\\n\\n    Instalaciones adicionales: Además de las tuberías de agua potable, la gasfitería también puede incluir la instalación de sistemas de calefacción, sistemas de rociadores contra incendios, sistemas de riego, sistemas de drenaje y sistemas de gas. Cada uno de estos sistemas tiene requisitos y consideraciones específicas que deben tenerse en cuenta durante la instalación.\\n\\n    Mantenimiento y reparación: Una vez que se ha completado la instalación, es importante realizar un mantenimiento regular y reparar cualquier problema que pueda surgir con el tiempo. Esto puede incluir la limpieza de tuberías obstruidas, la reparación de fugas, la sustitución de accesorios desgastados y la realización de inspecciones periódicas para garantizar el buen funcionamiento del sistema.\\n\\nEn resumen, la gasfitería es un campo diverso y especializado que abarca una amplia gama de tareas relacionadas con el suministro de agua, el manejo de aguas residuales y la seguridad en el uso de sistemas de gas. Un conocimiento sólido de los principios de diseño, instalación, mantenimiento y reparación es esencial para los profesionales de la gasfitería para garantizar la funcionalidad y seguridad de los sistemas de tuberías en cualquier entorno.\"]}', 0.00, '2024-04-10', '2024-04-12', NULL, 1);
+(14, 1, 'Lote', 'b56a102c2fb43d460d8a4231b0bb01e56202c558.jpg', 'SIN VENDER', 2, 'av santa rosa#541', 'SOL', 300.00, 56, 'PARTIDA ELECTRONICA NRO 2', NULL, NULL, '{\"clave\":[\"\"],\"valor\":[\"\"]}', '{\"clave\":[\"123\",\"nuevos\",\"valor creado\",\"veredas\"],\"valor\":[\"123\",\"nuevos\",\"valor creado\",\"La gasfitería, también conocida como fontanería en algunos lugares, es un campo crucial en la construcción y el mantenimiento de edificios, hogares e infraestructuras. Implica el diseño, instalación, reparación y mantenimiento de sistemas de tuberías y accesorios que transportan agua, gas y aguas residuales. La gasfitería juega un papel vital en la garantía de suministro de agua potable, el manejo adecuado de aguas residuales y la seguridad en el uso de sistemas de gas en diferentes entornos.\\n\\nLa construcción y reparación de sistemas de tuberías requiere conocimientos técnicos específicos y habilidades prácticas. Aquí hay una descripción detallada del proceso y las consideraciones importantes en el campo de la gasfitería:\\n\\n    Diseño del sistema: Antes de comenzar cualquier instalación, es crucial diseñar el sistema de tuberías de manera cuidadosa y precisa. Esto implica determinar la disposición de las tuberías, la ubicación de los accesorios, el diámetro de las tuberías y otros aspectos técnicos para garantizar un flujo de agua eficiente y seguro.\\n\\n    Selección de materiales: Se deben seleccionar materiales de alta calidad y durabilidad para las tuberías y accesorios. Los materiales comunes incluyen PVC, cobre, hierro galvanizado y PEX, cada uno con sus propias ventajas y desventajas en términos de costo, resistencia y facilidad de instalación.\\n\\n    Instalación de tuberías: Una vez que se ha diseñado el sistema y se han seleccionado los materiales adecuados, se procede a la instalación de las tuberías. Esto implica cortar, unir y ensamblar las tuberías y accesorios de acuerdo con el diseño previamente establecido.\\n\\n    Pruebas de presión y fugas: Después de completar la instalación, se realizan pruebas de presión y fugas para asegurarse de que el sistema esté funcionando correctamente y no haya escapes. Esto implica llenar el sistema con agua o aire y monitorear cualquier pérdida de presión o fugas durante un período de tiempo específico.\\n\\n    Instalaciones adicionales: Además de las tuberías de agua potable, la gasfitería también puede incluir la instalación de sistemas de calefacción, sistemas de rociadores contra incendios, sistemas de riego, sistemas de drenaje y sistemas de gas. Cada uno de estos sistemas tiene requisitos y consideraciones específicas que deben tenerse en cuenta durante la instalación.\\n\\n    Mantenimiento y reparación: Una vez que se ha completado la instalación, es importante realizar un mantenimiento regular y reparar cualquier problema que pueda surgir con el tiempo. Esto puede incluir la limpieza de tuberías obstruidas, la reparación de fugas, la sustitución de accesorios desgastados y la realización de inspecciones periódicas para garantizar el buen funcionamiento del sistema.\\n\\nEn resumen, la gasfitería es un campo diverso y especializado que abarca una amplia gama de tareas relacionadas con el suministro de agua, el manejo de aguas residuales y la seguridad en el uso de sistemas de gas. Un conocimiento sólido de los principios de diseño, instalación, mantenimiento y reparación es esencial para los profesionales de la gasfitería para garantizar la funcionalidad y seguridad de los sistemas de tuberías en cualquier entorno.\"]}', 0.00, '2024-04-10', '2024-04-12', NULL, 1),
+(15, 1, 'lote', NULL, 'SIN VENDER', 2, 'Urbanización Zeta', 'USD', 280.00, NULL, 'Partida 027', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 95000.00, '2024-04-14', NULL, NULL, 1),
+(16, 1, 'lote', NULL, 'SIN VENDER', 4, 'Urbanización Kappa', 'USD', 320.00, NULL, 'Partida 029', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 110000.00, '2024-04-14', NULL, NULL, 2),
+(17, 1, 'lote', NULL, 'SIN VENDER', 6, 'Urbanización Sigma', 'USD', 300.00, NULL, 'Partida 031', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 85000.00, '2024-04-14', NULL, NULL, 2),
+(18, 1, 'lote', NULL, 'SIN VENDER', 8, 'Urbanización Upsilon', 'USD', 380.00, NULL, 'Partida 033', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 120000.00, '2024-04-14', NULL, NULL, 1),
+(19, 1, 'lote', NULL, 'SIN VENDER', 10, 'Urbanización Omega', 'USD', 420.00, NULL, 'Partida 035', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 105000.00, '2024-04-14', NULL, NULL, 3),
+(20, 1, 'lote', NULL, 'SIN VENDER', 12, 'Urbanización Delta', 'USD', 450.00, NULL, 'Partida 037', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 115000.00, '2024-04-14', NULL, NULL, 3),
+(21, 1, 'lote', NULL, 'SIN VENDER', 14, 'Urbanización Gamma', 'USD', 480.00, NULL, 'Partida 039', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 100000.00, '2024-04-14', NULL, NULL, 2),
+(22, 1, 'lote', NULL, 'SIN VENDER', 16, 'Urbanización Epsilon', 'USD', 500.00, NULL, 'Partida 041', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 120000.00, '2024-04-14', NULL, NULL, 2),
+(23, 1, 'lote', NULL, 'SIN VENDER', 18, 'Urbanización Zeta', 'USD', 300.00, NULL, 'Partida 043', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 90000.00, '2024-04-14', NULL, NULL, 2),
+(24, 1, 'lote', NULL, 'SIN VENDER', 20, 'Urbanización Eta', 'USD', 250.00, NULL, 'Partida 045', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 95000.00, '2024-04-14', NULL, NULL, 1),
+(25, 1, 'lote', NULL, 'SIN VENDER', 22, 'Urbanización Theta', 'USD', 280.00, NULL, 'Partida 047', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 110000.00, '2024-04-14', NULL, NULL, 2),
+(26, 1, 'lote', NULL, 'SIN VENDER', 24, 'Urbanización Iota', 'USD', 320.00, NULL, 'Partida 049', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 85000.00, '2024-04-14', NULL, NULL, 2),
+(27, 1, 'lote', NULL, 'SIN VENDER', 26, 'Urbanización Kappa', 'USD', 380.00, NULL, 'Partida 051', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 120000.00, '2024-04-14', NULL, NULL, 1),
+(28, 1, 'lote', NULL, 'SIN VENDER', 28, 'Urbanización Lambda', 'USD', 420.00, NULL, 'Partida 053', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 105000.00, '2024-04-14', NULL, NULL, 3),
+(29, 1, 'lote', NULL, 'SIN VENDER', 30, 'Urbanización Mu', 'USD', 450.00, NULL, 'Partida 055', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 115000.00, '2024-04-14', NULL, NULL, 3),
+(30, 1, 'lote', NULL, 'SIN VENDER', 32, 'Urbanización Nu', 'USD', 480.00, NULL, 'Partida 057', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 100000.00, '2024-04-14', NULL, NULL, 2),
+(31, 1, 'lote', NULL, 'SIN VENDER', 34, 'Urbanización Xi', 'USD', 500.00, NULL, 'Partida 059', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 120000.00, '2024-04-14', NULL, NULL, 2),
+(32, 1, 'lote', NULL, 'SIN VENDER', 36, 'Urbanización Omicron', 'USD', 300.00, NULL, 'Partida 061', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 90000.00, '2024-04-14', NULL, NULL, 2),
+(33, 1, 'lote', NULL, 'SIN VENDER', 38, 'Urbanización Pi', 'USD', 250.00, NULL, 'Partida 063', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 95000.00, '2024-04-14', NULL, NULL, 1),
+(34, 1, 'lote', NULL, 'SIN VENDER', 40, 'Urbanización Rho', 'USD', 280.00, NULL, 'Partida 065', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 110000.00, '2024-04-14', NULL, NULL, 2),
+(35, 1, 'lote', NULL, 'SIN VENDER', 42, 'Urbanización Sigma', 'USD', 320.00, NULL, 'Partida 067', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 85000.00, '2024-04-14', NULL, NULL, 2),
+(36, 1, 'lote', NULL, 'SIN VENDER', 44, 'Urbanización Tau', 'USD', 380.00, NULL, 'Partida 069', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 120000.00, '2024-04-14', NULL, NULL, 1),
+(37, 1, 'lote', NULL, 'SIN VENDER', 46, 'Urbanización Upsilon', 'USD', 420.00, NULL, 'Partida 071', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 105000.00, '2024-04-14', NULL, NULL, 3),
+(38, 1, 'lote', NULL, 'SIN VENDER', 48, 'Urbanización Phi', 'USD', 450.00, NULL, 'Partida 073', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 115000.00, '2024-04-14', NULL, NULL, 3),
+(39, 1, 'lote', NULL, 'SIN VENDER', 50, 'Urbanización Chi', 'USD', 480.00, NULL, 'Partida 075', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 100000.00, '2024-04-14', NULL, NULL, 2),
+(40, 1, 'lote', NULL, 'SIN VENDER', 52, 'Urbanización Psi', 'USD', 500.00, NULL, 'Partida 077', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 120000.00, '2024-04-14', NULL, NULL, 2),
+(41, 1, 'lote', NULL, 'SIN VENDER', 54, 'Urbanización Omega', 'USD', 300.00, NULL, 'Partida 079', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 90000.00, '2024-04-14', NULL, NULL, 2),
+(42, 1, 'lote', NULL, 'SIN VENDER', 56, 'Urbanización Alpha', 'USD', 250.00, NULL, 'Partida 081', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 95000.00, '2024-04-14', NULL, NULL, 1),
+(43, 1, 'lote', NULL, 'SIN VENDER', 58, 'Urbanización Beta', 'USD', 280.00, NULL, 'Partida 083', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 110000.00, '2024-04-14', NULL, NULL, 2),
+(44, 1, 'lote', NULL, 'SIN VENDER', 60, 'Urbanización Gamma', 'USD', 320.00, NULL, 'Partida 085', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 85000.00, '2024-04-14', NULL, NULL, 2),
+(45, 1, 'lote', NULL, 'SIN VENDER', 62, 'Urbanización Delta', 'USD', 380.00, NULL, 'Partida 087', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 120000.00, '2024-04-14', NULL, NULL, 1),
+(46, 1, 'lote', NULL, 'SIN VENDER', 64, 'Urbanización Epsilon', 'USD', 420.00, NULL, 'Partida 089', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 105000.00, '2024-04-14', NULL, NULL, 3),
+(47, 1, 'lote', NULL, 'SIN VENDER', 66, 'Urbanización Zeta', 'USD', 450.00, NULL, 'Partida 091', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 115000.00, '2024-04-14', NULL, NULL, 3),
+(48, 1, 'lote', NULL, 'SIN VENDER', 68, 'Urbanización Eta', 'USD', 480.00, NULL, 'Partida 093', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 100000.00, '2024-04-14', NULL, NULL, 2),
+(49, 1, 'lote', NULL, 'SIN VENDER', 70, 'Urbanización Theta', 'USD', 500.00, NULL, 'Partida 095', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 120000.00, '2024-04-14', NULL, NULL, 2),
+(50, 1, 'lote', NULL, 'SIN VENDER', 72, 'Urbanización Iota', 'USD', 300.00, NULL, 'Partida 097', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 90000.00, '2024-04-14', NULL, NULL, 2),
+(51, 1, 'lote', NULL, 'SIN VENDER', 74, 'Urbanización Kappa', 'USD', 250.00, NULL, 'Partida 099', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 95000.00, '2024-04-14', NULL, NULL, 1),
+(52, 1, 'lote', NULL, 'SIN VENDER', 76, 'Urbanización Lambda', 'USD', 280.00, NULL, 'Partida 101', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 110000.00, '2024-04-14', NULL, NULL, 2),
+(53, 1, 'lote', NULL, 'SIN VENDER', 78, 'Urbanización Mu', 'USD', 320.00, NULL, 'Partida 103', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 85000.00, '2024-04-14', NULL, NULL, 2),
+(54, 1, 'lote', NULL, 'SIN VENDER', 80, 'Urbanización Nu', 'USD', 380.00, NULL, 'Partida 105', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 120000.00, '2024-04-14', NULL, NULL, 1),
+(55, 1, 'lote', NULL, 'SIN VENDER', 82, 'Urbanización Xi', 'USD', 420.00, NULL, 'Partida 107', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 105000.00, '2024-04-14', NULL, NULL, 3),
+(56, 1, 'lote', NULL, 'SIN VENDER', 84, 'Urbanización Omicron', 'USD', 450.00, NULL, 'Partida 109', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 115000.00, '2024-04-14', NULL, NULL, 3),
+(57, 1, 'lote', NULL, 'SIN VENDER', 86, 'Urbanización Pi', 'USD', 480.00, NULL, 'Partida 111', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 100000.00, '2024-04-14', NULL, NULL, 2),
+(58, 1, 'lote', NULL, 'SIN VENDER', 88, 'Urbanización Rho', 'USD', 500.00, NULL, 'Partida 113', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 120000.00, '2024-04-14', NULL, NULL, 2),
+(59, 1, 'lote', NULL, 'SIN VENDER', 90, 'Urbanización Sigma', 'USD', 300.00, NULL, 'Partida 115', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 90000.00, '2024-04-14', NULL, NULL, 2),
+(60, 1, 'lote', NULL, 'SIN VENDER', 92, 'Urbanización Tau', 'USD', 250.00, NULL, 'Partida 117', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 95000.00, '2024-04-14', NULL, NULL, 1),
+(61, 1, 'lote', NULL, 'SIN VENDER', 94, 'Urbanización Upsilon', 'USD', 280.00, NULL, 'Partida 119', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 110000.00, '2024-04-14', NULL, NULL, 2),
+(62, 1, 'lote', NULL, 'SIN VENDER', 96, 'Urbanización Phi', 'USD', 320.00, NULL, 'Partida 121', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 85000.00, '2024-04-14', NULL, NULL, 2),
+(63, 1, 'lote', NULL, 'SIN VENDER', 98, 'Urbanización Chi', 'USD', 380.00, NULL, 'Partida 123', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 120000.00, '2024-04-14', NULL, NULL, 1),
+(64, 1, 'lote', NULL, 'SIN VENDER', 100, 'Urbanización Psi', 'USD', 420.00, NULL, 'Partida 125', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 105000.00, '2024-04-14', NULL, NULL, 3);
 
 --
 -- Disparadores `activos`
@@ -957,8 +1089,8 @@ DELIMITER ;
 
 CREATE TABLE `clientes` (
   `idcliente` int(11) NOT NULL,
-  `nombres` varchar(40) NOT NULL,
-  `apellidos` varchar(40) NOT NULL,
+  `nombres` varchar(40) DEFAULT NULL,
+  `apellidos` varchar(40) DEFAULT NULL,
   `documento_tipo` varchar(20) NOT NULL,
   `documento_nro` varchar(12) NOT NULL,
   `estado_civil` varchar(20) NOT NULL,
@@ -967,17 +1099,19 @@ CREATE TABLE `clientes` (
   `create_at` date NOT NULL DEFAULT curdate(),
   `update_at` date DEFAULT NULL,
   `inactive_at` date DEFAULT NULL,
-  `idusuario` int(11) NOT NULL
+  `idusuario` int(11) NOT NULL,
+  `razon_social` varchar(60) DEFAULT NULL,
+  `tipo_persona` varchar(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `clientes`
 --
 
-INSERT INTO `clientes` (`idcliente`, `nombres`, `apellidos`, `documento_tipo`, `documento_nro`, `estado_civil`, `iddistrito`, `direccion`, `create_at`, `update_at`, `inactive_at`, `idusuario`) VALUES
-(1, 'Juan Carlos', 'Pérez García', 'DNI', '12345678', 'Soltero', 1007, 'Av. Primavera 123', '2024-04-12', NULL, NULL, 1),
-(2, 'María Luisa', 'Gómez Fernández', 'DNI', '23456789', 'Casada', 1007, 'Calle Flores 456', '2024-04-12', NULL, NULL, 2),
-(3, 'Pedro José', 'Ramírez Sánchez', 'DNI', '34567890', 'Soltero', 1007, 'Jr. Libertad 789', '2024-04-12', NULL, NULL, 3);
+INSERT INTO `clientes` (`idcliente`, `nombres`, `apellidos`, `documento_tipo`, `documento_nro`, `estado_civil`, `iddistrito`, `direccion`, `create_at`, `update_at`, `inactive_at`, `idusuario`, `razon_social`, `tipo_persona`) VALUES
+(1, 'Juan Carlos', 'Pérez García', 'DNI', '12345678', 'Soltero', 1007, 'Av. Primavera 123', '2024-04-12', NULL, NULL, 1, NULL, 'NATURAL'),
+(2, 'María Luisa', 'Gómez Fernández', 'RUC', '10234567898', 'Casada', 1007, 'Calle Flores 456', '2024-04-12', NULL, NULL, 2, 'María Luisa', 'JURÍDICA'),
+(3, 'Pedro José', 'Ramírez Sánchez', 'DNI', '34567890', 'Soltero', 1007, 'Jr. Libertad 789', '2024-04-12', NULL, NULL, 3, NULL, 'NATURAL');
 
 -- --------------------------------------------------------
 
@@ -3101,7 +3235,7 @@ CREATE TABLE `metricas` (
 --
 
 INSERT INTO `metricas` (`idmetrica`, `idproyecto`, `l_vendidos`, `l_noVendidos`, `l_separados`, `update_at`) VALUES
-(1, 1, 0, 2, 1, '2024-04-12 22:49:28'),
+(1, 1, 0, 52, 1, '2024-04-14 22:48:32'),
 (2, 2, 0, 2, 1, '2024-04-12 22:49:28'),
 (3, 3, 0, 2, 1, '2024-04-12 22:49:28'),
 (4, 4, 0, 2, 1, '2024-04-12 22:49:28'),
@@ -3657,6 +3791,8 @@ CREATE TABLE `vws_list_clients` (
 ,`documento_nro` varchar(12)
 ,`apellidos` varchar(40)
 ,`nombres` varchar(40)
+,`razon_social` varchar(60)
+,`tipo_persona` varchar(10)
 ,`estado_civil` varchar(20)
 ,`distrito` varchar(45)
 ,`provincia` varchar(45)
@@ -3792,7 +3928,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 DROP TABLE IF EXISTS `vws_list_clients`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vws_list_clients`  AS SELECT `clien`.`idcliente` AS `idcliente`, `clien`.`documento_tipo` AS `documento_tipo`, `clien`.`documento_nro` AS `documento_nro`, `clien`.`apellidos` AS `apellidos`, `clien`.`nombres` AS `nombres`, `clien`.`estado_civil` AS `estado_civil`, `dist`.`distrito` AS `distrito`, `prov`.`provincia` AS `provincia`, `dept`.`departamento` AS `departamento`, `clien`.`direccion` AS `direccion`, `usu`.`nombres` AS `usuario` FROM ((((`clientes` `clien` join `distritos` `dist` on(`dist`.`iddistrito` = `clien`.`iddistrito`)) join `provincias` `prov` on(`prov`.`idprovincia` = `dist`.`idprovincia`)) join `departamentos` `dept` on(`dept`.`iddepartamento` = `prov`.`iddepartamento`)) join `usuarios` `usu` on(`usu`.`idusuario` = `clien`.`idusuario`)) WHERE `clien`.`inactive_at` is null ORDER BY `clien`.`apellidos` ASC ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vws_list_clients`  AS SELECT `clien`.`idcliente` AS `idcliente`, `clien`.`documento_tipo` AS `documento_tipo`, `clien`.`documento_nro` AS `documento_nro`, `clien`.`apellidos` AS `apellidos`, `clien`.`nombres` AS `nombres`, `clien`.`razon_social` AS `razon_social`, `clien`.`tipo_persona` AS `tipo_persona`, `clien`.`estado_civil` AS `estado_civil`, `dist`.`distrito` AS `distrito`, `prov`.`provincia` AS `provincia`, `dept`.`departamento` AS `departamento`, `clien`.`direccion` AS `direccion`, `usu`.`nombres` AS `usuario` FROM ((((`clientes` `clien` join `distritos` `dist` on(`dist`.`iddistrito` = `clien`.`iddistrito`)) join `provincias` `prov` on(`prov`.`idprovincia` = `dist`.`idprovincia`)) join `departamentos` `dept` on(`dept`.`iddepartamento` = `prov`.`iddepartamento`)) join `usuarios` `usu` on(`usu`.`idusuario` = `clien`.`idusuario`)) WHERE `clien`.`inactive_at` is null ORDER BY `clien`.`documento_nro` ASC ;
 
 -- --------------------------------------------------------
 
@@ -4057,7 +4193,7 @@ ALTER TABLE `vend_representantes`
 -- AUTO_INCREMENT de la tabla `activos`
 --
 ALTER TABLE `activos`
-  MODIFY `idactivo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `idactivo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=65;
 
 --
 -- AUTO_INCREMENT de la tabla `clientes`

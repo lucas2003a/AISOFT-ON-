@@ -15,8 +15,9 @@ use PhpOffice\PhpSpreadsheet\Style\Font;
 $spreadsheet = new Spreadsheet();
 $asset = new Asset();
 
-//método
-$idproyecto = 1;
+//PARÁMETROS
+$codeID = $_GET["idproyecto"];
+$idproyecto = base64_decode($codeID);
 
 $denominacion = "";
 $codigo = "";
@@ -38,7 +39,7 @@ foreach($data as $register){
 }
 
 
-$spreadsheet->getProperties()->setCreator("A.I.F Contratistas Generales S.A.C")->setTitle("Reporte de estado de lotes - " . $denominacion);
+$spreadsheet->getProperties()->setCreator("A.I.F Contratistas Generales S.A.C")->setTitle("Reporte_de_estado_de_lotes-" . $denominacion);
 
 $spreadsheet->setActiveSheetIndex(0);       //PRIMERA HOJA
 $sheet = $spreadsheet->getActiveSheet();    //HOJA DE TRABAO
@@ -321,7 +322,7 @@ foreach($data as $register){
 }
 
 header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-header('Content-Disposition: attachment;filename="Estado de lotes - ' . $denominacion .'.xlsx"');
+header('Content-Disposition: attachment;filename="Estado_de_lotes-' . $denominacion .'.xlsx"');
 header('Cache-Control: max-age=0');
 
 $writer = IOFactory::createWriter($spreadsheet,"Xlsx");
