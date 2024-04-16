@@ -436,13 +436,13 @@
                   </div>
                 </div>
               </div>
-              <div class="row">
+              <!-- <div class="row">
                 <div class="col-md-3">
                   <select name="tipo_persona" class="form-select" id="documento_tipo">
                     <option value="NATURAL">Tipo de persona</option>
                   </select>
                 </div>
-              </div>
+              </div> -->
             </div>
             <div class="card-body px-0 pt-0 pb-2">
               <div class="table-responsive text-center p-0">

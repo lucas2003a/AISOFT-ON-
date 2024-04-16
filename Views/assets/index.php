@@ -126,7 +126,7 @@
 
         <!-- SEPARACIONES -->
         <li class="nav-item">
-          <a class="nav-link  active" href="../separations/index.php">
+          <a class="nav-link" href="../separations/index.php">
             <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
               <svg width="12px" height="12px" viewBox="0 0 42 42" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <title>office</title>
@@ -729,7 +729,7 @@ document.addEventListener("DOMContentLoaded",()=>{
     });
 
     //Menù */*/*/
-    $("#goDashboard").addEventListener("click",()=>{
+    /* $("#goDashboard").addEventListener("click",()=>{
     
     window.location.href = `../dashboard.php?id=${code}&name=${codeName}`;
     
@@ -739,7 +739,7 @@ document.addEventListener("DOMContentLoaded",()=>{
     
     window.location.href = `../projects/index.php?id=${code}&name=${codeName}`;
     
-  });
+  }) */;
       
   $("#generate-excel").addEventListener("click",()=>{
 
