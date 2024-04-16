@@ -346,7 +346,7 @@
                   <a class="dropdown-item border-radius-md" href="javascript:;">
                     <div class="d-flex py-1">
                       <div class="my-auto">
-                        <img src="../../../../assets/img/team-2.jpg" class="avatar avatar-sm  me-3 ">
+                        <img src="../../assets/img/team-2.jpg" class="avatar avatar-sm  me-3 ">
                       </div>
                       <div class="d-flex flex-column justify-content-center">
                         <h6 class="text-sm font-weight-normal mb-1">
@@ -364,7 +364,7 @@
                   <a class="dropdown-item border-radius-md" href="javascript:;">
                     <div class="d-flex py-1">
                       <div class="my-auto">
-                        <img src="../../../../assets/img/small-logos/logo-spotify.svg" class="avatar avatar-sm bg-gradient-dark  me-3 ">
+                        <img src="../../assets/img/small-logos/logo-spotify.svg" class="avatar avatar-sm bg-gradient-dark  me-3 ">
                       </div>
                       <div class="d-flex flex-column justify-content-center">
                         <h6 class="text-sm font-weight-normal mb-1">
@@ -427,7 +427,7 @@
               <div class="row">
                 <div class="col-md-6">
 
-                  <h6>Tabla - clientes</h6>
+                  <h6>Tabla - separaciones</h6>
                 </div>
                 <div class="col-md-6">
                   <div class="text-end">
@@ -438,27 +438,6 @@
               </div>
               <div class="row">
                 <div class="col-md-3">
-                  
-                <input type="date" name="" id="">
-                <input type="datetime" name="" id="">
-                <input type="datetime-local" name="" id="">
-                <input type="email" name="" id="">
-                <input type="file" name="" id="">
-                <input type="hidden" name="">
-                <input type="color" name="" id="">
-                <input type="image" src="" alt="">
-                <input type="month" name="" id="">
-                <input type="number" name="" id="">
-                <input type="password" name="" id="">
-                <input type="radio" name="" id="">
-                <input type="range" name="" id="">
-                <input type="reset" value="">
-                <input type="search" name="" id="">
-                <input type="submit" value="">
-                <input type="tel" name="" id="">
-                <input type="time" name="" id="">
-                <input type="url" name="" id="">
-                <input type="week" name="" id="">
                   <select name="tipo_persona" class="form-select" id="documento_tipo">
                     <option value="NATURAL">Tipo de persona</option>
                   </select>
@@ -471,12 +450,14 @@
                     <thead>
                     <tr>
                       <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">#</th>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Denominación</th>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Estado</th>
                       <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Sublote</th>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Direccion</th>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Operaciones</th>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10"></th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Denominación</th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Nombres</th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Apellidos</th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Monto</th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Estado</th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Fecha de pago</th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Fecha de devolución</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -567,13 +548,13 @@
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
   <!--   Core JS Files   -->
-  <script src="../../../../assets/js/core/popper.min.js"></script>
-  <script src="../../../../assets/js/core/bootstrap.min.js"></script>
-  <script src="../../../../assets/js/plugins/perfect-scrollbar.min.js"></script>
-  <script src="../../../../assets/js/plugins/smooth-scrollbar.min.js"></script>
-  <script src="../../../../assets/js/plugins/chartjs.min.js"></script>
-  <script src="../../../../assets/js/globalFunctions.js"></script>
-  <script src="../../../../assets/js/sweetAlert.js"></script>
+  <script src="../../assets/js/core/popper.min.js"></script>
+  <script src="../../assets/js/core/bootstrap.min.js"></script>
+  <script src="../../assets/js/plugins/perfect-scrollbar.min.js"></script>
+  <script src="../../assets/js/plugins/smooth-scrollbar.min.js"></script>
+  <script src="../../assets/js/plugins/chartjs.min.js"></script>
+  <script src="../../assets/js/globalFunctions.js"></script>
+  <script src="../../assets/js/sweetAlert.js"></script>
   <script>
 document.addEventListener("DOMContentLoaded",()=>{
 
@@ -583,192 +564,10 @@ document.addEventListener("DOMContentLoaded",()=>{
   const $ = id => global.$(id);
   const $All = id => global.$All(id);
 
-  /* VALOR EN LA URL */
-  const stringQuery = window.location.search;
-  const url = new URLSearchParams(stringQuery);
-  const code = url.get("id");
-  const codeName = url.get("name");
+  $("#month").addEventListener("change",()=>{
 
-  const idProyecto = atob(code); //DECOFICA EL VALOR
-  const name = atob(codeName);
-
-  let timer;
-
-  function renderAssets(results){
-
-    let numberRow = 1;
-
-    $("#table-assets tbody").innerHTML = "";
-
-    let newRow = ``;
-
-    if(results.length > 0){
-      
-      results.forEach(asset =>{
-        
-        let code = btoa(asset.idactivo) //CODIFICACIÓN
-  
-        let IconStatus = asset.estado == "SIN VENDER" ?  `<span class="badge badge-sm bg-gradient-danger">${asset.estado}</span>` : 
-                                        asset.estado = "VENDIDO" ? `<span class="badge badge-sm bg-gradient-success">${asset.estado}</span>`: 
-                                                                  `<span class="badge badge-sm bg-gradient-secondary">${asset.estado}</span>` ;
-  
-        newRow = `
-                <tr>
-                  <td>
-                    <div class="d-flex px-2 py-1">
-                      <div class="d-flex flex-column justify-content-center">
-                        <h6 class="mb-0 text-sm">${numberRow}</h6>
-                      </div>
-                    </div>
-                  </td>
-                  <td>
-                    <p class="text-xs font-weight-bold mb-0">${asset.denominacion}</p>
-                    </td>
-                    <td class="align-middle text-center text-sm">
-                      ${IconStatus}
-                    </td>
-                    <td>
-                      <p class="text-xs font-weight-bold mb-0">${asset.sublote}</p>
-                    </td>
-                  <td>
-                    <p class="text-xs font-weight-bold mb-0">${asset.direccion}</p>
-                  </td>
-                  <td class="align-middle">
-                    <div class="btn-group">
-                        <a type="button" href="./delete_asset.php?id=${code}" class="btn btn-danger btn-sm" id="btn-delete"><i class="bi bi-trash-fill"></i></a>
-                        <a type="button" href="./edit_asset.php?id=${code}" class="btn btn-primary btn-sm" id="btn-edit"><i class="bi bi-pencil-fill"></i></a>
-                        <a type="button" href="./detail_asset.php?id=${code}" class="btn btn-success btn-sm"><i class="bi bi-arrow-right-square"></i></a>
-                        </div>
-                    </td>
-                </tr>           
-        `;
-        numberRow ++;
-
-        $("#table-assets tbody").innerHTML += newRow;
-      });
-
-    }else{
-      newRow =`
-      <div class="alert alert-danger m-4 text-white" role="alert">
-          <strong class="text-white">No existe sublotes</strong> Asegurate de que existan los registros.
-      </div>
-      `;
-      $("#table-assets tbody").innerHTML += newRow;
-    }
-    
-
-  }
-
-
-  async function getAssets(id){
-
-    try{
-
-      $("#add-asset").setAttribute("href",`./add_asset.php?idproy=${code}&name=${codeName}`);
-
-      let url ="../../../../Controllers/asset.controller.php";
-      let params = new FormData();
-  
-      params.append("action","listAssetProjectId");
-      params.append("idproyecto",id);
-
-      results = await global.sendAction(url, params);
-
-      if(results){
-
-        $("#cabezera").innerText +=` ${name}`;
-        renderAssets(results);
-
-      }
-    }
-    catch(e){
-      console.error(e);
-    }
-  }
-
-  async function searchAsset(idproy,sublote){
-    try{
-
-      let url = `../../../../Controllers/asset.controller.php`;
-      let params = new FormData();
-
-      params.append("action", "listAssetPAcode");
-      params.append("idproyecto",idproy);
-      params.append("sublote",sublote);
-
-      let results = await global.sendAction(url, params);
-
-      if(results){
-        console.log(results)
-        renderAssets(results);
-      }
-    }
-    catch(e){
-      console.error(e);
-    }
-  }
-
-  //Genera u archivo PDF
-  async function generatePdf(id){
-
-    let codeID = btoa(id);
-    let url = `../../../../reports/reports_pdf.php?action=reportLots&idproyecto=${codeID}`;
-
-    window.location.href = url;
-  }
-
-  //Genera un archivo excel
-  async function generateExcel(id){
-
-    let codeID = btoa(id);
-    let url = `../../../../reports/reports_excel.php?idproyecto=${codeID}`;
-
-    window.location.href = url;
-  }
-
-  $("#in-sublote").addEventListener("input",()=>{
-
-      clearTimeout(timer);
-
-        timer = setTimeout(()=>{
-
-          let sublote = $("#in-sublote").value;
-
-          if(sublote != ""){
-
-            searchAsset(idProyecto,sublote);
-
-          }else{
-
-            getAssets(idProyecto);
-          }
-        },1500)
-    });
-
-    //Menù */*/*/
-    $("#goDashboard").addEventListener("click",()=>{
-    
-    window.location.href = `../../dashboard.php?id=${code}&name=${codeName}`;
-    
+    console.log($("#month").value);
   });
-
-  $("#goProjects").addEventListener("click",()=>{
-    
-    window.location.href = `../../projects/index.php?id=${code}&name=${codeName}`;
-    
-  });
-      
-  $("#generate-excel").addEventListener("click",()=>{
-
-    generateExcel(idProyecto);
-  });
-
-  $("#generate-pdf").addEventListener("click",()=>{
-
-    generatePdf(idProyecto);
-  });
-
-    getAssets(idProyecto);
 });
   </script>
   <script>
@@ -783,7 +582,7 @@ document.addEventListener("DOMContentLoaded",()=>{
   <!-- Github buttons -->
   <script async defer src="https://buttons.github.io/buttons.js"></script>
   <!-- Control Center for Soft Dashboard: parallax effects, scripts for the example Views etc -->
-  <script src="../../../../assets/js/soft-ui-dashboard.min.js?v=1.0.7"></script>
+  <script src="../../assets/js/soft-ui-dashboard.min.js?v=1.0.7"></script>
 </body>
 
 </html>

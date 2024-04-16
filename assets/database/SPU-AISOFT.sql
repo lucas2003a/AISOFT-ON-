@@ -945,6 +945,31 @@ END $$
 DELIMITER ;
 
 DELIMITER $$
+CREATE PROCEDURE spu_lis_separations()
+BEGIN
+	SELECT 
+		sep.idseparacion,
+		act.idactivo,
+		act.sublote,
+		proy.denominacion,
+		clien.apellidos,
+		clien.nombres,
+		sep.separacion_monto,
+		sep.estado,
+		sep.fecha_pago,
+		sep.fecha_devolucion,
+        usu.nombres
+		FROM separaciones AS sep
+		INNER JOIN activos AS act ON act.idactivo = sep.idactivo
+        INNER JOIN proyectos AS proy ON proy.idproyecto = act.idproyecto
+        INNER JOIN clientes AS clien ON clien.idcliente = sep.idcliente
+        INNER JOIN usuarios AS usu ON usu.idusuario = sep.idusuario 
+		WHERE sep.inactive_at IS NULL
+        ORDER BY sep.idseparacion DESC;
+END $$
+DELIMITER ;
+
+DELIMITER $$
 CREATE PROCEDURE spu_list_separation_ByIdAsset(IN _idactivo INT)
 BEGIN
 	SELECT 
