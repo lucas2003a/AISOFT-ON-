@@ -56,7 +56,7 @@
     <div class="collapse navbar-collapse  w-auto " id="sidenav-collapse-main">
       <ul class="navbar-nav">
 
-        <!-- DASHBOARD -->
+      <!-- DASHBOARD -->
         <li class="nav-item">
           <a class="nav-link" href="../../Views/dashboard.html">
             <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
@@ -101,8 +101,8 @@
         </li>
 
         <!-- CLIENTES -->
-        <li class="nav-item active">
-          <a class="nav-link  active" href="../Clients/index.php">
+        <li class="nav-item">
+          <a class="nav-link" href="../clients/index.php">
             <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
               <svg width="12px" height="12px" viewBox="0 0 42 42" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <title>office</title>
@@ -126,7 +126,7 @@
 
         <!-- SEPARACIONES -->
         <li class="nav-item">
-          <a class="nav-link" href="../separations/index.php">
+          <a class="nav-link  active" href="../separations/index.php">
             <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
               <svg width="12px" height="12px" viewBox="0 0 42 42" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <title>office</title>
@@ -173,7 +173,7 @@
         </li>
 
         <!-- USUARIOS -->
-        <li class="nav-item">
+        <li class="nav-item active">
           <a class="nav-link" href="../users/index.php">
             <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
               <svg width="12px" height="12px" viewBox="0 0 42 42" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -249,7 +249,7 @@
 
         <!-- PERFIL -->
         <li class="nav-item">
-          <a class="nav-link  " href="../Views/profile.html">
+          <a class="nav-link  active" href="../Views/profile.html">
             <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
               <svg width="12px" height="12px" viewBox="0 0 46 42" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <title>customer-support</title>
@@ -317,10 +317,12 @@
             <li class="nav-item d-flex align-items-center">
               <a class="btn btn-outline-success btn-sm mb-0 me-3" target="_blank" href="./add_asset.php" id="add-asset">AGREGAR CLIENTE</a>
             </li>
+
+            <!-- DATOS DEL USUARIO -->
             <li class="nav-item d-flex align-items-center">
               <a href="javascript:;" class="nav-link text-body font-weight-bold px-0">
                 <i class="fa fa-user me-sm-1"></i>
-                <span class="d-sm-inline d-none">Sign In</span>
+                <span class="d-sm-inline d-none">DATOS DEL USUARIO</span>
               </a>
             </li>
             <li class="nav-item d-xl-none ps-3 d-flex align-items-center">
@@ -337,6 +339,8 @@
                 <i class="fa fa-cog fixed-plugin-button-nav cursor-pointer"></i>
               </a>
             </li>
+
+            <!-- MENSAJES -->
             <li class="nav-item dropdown pe-2 d-flex align-items-center">
               <a href="javascript:;" class="nav-link text-body p-0" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
                 <i class="fa fa-bell cursor-pointer"></i>
@@ -346,7 +350,7 @@
                   <a class="dropdown-item border-radius-md" href="javascript:;">
                     <div class="d-flex py-1">
                       <div class="my-auto">
-                        <img src="../../../../assets/img/team-2.jpg" class="avatar avatar-sm  me-3 ">
+                        <img src="../../assets/img/team-2.jpg" class="avatar avatar-sm  me-3 ">
                       </div>
                       <div class="d-flex flex-column justify-content-center">
                         <h6 class="text-sm font-weight-normal mb-1">
@@ -364,7 +368,7 @@
                   <a class="dropdown-item border-radius-md" href="javascript:;">
                     <div class="d-flex py-1">
                       <div class="my-auto">
-                        <img src="../../../../assets/img/small-logos/logo-spotify.svg" class="avatar avatar-sm bg-gradient-dark  me-3 ">
+                        <img src="../../assets/img/small-logos/logo-spotify.svg" class="avatar avatar-sm bg-gradient-dark  me-3 ">
                       </div>
                       <div class="d-flex flex-column justify-content-center">
                         <h6 class="text-sm font-weight-normal mb-1">
@@ -410,6 +414,7 @@
                 </li>
               </ul>
             </li>
+
           </ul>
         </div>
       </div>
@@ -480,7 +485,7 @@
                   document.write(new Date().getFullYear())
                 </script>,
                 auspiciado por
-                <a href="https://www.creative-tim.com" class="font-weight-bold" target="_blank">A.I.F Contratistas Generales S.A.C</a>
+                <a href="https://aifperu.com/" class="font-weight-bold" target="_blank">A.I.F Contratistas Generales S.A.C</a>
                 (sistema web).
               </div>
             </div>
@@ -493,11 +498,13 @@
     <a class="fixed-plugin-button text-dark position-fixed px-3 py-2">
       <i class="fa fa-cog py-2"> </i>
     </a>
+
+    <!-- CONFIGURACIONES DEL PANEL -->
     <div class="card shadow-lg ">
       <div class="card-header pb-0 pt-3 ">
         <div class="float-start">
-          <h5 class="mt-3 mb-0">Soft UI Configurator</h5>
-          <p>See our dashboard options.</p>
+          <h5 class="mt-3 mb-0">Configurar tu interfáz</h5>
+          <p>Mira las opciones de configuración</p>
         </div>
         <div class="float-end mt-4">
           <button class="btn btn-link text-dark p-0 fixed-plugin-close-button">
@@ -528,8 +535,8 @@
           <p class="text-sm">Puedes escojer entre dos tipos de sidebar.</p>
         </div>
         <div class="d-flex">
-          <button class="btn bg-gradient-primary w-100 px-3 mb-2 active" data-class="bg-transparent" onclick="sidebarType(this)">Transparent</button>
-          <button class="btn bg-gradient-primary w-100 px-3 mb-2 ms-2" data-class="bg-white" onclick="sidebarType(this)">White</button>
+          <button class="btn bg-gradient-primary w-100 px-3 mb-2 active" data-class="bg-transparent" onclick="sidebarType(this)">Transparente</button>
+          <button class="btn bg-gradient-primary w-100 px-3 mb-2 ms-2" data-class="bg-white" onclick="sidebarType(this)">Blanco</button>
         </div>
         <p class="text-sm d-xl-none d-block mt-2">Solo puedes cambiar la transparecia del seidebar en la vista de escritorio.</p>
 
@@ -547,13 +554,13 @@
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
   <!--   Core JS Files   -->
-  <script src="../../../../assets/js/core/popper.min.js"></script>
-  <script src="../../../../assets/js/core/bootstrap.min.js"></script>
-  <script src="../../../../assets/js/plugins/perfect-scrollbar.min.js"></script>
-  <script src="../../../../assets/js/plugins/smooth-scrollbar.min.js"></script>
-  <script src="../../../../assets/js/plugins/chartjs.min.js"></script>
-  <script src="../../../../assets/js/globalFunctions.js"></script>
-  <script src="../../../../assets/js/sweetAlert.js"></script>
+  <script src="../../assets/js/core/popper.min.js"></script>
+  <script src="../../assets/js/core/bootstrap.min.js"></script>
+  <script src="../../assets/js/plugins/perfect-scrollbar.min.js"></script>
+  <script src="../../assets/js/plugins/smooth-scrollbar.min.js"></script>
+  <script src="../../assets/js/plugins/chartjs.min.js"></script>
+  <script src="../../assets/js/globalFunctions.js"></script>
+  <script src="../../assets/js/sweetAlert.js"></script>
   <script>
 document.addEventListener("DOMContentLoaded",()=>{
 
@@ -726,7 +733,7 @@ document.addEventListener("DOMContentLoaded",()=>{
     });
 
     //Menù */*/*/
-    $("#goDashboard").addEventListener("click",()=>{
+    /* $("#goDashboard").addEventListener("click",()=>{
     
     window.location.href = `../../dashboard.php?id=${code}&name=${codeName}`;
     
@@ -736,7 +743,7 @@ document.addEventListener("DOMContentLoaded",()=>{
     
     window.location.href = `../../projects/index.php?id=${code}&name=${codeName}`;
     
-  });
+  }); */
       
   $("#generate-excel").addEventListener("click",()=>{
 
@@ -748,7 +755,7 @@ document.addEventListener("DOMContentLoaded",()=>{
     generatePdf(idProyecto);
   });
 
-    getAssets(idProyecto);
+    /* getAssets(idProyecto); */
 });
   </script>
   <script>
@@ -763,7 +770,7 @@ document.addEventListener("DOMContentLoaded",()=>{
   <!-- Github buttons -->
   <script async defer src="https://buttons.github.io/buttons.js"></script>
   <!-- Control Center for Soft Dashboard: parallax effects, scripts for the example Views etc -->
-  <script src="../../../../assets/js/soft-ui-dashboard.min.js?v=1.0.7"></script>
+  <script src="../../assets/js/soft-ui-dashboard.min.js?v=1.0.7"></script>
 </body>
 
 </html>

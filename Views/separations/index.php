@@ -56,7 +56,7 @@
     <div class="collapse navbar-collapse  w-auto " id="sidenav-collapse-main">
       <ul class="navbar-nav">
 
-        <!-- DASHBOARD -->
+      <!-- DASHBOARD -->
         <li class="nav-item">
           <a class="nav-link" href="../../Views/dashboard.html">
             <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
@@ -101,8 +101,8 @@
         </li>
 
         <!-- CLIENTES -->
-        <li class="nav-item active">
-          <a class="nav-link  active" href="../Clients/index.php">
+        <li class="nav-item">
+          <a class="nav-link" href="../clients/index.php">
             <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
               <svg width="12px" height="12px" viewBox="0 0 42 42" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <title>office</title>
@@ -126,7 +126,7 @@
 
         <!-- SEPARACIONES -->
         <li class="nav-item">
-          <a class="nav-link" href="../separations/index.php">
+          <a class="nav-link  active" href="../separations/index.php">
             <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
               <svg width="12px" height="12px" viewBox="0 0 42 42" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <title>office</title>
@@ -291,7 +291,7 @@
             <span class="nav-link-text ms-1">Cerrar sesión</span>
           </a>
         </li>
-
+        
       </ul>
     </div>
   </aside>
@@ -439,6 +439,26 @@
               <div class="row">
                 <div class="col-md-3">
                   
+                <input type="date" name="" id="">
+                <input type="datetime" name="" id="">
+                <input type="datetime-local" name="" id="">
+                <input type="email" name="" id="">
+                <input type="file" name="" id="">
+                <input type="hidden" name="">
+                <input type="color" name="" id="">
+                <input type="image" src="" alt="">
+                <input type="month" name="" id="">
+                <input type="number" name="" id="">
+                <input type="password" name="" id="">
+                <input type="radio" name="" id="">
+                <input type="range" name="" id="">
+                <input type="reset" value="">
+                <input type="search" name="" id="">
+                <input type="submit" value="">
+                <input type="tel" name="" id="">
+                <input type="time" name="" id="">
+                <input type="url" name="" id="">
+                <input type="week" name="" id="">
                   <select name="tipo_persona" class="form-select" id="documento_tipo">
                     <option value="NATURAL">Tipo de persona</option>
                   </select>
