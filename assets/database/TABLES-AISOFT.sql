@@ -26,9 +26,9 @@ CREATE TABLE distritos(
     CONSTRAINT fk_idprovincia_distr	FOREIGN KEY (idprovincia) REFERENCES provincias(idprovincia)
 )ENGINE = INNODB;
 
--- EMPRESAS
-CREATE TABLE empresas(
-	idempresa			INT PRIMARY KEY AUTO_INCREMENT,
+-- constructora
+CREATE TABLE constructora(
+	idconstructora		INT PRIMARY KEY AUTO_INCREMENT,
     razon_social		VARCHAR(60)	 	NOT NULL,
     ruc					CHAR(11) 		NOT NULL,
     partida_elect		VARCHAR(60) 	NOT NULL,
@@ -37,20 +37,38 @@ CREATE TABLE empresas(
     create_at 			DATE 			NOT NULL	DEFAULT (CURDATE()),
     update_at			DATE 			NULL,
     inactive_at			DATE 			NULL,
-	CONSTRAINT uk_ruc_empresas UNIQUE(ruc)
+	CONSTRAINT uk_ruc_constructora UNIQUE(ruc)
+)ENGINE = INNODB;
+
+-- REPRESENTANTES
+CREATE TABLE representantes(
+	idrepresentante		INT PRIMARY KEY AUTO_INCREMENT,
+    idconstructora 		INT 			NOT NULL,
+    nombres 			VARCHAR(40) 	NOT NULL,
+    apellidos 			VARCHAR(40)		NOT NULL,
+    documento_tipo 		VARCHAR(20) 	NOT NULL,
+    documento_nro		VARCHAR(12) 	NOT NULL,
+    iddistrito 			INT 			NOT NULL,
+    direccion 			VARCHAR(60) 	NOT NULL,
+    partida_elect		VARCHAR(60) 	NOT NULL,
+    create_at 			DATE 			NOT NULL	DEFAULT (CURDATE()),
+    update_at			DATE 			NULL,
+    inactive_at			DATE 			NULL,
+    CONSTRAINT fk_idconstructora_rep FOREIGN KEY(idconstructora) REFERENCES constructora(idconstructora),
+	CONSTRAINT uk_documento_nro_constructora UNIQUE(documento_nro)
 )ENGINE = INNODB;
 
 -- DIRECCIONES
 CREATE TABLE direcciones(
 	iddireccion			INT PRIMARY KEY AUTO_INCREMENT,
-    idempresa			INT  		NOT NULL,
+    idconstructora			INT  		NOT NULL,
     iddistrito 			INT 		NOT NULL,
     direccion			VARCHAR(70) NOT NULL,
     referencia			VARCHAR(45) NULL,
 	create_at 			DATE 			NOT NULL	DEFAULT (CURDATE()),
     update_at			DATE 			NULL,
     inactive_at			DATE 			NULL,
-    CONSTRAINT fk_idempresa_direccs FOREIGN KEY(idempresa) REFERENCES empresas(idempresa),
+    CONSTRAINT fk_idconstructora_direccs FOREIGN KEY(idconstructora) REFERENCES constructora(idconstructora),
     CONSTRAINT fk_iddistrito_direccs FOREIGN KEY(iddistrito) REFERENCES distritos(iddistrito)
 )ENGINE = INNODB;
 
@@ -169,37 +187,49 @@ CREATE TABLE activos(
 -- CLIENTES
 CREATE TABLE clientes(
 	idcliente			INT PRIMARY KEY AUTO_INCREMENT,
+    tipo_persona		VARCHAR(10) 	NOT NULL,
     nombres				VARCHAR(40) 	NULL,
     apellidos			VARCHAR(40) 	NULL,
-    razon_social 		VARCHAR(60)		NULL,
-    tipo_persona		VARCHAR(10) 	NOT NULL,
     documento_tipo		VARCHAR(20) 	NOT NULL,
     documento_nro		VARCHAR(12)   	NOT NULL,
-    estado_civil 		VARCHAR(20) 	NOT NULL,
+    estado_civil 		VARCHAR(20) 	NULL,
+    razon_social 		VARCHAR(60)		NULL,
+    representante_legal VARCHAR(80)   	NULL,
+	documento_t_representante 	VARCHAR(20)	NULL,
+    documento_nro_representante	VARCHAR(12) NULL,
+    partida_elect 		VARCHAR(100) 	NULL,
     iddistrito 			INT 			NOT NULL,
     direccion 			VARCHAR(70) 	NOT NULL,
-	create_at 			DATE 		NOT NULL	DEFAULT (CURDATE()),
-    update_at			DATE 		NULL,
-    inactive_at			DATE 		NULL,
-    idusuario 			INT 		NOT NULL,
+	create_at 			DATE 			NOT NULL	DEFAULT (CURDATE()),
+    update_at			DATE 			NULL,
+    inactive_at			DATE 			NULL,
+    idusuario 			INT 			NOT NULL,
     CONSTRAINT uk_documento_nro_cli UNIQUE(documento_nro),
+    CONSTRAINT uk_documento_nro_representante_cli UNIQUE(documento_nro_representante),
     CONSTRAINT fk_iddistrito_cli FOREIGN KEY(iddistrito) REFERENCES distritos(iddistrito),
     CONSTRAINT fk_idusuario_cli FOREIGN KEY(idusuario) REFERENCES usuarios(idusuario)
 )ENGINE = INNODB;
 
--- VENDEDORES Y REPRESENTANTES
-CREATE TABLE vend_representantes(
-	idvend_representante 			INT PRIMARY KEY AUTO_INCREMENT,
-    idvendedor						INT NOT NULL,
-    idrepresentante 				INT NOT NULL,
-	create_at 						DATE 			NOT NULL	DEFAULT (CURDATE()),
-    update_at						DATE 			NULL,
-    inactive_at						DATE 			NULL,
-    idusuario 						INT 			NOT NULL,
-    CONSTRAINT fk_idvendor_vend_represents FOREIGN KEY(idvendedor) REFERENCES usuarios(idusuario),
-    CONSTRAINT fk_idrepresent_vend_represents FOREIGN KEY(idrepresentante) REFERENCES usuarios(idusuario),
-    CONSTRAINT uk_vendRepresent_vend_representss UNIQUE(idvendedor, idrepresentante),
-    CONSTRAINT fk_idusuario_vend_represents FOREIGN KEY(idusuario) REFERENCES usuarios(idusuario)
+-- SEPARACIONES
+CREATE TABLE separaciones(
+	idseparacion  			INT PRIMARY KEY AUTO_INCREMENT,
+    idactivo				INT 			NOT NULL,
+    idcliente 				INT  			NOT NULL,
+    idconyugue 				INT 			NOT NULL,
+    separacion_monto		DECIMAL(4,2) 	NOT NULL,
+    fecha_pago				DATE 			NOT NULL,
+    fecha_devolucion		DATE 			NULL,
+    monto_devolucion 		DECIMAL(4,2)	NULL,
+    estado 					VARCHAR(10) 	NOT NULL,
+    imagen					VARCHAR(100) 	NOT NULL,
+	create_at 				DATE 			NOT NULL	DEFAULT (CURDATE()),
+    update_at				DATE 			NULL,
+    inactive_at				DATE 			NULL,
+    idusuario 				INT 			NOT NULL,
+    CONSTRAINT fk_idactivo_sep FOREIGN KEY(idactivo) REFERENCES activos(idactivo),
+    CONSTRAINT fk_idcliente_sep FOREIGN KEY(idcliente) REFERENCES clientes(idcliente),
+    CONSTRAINT fk_idconyugue_sep FOREIGN KEY(idconyugue) REFERENCES clientes(idconyugue),
+    CONSTRAINT fk_idusuario_sep FOREIGN KEY(idusuario) REFERENCES usuarios(idusuario)
 )ENGINE = INNODB;
 
 -- CONTRATOS
@@ -211,6 +241,7 @@ CREATE TABLE contratos(
     idrepresentante_primario 		INT 			NOT NULL,	-- REPRESENTANTE DEL VENDEDOR
     idrepresentante_secundario 		INT 			NULL,		-- REPRESENTANTE DEL VENDEDOR 2 (SOLO SI EXISTIERA)
 	tipo_cambio 			DECIMAL(4,3) 	NOT NULL,
+    
 	estado 					VARCHAR(10)		NOT NULL,
     detalles				JSON 			NULL, -- BONOS, FINACIAMIENTOS, PENALIDAD, PLAZO ENTREGA, CUOTA INICIAL ..
     fecha_contrato			DATE 			NOT NULL,
@@ -223,70 +254,6 @@ CREATE TABLE contratos(
     CONSTRAINT fk_idrepresentante_cont FOREIGN KEY(idrepresentante_primario) REFERENCES vend_representantes(idvend_representante),
     CONSTRAINT fk_idrepresentante2_cont FOREIGN KEY(idrepresentante_secundario) REFERENCES vend_representantes(idvend_representante),
     CONSTRAINT fk_idusuario_cont FOREIGN KEY(idusuario) REFERENCES usuarios(idusuario)
-)ENGINE = INNODB;
-
-SELECT * FROM contratos;
--- ALTER TABLE contratos ADD COLUMN tipo_contrato VARCHAR(40) NOT NULL;
--- ALTER TABLE contratos DROP COLUMN detalles;
--- ALTER TABLE contratos ADD COLUMN detalles JSON NOT NULL DEFAULT '{"clave": "", "valor":  ""}';
-
--- MÉTRICAS CONTRATOS
-CREATE TABLE metricas_contratos
-(
-		idmetrica_contrato 		INT PRIMARY KEY AUTO_INCREMENT,
-        idcontrato				INT NOT NULL,
-        idvendedor				INT NOT NULL,
-        update_at				DATETIME NOT NULL DEFAULT NOW()
-)ENGINE=INNODB;
-
--- DETALLES CONTRATOS
-CREATE TABLE detalles_contratos(
-	iddetalle_contrato		INT PRIMARY KEY AUTO_INCREMENT,
-    idactivo				INT  			NOT NULL,
-    idcontrato 				INT 			NOT NULL,
-	create_at 				DATE 			NOT NULL	DEFAULT (CURDATE()),
-    update_at				DATE 			NULL,
-    inactive_at				DATE 			NULL,
-    idusuario 				INT 			NOT NULL,
-    CONSTRAINT fk_idactivo_dt_contratos FOREIGN KEY(idactivo) REFERENCES activos(idactivo),
-    CONSTRAINT fk_idcontrato_dt_contratos FOREIGN KEY(idcontrato) REFERENCES contratos(idcontrato),
-    CONSTRAINT fk_idusuario_dt_contrato FOREIGN KEY(idusuario) REFERENCES usuarios(idusuario)
-)ENGINE = INNODB;
-
--- SEPARACIONES
-CREATE TABLE separaciones(
-	idseparacion  			INT PRIMARY KEY AUTO_INCREMENT,
-    idactivo				INT 			NOT NULL,
-    idvend_representante 	INT  			NOT NULL,
-    idcliente 				INT  			NOT NULL,
-    separacion_monto				DECIMAL(5,2) 	NOT NULL,
-    fecha_pago				DATE 			NOT NULL,
-    penalidad_porcent 		TINYINT 		NOT NULL,
-    fecha_devolucion		DATE 			NULL,
-    estado 					VARCHAR(10) 	NOT NULL,
-	create_at 				DATE 			NOT NULL	DEFAULT (CURDATE()),
-    update_at				DATE 			NULL,
-    inactive_at				DATE 			NULL,
-    idusuario 				INT 			NOT NULL,
-    CONSTRAINT fk_idactivo_sep FOREIGN KEY(idactivo) REFERENCES activos(idactivo),
-    CONSTRAINT fk_idvend_representante_sep FOREIGN KEY(idvend_representante) REFERENCES vend_representantes(idvend_representante),
-    CONSTRAINT fk_idcliente_sep FOREIGN KEY(idcliente) REFERENCES clientes(idcliente),
-    CONSTRAINT fk_idusuario_sep FOREIGN KEY(idusuario) REFERENCES usuarios(idusuario)
-)ENGINE = INNODB;
-
--- ALTER TABLE separaciones CHANGE separacion separacion_monto DECIMAL(5,2) 	NOT NULL;
-
--- SUSTENTOS SEPARACIONES
-CREATE TABLE sustentos_sep(
-	idsustento_sep 			INT PRIMARY KEY AUTO_INCREMENT,
-    idseparacion			INT 			NOT NULL,
-    ruta 					VARCHAR(100) 	NOT NULL,
-	create_at 				DATE 			NOT NULL	DEFAULT (CURDATE()),
-    update_at				DATE 			NULL,
-    inactive_at				DATE 			NULL,
-    idusuario 				INT 			NOT NULL,
-    CONSTRAINT fk_idseparacion_sust_sep FOREIGN KEY(idseparacion) REFERENCES separaciones(idseparacion),
-    CONSTRAINT fk_idusuario_sust_sep FOREIGN KEY(idusuario) REFERENCES usuarios(idusuario)
 )ENGINE = INNODB;
 
 -- FINANCIERAS
