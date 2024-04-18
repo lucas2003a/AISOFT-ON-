@@ -707,6 +707,8 @@
   let dataProject;
   let AllProjects
 
+  console.log(idProyecto);
+
   function renderInputs(keyValue, valValue){
     
     //BOTÓN "-" Y SU CONTENEDOR
@@ -898,7 +900,8 @@
       let url = `../../Controllers/project.controller.php`;
 
       //Guarda la imagen anterior
-      let img = $("#in-image").files.length > 0? $("#in-image").files[0] : $("#in-image").files[0] = oldImage;
+      let img = $("#in-image").files.length > 0 ? $("#in-image").files[0] : $("#in-image").files[0] = null;
+      //let img = $("#in-image").files[0] ? $("#in-image").files[0] : null;
 
       //Iniica la operacion
       let params = new FormData();
@@ -927,7 +930,7 @@
                 window.location.href = "./index.php";
             });
         }else{
-            sAlert.alertError("No se actualizó el registro","Vuelve a intentarlo");
+            sAlert.sweetError("No se actualizó el registro","Vuelve a intentarlo");
         }
       }
     }
