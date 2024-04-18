@@ -17,15 +17,15 @@ DELIMITER ;
 
 SELECT * FROM vws_ubigeo;
 
--- VISTA EMPRESAS
+-- VISTA constructora
 DELIMITER $$
 CREATE VIEW vws_list_companies AS
 	SELECT
-		idempresa,
+		idconstructora,
         ruc,
         razon_social,
         partida_elect
-		FROM empresas;
+		FROM constructora;
 $$
 DELIMITER ;
 
@@ -154,13 +154,17 @@ DELIMITER $$
 CREATE VIEW vws_list_clients AS
 	SELECT
 		clien.idcliente,
-		clien.documento_tipo,
-        clien.documento_nro,
+        clien.tipo_persona,
         clien.apellidos,
         clien.nombres,
-        clien.razon_social,
-        clien.tipo_persona,
+		clien.documento_tipo,
+        clien.documento_nro,
         clien.estado_civil,
+        clien.razon_social,
+		clien.representante_legal,
+        clien.documento_t_representante,
+        clien.documento_nro_representante,
+        clien.partida_elect,
         dist.distrito,
         prov.provincia,
         dept.departamento,
@@ -182,11 +186,17 @@ DELIMITER $$
 CREATE VIEW vws_list_inactive_clients AS
 	SELECT
 		clien.idcliente,
-		clien.documento_tipo,
-        clien.documento_nro,
+        clien.tipo_persona,
         clien.apellidos,
         clien.nombres,
+		clien.documento_tipo,
+        clien.documento_nro,
         clien.estado_civil,
+        clien.razon_social,
+		clien.representante_legal,
+        clien.documento_t_representante,
+        clien.documento_nro_representante,
+        clien.partida_elect,
         dist.distrito,
         prov.provincia,
         dept.departamento,
@@ -198,80 +208,9 @@ CREATE VIEW vws_list_inactive_clients AS
         INNER JOIN departamentos AS dept ON dept.iddepartamento = prov.iddepartamento
         INNER JOIN usuarios AS usu ON usu.idusuario = clien.idusuario
         WHERE clien.inactive_at IS NOT NULL
-        ORDER BY clien.apellidos ASC;
+        ORDER BY clien.documento_nro ASC;
 $$
 DELIMITER ;
 
 SELECT * FROM vws_list_inactive_clients;
 
--- CONTRATOS
-DELIMITER $$
-DROP VIEW vws_list_contracts_short AS
-	SELECT 
-		cont.idcontrato,
-        cont.tipo_contrato,
-        proy.denominacion,
-        lt.codigo,
-        lt.sublote,
-		clien.nombres AS clien_nombres,
-		clien.apellidos AS clien_apellidos,
-        clien2.apellidos AS cony_apellidos,
-		clien2.nombres AS cony_nombres,
-        cont.estado,
-        usuRep1.nombres AS usuario
-		FROM contratos AS cont
-        INNER JOIN lotes AS lt ON lt.idlote = cont.idlote
-        INNER JOIN proyectos AS proy ON proy.idproyecto = lt.idproyecto
-        
-        -- OBTENGO LOS DATOS DEL CLIENTE1 Y DEL CLIENTE2 (SI EXISTE)
-        INNER JOIN clientes AS clien ON clien.idcliente = cont.idcliente
-        LEFT JOIN clientes AS clien2 ON clien2.idcliente = cont.idcliente2
-        
-        -- OBTENGO LOS DATOS DEL REPRESENTANTE1 Y DEL REPRESENTAN 2(SI EXISTE)
-        INNER JOIN usuarios AS usuRep1 ON usuRep1.idusuario = cont.idrepresentante
-        LEFT JOIN usuarios AS usuRep2 ON usuRep2.idusuario = cont.idrepresentante2
-        
-        -- OBTENGO LOS DATOS DEL USUARIO 
-        INNER JOIN usuarios AS usu ON usu.idusuario = proy.idusuario
-        WHERE cont.inactive_at IS NULL
-        ORDER BY denominacion;
-$$
-DELIMITER ;
-
-SELECT * FROM vws_list_contracts_short;
-
-DELIMITER $$
-DROP VIEW vws_list_inactive_contracts_short AS
-	SELECT 
-		cont.idcontrato,
-        cont.tipo_contrato,
-        proy.denominacion,
-        lt.codigo,
-        lt.sublote,
-		clien.nombres AS clien_nombres,
-		clien.apellidos AS clien_apellidos,
-        clien2.apellidos AS cony_apellidos,
-		clien2.nombres AS cony_nombres,
-        cont.estado,
-        usuRep1.nombres AS usuario
-		FROM contratos AS cont
-        INNER JOIN lotes AS lt ON lt.idlote = cont.idlote
-        INNER JOIN proyectos AS proy ON proy.idproyecto = lt.idproyecto
-        
-        -- OBTENGO LOS DATOS DEL CLIENTE1 Y DEL CLIENTE2 (SI EXISTE)
-        INNER JOIN clientes AS clien ON clien.idcliente = cont.idcliente
-        LEFT JOIN clientes AS clien2 ON clien2.idcliente = cont.idcliente2
-        
-        -- OBTENGO LOS DATOS DEL REPRESENTANTE1 Y DEL REPRESENTAN 2(SI EXISTE)
-        INNER JOIN usuarios AS usuRep1 ON usuRep1.idusuario = cont.idrepresentante
-        LEFT JOIN usuarios AS usuRep2 ON usuRep2.idusuario = cont.idrepresentante2
-        
-        -- OBTENGO LOS DATOS DEL USUARIO 
-        INNER JOIN usuarios AS usu ON usu.idusuario = proy.idusuario
-        WHERE cont.inactive_at IS NOT NULL
-        ORDER BY denominacion;
-$$
-DELIMITER ;
-
-
--- sustentos_cuotas, cuotas, detalle_gastos, presupuestos, desembolsos, sustentos_sep, separaciones, contratos, viviendas, lotes;

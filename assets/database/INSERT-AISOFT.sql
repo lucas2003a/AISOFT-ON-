@@ -1,22 +1,28 @@
 USE AISOFT;
 
--- EMPRESAS
-INSERT INTO empresas(razon_social, ruc, partida_elect)
+-- constructora
+INSERT INTO constructora(razon_social, ruc, partida_elect)
 	VALUES
     ("A.I. F CONTRATISTAS GENERALES S.A.C","20494453003","11013804 del Registro de Personas Jurídicas de CHINCHA-ICA"),
-    ("XYZ Construcciones S.A.C.", "12345678901", "78901234 del Registro de Empresas de Arequipa"),
-	("Inversiones TechCorp S.A.", "98765432109", "56789012 del Registro de Empresas de Lima");
+    ("XYZ Construcciones S.A.C.", "12345678901", "78901234 del Registro de constructora de Arequipa"),
+	("Inversiones TechCorp S.A.", "98765432109", "56789012 del Registro de constructora de Lima");
     
-SELECT * FROM empresas;
+SELECT * FROM constructora;
+
+-- REPRESENTANTES
+INSERT INTO representantes(idconstructora, nombres, apellidos, documento_tipo, documento_nro, iddistrito, direccion, partida_elect)
+			VALUES(1, 'ISAIAS LATINEZ','BLAS GUEROVICH','DNI','11122233',107,'AV LOS SAUCES','PARTIDA ELECTRONICA NRO 1');
+            
+SELECT * FROM representantes;
 
 -- DIRECCIONES
-INSERT INTO direcciones(idempresa, iddistrito, direccion, referencia)
+INSERT INTO direcciones(idconstructora, iddistrito, direccion, referencia)
 			VALUES
 				(1, 1007, "MZA. A LOTE. 06 URB. JULIO ARBOLEDA","A 1/2 CUADRA DE MAESTRO"),
                 (1, 1009, "AV. LOS ALAMOS MZA. C LOTE. 25 URB. EL ROSAL","FRENTE AL PARQUE"),
 				(1, 1010, "CALLE LOS GIRASOLES MZA. E LOTE. 10 URB. LAS MARGARITAS","A 200 METROS DE LA AVENIDA PRINCIPAL");
                 
-INSERT INTO direcciones(idempresa, iddistrito, direccion, referencia)
+INSERT INTO direcciones(idconstructora, iddistrito, direccion, referencia)
 			VALUES
 				(2, 1008, "MZA. A LOTE. 06 URB. JULIO ARBOLEDA","A 1/2 CUADRA DE MAESTRO"),
                 (2, 1010, "AV. LOS ALAMOS MZA. C LOTE. 25 URB. EL ROSAL","FRENTE AL PARQUE"),
@@ -119,6 +125,39 @@ SELECT * FROM metricas;
 ALTER TABLE activos AUTO_INCREMENT = 0; 
 SELECT * FROM activos;
 
+-- PRESUPUESTOS
+INSERT INTO presupuestos (modelo, medidas,idusuario)
+			VALUES 
+				('casa propia',"5X7 m2", 1),
+				('casita mia', "7X5 m2", 1);
+                
+SELECT * FROM presupuestos;
+
+-- COSTOS
+INSERT INTO costos(costo_descript)
+			VALUES
+				('GASTOS ADMINISTRATIVOS'),
+                ('HABIITACIÓN DE TERRENO'),
+                ('INSTALACIÓN DE ACCESOSRIOS'),
+                ('TRASLADO DE MATERIALES');
+                
+-- DETALLE GASTOS
+INSERT INTO detalle_costos (idpresupuesto, idcosto, tipo_costo, descripcion, cantidad, precio_unitario)
+			VALUES 
+				(3 , 2, 'COSTO DIRECTO', 'Materiales de construcción', 100, 0.50),
+				(3, 3,  'COSTO INDIRECTO', 'Gastos administrativos', 1, 300.00),
+				(3, 1,  'COSTO DIRECTO', 'Materiales de construcción', 50, 8.00),
+				(3, 1,  'COSTO INDIRECTO', 'Gastos administrativos', 1, 150.00);
+                
+INSERT INTO detalle_costos (idpresupuesto, idcosto, tipo_costo, descripcion, cantidad, precio_unitario)
+			VALUES 
+				(4 , 2, 'COSTO DIRECTO', 'Materiales de construcción', 100, 0.50),
+				(4, 3,  'COSTO INDIRECTO', 'Gastos administrativos', 1, 300.00),
+				(4, 1,  'COSTO DIRECTO', 'Materiales de construcción', 50, 8.00),
+				(4, 1,  'COSTO INDIRECTO', 'Gastos administrativos', 1, 150.00);
+                
+SELECT * FROM detalle_costos;
+
 -- activos
 INSERT INTO activos (idproyecto, tipo_activo, sublote, direccion, moneda_venta, area_terreno, partida_elect, precio_venta, create_at, idusuario)
 VALUES
@@ -190,21 +229,20 @@ VALUES
     (1, 'lote', 100, 'Urbanización Psi', 'USD', 420.00, 'Partida 125', 105000.00, CURDATE(), 3);
 
 -- CASAS
-INSERT INTO activos (idproyecto, tipo_activo, sublote, direccion, moneda_venta, area_terreno, partida_elect, idactivo, precio_venta, create_at, idusuario)
+INSERT INTO activos (idproyecto, tipo_activo, sublote, direccion, moneda_venta, area_terreno, partida_elect, precio_venta, create_at, idusuario)
 VALUES
-	(1, 'casa', 2, 'Urbanización Beta', 'USD', 200.00, 'Partida 002', 1, 150000.00, CURDATE(), 1),
-	(2, 'casa', 2, 'Urbanización Delta', 'USD', 220.00, 'Partida 004', 2, 180000.00, CURDATE(), 1),
-	(1, 'casa', 4, 'Urbanización Zeta', 'USD', 180.00, 'Partida 006', 3, 120000.00, CURDATE(), 2),
-	(3, 'casa', 3, 'Urbanización Theta', 'USD', 250.00, 'Partida 008', 4, 200000.00, CURDATE(), 2),
-	(2, 'casa', 4, 'Urbanización Kappa', 'USD', 230.00, 'Partida 010', 5, 190000.00, CURDATE(), 2),
-	(3, 'casa', 6, 'Urbanización Mu', 'USD', 210.00, 'Partida 012', 6, 160000.00, CURDATE(), 2),
-	(4, 'casa', 2, 'Urbanización Xi', 'USD', 240.00, 'Partida 014', 7, 175000.00, CURDATE(), 2),
-	(4, 'casa', 4, 'Urbanización Pi', 'USD', 260.00, 'Partida 016', 8, 220000.00, CURDATE(), 3),
-	(1, 'casa', 8, 'Urbanización Sigma', 'USD', 280.00, 'Partida 018', 9, 200000.00, CURDATE(), 3),
-	(2, 'casa', 10, 'Urbanización Upsilon', 'USD', 300.00, 'Partida 020', 10, 210000.00, CURDATE(), 3),
-	(3, 'casa', 12, 'Urbanización Chi', 'USD', 320.00, 'Partida 022', 11, 180000.00, CURDATE(), 2),
-	(4, 'casa', 14, 'Urbanización Omega', 'USD', 350.00, 'Partida 024', 12, 190000.00, CURDATE(), 2);
-
+	(1, 'casa', 2, 'Urbanización Beta', 'USD', 200.00, 'Partida 002', 150000.00, CURDATE(), 1),
+	(2, 'casa', 2, 'Urbanización Delta', 'USD', 220.00, 'Partida 004', 180000.00, CURDATE(), 1),
+	(1, 'casa', 4, 'Urbanización Zeta', 'USD', 180.00, 'Partida 006', 120000.00, CURDATE(), 2),
+	(3, 'casa', 3, 'Urbanización Theta', 'USD', 250.00, 'Partida 008', 200000.00, CURDATE(), 2),
+	(2, 'casa', 4, 'Urbanización Kappa', 'USD', 230.00, 'Partida 010', 190000.00, CURDATE(), 2),
+	(3, 'casa', 6, 'Urbanización Mu', 'USD', 210.00, 'Partida 012', 160000.00, CURDATE(), 2),
+	(4, 'casa', 2, 'Urbanización Xi', 'USD', 240.00, 'Partida 014', 175000.00, CURDATE(), 2),
+	(4, 'casa', 4, 'Urbanización Pi', 'USD', 260.00, 'Partida 016', 220000.00, CURDATE(), 3),
+	(1, 'casa', 8, 'Urbanización Sigma', 'USD', 280.00, 'Partida 018', 200000.00, CURDATE(), 3),
+	(2, 'casa', 10, 'Urbanización Upsilon', 'USD', 300.00, 'Partida 020', 210000.00, CURDATE(), 3),
+	(3, 'casa', 12, 'Urbanización Chi', 'USD', 320.00, 'Partida 022', 180000.00, CURDATE(), 2),
+	(4, 'casa', 14, 'Urbanización Omega', 'USD', 350.00, 'Partida 024', 190000.00, CURDATE(), 2);
 
 SELECT * FROM activos;
 
@@ -217,72 +255,65 @@ INSERT INTO clientes (nombres, apellidos, documento_tipo, documento_nro, estado_
 
 SELECT * FROM clientes;
 
--- CONTRATOS
-INSERT INTO contratos (idcliente, idconyugue, idrepresentante_primario, idrepresentante_secundario, tipo_cambio, estado, fecha_contrato, idusuario)
-			VALUES
-				(1, NULL, 1, NULL, 3.500, 'VIGENTE', '2024-03-10', 1),
-				(2, NULL, 2, NULL, 3.500, 'VIGENTE', '2024-03-11', 2),
-				(3, NULL, 2, NULL, 3.500, 'VIGENTE', '2024-03-12', 3),
-				(1, NULL, 1, NULL, 3.500, 'VIGENTE', '2024-03-13', 4),
-				(2, NULL, 1, NULL, 3.500, 'VIGENTE', '2024-03-14', 5);
-
-SELECT * FROM contratos;
-select * from activos;
--- VENDEDORES REPRESENTANTE
-INSERT INTO vend_representantes (idvendedor, idrepresentante, idusuario)
-			VALUES
-				(6, 1, 1),
-				(7, 2, 2);
-SELECT * FROM vend_representantes;
-
 -- SEPARACIONES
 INSERT INTO separaciones (
-    idactivo, idvend_representante, idcliente, separacion, fecha_pago,
-    penalidad_porcent, estado, create_at, idusuario
+    idactivo, idcliente, separacion_monto, fecha_pago,
+    estado, create_at, idusuario
 	) 
 		VALUES (
-		1, 1, 1, 150.5, '2024-03-08',
-		5, 'Activo', '2024-03-08', 1
+		1, 1, 150.5, '2024-03-08',
+		'Activo', '2024-03-08', 1
 		);
         
 INSERT INTO separaciones (
-    idactivo, idvend_representante, idcliente, separacion, fecha_pago,
-    penalidad_porcent, estado, create_at, idusuario
+    idactivo, idcliente, separacion_monto, fecha_pago,
+    estado, create_at, idusuario
 	) 
 		VALUES (
-		5, 1, 1, 150.5, '2024-03-08',
-		5, 'Activo', '2024-03-08', 1
+		5, 1, 150.5, '2024-03-08',
+		'Activo', '2024-03-08', 1
 		);
 INSERT INTO separaciones (
-    idactivo, idvend_representante, idcliente, separacion, fecha_pago,
-    penalidad_porcent, estado, create_at, idusuario
+    idactivo, idcliente, separacion_monto, fecha_pago,
+    estado, create_at, idusuario
 	) 
 		VALUES (
-		6, 1, 1, 150.5, '2024-03-08',
-		5, 'Activo', '2024-03-08', 1
+		6, 1, 150.5, '2024-03-08',
+		'Activo', '2024-03-08', 1
 		);
         
 INSERT INTO separaciones (
-    idactivo, idvend_representante, idcliente, separacion, fecha_pago,
-    penalidad_porcent, estado, create_at, idusuario
+    idactivo, idcliente, separacion_monto, fecha_pago,
+    estado, create_at, idusuario
 	) 
 		VALUES (
-		7, 1, 2, 150.5, '2024-03-08',
-		5, 'Activo', '2024-03-08', 1
-		);        
+		7, 2, 150.5, '2024-03-08',
+		'Activo', '2024-03-08', 1
+		); 
+        
+INSERT INTO separaciones (
+    idactivo, idcliente, separacion_monto, fecha_pago,
+    estado, create_at, idusuario
+	) 
+		VALUES (
+		8, 2, 150.5, '2024-03-08',
+		'Activo', '2024-03-08', 1
+		); 
+        
 SELECT * FROM separaciones;
 
--- SUSTENTO SEPARACIONES
-INSERT INTO sustentos_sep (idseparacion, ruta, idusuario)
-			VALUES 
-				(1, '/ruta/del/sustento1.pdf', 1);
+-- CONTRATOS
+INSERT INTO contratos (tipo_contrato, idseparacion, idrepresentante_primario, tipo_cambio, estado, fecha_contrato, idusuario)
+			VALUES
+				("VENTA DE LOTE", 1, 1, 3.500, 'VIGENTE', '2024-03-10', 1),
+				("VENTA DE LOTE", 2, 1, 3.500, 'VIGENTE', '2024-03-11', 2),
+				("VENTA DE LOTE", 3, 1, 3.500, 'VIGENTE', '2024-03-12', 3);
                 
-INSERT INTO sustentos_sep (idseparacion, ruta, idusuario)
-			VALUES                 
-                (1, '/ruta/del/sustento2.pdf', 2),
-                (1, '/ruta/del/sustento3.pdf', 1),
-                (1, '/ruta/del/sustento4.pdf', 2);
-SELECT * FROM sustentos_sep;
+INSERT INTO contratos (tipo_contrato, idseparacion, idrepresentante_primario, tipo_cambio, estado, fecha_contrato, idusuario)
+			VALUES
+				("VENTA DE LOTE", 6, 1, 3.500, 'VIGENTE', '2024-03-12', 3);                
+
+SELECT * FROM activos;
 
 -- FINANCIERAS
 INSERT INTO financieras (ruc, razon_social, direccion)
@@ -297,29 +328,6 @@ INSERT INTO desembolsos (idfinanciera, idactivo, monto_desemb, porcentaje, fecha
 				(2, 5, 7000.00, 15, NOW(), 1);
 SELECT * FROM desembolsos;
 
--- PRESUPUESTOS
-INSERT INTO presupuestos (idactivo, descripcion, fecha_program, idusuario)
-			VALUES 
-				(2, 'Materiales de construcción', '2024-03-10', 1),
-				(5, 'Materiales de construcción', '2024-03-15', 1);
-SELECT * FROM presupuestos;
-
--- DETALLE GASTOS
-INSERT INTO detalle_gastos (idpresupuesto, tipo_gasto, nombre_gasto, descripcion, cantidad, precio_unitario, idusuario)
-			VALUES 
-				(1, 'COSTO DIRECTO', 'Materiales de construcción', 'Compra de ladrillos', 100, 0.50, 1),
-				(1, 'COSTO INDIRECTO', 'Gastos administrativos', 'Alquiler de oficina', 1, 300.00, 1),
-				(1, 'COSTO DIRECTO', 'Materiales de construcción', 'Compra de cemento', 50, 8.00, 1),
-				(1, 'COSTO INDIRECTO', 'Gastos administrativos', 'Pago de servicios', 1, 150.00, 1);
-                
-INSERT INTO detalle_gastos (idpresupuesto, tipo_gasto, nombre_gasto, descripcion, cantidad, precio_unitario, idusuario)
-			VALUES
-				(2, 'COSTO DIRECTO', 'Pago de mano de obra', 'Jornal de albañiles', 5, 50.00, 1),
-				(2, 'COSTO INDIRECTO', 'Accesorios de baño', 'Compra de grifería', 3, 120.00, 1),
-				(2, 'COSTO DIRECTO', 'Pago de mano de obra', 'Jornal de carpinteros', 3, 60.00, 1),
-				(2, 'COSTO INDIRECTO', 'Gastos de supervisión', 'Honorarios de arquitecto', 1, 500.00, 1);
-SELECT * FROM detalle_gastos;
-
 -- CUOTAS
 INSERT INTO cuotas (idcontrato, monto_cuota, fecha_vencimiento, tipo_pago, entidad_bancaria, idusuario)
 			VALUES 
@@ -328,19 +336,20 @@ INSERT INTO cuotas (idcontrato, monto_cuota, fecha_vencimiento, tipo_pago, entid
                 
 INSERT INTO cuotas (idcontrato, monto_cuota, fecha_vencimiento, tipo_pago, entidad_bancaria, idusuario)
 			VALUES 
-				(7, 500.00, '2024-03-18','TRANSFERENCIA', 'BCP', 6),
-				(7, 500.00, '2024-04-13','TRANSFERENCIA', 'BCP',  6);          
+				(5, 500.00, '2024-03-18','TRANSFERENCIA', 'BCP', 6),
+				(5, 500.00, '2024-04-13','TRANSFERENCIA', 'BCP',  6);          
 SELECT * FROM cuotas;
 
 -- SUTENTOS CUOTAS
 INSERT INTO sustentos_cuotas (idcuota, ruta, idusuario)
 			VALUES 
-				(9, '/ruta/imagen1.jpg', 1),
-				(9, '/ruta/imagen2.jpg', 1),
-                (9, '/ruta/imagen1.jpg', 1),
-				(9, '/ruta/imagen2.jpg', 1),
-                (7, '/ruta/imagen1.jpg', 2),
-				(7, '/ruta/imagen2.jpg', 2),
-                (8, '/ruta/imagen1.jpg', 2),
-				(8, '/ruta/imagen2.jpg', 2);
+				(1, '/ruta/imagen1.jpg', 1),
+				(1, '/ruta/imagen2.jpg', 1),
+                (1, '/ruta/imagen1.jpg', 1),
+				(1, '/ruta/imagen2.jpg', 1),
+                (2, '/ruta/imagen1.jpg', 2),
+				(2, '/ruta/imagen2.jpg', 2),
+                (2, '/ruta/imagen1.jpg', 2),
+				(2, '/ruta/imagen2.jpg', 2);
 SELECT * FROM sustentos_cuotas;                
+

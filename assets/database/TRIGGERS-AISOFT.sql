@@ -105,6 +105,19 @@ END $$
 DELIMITER ;		
 
 DELIMITER $$
+CREATE TRIGGER trgr_asset_status_separation_insert AFTER INSERT ON separaciones
+FOR EACH ROW
+BEGIN
+	UPDATE activos
+		SET
+			estado = "SEPARADO",
+            update_at = CURDATE()
+		WHERE 
+			idactivo = NEW.idactivo;
+END $$
+DELIMITER ;
+
+DELIMITER $$
 CREATE TRIGGER trgr_asset_status_separation AFTER UPDATE ON separaciones
 FOR EACH ROW
 BEGIN
@@ -126,3 +139,32 @@ BEGIN
 END $$
 DELIMITER ;
 
+DELIMITER $$
+CREATE  TRIGGER trgr_contracts_add AFTER INSERT ON contratos
+FOR EACH ROW
+BEGIN
+	DECLARE _idactivo INT;
+    
+	IF NEW.idseparacion IS NOT NULL THEN
+    
+		SET _idactivo = (
+			SELECT idactivo FROM separaciones
+            WHERE idseparacion = NEW.idseparacion
+        );
+        
+        UPDATE activos
+			SET
+				estado = "VENDIDO",
+                update_at = CURDATE()
+			WHERE 
+				idactivo = _idactivo;
+	ELSE
+		UPDATE activos
+			SET
+				estado = "VENDIDO",
+                update_at = CURDATE()
+			WHERE 
+				idactivo = NEW.idactivo;
+	END IF;
+END $$
+DELIMITER ;

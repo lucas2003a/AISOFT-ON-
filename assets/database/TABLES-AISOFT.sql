@@ -158,6 +158,49 @@ CREATE TABLE metricas(
     CONSTRAINT fk_idproyecto_metr FOREIGN KEY(idproyecto) REFERENCES proyectos(idproyecto)
 )ENGINE = INNODB;
 
+-- PRESUPUESTOS
+CREATE table presupuestos
+(
+	idpresupuesto 			INT PRIMARY KEY AUTO_INCREMENT,
+    modelo					VARCHAR(30)		NOT NULL,
+    medidas 				VARCHAR(20)		NOT NULL,
+	descripcion				VARCHAR(70) 	NULL,
+    create_at				DATE 			NOT NULL 	DEFAULT(CURDATE()),
+    update_at 				DATE        	NULL,
+    inactive_at 			DATE 			NULL,
+    idusuario 				INT 			NOT NULL,
+    CONSTRAINT uk_modelo_pres UNIQUE(modelo),
+    CONSTRAINT fk_idusuario_pres FOREIGN KEY(idusuario) REFERENCES usuarios(idusuario)
+)
+ENGINE = INNODB;
+
+--  COSTOS 
+CREATE TABLE costos
+(
+	idcosto 		INT PRIMARY KEY AUTO_INCREMENT,
+    costo_descript 	VARCHAR(60)			NOT NULL,
+    CONSTRAINT uk_costo_descript_costos UNIQUE(costo_decript)
+)
+ENGINE = INNODB;
+
+-- DETALLE COSTOS
+CREATE TABLE detalle_costos
+(
+	iddetalle_costos		INT PRIMARY KEY AUTO_INCREMENT,
+    idpresupuesto 			INT 			NOT NULL,
+    idcosto					INT 			NOT NULL,
+    tipo_costo 				VARCHAR(20)		NOT NULL, -- COSTO DIRECTO O INDIRECTO
+    descripcion 			VARCHAR(100)	NOT NULL,
+    cantidad 				TINYINT 		NOT NULL,
+    precio_unitario			DECIMAL(8,2)	NOT NULL,
+    create_at 				DATE 			NOT NULL 	DEFAULT(CURDATE()),
+    update_at				DATE 			NULL,
+    inactive_at 			DATE 			NULL,
+    CONSTRAINT fk_idpresupuesto_det_costo FOREIGN KEY(idpresupuesto) REFERENCES presupuestos(idpresupuesto),
+    CONSTRAINT fk_idcosto_det_costo FOREIGN KEY(idcosto) REFERENCES costos(idcosto)
+)
+ENGINE = INNODB;
+
 -- PUEDEN SER LOS LOTES O CASAS
 CREATE TABLE activos(
 	idactivo 			INT PRIMARY KEY AUTO_INCREMENT,
@@ -175,13 +218,15 @@ CREATE TABLE activos(
     longitud 			VARCHAR(20) 		NULL,
     perimetro			JSON				NOT NULL DEFAULT '{"clave" :[""], "valor":[""]}',
     det_casa 			JSON 				NOT NULL DEFAULT '{"clave" :[""], "valor":[""]}',
+    idpresupuesto		INT					NULL,
     precio_venta 		DECIMAL(8,2)		NOT NULL,
 	create_at 			DATE 				NOT NULL	DEFAULT(CURDATE()),
     update_at			DATE 				NULL,
     inactive_at			DATE 				NULL,
     idusuario 			INT 				NOT NULL,
-    CONSTRAINT fk_idproyecto_lotes FOREIGN KEY(idproyecto)  REFERENCES proyectos(idproyecto),
-    CONSTRAINT fk_idusuario_lotes FOREIGN KEY(idusuario) REFERENCES usuarios(idusuario)
+    CONSTRAINT fk_idproyecto_activos FOREIGN KEY(idproyecto)  REFERENCES proyectos(idproyecto),
+    CONSTRAINT fk_idusuario_activos FOREIGN KEY(idusuario) REFERENCES usuarios(idusuario),
+    CONSTRAINT fk_idpresupuesto_activos FOREIGN KEY(idpresupuesto) REFERENCES presupuestos(idpresupuesto)
 )ENGINE = INNODB;
 
 -- CLIENTES
@@ -215,7 +260,7 @@ CREATE TABLE separaciones(
 	idseparacion  			INT PRIMARY KEY AUTO_INCREMENT,
     idactivo				INT 			NOT NULL,
     idcliente 				INT  			NOT NULL,
-    idconyugue 				INT 			NOT NULL,
+    idconyugue 				INT 			NULL,
     separacion_monto		DECIMAL(4,2) 	NOT NULL,
     fecha_pago				DATE 			NOT NULL,
     fecha_devolucion		DATE 			NULL,
@@ -228,31 +273,34 @@ CREATE TABLE separaciones(
     idusuario 				INT 			NOT NULL,
     CONSTRAINT fk_idactivo_sep FOREIGN KEY(idactivo) REFERENCES activos(idactivo),
     CONSTRAINT fk_idcliente_sep FOREIGN KEY(idcliente) REFERENCES clientes(idcliente),
-    CONSTRAINT fk_idconyugue_sep FOREIGN KEY(idconyugue) REFERENCES clientes(idconyugue),
+    CONSTRAINT fk_idconyugue_sep FOREIGN KEY(idconyugue) REFERENCES clientes(idcliente),
     CONSTRAINT fk_idusuario_sep FOREIGN KEY(idusuario) REFERENCES usuarios(idusuario)
 )ENGINE = INNODB;
 
+ALTER TABLE separaciones MODIFY COLUMN idconyugue INT NULL;
 -- CONTRATOS
 CREATE TABLE contratos(
 	idcontrato 				INT PRIMARY KEY AUTO_INCREMENT,
     tipo_contrato 			VARCHAR(40)		NOT NULL,
-    idcliente				INT  			NOT NULL,	-- EL CLIENTE
-    idconyugue 				INT    			NULL,		-- EL CONYUGUE (SOLO SI ESTÁ CASADO)
-    idrepresentante_primario 		INT 			NOT NULL,	-- REPRESENTANTE DEL VENDEDOR
-    idrepresentante_secundario 		INT 			NULL,		-- REPRESENTANTE DEL VENDEDOR 2 (SOLO SI EXISTIERA)
+    idseparacion 					INT 	NULL,
+    idrepresentante_primario 		INT 	NOT NULL,	-- REPRESENTANTE DEL VENDEDOR
+    idrepresentante_secundario 		INT 	NULL,		-- REPRESENTANTE DEL VENDEDOR 2 (SOLO SI EXISTIERA)
+    idcliente						INT		NULL,	-- EL CLIENTE
+    idconyugue 						INT		NULL,		-- EL CONYUGUE (SOLO SI ESTÁ CASADO)
+    idactivo 						INT 	NULL,
 	tipo_cambio 			DECIMAL(4,3) 	NOT NULL,
-    
 	estado 					VARCHAR(10)		NOT NULL,
-    detalles				JSON 			NULL, -- BONOS, FINACIAMIENTOS, PENALIDAD, PLAZO ENTREGA, CUOTA INICIAL ..
     fecha_contrato			DATE 			NOT NULL,
+    det_contrato			JSON 			NOT NULL DEFAULT '{"clave" :[""], "valor":[""]}', -- BONOS, FINACIAMIENTOS, PENALIDAD, PLAZO ENTREGA, CUOTA INICIAL ..    
 	create_at 				DATE 			NOT NULL	DEFAULT (CURDATE()),
     update_at				DATE 			NULL,
     inactive_at				DATE 			NULL,
     idusuario 				INT 			NOT NULL,
+    CONSTRAINT fk_idseparacion_cont FOREIGN KEY(idseparacion) REFERENCES separaciones(idseparacion),
+    CONSTRAINT fk_idrepresentante_cont FOREIGN KEY(idrepresentante_primario) REFERENCES representantes(idrepresentante),
+    CONSTRAINT fk_idrepresentante2_cont FOREIGN KEY(idrepresentante_secundario) REFERENCES representantes(idrepresentante),
     CONSTRAINT fk_idcliente_cont FOREIGN KEY(idcliente) REFERENCES clientes(idcliente),
     CONSTRAINT fk_idcliente2_cont FOREIGN KEY(idconyugue) REFERENCES clientes(idcliente),
-    CONSTRAINT fk_idrepresentante_cont FOREIGN KEY(idrepresentante_primario) REFERENCES vend_representantes(idvend_representante),
-    CONSTRAINT fk_idrepresentante2_cont FOREIGN KEY(idrepresentante_secundario) REFERENCES vend_representantes(idvend_representante),
     CONSTRAINT fk_idusuario_cont FOREIGN KEY(idusuario) REFERENCES usuarios(idusuario)
 )ENGINE = INNODB;
 
@@ -280,37 +328,6 @@ CREATE TABLE desembolsos(
     CONSTRAINT fk_idfinanciera_desemb FOREIGN KEY(idfinanciera) REFERENCES financieras(idfinanciera),
     CONSTRAINT fk_idactivo_desemb	FOREIGN KEY(idactivo) REFERENCES activos(idactivo),
     CONSTRAINT fk_idusuario_desemb FOREIGN KEY(idusuario) REFERENCES usuarios(idusuario)
-)ENGINE = INNODB;
-
--- PRESUPUESTOS
-CREATE TABLE presupuestos(
-	idpresupuesto			INT PRIMARY KEY AUTO_INCREMENT,
-    idactivo 					INT 			NOT NULL,
-    descripcion	 			VARCHAR(70)		NOT NULL,
-    fecha_program 			DATE 			NOT NULL,
-	create_at 				DATE 			NOT NULL	DEFAULT (CURDATE()),
-    update_at				DATE 			NULL,
-    inactive_at				DATE 			NULL,
-    idusuario 				INT 			NOT NULL,
-    CONSTRAINT fk_idactivo_presup FOREIGN KEY(idactivo) REFERENCES activos(idactivo),
-    CONSTRAINT fk_idusuario_presup FOREIGN KEY(idusuario) REFERENCES usuarios(idusuario)
-)ENGINE = INNODB;
-
--- DETALLE GASTOS
-CREATE TABLE detalle_gastos(
-	iddetalle_gasto 		INT PRIMARY KEY AUTO_INCREMENT,
-    idpresupuesto			INT 			NOT NULL,
-    tipo_gasto				VARCHAR(20)		NOT NULL,	-- "CSOSTO DIRECTO" O "COSTO INDIRECTO"
-    nombre_gasto			VARCHAR(40)		NOT NULL, 	-- "GASTOS ADMINISTRATIVOS", "ACCESORIOS DE BAÑO", ETC...
-    descripcion				VARCHAR(100) 	NOT NULL,
-    cantidad				TINYINT 		NOT NULL,
-    precio_unitario 		DECIMAL(8,2) 	NOT NULL,
-	create_at 				DATE 			NOT NULL	DEFAULT (CURDATE()),
-    update_at				DATE 			NULL,
-    inactive_at				DATE 			NULL,
-    idusuario				INT 			NOT NULL,
-    CONSTRAINT fk_idpresupuesto_dtgastos FOREIGN KEY(idpresupuesto) REFERENCES presupuestos(idpresupuesto),
-    CONSTRAINT fk_idusuario_dtgastos FOREIGN KEY(idusuario) REFERENCES usuarios(idusuario)
 )ENGINE = INNODB;
 
 -- CUOTAS
