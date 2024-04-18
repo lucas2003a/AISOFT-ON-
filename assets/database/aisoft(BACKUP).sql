@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 18-04-2024 a las 10:28:34
+-- Tiempo de generación: 18-04-2024 a las 19:53:59
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -3312,11 +3312,11 @@ CREATE TABLE `proyectos` (
 --
 
 INSERT INTO `proyectos` (`idproyecto`, `imagen`, `iddireccion`, `codigo`, `denominacion`, `latitud`, `longitud`, `perimetro`, `iddistrito`, `direccion`, `create_at`, `update_at`, `inactive_at`, `idusuario`) VALUES
-(1, NULL, 1, 'A-12 SAN BLAS', 'RESIDENCIAL SAN BLAS', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 1007, 'Dirección A-12 SAN BLAS', '2024-04-17', NULL, NULL, 1),
-(2, NULL, 1, 'A-17 SAN PEDRO', 'RESIDENCIAL SAN PABLO', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 1007, 'Dirección A-17 SAN PEDRO', '2024-04-17', NULL, NULL, 2),
-(3, NULL, 1, 'A-13 Santo Domingo', 'RESIDENCIAL Santo Domingo', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 1007, 'Dirección Santo Domingo', '2024-04-17', NULL, NULL, 3),
-(4, NULL, 1, 'A-14 Centenario II', 'RESIDENCIAL Centenario II', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 1007, 'Dirección Centenario II', '2024-04-17', NULL, NULL, 4),
-(5, NULL, 1, 'A-15 Kalea Playa', 'Kalea Playa', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 1007, 'Dirección Kalea Playa', '2024-04-17', NULL, NULL, 5);
+(1, '5adf8e42c04f0f2e9e37f5940df5c7d08369019f.jpg', 1, 'A-12 SAN BLAS', 'RESIDENCIAL SAN BLAS', NULL, NULL, '{\"clave\":[\"\"],\"valor\":[\"\"]}', 1007, 'Dirección A-12 SAN BLAS', '2024-04-17', '2024-04-18', NULL, 1),
+(2, '29ab08538c814f0367a5959884009ff577401cd4.jpg', 4, 'A-17 SAN PEDRO', 'RESIDENCIAL SAN PABLO', NULL, NULL, '{\"clave\":[\"\"],\"valor\":[\"\"]}', 1008, 'Dirección A-17 SAN PEDRO', '2024-04-17', '2024-04-18', NULL, 1),
+(3, 'f1eade5ed1cddfd455f0262965c522d643ca76d0.jpg', 1, 'A-13 Santo Domingo', 'RESIDENCIAL Santo Domingo', NULL, NULL, '{\"clave\":[\"\"],\"valor\":[\"\"]}', 1007, 'Dirección Santo Domingo', '2024-04-17', '2024-04-18', NULL, 1),
+(4, 'a004814d963cd9ff52612d45ec7fb40e13383d1f.jpg', 1, 'A-14 Centenario II', 'RESIDENCIAL Centenario II', NULL, NULL, '{\"clave\":[\"\"],\"valor\":[\"\"]}', 1007, 'Dirección Centenario II', '2024-04-17', '2024-04-18', NULL, 1),
+(5, '6ebb9ccd146bcf2b1317377469478ada9761e664.jpg', 4, 'A-15 Kalea Playa', 'Kalea Playa', NULL, NULL, '{\"clave\":[\"\"],\"valor\":[\"\"]}', 1008, 'Dirección Kalea Playa', '2024-04-17', '2024-04-18', NULL, 1);
 
 --
 -- Disparadores `proyectos`
