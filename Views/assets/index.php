@@ -591,9 +591,9 @@ document.addEventListener("DOMContentLoaded",()=>{
         
         let code = btoa(asset.idactivo) //CODIFICACIÓN
   
-        let IconStatus = asset.estado == "SIN VENDER" ?  `<span class="badge badge-sm bg-gradient-danger">${asset.estado}</span>` : 
-                                        asset.estado = "VENDIDO" ? `<span class="badge badge-sm bg-gradient-success">${asset.estado}</span>`: 
-                                                                  `<span class="badge badge-sm bg-gradient-secondary">${asset.estado}</span>` ;
+        let IconStatus = asset.estado == "SIN VENDER" ?  `<span class="badge badge-sm bg-danger">${asset.estado}</span>` : 
+                                        asset.estado == "VENDIDO" ? `<span class="badge badge-sm bg-success">${asset.estado}</span>`: 
+                                                                  `<span class="badge badge-sm bg-warning">${asset.estado}</span>` ;
   
         newRow = `
                 <tr>
@@ -618,9 +618,9 @@ document.addEventListener("DOMContentLoaded",()=>{
                   </td>
                   <td class="align-middle">
                     <div class="btn-group">
-                        <a type="button" href="./delete_asset.php?id=${code}" class="btn btn-danger btn-sm" id="btn-delete"><i class="bi bi-trash-fill"></i></a>
-                        <a type="button" href="./edit_asset.php?id=${code}" class="btn btn-primary btn-sm" id="btn-edit"><i class="bi bi-pencil-fill"></i></a>
-                        <a type="button" href="./detail_asset.php?id=${code}" class="btn btn-success btn-sm"><i class="bi bi-arrow-right-square"></i></a>
+                        <a type="button" href="./delete_asset.php?id=${code}" class="btn btn-link text-danger text-gradient px-3 mb-0" id="btn-delete"><i class="bi bi-trash-fill"></i></a>
+                        <a type="button" href="./edit_asset.php?id=${code}" class="btn btn-link text-dark px-3 mb-0" id="btn-edit"><i class="bi bi-pencil-fill"></i></a>
+                        <a type="button" href="./detail_asset.php?id=${code}" class="btn btn-link text-success px-3 mb-0"><i class="bi bi-arrow-right-square"></i></a>
                         </div>
                     </td>
                 </tr>           

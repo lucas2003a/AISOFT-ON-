@@ -93,7 +93,7 @@ BEGIN
         LIMIT 10;
 END $$
 DELIMITER ;
-
+select * from contratos;
 DELIMITER $$
 CREATE PROCEDURE spu_get_lot_reports(IN _idproyecto INT)
 BEGIN

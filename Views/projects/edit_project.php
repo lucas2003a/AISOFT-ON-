@@ -571,7 +571,7 @@
                                             <div class="row">
                                                 <div class="col-md-11">
                                                     <div class="row">
-                                                        <div class="col-md-6">
+                                                        <div class="col-md-6 mb-2">
                                                             <input type="text" class="form-control perim-key" name="clave" id="clave">
                                                         </div>
                                                         <div class="col-md-6">
@@ -579,7 +579,7 @@
                                                         </div>
                                                     </div>                                               
                                                 </div>
-                                                <div class="col-md-1">
+                                                <div class="col-md-1 mt-2">
                                                     <button type="button" class="btn btn-success pluss" id="add-textBox">+</button>
                                                 </div>
                                             </div>

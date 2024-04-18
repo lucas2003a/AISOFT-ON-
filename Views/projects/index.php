@@ -425,6 +425,7 @@
       <!-- RENDER -->
       <div class="row mt-4" id="card-project">
 
+      
         <!-- CARD PROYECTOS -->
       </div>
 
@@ -543,55 +544,60 @@
             `<li><a class="dropdown-item border-radius-md" href='./edit_project.php?id=${code}'><img src="../../assets/img/iconos/lapiz-blue.png" style="width: 24px;"> Editar</a></li>`;
 
             newCard = `
-          <div class="col-lg-6 mb-lg-0 mb-4 mt-4">
-            <div class="card">
-              <div class="col-lg-12 col-12 my-auto text-end p-2">
-                <div class="dropdown float-lg-end pe-4" style="z-index: 100;">
-                  <a class="cursor-pointer" id="dropdownTable" data-bs-toggle="dropdown" aria-expanded="false">
-                    <i class="fa fa-ellipsis-v text-secondary"></i>
-                  </a>
-                  <ul class="dropdown-menu px-2 py-3 ms-sm-n4 ms-n5" aria-labelledby="dropdownTable">
-                    ${options}
-                    <li><a class="dropdown-item border-radius-md "href="./${item.idproyecto}"><img src="../../assets/img/iconos/planet-earth.png" style="width: 24px;"> Mapa</a></li>
-                  </ul>
+            <div class="col-lg-6 mb-lg-0 mb-4 mt-4">
+              <div class="card">
+                <div class="col-lg-12 col-12 my-auto text-end p-2">
+                  <div class="dropdown float-lg-end pe-4" style="z-index: 100;">
+                    <a class="cursor-pointer" id="dropdownTable" data-bs-toggle="dropdown" aria-expanded="false">
+                      <i class="fa fa-ellipsis-v text-secondary"></i>
+                    </a>
+                    <ul class="dropdown-menu px-2 py-3 ms-sm-n4 ms-n5" aria-labelledby="dropdownTable">
+                      ${options}
+                      <li><a class="dropdown-item border-radius-md "href="./${item.idproyecto}"><img src="../../assets/img/iconos/planet-earth.png" style="width: 24px;"> Mapa</a></li>
+                    </ul>
+                  </div>
                 </div>
-              </div>
-              <div class="card-body" style="padding: 50px mt-0">
-                <div class="row">
-                  <div class="col-lg-6">
-                    <div class="d-flex flex-column h-100">
-                      <p class="mb-1 pt-2 text-bold">${item.denominacion}</p>
-                      <h5 class="font-weight-bolder"></h5>
-                      <p class="card-text"><strong><i class="bi bi-signpost-2 btn-adress"></i> </strong>${item.direccion}</p>
-                      <p class="card-text"><i class="bi bi-flag btn-band"></i>${item.distrito}-${item.provincia}-${item.departamento}</p>
-                      <p style="margin-top: 3rem; margin-bottom: 1rem;">
-                        <button class="btn btn-danger"><i class="bi bi-building-fill-slash"></i> ${item.l_noVendidos}</button>
-                        <button class="btn btn-secondary"><i class="bi bi-building-fill-lock"></i> ${item.l_separados}</button>
-                        <button class="btn btn-success"><i class="bi bi-building-fill-check"></i> ${item.l_vendidos}</button>
-                        <button class="btn btn-success"><i class="bi bi-houses-fill"></i> ${item.l_total}</button>
-                      </p>
+                <div class="card-body" style="padding: 50px mt-0">
+                  
+                <div class="d-flex align-items-center justify-content-center h-100">
+                  <img class="border-radius-lg w-100 position-relative z-index-2 mt-4" style="height: 300px;" src="../../media/logos/${newImage}" alt="${item.imagen}">
+                    </div>
+                    <span>${item.codigo}</span>
+                  <div class="row">
+                    <div class="col-md-6 mt-4">
+                      <div class="d-flex flex-column h-100">
+                        <p class="mb-1 pt-2 text-bold"><strong>${item.denominacion}</strong></p>
+                        <h5 class="font-weight-bolder"></h5>
+                        <p class="card-text"><i class="bi bi-signpost-2 btn btn-link text-dark px-3 mb-0"></i>${item.direccion}</p>
+                        <p class="card-text"><i class="bi bi-flag btn btn-link text-dark px-3 mb-0"></i>${item.distrito}-${item.provincia}-${item.departamento}</p>
+                        
+                      </div>
+                    </div>
+                    <div class="col-lg-5 ms-auto text-center mt-4">
 
+                      <div class="btn-group">
+                        <button class="btn btn-danger">${item.l_noVendidos} \n <p class="counter">sin vender</p></button>
+                        <button class="btn btn-secondary">${item.l_separados} \n <p class="counter">separados</p></button>
+                      </div>
+
+                      <div class="btn-group">
+                        <button class="btn btn-success">${item.l_vendidos} \n <p class="counter">vendidos</p></button>
+                        <button class="btn btn-primary">${item.l_total} \n <p class="counter">total</p></button>
+                      </div>
+
+                    </div>
+                    <div class="mt-4">
                       <a class="text-body text-sm font-weight-bold mb-0 icon-move-right mt-auto" href="../assets/index.php?id=${code}&name=${name}">
                         Ver más
                         <i class="fas fa-arrow-right text-sm ms-1" aria-hidden="true"></i>
                       </a>
                     </div>
                   </div>
-                  <div class="col-lg-5 ms-auto text-center mt-5 mt-lg-0">
-                    
-                    <span>${item.codigo}</span>
-                    <div class="bg-gradient-primary border-radius-lg h-100">
-                      <img src="../../assets/img/shapes/waves-white.svg" class="position-absolute h-100 w-50 top-0 d-lg-block d-none" alt="waves">
-                      
-                      <div class="position-relative d-flex align-items-center justify-content-center h-100">
-                        <img class="w-100 position-relative z-index-2 pt-4" src="../../media/logos/${newImage}" alt="${item.imagen}">
-                        </div>
-                    </div>
-                  </div>
                 </div>
               </div>
             </div>
-          </div>
+
+
             `;
             cardProject.innerHTML += newCard;
 
