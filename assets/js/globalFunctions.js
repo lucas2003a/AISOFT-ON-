@@ -25,6 +25,28 @@ class FunGlobal{
         }
         
     };
+    /**
+     * Método para realizar aciones en base a una URL y un objeto (devuelve un Blob)
+     * @param {string} url 
+     * @param {object} params 
+     * @returns 
+     */
+    async sendActionFile(url, params){
+
+        try{
+            
+            let response = await fetch(url,{
+                method: "POST",
+                body:params
+            });
+            const result = await response.blob(); 
+            return result;
+
+        }catch(e){
+            console.error(e);
+        }
+        
+    };
 
     /**
      * GETSON RETORNA UN JSON EN BASE A DOS CLASES DE EIQUETAS INPUT

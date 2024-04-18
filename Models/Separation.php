@@ -11,6 +11,20 @@ class Separation extends Conection{
         $this->conection = parent::getConection();
     }
 
+    public function listSeparations(){
+
+        try{
+
+            $query = $this->conection->prepare("CALL spu_lis_separations()");
+            $query->execute();
+
+            return $query->fetchAll(PDO::FETCH_ASSOC);
+
+        }catch(Exception $e){
+            die($e->getMessage());
+        }
+    }
+
     public function listByIdAsset($idactivo = 0){
 
         try{

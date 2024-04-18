@@ -95,7 +95,6 @@ if(isset($_POST["action"])){
                     "latitud"       => $_POST["latitud"],
                     "longitud"      => $_POST["longitud"],
                     "perimetro"     => $_POST["perimetro"],
-                    "det_casa"      => $_POST["det_casa"],
                     "precio_venta"  => $_POST["precio_venta"],
                     "idusuario"     => 1
                     /* "idusuario"     => $_POST["idusuario"] */
@@ -114,7 +113,9 @@ if(isset($_POST["action"])){
 
                 }else{
 
-                    $dataObtained["imagen"] = $nom_img;
+                    $result = $asset->listAssetId($dataObtained["idactivo"]);
+
+                    $dataObtained["imagen"] = $result["imagen"];
                 }
 
                 echo json_encode($asset->setAsset($dataObtained));
@@ -135,6 +136,16 @@ if(isset($_POST["action"])){
 
                 echo json_encode($asset->restoreAsset($idactivo));
             
+            break;
+
+        case "setDetAssetBuild": 
+                $dataObtained = [
+                    "idactivo" => $_POST["idactivo"],
+                    "det_casa" => $_POST["det_casa"]
+                ];
+
+
+                echo json_encode($asset->setDetAssetBuid($dataObtained));
             break;
     }
 }
