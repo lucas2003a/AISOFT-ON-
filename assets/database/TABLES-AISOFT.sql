@@ -37,8 +37,12 @@ CREATE TABLE personas
     estado_civil 		VARCHAR(10) 		NOT NULL,
     iddistrito 			INT					NOT NULL,
     direccion			VARCHAR(60) 		NOT NULL,
+    create_at 			DATE 				NOT NULL 	DEFAULT(CURDATE()),
+    update_at 			DATE 				NULL,
+    inactive_at 		DATE 				NULL,
     CONSTRAINT uk_documento_nro_pers UNIQUE(documento_nro),
-    CONSTRAINT fk_iddistrito_pers FOREIGN KEY(iddistrito) REFERENCES distritos(iddistrito)
+    CONSTRAINT fk_iddistrito_pers FOREIGN KEY(iddistrito) REFERENCES distritos(iddistrito),
+    CONSTRAINT fk_idusuario_pers FOREIGN KEY(idusuario) REFERENCES usuarios(idusuario)
 )ENGINE = INNODB;
 
 -- constructora
@@ -81,6 +85,7 @@ CREATE TABLE representantes
     create_at 			DATE 			NOT NULL	DEFAULT (CURDATE()),
     update_at			DATE 			NULL,
     inactive_at			DATE 			NULL,
+    CONSTRAINT uk_idpersona_rep UNIQUE(idpersona),
 	CONSTRAINT fk_idpersona_rep FOREIGN KEY(idpersona) REFERENCES personas(idpersona),
     CONSTRAINT fk_idsede_rep FOREIGN KEY(idsede) REFERENCES sedes(idsede)
 )ENGINE = INNODB;
@@ -227,7 +232,7 @@ CREATE TABLE activos(
     idpresupuesto		INT					NULL,
     propietario_lote 	VARCHAR(70)			NOT NULL,
     precio_lote 		DECIMAL(8,2)		NOT NULL,
-    precio_construccion	DECIMAL(8,2)		NOT NULL,
+    precio_construccion	DECIMAL(8,2)		NULL,
 	create_at 			DATE 				NOT NULL	DEFAULT(CURDATE()),
     update_at			DATE 				NULL,
     inactive_at			DATE 				NULL,
@@ -250,13 +255,17 @@ CREATE TABLE  personas_juridicas
     partida_elect 				VARCHAR(100) 	NULL,
     iddistrito 					INT 			NOT NULL,
     direccion 					VARCHAR(70) 	NOT NULL,
+    create_at 					DATE 			NOT NULL DEFAULT(CURDATE()),
+    update_at 					DATE 			NULL,
+    inactive_at 				DATE 			NULL,
     CONSTRAINT uk_documento_nro_pj UNIQUE(documento_nro),
     CONSTRAINT uk_documento_nro_representante_pj UNIQUE(documento_nro_representante),
     CONSTRAINT fk_iddistrito_pj FOREIGN KEY(iddistrito) REFERENCES distritos(iddistrito)
 )ENGINE = INNODB;
 
 -- CLIENTES
-CREATE TABLE clientes(
+CREATE TABLE clientes
+(
 	idcliente			INT PRIMARY KEY AUTO_INCREMENT,
     tipo_persona		VARCHAR(10) 	NOT NULL,
     idpersona			INT 			NULL,
@@ -271,16 +280,14 @@ CREATE TABLE clientes(
 )ENGINE = INNODB;
 
 -- SEPARACIONES
-CREATE TABLE separaciones(
+CREATE TABLE separaciones
+(
 	idseparacion  			INT PRIMARY KEY AUTO_INCREMENT,
     idactivo				INT 			NOT NULL,
     idcliente 				INT  			NOT NULL,
     idconyugue 				INT 			NULL,
     separacion_monto		DECIMAL(4,2) 	NOT NULL,
     fecha_pago				DATE 			NOT NULL,
-    fecha_devolucion		DATE 			NULL,
-    monto_devolucion 		DECIMAL(4,2)	NULL,
-    estado 					VARCHAR(10) 	NOT NULL,
     imagen					VARCHAR(100) 	NOT NULL,
 	create_at 				DATE 			NOT NULL	DEFAULT (CURDATE()),
     update_at				DATE 			NULL,
@@ -292,9 +299,24 @@ CREATE TABLE separaciones(
     CONSTRAINT fk_idusuario_sep FOREIGN KEY(idusuario) REFERENCES usuarios(idusuario)
 )ENGINE = INNODB;
 
-ALTER TABLE separaciones MODIFY COLUMN idconyugue INT NULL;
+-- deboluciones
+CREATE TABLE devoluciones
+(
+	iddevolucion 		INT PRIMARY KEY AUTO_INCREMENT,
+    idseparacion		INT 			NOT NULL,
+    fecha_devolucion	DATE 			NOT NULL,
+    monto_devolucion 	DECIMAL(4,2)	NOT NULL,
+    create_at 				DATE 		NOT NULL	DEFAULT (CURDATE()),
+    update_at				DATE 		NULL,
+    inactive_at				DATE 		NULL,
+    idusuario 				INT 		NOT NULL,
+    CONSTRAINT fk_idseparacion_dev FOREIGN KEY(idseparacion) REFERENCES separaciones(idseparacion),
+    CONSTRAINT fk_idusuario_dev FOREIGN KEY(idusuario) REFERENCES usuarios(idusuario)
+)ENGINE= INNODB;
+
 -- CONTRATOS
-DROP TABLE contratos(
+CREATE TABLE contratos
+(
 	idcontrato 				INT PRIMARY KEY AUTO_INCREMENT,
     tipo_contrato 			VARCHAR(40)		NOT NULL,
     idseparacion 					INT 	NULL,
@@ -324,7 +346,9 @@ CREATE TABLE financieras(
 	idfinanciera 			INT PRIMARY KEY AUTO_INCREMENT,
     ruc						CHAR(11) 		NOT NULL,
     razon_social 			VARCHAR(60) 	NOT NULL,
+    iddistrito 				INT 			NOT NULL,
     direccion 				VARCHAR(70) 	NOT NULL,
+    CONSTRAINT fk_iddistrito_finans FOREIGN KEY(iddistrito) REFERENCES distritos(iddistrito),
     CONSTRAINT uk_ruc_finans UNIQUE(ruc)
 )ENGINE = INNODB;
 
@@ -346,7 +370,7 @@ CREATE TABLE desembolsos(
 )ENGINE = INNODB;
 
 -- CUOTAS
-DROP TABLE cuotas(
+CREATE TABLE cuotas(
 	idcuota 				INT PRIMARY KEY AUTO_INCREMENT,
     idcontrato		INT  			NOT NULL,
     monto_cuota 			DECIMAL(8,2) 	NOT NULL,
@@ -364,7 +388,7 @@ DROP TABLE cuotas(
 )ENGINE = INNODB;
 
 -- SUSTENTOS CUOTAS
-DROP TABLE sustentos_cuotas(
+CREATE TABLE sustentos_cuotas(
 	idsustento_cuota 		INT PRIMARY KEY AUTO_INCREMENT,
     idcuota					INT 			NOT NULL,
     ruta 					VARCHAR(100) 	NOT NULL,
