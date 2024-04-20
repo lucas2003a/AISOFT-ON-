@@ -1,63 +1,12 @@
 DELIMITER $$
 CREATE PROCEDURE spu_get_lots_status()
 BEGIN
-select 
-	sum(l_vendidos) as l_vendidos,
-    sum(l_noVendidos) as l_noVendidos,
-    sum(l_separados) as l_separados
-	from metricas 
-	where YEAR(update_at) = YEAR(NOW());
+	SELECT 
+		(SUM(l_vendidos)) AS l_vendidos,
+        (SUM(l_noVendidos)) AS l_noVendidos,
+        (SUM(l_separados)) AS l_separados
+	FROM metricas;
 END $$
-DELIMITER ;
-
-DELIMITER $$
-CREATE PROCEDURE spu_get_least_sould()
-BEGIN
-select 
-    l_noVendidos,
-    proy.idproyecto,
-    proy.denominacion,
-    proy.imagen
-	from metricas AS met
-    INNER JOIN proyectos AS proy ON proy.idproyecto = met.idproyecto
-	WHERE YEAR(met.update_at) = YEAR(NOW())
-    ORDER BY 1 DESC
-    LIMIT 1;
-END $$
-DELIMITER ;
-
-DELIMITER $$
-CREATE PROCEDURE spu_get_most_separations()
-BEGIN
-select 
-    l_separados,
-    proy.idproyecto,
-    proy.denominacion,
-    proy.imagen
-	from metricas AS met
-    INNER JOIN proyectos AS proy ON proy.idproyecto = met.idproyecto
-	WHERE YEAR(met.update_at) = YEAR(NOW())
-    ORDER BY 1 DESC
-    LIMIT 1;
-END $$
-DELIMITER ;
-
-DELIMITER $$
-CREATE PROCEDURE spu_get_most_sould()
-BEGIN
-select 
-    l_vendidos,
-    proy.idproyecto,
-    proy.denominacion,
-    proy.imagen
-	from metricas AS met
-    INNER JOIN proyectos AS proy ON proy.idproyecto = met.idproyecto
-	WHERE YEAR(met.update_at) = YEAR(NOW())
-    ORDER BY 1 DESC
-    LIMIT 1;
-END $$
-DELIMITER ;
-
 DELIMITER $$
 CREATE PROCEDURE spu_get_yearly_sales()
 BEGIN
@@ -71,29 +20,51 @@ select
     ORDER BY 1 DESC; 
 END $$
 DELIMITER ;
+select * from clientes
 
 DELIMITER $$
 CREATE PROCEDURE spu_get_new_clients()
 BEGIN
+	WITH personasInfo AS(
+		SELECT 
+        idpersona,
+		CONCAT(nombres,'',apellidos) As cliente,
+        documento_tipo,
+        documento_nro,
+        direccion
+        FROM personas
+    ),
+    personasj AS(
+		SELECT
+			idpersona_juridica,
+			razon_social AS cliente,
+            documento_tipo,
+            documento_nro,
+            direccion
+            FROM personas_juridicas
+    )
+    
 	SELECT 
 		sep.idseparacion,
 		cli.idcliente,
-        cli.apellidos,
-        cli.nombres,
-        cli.documento_tipo,
-        cli.documento_nro,
+        cli.tipo_persona,
+        pi.*,
+        pj.*,
         act.sublote,
         proy.denominacion
 		FROM separaciones AS sep
         INNER JOIN clientes AS cli ON cli.idcliente = sep.idcliente
         INNER JOIN activos AS act ON act.idactivo = sep.idactivo
+        LEFT JOIN personasInfo AS pi ON pi.idpersona = cli.idpersona
+        LEFT JOIN personasj AS pj ON pj.idpersona_juridica = cli.idpersona_juridica
         INNER JOIN proyectos AS proy ON proy.idproyecto = act.idproyecto
         GROUP BY  2
         ORDER BY 2 DESC
         LIMIT 10;
 END $$
 DELIMITER ;
-select * from contratos;
+CALL spu_get_new_clients();
+select * from separaciones;
 DELIMITER $$
 CREATE PROCEDURE spu_get_lot_reports(IN _idproyecto INT)
 BEGIN

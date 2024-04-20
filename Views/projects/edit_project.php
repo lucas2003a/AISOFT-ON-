@@ -912,13 +912,6 @@
 
       let url = `../../Controllers/project.controller.php`;
 
-<<<<<<< HEAD:pages/projects/edit_project.php
-      //Guarda la imagen anterior
-      let img = $("#in-image").files.length > 0 ? $("#in-image").files[0] : $("#in-image").files[0] = null;
-      //let img = $("#in-image").files[0] ? $("#in-image").files[0] : null;
-
-=======
->>>>>>> 59bb3783d0384f43bac578b13dbd35db47fd2705:Views/projects/edit_project.php
       //Iniica la operacion
       let params = new FormData();
   
