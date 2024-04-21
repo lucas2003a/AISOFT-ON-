@@ -1043,36 +1043,8 @@ DELIMITER ;
 DELIMITER $$
 CREATE PROCEDURE spu_list_separation_ByIdAsset(IN _idactivo INT)
 BEGIN
-	SELECT 
-		sep.idseparacion,
-        sep.idactivo,
-        sep.sublote,
-        proy.denominacion,
-        clie.tipo_persona,
-        pers.apellidos,
-        pers.nombres,
-        pers.razon_social,
-        pers.documento_tipo,
-        pers.documento_nro,
-        cony.apellidos,
-        cony.nombres,
-        cony.razon_social,
-        cony.documento_tipo,
-        cony.documento_nro,
-        sep.separacion_monto,
-        sep.fecha_pago,
-        usuPers.idusuario AS usuario
-		FROM separaciones AS sep
-        INNER JOIN clientes AS clie ON clie.idcliente = sep.idcliente
-        LEFT JOIN clientes AS cony ON cony.idcliente = sep.idconyugue
-        
-        INNER JOIN personas AS pers ON pers.idpersona = clie.idpersona
-        LEFT JOIN persona AS conyper ON conyper.idpersona = cony.idpersona
-        
-        INNER JOIN usuarios AS usu ON usu.idusuario = sep.idusuario
-        INNER JOIN personas AS usuPers ON usuPers.idpersona = usu.idpersona
-		WHERE sep.idactivo = _idactivo
-		AND sep.inactive_at IS NULL;
+	
+    
 END $$
 DELIMITER ;
 

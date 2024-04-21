@@ -433,8 +433,8 @@
           <!-- IMAGEN -->
           <div class="row">
             <div class="col-xl-6 mb-xl-0 mb-4">
-              <div class="card bg-transparent shadow-xl">
-                <div class="overflow-hidden position-relative border-radius-xl" style="background-image: url('../../assets/img/curved-images/curved14.jpg');height:12rem;" id="imagen">
+              <div class="card bg-transparent shadow-xl"  style="height: 100%;">
+                <div class="overflow-hidden position-relative border-radius-xl" style="background-image: url('../../assets/img/curved-images/curved14.jpg');" id="imagen">
                   <span class="mask bg-gradient-dark" id="mask"></span>
                   <div class="card-body position-relative z-index-1 p-3">
                   </div>
@@ -447,21 +447,22 @@
             <div class="col-xl-6">
               <div class="row">
                 <div class="col-md-6">
-                  <div class="card">
+                  <div class="card"  style="height: 100%;">
                     <div class="card-header mx-4 p-3 text-center">
                       <div class="icon icon-shape icon-lg bg-gradient-primary shadow text-center border-radius-lg">
                       <i class="fa-solid fa-coins opacity-10"></i>
                       </div>
                     </div>
                     <div class="card-body pt-0 p-3 text-center">
-                      <h6 class="text-center mb-0">Moneda de venta</h6>
+                      <h6 class="text-center mb-0">Precio de construcción</h6>
                       <hr class="horizontal dark my-3">
-                      <h5 class="mb-0" id="moneda_venta">--</h5>
+                      <h5 class="mb-0" id="precio_construccion">--</h5>
                     </div>
                   </div>
                 </div>
+
                 <div class="col-md-6 mt-md-0 mt-4">
-                  <div class="card">
+                  <div class="card"  style="height: 100%;">
                     <div class="card-header mx-4 p-3 text-center">
                       <div class="icon icon-shape icon-lg bg-gradient-primary shadow text-center border-radius-lg">
                       <i class="fa-solid fa-hand-holding-dollar opacity-10"></i>
@@ -574,6 +575,18 @@
                     <h6 class="mb-1 text-dark font-weight-bold text-sm">Tipo </h6>
                   </div>
                   <div class="d-flex align-items-center text-sm" id="tipo_activo">
+                    
+                    <!-- RENDER -->
+
+                  </div>
+                </li>
+
+              <!-- MONEDA VENTA -->
+                <li class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg">
+                  <div class="d-flex flex-column">
+                    <h6 class="mb-1 text-dark font-weight-bold text-sm">Moneda de venta </h6>
+                  </div>
+                  <div class="d-flex align-items-center text-sm" id="moneda_venta">
                     
                     <!-- RENDER -->
 
@@ -852,7 +865,7 @@
           $("#precio_lote").innerText = result.precio_lote;
 
           $("#estado").innerHTML = result.estado;
-          $("#ubigeo").innerHTML = `${result.distrito} - ${result.provincia}- ${result.departamento}`;
+          $("#ubigeo").innerHTML = `${result.distrito} - ${result.provincia} - ${result.departamento}`;
           $("#direccion").innerHTML = result.direccion;
           $("#tipo_activo").innerHTML = result.tipo_activo;
           $("#partida_elect").innerHTML = result.partida_elect;
