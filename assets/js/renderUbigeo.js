@@ -124,10 +124,10 @@ document.addEventListener("DOMContentLoaded",()=>{
                 
                 results.forEach(address=>{
                     let newOption = document.createElement("option");
-                    newOption.value = address.iddireccion;
+                    newOption.value = address.idsede;
                     newOption.innerText = address.direccion;
         
-                    $("#iddireccion").appendChild(newOption);
+                    $("#idsede").appendChild(newOption);
                 });
             }
         }
@@ -154,7 +154,7 @@ document.addEventListener("DOMContentLoaded",()=>{
 
     $("#iddistrito").addEventListener("change",()=>{
 
-        resetSelect("#iddireccion","Sedes",renderSedes);
+        resetSelect("#idsede","Sedes",renderSedes);
     });
 
     $("#idprovincia").addEventListener("change",()=>{

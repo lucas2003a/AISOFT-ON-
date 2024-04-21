@@ -25,5 +25,19 @@ class Distrito extends Conection{
             die($e->getMessage());
         }
     }
+
+    public function getUbigeo($iddistrito = 0){
+
+        try{
+
+            $query = $this->conection->prepare("CALL spu_get_ubigeo(?)");
+            $query->execute(array($iddistrito));
+
+            return $query->fetch(PDO::FETCH_ASSOC);
+        }
+        catch(Exception $e){
+            die($e->getMessage());
+        }
+    }
 }
 ?>

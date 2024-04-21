@@ -429,7 +429,15 @@
             <div class="card">
               <div class="card-body" style="padding: 50px">
                 <div class="row">
-                  <div class="col-lg-6">
+                <div class="h-50" style="display: flex; justify-content: center;">
+                      
+                      <div class="position-relative d-flex align-items-center justify-content-center h-100">
+                        <img class="w-100 position-relative z-index-2 pt-4" style="width: 100%;" id="file-view" src="../../media/logos/NoImage.jpg" alt="">
+                      </div>
+                    </div>
+
+                  <div>
+                    
                     <div class="d-flex flex-column h-100">
                       <form class="row needs-validation" id="form-add-project" novalidate>
                             <div class="row">
@@ -481,8 +489,8 @@
 
                                     <!-- IDDIRECCIÓN -->
                                     <div class="mt-4">
-                                        <label for="iddireccion" class="form-label">Sede</label>
-                                        <select class="form-select custom-select-scroll" id="iddireccion" required>
+                                        <label for="idsede" class="form-label">Sede</label>
+                                        <select class="form-select custom-select-scroll" id="idsede" required>
                                             <option selected disabled value="">Sede</option>                                            
                                         </select>
                                         <div class="invalid-feedback">
@@ -517,7 +525,14 @@
                                         </div>
                                     </div>
     
-                                    <!-- DIRECCIÓN -->
+                                    
+    
+    
+                                    
+                                </div>
+    
+                                <div class="col-md-6">
+                                  <!-- DIRECCIÓN -->
                                     <div class="mt-4">
                                         <label for="direccion" class="form-label">Dirección</label>
                                         <input type="text" class="form-control" id="direccion" placeholder="Dirección" readonly required>
@@ -528,20 +543,6 @@
                                             Dirección ingresada correctamente.
                                         </div>
                                     </div>
-    
-    
-                                    <!-- IMAGEN -->
-                                    <div class="form-group">
-                                        <label for="in-image" class="label-img">
-                                            <i class="material-icons"></i>
-                                            <span class="title">Agregar imagen</span>
-                                            <input type="file" accept=".jpg" id="in-image">
-                                        </label>
-                                    </div>
-                                </div>
-    
-                                <div class="col-md-6">
-
                                     <!-- UBICACIÓN Y MEDIDAS-->
     
                                     <!-- LATITUD -->
@@ -554,60 +555,33 @@
                                     </div>
         
                                     <!-- LONGITUD -->
-                                    <div class="mt-4">
+                                    <div class="mt-4  ">
                                         <label for="longitud" class="form-label">Longitud</label>
                                         <input type="text" class="form-control" id="longitud">
                                         <div class="valid-feedback">
                                             <!-- -- -->
                                         </div>
                                     </div>
-        
-                                    <!-- PERÍMETRO -->                                    
-                                    <div class="mt-4" id="perim">
-                                        <label for="perimetro" class="form-label">Perímetro (Coordenadas)</label>
-                                        <hr>
-                                        <div id="patern">
-                                            <div class="row">
-                                                <div class="col-md-11">
-                                                    <div class="row">
-                                                        <div class="col-md-6 mb-2">
-                                                            <input type="text" class="form-control perim-key" name="clave" id="clave">
-                                                        </div>
-                                                        <div class="col-md-6">
-                                                            <input type="text" class="form-control perim-value" name="valor" id="valor">
-                                                        </div>
-                                                    </div>                                               
-                                                </div>
-                                                <div class="col-md-1 mt-2">
-                                                    <button type="button" class="btn btn-success pluss" id="add-textBox">+</button>
-                                                </div>
-                                            </div>
-                                            <div class="valid-feedback">
-                                                <!-- -- -->
-                                            </div>
-                                        </div>
-                                      </div>
-                                    <div class="m-4 col-md-12">
-                                        <div class="d-grid">
-
-                                            <button class="btn btn-success" type="submit" id="guardar" disabled>Guardar</button>
-                                        </div>
-                                    </div>
                                     
+                                    <!-- IMAGEN -->
+                                    <div class="form-group" style="margin-top: 70px;">
+                                        <label for="in-image" class="label-img">
+                                            <i class="material-icons"></i>
+                                            <span class="title" style="display: flex; justify-content: center;">Agregar imagen</span>
+                                            <input type="file" accept=".jpg" id="in-image">
+                                        </label>
+                                    </div>
+                                    <div class="d-grid p-3">
+
+                                        <button class="btn btn-success" type="submit" id="guardar" disabled>Guardar</button>
+                                    </div>
                                 </div>                                    
                             </div>
                         </form>
                     </div>
                   </div>
-                  <div class="col-lg-5 ms-auto text-center mt-5 mt-lg-0">
-                    
-                    <div class="bg-gradient-primary border-radius-lg h-50" style="display: flex;">
-                      
-                      <div class="position-relative d-flex align-items-center justify-content-center h-100">
-                        <img class="w-100 position-relative z-index-2 pt-4" style="width: max-content;" id="file-view" src="" alt="">
-                        </div>
-                    </div>
-                  </div>
+                  
+                </div>
                 </div>
               </div>
             </div>
@@ -797,24 +771,17 @@
 
       try{
 
-        //Otengo uun json de las cajas
-        let classKey = ".form-control.perim-key";
-        let classValue = ".form-control.perim-value";
-
-        let perim = global.getJson(classKey,classValue);
-
         //Realizo la operación
         let params = new FormData()
         let url = `../../Controllers/project.controller.php`;
   
         params.append("action","addProject");
         params.append("imagen",$("#in-image").files[0]);
-        params.append("iddireccion",$("#iddireccion").value);
+        params.append("idsede",$("#idsede").value);
         params.append("codigo",$("#codigo").value);
         params.append("denominacion",$("#denominacion").value);
         params.append("latitud",$("#latitud").value);
         params.append("longitud",$("#longitud").value);
-        params.append("perimetro",perim);
         params.append("iddistrito",$("#iddistrito").value);
         params.append("direccion",$("#direccion").value);
 
@@ -839,12 +806,17 @@
       }
     }
     
-    $("#direccion").addEventListener("keypress",(e)=>{
+    $("#direccion").addEventListener("input",(e)=>{
         
-        if(e.keyCode == 13){ //TECLA ENTER
+        clearTimeout(timer);
 
-            $("#guardar").removeAttribute("disabled");
-        }
+        timer = setTimeout(() => {
+          
+          if(e !== ""){ //TECLA ENTER
+  
+              $("#guardar").removeAttribute("disabled");
+          }
+        }, 1500);
     });
     
     $("#denominacion").addEventListener("keypress",(e)=>{

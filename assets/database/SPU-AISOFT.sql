@@ -9,6 +9,23 @@ BEGIN
 END $$
 DELIMITER ;
 
+DELIMITER $$
+CREATE PROCEDURE spu_get_ubigeo(IN _iddistrito INT)
+BEGIN
+	SELECT 
+		dist.iddistrito,
+        dist.distrito,
+        prov.idprovincia,
+        prov.provincia,
+        dept.iddepartamento,
+        dept.departamento
+		FROM distritos AS dist
+        INNER JOIN provincias AS prov ON prov.idprovincia = dist.idprovincia
+        INNER JOIN departamentos AS dept ON dept.iddepartamento = prov.iddepartamento
+        WHERE dist.iddistrito = 1010;
+END $$
+DELIMITER;
+
 -- PROVINCIAS
 DELIMITER $$
 CREATE PROCEDURE spu_list_provinces(IN _iddepartamento INT)
@@ -157,7 +174,7 @@ CREATE PROCEDURE spu_add_projects
     IN _idusuario 		INT
 )
 BEGIN
-	INSERT INTO proyectos(idsede, imagen, codigo, denominacion, latitud, longitud, perimetro, iddistrito, direccion, idusuario)
+	INSERT INTO proyectos(idsede, imagen, codigo, denominacion, latitud, longitud, iddistrito, direccion, idusuario)
 			VALUES
 				(_idsede, NULLIF(_imagen,""), _codigo, _denominacion, NULLIF(_latitud, ""), NULLIF(_longitud, ""), _iddistrito, _direccion, _idusuario);
                 
@@ -244,7 +261,7 @@ BEGIN
         act.propietario_lote,
         act.precio_lote,
         act.precio_construccion,
-        usu.nombres AS usuario
+        pers.nombres AS usuario
 		FROM activos AS act
         INNER JOIN proyectos AS proy ON proy.idproyecto = act.idproyecto
         INNER JOIN distritos AS dist ON dist.iddistrito = proy.iddistrito
@@ -252,6 +269,7 @@ BEGIN
         INNER JOIN departamentos AS dept ON dept.iddepartamento = prov.iddepartamento
         LEFT JOIN presupuestos AS pres ON pres.idpresupuesto = act.idpresupuesto
         INNER JOIN usuarios AS usu ON usu.idusuario = act.idusuario
+        INNER JOIN personas AS pers ON pers.idpersona = usu.idpersona
         WHERE act.idactivo = _idactivo
         AND act.inactive_at IS NULL;
 END $$
@@ -259,10 +277,11 @@ DELIMITER ;
 
 
 DELIMITER $$
-CREATE PROCEDURE spu_list_assets_short_idpr(IN _idproyecto INT)
+CREATE PROCEDURE spu_list_assets_short_idpr(IN _idproyecto INT, IN _propietario_lote VARCHAR(10))
 BEGIN
 	SELECT * FROM vws_list_assets_short
-    WHERE idproyecto = _idproyecto;
+    WHERE idproyecto = _idproyecto
+    AND propietario_lote = _propietario_lote;
 END $$
 DELIMITER ;
 
@@ -292,8 +311,6 @@ CREATE PROCEDURE spu_add_assets
     IN _latitud			VARCHAR(20),
     IN _longitud 		VARCHAR(20),
     IN _perimetro      	JSON,
-    IN _det_casa		JSON,
-    IN _idpresupuesto 	INT,
     IN _propietario_lote varchar(70),
     IN _precio_lote		DECIMAL(8,2),
     IN _precio_construccion		DECIMAL(8,2),
@@ -314,8 +331,6 @@ BEGIN
 						latitud, 
                         longitud, 
                         perimetro, 
-                        det_casa, 
-                        idpresupuesto,
                         propietario_lote,
                         precio_lote,
                         precio_construccion,
@@ -336,8 +351,6 @@ BEGIN
 				NULLIF(_latitud,""), 
                 NULLIF(_longitud, ""), 
                 NULLIF(_perimetro,""),
-                NULLIF(_det_casa,""), 
-                NULLIF(_idpresupuesto,""),
                 _propietario_lote,
                 _precio_lote,
                 NULLIF(_precio_construccion, ""), 

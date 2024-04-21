@@ -454,11 +454,34 @@
 
                                     </div>
     
-                                    <!-- ESTADO -->
+                                    <!-- TIPO ACTIVO -->
                                     <div class="mt-4">
-                                      <label for="tipo-activo" class="form-label">Tipo activo</label>
-                                        <input type="text" class="form-control" id="tipo-activo" readonly>
-
+                                      <label for="estado" class="form-label">Tipo de propiedad</label>
+                                      <select name="tipo_activo" class="form-select" id="tipo_activo">
+                                        <option value="LOTE">Lote</option>
+                                        <option value="CASA">Casa</option>
+                                      </select>
+                                      <div class="invalid-feedback">
+                                            Necesitas ingresar el tipo (casa/lote).
+                                        </div>
+                                        <div class="valid-feedback">
+                                            Casa/lote registrado correctamente.
+                                        </div>
+                                    </div>
+    
+                                    <!-- PROPIETARIO LOTE -->
+                                    <div class="mt-4">
+                                      <label for="estado" class="form-label">Propietarios</label>
+                                      <select name="propietario_lote" class="form-select" id="propietario_lote" disabled>
+                                        <option value="A.I.F">A.I.F</option>
+                                        <option value="TERCEROS">Terceros</option>
+                                      </select>
+                                      <div class="invalid-feedback">
+                                            Necesitas ingresar el propietario.
+                                        </div>
+                                        <div class="valid-feedback">
+                                            Propietario registrado correctamente.
+                                        </div>
                                     </div>
     
                                     <!-- SUBLOTE -->
@@ -489,7 +512,7 @@
                                     <div class="form-group">
                                         <label for="in-image" class="label-img">
                                             <i class="material-icons"></i>
-                                            <span class="title">Agregar imagen</span>
+                                            <span class="title d-flex justify-content-center">Agregar imagen</span>
                                             <input type="file" accept=".jpg" id="in-image">
                                         </label>
                                     </div>
@@ -497,7 +520,7 @@
                                 <div class="col-md-6">
                                   
                                   <div class="col-lg-12 ms-auto text-center mt-5 mt-lg-0">
-                                    <div class="bg-gradient-primary border-radius-lg h-100" style="display: flex; justify-content: center;">
+                                    <div class="h-100" style="display: flex; justify-content: center;">
                                     
                                       <div class="position-relative d-flex align-items-center justify-content-center h-100">
                                         <img class="w-100 position-relative z-index-2 pt-4" id="file-view" style="min-height: max-content; padding: 2rem;" src="" alt="">
@@ -506,9 +529,11 @@
                                   </div>
                                 </div>
                               </div>
-                              <div class="btn-group">
-                                <button type="button" class="btn btn-secondary prevBtn" disabled>Anterior</button>
-                                <button type="button" class="btn btn-success nextBtn">Siguiente</button>
+                              <div class="d-flex justify-content-center">
+                                <div class="btn-group">
+                                  <button type="button" class="btn btn-secondary prevBtn" disabled>Anterior</button>
+                                  <button type="button" class="btn btn-success nextBtn">Siguiente</button>
+                                </div>
                               </div>
                             </div>
                             
@@ -522,13 +547,18 @@
                                     <div>
                                       <label for="area" class="form-label">Área</label>
                                         <input type="number" class="form-control" id="area" min="0" value="000.00" placeholder="Àrea (m2)" required>
-
+                                        <div class="invalid-feedback">
+                                            Necesitas ingresar el área del lote.
+                                        </div>
+                                        <div class="valid-feedback">
+                                            Área del lote registrado correctamente.
+                                        </div>
                                     </div>
 
                                     <!-- ZONAS COMUNES -->
                                     <div class="mt-4">
                                       <label for="z-comunes" class="form-label">Zonas comunes</label>
-                                        <input type="number" class="form-control" id="z-comunes" min="0" max="100" placeholder="Zonas comúnes (%)" required>
+                                        <input type="number" class="form-control" id="z-comunes" min="0" max="100" placeholder="Zonas comúnes (%)">
 
                                     </div>
 
@@ -541,18 +571,35 @@
                                             <option value="USD">Dólares</option>
                                             <option value="SOL">Soles</option>
                                         </select>
-
-                                    </div>
-                                    
-                                    <!-- PRECIO VENTA -->
-                                    <div class="mt-4">
-                                        <label for="precio-venta" class="form-label">Precio de venta</label>
-                                        <input type="number" class="form-control" id="precio-venta" placeholder="Precio de venta" maxlength="7" minlength="7" required autofocus>
                                         <div class="invalid-feedback">
-                                            Necesitas ingresar un código.
+                                            Necesitas ingresar la moneda de venta.
                                         </div>
                                         <div class="valid-feedback">
-                                            Código registrado correctamente.
+                                            Moneda de venta registrada correctamente.
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- PRECIO LOTE -->
+                                    <div class="mt-4">
+                                        <label for="precio_lote" class="form-label">Precio del lote</label>
+                                        <input type="number" class="form-control" id="precio_lote" placeholder="Precio de venta" maxlength="7" minlength="7" min="0.00" value="0.00" required autofocus>
+                                        <div class="invalid-feedback">
+                                            Necesitas ingresar el precio del lote.
+                                        </div>
+                                        <div class="valid-feedback">
+                                            Precio del lote registrado correctamente.
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- PRECIO CONSTRUCCION -->
+                                    <div class="mt-4">
+                                        <label for="precio_construccion" class="form-label">Precio de la construcción</label>
+                                        <input type="number" class="form-control" id="precio_construccion" placeholder="Precio de construcción" maxlength="7" minlength="7" min="0.00" value="0.00">
+                                        <div class="invalid-feedback">
+                                            Necesitas ingresar el preecio de construcción.
+                                        </div>
+                                        <div class="valid-feedback">
+                                            Precio de construcción registrado correctamente.
                                         </div>
                                     </div>
     
@@ -565,7 +612,7 @@
                                             Necesitas ingresar la partida electrónica.
                                         </div>
                                         <div class="valid-feedback">
-                                        Partida electrónica registrada correctamente.
+                                            Partida electrónica registrada correctamente.
                                         </div>
                                     </div>
                                 </div>
@@ -614,7 +661,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="col-md-1 mt-2">
+                                            <div class="col-md-1">
                                                 <button type="button" class="btn btn-success pluss" id="add-textBox">+</button>
                                             </div>
                                         </div>
@@ -622,9 +669,12 @@
                                       </div>
                                 </div>
                               </div>
-                              <div class="btn-group mt-4">
-                                <button type="button" class="btn btn-secondary prevBtn">Anterior</button>
-                                <button type="submit" class="btn btn-success submit" id="guardar">Guardar</button>
+                              <div class="d-flex justify-content-center">
+
+                                <div class="btn-group mt-4">
+                                  <button type="button" class="btn btn-secondary prevBtn">Anterior</button>
+                                  <button type="submit" class="btn btn-success submit" id="guardar">Guardar</button>
+                                </div>
                               </div>
                             </div>
                         </form> 
@@ -730,7 +780,18 @@
   <script src="../../assets/js/sweetAlert.js"></script>
   <script src="../../assets/js/formMultiSteps.js"></script>
   <script src="../../assets/js/projects/interactionForms.js"></script>
+  <script src="../../assets/js/renderInputs.js"></script>
+  
   <!-- <script src="../../assets/js/renderUbigeo.js"></script>  -->
+
+  <!-- SELECT2 - JQUERY -->
+  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+  <script>
+
+    /* $('#propetario_lote').select2();  */
+
+  </script>
   <script>
 
   const global = new FunGlobal();
@@ -760,6 +821,20 @@
   let oldImage;
   let AllDataAssets;
   let idProyecto;
+
+  async function bucleOptions(select, param){
+
+    for(i = 0; i < select.options.length; i++){
+
+      if(select.options[i].value == param){
+
+        select.options[i].selected = true;
+
+        break;
+
+      }
+    }
+  }
 
   function renderInputs(key, value){
 
@@ -863,7 +938,11 @@
     /* FORMULARIO DATOS GENERALES  */
     $("#ubigeo").value = `${asset.distrito} - ${asset.provincia} - ${asset.departamento}`;
     $("#estado").value = asset.estado;
-    $("#tipo-activo").value = asset.tipo_activo;
+    
+    bucleOptions($("#tipo_activo"), asset.tipo_activo)
+
+    bucleOptions($("#propietario_lote"), asset.propietario_lote);
+
     $("#sublote").value = asset.sublote;
     $("#direccion").value = asset.direccion;
     $("#file-view").setAttribute("src",`../../media/lotes/${img}`);
@@ -872,7 +951,8 @@
     $("#area").value = asset.area_terreno;
     $("#z-comunes").value = asset.zcomunes_porcent;
     $("#moneda-venta").value = asset.moneda_venta;
-    $("#precio-venta").value = asset.precio_venta;
+    $("#precio_lote").value = asset.precio_lote;
+    $("#precio_construccion").value = asset.precio_construccion;
     $("#partida-elect").value = asset.partida_elect;
     $("#latitud").value = asset.latitud;
     $("#longitud").value = asset.longitud;
@@ -904,6 +984,7 @@
       let result =  await global.sendAction(url, params);
 
       if(result){
+        console.log(result);
 
         dataAsset = result;
         idProyecto = dataAsset.idproyecto;
@@ -968,19 +1049,23 @@
       params.append("action","setAsset");
       params.append("idactivo",id);
       params.append("idproyecto",idProyecto);
-      params.append("tipo_activo",dataAsset.tipo_activo);
+      params.append("tipo_activo",("#tipo_activo").value);
       params.append("imagen",img);
       params.append("estado",dataAsset.estado);
       params.append("sublote",$("#sublote").value);
       params.append("direccion",$("#direccion").value);
       params.append("moneda_venta",$("#moneda-venta").value);
-      params.append("precio_venta",$("#precio-venta").value);
+      params.append("precio_venta",$("#precio_lote").value);
       params.append("area_terreno",$("#area").value);
       params.append("zcomunes_porcent",$("#z-comunes").value);
       params.append("partida_elect",$("#partida-elect").value);
       params.append("latitud",$("#latitud").value);
       params.append("longitud",$("#longitud").value);
       params.append("perimetro",json);
+      params.append("idpresupuesto","");
+      params.append("propietario_lote",$("#propietario_lote").value);
+      params.append("precio_lote",$("#precio_lote").value);
+      params.append("precio_construccion",$("#precio_construccion").value);
 
       let results = await global.sendAction(url, params);
 
@@ -1006,7 +1091,19 @@
       console.error(e);
     }
   }
-  
+
+  $("#tipo_activo").addEventListener("change",(e)=>{
+
+    if(e.target.value == "CASA"){
+      $("#propietario_lote").removeAttribute("disabled");
+    
+    }else{
+    
+      $("#propietario_lote").setAttribute("disabled",true);
+      bucleOptions($("#propietario_lote"), "A.I.F");
+    }
+  });
+
   getAsset(idActivo);
 
 

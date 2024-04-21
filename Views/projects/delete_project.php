@@ -479,16 +479,6 @@
                                 </div>
                               </div>
 
-                              <div class="row">
-                                <div class="col-md-6">
-                                    <h3><strong>Perímetro: </strong></h3>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="m-4" id="perimetro">
-
-                                    </div>                                     
-                                </div>
-                              </div>
                               <div class="m-4" style="display:flex; justify-content: center;">
                                 <h4 class="ask-footer text-danger">¿Deseas eliminarlo?</h4>
                               </div>
@@ -622,32 +612,6 @@
   let dataProject;
   let AllProjects;
 
-  function renderInput(keys, values){
-
-    keys.forEach((key, index)=>{
-
-        let value = values[index];
-
-        if(key != "" || value != ""){
-
-            let newText = ``;
-
-            newText = `
-                <div class="row">
-                    <div class="col-md-6">
-                        <h4>${key}</h4>
-                    </div>
-                    <div class="col-md-6">
-                        <h4>${key}</h4>
-                    </div>
-                </div>
-            `;
-
-            $("#perimetro").innerHTML += newText;
-        }
-    });
-  }
-
   async function getData(id){
 
     try{
@@ -662,20 +626,16 @@
       let result = await global.sendAction(url, params)
 
       if(result){
-        
-        let perimetro = JSON.parse(result.perimetro);
     
-        let keys = perimetro.clave;
-        let values = perimetro.valor;
-        
-        renderInput(keys, values);
-    
+        let latitud = result.latitud ? result.latitud : "--";
+        let longitud = result.longitud ? result.longitud : "--";
+
         $("#card-title").innerText = result.denominacion;
         $("#codigo").innerText = result.codigo;
         $("#denominacion").innerText = result.denominacion;
         $("#ubigeo").innerText = `${result.departamento} - ${result.provincia} - ${result.distrito}`;
-        $("#latitud").innerText = result.latitud;
-        $("#longitud").innerText = result.longitud;
+        $("#latitud").innerText = latitud;
+        $("#longitud").innerText = longitud;
       }
     }
     catch(e){

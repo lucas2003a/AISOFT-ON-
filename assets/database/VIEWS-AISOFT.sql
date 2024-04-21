@@ -37,12 +37,12 @@ CREATE VIEW vws_list_projects AS
 		SELECT 
 			proy.idproyecto,
             proy.imagen,
-			proy.iddireccion,
+			proy.idsede,
+            sed.direccion AS sede,
             proy.codigo,            
 			proy.denominacion,
             proy.latitud,
             proy.longitud,
-            proy.perimetro,
 			dist.iddistrito,
             dist.distrito,
 			prov.idprovincia,
@@ -54,12 +54,14 @@ CREATE VIEW vws_list_projects AS
             met.l_noVendidos,
             met.l_separados,
             (met.l_vendidos + met.l_noVendidos + met.l_separados) as l_total,
-			usu.nombres AS usuario
+			pers.nombres AS usuario
         FROM proyectos AS proy
         INNER JOIN distritos AS dist ON dist.iddistrito = proy.iddistrito
         INNER JOIN provincias AS prov ON prov.idprovincia = dist.idprovincia
         INNER JOIN departamentos AS dept ON dept.iddepartamento = prov.iddepartamento
+        INNER JOIN sedes AS sed ON sed.idsede = proy.idsede
         INNER JOIN usuarios AS usu ON usu.idusuario = proy.idusuario
+        INNER JOIN personas AS pers ON pers.idpersona = usu.idpersona
         INNER JOIN metricas AS met ON met.idproyecto = proy.idproyecto
         WHERE proy.inactive_at IS NULL
         ORDER BY proy.codigo ASC;
@@ -101,21 +103,21 @@ CREATE VIEW vws_list_assets_short AS
 	SELECT
 		act.idactivo,
         proy.idproyecto,
-        proy.denominacion,
+        act.propietario_lote,
         act.estado,
         act.sublote,
         act.direccion,
         dist.distrito,
         prov.provincia,
         dept.departamento,
-        usu.nombres AS usuario
+        pers.nombres AS usuario
 		FROM activos AS act
         INNER JOIN proyectos AS proy ON proy.idproyecto = act.idproyecto
         INNER JOIN distritos AS dist ON dist.iddistrito = proy.iddistrito
         INNER JOIN provincias AS prov ON prov.idprovincia = dist.idprovincia
         INNER JOIN departamentos AS dept ON dept.iddepartamento = prov.iddepartamento
         INNER JOIN usuarios AS usu ON usu.idusuario = act.idusuario
-        WHERE act.tipo_activo = "LOTE"
+        INNER JOIN personas AS pers ON pers.idpersona = usu.idpersona
         AND act.inactive_at IS NULL
         ORDER BY act.sublote ASC;
 $$

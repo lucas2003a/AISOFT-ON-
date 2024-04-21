@@ -433,14 +433,21 @@
               <div class="row">
                 <div class="col-md-6">
 
-                  <h6>Tabla - lotes</h6>
+                  <h6><strong>Tabla - lotes</strong></h6>
+                  <div>
+                    <label for="propietario_lote" class="form-label">Propietarios</label>
+                    <select name="propietario_lote" id="propietario_lote" class="form-select">
+                      <option value="A.I.F" selected>A.I.F</option>
+                      <option value="TERCEROS">Terceros</option>
+                    </select>
+                  </div>
                 </div>
                 <div class="col-md-6">
                   <div class="text-end">
                     <button type="button" class="btn btn-lg bg-gradient-success opacity-10" id="generate-excel"><i class="fa-solid fa-file-excel"></i></button>
                     <button type="button" class="btn btn-lg bg-gradient-danger opacity-10" id="generate-pdf"><i class="bi bi-filetype-pdf"></i></button>
                   </div>
-
+                  
                 </div>
               </div>
             </div>
@@ -450,7 +457,7 @@
                     <thead>
                     <tr>
                       <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">#</th>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Denominación</th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Propietario</th>
                       <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Estado</th>
                       <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Sublote</th>
                       <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Direccion</th>
@@ -605,7 +612,7 @@ document.addEventListener("DOMContentLoaded",()=>{
                     </div>
                   </td>
                   <td>
-                    <p class="text-xs font-weight-bold mb-0">${asset.denominacion}</p>
+                    <p class="text-xs font-weight-bold mb-0">${asset.propietario_lote}</p>
                     </td>
                     <td class="align-middle text-center text-sm">
                       ${IconStatus}
@@ -633,7 +640,7 @@ document.addEventListener("DOMContentLoaded",()=>{
     }else{
       newRow =`
       <div class="alert alert-danger m-4 text-white" role="alert">
-          <strong class="text-white">No existe sublotes</strong> Asegurate de que existan los registros.
+          <strong class="text-white">No existe lotes</strong> Asegurate de que existan los registros.
       </div>
       `;
       $("#table-assets tbody").innerHTML += newRow;
@@ -654,11 +661,11 @@ document.addEventListener("DOMContentLoaded",()=>{
   
       params.append("action","listAssetProjectId");
       params.append("idproyecto",id);
+      params.append("propietario_lote",$("#propietario_lote").value);
 
       results = await global.sendAction(url, params);
 
       if(results){
-
         $("#cabezera").innerText +=` ${name}`;
         renderAssets(results);
 
@@ -728,18 +735,6 @@ document.addEventListener("DOMContentLoaded",()=>{
         },1500)
     });
 
-    //Menù */*/*/
-    /* $("#goDashboard").addEventListener("click",()=>{
-    
-    window.location.href = `../dashboard.php?id=${code}&name=${codeName}`;
-    
-  });
-
-  $("#goProjects").addEventListener("click",()=>{
-    
-    window.location.href = `../projects/index.php?id=${code}&name=${codeName}`;
-    
-  }) */;
       
   $("#generate-excel").addEventListener("click",()=>{
 
@@ -749,6 +744,11 @@ document.addEventListener("DOMContentLoaded",()=>{
   $("#generate-pdf").addEventListener("click",()=>{
 
     generatePdf(idProyecto);
+  });
+
+  $("#propietario_lote").addEventListener("change",()=>{
+
+    getAssets(idProyecto);
   });
 
     getAssets(idProyecto);

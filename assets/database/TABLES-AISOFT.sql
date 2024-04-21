@@ -231,17 +231,18 @@ CREATE TABLE activos(
     det_casa 			JSON 				NOT NULL DEFAULT '{"clave" :[""], "valor":[""]}',
     idpresupuesto		INT					NULL,
     propietario_lote 	VARCHAR(70)			NOT NULL,
-    precio_lote 		DECIMAL(8,2)		NOT NULL,
+    precio_lote 		DECIMAL(8,2)		NULL,
     precio_construccion	DECIMAL(8,2)		NULL,
 	create_at 			DATE 				NOT NULL	DEFAULT(CURDATE()),
     update_at			DATE 				NULL,
     inactive_at			DATE 				NULL,
     idusuario 			INT 				NOT NULL,
     CONSTRAINT fk_idproyecto_activos FOREIGN KEY(idproyecto)  REFERENCES proyectos(idproyecto),
+    CONSTRAINT uk_sublote_activos UNIQUE(idproyecto, sublote),
     CONSTRAINT fk_idpresupuesto_activos FOREIGN KEY(idpresupuesto) REFERENCES presupuestos(idpresupuesto),
     CONSTRAINT fk_idusuario_activos FOREIGN KEY(idusuario) REFERENCES usuarios(idusuario)
 )ENGINE = INNODB;
-
+ALTER TABLE activos CHANGE  precio_construccion precio_construccion	DECIMAL(8,2)		NULL;
 -- persona jurìdicas
 CREATE TABLE  personas_juridicas
 (

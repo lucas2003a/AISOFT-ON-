@@ -27,18 +27,6 @@ if(isset($_POST["action"])){
 
                 echo json_encode($project->listProjectCode($codeObtained));
             break;
-        
-        case "listProjectDrop": 
-
-                echo json_encode($project->listProjectDrop());
-            break;
-        
-        case "listProjectDrop": 
-            
-                $codeObtained = $_POST["codigo"];
-
-                echo json_encode($project->listProjectDropCode($codeObtained));
-            break;
 
         case "addProject": 
             
@@ -47,13 +35,12 @@ if(isset($_POST["action"])){
                 $nombre_img = null;
 
                 $dataObtained = [
+                    "idsede"        =>  $_POST["idsede"],
                     "imagen"        =>  $nombre_img,
-                    "iddireccion"   =>  $_POST["iddireccion"],
                     "codigo"        =>  $_POST["codigo"],
                     "denominacion"  =>  $_POST["denominacion"],
                     "latitud"       =>  $_POST["latitud"],
                     "longitud"      =>  $_POST["longitud"],
-                    "perimetro"     =>  $_POST["perimetro"],
                     "iddistrito"    =>  $_POST["iddistrito"],
                     "direccion"     =>  $_POST["direccion"],
                     "idusuario"     =>  1
@@ -91,13 +78,12 @@ if(isset($_POST["action"])){
             
             $dataObtained = [
                 "idproyecto"    =>  $_POST["idproyecto"],
+                "idsede"        =>  $_POST["idsede"],
                 "imagen"        =>  $nombre_img,
-                "iddireccion"   =>  $_POST["iddireccion"],
                 "codigo"        =>  $_POST["codigo"],
                 "denominacion"   =>  $_POST["denominacion"],
                 "latitud"       =>  $_POST["latitud"],
                 "longitud"      =>  $_POST["longitud"],
-                "perimetro"     =>  $_POST["perimetro"],
                 "iddistrito"    =>  $_POST["iddistrito"],
                 "direccion"     =>  $_POST["direccion"],
                 "idusuario"     =>  1
@@ -134,12 +120,6 @@ if(isset($_POST["action"])){
                     echo json_encode($project->inactiveProject($idproyecto));
                     break;
 
-        case "restoreProject": 
-
-                $idproyecto = $_POST["idproyecto"];
-
-                echo json_encode($project->restoreProject($idproyecto));
-            break;
     }
 }
 ?>

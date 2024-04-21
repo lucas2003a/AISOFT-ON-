@@ -10,9 +10,12 @@ if(isset($_POST["action"])){
 
         case "listAssetProjectId": 
 
-                $idPObtained = $_POST["idproyecto"];
+                $dataObtained = [
+                    "idproyecto"    =>  $_POST["idproyecto"],
+                    "propietario_lote"    =>  $_POST["propietario_lote"]
+                ];
 
-                echo json_encode($asset->listAssetProjectId($idPObtained));
+                echo json_encode($asset->listAssetProjectId($dataObtained));
             break;
         
         case "listAssetPAcode": 
@@ -39,22 +42,23 @@ if(isset($_POST["action"])){
             $nom_img = null;
             
                 $dataObtained = [
-                    "idproyecto"    => $_POST["idproyecto"],
-                    "tipo_activo"   => $_POST["tipo_activo"],
-                    "imagen"        => $nom_img, //se tiene que modificar el proceso de subir una imagen
-                    "estado"        => $_POST["estado"],
-                    "sublote"       => $_POST["sublote"],
-                    "direccion"     => $_POST["direccion"],
-                    "moneda_venta"  => $_POST["moneda_venta"],
-                    "area_terreno"  => $_POST["area_terreno"],
-                    "zcomunes_porcent"  => $_POST["zcomunes_porcent"],
-                    "partida_elect"     => $_POST["partida_elect"],
-                    "latitud"       => $_POST["latitud"],
-                    "longitud"      => $_POST["longitud"],
-                    "perimetro"     => $_POST["perimetro"],
-                    "det_casa"      => $_POST["det_casa"],
-                    "precio_venta"  => $_POST["precio_venta"],
-                    "idusuario"     => 1
+                    "idproyecto"            => $_POST["idproyecto"],
+                    "tipo_activo"           => $_POST["tipo_activo"],
+                    "imagen"                => $nom_img, //se tiene que modificar el proceso de subir una imagen
+                    "estado"                => $_POST["estado"],
+                    "sublote"               => $_POST["sublote"],
+                    "direccion"             => $_POST["direccion"],
+                    "moneda_venta"          => $_POST["moneda_venta"],
+                    "area_terreno"          => $_POST["area_terreno"],
+                    "zcomunes_porcent"      => $_POST["zcomunes_porcent"],
+                    "partida_elect"         => $_POST["partida_elect"],
+                    "latitud"               => $_POST["latitud"],
+                    "longitud"              => $_POST["longitud"],
+                    "perimetro"             => $_POST["perimetro"],
+                    "propietario_lote"      => $_POST["propietario_lote"],
+                    "precio_lote"           => $_POST["precio_lote"],
+                    "precio_construccion"   => $_POST["precio_construccion"],
+                    "idusuario"             => 1
                     /* "idusuario"     => $_POST["idusuario"] */
                 ];
 
@@ -81,22 +85,25 @@ if(isset($_POST["action"])){
                 $nom_img = null;
             
                 $dataObtained = [
-                    "idactivo"      => $_POST["idactivo"],
-                    "idproyecto"    => $_POST["idproyecto"],
-                    "tipo_activo"   => $_POST["tipo_activo"],
-                    "imagen"        => $nom_img, //se tiene que modificar el proceso de subir una imagen
-                    "estado"        => $_POST["estado"],
-                    "sublote"       => $_POST["sublote"],
-                    "direccion"     => $_POST["direccion"],
-                    "moneda_venta"  => $_POST["moneda_venta"],
-                    "area_terreno"  => $_POST["area_terreno"],
+                    "idactivo"          => $_POST["idactivo"],
+                    "idproyecto"        => $_POST["idproyecto"],
+                    "tipo_activo"       => $_POST["tipo_activo"],
+                    "imagen"            => $nom_img, //se tiene que modificar el proceso de subir una imagen
+                    "estado"            => $_POST["estado"],
+                    "sublote"           => $_POST["sublote"],
+                    "direccion"         => $_POST["direccion"],
+                    "moneda_venta"      => $_POST["moneda_venta"],
+                    "area_terreno"      => $_POST["area_terreno"],
                     "zcomunes_porcent"  => $_POST["zcomunes_porcent"],
                     "partida_elect"     => $_POST["partida_elect"],
-                    "latitud"       => $_POST["latitud"],
-                    "longitud"      => $_POST["longitud"],
-                    "perimetro"     => $_POST["perimetro"],
-                    "precio_venta"  => $_POST["precio_venta"],
-                    "idusuario"     => 1
+                    "latitud"           => $_POST["latitud"],
+                    "longitud"          => $_POST["longitud"],
+                    "perimetro"         => $_POST["perimetro"],
+                    "idpresupuesto"         => $_POST["idpresupuesto"],
+                    "propietario_lote"      => $_POST["propietario_lote"],
+                    "precio_lote"           => $_POST["precio_lote"],
+                    "precio_construccion"    => $_POST["precio_construccion"],
+                    "idusuario"             => 1
                     /* "idusuario"     => $_POST["idusuario"] */
                 ];
                 

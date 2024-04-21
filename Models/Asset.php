@@ -14,12 +14,16 @@ class Asset extends Conection{
     /**
      * Método para listar los activos por el idproyecto
      */
-    public function listAssetProjectId($idproyecto = 0){
+    public function listAssetProjectId($dataAsset = []){
 
         try{
 
-            $query = $this->conection->prepare("CALL spu_list_assets_short_idpr(?)");
-            $query->execute(array($idproyecto));
+            $query = $this->conection->prepare("CALL spu_list_assets_short_idpr(?,?)");
+            $query->execute(array(
+
+                $dataAsset["idproyecto"],
+                $dataAsset["propietario_lote"]
+            ));
 
             return $query->fetchAll(PDO::FETCH_ASSOC);
 
@@ -74,7 +78,7 @@ class Asset extends Conection{
 
         try{
 
-            $query = $this->conection->prepare("CALL spu_add_assets(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+            $query = $this->conection->prepare("CALL spu_add_assets(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
             $query->execute(
                 array(
                     $dataAsset["idproyecto"],
@@ -90,8 +94,9 @@ class Asset extends Conection{
                     $dataAsset["latitud"],
                     $dataAsset["longitud"],
                     $dataAsset["perimetro"],
-                    $dataAsset["precio_venta"],
-                    $dataAsset["det_casa"],
+                    $dataAsset["propietario_lote"],
+                    $dataAsset["precio_lote"],
+                    $dataAsset["precio_construccion"],
                     $dataAsset["idusuario"]
                 )
             );
@@ -110,7 +115,7 @@ class Asset extends Conection{
          
         try{
 
-            $query = $this->conection->prepare("CALL spu_set_assets(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+            $query = $this->conection->prepare("CALL spu_set_assets(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
             $query->execute(
                 array(
                     $dataAsset["idactivo"],
@@ -127,7 +132,10 @@ class Asset extends Conection{
                     $dataAsset["latitud"],
                     $dataAsset["longitud"],
                     $dataAsset["perimetro"],
-                    $dataAsset["precio_venta"],
+                    $dataAsset["idpresupuesto"],
+                    $dataAsset["propietario_lote"],
+                    $dataAsset["precio_lote"],
+                    $dataAsset["precio_construccion"],
                     $dataAsset["idusuario"]
                 )
             );

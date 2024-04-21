@@ -468,9 +468,9 @@
                       </div>
                     </div>
                     <div class="card-body pt-0 p-3 text-center">
-                      <h6 class="text-center mb-0">Precio de venta</h6>
+                      <h6 class="text-center mb-0">Precio del lote</h6>
                       <hr class="horizontal dark my-3">
-                      <h5 class="mb-0" id="precio_venta">--</h5>
+                      <h5 class="mb-0" id="precio_lote">--</h5>
                     </div>
                   </div>
                 </div>
@@ -849,7 +849,7 @@
           $("#imagen").setAttribute("style",`background-image: url('../../media/lotes/${imagen}');background-size: cover; background-repeat: no-repeat; height:12rem; width: 100%`);
           $("#mask").classList.remove("bg-gradient-dark");
           $("#moneda_venta").innerText = result.moneda_venta;
-          $("#precio_venta").innerText = result.precio_venta;
+          $("#precio_lote").innerText = result.precio_lote;
 
           $("#estado").innerHTML = result.estado;
           $("#ubigeo").innerHTML = `${result.distrito} - ${result.provincia}- ${result.departamento}`;

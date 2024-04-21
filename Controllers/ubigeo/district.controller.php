@@ -14,6 +14,13 @@ if(isset($_POST["action"])){
 
             echo json_encode($dist->list_districts($idprovincia));
         break;
+
+        case "getUbigeo": 
+            
+            $iddistrito = $_POST["iddistrito"];
+
+            echo json_encode($dist->getUbigeo($iddistrito));
+        break;
     }
 }
 ?>

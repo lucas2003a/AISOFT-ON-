@@ -430,11 +430,19 @@
             <div class="card">
               <div class="card-body" style="padding: 50px">
                 <div class="row">
-                  <div class="col-lg-6">
-                    <div class="d-flex flex-column h-100">
-                      <form class="row needs-validation" id="form-add-project" novalidate>
-                            <div class="row">
-                                <div class="col-md-6">
+                <div class="h-50" style="display: flex; justify-content: center;">
+                      
+                      <div class="position-relative d-flex align-items-center justify-content-center h-100">
+                        <img class="w-100 position-relative z-index-2 pt-4" style="width: 100%;" id="file-view" src="" alt="">
+                      </div>
+                    </div>
+                    
+                    <div>
+                      
+                      <div class="d-flex flex-column h-100">
+                        <form class="row needs-validation" id="form-add-project" novalidate>
+                          <div class="row">
+                            <div class="col-md-6">
 
                                     <!-- DATOS GENERALES -->
                                     
@@ -482,8 +490,8 @@
 
                                     <!-- IDDIRECCIÓN -->
                                     <div class="mt-4">
-                                        <label for="iddireccion" class="form-label">Sede</label>
-                                        <select class="form-select custom-select-scroll" id="iddireccion" required>
+                                        <label for="idsede" class="form-label">Sede</label>
+                                        <select class="form-select custom-select-scroll" id="idsede" required>
                                             <option selected disabled value="">Sede</option>                                            
                                         </select>
                                         <div class="invalid-feedback">
@@ -518,7 +526,14 @@
                                         </div>
                                     </div>
     
-                                    <!-- DIRECCIÓN -->
+                                    
+    
+    
+                                    
+                                </div>
+    
+                                <div class="col-md-6">
+                                  <!-- DIRECCIÓN -->
                                     <div class="mt-4">
                                         <label for="direccion" class="form-label">Dirección</label>
                                         <input type="text" class="form-control" id="direccion" placeholder="Dirección" readonly required>
@@ -529,20 +544,6 @@
                                             Dirección ingresada correctamente.
                                         </div>
                                     </div>
-    
-    
-                                    <!-- IMAGEN -->
-                                    <div class="form-group">
-                                        <label for="in-image" class="label-img">
-                                            <i class="material-icons"></i>
-                                            <span class="title">Agregar imagen</span>
-                                            <input type="file" accept=".jpg" id="in-image">
-                                        </label>
-                                    </div>
-                                </div>
-    
-                                <div class="col-md-6">
-
                                     <!-- UBICACIÓN Y MEDIDAS-->
     
                                     <!-- LATITUD -->
@@ -555,60 +556,32 @@
                                     </div>
         
                                     <!-- LONGITUD -->
-                                    <div class="mt-4">
+                                    <div class="mt-4  ">
                                         <label for="longitud" class="form-label">Longitud</label>
                                         <input type="text" class="form-control" id="longitud">
                                         <div class="valid-feedback">
                                             <!-- -- -->
                                         </div>
                                     </div>
-        
-                                    <!-- PERÍMETRO -->                                    
-                                    <div class="mt-4" id="perim">
-                                        <label for="perimetro" class="form-label">Perímetro (Coordenadas)</label>
-                                        <hr>
-                                        <div id="patern">
-                                            <div class="row">
-                                                <div class="col-md-11">
-                                                    <div class="row">
-                                                        <div class="col-md-6 mb-2">
-                                                            <input type="text" class="form-control perim-key" name="clave" id="clave">
-                                                        </div>
-                                                        <div class="col-md-6">
-                                                            <input type="text" class="form-control perim-value" name="valor" id="valor">
-                                                        </div>
-                                                    </div>                                               
-                                                </div>
-                                                <div class="col-md-1 mt-2">
-                                                    <button type="button" class="btn btn-success pluss" id="add-textBox">+</button>
-                                                </div>
-                                            </div>
-                                            <div class="valid-feedback">
-                                                <!-- -- -->
-                                            </div>
-                                        </div>
-                                      </div>
-                                    <div class="m-4 col-md-12">
-                                        <div class="d-grid">
-
-                                            <button class="btn btn-success" type="submit" id="guardar" disabled>Guardar</button>
-                                        </div>
-                                    </div>
                                     
+                                    <!-- IMAGEN -->
+                                    <div class="form-group" style="margin-top: 70px;">
+                                        <label for="in-image" class="label-img">
+                                            <i class="material-icons"></i>
+                                            <span class="title" style="display: flex; justify-content: center;">Agregar imagen</span>
+                                            <input type="file" accept=".jpg" id="in-image">
+                                        </label>
+                                    </div>
+                                    <div class="d-grid p-3">
+
+                                        <button class="btn btn-success" type="submit" id="guardar" disabled>Guardar</button>
+                                    </div>
                                 </div>                                    
                             </div>
                         </form>
                     </div>
                   </div>
-                  <div class="col-lg-5 ms-auto text-center mt-5 mt-lg-0">
-                    
-                    <div class="bg-gradient-primary border-radius-lg h-50" style="display: flex; justify-content: center;">
-                      
-                      <div class="position-relative d-flex align-items-center justify-content-center h-100">
-                        <img class="w-100 position-relative z-index-2 pt-4" style="width: 100%;" id="file-view" src="" alt="">
-                      </div>
-                    </div>
-                  </div>
+                  
                 </div>
               </div>
             </div>
@@ -724,70 +697,43 @@
   let Patern = $("#patern");
 
   let dataProject;
-  let AllProjects
+  let AllProjects;
+  let timer;
 
   console.log(idProyecto);
 
-  function renderInputs(keyValue, valValue){
-    
-    //BOTÓN "-" Y SU CONTENEDOR
-    let buttonLess = document.createElement("Button");
-    buttonLess.classList.add("btn","btn-danger","less","mt-2","active");
-    buttonLess.setAttribute("id","add-textBox");
-    buttonLess.setAttribute("type","button");
-    buttonLess.innerText = "-";
+  async function getUbigeo(iddistrito){
 
-    let contentButton = document.createElement("div");
-    contentButton.classList.add("col-md-1");
+    try{
 
-    contentButton.appendChild(buttonLess); //=> SE AGREGA AL CONTENEDOR
+      let url = "../../Controllers/ubigeo/district.controller.php";
+      let params = new FormData();
 
-    // DIV ROW{DIV(COL-MD-11) - DIV(CONTENT BUTTON)}
-    let dataPerim = document.createElement("div");
-    dataPerim.classList.add("row");
+      params.append("action","getUbigeo");
+      params.append("iddistrito", iddistrito);
 
-    //CONTENEDOR (LLAVE)
-    let containerKey = document.createElement("div");
-    containerKey.classList.add("col-md-6","mt-2");
-    
-    //CAJA DE TEXTO PARA LA CLAVE NUEVA EN EL INPUT
-    let newInputKey = document.createElement("input");
-    newInputKey.classList.add("form-control","perim-key"); 
-    newInputKey.value = keyValue;                           //=> SE LE ASIGNA VALOR OBTENIDO
+      let result = await global.sendAction(url,params)
 
-    containerKey.appendChild(newInputKey);  //=> SE AGREGA EL INPUT AL CONTENEDOR
+      if(result){
 
-    //CONTENDEDOR (VALOR)
-    let containerValue = document.createElement("div");
-    containerValue.classList.add("col-md-6","mt-2");        
-    
-    //CAJA DE TEXTO PARA EL NUEVO VALOR EN EL INPUT
-    let newInputValue = document.createElement("input");
-    newInputValue.classList.add("form-control","perim-value");
-    newInputValue.value = valValue;                          //=> SE LE ASIGNA VALOR OBTENIDO
+        const tagDistrito = document.createElement("option");
+        tagDistrito.value = result.iddistrito;
+        tagDistrito.innerHTML = result.distrito
+        $("#iddistrito").appendChild(tagDistrito);
+        $("#iddistrito").value = result.iddistrito;
 
-    containerValue.appendChild(newInputValue);  //=> SE AGREGA EL INPUT AL CONTENEDOR
+        const tagProvincia = document.createElement("option");
+        tagProvincia.value = result.idprovincia;
+        tagProvincia.innerHTML = result.provincia
+        $("#idprovincia").appendChild(tagProvincia);
+        $("#idprovincia").value = result.idprovincia;
 
-    //ROW (CONTIENE A LOS CONTENEDORES DE LLAVES Y VALORES)
-    let row = document.createElement("div");
-    row.classList.add("row");
-
-    row.appendChild(containerKey);
-    row.appendChild(containerValue);
-
-    //CONTENEDOR PADRE
-    let divPatern = document.createElement("div");
-    divPatern.classList.add("col-md-11");                   
- 
-    divPatern.appendChild(row); //SE AGREAGA EL ROW DE CONTENEDORES AL ULTIMO DIV
-
-    dataPerim.appendChild(divPatern);
-    dataPerim.appendChild(contentButton);
-
-    let firstIntputs = Patern.firstChild; //=> OBTIENE EL PRIMER NODO(ELEMENTO) DEL CONTENEDOR EN LA VARIABLE PATERN
-
-    Patern.insertBefore(dataPerim, firstIntputs); //AGREGA DATEPERIM ANTES DEL PRIMER ELEMENTO EN PATERN
-
+        $("#iddepartamento").value = result.iddepartamento;
+      }
+    }
+    catch(e){
+      console.error(e);
+    }
   };
 
   async function getAllProjects(){
@@ -827,31 +773,25 @@
       let project = await global.sendAction(url, params);
 
       if(project){
-
+        console.log(project);
         dataProject = project;
-
-        const perimetro = JSON.parse(project.perimetro);
-    
-        const keys = perimetro.clave;
-        const values = perimetro.valor;
     
         let img = project.imagen ? project.imagen : "NoImage.jpg";
     
+        const tagSede = document.createElement("option");
+        tagSede.value = project.idsede;
+        tagSede.innerHTML = project.sede;
+        $("#idsede").appendChild(tagSede);
+        $("#idsede").value = project.idsede;
+
         $("#codigo").value = project.codigo;
         $("#denominacion").value = project.denominacion;
         $("#direccion").value = project.direccion;
         $("#latitud").value = project.latitud;
         $("#longitud").value = project.longitud;
         $("#file-view").setAttribute("src",`../../media/logos/${img}`);
-    
-        keys.forEach((key, index) => {
-            const value = values[index];
-    
-            if(key != ""|| value != ""){
-    
-                renderInputs(key,value);
-            }
-        });
+
+        getUbigeo(project.iddistrito);
       }
     }
     catch(e){
@@ -905,11 +845,6 @@
   async function setData(){
     try{
       
-      let keyClass = ".form-control.perim-key";
-      let valueClass = ".form-control.perim-value";
-
-      let perim = global.getJson(keyClass,valueClass);
-
       let url = `../../Controllers/project.controller.php`;
 
       //Iniica la operacion
@@ -918,12 +853,11 @@
       params.append("action","setProject");
       params.append("idproyecto",idProyecto);
       params.append("imagen",$("#in-image").files[0]);
-      params.append("iddireccion",$("#iddireccion").value);
+      params.append("idsede",$("#idsede").value);
       params.append("codigo",$("#codigo").value);
       params.append("denominacion",$("#denominacion").value);
       params.append("latitud",$("#latitud").value);
       params.append("longitud",$("#longitud").value);
-      params.append("perimetro",perim);
       params.append("iddistrito",$("#iddistrito").value);
       params.append("direccion",$("#direccion").value);
 
@@ -982,19 +916,18 @@
     }
   });
 
-  $("#direccion").addEventListener("keypress",(e)=>{
+  $("#direccion").addEventListener("input",(e)=>{
         
-        if(e.keyCode == 13){ //TECLA ENTER
+    clearTimeout(timer);
 
-            $("#guardar").removeAttribute("disabled");
-        }
-    });$("#direccion").addEventListener("keypress",(e)=>{
-        
-        if(e.keyCode == 13){ //TECLA ENTER
+    timer = setTimeout(() => {
+      
+      if(e !== ""){ 
 
-            $("#guardar").removeAttribute("disabled");
-        }
-    });
+          $("#guardar").removeAttribute("disabled");
+      }
+    }, 1500);
+    })
 
     
     getDataId(idProyecto);
