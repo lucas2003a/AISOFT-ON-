@@ -666,7 +666,8 @@ document.addEventListener("DOMContentLoaded",()=>{
       results = await global.sendAction(url, params);
 
       if(results){
-        $("#cabezera").innerText +=` ${name}`;
+        $("#cabezera").innerHTML = "";
+        $("#cabezera").innerText +=`LOTES - ${name}`;
         renderAssets(results);
 
       }
@@ -748,6 +749,7 @@ document.addEventListener("DOMContentLoaded",()=>{
 
   $("#propietario_lote").addEventListener("change",()=>{
 
+    $("#table-assets tbody").innerHTML = "";
     getAssets(idProyecto);
   });
 

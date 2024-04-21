@@ -23,6 +23,12 @@
   <title>
     My Aisoft
   </title>
+  <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+      crossorigin="anonymous"
+    />
   <!--     Fonts and icons     -->
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
   <!-- Nucleo Icons -->
@@ -646,15 +652,15 @@
                   <h6 class="mb-0">Detalles de constricción</h6>
                   </div>
                   <div class="col-6 text-end">
-                    <a class="btn bg-gradient-dark mb-0" href="#" id="add"><i class="fas fa-plus"></i>&nbsp;&nbsp;Agregar</a>
-                    <a class="btn bg-gradient-info mb-0" href="#" id="save"><i class="fa-solid fa-floppy-disk"></i> Guardar</a>
+                    <button class="btn bg-gradient-dark mb-0" id="add"><i class="fas fa-plus"></i>&nbsp;&nbsp;Agregar</button>
+                    <button type="button" class="btn bg-gradient-info mb-0" id="save"><i class="fa-solid fa-floppy-disk"></i> Guardar</button>
                 </div>
               </div>
             </div>
             <div class="card-body p-3">
             <div class="card-body pt-4 p-3">
               <ul class="list-group"id="list-group">
-                
+              
                 <!-- RENDER DETALLES DE CONSTRUCCIÓN -->
 
               </ul>
@@ -739,6 +745,7 @@
     </div>
 
   </div>
+   
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
@@ -774,7 +781,10 @@
 
   const btnsEdit = $All(".edit");
 
+  let bootstrap;
+
   let det_casaJSON;
+  let idPresupuesto;
     
     /**
      * Renderiza los de talles de la construcción - recive un JSON
@@ -847,13 +857,8 @@
         let result =  await global.sendAction(url, params);
 
         if(result){
-
-          let notNullResult = Object.keys(result).reduce((acc, key) => { 
-              acc[key] = result[key] == null ? 0 : result[key]
-              return acc;
-            },{});
-
-          console.log(notNullResult);
+          
+          idPresupuesto = result.idPresupuesto;
 
           let imagen = result.imagen ? result.imagen : "NoImage.jpg";
           
@@ -871,6 +876,8 @@
           $("#partida_elect").innerHTML = result.partida_elect;
           $("#area_terreno").innerHTML = `${notNullResult.area_terreno} m2`;
           $("#zcomunes_porcent").innerHTML = `${notNullResult.zcomunes_porcent} %`;
+
+          
 
           det_casaJSON = result.det_casa
           renderDetBuild(det_casaJSON);
@@ -1195,7 +1202,13 @@
 
   $("#add").addEventListener("click",()=>{
 
-    validateInputs(createIputText);
+
+    if(idPresupuesto){
+      
+      validateInputs(createIputText);
+    }else{
+      sAlert.sweetError("Registra el presupuesto","El lote no tiene aún un presupuesto asignado");
+    }
     
   });
 

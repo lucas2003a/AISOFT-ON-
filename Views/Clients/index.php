@@ -346,7 +346,7 @@
                   <a class="dropdown-item border-radius-md" href="javascript:;">
                     <div class="d-flex py-1">
                       <div class="my-auto">
-                        <img src="../../../../assets/img/team-2.jpg" class="avatar avatar-sm  me-3 ">
+                        <img src="../../assets/img/team-2.jpg" class="avatar avatar-sm  me-3 ">
                       </div>
                       <div class="d-flex flex-column justify-content-center">
                         <h6 class="text-sm font-weight-normal mb-1">
@@ -364,7 +364,7 @@
                   <a class="dropdown-item border-radius-md" href="javascript:;">
                     <div class="d-flex py-1">
                       <div class="my-auto">
-                        <img src="../../../../assets/img/small-logos/logo-spotify.svg" class="avatar avatar-sm bg-gradient-dark  me-3 ">
+                        <img src="../../assets/img/small-logos/logo-spotify.svg" class="avatar avatar-sm bg-gradient-dark  me-3 ">
                       </div>
                       <div class="d-flex flex-column justify-content-center">
                         <h6 class="text-sm font-weight-normal mb-1">
@@ -439,7 +439,7 @@
               <div class="row">
                 <div class="col-md-3">
                   
-                  <select name="tipo_persona" class="form-select" id="documento_tipo">
+                  <select name="tipo_persona" class="form-select" id="tipo_persona">
                     <option value="NATURAL">Tipo de persona</option>
                   </select>
                 </div>
@@ -451,12 +451,12 @@
                     <thead>
                     <tr>
                       <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">#</th>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Denominación</th>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Estado</th>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Sublote</th>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Direccion</th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Tipo de persona</th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Apellidos</th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Nombres</th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Tipo de documento</th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Nº de documento</th>
                       <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Operaciones</th>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10"></th>
                     </tr>
                   </thead>
                   <tbody>
@@ -547,13 +547,13 @@
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
   <!--   Core JS Files   -->
-  <script src="../../../../assets/js/core/popper.min.js"></script>
-  <script src="../../../../assets/js/core/bootstrap.min.js"></script>
-  <script src="../../../../assets/js/plugins/perfect-scrollbar.min.js"></script>
-  <script src="../../../../assets/js/plugins/smooth-scrollbar.min.js"></script>
-  <script src="../../../../assets/js/plugins/chartjs.min.js"></script>
-  <script src="../../../../assets/js/globalFunctions.js"></script>
-  <script src="../../../../assets/js/sweetAlert.js"></script>
+  <script src="../../assets/js/core/popper.min.js"></script>
+  <script src="../../assets/js/core/bootstrap.min.js"></script>
+  <script src="../../assets/js/plugins/perfect-scrollbar.min.js"></script>
+  <script src="../../assets/js/plugins/smooth-scrollbar.min.js"></script>
+  <script src="../../assets/js/plugins/chartjs.min.js"></script>
+  <script src="../../assets/js/globalFunctions.js"></script>
+  <script src="../../assets/js/sweetAlert.js"></script>
   <script>
 document.addEventListener("DOMContentLoaded",()=>{
 
@@ -640,24 +640,26 @@ document.addEventListener("DOMContentLoaded",()=>{
   }
 
 
-  async function getAssets(id){
+  async function getClients(id){
 
     try{
 
-      $("#add-asset").setAttribute("href",`./add_asset.php?idproy=${code}&name=${codeName}`);
+      /* $("#add-asset").setAttribute("href",`./add_asset.php?idproy=${code}&name=${codeName}`); */
 
-      let url ="../../../../Controllers/asset.controller.php";
+      let url ="../../Controllers/client.controller.php";
       let params = new FormData();
   
-      params.append("action","listAssetProjectId");
-      params.append("idproyecto",id);
+      params.append("action","listClienTperson");
+      params.append("tipo_persona",$("#tipo_persona"));
 
       results = await global.sendAction(url, params);
 
       if(results){
 
-        $("#cabezera").innerText +=` ${name}`;
-        renderAssets(results);
+        /* $("#cabezera").innerText +=` ${name}`;
+        renderAssets(results); */
+
+        console.log(results);
 
       }
     }
@@ -669,7 +671,7 @@ document.addEventListener("DOMContentLoaded",()=>{
   async function searchAsset(idproy,sublote){
     try{
 
-      let url = `../../../../Controllers/asset.controller.php`;
+      let url = `../../Controllers/client.controller.php`;
       let params = new FormData();
 
       params.append("action", "listAssetPAcode");
@@ -692,7 +694,7 @@ document.addEventListener("DOMContentLoaded",()=>{
   async function generatePdf(id){
 
     let codeID = btoa(id);
-    let url = `../../../../reports/reports_pdf.php?action=reportLots&idproyecto=${codeID}`;
+    let url = `../../reports/reports_pdf.php?action=reportLots&idproyecto=${codeID}`;
 
     window.location.href = url;
   }
@@ -701,7 +703,7 @@ document.addEventListener("DOMContentLoaded",()=>{
   async function generateExcel(id){
 
     let codeID = btoa(id);
-    let url = `../../../../reports/reports_excel.php?idproyecto=${codeID}`;
+    let url = `../../reports/reports_excel.php?idproyecto=${codeID}`;
 
     window.location.href = url;
   }
@@ -720,23 +722,10 @@ document.addEventListener("DOMContentLoaded",()=>{
 
           }else{
 
-            getAssets(idProyecto);
+            getClients(idProyecto);
           }
         },1500)
     });
-
-    //Menù */*/*/
-    $("#goDashboard").addEventListener("click",()=>{
-    
-    window.location.href = `../../dashboard.php?id=${code}&name=${codeName}`;
-    
-  });
-
-  $("#goProjects").addEventListener("click",()=>{
-    
-    window.location.href = `../../projects/index.php?id=${code}&name=${codeName}`;
-    
-  });
       
   $("#generate-excel").addEventListener("click",()=>{
 
@@ -748,7 +737,7 @@ document.addEventListener("DOMContentLoaded",()=>{
     generatePdf(idProyecto);
   });
 
-    getAssets(idProyecto);
+    getClients(idProyecto);
 });
   </script>
   <script>
@@ -763,7 +752,7 @@ document.addEventListener("DOMContentLoaded",()=>{
   <!-- Github buttons -->
   <script async defer src="https://buttons.github.io/buttons.js"></script>
   <!-- Control Center for Soft Dashboard: parallax effects, scripts for the example Views etc -->
-  <script src="../../../../assets/js/soft-ui-dashboard.min.js?v=1.0.7"></script>
+  <script src="../../assets/js/soft-ui-dashboard.min.js?v=1.0.7"></script>
 </body>
 
 </html>

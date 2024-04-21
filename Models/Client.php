@@ -29,6 +29,22 @@ class Client extends Conection{
     }
 
     /**
+     * Método para listar los clientes distintguiendo el tipo de persona
+     */
+    public function listClientsTpersona($tipo_persona = ""){
+
+        try{
+
+            $query =  $this->conection->prepare("CALL spu_list_clients_tpersona(?)");
+            $query->execute(array($tipo_persona));
+
+            return $query->fetchAll(PDO::FETCH_ASSOC);
+        }
+        catch(Exception $e){
+            die($e->getMessage());
+        }
+    }
+    /**
      * Métodos para listar los clientes por su número de documento
      */
     public function listClientsDnro($documento_nro = ""){

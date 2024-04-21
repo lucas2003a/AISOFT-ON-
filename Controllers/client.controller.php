@@ -22,6 +22,12 @@ if(isset($_POST["action"])){
             
             break;
 
+        case "listClienTperson": 
+
+            $tipo_persona =$_POST["tipo_persona"];
+
+            echo json_encode($client->listClientsTpersona($tipo_persona));
+            break;
         case "listClientDrop": 
             
                 echo json_encode($client->listInactiveClients());
