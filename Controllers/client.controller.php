@@ -16,9 +16,12 @@ if(isset($_POST["action"])){
 
         case "listClientDnro": 
             
-                $documento_nro = $_POST["documento_nro"];
+                $dataObtained = [
+                    "tipo_persona"     =>  $_POST["tipo_persona"],
+                    "documento_nro"     =>  $_POST["documento_nro"]
+                ];
 
-                echo json_encode($client->listClientsDnro($documento_nro));
+                echo json_encode($client->listClientsDnro($dataObtained));
             
             break;
 

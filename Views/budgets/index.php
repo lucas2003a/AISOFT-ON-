@@ -100,9 +100,33 @@
           </a>
         </li>
 
+        <!-- PRSUPUESTOS -->
+        <li class="nav-item">
+          <a class="nav-link active" href="../budgets/index.php">
+            <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
+              <svg width="12px" height="12px" viewBox="0 0 42 42" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                <title>office</title>
+                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                  <g transform="translate(-1869.000000, -293.000000)" fill="#FFFFFF" fill-rule="nonzero">
+                    <g transform="translate(1716.000000, 291.000000)">
+                      <g id="office" transform="translate(153.000000, 2.000000)">
+                        <path class="color-background opacity-6" d="M12.25,17.5 L8.75,17.5 L8.75,1.75 C8.75,0.78225 9.53225,0 10.5,0 L31.5,0 C32.46775,0 33.25,0.78225 33.25,1.75 L33.25,12.25 L29.75,12.25 L29.75,3.5 L12.25,3.5 L12.25,17.5 Z"></path>
+                        <svg  class="color-background" xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-calculator" viewBox="0 0 16 16">
+                          <path d="M12 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1zM4 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z"/>
+                          <path d="M4 2.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5h-7a.5.5 0 0 1-.5-.5zm0 4a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm0 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm0 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm3-6a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm0 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm0 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm3-6a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm0 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5z"/>
+                        </svg>
+                      </g>
+                    </g>
+                  </g>
+                </g>
+              </svg>
+            </div>
+            <span class="nav-link-text ms-1">Presupuestos</span>
+          </a>
+        </li>
         <!-- CLIENTES -->
-        <li class="nav-item active">
-          <a class="nav-link  active" href="../Clients/index.php">
+        <li class="nav-item">
+          <a class="nav-link" href="../Views/Clients/index.php">
             <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
               <svg width="12px" height="12px" viewBox="0 0 42 42" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <title>office</title>
@@ -302,20 +326,20 @@
         <nav aria-label="breadcrumb">
           <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
           <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="#">Dashboard</a></li>
-            <li class="breadcrumb-item text-sm text-dark active" aria-current="page">CLientes</li>
+            <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Presupuestos</li>
           </ol>
-          <h6 class="font-weight-bolder mb-0" id="cabezera">CIENTES </h6>
+          <h6 class="font-weight-bolder mb-0" id="cabezera">PRESUPUESTOS </h6>
         </nav>
         <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
           <div class="ms-md-auto pe-md-3 d-flex align-items-center">
             <div class="input-group">
               <span class="input-group-text text-body"><i class="fas fa-search" aria-hidden="true"></i></span>
-              <input type="text" class="form-control" placeholder="Escribe el nº de documento..." id="in-doumento-tipo">
+              <input type="text" class="form-control" placeholder="Escribe el Sublote..." id="in-sublote">
             </div>
           </div>
           <ul class="navbar-nav  justify-content-end">
             <li class="nav-item d-flex align-items-center">
-              <a class="btn btn-outline-success btn-sm mb-0 me-3" target="_blank" href="./add_client.php" id="add-asset">AGREGAR CLIENTE</a>
+              <a class="btn btn-outline-success btn-sm mb-0 me-3" target="_blank" href="./add_asset.php" id="add-asset">AGREGAR PRESUPUESTO</a>
             </li>
             <li class="nav-item d-flex align-items-center">
               <a href="javascript:;" class="nav-link text-body font-weight-bold px-0">
@@ -436,25 +460,16 @@
                   </div>
                 </div>
               </div>
-              <div class="row">
-                <div class="col-md-3">
-                  
-                  <select name="tipo_persona" class="form-select" id="tipo_persona">
-                    <option value="NATURAL" selected>Tipo de persona</option>
-                    <option value="JURÍDICA">Jurídica</option>
-                    <option value="NATURAL">Natural</option>
-                  </select>
-                </div>
-              </div>
             </div>
             <div class="card-body px-0 pt-0 pb-2">
               <div class="table-responsive text-center p-0">
-                  <table class="table align-items-center mb-0" id="table-clients">
+                  <table class="table align-items-center mb-0" id="table-assets">
                     <thead>
                     <tr>
                       <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">#</th>
                       <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Tipo de persona</th>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Cliente</th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Apellidos</th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Nombres</th>
                       <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Tipo de documento</th>
                       <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Nº de documento</th>
                       <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Operaciones</th>
@@ -564,24 +579,35 @@ document.addEventListener("DOMContentLoaded",()=>{
   const $ = id => global.$(id);
   const $All = id => global.$All(id);
 
+  /* VALOR EN LA URL */
+  const stringQuery = window.location.search;
+  const url = new URLSearchParams(stringQuery);
+  const code = url.get("id");
+  const codeName = url.get("name");
+
+  const idProyecto = atob(code); //DECOFICA EL VALOR
+  const name = atob(codeName);
+
   let timer;
 
-  function renderClients(results){
+  function renderAssets(results){
 
     let numberRow = 1;
 
-    $("#table-clients tbody").innerHTML = "";
+    $("#table-assets tbody").innerHTML = "";
 
     let newRow = ``;
 
     if(results.length > 0){
       
-      results.forEach(client =>{
+      results.forEach(asset =>{
         
-        let code = btoa(client.idactivo) //CODIFICACIÓN
+        let code = btoa(asset.idactivo) //CODIFICACIÓN
   
-        let clientNames = client.tipo_persona == "NATURAL" ? `<strong class="text-uppercase">${client.apellidos}</strong>, ${client.nombres}` :
-                        `<strong class="text-uppercase">${client.razon_social}</strong>`;
+        let IconStatus = asset.estado == "SIN VENDER" ?  `<span class="badge badge-sm bg-gradient-danger">${asset.estado}</span>` : 
+                                        asset.estado = "VENDIDO" ? `<span class="badge badge-sm bg-gradient-success">${asset.estado}</span>`: 
+                                                                  `<span class="badge badge-sm bg-gradient-secondary">${asset.estado}</span>` ;
+  
         newRow = `
                 <tr>
                   <td>
@@ -592,29 +618,29 @@ document.addEventListener("DOMContentLoaded",()=>{
                     </div>
                   </td>
                   <td>
-                    <p class="text-xs font-weight-bold mb-0">${client.tipo_persona}</p>
+                    <p class="text-xs font-weight-bold mb-0">${asset.denominacion}</p>
                     </td>
                     <td class="align-middle text-center text-sm">
-                      ${clientNames}
+                      ${IconStatus}
                     </td>
                     <td>
-                      <p class="text-xs font-weight-bold mb-0">${client.documento_tipo}</p>
+                      <p class="text-xs font-weight-bold mb-0">${asset.sublote}</p>
                     </td>
                   <td>
-                    <p class="text-xs font-weight-bold mb-0">${client.documento_nro}</p>
+                    <p class="text-xs font-weight-bold mb-0">${asset.direccion}</p>
                   </td>
                   <td class="align-middle">
-                  <div class="btn-group">
-                        <a type="button" href="./delete_asset.php?id=${code}" class="btn btn-link text-danger text-gradient px-3 mb-0" id="btn-delete"><i class="bi bi-trash-fill"></i></a>
-                        <a type="button" href="./edit_asset.php?id=${code}" class="btn btn-link text-dark px-3 mb-0" id="btn-edit"><i class="bi bi-pencil-fill"></i></a>
-                        <a type="button" href="./detail_asset.php?id=${code}" class="btn btn-link text-success px-3 mb-0"><i class="bi bi-arrow-right-square"></i></a>
+                    <div class="btn-group">
+                        <a type="button" href="./delete_asset.php?id=${code}" class="btn btn-danger btn-sm" id="btn-delete"><i class="bi bi-trash-fill"></i></a>
+                        <a type="button" href="./edit_asset.php?id=${code}" class="btn btn-primary btn-sm" id="btn-edit"><i class="bi bi-pencil-fill"></i></a>
+                        <a type="button" href="./detail_asset.php?id=${code}" class="btn btn-success btn-sm"><i class="bi bi-arrow-right-square"></i></a>
                         </div>
                     </td>
                 </tr>           
         `;
         numberRow ++;
 
-        $("#table-clients tbody").innerHTML += newRow;
+        $("#table-assets tbody").innerHTML += newRow;
       });
 
     }else{
@@ -623,14 +649,14 @@ document.addEventListener("DOMContentLoaded",()=>{
           <strong class="text-white">No existe sublotes</strong> Asegurate de que existan los registros.
       </div>
       `;
-      $("#table-clients tbody").innerHTML += newRow;
+      $("#table-assets tbody").innerHTML += newRow;
     }
     
 
   }
 
 
-  async function getClients(){
+  async function getClients(id){
 
     try{
 
@@ -640,14 +666,16 @@ document.addEventListener("DOMContentLoaded",()=>{
       let params = new FormData();
   
       params.append("action","listClienTperson");
-      params.append("tipo_persona",$("#tipo_persona").value);
+      params.append("tipo_persona",$("#tipo_persona"));
 
       results = await global.sendAction(url, params);
 
       if(results){
 
-        /* $("#cabezera").innerText +=` ${name}`; */
-        renderClients(results);
+        /* $("#cabezera").innerText +=` ${name}`;
+        renderAssets(results); */
+
+        console.log(results);
 
       }
     }
@@ -656,20 +684,21 @@ document.addEventListener("DOMContentLoaded",()=>{
     }
   }
 
-  async function searchClients(dnro){
+  async function searchAsset(idproy,sublote){
     try{
 
       let url = `../../Controllers/client.controller.php`;
       let params = new FormData();
 
-      params.append("action", "listClientDnro");
-      params.append("tipo_persona",$("#tipo_persona").value);
-      params.append("documento_nro",dnro);
+      params.append("action", "listAssetPAcode");
+      params.append("idproyecto",idproy);
+      params.append("sublote",sublote);
 
       let results = await global.sendAction(url, params);
 
       if(results){
-        renderClients(results);
+        console.log(results)
+        renderAssets(results);
       }
     }
     catch(e){
@@ -695,21 +724,21 @@ document.addEventListener("DOMContentLoaded",()=>{
     window.location.href = url;
   }
 
-  $("#in-doumento-tipo").addEventListener("input",()=>{
+  $("#in-sublote").addEventListener("input",()=>{
 
       clearTimeout(timer);
 
         timer = setTimeout(()=>{
 
-          let dnro = $("#in-doumento-tipo").value;
+          let sublote = $("#in-sublote").value;
 
-          if(dnro != ""){
+          if(sublote != ""){
 
-            searchClients(dnro);
+            searchAsset(idProyecto,sublote);
 
           }else{
 
-            getClients();
+            getClients(idProyecto);
           }
         },1500)
     });
@@ -724,14 +753,7 @@ document.addEventListener("DOMContentLoaded",()=>{
     generatePdf(idProyecto);
   });
 
-  $("#tipo_persona").addEventListener("change",()=>{
-
-    getClients();
-
-  });
-
-
-    getClients();
+    getClients(idProyecto);
 });
   </script>
   <script>

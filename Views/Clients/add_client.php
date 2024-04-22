@@ -302,9 +302,11 @@
         <nav aria-label="breadcrumb">
           <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
           <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="#">Dashboard</a></li>
-            <li class="breadcrumb-item text-sm text-dark active" aria-current="page">CLientes</li>
+          <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="#">CLientes</a></li>
+            <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Registrar clientes</li>
           </ol>
-          <h6 class="font-weight-bolder mb-0" id="cabezera">CIENTES </h6>
+          <h6 class="font-weight-bolder mb-0" id="cabezera">REGISTRAR 
+            CIENTES </h6>
         </nav>
         <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
           <div class="ms-md-auto pe-md-3 d-flex align-items-center">
@@ -420,57 +422,147 @@
 
     <!-- CONTENIDO -->
 
-    <div class="row">
-        <div class="col-12">
-          <div class="card mb-4">
-            <div class="card-header pb-0">
-              <div class="row">
-                <div class="col-md-6">
+    <div class="d-flex flex-column h-100">
+                      <form class="row needs-validation" id="form-add-project" novalidate>
+                            <div class="row">
+                                <div class="col-md-6">
 
-                  <h6>Tabla - clientes</h6>
-                </div>
-                <div class="col-md-6">
-                  <div class="text-end">
-                    <button type="button" class="btn btn-lg bg-gradient-success opacity-10" id="generate-excel"><i class="fa-solid fa-file-excel"></i></button>
-                    <button type="button" class="btn btn-lg bg-gradient-danger opacity-10" id="generate-pdf"><i class="bi bi-filetype-pdf"></i></button>
-                  </div>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-md-3">
-                  
-                  <select name="tipo_persona" class="form-select" id="tipo_persona">
-                    <option value="NATURAL" selected>Tipo de persona</option>
-                    <option value="JURÍDICA">Jurídica</option>
-                    <option value="NATURAL">Natural</option>
-                  </select>
-                </div>
-              </div>
-            </div>
-            <div class="card-body px-0 pt-0 pb-2">
-              <div class="table-responsive text-center p-0">
-                  <table class="table align-items-center mb-0" id="table-clients">
-                    <thead>
-                    <tr>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">#</th>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Tipo de persona</th>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Cliente</th>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Tipo de documento</th>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Nº de documento</th>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Operaciones</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    
-                  <!-- RENDER -->
+                                    <!-- DATOS GENERALES -->
+                                    
+                                    <!-- DEPARTEMENTO -->
+                                    <div class="mt-4">
+                                      <label for="iddepartamento" class="form-label">Departamento</label>
+                                        <select class="form-select custom-select-scroll" id="iddepartamento" required>
+                                            <option selected disabled value="">Departamento</option>
+                                        </select>
+                                        <div class="invalid-feedback">
+                                            Necesitas escojer un departamento.
+                                        </div>
+                                        <div class="valid-feedback">
+                                            Departamento escojido correctamente.
+                                        </div>
+                                    </div>
+    
+                                    <!-- PROVINCIA -->
+                                    <div class="mt-4">
+                                        <label for="idprovincia" class="form-label">Provincia</label>
+                                        <select class="form-select custom-select-scroll" id="idprovincia" required>
+                                            <option selected disabled value="">Provincia</option>
+                                        </select>
+                                        <div class="invalid-feedback">
+                                            Necesitas escojer una provincia.
+                                        </div>
+                                        <div class="valid-feedback">
+                                            Provincia escojida correctamente.
+                                        </div>
+                                    </div>
+    
+                                    <!-- DISTRITO -->
+                                    <div class="mt-4">
+                                        <label for="iddistrito" class="form-label">Distrito</label>
+                                        <select class="form-select custom-select-scroll" id="iddistrito" required>
+                                            <option selected disabled value="">Distrito</option>
+                                        </select>
+                                        <div class="invalid-feedback">
+                                            Necesitas escojer un distrito.
+                                        </div>
+                                        <div class="valid-feedback">
+                                            Distrito escojido correctamente.
+                                        </div>
+                                    </div>
 
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+                                    <!-- IDDIRECCIÓN -->
+                                    <div class="mt-4">
+                                        <label for="idsede" class="form-label">Sede</label>
+                                        <select class="form-select custom-select-scroll" id="idsede" required>
+                                            <option selected disabled value="">Sede</option>                                            
+                                        </select>
+                                        <div class="invalid-feedback">
+                                            Necesitas escojer una sede.
+                                        </div>
+                                        <div class="valid-feedback">
+                                            Sede escojida correctament
+                                        </div>
+                                    </div>
+
+                                    <!-- CODIGO -->
+                                    <div class="mt-4">
+                                        <label for="codigo" class="form-label">Código</label>
+                                        <input type="text" class="form-control" id="codigo" placeholder="Código" required autofocus>
+                                        <div class="invalid-feedback">
+                                            Necesitas ingresar un código.
+                                        </div>
+                                        <div class="valid-feedback">
+                                            Código registrado correctamente.
+                                        </div>
+                                    </div>
+    
+                                    <!-- DENOMINACÓN -->
+                                    <div class="mt-4">
+                                        <label for="denominacion" class="form-label">Denominación</label>
+                                        <input type="text" class="form-control" id="denominacion" placeholder="Denominación" readonly required>
+                                        <div class="invalid-feedback">
+                                            Necesitas ingresar una denominación.
+                                        </div>
+                                        <div class="valid-feedback">
+                                            Denominación ingresada correctamente.
+                                        </div>
+                                    </div>
+    
+                                    
+    
+    
+                                    
+                                </div>
+    
+                                <div class="col-md-6">
+                                  <!-- DIRECCIÓN -->
+                                    <div class="mt-4">
+                                        <label for="direccion" class="form-label">Dirección</label>
+                                        <input type="text" class="form-control" id="direccion" placeholder="Dirección" readonly required>
+                                        <div class="invalid-feedback">
+                                            Necesitas ingresar una dirección.
+                                        </div>
+                                        <div class="valid-feedback">
+                                            Dirección ingresada correctamente.
+                                        </div>
+                                    </div>
+                                    <!-- UBICACIÓN Y MEDIDAS-->
+    
+                                    <!-- LATITUD -->
+                                    <div class="mt-4">
+                                        <label for="latitud" class="form-label">Latitud</label>                                  
+                                        <input type="text" class="form-control" id="latitud">
+                                        <div class="valid-feedback">
+                                            <!-- -- -->
+                                        </div>
+                                    </div>
+        
+                                    <!-- LONGITUD -->
+                                    <div class="mt-4  ">
+                                        <label for="longitud" class="form-label">Longitud</label>
+                                        <input type="text" class="form-control" id="longitud">
+                                        <div class="valid-feedback">
+                                            <!-- -- -->
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- IMAGEN -->
+                                    <div class="form-group" style="margin-top: 70px;">
+                                        <label for="in-image" class="label-img">
+                                            <i class="material-icons"></i>
+                                            <span class="title" style="display: flex; justify-content: center;">Agregar imagen</span>
+                                            <input type="file" accept=".jpg" id="in-image">
+                                        </label>
+                                    </div>
+                                    <div class="d-grid p-3">
+
+                                        <button class="btn btn-success" type="submit" id="guardar" disabled>Guardar</button>
+                                    </div>
+                                </div>                                    
+                            </div>
+                        </form>
+                    </div>
 
     <footer class="footer pt-3  ">
         <div class="container-fluid">

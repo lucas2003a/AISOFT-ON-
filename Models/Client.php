@@ -47,12 +47,16 @@ class Client extends Conection{
     /**
      * Métodos para listar los clientes por su número de documento
      */
-    public function listClientsDnro($documento_nro = ""){
+    public function listClientsDnro($dataClient = []){
 
         try{
 
-            $query = $this->conection->prepare("CALL spu_list_clients_by_docNro(?)");
-            $query->execute(array($documento_nro));
+            $query = $this->conection->prepare("CALL spu_list_clients_by_docNro(?,?)");
+            $query->execute(array(
+
+                $dataClient["tipo_persona"],
+                $dataClient["documento_nro"],
+            ));
 
             return $query->fetchAll(PDO::FETCH_ASSOC);
 

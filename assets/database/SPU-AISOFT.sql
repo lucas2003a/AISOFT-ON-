@@ -629,10 +629,10 @@ BEGIN
 			dist.distrito,
 			prov.provincia,
 			dept.departamento,
-			pers.direccion,
+			persj.direccion,
 			persUsu.nombres AS usuario
 			FROM clientes AS clien
-			INNER JOIN personas_juridicas AS persj ON pers.idpersona_juridica = clien.idpersona_juridica
+			INNER JOIN personas_juridicas AS persj ON persj.idpersona_juridica = clien.idpersona_juridica
 			INNER JOIN distritos AS dist ON dist.iddistrito = persj.iddistrito
 			INNER JOIN provincias AS prov ON prov.idprovincia = dist.idprovincia
 			INNER JOIN departamentos AS dept ON dept.iddepartamento = prov.iddepartamento
@@ -675,7 +675,7 @@ BEGIN
         INNER JOIN usuarios AS usu ON usu.idusuario = clien.idusuario
         INNER JOIN personas AS persUsu ON persUsu.idpersona = usu.idpersona
         WHERE clien.inactive_at IS NULL 
-			AND clien.idcliente = _idcliente
+			AND clien.tipo_persona = _tipoPersona
         ORDER BY pers.documento_nro ASC;
     ELSE 
 		SELECT
@@ -691,17 +691,17 @@ BEGIN
 			dist.distrito,
 			prov.provincia,
 			dept.departamento,
-			pers.direccion,
+			persj.direccion,
 			persUsu.nombres AS usuario
 			FROM clientes AS clien
-			INNER JOIN personas_juridicas AS persj ON pers.idpersona_juridica = clien.idpersona_juridica
+			INNER JOIN personas_juridicas AS persj ON persj.idpersona_juridica = clien.idpersona_juridica
 			INNER JOIN distritos AS dist ON dist.iddistrito = persj.iddistrito
 			INNER JOIN provincias AS prov ON prov.idprovincia = dist.idprovincia
 			INNER JOIN departamentos AS dept ON dept.iddepartamento = prov.iddepartamento
 			INNER JOIN usuarios AS usu ON usu.idusuario = clien.idusuario	
 			INNER JOIN personas AS persUsu ON persUsu.idpersona = usu.idpersona
 			WHERE clien.inactive_at IS NULL 
-				AND clien.idcliente = _idcliente
+				AND clien.tipo_persona = _tipoPersona
 			ORDER BY persj.documento_nro ASC;
 		END IF;
 END$$
@@ -733,7 +733,7 @@ BEGIN
         INNER JOIN personas AS persUsu ON persUsu.idpersona = usu.idpersona
         WHERE clien.inactive_at IS NULL 
 			AND clien.tipo_persona = _tipo_persona
-            AND pers.documento_nro = _documento_nro
+            AND pers.documento_nro LIKE CONCAT(_documento_nro,'%')
         ORDER BY pers.documento_nro ASC;
     ELSE 
 		SELECT
@@ -749,10 +749,10 @@ BEGIN
 			dist.distrito,
 			prov.provincia,
 			dept.departamento,
-			pers.direccion,
+			persj.direccion,
 			persUsu.nombres AS usuario
 			FROM clientes AS clien
-			INNER JOIN personas_juridicas AS persj ON pers.idpersona_juridica = clien.idpersona_juridica
+			INNER JOIN personas_juridicas AS persj ON persj.idpersona_juridica = clien.idpersona_juridica
 			INNER JOIN distritos AS dist ON dist.iddistrito = persj.iddistrito
 			INNER JOIN provincias AS prov ON prov.idprovincia = dist.idprovincia
 			INNER JOIN departamentos AS dept ON dept.iddepartamento = prov.iddepartamento
@@ -760,7 +760,7 @@ BEGIN
 			INNER JOIN personas AS persUsu ON persUsu.idpersona = usu.idpersona
 			WHERE clien.inactive_at IS NULL 
 				AND clien.tipo_persona = _tipo_persona
-                AND persj.documento_nro = _documento_nro
+                AND persj.documento_nro LIKE CONCAT(_documento_nro,'%')
 			ORDER BY persj.documento_nro ASC;
 		END IF;
 END$$
@@ -1043,11 +1043,52 @@ DELIMITER ;
 DELIMITER $$
 CREATE PROCEDURE spu_list_separation_ByIdAsset(IN _idactivo INT)
 BEGIN
-	
-    
+	SELECT 
+		sep.idseparacion,
+        act.sublote,
+        proy.denominacion,
+        dist.distrito,
+        prov.provincia,
+        dept.departamento,
+        pers.nombres,
+        pers.apellidos,
+        pers.documento_tipo,
+        pers.documento_nro,
+        persj.razon_social AS razon_social,
+        persj.documento_tipo AS persj_documento_nro,
+        persj.documento_nro AS persj_documento_nro,
+        conyPers.nombres	AS conyPers_nombres,
+        conyPers.apellidos AS conyPers_apellidos,
+        conyPers.documento_tipo AS conyPers_documento_tipo,
+        conyPers.documento_nro As conyPers_documento_nro,
+        sep.separacion_monto,
+        sep.fecha_pago,
+		sep.imagen,
+        usuPers.nombres AS usuario
+		FROM separaciones AS sep
+        INNER JOIN activos AS act ON act.idactivo = sep.idactivo
+        INNER JOIN proyectos AS proy ON proy.idproyecto = act.idproyecto
+        INNER JOIN distritos AS dist ON dist.iddistrito = proy.iddistrito
+        INNER JOIN provincias AS prov ON prov.idprovincia = dist.idprovincia
+        INNER JOIN departamentos AS dept ON dept.iddepartamento = prov.iddepartamento
+        
+        INNER JOIN clientes AS clien ON clien.idcliente = sep.idcliente
+        LEFT JOIN personas AS pers ON pers.idpersona = clien.idpersona
+        
+        LEFT JOIN personas_juridicas AS persj ON persj.idpersona_juridica = clien.idpersona_juridica
+        
+		LEFT JOIN clientes AS cony ON cony.idcliente = sep.idconyugue
+        LEFT JOIN personas AS conyPers ON conyPers.idpersona = cony.idpersona
+        
+        INNER JOIN usuarios AS usu ON usu.idusuario = sep.idusuario
+        INNER JOIN personas AS usuPers ON usuPers.idpersona = usu.idpersona
+        
+        WHERE sep.idactivo = _idactivo
+        AND sep.inactive_at IS NULL;
 END $$
 DELIMITER ;
 
+SELECT * FROM clientes;
 -- CONTRATOS
 DELIMITER $$
 CREATE PROCEDURE spu_lits_contracts_full_by_id(IN _idcontrato INT)
@@ -1163,7 +1204,7 @@ END $$
 DELIMITER ;
 
 DELIMITER $$
-CREATE PROCEDURE set_inactive_contracts(IN _idcontrato INT)
+CREATE PROCEDURE spu_set_inactive_contracts(IN _idcontrato INT)
 BEGIN
 
 	UPDATE contratos
@@ -1173,6 +1214,23 @@ BEGIN
 			idcontrato = _idcontrato;
             
   SELECT ROW_COUNT() AS filasAfect;
+END $$
+DELIMITER ;
+
+-- PRESUPUESTOS
+DELIMITER $$
+CREATE PROCEDURE spu_list_budgets()
+BEGIN
+	SELECT
+		pres.idpresupuesto,
+        pres.modelo,
+        pres.medidas,
+        pres.descripcion,
+        pers.nombres AS usuario
+		FROM presupuestos AS pres
+        INNER JOIN usuarios AS usu ON usu.idusuario = pres.idusuario
+        INNER JOIN personas AS pers ON pers.idpersona = usu.idpersona
+        WHERE pres.inactive_at IS NULL;
 END $$
 DELIMITER ;
 

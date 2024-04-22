@@ -52,7 +52,7 @@ INSERT INTO direcciones(idconstructora, iddistrito, direccion, referencia)
 				(2, 1011, "CALLE LOS GIRASOLES MZA. E LOTE. 10 URB. LAS MARGARITAS","A 200 METROS DE LA AVENIDA PRINCIPAL");                
                                 
                 
-SELECT * FROM direcciones;
+SELECT * FROM sedes;
 
 -- ROLES
 INSERT INTO roles(rol)

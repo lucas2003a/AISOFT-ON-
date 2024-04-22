@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 22-04-2024 a las 09:25:25
+-- Tiempo de generación: 22-04-2024 a las 09:26:15
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Base de datos: `aisoft`
+-- Base de datos: `id20871685_aisoft`
 --
 
 DELIMITER $$
