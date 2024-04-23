@@ -22104,7 +22104,7 @@ svg.text-dark .color-background {
 }
 
 hr {
-  border-top: none !important;
+  /* border-top: none !important; */
   height: 1px;
 }
 

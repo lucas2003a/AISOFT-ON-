@@ -154,7 +154,10 @@ document.addEventListener("DOMContentLoaded",()=>{
 
     $("#iddistrito").addEventListener("change",()=>{
 
-        resetSelect("#idsede","Sedes",renderSedes);
+        if($("#idsede")){
+
+            resetSelect("#idsede","Sedes",renderSedes);
+        }
     });
 
     $("#idprovincia").addEventListener("change",()=>{

@@ -41,8 +41,7 @@ CREATE TABLE personas
     update_at 			DATE 				NULL,
     inactive_at 		DATE 				NULL,
     CONSTRAINT uk_documento_nro_pers UNIQUE(documento_nro),
-    CONSTRAINT fk_iddistrito_pers FOREIGN KEY(iddistrito) REFERENCES distritos(iddistrito),
-    CONSTRAINT fk_idusuario_pers FOREIGN KEY(idusuario) REFERENCES usuarios(idusuario)
+    CONSTRAINT fk_iddistrito_pers FOREIGN KEY(iddistrito) REFERENCES distritos(iddistrito)
 )ENGINE = INNODB;
 
 -- constructora

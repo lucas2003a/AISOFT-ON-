@@ -1,7 +1,7 @@
 <?php
 // Datos
 $token = 'apis-token-8212.Q9lPCYsqb-fSerOD537b17vnbMdul7XW';
-$dni = '77068570';
+$dni = $_GET["documento_nro"];
 
 // Iniciar llamada a API
 $curl = curl_init();

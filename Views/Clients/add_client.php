@@ -312,7 +312,7 @@
           <div class="ms-md-auto pe-md-3 d-flex align-items-center">
             <div class="input-group">
               <span class="input-group-text text-body"><i class="fas fa-search" aria-hidden="true"></i></span>
-              <input type="text" class="form-control" placeholder="Escribe el nº de documento..." id="in-doumento-tipo">
+              <input type="text" class="form-control" placeholder="Nº documento..." id="in-doumento-tipo">
             </div>
           </div>
           <ul class="navbar-nav  justify-content-end">
@@ -423,147 +423,169 @@
     <!-- CONTENIDO -->
 
     <div class="d-flex flex-column h-100">
-                      <form class="row needs-validation" id="form-add-project" novalidate>
-                            <div class="row">
-                                <div class="col-md-6">
-
-                                    <!-- DATOS GENERALES -->
-                                    
-                                    <!-- DEPARTEMENTO -->
-                                    <div class="mt-4">
-                                      <label for="iddepartamento" class="form-label">Departamento</label>
-                                        <select class="form-select custom-select-scroll" id="iddepartamento" required>
-                                            <option selected disabled value="">Departamento</option>
-                                        </select>
-                                        <div class="invalid-feedback">
-                                            Necesitas escojer un departamento.
-                                        </div>
-                                        <div class="valid-feedback">
-                                            Departamento escojido correctamente.
-                                        </div>
-                                    </div>
-    
-                                    <!-- PROVINCIA -->
-                                    <div class="mt-4">
-                                        <label for="idprovincia" class="form-label">Provincia</label>
-                                        <select class="form-select custom-select-scroll" id="idprovincia" required>
-                                            <option selected disabled value="">Provincia</option>
-                                        </select>
-                                        <div class="invalid-feedback">
-                                            Necesitas escojer una provincia.
-                                        </div>
-                                        <div class="valid-feedback">
-                                            Provincia escojida correctamente.
-                                        </div>
-                                    </div>
-    
-                                    <!-- DISTRITO -->
-                                    <div class="mt-4">
-                                        <label for="iddistrito" class="form-label">Distrito</label>
-                                        <select class="form-select custom-select-scroll" id="iddistrito" required>
-                                            <option selected disabled value="">Distrito</option>
-                                        </select>
-                                        <div class="invalid-feedback">
-                                            Necesitas escojer un distrito.
-                                        </div>
-                                        <div class="valid-feedback">
-                                            Distrito escojido correctamente.
-                                        </div>
-                                    </div>
-
-                                    <!-- IDDIRECCIÓN -->
-                                    <div class="mt-4">
-                                        <label for="idsede" class="form-label">Sede</label>
-                                        <select class="form-select custom-select-scroll" id="idsede" required>
-                                            <option selected disabled value="">Sede</option>                                            
-                                        </select>
-                                        <div class="invalid-feedback">
-                                            Necesitas escojer una sede.
-                                        </div>
-                                        <div class="valid-feedback">
-                                            Sede escojida correctament
-                                        </div>
-                                    </div>
-
-                                    <!-- CODIGO -->
-                                    <div class="mt-4">
-                                        <label for="codigo" class="form-label">Código</label>
-                                        <input type="text" class="form-control" id="codigo" placeholder="Código" required autofocus>
-                                        <div class="invalid-feedback">
-                                            Necesitas ingresar un código.
-                                        </div>
-                                        <div class="valid-feedback">
-                                            Código registrado correctamente.
-                                        </div>
-                                    </div>
-    
-                                    <!-- DENOMINACÓN -->
-                                    <div class="mt-4">
-                                        <label for="denominacion" class="form-label">Denominación</label>
-                                        <input type="text" class="form-control" id="denominacion" placeholder="Denominación" readonly required>
-                                        <div class="invalid-feedback">
-                                            Necesitas ingresar una denominación.
-                                        </div>
-                                        <div class="valid-feedback">
-                                            Denominación ingresada correctamente.
-                                        </div>
-                                    </div>
-    
-                                    
-    
-    
-                                    
-                                </div>
-    
-                                <div class="col-md-6">
-                                  <!-- DIRECCIÓN -->
-                                    <div class="mt-4">
-                                        <label for="direccion" class="form-label">Dirección</label>
-                                        <input type="text" class="form-control" id="direccion" placeholder="Dirección" readonly required>
-                                        <div class="invalid-feedback">
-                                            Necesitas ingresar una dirección.
-                                        </div>
-                                        <div class="valid-feedback">
-                                            Dirección ingresada correctamente.
-                                        </div>
-                                    </div>
-                                    <!-- UBICACIÓN Y MEDIDAS-->
-    
-                                    <!-- LATITUD -->
-                                    <div class="mt-4">
-                                        <label for="latitud" class="form-label">Latitud</label>                                  
-                                        <input type="text" class="form-control" id="latitud">
-                                        <div class="valid-feedback">
-                                            <!-- -- -->
-                                        </div>
-                                    </div>
+      <form action="" class="row needs-validation" style="width: 50%;" id="search_person" novalidate>
+        <!-- TIPO DE PERSONA -->
+        <div class="mt-4">
+          <label for="tipo_persona" class="form-label">Tipo de persona</label>
+            <select class="form-select custom-select-scroll" id="tipo_persona" required>
+                <option selected value="NATURAL">Natural</option>
+                <option value="JURÍDICA">Juridica</option>
+            </select>
+            <div class="invalid-feedback">
+                Necesitas escojer un tipo de persona.
+            </div>
+            <div class="valid-feedback">
+                Tipo de persona seleccionado correctamente.
+            </div>
+        </div>
         
-                                    <!-- LONGITUD -->
-                                    <div class="mt-4  ">
-                                        <label for="longitud" class="form-label">Longitud</label>
-                                        <input type="text" class="form-control" id="longitud">
-                                        <div class="valid-feedback">
-                                            <!-- -- -->
-                                        </div>
-                                    </div>
-                                    
-                                    <!-- IMAGEN -->
-                                    <div class="form-group" style="margin-top: 70px;">
-                                        <label for="in-image" class="label-img">
-                                            <i class="material-icons"></i>
-                                            <span class="title" style="display: flex; justify-content: center;">Agregar imagen</span>
-                                            <input type="file" accept=".jpg" id="in-image">
-                                        </label>
-                                    </div>
-                                    <div class="d-grid p-3">
+        <!-- Nro de documento -->
+        <div class="mt-4">
+          <label for="documento_nro" class="form-label">Nº de documento</label>
+          <div class="row">
+            <div class="col-md-9">
+              
+              <input type="text" name="documento_nro" id="documento_nro" class="form-control" required>
+              <div class="invalid-feedback">
+                  Necesitas ingresar el número del documento.
+              </div>
+              <div class="valid-feedback">
+                  Nº de documento ingresado correctamente.
+              </div>
+            </div>
+            <div class="col-md-3">
+              <button type="submit" class="btn btn-success" id="buscar">Buscar</button>
+              <button class="btn btn-success d-none" id="spinner" type="button" disabled>
+                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+              </button>
+              
+            </div>
+          </div>
+        </div>
 
-                                        <button class="btn btn-success" type="submit" id="guardar" disabled>Guardar</button>
-                                    </div>
-                                </div>                                    
-                            </div>
-                        </form>
+      </form>
+      <hr>
+      <form class="row needs-validation" id="form-data-client" novalidate>
+        <div class="row">
+            <div class="col-md-6">
+
+                <!-- DATOS GENERALES -->
+
+
+                <!-- DEPARTAMENTO -->
+                <div class="mt-4">
+                    <label for="iddepartamento" class="form-label">Departamento</label>
+                    <select class="form-select custom-select-scroll" id="iddepartamento" required>
+                        <option selected disabled value="">Departamento</option>
+                    </select>
+                    <div class="invalid-feedback">
+                        Necesitas escojer una departamento.
                     </div>
+                    <div class="valid-feedback">
+                      Departamento escojido correctamente.
+                    </div>
+                </div>
 
+                <!-- PROVINCIA -->
+                <div class="mt-4">
+                    <label for="idprovincia" class="form-label">Provincia</label>
+                    <select class="form-select custom-select-scroll" id="idprovincia" required>
+                        <option selected disabled value="">Provincia</option>
+                    </select>
+                    <div class="invalid-feedback">
+                        Necesitas escojer una provincia.
+                    </div>
+                    <div class="valid-feedback">
+                        Provincia escojida correctamente.
+                    </div>
+                </div>
+
+                <!-- DISTRITO -->
+                <div class="mt-4">
+                    <label for="iddistrito" class="form-label">Distrito</label>
+                    <select class="form-select custom-select-scroll" id="iddistrito" required>
+                        <option selected disabled value="">Distrito</option>
+                    </select>
+                    <div class="invalid-feedback">
+                        Necesitas escojer un distrito.
+                    </div>
+                    <div class="valid-feedback">
+                        Distrito escojido correctamente.
+                    </div>
+                </div>
+
+                <!-- APELLIDOS -->
+                <div class="mt-4">
+                    <label for="apellidos" class="form-label">Apellidos</label>
+                    <input type="text" name="nombres" id="apellidos" placeholder="Apellidos" class="form-control" required>
+                    <div class="invalid-feedback">
+                        Necesitas registrar los apellidos.
+                    </div>
+                    <div class="valid-feedback">
+                        Apellidos registrados correctamente.
+                    </div>
+                </div>
+
+                <!-- NOMBRES -->
+                <div class="mt-4">
+                    <label for="nombres" class="form-label">Nombres</label>
+                    <input type="text" name="nombres" id="nombres" placeholder="Nombres" class="form-control" required>
+                    <div class="invalid-feedback">
+                        Necesitas registrar los nombres.
+                    </div>
+                    <div class="valid-feedback">
+                        Nombres registrados correctamente.
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+
+              <!-- DOCUMENTO TIPO -->
+                <div class="mt-4">
+                    <label for="documento_tipo" class="form-label">Tipo de documento</label>
+                    <input type="text" class="form-control" id="documento_tipo" placeholder="Tipo de documento" required>
+                    <div class="invalid-feedback">
+                        Necesitas registrar el tipo de documento.
+                    </div>
+                    <div class="valid-feedback">
+                        Tipo de documento registrado correctamente.
+                    </div>
+                </div>
+
+                <!-- ESTADO CIVIL -->
+                <div class="mt-4">
+                    <label for="estado_civil" class="form-label">Estado civil</label>                                  
+                    <input type="text" class="form-control" id="estado_civil" required>
+                    <div class="invalid-feedback">
+                        Necesitas registrar el estado civil.
+                    </div>
+                    <div class="valid-feedback">
+                        Estado civil registrado correctamente.
+                    </div>
+                </div>
+
+                <!-- DIRECCIÓN -->
+                <div class="mt-4">
+                    <label for="direccion" class="form-label">Dirección</label>                                  
+                    <input type="text" class="form-control" id="direccion" required>
+                    <div class="invalid-feedback">
+                        Necesitas registrar la dirección.
+                    </div>
+                    <div class="valid-feedback">
+                        Dirección registrada correctamente.
+                    </div>
+                </div>
+
+              </div>                                    
+              <div class="mt-4 mb-4">
+
+                  <button class="btn btn-success" type="submit" id="guardar">Guardar</button>
+              </div>
+        </div>
+      </form>
+    </div>
+        
     <footer class="footer pt-3  ">
         <div class="container-fluid">
           <div class="row align-items-center justify-content-lg-between">
@@ -647,86 +669,22 @@
   <script src="../../assets/js/plugins/chartjs.min.js"></script>
   <script src="../../assets/js/globalFunctions.js"></script>
   <script src="../../assets/js/sweetAlert.js"></script>
+  <script src="../../assets/js/renderUbigeo.js"></script>
   <script>
 document.addEventListener("DOMContentLoaded",()=>{
 
   /* INSTANCIAS */
   const global = new FunGlobal();
+  const sAlert = new Alert();
 
   const $ = id => global.$(id);
   const $All = id => global.$All(id);
 
-  let timer;
-
-  function renderClients(results){
-
-    let numberRow = 1;
-
-    $("#table-clients tbody").innerHTML = "";
-
-    let newRow = ``;
-
-    if(results.length > 0){
-      
-      results.forEach(client =>{
-        
-        let code = btoa(client.idactivo) //CODIFICACIÓN
-  
-        let clientNames = client.tipo_persona == "NATURAL" ? `<strong class="text-uppercase">${client.apellidos}</strong>, ${client.nombres}` :
-                        `<strong class="text-uppercase">${client.razon_social}</strong>`;
-        newRow = `
-                <tr>
-                  <td>
-                    <div class="d-flex px-2 py-1">
-                      <div class="d-flex flex-column justify-content-center">
-                        <h6 class="mb-0 text-sm">${numberRow}</h6>
-                      </div>
-                    </div>
-                  </td>
-                  <td>
-                    <p class="text-xs font-weight-bold mb-0">${client.tipo_persona}</p>
-                    </td>
-                    <td class="align-middle text-center text-sm">
-                      ${clientNames}
-                    </td>
-                    <td>
-                      <p class="text-xs font-weight-bold mb-0">${client.documento_tipo}</p>
-                    </td>
-                  <td>
-                    <p class="text-xs font-weight-bold mb-0">${client.documento_nro}</p>
-                  </td>
-                  <td class="align-middle">
-                  <div class="btn-group">
-                        <a type="button" href="./delete_asset.php?id=${code}" class="btn btn-link text-danger text-gradient px-3 mb-0" id="btn-delete"><i class="bi bi-trash-fill"></i></a>
-                        <a type="button" href="./edit_asset.php?id=${code}" class="btn btn-link text-dark px-3 mb-0" id="btn-edit"><i class="bi bi-pencil-fill"></i></a>
-                        <a type="button" href="./detail_asset.php?id=${code}" class="btn btn-link text-success px-3 mb-0"><i class="bi bi-arrow-right-square"></i></a>
-                        </div>
-                    </td>
-                </tr>           
-        `;
-        numberRow ++;
-
-        $("#table-clients tbody").innerHTML += newRow;
-      });
-
-    }else{
-      newRow =`
-      <div class="alert alert-danger m-4 text-white" role="alert">
-          <strong class="text-white">No existe sublotes</strong> Asegurate de que existan los registros.
-      </div>
-      `;
-      $("#table-clients tbody").innerHTML += newRow;
-    }
-    
-
-  }
-
+  let dataClient;
 
   async function getClients(){
 
     try{
-
-      /* $("#add-asset").setAttribute("href",`./add_asset.php?idproy=${code}&name=${codeName}`); */
 
       let url ="../../Controllers/client.controller.php";
       let params = new FormData();
@@ -738,8 +696,8 @@ document.addEventListener("DOMContentLoaded",()=>{
 
       if(results){
 
-        /* $("#cabezera").innerText +=` ${name}`; */
-        renderClients(results);
+        console.log(results);
+        dataClient = results;
 
       }
     }
@@ -748,20 +706,72 @@ document.addEventListener("DOMContentLoaded",()=>{
     }
   }
 
-  async function searchClients(dnro){
+  //Busca el documento de identidad consumiendo datos de la API
+  async function searchDocument(dnro){
     try{
 
-      let url = `../../Controllers/client.controller.php`;
+      $("#buscar").classList.toggle("d-none");
+      $("#spinner").classList.toggle("d-none");
+      let params = new URLSearchParams();
+      params.append("documento_nro",$("#documento_nro").value);
+
+      let url = `../../Controllers/searchDNI.php?${params}`;
+
+      let result = await global.sendAction(url, params);
+
+      if(result){
+        console.log(result);
+
+        $("#apellidos").value = `${result.apellidoPaterno} ${result.apellidoMaterno}`;
+        $("#nombres").value = result.nombres;
+        $("#documento_tipo").value = result.tipoDocumento;
+
+      }else{
+        sAlert.sweetError("El documento ingresado no existe","No existe una persona con este documento");
+      }
+
+      $("#buscar").classList.toggle("d-none");
+      $("#spinner").classList.toggle("d-none");
+    }
+    catch(e){
+      console.error(e);
+    }
+  }
+
+  //Agrega un cliente
+  async function addClient(){
+
+    try{
+
+      let url = "../../Controllers/client.controller.php";
+
       let params = new FormData();
 
-      params.append("action", "listClientDnro");
+      params.append("action","addClientNatural");
       params.append("tipo_persona",$("#tipo_persona").value);
-      params.append("documento_nro",dnro);
+      params.append("nombres",$("#nombres").value);
+      params.append("apellidos",$("#apellidos").value);
+      params.append("documento_tipo",$("#documento_tipo").value);
+      params.append("documento_nro",$("#documento_nro").value);
+      params.append("estado_civil",$("#estado_civil").value);
+      params.append("iddistrito",$("#iddistrito").value);
+      params.append("direccion",$("#direccion").value);
 
-      let results = await global.sendAction(url, params);
+      let result = await global.sendAction(url, params);
 
-      if(results){
-        renderClients(results);
+      if(result){
+
+        if(result.filasAfect > 0){
+
+          sAlert.sweetConfirmAdd("Éxito","El registro se ha guardado de forma existosa, ¿Deseas registrar otro?",()=>{
+
+            $("#search_person").reset();
+            $("#form-data-client").reset();
+
+          },()=>{
+            window.location.href = "./index.php";
+          });
+        }
       }
     }
     catch(e){
@@ -769,44 +779,71 @@ document.addEventListener("DOMContentLoaded",()=>{
     }
   }
 
-  //Genera u archivo PDF
-  async function generatePdf(id){
+  function validateFom(form, callback) {
+    'use strict' //=> USO ESTRICTO POR POLITICAS DE SEGURIDAD EN EL FORMULARIO
 
-    let codeID = btoa(id);
-    let url = `../../reports/reports_pdf.php?action=reportLots&idproyecto=${codeID}`;
+     //SELECCIONA TODOS LOS ELEMENTOS DEL FORMULARIO QUE TIENE LA CLASE "needs-validation
+    const forms = document.querySelectorAll(form)
 
-    window.location.href = url;
-  }
+    // TOMA EL ELEMENTO "FORMS" Y LO CONVIERTE A UN ARRAY
+    // SE INCLUYE EN UN FOREAH PARA ITERAR SOBRE SUS ELEMENTOS
 
-  //Genera un archivo excel
-  async function generateExcel(id){
+    Array.from(forms).forEach(form => {
+        form.addEventListener('submit', event => {
 
-    let codeID = btoa(id);
-    let url = `../../reports/reports_excel.php?idproyecto=${codeID}`;
+            //SI LA VALIDACIÓN DEL FORMULARIO ES FALSE
+        if (!form.checkValidity()) {
+            event.preventDefault()      //=> FRENA EL ENVÍO DEL FORMULARIO
+            event.stopPropagation()     //=> FRENA LA PROPAGACIÓN DE DATOS EN EL FORMULARIO
+            form.reportValidity();
+        }else{
+            event.preventDefault();
+            callback();
+            /* sAlert.sweetConfirm("Datos nuevos","¿Deseas actualizar el registro?",()=>{
+                
+            }); */
+        }
 
-    window.location.href = url;
-  }
+        form.classList.add('was-validated') //=> AGREGA ESTA CLASE A LOS ELEMENTOS DEL FORMULARIO(MUESTRA LOS COMENTARIOS)
+        }, false) //=> ESTE TERCER ARGUMENTO INDICA QUE EL EVENTO NO SE ESTA CAPTURANDO EN LA ""FASE DE CAPTURA" SINO EN "PROPAGACIÓN NORMAL"
+    })  
+  };
 
-  $("#in-doumento-tipo").addEventListener("input",()=>{
+  //Compara si existe un registro con el número de documento
+  async function searchNDocument(array, params){
 
-      clearTimeout(timer);
+    return new Promise((resolve, reject)  => {
 
-        timer = setTimeout(()=>{
-
-          let dnro = $("#in-doumento-tipo").value;
-
-          if(dnro != ""){
-
-            searchClients(dnro);
-
-          }else{
-
-            getClients();
-          }
-        },1500)
-    });
+      const found = array.find(element => element.documento_nro == params);
+  
+      if(found){
+  
+        sAlert.sweetError("El documento ingresado ya existe","Ya existe un registro con este documento");
+        
+        reject();
       
-  $("#generate-excel").addEventListener("click",()=>{
+      }else{
+  
+        validateFom("#form-data-client",addClient);
+        resolve();
+  
+      }
+    })
+
+  }
+
+    $("#form-data-client").addEventListener("submit",(e)=>{
+
+      e.preventDefault(); 
+      searchNDocument(dataClient, $("#documento_nro").value);
+    })
+    
+    $("#buscar").addEventListener("click",()=>{
+
+      validateFom("#search_person",searchDocument);
+    })
+      
+  /* $("#generate-excel").addEventListener("click",()=>{
 
     generateExcel(idProyecto);
   });
@@ -814,16 +851,17 @@ document.addEventListener("DOMContentLoaded",()=>{
   $("#generate-pdf").addEventListener("click",()=>{
 
     generatePdf(idProyecto);
-  });
+  }); */
 
   $("#tipo_persona").addEventListener("change",()=>{
 
     getClients();
 
   });
-
-
-    getClients();
+  /* '.needs-validation' */
+  
+  getClients();
+  
 });
   </script>
   <script>

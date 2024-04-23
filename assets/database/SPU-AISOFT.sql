@@ -809,14 +809,12 @@ BEGIN
 	INSERT INTO clientes(
 						tipo_persona, 
                         idpersona,
-                        idpersona_juridica,
                         idusuario
                         )
 				VALUES
 					(
 						_tipo_persona,
                         _idpersona,
-                        NULLIF(_idpersona_juridica,''),
                         _idusuario
                     );
 	

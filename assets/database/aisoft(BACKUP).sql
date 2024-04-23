@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 22-04-2024 a las 09:25:25
+-- Tiempo de generación: 23-04-2024 a las 09:41:29
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -147,14 +147,12 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_add_clients_personN` (IN `_tipo
 	INSERT INTO clientes(
 						tipo_persona, 
                         idpersona,
-                        idpersona_juridica,
                         idusuario
                         )
 				VALUES
 					(
 						_tipo_persona,
                         _idpersona,
-                        NULLIF(_idpersona_juridica,''),
                         _idusuario
                     );
 	
@@ -3540,7 +3538,8 @@ INSERT INTO `personas` (`idpersona`, `nombres`, `apellidos`, `documento_tipo`, `
 (15, 'Antonio José', 'Hernández Martín', 'DNI', '14141414', 'Soltera', 14, 'Calle N 444', '2024-04-19', NULL, NULL),
 (16, 'Juan Carlos', 'Pérez García', 'DNI', '12345678', 'Soltero', 1007, 'Av. Primavera 123', '2024-04-19', NULL, NULL),
 (17, 'María Luisa', 'Gómez Fernández', 'DNI', '23456789', 'Casada', 1007, 'Calle Flores 456', '2024-04-19', NULL, NULL),
-(18, 'Pedro José', 'Ramírez Sánchez', 'DNI', '34567890', 'Soltero', 1007, 'Jr. Libertad 789', '2024-04-19', NULL, NULL);
+(18, 'Pedro José', 'Ramírez Sánchez', 'DNI', '34567890', 'Soltero', 1007, 'Jr. Libertad 789', '2024-04-19', NULL, NULL),
+(19, 'LUCAS ALFREDO', 'ATUNCAR VALERIO', 'DNI', '77068570', 'soltero', 1016, 'av santa rosa#541', '2024-04-23', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -4467,7 +4466,7 @@ ALTER TABLE `permisos`
 -- AUTO_INCREMENT de la tabla `personas`
 --
 ALTER TABLE `personas`
-  MODIFY `idpersona` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `idpersona` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT de la tabla `personas_juridicas`

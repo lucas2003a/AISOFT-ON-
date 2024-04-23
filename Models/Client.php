@@ -100,15 +100,16 @@ class Client extends Conection{
     }
 
     /**
-     * Método para registrar cliente
+     * Método para registrar cliente como persona natural
      */
-    public function addClient($dataClient = []){
+    public function addClientNatural($dataClient = []){
 
         try{
 
-            $query = $this->conection->prepare("CALL spu_add_clients(?,?,?,?,?,?,?,?)");
+            $query = $this->conection->prepare("CALL spu_add_clients_personN(?,?,?,?,?,?,?,?,?)");
             $query->execute(
                 array(
+                    $dataClient["tipo_persona"],
                     $dataClient["nombres"],
                     $dataClient["apellidos"],
                     $dataClient["documento_tipo"],
@@ -130,7 +131,7 @@ class Client extends Conection{
     /**
      * Método para actualizar los registros de un cliente
      */
-    public function setClient($dataClient = []){
+    public function setClientNatural($dataClient = []){
 
         try{
 

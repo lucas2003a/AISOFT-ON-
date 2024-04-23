@@ -45,10 +45,11 @@ if(isset($_POST["action"])){
 
             break;
 
-        case "addClient": 
+        case "addClientNatural": 
             
                 $dataObtained = [
 
+                    "tipo_persona"         => $_POST["tipo_persona"],
                     "nombres"         => $_POST["nombres"],
                     "apellidos"       => $_POST["apellidos"],
                     "documento_tipo"  => $_POST["documento_tipo"],
@@ -56,11 +57,11 @@ if(isset($_POST["action"])){
                     "estado_civil"    => $_POST["estado_civil"],
                     "iddistrito"      => $_POST["iddistrito"],
                     "direccion"       => $_POST["direccion"],
-                    "idusuario"       => $_POST["idusuario"]
+                    "idusuario"       => 1
                     
                 ];
 
-                echo json_encode($client->addClient($dataObtained));
+                echo json_encode($client->addClientNatural($dataObtained));
             
             break;
 
@@ -80,7 +81,7 @@ if(isset($_POST["action"])){
                     
                 ];
                 
-                echo json_encode($client->setClient($dataObtained));
+                /* echo json_encode($client->setClient($dataObtained)); */
 
             break;
 
