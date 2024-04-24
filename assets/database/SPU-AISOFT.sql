@@ -9,23 +9,6 @@ BEGIN
 END $$
 DELIMITER ;
 
-DELIMITER $$
-CREATE PROCEDURE spu_get_ubigeo(IN _iddistrito INT)
-BEGIN
-	SELECT 
-		dist.iddistrito,
-        dist.distrito,
-        prov.idprovincia,
-        prov.provincia,
-        dept.iddepartamento,
-        dept.departamento
-		FROM distritos AS dist
-        INNER JOIN provincias AS prov ON prov.idprovincia = dist.idprovincia
-        INNER JOIN departamentos AS dept ON dept.iddepartamento = prov.iddepartamento
-        WHERE dist.iddistrito = 1010;
-END $$
-DELIMITER;
-
 -- PROVINCIAS
 DELIMITER $$
 CREATE PROCEDURE spu_list_provinces(IN _iddepartamento INT)
@@ -48,6 +31,49 @@ BEGIN
 END $$
 DELIMITER ;
 
+-- UBGEO
+DELIMITER $$
+CREATE PROCEDURE spu_get_ubigeo(IN _iddistrito INT)
+BEGIN
+	SELECT 
+		dist.iddistrito,
+        dist.distrito,
+        prov.idprovincia,
+        prov.provincia,
+        dept.iddepartamento,
+        dept.departamento
+		FROM distritos AS dist
+        INNER JOIN provincias AS prov ON prov.idprovincia = dist.idprovincia
+        INNER JOIN departamentos AS dept ON dept.iddepartamento = prov.iddepartamento
+        WHERE dist.iddistrito = _iddistrito;
+END $$
+DELIMITER;
+
+DELIMITER $$
+CREATE PROCEDURE spu_get_fullUbigeo(
+	IN _distrito VARCHAR(45),
+    IN _provincia VARCHAR(45),
+    IN _departamento VARCHAR(45)
+)
+BEGIN
+	SELECT 	
+		dist.iddistrito,
+        dist.distrito,
+        prov.idprovincia,
+        prov.provincia,
+        dept.iddepartamento,
+        dept.departamento
+		FROM distritos dist 
+        INNER JOIN provincias prov ON prov.idprovincia = dist.idprovincia
+        INNER JOIN departamentos dept ON dept.iddepartamento = prov.iddepartamento
+        WHERE 
+				dist.distrito = _distrito
+            AND prov.provincia = _provincia
+            AND dept.departamento = _departamento;
+END $$
+DELIMITER ;
+
+CALL spu_get_fullUbigeo("sunampe","Chincha","Ica");
 -- constructora
 DELIMITER $$
 CREATE PROCEDURE spu_list_companies()
@@ -803,7 +829,7 @@ BEGIN
                             _direccion
                         );
                         
-		SET _idpersona =  @@last_insert_id;
+		SET _idpersona = (SELECT @@last_insert_id);
 
 	-- registro a la persona como cliente
 	INSERT INTO clientes(
@@ -822,6 +848,9 @@ BEGIN
 END $$
 DELIMITER ;
 
+/*CALL spu_add_clients_personN("NATURAL","LUCAS ALFREDO","ATUNCAR VALERIO","DNI","77068570","SOLTERO",1016,"AV SANTA ROSA #541",3);
+SELECT * FROM PERSONAS;
+DELETE FROM CLIENTES WHERE ;*/
 DELIMITER $$
 CREATE PROCEDURE spu_add_clients_personj
 (

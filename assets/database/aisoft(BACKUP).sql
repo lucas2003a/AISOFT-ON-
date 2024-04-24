@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 23-04-2024 a las 09:41:29
+-- Tiempo de generación: 24-04-2024 a las 09:56:04
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -141,7 +141,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_add_clients_personN` (IN `_tipo
                             _direccion
                         );
                         
-		SET _idpersona =  @@last_insert_id;
+		SET _idpersona = (SELECT @@last_insert_id);
 
 	-- registro a la persona como cliente
 	INSERT INTO clientes(
@@ -226,6 +226,23 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_add_projects` (IN `_idsede` INT
 				(_idsede, NULLIF(_imagen,""), _codigo, _denominacion, NULLIF(_latitud, ""), NULLIF(_longitud, ""), _iddistrito, _direccion, _idusuario);
                 
 	SELECT ROW_COUNT() AS filasAfect; -- FILAS AFECTADAS
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_get_fullUbigeo` (IN `_distrito` VARCHAR(45), IN `_provincia` VARCHAR(45), IN `_departamento` VARCHAR(45))   BEGIN
+	SELECT 	
+		dist.iddistrito,
+        dist.distrito,
+        prov.idprovincia,
+        prov.provincia,
+        dept.iddepartamento,
+        dept.departamento
+		FROM distritos dist 
+        INNER JOIN provincias prov ON prov.idprovincia = dist.idprovincia
+        INNER JOIN departamentos dept ON dept.iddepartamento = prov.iddepartamento
+        WHERE 
+				dist.distrito = _distrito
+            AND prov.provincia = _provincia
+            AND dept.departamento = _departamento;
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_get_lots_status` ()   BEGIN
@@ -329,7 +346,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_get_ubigeo` (IN `_iddistrito` I
 		FROM distritos AS dist
         INNER JOIN provincias AS prov ON prov.idprovincia = dist.idprovincia
         INNER JOIN departamentos AS dept ON dept.iddepartamento = prov.iddepartamento
-        WHERE dist.iddistrito = 1010;
+        WHERE dist.iddistrito = _iddistrito;
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_get_yearly_sales` ()   BEGIN
@@ -1242,7 +1259,8 @@ INSERT INTO `clientes` (`idcliente`, `tipo_persona`, `idpersona`, `idpersona_jur
 (2, 'JURÍDICA', NULL, 2, '2024-04-19', NULL, NULL, 2),
 (3, 'JURÍDICA', NULL, 3, '2024-04-19', NULL, NULL, 3),
 (4, 'NATURAL', 17, NULL, '2024-04-19', NULL, NULL, 1),
-(5, 'NATURAL', 18, NULL, '2024-04-19', NULL, NULL, 2);
+(5, 'NATURAL', 18, NULL, '2024-04-19', NULL, NULL, 2),
+(7, 'NATURAL', 22, NULL, '2024-04-23', NULL, NULL, 1);
 
 -- --------------------------------------------------------
 
@@ -3539,7 +3557,7 @@ INSERT INTO `personas` (`idpersona`, `nombres`, `apellidos`, `documento_tipo`, `
 (16, 'Juan Carlos', 'Pérez García', 'DNI', '12345678', 'Soltero', 1007, 'Av. Primavera 123', '2024-04-19', NULL, NULL),
 (17, 'María Luisa', 'Gómez Fernández', 'DNI', '23456789', 'Casada', 1007, 'Calle Flores 456', '2024-04-19', NULL, NULL),
 (18, 'Pedro José', 'Ramírez Sánchez', 'DNI', '34567890', 'Soltero', 1007, 'Jr. Libertad 789', '2024-04-19', NULL, NULL),
-(19, 'LUCAS ALFREDO', 'ATUNCAR VALERIO', 'DNI', '77068570', 'soltero', 1016, 'av santa rosa#541', '2024-04-23', NULL, NULL);
+(22, 'LUCAS ALFREDO', 'ATUNCAR VALERIO', 'DNI', '77068570', 'SOLTERO', 1016, 'AV. SANTA ROSA 541', '2024-04-23', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -4388,7 +4406,7 @@ ALTER TABLE `activos`
 -- AUTO_INCREMENT de la tabla `clientes`
 --
 ALTER TABLE `clientes`
-  MODIFY `idcliente` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `idcliente` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT de la tabla `constructora`
@@ -4466,7 +4484,7 @@ ALTER TABLE `permisos`
 -- AUTO_INCREMENT de la tabla `personas`
 --
 ALTER TABLE `personas`
-  MODIFY `idpersona` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `idpersona` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- AUTO_INCREMENT de la tabla `personas_juridicas`

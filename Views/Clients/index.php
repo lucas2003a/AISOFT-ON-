@@ -544,6 +544,11 @@
       </div>
     </div>
   </div>
+
+  <!-- JQUERY -->
+  <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+  <script type="text/javascript" src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script> -->
+
   <!-- SWEET ALERT -->
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
@@ -555,6 +560,14 @@
   <script src="../../assets/js/plugins/chartjs.min.js"></script>
   <script src="../../assets/js/globalFunctions.js"></script>
   <script src="../../assets/js/sweetAlert.js"></script>
+
+  <!-- <script>
+    $(document).ready(function(){
+
+      $('#table-clients').DataTable();
+    });
+
+  </script> -->
   <script>
 document.addEventListener("DOMContentLoaded",()=>{
 

@@ -21,6 +21,18 @@ if(isset($_POST["action"])){
 
             echo json_encode($dist->getUbigeo($iddistrito));
         break;
+        
+        case "listUbigeoFull": 
+
+            $dataUbigeo = [
+                "distrito"      => $_POST["distrito"],
+                "provincia"     => $_POST["provincia"],
+                "departamento"  => $_POST["departamento"]
+            ];
+
+            echo json_encode($dist->getUbigeoFull($dataUbigeo));
+        break;
+
     }
 }
 ?>

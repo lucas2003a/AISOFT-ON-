@@ -423,29 +423,47 @@
     <!-- CONTENIDO -->
 
     <div class="d-flex flex-column h-100">
-      <form action="" class="row needs-validation" style="width: 50%;" id="search_person" novalidate>
-        <!-- TIPO DE PERSONA -->
-        <div class="mt-4">
-          <label for="tipo_persona" class="form-label">Tipo de persona</label>
-            <select class="form-select custom-select-scroll" id="tipo_persona" required>
+      <form action="" class="row needs-validation"  id="search_person" novalidate>
+      
+      <div class="row">
+        <div class="col-md-4">
+          <!-- TIPO DE PERSONA -->
+          <div class="mt-4">
+            <label for="tipo_persona" class="form-label">Tipo de persona</label>
+              <select class="form-select custom-select-scroll" id="tipo_persona" required>
                 <option selected value="NATURAL">Natural</option>
                 <option value="JURÍDICA">Juridica</option>
+              </select>
+              <div class="invalid-feedback">
+                  Necesitas escojer un tipo de persona.
+              </div>
+              <div class="valid-feedback">
+                Tipo de persona seleccionado correctamente.
+              </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+
+          <!-- DOCUMENTO TIPO -->
+          <div class="mt-4">
+            <label for="documento_tipo" class="form-label">Tipo de documento</label>
+            <select name="documento_tipo" class="form-select" id="documento_tipo" required>
+              <option value="">Tipo de documento</option>
             </select>
             <div class="invalid-feedback">
-                Necesitas escojer un tipo de persona.
+              Necesitas registrar el tipo de documento.
             </div>
             <div class="valid-feedback">
-                Tipo de persona seleccionado correctamente.
+              Tipo de documento registrado correctamente.
             </div>
+          </div>
         </div>
-        
-        <!-- Nro de documento -->
-        <div class="mt-4">
+        <div class="col-md-4 mt-4">
           <label for="documento_nro" class="form-label">Nº de documento</label>
           <div class="row">
             <div class="col-md-9">
-              
-              <input type="text" name="documento_nro" id="documento_nro" class="form-control" required>
+  
+              <input type="text" name="documento_nro" id="documento_nro" class="form-control" placeholder="Nº documento" required>
               <div class="invalid-feedback">
                   Necesitas ingresar el número del documento.
               </div>
@@ -461,9 +479,12 @@
               
             </div>
           </div>
-        </div>
 
-      </form>
+        </div>
+      </div>
+      
+    </form>
+
       <hr>
       <form class="row needs-validation" id="form-data-client" novalidate>
         <div class="row">
@@ -514,10 +535,49 @@
                     </div>
                 </div>
 
+                <!-- DIRECCIÓN -->
+                <div class="mt-4">
+                    <label for="direccion" class="form-label">Dirección</label>                                  
+                    <input type="text" class="form-control" id="direccion" placeholder="Dirección" required>
+                    <div class="invalid-feedback">
+                        Necesitas registrar la dirección.
+                    </div>
+                    <div class="valid-feedback">
+                        Dirección registrada correctamente.
+                    </div>
+                </div>
+                 <!-- NRO DE DOCUMENTO DEL REPRESENTATE -->
+                 <div class="mt-4">
+                    <label for="documento_nro_representante" class="form-label">Nº de documento del representante</label>
+                    <input type="text" name="documento_nro_representante" id="documento_nro_representante" placeholder="Nº de documento del representante" class="form-control pern-j" disabled>
+                    <div class="invalid-feedback">
+                        Necesitas registrar el nº de documento del representante.
+                    </div>
+                    <div class="valid-feedback">
+                      Nº de documento del representante registrado correctamente.
+                    </div>
+                </div>  
+
+                
+                <!-- TIPO DE DOCUMENTO DEL REPRESENTATE -->
+                <div class="mt-4">
+                    <label for="documento_t_representante" class="form-label">Tipo de documento del representante</label>
+                    <input type="text" name="documento_t_representante" id="documento_t_representante" placeholder="Tipo de documento del representante" class="form-control pern-j" disabled>
+                    <div class="invalid-feedback">
+                        Necesitas registrar el tipo de documento del representante.
+                    </div>
+                    <div class="valid-feedback">
+                      Tipo de documento del representante registrado correctamente.
+                    </div>
+                </div>  
+            </div>
+
+            <div class="col-md-6">
+
                 <!-- APELLIDOS -->
                 <div class="mt-4">
                     <label for="apellidos" class="form-label">Apellidos</label>
-                    <input type="text" name="nombres" id="apellidos" placeholder="Apellidos" class="form-control" required>
+                    <input type="text" name="nombres" id="apellidos" placeholder="Apellidos" class="form-control pern-n" required>
                     <div class="invalid-feedback">
                         Necesitas registrar los apellidos.
                     </div>
@@ -529,34 +589,19 @@
                 <!-- NOMBRES -->
                 <div class="mt-4">
                     <label for="nombres" class="form-label">Nombres</label>
-                    <input type="text" name="nombres" id="nombres" placeholder="Nombres" class="form-control" required>
+                    <input type="text" name="nombres" id="nombres" placeholder="Nombres" class="form-control pern-n" required>
                     <div class="invalid-feedback">
                         Necesitas registrar los nombres.
                     </div>
                     <div class="valid-feedback">
                         Nombres registrados correctamente.
                     </div>
-                </div>
-            </div>
-
-            <div class="col-md-6">
-
-              <!-- DOCUMENTO TIPO -->
-                <div class="mt-4">
-                    <label for="documento_tipo" class="form-label">Tipo de documento</label>
-                    <input type="text" class="form-control" id="documento_tipo" placeholder="Tipo de documento" required>
-                    <div class="invalid-feedback">
-                        Necesitas registrar el tipo de documento.
-                    </div>
-                    <div class="valid-feedback">
-                        Tipo de documento registrado correctamente.
-                    </div>
-                </div>
+                </div>              
 
                 <!-- ESTADO CIVIL -->
                 <div class="mt-4">
                     <label for="estado_civil" class="form-label">Estado civil</label>                                  
-                    <input type="text" class="form-control" id="estado_civil" required>
+                    <input type="text" class="form-control pern-n" id="estado_civil" placeholder="Estado civil" required>
                     <div class="invalid-feedback">
                         Necesitas registrar el estado civil.
                     </div>
@@ -565,18 +610,44 @@
                     </div>
                 </div>
 
-                <!-- DIRECCIÓN -->
+                <!-- RAZÓN SOCIAL -->
                 <div class="mt-4">
-                    <label for="direccion" class="form-label">Dirección</label>                                  
-                    <input type="text" class="form-control" id="direccion" required>
+                    <label for="razon_social" class="form-label">Razón social</label>
+                    <input type="text" name="razon_social" id="razon_social" placeholder="Razón social" class="form-control pern-j" disabled>
                     <div class="invalid-feedback">
-                        Necesitas registrar la dirección.
+                        Necesitas registrar la razón social.
                     </div>
                     <div class="valid-feedback">
-                        Dirección registrada correctamente.
+                      Razón social registrada correctamente.
+                    </div>
+                </div>  
+
+                <!-- REPRESENTANTE LEGAL -->
+                <div class="mt-4">
+                    <label for="representante-legal" class="form-label">Representante legal</label>
+                    <input type="text" name="representante-legal" id="representante-legal" placeholder="Representante legal" class="form-control pern-j" disabled>
+                    <div class="invalid-feedback">
+                        Necesitas registrar al representante legal.
+                    </div>
+                    <div class="valid-feedback">
+                      Representante legal registrado correctamente.
+                    </div>
+                </div>  
+
+                <!-- PARTIDA ELECTRÓNICA -->
+                <div class="mt-4">
+                    <label for="partida_elect" class="form-label">Partida electrónica</label>
+                    <input type="text" name="partida_elect" id="partida_elect" placeholder="Partida electrónica" class="form-control pern-j" disabled>
+                    <div class="invalid-feedback">
+                        Necesitas registrar la partida electrónica.
+                    </div>
+                    <div class="valid-feedback">
+                      Partida electrónica registrada correctamente.
                     </div>
                 </div>
+              </div>        
 
+               
               </div>                                    
               <div class="mt-4 mb-4">
 
@@ -706,6 +777,66 @@ document.addEventListener("DOMContentLoaded",()=>{
     }
   }
 
+  async function searchUbigeo(obj){
+
+    try{
+
+      let url = "../../Controllers/ubigeo/district.controller.php";
+
+      let params = new FormData();
+
+      params.append("action","listUbigeoFull");
+      params.append("distrito",obj.distrito);
+      params.append("provincia",obj.provincia);
+      params.append("departamento",obj.departamento);
+
+      let result = await global.sendAction(url, params);
+
+      if(result){
+
+        return result;
+      }
+
+    }
+    catch(e){
+      console.error(e);
+    }
+  }
+
+  async function getUbigeo(iddistrito){
+
+    try{
+
+      let url = "../../Controllers/ubigeo/district.controller.php";
+      let params = new FormData();
+
+      params.append("action","getUbigeo");
+      params.append("iddistrito", iddistrito);
+
+      let result = await global.sendAction(url,params)
+
+      if(result){
+
+        const tagDistrito = document.createElement("option");
+        tagDistrito.value = result.iddistrito;
+        tagDistrito.innerHTML = result.distrito.trim();
+        $("#iddistrito").appendChild(tagDistrito);
+        $("#iddistrito").value = result.iddistrito;
+
+        const tagProvincia = document.createElement("option");
+        tagProvincia.value = result.idprovincia;
+        tagProvincia.innerHTML = result.provincia.trim();
+        $("#idprovincia").appendChild(tagProvincia);
+        $("#idprovincia").value = result.idprovincia;
+
+        $("#iddepartamento").value = result.iddepartamento;
+      }
+    }
+    catch(e){
+      console.error(e);
+    }
+  };
+
   //Busca el documento de identidad consumiendo datos de la API
   async function searchDocument(dnro){
     try{
@@ -713,18 +844,30 @@ document.addEventListener("DOMContentLoaded",()=>{
       $("#buscar").classList.toggle("d-none");
       $("#spinner").classList.toggle("d-none");
       let params = new URLSearchParams();
+
+      params.append("action","searchDNI");
       params.append("documento_nro",$("#documento_nro").value);
 
-      let url = `../../Controllers/searchDNI.php?${params}`;
+      let url = `../../Controllers/searchDocument.php?${params}`;
 
       let result = await global.sendAction(url, params);
 
       if(result){
-        console.log(result);
+        
+        let docs = result.data.body;
 
-        $("#apellidos").value = `${result.apellidoPaterno} ${result.apellidoMaterno}`;
-        $("#nombres").value = result.nombres;
-        $("#documento_tipo").value = result.tipoDocumento;
+        let ubigeo = docs.ubigeo;
+
+        //OBTENGO LOS IDS DEL UBIGEO
+        let dataUbigeo = await searchUbigeo(ubigeo);
+        console.log(dataUbigeo)
+
+        await getUbigeo(dataUbigeo.iddistrito);
+
+        $("#apellidos").value = `${docs.apePaterno} ${docs.apeMaterno}`;
+        $("#nombres").value = docs.preNombres;
+        $("#direccion").value = docs.desDireccion;
+        /* $("#documento_tipo").value = result.tipoDocumento; */
 
       }else{
         sAlert.sweetError("El documento ingresado no existe","No existe una persona con este documento");
@@ -734,6 +877,9 @@ document.addEventListener("DOMContentLoaded",()=>{
       $("#spinner").classList.toggle("d-none");
     }
     catch(e){
+      $("#buscar").classList.toggle("d-none");
+      $("#spinner").classList.toggle("d-none");
+      sAlert.sweetError("El documento ingresado no existe","No existe una persona con este documento");
       console.error(e);
     }
   }
@@ -832,6 +978,114 @@ document.addEventListener("DOMContentLoaded",()=>{
 
   }
 
+  //Cambia la visibilidad de los inputs dependiendo del tipo de persona
+  function changeVisibilityInput(tPersona){
+    
+    let perJInputs = $All(".pern-j")
+    let perNInputs = $All(".pern-n")
+
+    if(tPersona == "JURÍDICA"){
+
+
+      Array.from(perJInputs).forEach(input =>{
+
+        if(input.disabled == true){
+
+          input.removeAttribute("disabled");
+          input.setAttribute("required",true);
+        }
+      });
+
+      Array.from(perNInputs).forEach(input =>{
+
+        if(input.disabled == false){
+
+          input.removeAttribute("required");
+          input.setAttribute("disabled", true);
+        }
+      });
+
+    }else if(tPersona == "NATURAL"){
+
+      Array.from(perJInputs).forEach(input =>{
+
+        if(input.disabled == false){
+
+          input.setAttribute("disabled", true);
+          input.removeAttribute("required");
+        }
+      });
+
+      Array.from(perNInputs).forEach(input =>{
+
+        if(input.disabled == true){
+
+          input.setAttribute("required", true);
+          input.removeAttribute("disabled");
+        }
+      });
+
+    }
+
+  }
+
+  function createOptions(tPersona){
+
+    $("#documento_tipo").innerHTML = "";
+
+    const defaultOption = document.createElement("option");
+    defaultOption.value = 0;
+    defaultOption.innerText = "Tipo de documento";
+    $("#documento_tipo").appendChild(defaultOption);
+
+    if(tPersona.value == "JURÍDICA"){
+
+      const rucOption = document.createElement("option");
+      rucOption.value = "RUC";
+      rucOption.innerText = "RUC";
+
+      $("#documento_tipo").appendChild(rucOption);
+    
+    }else{
+
+      const ctOption = document.createElement("option");
+      ctOption.value = "CARNET DE EXTRANJERÍA";
+      ctOption.innerText = "CARNET DE EXTRANJERÍA";
+
+      $("#documento_tipo").appendChild(ctOption);
+
+      const dniOption = document.createElement("option");
+      dniOption.value = "DNI";
+      dniOption.innerText = "DNI";
+
+      $("#documento_tipo").appendChild(dniOption);
+    }
+  }
+
+  //Cambia la longitud de la cadena de acuerdo al tipo de documento escojido
+  function lengthTDocument(tDocument){
+
+    $("#documento_nro").minLength = 0;
+    $("#documento_nro").maxLength = 0;
+    if(tDocument.value == "DNI"){
+
+      $("#documento_nro").maxLength = 8;
+      $("#documento_nro").minLength = 8;
+
+    }else if(tDocument.value == "CARNET DE EXTRANJERÍA"){
+
+      $("#documento_nro").maxLength = 12;
+      $("#documento_nro").minLength = 12;
+
+    }else if(tDocument.value == "RUC"){
+
+      $("#documento_nro").maxLength = 11;
+      $("#documento_nro").minLength = 11;
+
+    }
+  }
+
+
     $("#form-data-client").addEventListener("submit",(e)=>{
 
       e.preventDefault(); 
@@ -853,13 +1107,21 @@ document.addEventListener("DOMContentLoaded",()=>{
     generatePdf(idProyecto);
   }); */
 
+  $("#documento_tipo").addEventListener("change",(e)=>{
+
+    console.log(e.target.value)
+    lengthTDocument($("#documento_tipo"));
+  });
+
   $("#tipo_persona").addEventListener("change",()=>{
 
     getClients();
+    changeVisibilityInput($("#tipo_persona").value);
+    createOptions($("#tipo_persona"));
 
   });
-  /* '.needs-validation' */
   
+  createOptions($("#tipo_persona"));
   getClients();
   
 });

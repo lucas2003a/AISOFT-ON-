@@ -39,5 +39,25 @@ class Distrito extends Conection{
             die($e->getMessage());
         }
     }
+
+    public function getUbigeoFull($dataUbigeo = []){
+
+        try{
+
+            $query = $this->conection->prepare("CALL spu_get_fullUbigeo(?,?,?)");
+            $query->execute(
+                array(
+                    $dataUbigeo["distrito"],
+                    $dataUbigeo["provincia"],
+                    $dataUbigeo["departamento"]
+                )
+            );
+
+            return $query->fetch(PDO::FETCH_ASSOC);
+        }
+        catch(Exception $e){
+            die($e->getMessage());
+        }
+    }
 }
 ?>
