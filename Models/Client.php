@@ -117,6 +117,7 @@ class Client extends Conection{
                     $dataClient["estado_civil"],
                     $dataClient["iddistrito"],
                     $dataClient["direccion"],
+                    $dataClient["nacionalidad"],
                     $dataClient["idusuario"]
                 )
             );

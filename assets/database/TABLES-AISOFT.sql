@@ -37,6 +37,7 @@ CREATE TABLE personas
     estado_civil 		VARCHAR(10) 		NOT NULL,
     iddistrito 			INT					NOT NULL,
     direccion			VARCHAR(60) 		NOT NULL,
+    nacionalidad 		VARCHAR(20) 		NOT NULL DEFAULT "PERUANA",
     create_at 			DATE 				NOT NULL 	DEFAULT(CURDATE()),
     update_at 			DATE 				NULL,
     inactive_at 		DATE 				NULL,

@@ -546,6 +546,19 @@
                         Dirección registrada correctamente.
                     </div>
                 </div>
+
+                 <!-- NACIONALIDAD -->
+                 <div class="mt-4">
+                    <label for="nacionalidad" class="form-label">Nacionalidad</label>
+                    <input type="text" name="nacionalidad" id="nacionalidad" placeholder="Nacionalidad" class="form-control">
+                    <div class="invalid-feedback">
+                        Necesitas registrar la nacionalidad.
+                    </div>
+                    <div class="valid-feedback">
+                      Nacionalidad registrada correctamente.
+                    </div>
+                </div>  
+
                  <!-- NRO DE DOCUMENTO DEL REPRESENTATE -->
                  <div class="mt-4">
                     <label for="documento_nro_representante" class="form-label">Nº de documento del representante</label>
@@ -803,6 +816,32 @@ document.addEventListener("DOMContentLoaded",()=>{
     }
   }
 
+  async function searchUbigeoRUC(obj){
+
+    try{
+
+      let url = "../../Controllers/ubigeo/district.controller.php";
+
+      let params = new FormData();
+
+      params.append("action","listUbigeoFull");
+      params.append("distrito",obj.desDistrito);
+      params.append("provincia",obj.desProvincia);
+      params.append("departamento",obj.desDepartamento);
+
+      let result = await global.sendAction(url, params);
+
+      if(result){
+
+        return result;
+      }
+
+    }
+    catch(e){
+      console.error(e);
+    }
+  }
+
   async function getUbigeo(iddistrito){
 
     try{
@@ -837,8 +876,8 @@ document.addEventListener("DOMContentLoaded",()=>{
     }
   };
 
-  //Busca el documento de identidad consumiendo datos de la API
-  async function searchDocument(dnro){
+  //Busca a una persona de acuerdo al número de DNI
+  async function searchDNI(dnro){
     try{
 
       $("#buscar").classList.toggle("d-none");
@@ -884,6 +923,102 @@ document.addEventListener("DOMContentLoaded",()=>{
     }
   }
 
+  //Busca los datos del prepresentante legal de una empresa POR SU RUC
+  async function searchRpRUC(dnro){
+
+    try{
+
+      let params = new URLSearchParams();
+      params.append("action","searchRpRUC");
+      params.append("documento_nro",$("#documento_nro").value)
+
+      let url = `../../Controllers/searchDocument.php?${params}`;
+
+      let result = await global.sendAction(url, params);
+
+      if(result){
+        if(result.data.success){
+
+          let docs = result.data.data[0];
+          console.log(docs);
+          $("#documento_t_representante").value = docs.tipo_de_documento;
+          $("#documento_nro_representante").value = docs.numero_de_documento;
+          $("#representante-legal").value = docs.nombre;
+        }else{
+          sAlert.sweetError("El documento ingresado no existe",`${result.data.message}`);
+        }
+      }
+    }catch(e){
+      console.error(e);
+    }
+  }
+
+  //Busca a una entidad de acuerdo a sun número de RUC
+  async function searchRUC(dnro){
+    try{
+
+      $("#buscar").classList.toggle("d-none");
+      $("#spinner").classList.toggle("d-none");
+      let params = new URLSearchParams();
+
+      params.append("action","searchRUC");
+      params.append("documento_nro",$("#documento_nro").value);
+
+      let url = `../../Controllers/searchDocument.php?${params}`;
+
+      let result = await global.sendAction(url, params);
+
+      if(result){
+        
+        let docs = result.data.body.datosContribuyente;
+
+        let ubigeo = docs.ubigeo;
+
+        console.log(docs);
+
+        //OBTENGO LOS IDS DEL UBIGEO
+        let dataUbigeo = await searchUbigeoRUC(ubigeo);
+        
+        await getUbigeo(dataUbigeo.iddistrito);
+
+        //OBTENGO AL REPRESENTANT LEGAL
+        await searchRpRUC(dnro);
+
+        $("#razon_social").value = docs.desRazonSocial;
+
+      }else{
+        sAlert.sweetError("El documento ingresado no existe","No existe una persona con este documento");
+      }
+
+      $("#buscar").classList.toggle("d-none");
+      $("#spinner").classList.toggle("d-none");
+    }
+    catch(e){
+      $("#buscar").classList.toggle("d-none");
+      $("#spinner").classList.toggle("d-none");
+      sAlert.sweetError("El documento ingresado no existe","No existe una persona con este documento");
+      console.error(e);
+    }
+
+  }
+
+  //Busca el documento de identidad consumiendo datos de la API
+  async function searchDocument(dnro){
+
+    if($("#documento_tipo").value == "DNI"){
+
+      await searchDNI(dnro);
+      
+    }else if($("#documento_tipo").value == "CARNET DE EXTRANJERÍA"){
+
+      console.log("Buscano CT")
+      
+    } else if($("#documento_tipo").value == "RUC"){
+      
+      await searchRUC(dnro);
+    }
+  }
+
   //Agrega un cliente
   async function addClient(){
 
@@ -902,6 +1037,7 @@ document.addEventListener("DOMContentLoaded",()=>{
       params.append("estado_civil",$("#estado_civil").value);
       params.append("iddistrito",$("#iddistrito").value);
       params.append("direccion",$("#direccion").value);
+      params.append("nacionalidad",$("#nacionalidad").value);
 
       let result = await global.sendAction(url, params);
 
@@ -944,6 +1080,7 @@ document.addEventListener("DOMContentLoaded",()=>{
             form.reportValidity();
         }else{
             event.preventDefault();
+            
             callback();
             /* sAlert.sweetConfirm("Datos nuevos","¿Deseas actualizar el registro?",()=>{
                 
@@ -1025,7 +1162,7 @@ document.addEventListener("DOMContentLoaded",()=>{
         }
       });
 
-    }
+    }else if(tPersona == "CARNET DE EXTRANJERÍA"){}
 
   }
 
@@ -1065,8 +1202,10 @@ document.addEventListener("DOMContentLoaded",()=>{
   //Cambia la longitud de la cadena de acuerdo al tipo de documento escojido
   function lengthTDocument(tDocument){
 
+    $("#nacionalidad").required = false;
     $("#documento_nro").minLength = 0;
     $("#documento_nro").maxLength = 0;
+
     if(tDocument.value == "DNI"){
 
       $("#documento_nro").maxLength = 8;
@@ -1076,6 +1215,7 @@ document.addEventListener("DOMContentLoaded",()=>{
 
       $("#documento_nro").maxLength = 12;
       $("#documento_nro").minLength = 12;
+      $("#nacionalidad").required = true;
 
     }else if(tDocument.value == "RUC"){
 

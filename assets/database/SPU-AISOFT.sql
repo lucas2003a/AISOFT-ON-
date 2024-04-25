@@ -803,6 +803,7 @@ CREATE PROCEDURE spu_add_clients_personN
     IN _estado_civil 	VARCHAR(20),
     IN _iddistrito 		INT,
     IN _direccion		VARCHAR(70),
+    IN _nacionalidad	VARCHAR(20),
     IN _idusuario 		INT
 )
 BEGIN
@@ -816,7 +817,8 @@ BEGIN
                             documento_nro,
                             estado_civil,
                             iddistrito,
-                            direccion
+                            direccion,
+                            nacionalidad
 							)
                             
 						VALUES(
@@ -826,7 +828,8 @@ BEGIN
                             _documento_nro,
                             _estado_civil,
                             _iddistrito,
-                            _direccion
+                            _direccion,
+                            NULLIF(_nacionalidad,'')
                         );
                         
 		SET _idpersona = (SELECT @@last_insert_id);

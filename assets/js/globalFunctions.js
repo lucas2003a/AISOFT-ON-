@@ -25,6 +25,23 @@ class FunGlobal{
         }
         
     };
+
+    async sendActionGET(url, params){
+
+        try{
+            
+            let response = await fetch(url,{
+                method: "GET",
+                body:params
+            });
+            const result = await response.json(); 
+            return result;
+
+        }catch(e){
+            console.error(e);
+        }
+        
+    };
     /**
      * Método para realizar aciones en base a una URL y un objeto (devuelve un Blob)
      * @param {string} url 

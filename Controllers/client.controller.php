@@ -49,7 +49,7 @@ if(isset($_POST["action"])){
             
                 $dataObtained = [
 
-                    "tipo_persona"         => $_POST["tipo_persona"],
+                    "tipo_persona"    => $_POST["tipo_persona"],
                     "nombres"         => $_POST["nombres"],
                     "apellidos"       => $_POST["apellidos"],
                     "documento_tipo"  => $_POST["documento_tipo"],
@@ -57,6 +57,7 @@ if(isset($_POST["action"])){
                     "estado_civil"    => $_POST["estado_civil"],
                     "iddistrito"      => $_POST["iddistrito"],
                     "direccion"       => $_POST["direccion"],
+                    "nacionalidad"    => $_POST["nacionalidad"],
                     "idusuario"       => 1
                     
                 ];
