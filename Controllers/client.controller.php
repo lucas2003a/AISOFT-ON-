@@ -8,12 +8,6 @@ if(isset($_POST["action"])){
 
     switch($_POST["action"]){
 
-        case "listClient": 
-            
-                echo json_encode($client->listClients());
-            
-            break;
-
         case "listClientDnro": 
             
                 $dataObtained = [
@@ -29,22 +23,10 @@ if(isset($_POST["action"])){
 
             $tipo_persona =$_POST["tipo_persona"];
 
-            echo json_encode($client->listClientsTpersona($tipo_persona));
-            break;
-        case "listClientDrop": 
-            
-                echo json_encode($client->listInactiveClients());
-            
-            break;
-        
-        case "listClientDropDnro":
-            
-                $documento_nro = $_POST["documento_nro"];
-
-                echo json_encode($client->listInactiveClientsDnro($documento_nro));
-
+            echo json_encode($client->listClientsTperson($tipo_persona));
             break;
 
+        //PERSONA NATURALES
         case "addClientNatural": 
             
                 $dataObtained = [
@@ -66,7 +48,7 @@ if(isset($_POST["action"])){
             
             break;
 
-        case "setClient": 
+        case "setClientNatural": 
             
                 $dataObtained = [
 
@@ -82,23 +64,57 @@ if(isset($_POST["action"])){
                     
                 ];
                 
-                /* echo json_encode($client->setClient($dataObtained)); */
+                echo json_encode($client->setClientNatural($dataObtained));
 
             break;
+            
+        
+        
+        //PERSONAS JURÍDICAS
+        case "addLegalClient": 
 
+            $dataObtained = [
+                "tipo_persona"     =>  $_POST["tipo_persona"],
+                "razon_social"     =>  $_POST["razon_social"],
+                "documento_tipo"   =>  $_POST["documento_tipo"],
+                "documento_nro"    =>  $_POST["documento_nro"],
+                "representante_legal"          =>  $_POST["representante_legal"],
+                "documento_t_representante"    =>  $_POST["documento_t_representante"],
+                "documento_nro_representante"  =>  $_POST["documento_nro_representante"],
+                "partida_elect"    =>  $_POST["partida_elect"],
+                "iddistrito"       =>  $_POST["iddistrito"],
+                "direccion"        =>  $_POST["direccion"],
+                "idusuario"        =>  1
+            ];
+    
+            echo json_encode($client->addLegalClient($dataObtained));
+
+        break;
+        case "setLegalClient": 
+
+            $dataObtained = [
+                "idcliente"        =>  $_POST["idcliente"],
+                "tipo_persona"     =>  $_POST["tipo_persona"],
+                "razon_social"     =>  $_POST["razon_social"],
+                "documento_tipo"   =>  $_POST["documento_tipo"],
+                "documento_nro"    =>  $_POST["documento_nro"],
+                "representante_legal"          =>  $_POST["representante_legal"],
+                "documento_t_representante"    =>  $_POST["documento_t_representante"],
+                "documento_nro_representante"  =>  $_POST["documento_nro_representante"],
+                "partida_elect"    =>  $_POST["partida_elect"],
+                "iddistrito"       =>  $_POST["iddistrito"],
+                "direccion"        =>  $_POST["direccion"],
+                "idusuario"        =>  1
+            ];
+    
+            echo json_encode($client->setLegalClient($dataObtained));
+        
+        break;
         case "inactiveClient": 
             
                 $idcliente = $_POST["idcliente"];
 
                 echo json_encode($client->inactiveClient($idcliente));
-
-            break;
-
-        case "restoreClient": 
-            
-                $idcliente = $_POST["idcliente"];
-
-                echo json_encode($client->restoreClient($idcliente));
 
             break;
     }

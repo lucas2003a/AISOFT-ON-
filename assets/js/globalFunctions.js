@@ -26,13 +26,12 @@ class FunGlobal{
         
     };
 
-    async sendActionGET(url, params){
+    async sendActionGET(url){
 
         try{
             
             let response = await fetch(url,{
                 method: "GET",
-                body:params
             });
             const result = await response.json(); 
             return result;

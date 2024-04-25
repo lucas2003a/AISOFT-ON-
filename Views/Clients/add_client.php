@@ -550,7 +550,7 @@
                  <!-- NACIONALIDAD -->
                  <div class="mt-4">
                     <label for="nacionalidad" class="form-label">Nacionalidad</label>
-                    <input type="text" name="nacionalidad" id="nacionalidad" placeholder="Nacionalidad" class="form-control">
+                    <input type="text" name="nacionalidad" id="nacionalidad" placeholder="Nacionalidad" class="form-control pern-n">
                     <div class="invalid-feedback">
                         Necesitas registrar la nacionalidad.
                     </div>
@@ -637,8 +637,8 @@
 
                 <!-- REPRESENTANTE LEGAL -->
                 <div class="mt-4">
-                    <label for="representante-legal" class="form-label">Representante legal</label>
-                    <input type="text" name="representante-legal" id="representante-legal" placeholder="Representante legal" class="form-control pern-j" disabled>
+                    <label for="representante_legal" class="form-label">Representante legal</label>
+                    <input type="text" name="representante_legal" id="representante_legal" placeholder="Representante legal" class="form-control pern-j" disabled>
                     <div class="invalid-feedback">
                         Necesitas registrar al representante legal.
                     </div>
@@ -889,7 +889,7 @@ document.addEventListener("DOMContentLoaded",()=>{
 
       let url = `../../Controllers/searchDocument.php?${params}`;
 
-      let result = await global.sendAction(url, params);
+      let result = await global.sendActionGET(url);
 
       if(result){
         
@@ -934,7 +934,7 @@ document.addEventListener("DOMContentLoaded",()=>{
 
       let url = `../../Controllers/searchDocument.php?${params}`;
 
-      let result = await global.sendAction(url, params);
+      let result = await global.sendActionGET(url);
 
       if(result){
         if(result.data.success){
@@ -943,7 +943,7 @@ document.addEventListener("DOMContentLoaded",()=>{
           console.log(docs);
           $("#documento_t_representante").value = docs.tipo_de_documento;
           $("#documento_nro_representante").value = docs.numero_de_documento;
-          $("#representante-legal").value = docs.nombre;
+          $("#representante_legal").value = docs.nombre;
         }else{
           sAlert.sweetError("El documento ingresado no existe",`${result.data.message}`);
         }
@@ -966,7 +966,7 @@ document.addEventListener("DOMContentLoaded",()=>{
 
       let url = `../../Controllers/searchDocument.php?${params}`;
 
-      let result = await global.sendAction(url, params);
+      let result = await global.sendActionGET(url);
 
       if(result){
         
@@ -985,6 +985,7 @@ document.addEventListener("DOMContentLoaded",()=>{
         await searchRpRUC(dnro);
 
         $("#razon_social").value = docs.desRazonSocial;
+        $("#direccion").value = docs.desDireccion;
 
       }else{
         sAlert.sweetError("El documento ingresado no existe","No existe una persona con este documento");
@@ -1005,6 +1006,9 @@ document.addEventListener("DOMContentLoaded",()=>{
   //Busca el documento de identidad consumiendo datos de la API
   async function searchDocument(dnro){
 
+    $("#form-data-client").reset();
+    $("#guardar").disabled = true;
+
     if($("#documento_tipo").value == "DNI"){
 
       await searchDNI(dnro);
@@ -1017,6 +1021,8 @@ document.addEventListener("DOMContentLoaded",()=>{
       
       await searchRUC(dnro);
     }
+
+    $("#guardar").disabled = false;
   }
 
   //Agrega un cliente
@@ -1028,19 +1034,39 @@ document.addEventListener("DOMContentLoaded",()=>{
 
       let params = new FormData();
 
-      params.append("action","addClientNatural");
-      params.append("tipo_persona",$("#tipo_persona").value);
-      params.append("nombres",$("#nombres").value);
-      params.append("apellidos",$("#apellidos").value);
-      params.append("documento_tipo",$("#documento_tipo").value);
-      params.append("documento_nro",$("#documento_nro").value);
-      params.append("estado_civil",$("#estado_civil").value);
-      params.append("iddistrito",$("#iddistrito").value);
-      params.append("direccion",$("#direccion").value);
-      params.append("nacionalidad",$("#nacionalidad").value);
+      
+      if($("#tipo_persona").value == "JURÍDICA"){
+        
+        params.append("action","addLegalClient");
+        params.append("tipo_persona",$("#tipo_persona").value);
+        params.append("razon_social",$("#razon_social").value);
+        params.append("documento_tipo",$("#documento_tipo").value);
+        params.append("documento_nro",$("#documento_nro").value);
+        params.append("representante_legal",$("#representante_legal").value);
+        params.append("documento_t_representante",$("#documento_t_representante").value);
+        params.append("documento_nro_representante",$("#documento_nro_representante").value);
+        params.append("partida_elect",$("#partida_elect").value);
+        params.append("iddistrito",$("#iddistrito").value);
+        params.append("direccion",$("#direccion").value);
 
+      }else if($("#tipo_persona").value == "NATURAL"){
+        
+        params.append("action","addClientNatural");
+        params.append("tipo_persona",$("#tipo_persona").value);
+        params.append("nombres",$("#nombres").value);
+        params.append("apellidos",$("#apellidos").value);
+        params.append("documento_tipo",$("#documento_tipo").value);
+        params.append("documento_nro",$("#documento_nro").value);
+        params.append("estado_civil",$("#estado_civil").value);
+        params.append("iddistrito",$("#iddistrito").value);
+        params.append("direccion",$("#direccion").value);
+        params.append("nacionalidad",$("#nacionalidad").value);
+      }
+
+      
       let result = await global.sendAction(url, params);
-
+      console.log(result);
+      console.log(params);
       if(result){
 
         if(result.filasAfect > 0){
@@ -1057,10 +1083,12 @@ document.addEventListener("DOMContentLoaded",()=>{
       }
     }
     catch(e){
+      
       console.error(e);
     }
   }
 
+  //Validar formulario
   function validateFom(form, callback) {
     'use strict' //=> USO ESTRICTO POR POLITICAS DE SEGURIDAD EN EL FORMULARIO
 
@@ -1093,7 +1121,7 @@ document.addEventListener("DOMContentLoaded",()=>{
   };
 
   //Compara si existe un registro con el número de documento
-  async function searchNDocument(array, params){
+  async function validateDocument(array, params){
 
     return new Promise((resolve, reject)  => {
 
@@ -1229,7 +1257,7 @@ document.addEventListener("DOMContentLoaded",()=>{
     $("#form-data-client").addEventListener("submit",(e)=>{
 
       e.preventDefault(); 
-      searchNDocument(dataClient, $("#documento_nro").value);
+      validateDocument(dataClient, $("#documento_nro").value);
     })
     
     $("#buscar").addEventListener("click",()=>{

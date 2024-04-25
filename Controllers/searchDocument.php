@@ -51,7 +51,6 @@ if(isset($_GET["action"])){
 
       $data = json_decode($response);
 
-      //DATOS DE LA EMPRESA -------------------------------------------------------------------------------
       try{
 
         if($data !== null){
@@ -72,6 +71,7 @@ if(isset($_GET["action"])){
       }
       
       break;
+
     case "searchRpRUC": 
     
       $params = json_encode(["ruc" => $numDoc]);
@@ -108,6 +108,7 @@ if(isset($_GET["action"])){
 
       echo json_encode($responseData);
       break;
+
     case "searchCT": 
        
       $url = "https://api.sunat.dev/ce/{$numDoc}?apikey={$token}";

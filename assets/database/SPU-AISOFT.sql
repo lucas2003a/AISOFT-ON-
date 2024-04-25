@@ -614,7 +614,7 @@ BEGIN
 END $$
 DELIMITER ;
 
--- CLIENTES
+-- CLIENTES ---------------------------------------------------------------------------------------------------------------------------------------
 DELIMITER $$
 CREATE PROCEDURE spu_list_clients_tpersona(IN _tipo_persona VARCHAR(10))
 BEGIN
@@ -792,6 +792,7 @@ BEGIN
 END$$
 DELIMITER ;
 
+-- PERSONA NATURAL
 DELIMITER $$
 CREATE PROCEDURE spu_add_clients_personN
 (
@@ -851,9 +852,51 @@ BEGIN
 END $$
 DELIMITER ;
 
-/*CALL spu_add_clients_personN("NATURAL","LUCAS ALFREDO","ATUNCAR VALERIO","DNI","77068570","SOLTERO",1016,"AV SANTA ROSA #541",3);
-SELECT * FROM PERSONAS;
-DELETE FROM CLIENTES WHERE ;*/
+DELIMITER $$
+CREATE PROCEDURE spu_set_clientN
+(
+	IN _idcliente		INT,
+    IN _tipo_persona	VARCHAR(10),
+    IN _idpersona		INT,
+    IN _idpersona_jurdica INT,
+	IN _nombres 		VARCHAR(40),
+    IN _apellidos 		VARCHAR(40),
+    IN _documento_tipo 	VARCHAR(20),
+    IN _documento_nro 	VARCHAR(12),
+    IN _estado_civil 	VARCHAR(20),
+    IN _iddistrito 		INT,
+    IN _direccion		VARCHAR(70),
+    IN _idusuario 		INT
+)
+BEGIN    
+	UPDATE personas
+		SET
+			nombres 	= _nombres,
+			apellidos	= _apellidos,
+			documento_tipo	= _documento_tipo,
+			documento_nro	= _documento_nro,
+			estado_civil	=  _estado_civil,
+			iddistrito		= _iddistrito,
+            direccion		= _direccion,
+            update_at 		= CURDATE()
+		WHERE 
+			idpersona = _idpersona;
+            
+		
+        UPDATE clientes 
+			SET 
+				tipo_persona 	= _tipo_persona,
+				idpersona 		= _idpersona,
+                idpersona_jurdica	= NULL,
+                idsuario		= idusuario,
+                update_at		= CURDATE()
+			WHERE idcliente = _idcliente;
+            
+			SELECT ROW_COUNT() AS filasAfect;
+END $$
+DELIMITER ;
+
+-- PERSONA JURÍDICA
 DELIMITER $$
 CREATE PROCEDURE spu_add_clients_personj
 (
@@ -897,68 +940,22 @@ BEGIN
                             _direccion
                         );
                         
-		SET _idpersona_juridica =  @@last_insert_id;
+		SET _idpersona_juridica = (SELECT @@last_insert_id);
 
 	-- registro a la persona como cliente
 	INSERT INTO clientes(
 						tipo_persona, 
-                        idpersona,
                         idpersona_juridica,
                         idusuario
                         )
 				VALUES
 					(
 						_tipo_persona,
-                        NULLIF(_idpersona,''),
                         _idpersona_juridica,
                         _idusuario
                     );
 	
     SELECT ROW_COUNT() AS filasAfect;
-END $$
-DELIMITER ;
-
-DELIMITER $$
-CREATE PROCEDURE spu_set_clientN
-(
-	IN _idcliente		INT,
-    IN _tipo_persona	VARCHAR(10),
-    IN _idpersona		INT,
-    IN _idpersona_jurdica INT,
-	IN _nombres 		VARCHAR(40),
-    IN _apellidos 		VARCHAR(40),
-    IN _documento_tipo 	VARCHAR(20),
-    IN _documento_nro 	VARCHAR(12),
-    IN _estado_civil 	VARCHAR(20),
-    IN _iddistrito 		INT,
-    IN _direccion		VARCHAR(70),
-    IN _idusuario 		INT
-)
-BEGIN    
-	UPDATE personas
-		SET
-			nombres 	= _nombres,
-			apellidos	= _apellidos,
-			documento_tipo	= _documento_tipo,
-			documento_nro	= _documento_nro,
-			estado_civil	=  _estado_civil,
-			iddistrito		= _iddistrito,
-            direccion		= _direccion,
-            update_at 		= CURDATE()
-		WHERE 
-			idpersona = _idpersona;
-            
-		
-        UPDATE clientes 
-			SET 
-				tipo_persona 	= _tipo_persona,
-				idpersona 		= _idpersona,
-                idpersona_jurdica	= NULL,
-                idsuario		= idusuario,
-                update_at		= CURDATE()
-			WHERE idcliente = _idcliente;
-            
-			SELECT ROW_COUNT() AS filasAfect;
 END $$
 DELIMITER ;
 

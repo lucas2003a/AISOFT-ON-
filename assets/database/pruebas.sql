@@ -40,6 +40,7 @@ UPDATE activos AS ACT
 INNER JOIN separaciones AS SEP ON ACT.idactivo = SEP.idactivo
 SET ACT.ESTADO = 'SEPARADO';
 
-select * from activos;
+select * from personas_juridicas;
+select * from clientes
 
 

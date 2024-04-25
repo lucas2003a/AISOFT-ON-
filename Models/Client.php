@@ -12,26 +12,9 @@ class Client extends Conection{
     }
 
     /**
-     * Método para listar los clientes activos
-     */
-    public function listClients(){
-
-        try{
-
-            $query = $this->conection->prepare("spu_list_clients()");
-            $query->execute();
-
-            return $query->fetchAll(PDO::FETCH_ASSOC);
-
-        }catch(Exception $e){
-            die($e->getMessage());
-        }
-    }
-
-    /**
      * Método para listar los clientes distintguiendo el tipo de persona
      */
-    public function listClientsTpersona($tipo_persona = ""){
+    public function listClientsTperson($tipo_persona = ""){
 
         try{
 
@@ -65,39 +48,7 @@ class Client extends Conection{
         }
     }
 
-    /**
-     * Método para listar los clientes inactivos
-     */
-    public function listInactiveClients(){
-
-        try{
-
-            $query = $this->conection->prepare("CALL spu_list_inactive_clients()");
-            $query->execute();
-
-            return $query->fetchAll(PDO::FETCH_ASSOC);
-
-        }catch(Exception $e){
-            die($e->getMessage());
-        }
-    }
-
-    /**
-     * Método para listar a los clientes inactivos por nro de documento
-     */
-    public function listInactiveClientsDnro($documento_nro = ""){
-
-        try{
-
-            $query = $this->conection->prepare("CALL spu_list_inactive_clients_docNro(?)");
-            $query->execute(array($documento_nro));
-
-            return $query->fetchAll(PDO::FETCH_ASSOC);
-
-        }catch(Exception $e){
-            die($e->getMessage());
-        }
-    }
+    //PERSONAS NATURALES
 
     /**
      * Método para registrar cliente como persona natural
@@ -106,7 +57,7 @@ class Client extends Conection{
 
         try{
 
-            $query = $this->conection->prepare("CALL spu_add_clients_personN(?,?,?,?,?,?,?,?,?)");
+            $query = $this->conection->prepare("CALL spu_add_clients_personN(?,?,?,?,?,?,?,?,?,?)");
             $query->execute(
                 array(
                     $dataClient["tipo_persona"],
@@ -158,6 +109,72 @@ class Client extends Conection{
         }
     }
 
+    //PERSONAS JURÍDICCAS
+
+    /**
+     * Método para registrar una persona jurídicia
+     */
+    public function addLegalClient($dataClient = []){
+
+        try{
+
+            $query = $this->conection->prepare("CALL spu_add_clients_personj(?,?,?,?,?,?,?,?,?,?,?)");
+            $query->execute(
+                array(
+                    $dataClient["tipo_persona"],
+                    $dataClient["razon_social"],
+                    $dataClient["documento_tipo"],
+                    $dataClient["documento_nro"],
+                    $dataClient["representante_legal"],
+                    $dataClient["documento_t_representante"],
+                    $dataClient["documento_nro_representante"],
+                    $dataClient["partida_elect"],
+                    $dataClient["iddistrito"],
+                    $dataClient["direccion"],
+                    $dataClient["idusuario"]
+                )
+            );
+
+            return $query->fetch(PDO::FETCH_ASSOC);
+        }
+        
+        catch(Exception $e){
+            die($e->getMessage());
+        }
+    }
+
+    /**
+     * Método para actualizar a una persoma jurídica
+     */
+    public function setLegalClient($dataClient = []){
+
+        try{
+
+            $query = $this->conection->prepare("CALL spu_set_clientJ(?,?,?,?,?,?,?,?,?,?,?,?)");
+            $query->execute(
+                array(
+                    $dataClient["idcliente"],
+                    $dataClient["tipo_persona"],
+                    $dataClient["razon_social"],
+                    $dataClient["documento_tipo"],
+                    $dataClient["documento_nro"],
+                    $dataClient["representante_legal"],
+                    $dataClient["documento_t_representante"],
+                    $dataClient["documento_nro_representante"],
+                    $dataClient["partida_elect"],
+                    $dataClient["iddistrito"],
+                    $dataClient["direccion"],
+                    $dataClient["idusuario"]
+                )
+            );
+
+            return $query->fetch(PDO::FETCH_ASSOC);
+        }
+        
+        catch(Exception $e){
+            die($e->getMessage());
+        }
+    }
     /**
      * Método para inactivar a un cliente
      */
@@ -170,23 +187,6 @@ class Client extends Conection{
 
             return $query->fetch(PDO::FETCH_ASSOC);
 
-        }catch(Exception $e){
-            die($e->getMessage());
-        }
-    }
-
-    /**
-     * Método para recuperar a un cliente inactivo(eliminado)
-     */
-    public function restoreClient($idcliente = 0){
-
-        try{
-
-            $query = $this->conection->prepare("CALL spu_restore_clientes(?)");
-            $query->execute(array($idcliente));
-
-            return $query->fetch(PDO::FETCH_ASSOC);
-            
         }catch(Exception $e){
             die($e->getMessage());
         }
