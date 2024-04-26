@@ -45,30 +45,39 @@ if(isset($_GET["action"])){
 
     case "searchRUC": 
       
-      $url = "https://api.sunat.dev/ruc-premium/{$numDoc}?apikey={$token}";
+      $params = json_encode(["ruc" => $numDoc]);
 
-      $response = file_get_contents($url);
+      $curl = curl_init();
+      curl_setopt_array($curl, [
+          CURLOPT_URL => "https://apiperu.dev/api/ruc",
+          CURLOPT_RETURNTRANSFER => true,
+          CURLOPT_CUSTOMREQUEST => "POST",
+          CURLOPT_SSL_VERIFYPEER => false,
+          CURLOPT_POSTFIELDS => $params,        
+          CURLOPT_HTTPHEADER => [
+              'Accept: application/json',
+              'Content-Type: application/json',
+              'Authorization: Bearer '.$tokenDEV
+          ],
+      ]);
 
+      $response = curl_exec($curl);
       $data = json_decode($response);
 
-      try{
-
-        if($data !== null){
-          
-          $responseData["message"] = "Documento encontrado";
-          $responseData["data"] = $data;
-  
-        }else{
-  
-          $responseData["message"] = "Documento no encontrado";
-        }
-  
-        echo json_encode($responseData);
+      $err = curl_error($curl);
+      curl_close($curl);
       
-      }catch(Exception $e){
+      if ($err) {
+          echo "cURL Error #:" . $err;
+          $responseData["message"] = "Documento no encontrado";
 
-        die($e->getMessage());
+      } else {
+
+        $responseData["message"] = "Documento encontrado";
+        $responseData["data"] = $data;
       }
+
+      echo json_encode($responseData);
       
       break;
 

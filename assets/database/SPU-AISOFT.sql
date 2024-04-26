@@ -73,7 +73,10 @@ BEGIN
 END $$
 DELIMITER ;
 
-CALL spu_get_fullUbigeo("sunampe","Chincha","Ica");
+CALL spu_get_fullUbigeo("LA PERLA","PROV. CONST. DEL CALLAO","PROV. CONST. DEL CALLAO");
+select * from distritos where distrito ="LA PERLA";
+select * from provincias where provincia ="PROV. CONST. DEL CALLAO";
+select * from departamentos where departamento ="ANCASH";
 -- constructora
 DELIMITER $$
 CREATE PROCEDURE spu_list_companies()
@@ -648,10 +651,10 @@ BEGIN
 			persj.documento_tipo,
 			persj.documento_nro,
 			persj.razon_social,
-			persj.representante_legal,
-			persj.documento_t_representante,
-			persj.documento_nro_representante,
-			persj.partida_elect,
+			rep.representante_legal,
+			rep.documento_tipo,
+			rep.documento_nro,
+			rep.partida_elect,
 			dist.distrito,
 			prov.provincia,
 			dept.departamento,
@@ -659,6 +662,7 @@ BEGIN
 			persUsu.nombres AS usuario
 			FROM clientes AS clien
 			INNER JOIN personas_juridicas AS persj ON persj.idpersona_juridica = clien.idpersona_juridica
+            INNER JOIN representantes_legales_clientes AS rep ON rep.idpersona_juridica = persj.idpersona_juridica
 			INNER JOIN distritos AS dist ON dist.iddistrito = persj.iddistrito
 			INNER JOIN provincias AS prov ON prov.idprovincia = dist.idprovincia
 			INNER JOIN departamentos AS dept ON dept.iddepartamento = prov.iddepartamento
@@ -711,10 +715,10 @@ BEGIN
 			persj.documento_tipo,
 			persj.documento_nro,
 			persj.razon_social,
-			persj.representante_legal,
-			persj.documento_t_representante,
-			persj.documento_nro_representante,
-			persj.partida_elect,
+			rep.representante_legal,
+			rep.documento_tipo,
+			rep.documento_nro,
+			rep.partida_elect,
 			dist.distrito,
 			prov.provincia,
 			dept.departamento,
@@ -722,6 +726,7 @@ BEGIN
 			persUsu.nombres AS usuario
 			FROM clientes AS clien
 			INNER JOIN personas_juridicas AS persj ON persj.idpersona_juridica = clien.idpersona_juridica
+            INNER JOIN representantes_legales_clientes AS rep ON rep.idpersona_juridica = persj.idpersona_juridica
 			INNER JOIN distritos AS dist ON dist.iddistrito = persj.iddistrito
 			INNER JOIN provincias AS prov ON prov.idprovincia = dist.idprovincia
 			INNER JOIN departamentos AS dept ON dept.iddepartamento = prov.iddepartamento
@@ -912,23 +917,22 @@ CREATE PROCEDURE spu_add_clients_personj
     IN _representante_legal 		VARCHAR(30),
     IN _documento_t_representante 	VARCHAR(20),
     IN _documento_nro_representante 	VARCHAR(12),
+    IN _cargo			VARCHAR(30),
     IN _partida_elect	VARCHAR(100),
     IN _iddistrito 		INT,
     IN _direccion		VARCHAR(70),	
     IN _idusuario 		INT
 )
 BEGIN
+
 	DECLARE _idpersona_juridica INT;
     
+    -- registro al representante
     -- registro a la persona
     INSERT INTO personas_juridicas(
 							razon_social,
                             documento_tipo,                            
                             documento_nro,
-                            representante_legal,
-                            documento_t_representante,
-                            documento_nro_representante,
-                            partida_elect,
                             iddistrito,
                             direccion
 							)
@@ -937,15 +941,30 @@ BEGIN
 							_razon_social,
                             _documento_tipo,                            
                             _documento_nro,
-                            _representante_legal,
-                            _documento_t_representante,
-                            _documento_nro_representante,
-                            _partida_elect,
                             _iddistrito,
                             _direccion
                         );
                         
 		SET _idpersona_juridica = (SELECT @@last_insert_id);
+        
+        -- REGISTRO AL REPRESETANTE
+        INSERT INTO representantes_legales_clientes
+					(
+						idpersona_juridica,
+						representante_legal,
+                        documento_tipo,
+                        documento_nro,
+						partida_elect,
+                        cargo
+					)
+                    VALUES(
+						_idpersona_juridica,
+						_representante_legal,
+						_documento_t_representante,
+						_documento_nro_representante,
+						_partida_elect,
+                        _cargo
+                    );
 
 	-- registro a la persona como cliente
 	INSERT INTO clientes(

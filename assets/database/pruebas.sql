@@ -41,6 +41,15 @@ INNER JOIN separaciones AS SEP ON ACT.idactivo = SEP.idactivo
 SET ACT.ESTADO = 'SEPARADO';
 
 select * from personas_juridicas;
-select * from clientes
+select * from clientes;
+
+SELECT * FROM representantes_legales_clientes;
 
 
+
+INSERT INTO representantes_legales_clientes(idpersona_juridica, representante_legal, documento_tipo, documento_nro,partida_elect)
+SELECT idpersona_juridica, representante_legal, documento_t_representante, documento_nro_representante,partida_elect
+	FROM personas_juridicas
+    WHERE inactive_at IS NULL;
+
+SELECT * FROM representantes_legales_clientes;

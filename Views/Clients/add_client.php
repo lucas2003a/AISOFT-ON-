@@ -658,6 +658,18 @@
                       Partida electrónica registrada correctamente.
                     </div>
                 </div>
+
+                <!-- CARGO -->
+                <div class="mt-4">
+                    <label for="cargo" class="form-label">Cargo</label>
+                    <input type="text" name="cargo" id="cargo" placeholder="Cargo" class="form-control pern-j" disabled>
+                    <div class="invalid-feedback">
+                        Necesitas registrar el cargo.
+                    </div>
+                    <div class="valid-feedback">
+                      Cargo registrado correctamente.
+                    </div>
+                </div>
               </div>        
 
                
@@ -944,6 +956,7 @@ document.addEventListener("DOMContentLoaded",()=>{
           $("#documento_t_representante").value = docs.tipo_de_documento;
           $("#documento_nro_representante").value = docs.numero_de_documento;
           $("#representante_legal").value = docs.nombre;
+          $("#cargo").value = docs.cargo;
         }else{
           sAlert.sweetError("El documento ingresado no existe",`${result.data.message}`);
         }
@@ -970,22 +983,27 @@ document.addEventListener("DOMContentLoaded",()=>{
 
       if(result){
         
-        let docs = result.data.body.datosContribuyente;
-
-        let ubigeo = docs.ubigeo;
-
+        console.log(result)
+        let docs = result.data.data;
         console.log(docs);
+
+        let ubigeo = {
+          desDistrito: docs.distrito,
+          desProvincia: docs.provincia,
+          desDepartamento: docs.departamento,
+        };
+
 
         //OBTENGO LOS IDS DEL UBIGEO
         let dataUbigeo = await searchUbigeoRUC(ubigeo);
-        
+        console.log(dataUbigeo)
         await getUbigeo(dataUbigeo.iddistrito);
 
         //OBTENGO AL REPRESENTANT LEGAL
         await searchRpRUC(dnro);
 
-        $("#razon_social").value = docs.desRazonSocial;
-        $("#direccion").value = docs.desDireccion;
+        $("#razon_social").value = docs.nombre_o_razon_social;
+        $("#direccion").value = docs.direccion_completa;
 
       }else{
         sAlert.sweetError("El documento ingresado no existe","No existe una persona con este documento");
@@ -1085,6 +1103,7 @@ document.addEventListener("DOMContentLoaded",()=>{
         params.append("representante_legal",$("#representante_legal").value);
         params.append("documento_t_representante",$("#documento_t_representante").value);
         params.append("documento_nro_representante",$("#documento_nro_representante").value);
+        params.append("cargo",$("#cargo").value);
         params.append("partida_elect",$("#partida_elect").value);
         params.append("iddistrito",$("#iddistrito").value);
         params.append("direccion",$("#direccion").value);

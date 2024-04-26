@@ -640,18 +640,26 @@
 
                 <!-- REPRESENTANTE LEGAL -->
                 <div class="mt-4">
-                    <label for="representante_legal" class="form-label">Representante legal</label>
-                    <input type="text" name="representante_legal" id="representante_legal" placeholder="Representante legal" class="form-control pern-j" disabled>
+                  <label for="representante_legal" class="form-label">Representante legal</label>
+                  <div class="row">
+                    <div class="col-10">
+                      <input type="text" name="representante_legal" id="representante_legal" placeholder="Representante legal" class="form-control pern-j" disabled>
+                    </div>
+                      <div class="col-1">
+                        <button type="button" class="btn btn-primary" id="basic-addon2"><i class="bi bi-arrow-clockwise"></i></button>
+                      </div>
+                  </div>
                     <div class="invalid-feedback">
                         Necesitas registrar al representante legal.
                     </div>
                     <div class="valid-feedback">
                       Representante legal registrado correctamente.
                     </div>
+
                 </div>  
 
                 <!-- PARTIDA ELECTRÓNICA -->
-                <div class="mt-4">
+                <div class="mt-1">
                     <label for="partida_elect" class="form-label">Partida electrónica</label>
                     <input type="text" name="partida_elect" id="partida_elect" placeholder="Partida electrónica" class="form-control pern-j" disabled>
                     <div class="invalid-feedback">

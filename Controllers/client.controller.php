@@ -88,6 +88,7 @@ if(isset($_POST["action"])){
                 "representante_legal"          =>  $_POST["representante_legal"],
                 "documento_t_representante"    =>  $_POST["documento_t_representante"],
                 "documento_nro_representante"  =>  $_POST["documento_nro_representante"],
+                "cargo"            =>  $_POST["cargo"],
                 "partida_elect"    =>  $_POST["partida_elect"],
                 "iddistrito"       =>  $_POST["iddistrito"],
                 "direccion"        =>  $_POST["direccion"],

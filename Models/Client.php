@@ -135,7 +135,7 @@ class Client extends Conection{
 
         try{
 
-            $query = $this->conection->prepare("CALL spu_add_clients_personj(?,?,?,?,?,?,?,?,?,?,?)");
+            $query = $this->conection->prepare("CALL spu_add_clients_personj(?,?,?,?,?,?,?,?,?,?,?,?)");
             $query->execute(
                 array(
                     $dataClient["tipo_persona"],
@@ -145,6 +145,7 @@ class Client extends Conection{
                     $dataClient["representante_legal"],
                     $dataClient["documento_t_representante"],
                     $dataClient["documento_nro_representante"],
+                    $dataClient["cargo"],
                     $dataClient["partida_elect"],
                     $dataClient["iddistrito"],
                     $dataClient["direccion"],
