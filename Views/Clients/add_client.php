@@ -1003,6 +1003,46 @@ document.addEventListener("DOMContentLoaded",()=>{
 
   }
 
+  async function searchCE(dnro){
+
+    try{
+
+      $("#buscar").classList.toggle("d-none");
+      $("#spinner").classList.toggle("d-none");
+      let params = new URLSearchParams();
+
+      params.append("action","searchCE");
+      params.append("documento_nro",$("#documento_nro").value);
+
+      let url = `../../Controllers/searchDocument.php?${params}`;
+
+      let result = await global.sendActionGET(url);
+
+      if(result){
+        
+        let docs = result.data.body;
+
+        console.log(docs);
+
+        $("#nombres").value = docs.nombre_completo;
+        $("#apellidos").value = `${docs.apellido_paterno} ${docs.apellido_materno}`;
+        $("#nacionalidad").value = docs.nacionalidad;
+
+      }else{
+        sAlert.sweetError("El documento ingresado no existe","No existe una persona con este documento");
+      }
+
+      $("#buscar").classList.toggle("d-none");
+      $("#spinner").classList.toggle("d-none");
+
+    }
+    catch(e){
+      $("#buscar").classList.toggle("d-none");
+      $("#spinner").classList.toggle("d-none");
+      sAlert.sweetError("El documento ingresado no existe","No existe una persona con este documento");
+      console.error(e);
+    }
+  }
   //Busca el documento de identidad consumiendo datos de la API
   async function searchDocument(dnro){
 
@@ -1015,7 +1055,7 @@ document.addEventListener("DOMContentLoaded",()=>{
       
     }else if($("#documento_tipo").value == "CARNET DE EXTRANJERÍA"){
 
-      console.log("Buscano CT")
+      await searchCE(dnro);
       
     } else if($("#documento_tipo").value == "RUC"){
       
@@ -1075,6 +1115,7 @@ document.addEventListener("DOMContentLoaded",()=>{
 
             $("#search_person").reset();
             $("#form-data-client").reset();
+            $("#form-data-client").classList.remove('was-validated');
 
           },()=>{
             window.location.href = "./index.php";
@@ -1242,7 +1283,7 @@ document.addEventListener("DOMContentLoaded",()=>{
     }else if(tDocument.value == "CARNET DE EXTRANJERÍA"){
 
       $("#documento_nro").maxLength = 12;
-      $("#documento_nro").minLength = 12;
+      $("#documento_nro").minLength = 0;
       $("#nacionalidad").required = true;
 
     }else if(tDocument.value == "RUC"){

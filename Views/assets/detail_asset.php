@@ -836,7 +836,7 @@
 
       newDetail =`
       <div class="alert alert-danger m-4 text-white" role="alert">
-          <strong class="text-white">No se han ecnontrado registros</strong> Aegurate que exista la conformidad de datos.
+          <strong class="text-white">No se ha encontrado registros</strong> Asegurate que exista la conformidad de datos.
       </div>
       `;
       $(id).innerHTML += newDetail;

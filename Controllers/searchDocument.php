@@ -109,7 +109,7 @@ if(isset($_GET["action"])){
       echo json_encode($responseData);
       break;
 
-    case "searchCT": 
+    case "searchCE": 
        
       $url = "https://api.sunat.dev/ce/{$numDoc}?apikey={$token}";
 
@@ -120,14 +120,14 @@ if(isset($_GET["action"])){
 
         if($data !== null){
 
-          $data["message"] = "Documento encontrado";
-          $data["data"] = $data;
+          $dataResponse["message"] = "Documento encontrado";
+          $dataResponse["data"] = $data;
 
         }else{
-          $data["message"] = "Documento no encontrado";
+          $dataResponse["message"] = "Documento no encontrado";
         }
 
-        echo json_encode($data);
+        echo json_encode($dataResponse);
 
       }catch(Exception $e){
         die($e->getMessage());

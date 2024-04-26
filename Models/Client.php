@@ -12,6 +12,23 @@ class Client extends Conection{
     }
 
     /**
+     * Obtengo el cliente por el ID
+     */
+    public function getClientById($idcliente = 0){
+        
+        try{
+
+            $query = $this->conection->prepare("CALL spu_list_clients_by_id(?)");
+            $query->execute(array($idcliente));
+
+            return $query->fetch(PDO::FETCH_ASSOC);
+        }
+        catch(Exception $e){
+            die($e->getMessage());
+        }
+    }
+
+    /**
      * Método para listar los clientes distintguiendo el tipo de persona
      */
     public function listClientsTperson($tipo_persona = ""){

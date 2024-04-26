@@ -302,9 +302,11 @@
         <nav aria-label="breadcrumb">
           <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
           <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="#">Dashboard</a></li>
-            <li class="breadcrumb-item text-sm text-dark active" aria-current="page">CLientes</li>
+          <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="#">CLientes</a></li>
+            <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Actualizar clientes</li>
           </ol>
-          <h6 class="font-weight-bolder mb-0" id="cabezera">CIENTES </h6>
+          <h6 class="font-weight-bolder mb-0" id="cabezera">ACTUALIZAR 
+            CIENTES </h6>
         </nav>
         <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
           <div class="ms-md-auto pe-md-3 d-flex align-items-center">
@@ -420,58 +422,257 @@
 
     <!-- CONTENIDO -->
 
-    <div class="row">
-        <div class="col-12">
-          <div class="card mb-4">
-            <div class="card-header pb-0">
-              <div class="row">
-                <div class="col-md-6">
+    <div class="d-flex flex-column h-100">
 
-                  <h6>Tabla - clientes</h6>
+    <form action="" class="row needs-validation"  id="search_person" novalidate>
+      
+      
+      </form>
+      
+      <form class="row needs-validation" id="form-data-client" novalidate>
+        <div class="row">
+          <div class="col-md-4">
+            <!-- TIPO DE PERSONA -->
+            <div class="mt-4">
+              <label for="tipo_persona" class="form-label">Tipo de persona</label>
+                <select class="form-select custom-select-scroll" id="tipo_persona" required>
+                  <option value="NATURAL">Natural</option>
+                  <option value="JURÍDICA">Juridica</option>
+                </select>
+                <div class="invalid-feedback">
+                    Necesitas escojer un tipo de persona.
                 </div>
-                <div class="col-md-6">
-                  <div class="text-end">
-                    <button type="button" class="btn btn-lg bg-gradient-success opacity-10" id="generate-excel"><i class="fa-solid fa-file-excel"></i></button>
-                    <button type="button" class="btn btn-lg bg-gradient-danger opacity-10" id="generate-pdf"><i class="bi bi-filetype-pdf"></i></button>
-                  </div>
+                <div class="valid-feedback">
+                  Tipo de persona seleccionado correctamente.
                 </div>
-              </div>
-              <div class="row">
-                <div class="col-md-3">
-                  
-                  <select name="tipo_persona" class="form-select" id="tipo_persona">
-                    <option value="NATURAL" selected>Tipo de persona</option>
-                    <option value="JURÍDICA">Jurídica</option>
-                    <option value="NATURAL">Natural</option>
-                  </select>
-                </div>
-              </div>
             </div>
-            <div class="card-body px-0 pt-0 pb-2">
-              <div class="table-responsive text-center p-0">
-                  <table class="table align-items-center mb-0" id="table-clients">
-                    <thead>
-                    <tr>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">#</th>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Tipo de persona</th>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Cliente</th>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Tipo de documento</th>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Nº de documento</th>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Operaciones</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    
-                  <!-- RENDER -->
-
-                  </tbody>
-                </table>
+          </div>
+          <div class="col-md-4">
+  
+            <!-- DOCUMENTO TIPO -->
+            <div class="mt-4">
+              <label for="documento_tipo" class="form-label">Tipo de documento</label>
+              <select name="documento_tipo" class="form-select" id="documento_tipo" required>
+                <option value="">Tipo de documento</option>
+              </select>
+              <div class="invalid-feedback">
+                Necesitas registrar el tipo de documento.
+              </div>
+              <div class="valid-feedback">
+                Tipo de documento registrado correctamente.
               </div>
             </div>
           </div>
-        </div>
-      </div>
+          <div class="col-md-4 mt-4">
+            <label for="documento_nro" class="form-label">Nº de documento</label>
+            <div class="row">
+              <div class="col-md-9">
+    
+                <input type="text" name="documento_nro" id="documento_nro" class="form-control" placeholder="Nº documento" required>
+                <div class="invalid-feedback">
+                    Necesitas ingresar el número del documento.
+                </div>
+                <div class="valid-feedback">
+                    Nº de documento ingresado correctamente.
+                </div>
+              </div>
+              <div class="col-md-3">
+                <button type="submit" class="btn btn-success" id="buscar"- disabled>Buscar</button>
+                <button class="btn btn-success d-none" id="spinner" type="button" disabled>
+                  <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                </button>
+                
+              </div>
+            </div>
+  
+          </div>
 
+          <hr>
+        </div>
+        
+        <div class="row">
+            <div class="col-md-6">
+
+                <!-- DATOS GENERALES -->
+
+
+                <!-- DEPARTAMENTO -->
+                <div class="mt-4">
+                    <label for="iddepartamento" class="form-label">Departamento</label>
+                    <select class="form-select custom-select-scroll" id="iddepartamento" required>
+                        <option selected disabled value="">Departamento</option>
+                    </select>
+                    <div class="invalid-feedback">
+                        Necesitas escojer una departamento.
+                    </div>
+                    <div class="valid-feedback">
+                      Departamento escojido correctamente.
+                    </div>
+                </div>
+
+                <!-- PROVINCIA -->
+                <div class="mt-4">
+                    <label for="idprovincia" class="form-label">Provincia</label>
+                    <select class="form-select custom-select-scroll" id="idprovincia" required>
+                        <option selected disabled value="">Provincia</option>
+                    </select>
+                    <div class="invalid-feedback">
+                        Necesitas escojer una provincia.
+                    </div>
+                    <div class="valid-feedback">
+                        Provincia escojida correctamente.
+                    </div>
+                </div>
+
+                <!-- DISTRITO -->
+                <div class="mt-4">
+                    <label for="iddistrito" class="form-label">Distrito</label>
+                    <select class="form-select custom-select-scroll" id="iddistrito" required>
+                        <option selected disabled value="">Distrito</option>
+                    </select>
+                    <div class="invalid-feedback">
+                        Necesitas escojer un distrito.
+                    </div>
+                    <div class="valid-feedback">
+                        Distrito escojido correctamente.
+                    </div>
+                </div>
+
+                <!-- DIRECCIÓN -->
+                <div class="mt-4">
+                    <label for="direccion" class="form-label">Dirección</label>                                  
+                    <input type="text" class="form-control" id="direccion" placeholder="Dirección" required>
+                    <div class="invalid-feedback">
+                        Necesitas registrar la dirección.
+                    </div>
+                    <div class="valid-feedback">
+                        Dirección registrada correctamente.
+                    </div>
+                </div>
+
+                 <!-- NACIONALIDAD -->
+                 <div class="mt-4">
+                    <label for="nacionalidad" class="form-label">Nacionalidad</label>
+                    <input type="text" name="nacionalidad" id="nacionalidad" placeholder="Nacionalidad" class="form-control pern-n">
+                    <div class="invalid-feedback">
+                        Necesitas registrar la nacionalidad.
+                    </div>
+                    <div class="valid-feedback">
+                      Nacionalidad registrada correctamente.
+                    </div>
+                </div>  
+
+                 <!-- NRO DE DOCUMENTO DEL REPRESENTATE -->
+                 <div class="mt-4">
+                    <label for="documento_nro_representante" class="form-label">Nº de documento del representante</label>
+                    <input type="text" name="documento_nro_representante" id="documento_nro_representante" placeholder="Nº de documento del representante" class="form-control pern-j" disabled>
+                    <div class="invalid-feedback">
+                        Necesitas registrar el nº de documento del representante.
+                    </div>
+                    <div class="valid-feedback">
+                      Nº de documento del representante registrado correctamente.
+                    </div>
+                </div>  
+
+                
+                <!-- TIPO DE DOCUMENTO DEL REPRESENTATE -->
+                <div class="mt-4">
+                    <label for="documento_t_representante" class="form-label">Tipo de documento del representante</label>
+                    <input type="text" name="documento_t_representante" id="documento_t_representante" placeholder="Tipo de documento del representante" class="form-control pern-j" disabled>
+                    <div class="invalid-feedback">
+                        Necesitas registrar el tipo de documento del representante.
+                    </div>
+                    <div class="valid-feedback">
+                      Tipo de documento del representante registrado correctamente.
+                    </div>
+                </div>  
+            </div>
+
+            <div class="col-md-6">
+
+                <!-- APELLIDOS -->
+                <div class="mt-4">
+                    <label for="apellidos" class="form-label">Apellidos</label>
+                    <input type="text" name="nombres" id="apellidos" placeholder="Apellidos" class="form-control pern-n" required>
+                    <div class="invalid-feedback">
+                        Necesitas registrar los apellidos.
+                    </div>
+                    <div class="valid-feedback">
+                        Apellidos registrados correctamente.
+                    </div>
+                </div>
+
+                <!-- NOMBRES -->
+                <div class="mt-4">
+                    <label for="nombres" class="form-label">Nombres</label>
+                    <input type="text" name="nombres" id="nombres" placeholder="Nombres" class="form-control pern-n" required>
+                    <div class="invalid-feedback">
+                        Necesitas registrar los nombres.
+                    </div>
+                    <div class="valid-feedback">
+                        Nombres registrados correctamente.
+                    </div>
+                </div>              
+
+                <!-- ESTADO CIVIL -->
+                <div class="mt-4">
+                    <label for="estado_civil" class="form-label">Estado civil</label>                                  
+                    <input type="text" class="form-control pern-n" id="estado_civil" placeholder="Estado civil" required>
+                    <div class="invalid-feedback">
+                        Necesitas registrar el estado civil.
+                    </div>
+                    <div class="valid-feedback">
+                        Estado civil registrado correctamente.
+                    </div>
+                </div>
+
+                <!-- RAZÓN SOCIAL -->
+                <div class="mt-4">
+                    <label for="razon_social" class="form-label">Razón social</label>
+                    <input type="text" name="razon_social" id="razon_social" placeholder="Razón social" class="form-control pern-j" disabled>
+                    <div class="invalid-feedback">
+                        Necesitas registrar la razón social.
+                    </div>
+                    <div class="valid-feedback">
+                      Razón social registrada correctamente.
+                    </div>
+                </div>  
+
+                <!-- REPRESENTANTE LEGAL -->
+                <div class="mt-4">
+                    <label for="representante_legal" class="form-label">Representante legal</label>
+                    <input type="text" name="representante_legal" id="representante_legal" placeholder="Representante legal" class="form-control pern-j" disabled>
+                    <div class="invalid-feedback">
+                        Necesitas registrar al representante legal.
+                    </div>
+                    <div class="valid-feedback">
+                      Representante legal registrado correctamente.
+                    </div>
+                </div>  
+
+                <!-- PARTIDA ELECTRÓNICA -->
+                <div class="mt-4">
+                    <label for="partida_elect" class="form-label">Partida electrónica</label>
+                    <input type="text" name="partida_elect" id="partida_elect" placeholder="Partida electrónica" class="form-control pern-j" disabled>
+                    <div class="invalid-feedback">
+                        Necesitas registrar la partida electrónica.
+                    </div>
+                    <div class="valid-feedback">
+                      Partida electrónica registrada correctamente.
+                    </div>
+                </div>
+              </div>        
+
+               
+              </div>                                    
+              <div class="mt-4 mb-4">
+
+                  <button class="btn btn-success" type="submit" id="guardar">Guardar</button>
+              </div>
+        </div>
+      </form>
+    </div>
+        
     <footer class="footer pt-3  ">
         <div class="container-fluid">
           <div class="row align-items-center justify-content-lg-between">
@@ -544,11 +745,6 @@
       </div>
     </div>
   </div>
-
-  <!-- JQUERY -->
-  <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
-  <script type="text/javascript" src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script> -->
-
   <!-- SWEET ALERT -->
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
@@ -560,107 +756,100 @@
   <script src="../../assets/js/plugins/chartjs.min.js"></script>
   <script src="../../assets/js/globalFunctions.js"></script>
   <script src="../../assets/js/sweetAlert.js"></script>
-
-  <!-- <script>
-    $(document).ready(function(){
-
-      $('#table-clients').DataTable();
-    });
-
-  </script> -->
+  <script src="../../assets/js/renderUbigeo.js"></script>
   <script>
 document.addEventListener("DOMContentLoaded",()=>{
 
   /* INSTANCIAS */
   const global = new FunGlobal();
+  const sAlert = new Alert();
 
   const $ = id => global.$(id);
   const $All = id => global.$All(id);
 
-  let timer;
+  let dataClient;
 
-  function renderClients(results){
+  let url = window.location.search;
+  let stringQuery = new URLSearchParams(url);
+  let code = stringQuery.get("id");
+  let idCliente = atob(code);
 
-    let numberRow = 1;
+  console.log(idCliente);
 
-    $("#table-clients tbody").innerHTML = "";
+  async function getTDoc(data){
 
-    let newRow = ``;
-
-    if(results.length > 0){
-      
-      results.forEach(client =>{
-        
-        let code = btoa(client.idcliente) //CODIFICACIÓN
-  
-        let clientNames = client.tipo_persona == "NATURAL" ? `<strong class="text-uppercase">${client.apellidos}</strong>, ${client.nombres}` :
-                        `<strong class="text-uppercase">${client.razon_social}</strong>`;
-        newRow = `
-                <tr>
-                  <td>
-                    <div class="d-flex px-2 py-1">
-                      <div class="d-flex flex-column justify-content-center">
-                        <h6 class="mb-0 text-sm">${numberRow}</h6>
-                      </div>
-                    </div>
-                  </td>
-                  <td>
-                    <p class="text-xs font-weight-bold mb-0">${client.tipo_persona}</p>
-                    </td>
-                    <td class="align-middle text-center text-sm">
-                      ${clientNames}
-                    </td>
-                    <td>
-                      <p class="text-xs font-weight-bold mb-0">${client.documento_tipo}</p>
-                    </td>
-                  <td>
-                    <p class="text-xs font-weight-bold mb-0">${client.documento_nro}</p>
-                  </td>
-                  <td class="align-middle">
-                  <div class="btn-group">
-                        <a type="button" href="./delete_asset.php?id=${code}" class="btn btn-link text-danger text-gradient px-3 mb-0" id="btn-delete"><i class="bi bi-trash-fill"></i></a>
-                        <a type="button" href="./set_client.php?id=${code}" class="btn btn-link text-dark px-3 mb-0" id="btn-edit"><i class="bi bi-pencil-fill"></i></a>
-                        <a type="button" href="./detail_asset.php?id=${code}" class="btn btn-link text-success px-3 mb-0"><i class="bi bi-arrow-right-square"></i></a>
-                        </div>
-                    </td>
-                </tr>           
-        `;
-        numberRow ++;
-
-        $("#table-clients tbody").innerHTML += newRow;
-      });
-
-    }else{
-      newRow =`
-      <div class="alert alert-danger m-4 text-white" role="alert">
-          <strong class="text-white">No existe sublotes</strong> Asegurate de que existan los registros.
-      </div>
-      `;
-      $("#table-clients tbody").innerHTML += newRow;
+    try{
+      $("#documento_tipo").value = data.documento_tipo;
     }
-    
-
+    catch(e){
+      
+    }
   }
 
-
-  async function getClients(){
+  async function getTPerson(data){
 
     try{
 
-      /* $("#add-asset").setAttribute("href",`./add_asset.php?idproy=${code}&name=${codeName}`); */
+      
+    }
+    catch(e){
+      console.error(e);
+    }
+  }
+
+  function createOptions(tPersona){
+
+    $("#documento_tipo").innerHTML = "";
+
+    const defaultOption = document.createElement("option");
+    defaultOption.value = 0;
+    defaultOption.innerText = "Tipo de documento";
+    $("#documento_tipo").appendChild(defaultOption);
+
+    if(tPersona.value == "JURÍDICA"){
+
+      const rucOption = document.createElement("option");
+      rucOption.value = "RUC";
+      rucOption.innerText = "RUC";
+
+      $("#documento_tipo").appendChild(rucOption);
+    
+    }else{
+
+      const ctOption = document.createElement("option");
+      ctOption.value = "CARNET DE EXTRANJERÍA";
+      ctOption.innerText = "CARNET DE EXTRANJERÍA";
+
+      $("#documento_tipo").appendChild(ctOption);
+
+      const dniOption = document.createElement("option");
+      dniOption.value = "DNI";
+      dniOption.innerText = "DNI";
+
+      $("#documento_tipo").appendChild(dniOption);
+    }
+  }
+
+  async function getClient(id){
+
+    try{
 
       let url ="../../Controllers/client.controller.php";
       let params = new FormData();
   
-      params.append("action","listClienTperson");
-      params.append("tipo_persona",$("#tipo_persona").value);
+      params.append("action","listClientById");
+      params.append("idcliente",id);
 
       results = await global.sendAction(url, params);
 
       if(results){
 
-        /* $("#cabezera").innerText +=` ${name}`; */
-        renderClients(results);
+        console.log(results);
+        dataClient = results;
+        
+        const tPersons = $("#tipo_persona").value = results.tipo_persona;
+        createOptions(tPersons);
+        /* await getTPerson(dataClient); */
 
       }
     }
@@ -669,65 +858,250 @@ document.addEventListener("DOMContentLoaded",()=>{
     }
   }
 
-  async function searchClients(dnro){
+  async function getUbigeo(iddistrito){
+
     try{
 
-      let url = `../../Controllers/client.controller.php`;
+      let url = "../../Controllers/ubigeo/district.controller.php";
       let params = new FormData();
 
-      params.append("action", "listClientDnro");
-      params.append("tipo_persona",$("#tipo_persona").value);
-      params.append("documento_nro",dnro);
+      params.append("action","getUbigeo");
+      params.append("iddistrito", iddistrito);
 
-      let results = await global.sendAction(url, params);
+      let result = await global.sendAction(url,params)
 
-      if(results){
-        renderClients(results);
+      if(result){
+
+        const tagDistrito = document.createElement("option");
+        tagDistrito.value = result.iddistrito;
+        tagDistrito.innerHTML = result.distrito.trim();
+        $("#iddistrito").appendChild(tagDistrito);
+        $("#iddistrito").value = result.iddistrito;
+
+        const tagProvincia = document.createElement("option");
+        tagProvincia.value = result.idprovincia;
+        tagProvincia.innerHTML = result.provincia.trim();
+        $("#idprovincia").appendChild(tagProvincia);
+        $("#idprovincia").value = result.idprovincia;
+
+        $("#iddepartamento").value = result.iddepartamento;
       }
     }
     catch(e){
       console.error(e);
     }
-  }
+  };
 
-  //Genera u archivo PDF
-  async function generatePdf(id){
+  //Agrega un cliente
+  async function addClient(){
 
-    let codeID = btoa(id);
-    let url = `../../reports/reports_pdf.php?action=reportLots&idproyecto=${codeID}`;
+    try{
 
-    window.location.href = url;
-  }
+      let url = "../../Controllers/client.controller.php";
 
-  //Genera un archivo excel
-  async function generateExcel(id){
+      let params = new FormData();
 
-    let codeID = btoa(id);
-    let url = `../../reports/reports_excel.php?idproyecto=${codeID}`;
-
-    window.location.href = url;
-  }
-
-  $("#in-doumento-tipo").addEventListener("input",()=>{
-
-      clearTimeout(timer);
-
-        timer = setTimeout(()=>{
-
-          let dnro = $("#in-doumento-tipo").value;
-
-          if(dnro != ""){
-
-            searchClients(dnro);
-
-          }else{
-
-            getClients();
-          }
-        },1500)
-    });
       
-  $("#generate-excel").addEventListener("click",()=>{
+      if($("#tipo_persona").value == "JURÍDICA"){
+        
+        params.append("action","addLegalClient");
+        params.append("tipo_persona",$("#tipo_persona").value);
+        params.append("razon_social",$("#razon_social").value);
+        params.append("documento_tipo",$("#documento_tipo").value);
+        params.append("documento_nro",$("#documento_nro").value);
+        params.append("representante_legal",$("#representante_legal").value);
+        params.append("documento_t_representante",$("#documento_t_representante").value);
+        params.append("documento_nro_representante",$("#documento_nro_representante").value);
+        params.append("partida_elect",$("#partida_elect").value);
+        params.append("iddistrito",$("#iddistrito").value);
+        params.append("direccion",$("#direccion").value);
+
+      }else if($("#tipo_persona").value == "NATURAL"){
+        
+        params.append("action","addClientNatural");
+        params.append("tipo_persona",$("#tipo_persona").value);
+        params.append("nombres",$("#nombres").value);
+        params.append("apellidos",$("#apellidos").value);
+        params.append("documento_tipo",$("#documento_tipo").value);
+        params.append("documento_nro",$("#documento_nro").value);
+        params.append("estado_civil",$("#estado_civil").value);
+        params.append("iddistrito",$("#iddistrito").value);
+        params.append("direccion",$("#direccion").value);
+        params.append("nacionalidad",$("#nacionalidad").value);
+      }
+
+      
+      let result = await global.sendAction(url, params);
+      console.log(result);
+      console.log(params);
+      if(result){
+
+        if(result.filasAfect > 0){
+
+          sAlert.sweetConfirmAdd("Éxito","El registro se ha guardado de forma existosa, ¿Deseas registrar otro?",()=>{
+
+            $("#search_person").reset();
+            $("#form-data-client").reset();
+            $("#form-data-client").classList.remove('was-validated');
+
+          },()=>{
+            window.location.href = "./index.php";
+          });
+        }
+      }
+    }
+    catch(e){
+      
+      console.error(e);
+    }
+  }
+
+  //Validar formulario
+  function validateFom(form, callback) {
+    'use strict' //=> USO ESTRICTO POR POLITICAS DE SEGURIDAD EN EL FORMULARIO
+
+     //SELECCIONA TODOS LOS ELEMENTOS DEL FORMULARIO QUE TIENE LA CLASE "needs-validation
+    const forms = document.querySelectorAll(form)
+
+    // TOMA EL ELEMENTO "FORMS" Y LO CONVIERTE A UN ARRAY
+    // SE INCLUYE EN UN FOREAH PARA ITERAR SOBRE SUS ELEMENTOS
+
+    Array.from(forms).forEach(form => {
+        form.addEventListener('submit', event => {
+
+            //SI LA VALIDACIÓN DEL FORMULARIO ES FALSE
+        if (!form.checkValidity()) {
+            event.preventDefault()      //=> FRENA EL ENVÍO DEL FORMULARIO
+            event.stopPropagation()     //=> FRENA LA PROPAGACIÓN DE DATOS EN EL FORMULARIO
+            form.reportValidity();
+        }else{
+            event.preventDefault();
+            
+            callback();
+            /* sAlert.sweetConfirm("Datos nuevos","¿Deseas actualizar el registro?",()=>{
+                
+            }); */
+        }
+
+        form.classList.add('was-validated') //=> AGREGA ESTA CLASE A LOS ELEMENTOS DEL FORMULARIO(MUESTRA LOS COMENTARIOS)
+        }, false) //=> ESTE TERCER ARGUMENTO INDICA QUE EL EVENTO NO SE ESTA CAPTURANDO EN LA ""FASE DE CAPTURA" SINO EN "PROPAGACIÓN NORMAL"
+    })  
+  };
+
+  //Compara si existe un registro con el número de documento
+  async function validateDocument(array, params){
+
+    return new Promise((resolve, reject)  => {
+
+      const found = array.find(element => element.documento_nro == params);
+  
+      if(found){
+  
+        sAlert.sweetError("El documento ingresado ya existe","Ya existe un registro con este documento");
+        
+        reject();
+      
+      }else{
+  
+        validateFom("#form-data-client",addClient);
+        resolve();
+  
+      }
+    })
+
+  }
+
+  //Cambia la visibilidad de los inputs dependiendo del tipo de persona
+  function changeVisibilityInput(tPersona){
+    
+    let perJInputs = $All(".pern-j")
+    let perNInputs = $All(".pern-n")
+
+    if(tPersona == "JURÍDICA"){
+
+
+      Array.from(perJInputs).forEach(input =>{
+
+        if(input.disabled == true){
+
+          input.removeAttribute("disabled");
+          input.setAttribute("required",true);
+        }
+      });
+
+      Array.from(perNInputs).forEach(input =>{
+
+        if(input.disabled == false){
+
+          input.removeAttribute("required");
+          input.setAttribute("disabled", true);
+        }
+      });
+
+    }else if(tPersona == "NATURAL"){
+
+      Array.from(perJInputs).forEach(input =>{
+
+        if(input.disabled == false){
+
+          input.setAttribute("disabled", true);
+          input.removeAttribute("required");
+        }
+      });
+
+      Array.from(perNInputs).forEach(input =>{
+
+        if(input.disabled == true){
+
+          input.setAttribute("required", true);
+          input.removeAttribute("disabled");
+        }
+      });
+
+    }else if(tPersona == "CARNET DE EXTRANJERÍA"){}
+
+  }
+
+  
+  //Cambia la longitud de la cadena de acuerdo al tipo de documento escojido
+  function lengthTDocument(tDocument){
+
+    $("#nacionalidad").required = false;
+    $("#documento_nro").minLength = 0;
+    $("#documento_nro").maxLength = 0;
+
+    if(tDocument.value == "DNI"){
+
+      $("#documento_nro").maxLength = 8;
+      $("#documento_nro").minLength = 8;
+
+    }else if(tDocument.value == "CARNET DE EXTRANJERÍA"){
+
+      $("#documento_nro").maxLength = 12;
+      $("#documento_nro").minLength = 0;
+      $("#nacionalidad").required = true;
+
+    }else if(tDocument.value == "RUC"){
+
+      $("#documento_nro").maxLength = 11;
+      $("#documento_nro").minLength = 11;
+
+    }
+  }
+
+
+    $("#form-data-client").addEventListener("submit",(e)=>{
+
+      e.preventDefault(); 
+      validateDocument(dataClient, $("#documento_nro").value);
+    })
+    
+    $("#buscar").addEventListener("click",()=>{
+
+      validateFom("#search_person",searchDocument);
+    })
+      
+  /* $("#generate-excel").addEventListener("click",()=>{
 
     generateExcel(idProyecto);
   });
@@ -735,16 +1109,24 @@ document.addEventListener("DOMContentLoaded",()=>{
   $("#generate-pdf").addEventListener("click",()=>{
 
     generatePdf(idProyecto);
+  }); */
+
+  $("#documento_tipo").addEventListener("change",(e)=>{
+
+    console.log(e.target.value)
+    lengthTDocument($("#documento_tipo"));
   });
 
   $("#tipo_persona").addEventListener("change",()=>{
 
-    getClients();
+    changeVisibilityInput($("#tipo_persona").value);
+    createOptions($("#tipo_persona"));
 
   });
-
-
-    getClients();
+  
+  /* createOptions($("#tipo_persona")); */
+  getClient(idCliente);
+  
 });
   </script>
   <script>

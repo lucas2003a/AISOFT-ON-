@@ -1,0 +1,2 @@
+los datos del represtante legal deben de inr directameten en el contrato para que si en caso haiga un cambio de representante legal, no afecte a registros anteriores
+las mediada del modelo de construccion deber de ir directamete al lote ya que alli se especifican.

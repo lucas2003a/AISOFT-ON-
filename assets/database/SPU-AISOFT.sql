@@ -702,6 +702,7 @@ BEGIN
         INNER JOIN personas AS persUsu ON persUsu.idpersona = usu.idpersona
         WHERE clien.inactive_at IS NULL 
 			AND clien.tipo_persona = _tipoPersona
+            AND clien.idcliente = _idcliente
         ORDER BY pers.documento_nro ASC;
     ELSE 
 		SELECT
@@ -728,8 +729,12 @@ BEGIN
 			INNER JOIN personas AS persUsu ON persUsu.idpersona = usu.idpersona
 			WHERE clien.inactive_at IS NULL 
 				AND clien.tipo_persona = _tipoPersona
+                AND clien.idcliente = _idcliente
 			ORDER BY persj.documento_nro ASC;
 		END IF;
+        
+        SELECT ROW_COUNT() AS filasAfect;
+        
 END$$
 DELIMITER ;
 
@@ -799,7 +804,7 @@ CREATE PROCEDURE spu_add_clients_personN
 	IN _tipo_persona	VARCHAR(10),
 	IN _nombres 		VARCHAR(40),
     IN _apellidos 		VARCHAR(40),
-    IN _documento_tipo 	VARCHAR(20),
+    IN _documento_tipo 	VARCHAR(30),
     IN _documento_nro 	VARCHAR(12),
     IN _estado_civil 	VARCHAR(20),
     IN _iddistrito 		INT,
@@ -861,7 +866,7 @@ CREATE PROCEDURE spu_set_clientN
     IN _idpersona_jurdica INT,
 	IN _nombres 		VARCHAR(40),
     IN _apellidos 		VARCHAR(40),
-    IN _documento_tipo 	VARCHAR(20),
+    IN _documento_tipo 	VARCHAR(30),
     IN _documento_nro 	VARCHAR(12),
     IN _estado_civil 	VARCHAR(20),
     IN _iddistrito 		INT,
@@ -1267,3 +1272,5 @@ CREATE PROCEDURE ()
 BEGIN
 END $$
 DELIMITER ;
+
+SELECT * FROM personas;

@@ -32,7 +32,7 @@ CREATE TABLE personas
 	idpersona 			INT PRIMARY KEY AUTO_INCREMENT,
     nombres 			VARCHAR(40) 		NOT NULL,
     apellidos 			VARCHAR(40) 		NOT NULL,
-    documento_tipo		VARCHAR(20) 		NOT NULL,
+    documento_tipo		VARCHAR(30) 		NOT NULL,
     documento_nro 		VARCHAR(12) 		NOT NULL,
     estado_civil 		VARCHAR(10) 		NOT NULL,
     iddistrito 			INT					NOT NULL,
@@ -45,6 +45,7 @@ CREATE TABLE personas
     CONSTRAINT fk_iddistrito_pers FOREIGN KEY(iddistrito) REFERENCES distritos(iddistrito)
 )ENGINE = INNODB;
 
+ALTER TABLE personas change documento_tipo documento_tipo VARCHAR(30) NOT NULL;
 -- constructora
 CREATE TABLE constructora(
 	idconstructora		INT PRIMARY KEY AUTO_INCREMENT,

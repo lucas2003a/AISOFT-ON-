@@ -8,6 +8,13 @@ if(isset($_POST["action"])){
 
     switch($_POST["action"]){
 
+        case "listClientById":
+            
+            $idcliente = $_POST["idcliente"];
+
+            echo json_encode($client->getClientById($idcliente));
+            
+            break;
         case "listClientDnro": 
             
                 $dataObtained = [
