@@ -437,7 +437,7 @@
               <label for="tipo_persona" class="form-label">Tipo de persona</label>
                 <select class="form-select custom-select-scroll" id="tipo_persona" required>
                   <option value="NATURAL">Natural</option>
-                  <option value="JURÍDICA">Juridica</option>
+                  <option value="JURÍDICA">Jurídica</option>
                 </select>
                 <div class="invalid-feedback">
                     Necesitas escojer un tipo de persona.
@@ -669,6 +669,19 @@
                       Partida electrónica registrada correctamente.
                     </div>
                 </div>
+
+                <!-- CARGO -->
+                <div class="mt-4">
+                    <label for="cargo" class="form-label">Cargo</label>
+                    <input type="text" name="cargo" id="cargo" placeholder="Cargo" class="form-control pern-j" disabled>
+                    <div class="invalid-feedback">
+                        Necesitas registrar el cargo.
+                    </div>
+                    <div class="valid-feedback">
+                      Cargo registrado correctamente.
+                    </div>
+                </div>
+
               </div>        
 
                
@@ -776,6 +789,7 @@ document.addEventListener("DOMContentLoaded",()=>{
   const $All = id => global.$All(id);
 
   let dataClient;
+  let dataClients;
 
   let url = window.location.search;
   let stringQuery = new URLSearchParams(url);
@@ -784,28 +798,84 @@ document.addEventListener("DOMContentLoaded",()=>{
 
   console.log(idCliente);
 
-  async function getTDoc(data){
-
-    try{
-      $("#documento_tipo").value = data.documento_tipo;
-    }
-    catch(e){
-      
-    }
-  }
-
-  async function getTPerson(data){
+  //Obtengot todos los clientes
+  async function getClients(){
 
     try{
 
-      
+      let url ="../../Controllers/client.controller.php";
+      let params = new FormData();
+  
+      params.append("action","listClienTperson");
+      params.append("tipo_persona",$("#tipo_persona").value);
+
+      results = await global.sendAction(url, params);
+
+      if(results){
+
+        console.log(results);
+        dataClients = results;
+
+      }
     }
     catch(e){
       console.error(e);
     }
   }
 
-  function createOptions(tPersona){
+  //Cambia la visibilidad de los inputs dependiendo del tipo de persona
+  async function changeVisibilityInput(tPersona){
+    
+    let perJInputs = $All(".pern-j")
+    let perNInputs = $All(".pern-n")
+
+    if(tPersona == "JURÍDICA"){
+
+
+      Array.from(perJInputs).forEach(input =>{
+
+        if(input.disabled == true){
+
+          input.removeAttribute("disabled");
+          input.setAttribute("required",true);
+        }
+      });
+
+      Array.from(perNInputs).forEach(input =>{
+
+        if(input.disabled == false){
+
+          input.removeAttribute("required");
+          input.setAttribute("disabled", true);
+        }
+      });
+
+    }else if(tPersona == "NATURAL"){
+
+      Array.from(perJInputs).forEach(input =>{
+
+        if(input.disabled == false){
+
+          input.setAttribute("disabled", true);
+          input.removeAttribute("required");
+        }
+      });
+
+      Array.from(perNInputs).forEach(input =>{
+
+        if(input.disabled == true){
+
+          input.setAttribute("required", true);
+          input.removeAttribute("disabled");
+        }
+      });
+
+    }
+
+  }
+
+  //Crea opciones de tipos de documentos de acuerdo al tipo de persona
+  async function createOptions(tPersona){
 
     $("#documento_tipo").innerHTML = "";
 
@@ -838,34 +908,7 @@ document.addEventListener("DOMContentLoaded",()=>{
     }
   }
 
-  async function getClient(id){
-
-    try{
-
-      let url ="../../Controllers/client.controller.php";
-      let params = new FormData();
-  
-      params.append("action","listClientById");
-      params.append("idcliente",id);
-
-      results = await global.sendAction(url, params);
-
-      if(results){
-
-        console.log(results);
-        dataClient = results;
-        
-        const tPersons = $("#tipo_persona").value = results.tipo_persona;
-        createOptions(tPersons);
-        /* await getTPerson(dataClient); */
-
-      }
-    }
-    catch(e){
-      console.error(e);
-    }
-  }
-
+  //Obtiene el ubigeo por el iddistrito
   async function getUbigeo(iddistrito){
 
     try{
@@ -899,6 +942,59 @@ document.addEventListener("DOMContentLoaded",()=>{
       console.error(e);
     }
   };
+
+  //Obtiene los datos del cliente
+  async function getClient(id){
+
+    try{
+
+      let url ="../../Controllers/client.controller.php";
+      let params = new FormData();
+  
+      params.append("action","listClientById");
+      params.append("idcliente",id);
+
+      results = await global.sendAction(url, params);
+
+      if(results){
+
+        console.log(results);
+        dataClient = results;
+        
+        $("#tipo_persona").value = dataClient.tipo_persona;
+
+        let tPersons = $("#tipo_persona");
+        await createOptions(tPersons);
+        await changeVisibilityInput(tPersons.value);
+
+        $("#documento_tipo").value = dataClient.documento_tipo;
+        $("#documento_nro").value = dataClient.documento_nro;
+
+        getUbigeo(dataClient.iddistrito);
+        $("#direccion").value = dataClient.direccion;
+
+        if(dataClient.tipo_persona == "JURÍDICA"){
+
+          $("#documento_t_representante").value = dataClient.repDocumento_tipo;
+          $("#documento_nro_representante").value = dataClient.repDocumento_nro;
+          $("#razon_social").value = dataClient.razon_social;
+          $("#representante_legal").value = dataClient.representante_legal;
+          $("#partida_elect").value = dataClient.partida_elect;
+          $("#cargo").value = dataClient.cargo;
+
+        }else{
+
+          $("#nacionalidad").value = dataClient.nacionalidad;
+          $("#apellidos").value = dataClient.apellidos;
+          $("#nombres").value = dataClient.nombres;
+          $("#estado_civil").value = dataClient.estado_civil;
+        }
+      }
+    }
+    catch(e){
+      console.error(e);
+    }
+  }
 
   //Agrega un cliente
   async function addClient(){
@@ -1004,14 +1100,16 @@ document.addEventListener("DOMContentLoaded",()=>{
       const found = array.find(element => element.documento_nro == params);
   
       if(found){
-  
+
         sAlert.sweetError("El documento ingresado ya existe","Ya existe un registro con este documento");
-        
+  
         reject();
       
       }else{
   
-        validateFom("#form-data-client",addClient);
+        validateFom("#form-data-client",()=>{
+          console.log("formuario validado");
+        });
         resolve();
   
       }
@@ -1019,58 +1117,6 @@ document.addEventListener("DOMContentLoaded",()=>{
 
   }
 
-  //Cambia la visibilidad de los inputs dependiendo del tipo de persona
-  function changeVisibilityInput(tPersona){
-    
-    let perJInputs = $All(".pern-j")
-    let perNInputs = $All(".pern-n")
-
-    if(tPersona == "JURÍDICA"){
-
-
-      Array.from(perJInputs).forEach(input =>{
-
-        if(input.disabled == true){
-
-          input.removeAttribute("disabled");
-          input.setAttribute("required",true);
-        }
-      });
-
-      Array.from(perNInputs).forEach(input =>{
-
-        if(input.disabled == false){
-
-          input.removeAttribute("required");
-          input.setAttribute("disabled", true);
-        }
-      });
-
-    }else if(tPersona == "NATURAL"){
-
-      Array.from(perJInputs).forEach(input =>{
-
-        if(input.disabled == false){
-
-          input.setAttribute("disabled", true);
-          input.removeAttribute("required");
-        }
-      });
-
-      Array.from(perNInputs).forEach(input =>{
-
-        if(input.disabled == true){
-
-          input.setAttribute("required", true);
-          input.removeAttribute("disabled");
-        }
-      });
-
-    }else if(tPersona == "CARNET DE EXTRANJERÍA"){}
-
-  }
-
-  
   //Cambia la longitud de la cadena de acuerdo al tipo de documento escojido
   function lengthTDocument(tDocument){
 
@@ -1097,27 +1143,50 @@ document.addEventListener("DOMContentLoaded",()=>{
     }
   }
 
+  function validateDataPersnNatural(){
+    
+    if($("#documento_nro").value !== dataClient.documento_nro){
+
+      console.log("validando el docuento si existe");
+      validateDocument(dataClients, $("#documento_nro").value);
+
+    }
+  };
+
+  function validateDataPersnLegal(){
+
+    if($("#documento_nro").value !== dataClient.documento_nro){
+
+      console.log("validando el docuento si existe");
+      validateDocument(dataClients, $("#documento_nro").value);
+
+    }else if($("#documento_nro_representante").value !== dataClient.repDocumento_nro){
+
+      console.log("documento no existe");
+    }
+
+  };
 
     $("#form-data-client").addEventListener("submit",(e)=>{
 
       e.preventDefault(); 
-      validateDocument(dataClient, $("#documento_nro").value);
+
+      if($("#tipo_pesona").value == "JURÍDICA"){
+
+        validateDataPersnNatural();
+
+      }else if($("#tipo_pesona").value == "NATURAL"){
+
+        validateDataPersnLegal();
+      }
+
     })
     
     $("#buscar").addEventListener("click",()=>{
 
       validateFom("#search_person",searchDocument);
     })
-      
-  /* $("#generate-excel").addEventListener("click",()=>{
-
-    generateExcel(idProyecto);
-  });
-
-  $("#generate-pdf").addEventListener("click",()=>{
-
-    generatePdf(idProyecto);
-  }); */
+    
 
   $("#documento_tipo").addEventListener("change",(e)=>{
 
@@ -1132,7 +1201,7 @@ document.addEventListener("DOMContentLoaded",()=>{
 
   });
   
-  /* createOptions($("#tipo_persona")); */
+  getClients();
   getClient(idCliente);
   
 });

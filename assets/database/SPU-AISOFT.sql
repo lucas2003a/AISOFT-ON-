@@ -692,9 +692,8 @@ BEGIN
 		pers.documento_tipo,
         pers.documento_nro,
         pers.estado_civil,
-        dist.distrito,
-        prov.provincia,
-        dept.departamento,
+        dist.iddistrito,
+        pers.nacionalidad,
         pers.direccion,
         persUsu.nombres AS usuario
 		FROM clientes AS clien
@@ -715,13 +714,15 @@ BEGIN
 			persj.documento_tipo,
 			persj.documento_nro,
 			persj.razon_social,
+            rep.idrepresentante,
 			rep.representante_legal,
-			rep.documento_tipo,
-			rep.documento_nro,
+			rep.documento_tipo AS repDocumento_tipo,
+			rep.documento_nro AS repDocumento_nro,
 			rep.partida_elect,
 			dist.distrito,
 			prov.provincia,
 			dept.departamento,
+            dist.iddistrito,
 			persj.direccion,
 			persUsu.nombres AS usuario
 			FROM clientes AS clien
@@ -868,7 +869,6 @@ CREATE PROCEDURE spu_set_clientN
 	IN _idcliente		INT,
     IN _tipo_persona	VARCHAR(10),
     IN _idpersona		INT,
-    IN _idpersona_jurdica INT,
 	IN _nombres 		VARCHAR(40),
     IN _apellidos 		VARCHAR(40),
     IN _documento_tipo 	VARCHAR(30),
@@ -876,18 +876,20 @@ CREATE PROCEDURE spu_set_clientN
     IN _estado_civil 	VARCHAR(20),
     IN _iddistrito 		INT,
     IN _direccion		VARCHAR(70),
+    IN _nacionalidad	VARCHAR(20),
     IN _idusuario 		INT
 )
 BEGIN    
 	UPDATE personas
 		SET
-			nombres 	= _nombres,
-			apellidos	= _apellidos,
+			nombres 		= _nombres,
+			apellidos		= _apellidos,
 			documento_tipo	= _documento_tipo,
 			documento_nro	= _documento_nro,
 			estado_civil	=  _estado_civil,
 			iddistrito		= _iddistrito,
             direccion		= _direccion,
+            nacionalidad	= _nacionalidad,
             update_at 		= CURDATE()
 		WHERE 
 			idpersona = _idpersona;
@@ -897,9 +899,9 @@ BEGIN
 			SET 
 				tipo_persona 	= _tipo_persona,
 				idpersona 		= _idpersona,
-                idpersona_jurdica	= NULL,
-                idsuario		= idusuario,
+                idsuario		= _idusuario,
                 update_at		= CURDATE()
+                
 			WHERE idcliente = _idcliente;
             
 			SELECT ROW_COUNT() AS filasAfect;
@@ -927,7 +929,6 @@ BEGIN
 
 	DECLARE _idpersona_juridica INT;
     
-    -- registro al representante
     -- registro a la persona
     INSERT INTO personas_juridicas(
 							razon_social,
@@ -988,45 +989,56 @@ CREATE PROCEDURE spu_set_clientJ
 (
 	IN _idcliente			INT,
     IN _tipo_persona 		VARCHAR(10),
-    IN _idpersona 			INT,
     IN _idpersona_juridica 	INT,
 	IN _razon_social 		VARCHAR(60),
     IN _documento_tipo 		VARCHAR(20),
     IN _documento_nro		VARCHAR(12),
+    IN _iddistrito 			INT,
+    IN _direccion			VARCHAR(70),
+    IN _idusuario 			INT,
+    IN _idrepresentante	 	INT,
     IN _representante_legal 			VARCHAR(30),
     IN _documento_t_representante 		VARCHAR(20),
     IN _documento_nro_representante 	VARCHAR(12),
-    IN _partida_elect	VARCHAR(100),
-    IN _iddistrito 		INT,
-    IN _direccion		VARCHAR(70),	
-    IN _idusuario 		INT
+    IN _cargo							VARCHAR(30),
+    IN _partida_elect					VARCHAR(100)
 )
 BEGIN
-	
-    UPDATE personas_juridicas
+	-- ACTUALIZA LOS DATOS DE LA PERSONA JURÍDICA
+	UPDATE personas_juridicas
 		SET
 			razon_social	= _razon_social,
             documento_tipo 	= _documento_tipo,
             documento_nro 	= _documento_nro,
-            representante_legal 		= _representante_legal,
-            documento_t_representate 	= _documento_t_representate,
-            documento_nro_representate	= _documento_nro_representate,
-			partida_elect 	= _partida_elect,
             iddistrito		= _iddistrito,
             direccion 		= _direccion,
             update_at 		= CURDATE()
         WHERE
 			idpersona_juridica = _idpersona_juridica;
+		
+	-- ACUTALIZA LOS DATOS DEL REPRESENTANTE LEGAL
+	UPDATE representantes_legales_clientes
+		SET
+			idpersona_juridica 	= _idpersona_juridica,
+            representante_legal	= _representante_legal,
+            documento_tipo		= _documento_t_representante,
+            documento_nro		= _documento_nro_representante,
+            cargo				= _cargo
+		
+        WHERE 
+			idrepresentante = _idrepresentante;
             
+	-- ACTUALIZA LOS DATOS DEL CLIENTE
 		UPDATE clientes
 				SET
 					tipo_persona	= _tipo_persona,
-                    idpersona		= NULLIF(_idpersona,''),
                     idpersona_juridica 	= _idpersona_juridica,
                     update_at 			= CURDATE(),
                     idusuario 			= _idusuario
                 WHERE 
 					idcliente = _idcliente;
+	
+    SELECT ROW_COUNT() AS filasAfect;
 END $$
 DELIMITER ;
 

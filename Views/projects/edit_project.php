@@ -924,10 +924,10 @@
       
       if(e !== ""){ 
 
-          $("#guardar").removeAttribute("disabled");
+        $("#guardar").removeAttribute("disabled");
       }
     }, 1500);
-    })
+  });
 
     
     getDataId(idProyecto);

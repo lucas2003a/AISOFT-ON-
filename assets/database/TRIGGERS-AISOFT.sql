@@ -168,3 +168,69 @@ BEGIN
 	END IF;
 END $$
 DELIMITER ;
+
+DELIMITER $$
+CREATE TRIGGER trgr_new_represent 
+AFTER UPDATE ON representantes_legales_clientes
+FOR EACH ROW
+BEGIN
+	DECLARE _idpersona_juridica INT;
+    
+    IF NEW.documento_nro != OLD.documento_nro THEN
+		UPDATE clientes
+				SET
+					inactive_at = CURDATE()
+				WHERE idpersona_juridica = NEW.idpersona_juridica;
+		
+        
+		INSERT INTO personas_juridicas(
+				razon_social,
+				documento_tipo,                            
+				documento_nro,
+				iddistrito,
+				direccion
+			)						
+				VALUES(
+						NEW.razon_social,
+						NEW.documento_tipo,                            
+                        NEW.documento_nro,
+                        NEW.iddistrito,
+                        NEW.direccion
+                        );
+                        
+		SET _idpersona_juridica = (SELECT @@last_insert_id);
+        
+        -- REGISTRO AL REPRESETANTE
+        INSERT INTO representantes_legales_clientes
+					(
+						idpersona_juridica,
+						representante_legal,
+                        documento_tipo,
+                        documento_nro,
+						partida_elect,
+                        cargo
+					)
+                    VALUES(
+						NEW.idpersona_juridica,
+						NEW.representante_legal,
+						NEW.documento_t_representante,
+						NEW.documento_nro_representante,
+						NEW.partida_elect,
+                        NEW.cargo
+                    );
+
+	-- registro a la persona como cliente
+	INSERT INTO clientes(
+						tipo_persona, 
+                        idpersona_juridica,
+                        idusuario
+                        )
+				VALUES
+					(
+						NEW.tipo_persona,
+                        NEW.idpersona_juridica,
+                        NEW.idusuario
+                    );
+    END IF;
+END $$
+DELIMITER ;

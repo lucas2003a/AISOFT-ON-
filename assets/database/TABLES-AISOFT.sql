@@ -252,7 +252,7 @@ CREATE TABLE representantes_legales_clientes
 	representante_legal		VARCHAR(100)	NOT NULL,
 	documento_tipo			VARCHAR(20) 	NOT NULL,
 	documento_nro			VARCHAR(12) 	NOT NULL,
-	cargo					VARCHAR(30)		NULL,
+	cargo					VARCHAR(30)		NOT NULL,
 	partida_elect			VARCHAR(100) 	NOT NULL,
     CONSTRAINT fk_idpersona_juridica FOREIGN KEY(idpersona_juridica) REFERENCES personas_juridicas(idpersona_juridica)
 )ENGINE = INNODB;
@@ -264,7 +264,6 @@ CREATE TABLE  personas_juridicas
     razon_social 				VARCHAR(60)		NOT NULL,
     documento_tipo	 			VARCHAR(20) 	NOT NULL,
     documento_nro				VARCHAR(12) 	NOT NULL,
-	idrepresentante 			INT				NOT NULL,
     iddistrito 					INT 			NOT NULL,
     direccion 					VARCHAR(70) 	NOT NULL,
     create_at 					DATE 			NOT NULL DEFAULT(CURDATE()),
@@ -272,7 +271,6 @@ CREATE TABLE  personas_juridicas
     inactive_at 				DATE 			NULL,
     CONSTRAINT uk_documento_nro_pj UNIQUE(documento_nro),
     CONSTRAINT uk_documento_nro_representante_pj UNIQUE(documento_nro_representante),
-    CONSTRAINT fk_idrepresentante_pj FOREIGN KEY(idrepresentante) REFERENCES representantes_legales_clientes(idrepresentante),
     CONSTRAINT fk_iddistrito_pj FOREIGN KEY(iddistrito) REFERENCES distritos(iddistrito)
 )ENGINE = INNODB;
 

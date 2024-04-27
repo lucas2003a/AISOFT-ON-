@@ -67,6 +67,7 @@ if(isset($_POST["action"])){
                     "estado_civil"    => $_POST["estado_civil"],
                     "iddistrito"      => $_POST["iddistrito"],
                     "direccion"       => $_POST["direccion"],
+                    "nacionalidad"    => $_POST["nacionalidad"],
                     "idusuario"       => $_POST["idusuario"]
                     
                 ];
@@ -101,18 +102,21 @@ if(isset($_POST["action"])){
         case "setLegalClient": 
 
             $dataObtained = [
-                "idcliente"        =>  $_POST["idcliente"],
-                "tipo_persona"     =>  $_POST["tipo_persona"],
-                "razon_social"     =>  $_POST["razon_social"],
-                "documento_tipo"   =>  $_POST["documento_tipo"],
-                "documento_nro"    =>  $_POST["documento_nro"],
-                "representante_legal"          =>  $_POST["representante_legal"],
-                "documento_t_representante"    =>  $_POST["documento_t_representante"],
-                "documento_nro_representante"  =>  $_POST["documento_nro_representante"],
-                "partida_elect"    =>  $_POST["partida_elect"],
-                "iddistrito"       =>  $_POST["iddistrito"],
-                "direccion"        =>  $_POST["direccion"],
-                "idusuario"        =>  1
+                "idcliente" => $_POST["idcliente"],
+                "tipo_persona"      => $_POST["tipo_persona"],
+                "idpersona_juridica" => $_POST["idpersona_juridica"],
+                "documento_tipo"    => $_POST["documento_tipo"],
+                "documento_nro"     => $_POST["documento_nro"],
+                "iddistrito"        => $_POST["iddistrito"],
+                "direccion"         => $_POST["direccion"],
+                "idusuario"         => $_POST["idusuario"],
+                "idrepresentante"               => $_POST["idrepresentante"],
+                "representante_legal"           => $_POST["representante_legal"],
+                "documento_t_representante"     => $_POST["documento_t_representante"],
+                "documento_nro_representante"   => $_POST["documento_nro_representante"],
+                "cargo"         => $_POST["cargo"],
+                "partida_elect" => $_POST["partida_elect"],
+                "idusuario"     => 1,
             ];
     
             echo json_encode($client->setLegalClient($dataObtained));
