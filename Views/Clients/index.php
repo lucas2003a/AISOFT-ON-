@@ -552,6 +552,128 @@
     </div>
   </div>
 
+             
+            
+  
+  <!-- MODAL -->
+  <!-- Button trigger modal -->
+  <!-- Modal -->
+  <div class="modal fade" id="data_full_client" tabindex="-1" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-fullscreen-sm-down" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalTitle">
+            Modal title
+          </h5>
+          <button type="button" class="btn-close text-dark" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="row">
+                
+                <div class="col-md-6">
+                  <div class="card"  style="height: 100%;">
+                    <div class="card-header mx-4 p-3 text-center">
+                      <div class="icon icon-shape icon-lg bg-primary shadow text-center border-radius-lg">
+                      <i class="fa-solid fa-calendar-days"></i>
+                      </div>
+                    </div>
+                    <div class="card-body pt-0 p-3 text-center">
+                      <h6 class="text-center mb-0">Cuota actual</h6>
+                      <h6 class="text-center mb-0"></h6>
+                      <hr class="horizontal dark my-3">
+                      <h5 class="mb-0" id="cuota_actual">30/12/24</h5>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-md-6 mt-md-0 mt-4">
+                  <div class="card"  style="height: 100%;">
+                    <div class="card-header mx-4 p-3 text-center">
+                      <div class="icon icon-shape icon-lg bg-primary shadow text-center border-radius-lg">
+                      <i class="fa-solid fa-calendar-days"></i>
+                      </div>
+                    </div>
+                    <div class="card-body pt-0 p-3 text-center">
+                      <h6 class="text-center mb-0">Cuota próxima</h6>
+                      <hr class="horizontal dark my-3">
+                      <h5 class="mb-0" id="proxima couta">20/04/2025</h5>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row mt-4">
+              <div class="table-responsive table-responsive-lg">
+                      <table class="table align-items-center mb-0" id="table-clients">
+                        <thead>
+                          <tr>
+                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">#</th>
+                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Proyecto</th>
+                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Sublote</th>
+                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Deuda</th>
+                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Monto pagado</th>
+                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Saldo</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td>1</td>
+                            <td>San Blas</td>
+                            <td>12</td>
+                            <td>5000.00</td>
+                            <td>4000.00</td>
+                            <td>1000.00</td>
+                          </tr>
+                          <tr>
+                            <td>2</td>
+                            <td>San Blas</td>
+                            <td>12</td>
+                            <td>5000.00</td>
+                            <td>4000.00</td>
+                            <td>1000.00</td>
+                          </tr>
+                        <!-- RENDER NUEVOS CLIENTES  -->
+                        
+                        </tbody>
+                      </table>
+                    </div>
+              </div>
+            </div>
+
+            <div class="col-md-6 mt-4">
+              <div class="card h-100">
+              <div class="card-header pb-0 p-3">
+                <div class="row">
+                  <div class="col-6 d-flex align-items-center">
+                    <h6 class="mb-0"><strong>Información</strong></h6>
+                  </div>
+                  <hr>
+                </div>
+              </div>
+              <div class="card-body p-3 pb-0">
+                <ul class="list-group" id="data-client-modal">
+
+                  <!-- RENDER DE INFORMACIÓN DEL CLIENTE -->
+                </ul>
+
+              </div>
+            
+            </div>
+          </div>
+          </div>        
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+            Close
+          </button>
+          <button type="button" class="btn btn-primary">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- JQUERY -->
   <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
   <script type="text/javascript" src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script> -->
@@ -585,6 +707,169 @@ document.addEventListener("DOMContentLoaded",()=>{
   const $All = id => global.$All(id);
 
   let timer;
+
+  async function getClientModal(id){
+
+    try{
+
+      let url ="../../Controllers/client.controller.php";
+      let params = new FormData();
+  
+      params.append("action","listClientById");
+      params.append("idcliente",id);
+
+      results = await global.sendAction(url, params);
+
+      if(results){
+
+        console.log(results);
+        dataClient = results;
+
+        $("#data-client-modal").innerHTML = ""; 
+
+        let row = "";
+        row = `
+            <li class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg">
+              <div class="d-flex flex-column">
+                <h6 class="mb-1 text-dark font-weight-bold text-sm">Tipo persona</h6>
+              </div>
+              <div class="d-flex align-items-center text-sm">
+                    ${dataClient.tipo_persona}
+                </div>
+            </li>
+
+            <li class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg">
+              <div class="d-flex flex-column">
+                <h6 class="mb-1 text-dark font-weight-bold text-sm">Tipo de documento</h6>
+              </div>
+              <div class="d-flex align-items-center text-sm">
+                    ${dataClient.documento_tipo}
+                </div>
+            </li>
+
+            <li class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg">
+              <div class="d-flex flex-column">
+                <h6 class="mb-1 text-dark font-weight-bold text-sm">Tipo de documento</h6>
+              </div>
+              <div class="d-flex align-items-center text-sm">
+                    ${dataClient.documento_nro}
+                </div>
+            </li>
+        `;
+
+        if(dataClient.tipo_persona == "JURÍDICA"){
+          $("#modalTitle").innerHTML = dataClient.razon_social;
+
+          row += `
+
+            <li class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg">
+              <div class="d-flex flex-column">
+                <h6 class="mb-1 text-dark font-weight-bold text-sm">Razón social</h6>
+              </div>
+              <div class="d-flex align-items-center text-sm">
+                    ${dataClient.razon_social}
+                </div>
+            </li>
+
+            <hr>
+            <h6><strong>Datos del representante :</strong></h6>
+            <br>
+
+            <li class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg">
+              <div class="d-flex flex-column">
+                <h6 class="mb-1 text-dark font-weight-bold text-sm">Nombres y apellidos</h6>
+              </div>
+              <div class="d-flex align-items-center text-sm">
+                    ${dataClient.representante_legal}
+                </div>
+            </li>
+
+            <li class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg">
+              <div class="d-flex flex-column">
+                <h6 class="mb-1 text-dark font-weight-bold text-sm">Tipo de documento</h6>
+              </div>
+              <div class="d-flex align-items-center text-sm">
+                    ${dataClient.repDocumento_tipo}
+                </div>
+            </li>
+
+            <li class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg">
+              <div class="d-flex flex-column">
+                <h6 class="mb-1 text-dark font-weight-bold text-sm">Nº de documento</h6>
+              </div>
+              <div class="d-flex align-items-center text-sm">
+                    ${dataClient.repDocumento_nro}
+                </div>
+            </li>
+
+            <li class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg">
+              <div class="d-flex flex-column">
+                <h6 class="mb-1 text-dark font-weight-bold text-sm">Cargo</h6>
+              </div>
+              <div class="d-flex align-items-center text-sm">
+                    ${dataClient.cargo}
+                </div>
+            </li>
+
+            <li class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg">
+              <div class="d-flex flex-column">
+                <h6 class="mb-1 text-dark font-weight-bold text-sm">Partida electrónica</h6>
+              </div>
+              <div class="d-flex align-items-center text-sm">
+                    ${dataClient.partida_elect}
+                </div>
+            </li>
+            `;
+
+        }else{
+          $("#modalTitle").innerHTML = dataClient.apellidos + ", " + dataClient.nombres;
+          row += `
+            <li class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg">
+              <div class="d-flex flex-column">
+                <h6 class="mb-1 text-dark font-weight-bold text-sm">Apellidos</h6>
+              </div>
+              <div class="d-flex align-items-center text-sm">
+                    ${dataClient.apellidos}
+                </div>
+            </li>
+
+            <li class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg">
+              <div class="d-flex flex-column">
+                <h6 class="mb-1 text-dark font-weight-bold text-sm">Nombres</h6>
+              </div>
+              <div class="d-flex align-items-center text-sm">
+                    ${dataClient.nombres}
+                </div>
+            </li>
+
+            <li class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg">
+              <div class="d-flex flex-column">
+                <h6 class="mb-1 text-dark font-weight-bold text-sm">Estado civil</h6>
+              </div>
+              <div class="d-flex align-items-center text-sm">
+                    ${dataClient.estado_civil}
+                </div>
+            </li>
+
+            <li class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg">
+              <div class="d-flex flex-column">
+                <h6 class="mb-1 text-dark font-weight-bold text-sm">Nacionalidad</h6>
+              </div>
+              <div class="d-flex align-items-center text-sm">
+                    ${dataClient.nacionalidad}
+                </div>
+            </li>
+
+            `;
+        }
+
+        $("#data-client-modal").innerHTML += row;
+      }
+    }
+    catch(e){
+      console.error(e);
+    }
+  };
 
   function renderClients(results){
 
@@ -624,13 +909,13 @@ document.addEventListener("DOMContentLoaded",()=>{
                     <p class="text-xs font-weight-bold mb-0">${client.documento_nro}</p>
                   </td>
                   <td class="align-middle">
-                  <div class="btn-group">
-                        <a type="button" href="./delete_client.php?id=${code}" class="btn btn-link text-danger text-gradient px-3 mb-0" id="btn-delete"><i class="bi bi-trash-fill"></i></a>
-                        <a type="button" href="./edit_client.php?id=${code}" class="btn btn-link text-dark px-3 mb-0" id="btn-edit"><i class="bi bi-pencil-fill"></i></a>
-                        <a type="button" href="./detail_client.php?id=${code}" class="btn btn-link text-success px-3 mb-0"><i class="bi bi-arrow-right-square"></i></a>
-                        </div>
-                    </td>
-                </tr>           
+                    <div class="btn-group">
+                        <a type="button" href="./delete_client.php?id=${code}" class="btn btn-link text-danger text-gradient px-3 mb-0"><i class="bi bi-trash-fill"></i></a>
+                        <a type="button" href="./edit_client.php?id=${code}" class="btn btn-link text-dark px-3 mb-0"><i class="bi bi-pencil-fill"></i></a>
+                        <a type="button" href="#" class="btn btn-link text-success px-3 mb-0 openModal" data-bs-toggle="modal" data-bs-target="#data_full_client" data-id="${client.idcliente}"><i class="bi bi-arrow-right-square openModal" data-id="${client.idcliente}"></i></a>
+                      </div>
+                  </td>
+              </tr>           
         `;
         numberRow ++;
 
@@ -648,7 +933,6 @@ document.addEventListener("DOMContentLoaded",()=>{
     
 
   }
-
 
   async function getClients(){
 
@@ -740,6 +1024,16 @@ document.addEventListener("DOMContentLoaded",()=>{
 
   });
 
+
+  $("#table-clients tbody").addEventListener("click",(e)=>{
+
+    if(e.target.classList.contains("openModal")){
+
+      let idCliente = e.target.dataset.id;
+      
+      getClientModal(idCliente);
+    }
+  });
 
     getClients();
 });
