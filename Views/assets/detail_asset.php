@@ -432,8 +432,8 @@
     <!-- End Navbar -->
     <div class="container py-4">
 
-        <!-- CONTENIDO -->
-        <div class="row">
+      <!-- CONTENIDO -->
+      <div class="row">
         <div class="col-lg-8">
 
           <!-- IMAGEN -->

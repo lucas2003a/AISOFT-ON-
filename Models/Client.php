@@ -104,10 +104,12 @@ class Client extends Conection{
 
         try{
 
-            $query = $this->conection->prepare("spu_set_clients(?,?,?,?,?,?,?,?,?,?)");
+            $query = $this->conection->prepare("CALL spu_set_clientN(?,?,?,?,?,?,?,?,?,?,?,?)");
             $query->execute(
                 array(
                     $dataClient["idcliente"],
+                    $dataClient["tipo_persona"],
+                    $dataClient["idpersona"],
                     $dataClient["nombres"],
                     $dataClient["apellidos"],
                     $dataClient["documento_tipo"],
@@ -169,24 +171,23 @@ class Client extends Conection{
 
         try{
 
-            $query = $this->conection->prepare("CALL spu_set_clientJ(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+            $query = $this->conection->prepare("CALL spu_set_clientJ(?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
             $query->execute(
                 array(
                     $dataClient["idcliente"],
                     $dataClient["tipo_persona"],
                     $dataClient["idpersona_juridica"],
+                    $dataClient["razon_social"],
                     $dataClient["documento_tipo"],
                     $dataClient["documento_nro"],
                     $dataClient["iddistrito"],
                     $dataClient["direccion"],
                     $dataClient["idusuario"],
-                    $dataClient["idrepresentante"],
                     $dataClient["representante_legal"],
                     $dataClient["documento_t_representante"],
                     $dataClient["documento_nro_representante"],
                     $dataClient["cargo"],
                     $dataClient["partida_elect"],
-                    $dataClient["idusuario"],
                 )
             );
 

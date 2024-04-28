@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 26-04-2024 a las 10:14:01
+-- Tiempo de generación: 28-04-2024 a las 10:48:34
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -73,12 +73,16 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_add_clients_personj` (IN `_tipo
 
 	DECLARE _idpersona_juridica INT;
     
-    -- registro al representante
     -- registro a la persona
     INSERT INTO personas_juridicas(
 							razon_social,
                             documento_tipo,                            
                             documento_nro,
+                            representante_legal,
+                            documento_t_representante,
+                            documento_nro_representante,
+                            cargo,
+                            partida_elect,
                             iddistrito,
                             direccion
 							)
@@ -87,30 +91,16 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_add_clients_personj` (IN `_tipo
 							_razon_social,
                             _documento_tipo,                            
                             _documento_nro,
+                            _representante_legal,
+                            _documento_t_representante,
+                            _documento_nro_representante,
+                            _cargo,
+                            _partida_elect,
                             _iddistrito,
                             _direccion
                         );
                         
 		SET _idpersona_juridica = (SELECT @@last_insert_id);
-        
-        -- REGISTRO AL REPRESETANTE
-        INSERT INTO representantes_legales_clientes
-					(
-						idpersona_juridica,
-						representante_legal,
-                        documento_tipo,
-                        documento_nro,
-						partida_elect,
-                        cargo
-					)
-                    VALUES(
-						_idpersona_juridica,
-						_representante_legal,
-						_documento_t_representante,
-						_documento_nro_representante,
-						_partida_elect,
-                        _cargo
-                    );
 
 	-- registro a la persona como cliente
 	INSERT INTO clientes(
@@ -612,14 +602,14 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_clients_by_id` (IN `_idcli
 		SELECT
 		clien.idcliente,
         clien.tipo_persona,
+        pers.idpersona,
         pers.apellidos,
         pers.nombres,
 		pers.documento_tipo,
         pers.documento_nro,
         pers.estado_civil,
-        dist.distrito,
-        prov.provincia,
-        dept.departamento,
+        dist.iddistrito,
+        pers.nacionalidad,
         pers.direccion,
         persUsu.nombres AS usuario
 		FROM clientes AS clien
@@ -637,21 +627,23 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_clients_by_id` (IN `_idcli
 		SELECT
 			clien.idcliente,
 			clien.tipo_persona,
+            persj.idpersona_juridica,
 			persj.documento_tipo,
 			persj.documento_nro,
 			persj.razon_social,
-			rep.representante_legal,
-			rep.documento_tipo,
-			rep.documento_nro,
-			rep.partida_elect,
+			persj.representante_legal,
+			persj.documento_t_representante AS repDocumento_tipo,
+			persj.documento_nro_representante AS repDocumento_nro,
+			persj.partida_elect,
+            persj.cargo,
 			dist.distrito,
 			prov.provincia,
 			dept.departamento,
+            dist.iddistrito,
 			persj.direccion,
 			persUsu.nombres AS usuario
 			FROM clientes AS clien
 			INNER JOIN personas_juridicas AS persj ON persj.idpersona_juridica = clien.idpersona_juridica
-            INNER JOIN representantes_legales_clientes AS rep ON rep.idpersona_juridica = persj.idpersona_juridica
 			INNER JOIN distritos AS dist ON dist.iddistrito = persj.iddistrito
 			INNER JOIN provincias AS prov ON prov.idprovincia = dist.idprovincia
 			INNER JOIN departamentos AS dept ON dept.iddepartamento = prov.iddepartamento
@@ -698,10 +690,10 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_clients_tpersona` (IN `_ti
 			persj.documento_tipo,
 			persj.documento_nro,
 			persj.razon_social,
-			rep.representante_legal,
-			rep.documento_tipo,
-			rep.documento_nro,
-			rep.partida_elect,
+			persj.representante_legal,
+			persj.documento_t_representante,
+			persj.documento_nro_representante,
+			persj.partida_elect,
 			dist.distrito,
 			prov.provincia,
 			dept.departamento,
@@ -709,7 +701,6 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_clients_tpersona` (IN `_ti
 			persUsu.nombres AS usuario
 			FROM clientes AS clien
 			INNER JOIN personas_juridicas AS persj ON persj.idpersona_juridica = clien.idpersona_juridica
-            INNER JOIN representantes_legales_clientes AS rep ON rep.idpersona_juridica = persj.idpersona_juridica
 			INNER JOIN distritos AS dist ON dist.iddistrito = persj.iddistrito
 			INNER JOIN provincias AS prov ON prov.idprovincia = dist.idprovincia
 			INNER JOIN departamentos AS dept ON dept.iddepartamento = prov.iddepartamento
@@ -912,56 +903,120 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_set_assets` (IN `_idactivo` INT
 		SELECT ROW_COUNT() AS filasAfect;
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_set_clientJ` (IN `_idcliente` INT, IN `_tipo_persona` VARCHAR(10), IN `_idpersona` INT, IN `_idpersona_juridica` INT, IN `_razon_social` VARCHAR(60), IN `_documento_tipo` VARCHAR(20), IN `_documento_nro` VARCHAR(12), IN `_representante_legal` VARCHAR(30), IN `_documento_t_representante` VARCHAR(20), IN `_documento_nro_representante` VARCHAR(12), IN `_partida_elect` VARCHAR(100), IN `_iddistrito` INT, IN `_direccion` VARCHAR(70), IN `_idusuario` INT)   BEGIN
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_set_clientJ` (IN `_idcliente` INT, IN `_tipo_persona` VARCHAR(10), IN `_idpersona_juridica` INT, IN `_razon_social` VARCHAR(60), IN `_documento_tipo` VARCHAR(20), IN `_documento_nro` VARCHAR(12), IN `_iddistrito` INT, IN `_direccion` VARCHAR(70), IN `_idusuario` INT, IN `_representante_legal` VARCHAR(30), IN `_documento_t_representante` VARCHAR(20), IN `_documento_nro_representante` VARCHAR(12), IN `_cargo` VARCHAR(30), IN `_partida_elect` VARCHAR(100))   BEGIN
+	DECLARE _numDoc VARCHAR(12);
+    DECLARE _newClient INT;
+    
+    SET _numDoc = (SELECT documento_nro_representante FROM personas_juridicas WHERE idpersona_juridica = _idpersona_juridica);
+    
+    IF _numDoc != _documento_nro_representante THEN
+    
+		-- ELIMINA DE MANERA LÓGICA EL CLIENTE
+        UPDATE clientes
+			SET
+				inactive_at = CURDATE()
+			WHERE idcliente = _idcliente;
+		
+        -- REGISTRA A LA NUEVA PERSONA JURÍDICA
+        INSERT INTO personas_juridicas(
+						razon_social,
+                        documento_tipo,
+                        documento_nro,
+                        iddistrito,
+                        direccion,
+                        representante_legal,
+						documento_t_representante,
+						documento_nro_representante,
+						cargo,
+						partida_elect
+					)
+					VALUES(
+						_razon_social,
+                        _documento_tipo,
+                        _documento_nro,
+                        _iddistrito,
+                        _direccion,
+                        _representante_legal,
+						_documento_t_representante,
+						_documento_nro_representante,
+						_cargo,
+						_partida_elect	
+                    );
+                
+		SET _newClient = (SELECT @@last_insert_id);
+        
+        -- REGTISTRA AL CLIENTE
+        INSERT INTO clientes(
+					tipo_persona,
+                    idpersona_juridica,
+					idusuario
+                )
+				VALUES(
+					_tipo_persona,
+					_newClient,
+					_idusuario
+                );
+                
+		SELECT ROW_COUNT() AS filasAfect;
+	ELSE
+		-- SI EL NÚMERO DE DOCUMENTO DEL REPRESENTANTE LEGAL ES CAMBIADO
+		-- ACTUALIZA LOS DATOS DE LA PERSONA JURÍDICA
+		UPDATE personas_juridicas
+			SET
+				razon_social	= _razon_social,
+				documento_tipo 	= _documento_tipo,
+				documento_nro 	= _documento_nro,
+                representante_legal	= _representante_legal,
+				documento_t_representante		= _documento_t_representante,
+				documento_nro_representante		= _documento_nro_representante,
+				cargo				= _cargo,
+                partida_elect	= _partida_elect,
+				iddistrito		= _iddistrito,
+				direccion 		= _direccion,
+				update_at 		= CURDATE()
+			WHERE
+				idpersona_juridica = _idpersona_juridica;
+				
+			SELECT ROW_COUNT() AS filasAfect;
+		-- ACTUALIZA LOS DATOS DEL CLIENTE
+			UPDATE clientes
+					SET
+						tipo_persona	= _tipo_persona,
+						idpersona_juridica 	= _idpersona_juridica,
+						update_at 			= CURDATE(),
+						idusuario 			= _idusuario
+					WHERE 
+						idcliente = _idcliente;
+        
+		SELECT ROW_COUNT() AS filasAfect;
+    END IF;
 	
-    UPDATE personas_juridicas
-		SET
-			razon_social	= _razon_social,
-            documento_tipo 	= _documento_tipo,
-            documento_nro 	= _documento_nro,
-            representante_legal 		= _representante_legal,
-            documento_t_representate 	= _documento_t_representate,
-            documento_nro_representate	= _documento_nro_representate,
-			partida_elect 	= _partida_elect,
-            iddistrito		= _iddistrito,
-            direccion 		= _direccion,
-            update_at 		= CURDATE()
-        WHERE
-			idpersona_juridica = _idpersona_juridica;
-            
-		UPDATE clientes
-				SET
-					tipo_persona	= _tipo_persona,
-                    idpersona		= NULLIF(_idpersona,''),
-                    idpersona_juridica 	= _idpersona_juridica,
-                    update_at 			= CURDATE(),
-                    idusuario 			= _idusuario
-                WHERE 
-					idcliente = _idcliente;
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_set_clientN` (IN `_idcliente` INT, IN `_tipo_persona` VARCHAR(10), IN `_idpersona` INT, IN `_nombres` VARCHAR(40), IN `_apellidos` VARCHAR(40), IN `_documento_tipo` VARCHAR(20), IN `_documento_nro` VARCHAR(12), IN `_estado_civil` VARCHAR(20), IN `_iddistrito` INT, IN `_direccion` VARCHAR(70), IN `_idusuario` INT)   BEGIN    
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_set_clientN` (IN `_idcliente` INT, IN `_tipo_persona` VARCHAR(10), IN `_idpersona` INT, IN `_nombres` VARCHAR(40), IN `_apellidos` VARCHAR(40), IN `_documento_tipo` VARCHAR(30), IN `_documento_nro` VARCHAR(12), IN `_estado_civil` VARCHAR(20), IN `_iddistrito` INT, IN `_direccion` VARCHAR(70), IN `_nacionalidad` VARCHAR(20), IN `_idusuario` INT)   BEGIN    
 	UPDATE personas
 		SET
-			nombres 	= _nombres,
-			apellidos	= _apellidos,
+			nombres 		= _nombres,
+			apellidos		= _apellidos,
 			documento_tipo	= _documento_tipo,
 			documento_nro	= _documento_nro,
 			estado_civil	=  _estado_civil,
 			iddistrito		= _iddistrito,
             direccion		= _direccion,
+            nacionalidad	= _nacionalidad,
             update_at 		= CURDATE()
 		WHERE 
 			idpersona = _idpersona;
-            
+		
+        SELECT ROW_COUNT() AS filasAfect;
 		
         UPDATE clientes 
 			SET 
 				tipo_persona 	= _tipo_persona,
 				idpersona 		= _idpersona,
-                idpersona_jurdica	= NULL,
-                idsuario		= idusuario,
+                idusuario		= _idusuario,
                 update_at		= CURDATE()
+                
 			WHERE idcliente = _idcliente;
             
 			SELECT ROW_COUNT() AS filasAfect;
@@ -1275,17 +1330,19 @@ CREATE TABLE `clientes` (
 --
 
 INSERT INTO `clientes` (`idcliente`, `tipo_persona`, `idpersona`, `idpersona_juridica`, `create_at`, `update_at`, `inactive_at`, `idusuario`) VALUES
-(1, 'JURÍDICA', NULL, 1, '2024-04-19', NULL, NULL, 1),
+(1, 'JURÍDICA', NULL, 1, '2024-04-19', '2024-04-27', NULL, 1),
 (2, 'JURÍDICA', NULL, 2, '2024-04-19', NULL, NULL, 2),
 (3, 'JURÍDICA', NULL, 3, '2024-04-19', NULL, NULL, 3),
-(4, 'NATURAL', 17, NULL, '2024-04-19', NULL, NULL, 1),
+(4, 'NATURAL', 17, NULL, '2024-04-19', '2024-04-27', NULL, 1),
 (5, 'NATURAL', 18, NULL, '2024-04-19', NULL, NULL, 2),
 (7, 'NATURAL', 22, NULL, '2024-04-23', NULL, NULL, 1),
-(8, 'NATURAL', 23, NULL, '2024-04-25', NULL, NULL, 1),
+(8, 'NATURAL', 23, NULL, '2024-04-25', NULL, '2024-04-28', 1),
 (9, 'JURÍDICA', NULL, 9, '2024-04-25', NULL, NULL, 1),
 (10, 'JURÍDICA', NULL, 10, '2024-04-25', NULL, NULL, 1),
-(11, 'JURÍDICA', NULL, 16, '2024-04-26', NULL, NULL, 1),
-(12, 'JURÍDICA', NULL, 17, '2024-04-26', NULL, NULL, 1);
+(11, 'JURÍDICA', NULL, 16, '2024-04-26', '2024-04-27', NULL, 1),
+(12, 'JURÍDICA', NULL, 17, '2024-04-26', NULL, NULL, 1),
+(13, 'JURÍDICA', NULL, 20, '2024-04-27', NULL, NULL, 1),
+(14, 'JURÍDICA', NULL, 21, '2024-04-27', NULL, NULL, 1);
 
 -- --------------------------------------------------------
 
@@ -3581,7 +3638,7 @@ INSERT INTO `personas` (`idpersona`, `nombres`, `apellidos`, `documento_tipo`, `
 (14, 'María Isabel', 'García Pérez', 'DNI', '13131313', 'Casado', 13, 'Calle M 333', '2024-04-19', NULL, NULL, 'PERUANA'),
 (15, 'Antonio José', 'Hernández Martín', 'DNI', '14141414', 'Soltera', 14, 'Calle N 444', '2024-04-19', NULL, NULL, 'PERUANA'),
 (16, 'Juan Carlos', 'Pérez García', 'DNI', '12345678', 'Soltero', 1007, 'Av. Primavera 123', '2024-04-19', NULL, NULL, 'PERUANA'),
-(17, 'María Luisa', 'Gómez Fernández', 'DNI', '23456789', 'Casada', 1007, 'Calle Flores 456', '2024-04-19', NULL, NULL, 'PERUANA'),
+(17, 'María Luisa Angelina', 'Gómez Fernández', 'DNI', '23456789', 'Casada', 1007, 'Calle Flores 456', '2024-04-19', '2024-04-27', NULL, 'PERUANA'),
 (18, 'Pedro José', 'Ramírez Sánchez', 'DNI', '34567890', 'Soltero', 1007, 'Jr. Libertad 789', '2024-04-19', NULL, NULL, 'PERUANA'),
 (22, 'LUCAS ALFREDO', 'ATUNCAR VALERIO', 'DNI', '77068570', 'SOLTERO', 1016, 'AV. SANTA ROSA 541', '2024-04-23', NULL, NULL, 'PERUANA'),
 (23, 'YORGHET FERNANDA', 'HERNANDEZ YEREN', 'DNI', '72159736', 'SOLTERA', 1007, 'AV. CENTENARIO MZ 10 LT 01 TUPAC AMARU', '2024-04-25', NULL, NULL, 'PERUANA');
@@ -3601,23 +3658,30 @@ CREATE TABLE `personas_juridicas` (
   `direccion` varchar(70) NOT NULL,
   `create_at` date NOT NULL DEFAULT curdate(),
   `update_at` date DEFAULT NULL,
-  `inactive_at` date DEFAULT NULL
+  `inactive_at` date DEFAULT NULL,
+  `representante_legal` varchar(100) NOT NULL,
+  `documento_t_representante` varchar(20) NOT NULL,
+  `documento_nro_representante` varchar(12) NOT NULL,
+  `cargo` varchar(30) NOT NULL,
+  `partida_elect` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `personas_juridicas`
 --
 
-INSERT INTO `personas_juridicas` (`idpersona_juridica`, `razon_social`, `documento_tipo`, `documento_nro`, `iddistrito`, `direccion`, `create_at`, `update_at`, `inactive_at`) VALUES
-(1, 'Acme Corporation', 'RUC', '20123456789', 1, 'Lima', '2024-04-19', NULL, NULL),
-(2, 'Tech Innovations Ltd.', 'RUC', '20234567890', 2, 'Arequipa', '2024-04-19', NULL, NULL),
-(3, 'Global Solutions Inc.', 'RUC', '20345678901', 3, 'Trujillo', '2024-04-19', NULL, NULL),
-(4, 'Peak Enterprises', 'RUC', '20456789012', 4, 'Cusco', '2024-04-19', NULL, NULL),
-(5, 'Sunrise Holdings', 'RUC', '20567890123', 5, 'Iquitos', '2024-04-19', NULL, NULL),
-(9, 'A.I.S. HOSPITAL APOYO IQUITOS', 'RUC', '20408453560', 1462, 'AV. ABELARDO QUIÑONES  KM. 1.4', '2024-04-25', NULL, NULL),
-(10, 'ACADEMIA DE LA MAGISTRATURA', 'RUC', '20290898685', 1281, 'JR. CAMANA NRO. 669', '2024-04-25', NULL, NULL),
-(16, 'DIRECCION DE RED DE SALUD CONCHUCOS NORTE', 'RUC', '20205422332', 210, 'CAL. HUAJTACHACRA NRO. S/N URB. BUENA VISTA, ANCASH - POMABAMBA - POMA', '2024-04-26', NULL, NULL),
-(17, 'UNIDAD DE GESTION EDUCATIVA LOCAL DE UTCUBAMBA - UGEL-UTCUBA', 'RUC', '20392286617', 78, 'AV. CHACHAPOYAS NRO. 1749, AMAZONAS - UTCUBAMBA - BAGUA GRANDE', '2024-04-26', NULL, NULL);
+INSERT INTO `personas_juridicas` (`idpersona_juridica`, `razon_social`, `documento_tipo`, `documento_nro`, `iddistrito`, `direccion`, `create_at`, `update_at`, `inactive_at`, `representante_legal`, `documento_t_representante`, `documento_nro_representante`, `cargo`, `partida_elect`) VALUES
+(1, 'Acme Corporation', 'RUC', '20234567888', 1, 'Lima', '2024-04-19', '2024-04-27', NULL, 'AAAAAC1', 'DNI', '12356855', 'juez', 'PARTIDA Nº15'),
+(2, 'Tech Innovations Ltd.', 'RUC', '20234567890', 2, 'Arequipa', '2024-04-19', NULL, NULL, 'AAAAAA', 'DNI', '12356855', 'GERENTE', 'PARTIDA Nº2'),
+(3, 'Global Solutions Inc.', 'RUC', '20345678901', 3, 'Trujillo', '2024-04-19', NULL, NULL, 'AAAAAA', 'DNI', '12356855', 'GERENTE', 'PARTIDA Nº2'),
+(4, 'Peak Enterprises', 'RUC', '20456789012', 4, 'Cusco', '2024-04-19', NULL, NULL, 'AAAAAA', 'DNI', '12356855', 'GERENTE', 'PARTIDA Nº2'),
+(5, 'Sunrise Holdings', 'RUC', '20567890123', 5, 'Iquitos', '2024-04-19', NULL, NULL, 'AAAAAA', 'DNI', '12356855', 'GERENTE', 'PARTIDA Nº2'),
+(9, 'A.I.S. HOSPITAL APOYO IQUITOS', 'RUC', '20408453560', 1462, 'AV. ABELARDO QUIÑONES  KM. 1.4', '2024-04-25', NULL, NULL, 'AAAAAA', 'DNI', '12356855', 'GERENTE', 'PARTIDA Nº2'),
+(10, 'ACADEMIA DE LA MAGISTRATURA', 'RUC', '20290898685', 1281, 'JR. CAMANA NRO. 669', '2024-04-25', NULL, NULL, 'AAAAAA', 'DNI', '12356855', 'GERENTE', 'PARTIDA Nº2'),
+(16, 'DIRECCION DE RED DE SALUD CONCHUCOS NORTE', 'RUC', '20234567845', 210, 'CAL. HUAJTACHACRA NRO. S/N URB. BUENA VISTA, ANCASH - POMABAMBA - POMA', '2024-04-26', '2024-04-27', NULL, 'AAAAAA', 'DNI', '12356855', 'GERENTE', 'PARTIDA Nº13'),
+(17, 'UNIDAD DE GESTION EDUCATIVA LOCAL DE UTCUBAMBA - UGEL-UTCUBA', 'RUC', '20392286617', 78, 'AV. CHACHAPOYAS NRO. 1749, AMAZONAS - UTCUBAMBA - BAGUA GRANDE', '2024-04-26', NULL, NULL, 'AAAAAA', 'DNI', '12356855', 'GERENTE', 'PARTIDA Nº2'),
+(20, 'Acme Corporation', 'RUC', '20234567888', 1, 'Lima', '2024-04-27', NULL, NULL, 'AAAAAC1', 'DNI', '12356853', 'juez', 'PARTIDA Nº15'),
+(21, 'A.I.S. HOSPITAL APOYO IQUITOS', 'RUC', '20408453560', 1462, 'AV. ABELARDO QUIÑONES  KM. 1.4', '2024-04-27', NULL, NULL, 'CORAL GONZALES CARLOS ALBERTO', 'DNI', '05239595', 'DIRECTOR GENERAL', 'PARTIDA Nº2');
 
 -- --------------------------------------------------------
 
@@ -3927,37 +3991,6 @@ CREATE TABLE `representantes` (
 INSERT INTO `representantes` (`idrepresentante`, `idpersona`, `cargo`, `partida_elect`, `idsede`, `create_at`, `update_at`, `inactive_at`) VALUES
 (1, 1, 'GERENTE GENERAL', 'PARTIDA ELECTRONICA NRO 1', 1, '2024-04-19', NULL, NULL),
 (3, 2, 'ASISTENTE DE VENTAS', 'PARTIDA ELECTRONICA NRO 1', 1, '2024-04-19', NULL, NULL);
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `representantes_legales_clientes`
---
-
-CREATE TABLE `representantes_legales_clientes` (
-  `idrepresentante` int(11) NOT NULL,
-  `idpersona_juridica` int(11) NOT NULL,
-  `representante_legal` varchar(100) NOT NULL,
-  `documento_tipo` varchar(20) NOT NULL,
-  `documento_nro` varchar(12) NOT NULL,
-  `cargo` varchar(30) NOT NULL,
-  `partida_elect` varchar(100) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Volcado de datos para la tabla `representantes_legales_clientes`
---
-
-INSERT INTO `representantes_legales_clientes` (`idrepresentante`, `idpersona_juridica`, `representante_legal`, `documento_tipo`, `documento_nro`, `cargo`, `partida_elect`) VALUES
-(1, 1, 'John Doe', 'DNI', '12345678', 'GERENTE GENERAL', 'AV. Principal 123'),
-(2, 2, 'Jane Smith', 'DNI', '23456789', 'GERENTE GENERAL', 'Calle Secundaria 456'),
-(3, 3, 'Michael Johnson', 'DNI', '34567890', 'GERENTE GENERAL', 'Jirón Terciario 789'),
-(4, 4, 'Emma Garcia', 'DNI', '45678901', 'GERENTE GENERAL', 'Pasaje Cuaternario 012'),
-(5, 5, 'David Brown', 'DNI', '56789012', 'GERENTE GENERAL', 'Plaza Quinario 345'),
-(6, 9, 'CORAL GONZALES CARLOS ALBERTO', 'DNI', '05239595', 'GERENTE GENERAL', 'partida nro 3'),
-(7, 10, 'INGARUCA RUIZ NATHALIE BETSY', 'DNI', '10180904', 'GERENTE GENERAL', 'partida nr 4'),
-(9, 16, 'ESPINOZA BENITO JUAN SANTOS', 'DNI', '16004773', 'DIRECTOR', 'partida nr 4'),
-(10, 17, 'MONDRAGON CALDERON JOSE ELSO', 'DNI', '27728740', 'DIRECTOR', 'partida nro 3');
 
 -- --------------------------------------------------------
 
@@ -4369,7 +4402,6 @@ ALTER TABLE `personas`
 --
 ALTER TABLE `personas_juridicas`
   ADD PRIMARY KEY (`idpersona_juridica`),
-  ADD UNIQUE KEY `uk_documento_nro_pj` (`documento_nro`),
   ADD KEY `fk_iddistrito_pj` (`iddistrito`);
 
 --
@@ -4405,13 +4437,6 @@ ALTER TABLE `representantes`
   ADD PRIMARY KEY (`idrepresentante`),
   ADD UNIQUE KEY `uk_idpersona_rep` (`idpersona`),
   ADD KEY `fk_idsede_rep` (`idsede`);
-
---
--- Indices de la tabla `representantes_legales_clientes`
---
-ALTER TABLE `representantes_legales_clientes`
-  ADD PRIMARY KEY (`idrepresentante`),
-  ADD KEY `fk_idpersona_juridica` (`idpersona_juridica`);
 
 --
 -- Indices de la tabla `roles`
@@ -4470,7 +4495,7 @@ ALTER TABLE `activos`
 -- AUTO_INCREMENT de la tabla `clientes`
 --
 ALTER TABLE `clientes`
-  MODIFY `idcliente` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `idcliente` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT de la tabla `constructora`
@@ -4554,7 +4579,7 @@ ALTER TABLE `personas`
 -- AUTO_INCREMENT de la tabla `personas_juridicas`
 --
 ALTER TABLE `personas_juridicas`
-  MODIFY `idpersona_juridica` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `idpersona_juridica` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- AUTO_INCREMENT de la tabla `presupuestos`
@@ -4579,12 +4604,6 @@ ALTER TABLE `proyectos`
 --
 ALTER TABLE `representantes`
   MODIFY `idrepresentante` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
-
---
--- AUTO_INCREMENT de la tabla `representantes_legales_clientes`
---
-ALTER TABLE `representantes_legales_clientes`
-  MODIFY `idrepresentante` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT de la tabla `roles`
@@ -4738,12 +4757,6 @@ ALTER TABLE `proyectos`
 ALTER TABLE `representantes`
   ADD CONSTRAINT `fk_idpersona_rep` FOREIGN KEY (`idpersona`) REFERENCES `personas` (`idpersona`),
   ADD CONSTRAINT `fk_idsede_rep` FOREIGN KEY (`idsede`) REFERENCES `sedes` (`idsede`);
-
---
--- Filtros para la tabla `representantes_legales_clientes`
---
-ALTER TABLE `representantes_legales_clientes`
-  ADD CONSTRAINT `fk_idpersona_juridica` FOREIGN KEY (`idpersona_juridica`) REFERENCES `personas_juridicas` (`idpersona_juridica`);
 
 --
 -- Filtros para la tabla `sedes`

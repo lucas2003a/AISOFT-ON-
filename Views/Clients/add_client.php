@@ -1027,6 +1027,7 @@ document.addEventListener("DOMContentLoaded",()=>{
 
       $("#buscar").classList.toggle("d-none");
       $("#spinner").classList.toggle("d-none");
+      
       let params = new URLSearchParams();
 
       params.append("action","searchCE");

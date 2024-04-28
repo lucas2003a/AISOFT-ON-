@@ -651,10 +651,10 @@ BEGIN
 			persj.documento_tipo,
 			persj.documento_nro,
 			persj.razon_social,
-			rep.representante_legal,
-			rep.documento_tipo,
-			rep.documento_nro,
-			rep.partida_elect,
+			persj.representante_legal,
+			persj.documento_t_representante,
+			persj.documento_nro_representante,
+			persj.partida_elect,
 			dist.distrito,
 			prov.provincia,
 			dept.departamento,
@@ -662,7 +662,6 @@ BEGIN
 			persUsu.nombres AS usuario
 			FROM clientes AS clien
 			INNER JOIN personas_juridicas AS persj ON persj.idpersona_juridica = clien.idpersona_juridica
-            INNER JOIN representantes_legales_clientes AS rep ON rep.idpersona_juridica = persj.idpersona_juridica
 			INNER JOIN distritos AS dist ON dist.iddistrito = persj.iddistrito
 			INNER JOIN provincias AS prov ON prov.idprovincia = dist.idprovincia
 			INNER JOIN departamentos AS dept ON dept.iddepartamento = prov.iddepartamento
@@ -687,6 +686,7 @@ BEGIN
 		SELECT
 		clien.idcliente,
         clien.tipo_persona,
+        pers.idpersona,
         pers.apellidos,
         pers.nombres,
 		pers.documento_tipo,
@@ -711,14 +711,15 @@ BEGIN
 		SELECT
 			clien.idcliente,
 			clien.tipo_persona,
+            persj.idpersona_juridica,
 			persj.documento_tipo,
 			persj.documento_nro,
 			persj.razon_social,
-            rep.idrepresentante,
-			rep.representante_legal,
-			rep.documento_tipo AS repDocumento_tipo,
-			rep.documento_nro AS repDocumento_nro,
-			rep.partida_elect,
+			persj.representante_legal,
+			persj.documento_t_representante AS repDocumento_tipo,
+			persj.documento_nro_representante AS repDocumento_nro,
+			persj.partida_elect,
+            persj.cargo,
 			dist.distrito,
 			prov.provincia,
 			dept.departamento,
@@ -727,7 +728,6 @@ BEGIN
 			persUsu.nombres AS usuario
 			FROM clientes AS clien
 			INNER JOIN personas_juridicas AS persj ON persj.idpersona_juridica = clien.idpersona_juridica
-            INNER JOIN representantes_legales_clientes AS rep ON rep.idpersona_juridica = persj.idpersona_juridica
 			INNER JOIN distritos AS dist ON dist.iddistrito = persj.iddistrito
 			INNER JOIN provincias AS prov ON prov.idprovincia = dist.idprovincia
 			INNER JOIN departamentos AS dept ON dept.iddepartamento = prov.iddepartamento
@@ -893,13 +893,14 @@ BEGIN
             update_at 		= CURDATE()
 		WHERE 
 			idpersona = _idpersona;
-            
+		
+        SELECT ROW_COUNT() AS filasAfect;
 		
         UPDATE clientes 
 			SET 
 				tipo_persona 	= _tipo_persona,
 				idpersona 		= _idpersona,
-                idsuario		= _idusuario,
+                idusuario		= _idusuario,
                 update_at		= CURDATE()
                 
 			WHERE idcliente = _idcliente;
@@ -934,6 +935,11 @@ BEGIN
 							razon_social,
                             documento_tipo,                            
                             documento_nro,
+                            representante_legal,
+                            documento_t_representante,
+                            documento_nro_representante,
+                            cargo,
+                            partida_elect,
                             iddistrito,
                             direccion
 							)
@@ -942,30 +948,16 @@ BEGIN
 							_razon_social,
                             _documento_tipo,                            
                             _documento_nro,
+                            _representante_legal,
+                            _documento_t_representante,
+                            _documento_nro_representante,
+                            _cargo,
+                            _partida_elect,
                             _iddistrito,
                             _direccion
                         );
                         
 		SET _idpersona_juridica = (SELECT @@last_insert_id);
-        
-        -- REGISTRO AL REPRESETANTE
-        INSERT INTO representantes_legales_clientes
-					(
-						idpersona_juridica,
-						representante_legal,
-                        documento_tipo,
-                        documento_nro,
-						partida_elect,
-                        cargo
-					)
-                    VALUES(
-						_idpersona_juridica,
-						_representante_legal,
-						_documento_t_representante,
-						_documento_nro_representante,
-						_partida_elect,
-                        _cargo
-                    );
 
 	-- registro a la persona como cliente
 	INSERT INTO clientes(
@@ -996,7 +988,6 @@ CREATE PROCEDURE spu_set_clientJ
     IN _iddistrito 			INT,
     IN _direccion			VARCHAR(70),
     IN _idusuario 			INT,
-    IN _idrepresentante	 	INT,
     IN _representante_legal 			VARCHAR(30),
     IN _documento_t_representante 		VARCHAR(20),
     IN _documento_nro_representante 	VARCHAR(12),
@@ -1004,41 +995,93 @@ CREATE PROCEDURE spu_set_clientJ
     IN _partida_elect					VARCHAR(100)
 )
 BEGIN
-	-- ACTUALIZA LOS DATOS DE LA PERSONA JURÍDICA
-	UPDATE personas_juridicas
-		SET
-			razon_social	= _razon_social,
-            documento_tipo 	= _documento_tipo,
-            documento_nro 	= _documento_nro,
-            iddistrito		= _iddistrito,
-            direccion 		= _direccion,
-            update_at 		= CURDATE()
-        WHERE
-			idpersona_juridica = _idpersona_juridica;
+	DECLARE _numDoc VARCHAR(12);
+    DECLARE _newClient INT;
+    
+    SET _numDoc = (SELECT documento_nro_representante FROM personas_juridicas WHERE idpersona_juridica = _idpersona_juridica);
+    
+    IF _numDoc != _documento_nro_representante THEN
+    
+		-- ELIMINA DE MANERA LÓGICA EL CLIENTE
+        UPDATE clientes
+			SET
+				inactive_at = CURDATE()
+			WHERE idcliente = _idcliente;
 		
-	-- ACUTALIZA LOS DATOS DEL REPRESENTANTE LEGAL
-	UPDATE representantes_legales_clientes
-		SET
-			idpersona_juridica 	= _idpersona_juridica,
-            representante_legal	= _representante_legal,
-            documento_tipo		= _documento_t_representante,
-            documento_nro		= _documento_nro_representante,
-            cargo				= _cargo
-		
-        WHERE 
-			idrepresentante = _idrepresentante;
-            
-	-- ACTUALIZA LOS DATOS DEL CLIENTE
-		UPDATE clientes
-				SET
-					tipo_persona	= _tipo_persona,
-                    idpersona_juridica 	= _idpersona_juridica,
-                    update_at 			= CURDATE(),
-                    idusuario 			= _idusuario
-                WHERE 
-					idcliente = _idcliente;
+        -- REGISTRA A LA NUEVA PERSONA JURÍDICA
+        INSERT INTO personas_juridicas(
+						razon_social,
+                        documento_tipo,
+                        documento_nro,
+                        iddistrito,
+                        direccion,
+                        representante_legal,
+						documento_t_representante,
+						documento_nro_representante,
+						cargo,
+						partida_elect
+					)
+					VALUES(
+						_razon_social,
+                        _documento_tipo,
+                        _documento_nro,
+                        _iddistrito,
+                        _direccion,
+                        _representante_legal,
+						_documento_t_representante,
+						_documento_nro_representante,
+						_cargo,
+						_partida_elect	
+                    );
+                
+		SET _newClient = (SELECT @@last_insert_id);
+        
+        -- REGTISTRA AL CLIENTE
+        INSERT INTO clientes(
+					tipo_persona,
+                    idpersona_juridica,
+					idusuario
+                )
+				VALUES(
+					_tipo_persona,
+					_newClient,
+					_idusuario
+                );
+                
+		SELECT ROW_COUNT() AS filasAfect;
+	ELSE
+		-- SI EL NÚMERO DE DOCUMENTO DEL REPRESENTANTE LEGAL ES CAMBIADO
+		-- ACTUALIZA LOS DATOS DE LA PERSONA JURÍDICA
+		UPDATE personas_juridicas
+			SET
+				razon_social	= _razon_social,
+				documento_tipo 	= _documento_tipo,
+				documento_nro 	= _documento_nro,
+                representante_legal	= _representante_legal,
+				documento_t_representante		= _documento_t_representante,
+				documento_nro_representante		= _documento_nro_representante,
+				cargo				= _cargo,
+                partida_elect	= _partida_elect,
+				iddistrito		= _iddistrito,
+				direccion 		= _direccion,
+				update_at 		= CURDATE()
+			WHERE
+				idpersona_juridica = _idpersona_juridica;
+				
+			SELECT ROW_COUNT() AS filasAfect;
+		-- ACTUALIZA LOS DATOS DEL CLIENTE
+			UPDATE clientes
+					SET
+						tipo_persona	= _tipo_persona,
+						idpersona_juridica 	= _idpersona_juridica,
+						update_at 			= CURDATE(),
+						idusuario 			= _idusuario
+					WHERE 
+						idcliente = _idcliente;
+        
+		SELECT ROW_COUNT() AS filasAfect;
+    END IF;
 	
-    SELECT ROW_COUNT() AS filasAfect;
 END $$
 DELIMITER ;
 

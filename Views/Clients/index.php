@@ -302,21 +302,14 @@
         <nav aria-label="breadcrumb">
           <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
           <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="#">Dashboard</a></li>
-            <li class="breadcrumb-item text-sm text-dark active" aria-current="page">CLientes</li>
+            <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Clientes</li>
           </ol>
-          <h6 class="font-weight-bolder mb-0" id="cabezera">CIENTES </h6>
+          <h6 class="font-weight-bolder mb-0" id="cabezera">CLIENTES </h6>
         </nav>
         <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
-          <div class="ms-md-auto pe-md-3 d-flex align-items-center">
-            <div class="input-group">
-              <span class="input-group-text text-body"><i class="fas fa-search" aria-hidden="true"></i></span>
-              <input type="text" class="form-control" placeholder="Nº documento..." id="in-doumento-tipo">
-            </div>
-          </div>
+          
           <ul class="navbar-nav  justify-content-end">
-            <li class="nav-item d-flex align-items-center">
-              <a class="btn btn-outline-success btn-sm mb-0 me-3" target="_blank" href="./add_client.php" id="add-asset">AGREGAR CLIENTE</a>
-            </li>
+            
             <li class="nav-item d-flex align-items-center">
               <a href="javascript:;" class="nav-link text-body font-weight-bold px-0">
                 <i class="fa fa-user me-sm-1"></i>
@@ -430,10 +423,8 @@
                   <h6>Tabla - clientes</h6>
                 </div>
                 <div class="col-md-6">
-                  <div class="text-end">
-                    <button type="button" class="btn btn-lg bg-gradient-success opacity-10" id="generate-excel"><i class="fa-solid fa-file-excel"></i></button>
-                    <button type="button" class="btn btn-lg bg-gradient-danger opacity-10" id="generate-pdf"><i class="bi bi-filetype-pdf"></i></button>
-                  </div>
+                  
+                  
                 </div>
               </div>
               <div class="row">
@@ -445,9 +436,25 @@
                     <option value="NATURAL">Natural</option>
                   </select>
                 </div>
+
+                <div class="col-md-6">
+                  <div class="ms-md-auto pe-md-3 d-flex align-items-center">
+                    <div class="input-group">
+                      <span class="input-group-text text-body"><i class="fas fa-search" aria-hidden="true"></i></span>
+                      <input type="text" class="form-control" placeholder="Nº documento..." id="in-doumento-tipo">
+                    </div>
+                  </div>
+                  
+                </div>
+
+                <div class="col-md-3">
+                  <a class="btn btn-outline-success btn-sm mb-0 me-3" target="_blank" href="./add_client.php" id="add-asset">AGREGAR CLIENTE</a>
+                  
+                </div>
+
               </div>
             </div>
-            <div class="card-body px-0 pt-0 pb-2">
+            <div class="card-body px-0 pt-0 pb-2 mt-4">
               <div class="table-responsive text-center p-0">
                   <table class="table align-items-center mb-0" id="table-clients">
                     <thead>
@@ -618,9 +625,9 @@ document.addEventListener("DOMContentLoaded",()=>{
                   </td>
                   <td class="align-middle">
                   <div class="btn-group">
-                        <a type="button" href="./delete_asset.php?id=${code}" class="btn btn-link text-danger text-gradient px-3 mb-0" id="btn-delete"><i class="bi bi-trash-fill"></i></a>
-                        <a type="button" href="./set_client.php?id=${code}" class="btn btn-link text-dark px-3 mb-0" id="btn-edit"><i class="bi bi-pencil-fill"></i></a>
-                        <a type="button" href="./detail_asset.php?id=${code}" class="btn btn-link text-success px-3 mb-0"><i class="bi bi-arrow-right-square"></i></a>
+                        <a type="button" href="./delete_client.php?id=${code}" class="btn btn-link text-danger text-gradient px-3 mb-0" id="btn-delete"><i class="bi bi-trash-fill"></i></a>
+                        <a type="button" href="./edit_client.php?id=${code}" class="btn btn-link text-dark px-3 mb-0" id="btn-edit"><i class="bi bi-pencil-fill"></i></a>
+                        <a type="button" href="./detail_client.php?id=${code}" class="btn btn-link text-success px-3 mb-0"><i class="bi bi-arrow-right-square"></i></a>
                         </div>
                     </td>
                 </tr>           
@@ -726,16 +733,6 @@ document.addEventListener("DOMContentLoaded",()=>{
           }
         },1500)
     });
-      
-  $("#generate-excel").addEventListener("click",()=>{
-
-    generateExcel(idProyecto);
-  });
-
-  $("#generate-pdf").addEventListener("click",()=>{
-
-    generatePdf(idProyecto);
-  });
 
   $("#tipo_persona").addEventListener("change",()=>{
 

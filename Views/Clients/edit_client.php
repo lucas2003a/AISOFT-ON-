@@ -435,7 +435,7 @@
             <!-- TIPO DE PERSONA -->
             <div class="mt-4">
               <label for="tipo_persona" class="form-label">Tipo de persona</label>
-                <select class="form-select custom-select-scroll" id="tipo_persona" required>
+                <select class="form-select custom-select-scroll" id="tipo_persona" readonly>
                   <option value="NATURAL">Natural</option>
                   <option value="JURÍDICA">Jurídica</option>
                 </select>
@@ -452,7 +452,7 @@
             <!-- DOCUMENTO TIPO -->
             <div class="mt-4">
               <label for="documento_tipo" class="form-label">Tipo de documento</label>
-              <select name="documento_tipo" class="form-select" id="documento_tipo" required>
+              <select name="documento_tipo" class="form-select" id="documento_tipo" readonly>
                 <option value="">Tipo de documento</option>
               </select>
               <div class="invalid-feedback">
@@ -468,7 +468,7 @@
             <div class="row">
               <div class="col-md-9">
     
-                <input type="text" name="documento_nro" id="documento_nro" class="form-control" placeholder="Nº documento" required>
+                <input type="text" name="documento_nro" id="documento_nro" class="form-control" placeholder="Nº documento" readonly>
                 <div class="invalid-feedback">
                     Necesitas ingresar el número del documento.
                 </div>
@@ -478,9 +478,7 @@
               </div>
               <div class="col-md-3">
                 <button type="submit" class="btn btn-success" id="buscar"- disabled>Buscar</button>
-                <button class="btn btn-success d-none" id="spinner" type="button" disabled>
-                  <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                </button>
+                
                 
               </div>
             </div>
@@ -646,7 +644,10 @@
                       <input type="text" name="representante_legal" id="representante_legal" placeholder="Representante legal" class="form-control pern-j" disabled>
                     </div>
                       <div class="col-1">
-                        <button type="button" class="btn btn-primary" id="basic-addon2"><i class="bi bi-arrow-clockwise"></i></button>
+                        <button type="button" class="btn btn-primary pern-j" id="reloadRep"><i class="bi bi-arrow-clockwise"></i></button>
+                        <button class="btn btn-primary d-none" id="spinner" type="button" disabled>
+                          <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                        </button>
                       </div>
                   </div>
                     <div class="invalid-feedback">
@@ -689,6 +690,7 @@
               <div class="mt-4 mb-4">
 
                   <button class="btn btn-success" type="submit" id="guardar">Guardar</button>
+                  
               </div>
         </div>
       </form>
@@ -795,8 +797,6 @@ document.addEventListener("DOMContentLoaded",()=>{
   let stringQuery = new URLSearchParams(url);
   let code = stringQuery.get("id");
   let idCliente = atob(code);
-
-  console.log(idCliente);
 
   //Obtengot todos los clientes
   async function getClients(){
@@ -997,7 +997,7 @@ document.addEventListener("DOMContentLoaded",()=>{
   }
 
   //Agrega un cliente
-  async function addClient(){
+  async function setClient(){
 
     try{
 
@@ -1008,22 +1008,27 @@ document.addEventListener("DOMContentLoaded",()=>{
       
       if($("#tipo_persona").value == "JURÍDICA"){
         
-        params.append("action","addLegalClient");
+        params.append("action","setLegalClient");
+        params.append("idcliente",idCliente);
         params.append("tipo_persona",$("#tipo_persona").value);
+        params.append("idpersona_juridica",dataClient.idpersona_juridica);
         params.append("razon_social",$("#razon_social").value);
         params.append("documento_tipo",$("#documento_tipo").value);
         params.append("documento_nro",$("#documento_nro").value);
+        params.append("iddistrito",$("#iddistrito").value);
+        params.append("direccion",$("#direccion").value);
         params.append("representante_legal",$("#representante_legal").value);
         params.append("documento_t_representante",$("#documento_t_representante").value);
         params.append("documento_nro_representante",$("#documento_nro_representante").value);
         params.append("partida_elect",$("#partida_elect").value);
-        params.append("iddistrito",$("#iddistrito").value);
-        params.append("direccion",$("#direccion").value);
+        params.append("cargo",$("#cargo").value);
 
       }else if($("#tipo_persona").value == "NATURAL"){
         
-        params.append("action","addClientNatural");
+        params.append("action","setClientNatural");
+        params.append("idcliente",idCliente);
         params.append("tipo_persona",$("#tipo_persona").value);
+        params.append("idpersona",dataClient.idpersona);
         params.append("nombres",$("#nombres").value);
         params.append("apellidos",$("#apellidos").value);
         params.append("documento_tipo",$("#documento_tipo").value);
@@ -1036,22 +1041,19 @@ document.addEventListener("DOMContentLoaded",()=>{
 
       
       let result = await global.sendAction(url, params);
-      console.log(result);
-      console.log(params);
+
       if(result){
 
+        console.log(result.filasAfect);
         if(result.filasAfect > 0){
-
-          sAlert.sweetConfirmAdd("Éxito","El registro se ha guardado de forma existosa, ¿Deseas registrar otro?",()=>{
-
-            $("#search_person").reset();
-            $("#form-data-client").reset();
-            $("#form-data-client").classList.remove('was-validated');
-
-          },()=>{
-            window.location.href = "./index.php";
+          sAlert.sweetSuccess("Registro actualizado","El registro se ha actualizado correctamente",()=>{
+    
+            window.location.href = `./index.php`;
           });
+
         }
+      }else{
+        sAlert.sweetError("No se actualizó el registro","Vuelve a intentarlo");
       }
     }
     catch(e){
@@ -1092,7 +1094,7 @@ document.addEventListener("DOMContentLoaded",()=>{
     })  
   };
 
-  //Compara si existe un registro con el número de documento
+  //Compara si existe un registro con el número de documento(de la entidad o persona)
   async function validateDocument(array, params){
 
     return new Promise((resolve, reject)  => {
@@ -1108,7 +1110,32 @@ document.addEventListener("DOMContentLoaded",()=>{
       }else{
   
         validateFom("#form-data-client",()=>{
-          console.log("formuario validado");
+        setClient();
+        });
+        resolve();
+  
+      }
+    })
+
+  };
+
+  //Compara si existe un registro con el número de documento(del representante legal)
+  async function validateDocumentRep(array, params){
+
+    return new Promise((resolve, reject)  => {
+
+      const found = array.find(element => element.documento_nro_representante == params);
+  
+      if(found){
+
+        sAlert.sweetError("El documento ingresado ya existe","Ya existe un registro con este documento");
+  
+        reject();
+      
+      }else{
+  
+        validateFom("#form-data-client",()=>{
+        setClient();
         });
         resolve();
   
@@ -1117,6 +1144,45 @@ document.addEventListener("DOMContentLoaded",()=>{
 
   }
 
+  //Busca el representante legal y lo cambia
+  async function reloadRep(){
+    
+    try{
+      
+      $("#reloadRep").classList.toggle("d-none");
+      $("#spinner").classList.toggle("d-none");
+
+      let params = new URLSearchParams();
+
+      params.append("action","searchRpRUC");
+      params.append("documento_nro",$("#documento_nro").value);
+
+      let url = `../../Controllers/searchDocument.php?${params}`;
+
+      let result = await global.sendActionGET(url);
+
+      if(result){
+
+        let docs = result.data.data[0];
+        console.log(docs);
+        $("#documento_t_representante").value = docs.tipo_de_documento;
+        $("#documento_nro_representante").value = docs.numero_de_documento;
+        $("#representante_legal").value = docs.nombre;
+        $("#cargo").value = docs.cargo;
+
+        $("#reloadRep").classList.toggle("d-none");
+        $("#spinner").classList.toggle("d-none");
+      }else{
+        
+        $("#reloadRep").classList.toggle("d-none");
+        $("#spinner").classList.toggle("d-none");
+        sAlert.sweetError("El documento ingresado no existe",`${result.data.message}`);
+      }
+    }
+    catch(e){
+      console.error(e);
+    }
+  }
   //Cambia la longitud de la cadena de acuerdo al tipo de documento escojido
   function lengthTDocument(tDocument){
 
@@ -1143,26 +1209,31 @@ document.addEventListener("DOMContentLoaded",()=>{
     }
   }
 
-  function validateDataPersnNatural(){
+  function validateDataPersonNatural(){
     
     if($("#documento_nro").value !== dataClient.documento_nro){
 
       console.log("validando el docuento si existe");
       validateDocument(dataClients, $("#documento_nro").value);
 
+    }else{
+      setClient();
     }
   };
 
-  function validateDataPersnLegal(){
+  function validateDataPersonLegal(){
 
     if($("#documento_nro").value !== dataClient.documento_nro){
 
-      console.log("validando el docuento si existe");
       validateDocument(dataClients, $("#documento_nro").value);
 
     }else if($("#documento_nro_representante").value !== dataClient.repDocumento_nro){
 
-      console.log("documento no existe");
+      validateDocument(dataClients, $("#documento_nro_representante").value);
+
+    }else{
+      
+      setClient();
     }
 
   };
@@ -1171,13 +1242,13 @@ document.addEventListener("DOMContentLoaded",()=>{
 
       e.preventDefault(); 
 
-      if($("#tipo_pesona").value == "JURÍDICA"){
+      if($("#tipo_persona").value == "JURÍDICA"){
 
-        validateDataPersnNatural();
-
-      }else if($("#tipo_pesona").value == "NATURAL"){
-
-        validateDataPersnLegal();
+        validateDataPersonLegal();
+        
+      }else if($("#tipo_persona").value == "NATURAL"){
+        
+        validateDataPersonNatural();
       }
 
     })
@@ -1199,6 +1270,11 @@ document.addEventListener("DOMContentLoaded",()=>{
     changeVisibilityInput($("#tipo_persona").value);
     createOptions($("#tipo_persona"));
 
+  });
+
+  $("#reloadRep").addEventListener("click",()=>{
+
+    reloadRep();
   });
   
   getClients();

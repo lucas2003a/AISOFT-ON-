@@ -60,6 +60,8 @@ if(isset($_POST["action"])){
                 $dataObtained = [
 
                     "idcliente"       => $_POST["idcliente"],
+                    "tipo_persona"    => $_POST["tipo_persona"],
+                    "idpersona"       => $_POST["idpersona"],
                     "nombres"         => $_POST["nombres"],
                     "apellidos"       => $_POST["apellidos"],
                     "documento_tipo"  => $_POST["documento_tipo"],
@@ -68,7 +70,7 @@ if(isset($_POST["action"])){
                     "iddistrito"      => $_POST["iddistrito"],
                     "direccion"       => $_POST["direccion"],
                     "nacionalidad"    => $_POST["nacionalidad"],
-                    "idusuario"       => $_POST["idusuario"]
+                    "idusuario"       => 1
                     
                 ];
                 
@@ -105,18 +107,17 @@ if(isset($_POST["action"])){
                 "idcliente" => $_POST["idcliente"],
                 "tipo_persona"      => $_POST["tipo_persona"],
                 "idpersona_juridica" => $_POST["idpersona_juridica"],
+                "razon_social"      => $_POST["razon_social"],
                 "documento_tipo"    => $_POST["documento_tipo"],
                 "documento_nro"     => $_POST["documento_nro"],
                 "iddistrito"        => $_POST["iddistrito"],
                 "direccion"         => $_POST["direccion"],
-                "idusuario"         => $_POST["idusuario"],
-                "idrepresentante"               => $_POST["idrepresentante"],
+                "idusuario"         => 1,
                 "representante_legal"           => $_POST["representante_legal"],
                 "documento_t_representante"     => $_POST["documento_t_representante"],
                 "documento_nro_representante"   => $_POST["documento_nro_representante"],
                 "cargo"         => $_POST["cargo"],
                 "partida_elect" => $_POST["partida_elect"],
-                "idusuario"     => 1,
             ];
     
             echo json_encode($client->setLegalClient($dataObtained));
