@@ -245,8 +245,20 @@ CREATE TABLE activos(
 )ENGINE = INNODB;
 
 -- REPRESENTATES LEGALES DE LOS CLIENTES DEL TIPO PERSONA JURÍDICA
-
+CREATE TABLE rep_legales_clientes
+(
+	idprespresentante 					INT PRIMARY KEY AUTO_INCREMENT,
+    idpersona_juridica					INT 			NOT NULL,
+    representante_legal					VARCHAR(100)	NOT NULL,
+	documento_tipo						VARCHAR(20) 	NOT NULL,
+	documento_nro						VARCHAR(12) 	NOT NULL,
+	cargo								VARCHAR(30)		NOT NULL,
+	partida_elect						VARCHAR(100) 	NOT NULL,
+    estado								VARCHAR(20) 	NOT NULL DEFAULT "DESHABILITADO"
+)ENGINE= INNODB;
+ 
 -- persona jurìdicas
+
 CREATE TABLE  personas_juridicas
 (
 	idpersona_juridica 			INT PRIMARY KEY AUTO_INCREMENT,
@@ -258,13 +270,7 @@ CREATE TABLE  personas_juridicas
     create_at 					DATE 			NOT NULL DEFAULT(CURDATE()),
     update_at 					DATE 			NULL,
     inactive_at 				DATE 			NULL,
-    representante_legal		VARCHAR(100)	NOT NULL,
-	documento_t_representante			VARCHAR(20) 	NOT NULL,
-	documento_nro_representante			VARCHAR(12) 	NOT NULL,
-	cargo					VARCHAR(30)		NOT NULL,
-	partida_elect			VARCHAR(100) 	NOT NULL,
     CONSTRAINT uk_documento_nro_pj UNIQUE(documento_nro),
-    CONSTRAINT uk_documento_nro_representante_pj UNIQUE(documento_nro_representante),
     CONSTRAINT fk_iddistrito_pj FOREIGN KEY(iddistrito) REFERENCES distritos(iddistrito)
 )ENGINE = INNODB;
 

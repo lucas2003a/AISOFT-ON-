@@ -678,6 +678,10 @@
 
                   <button class="btn btn-success" type="submit" id="guardar">Guardar</button>
               </div>
+                <!-- Button trigger modal -->
+  <button type="button" class="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#modal-data-represents" >
+    Launch
+  </button>
         </div>
       </form>
     </div>
@@ -754,6 +758,45 @@
       </div>
     </div>
   </div>
+
+
+  
+  <!-- Modal -->
+  <div class="modal fade" id="modal-data-represents" tabindex="-1" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
+    <div class="modal-dialog  modal-fullscreen-sm-down modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalTitleId">
+            Representantes legales
+          </h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="container-fluid">Add rows here</div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+            Close
+          </button>
+          <button type="button" class="btn btn-primary">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    var modalId = document.getElementById('modalId');
+  
+    modalId.addEventListener('show.bs.modal', function (event) {
+        // Button that triggered the modal
+        let button = event.relatedTarget;
+        // Extract info from data-bs-* attributes
+        let recipient = button.getAttribute('data-bs-whatever');
+  
+      // Use above variables to manipulate the DOM
+    });
+  </script>
+  
   <!-- SWEET ALERT -->
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
@@ -951,7 +994,7 @@ document.addEventListener("DOMContentLoaded",()=>{
       if(result){
         if(result.data.success){
 
-          let docs = result.data.data[0];
+          let docs = result.data.data;
           console.log(docs);
           $("#documento_t_representante").value = docs.tipo_de_documento;
           $("#documento_nro_representante").value = docs.numero_de_documento;

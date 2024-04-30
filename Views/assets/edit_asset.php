@@ -472,7 +472,7 @@
                                     <!-- PROPIETARIO LOTE -->
                                     <div class="mt-4">
                                       <label for="estado" class="form-label">Propietarios</label>
-                                      <select name="propietario_lote" class="form-select" id="propietario_lote" disabled>
+                                      <select name="propietario_lote" class="form-select" id="propietario_lote" readonly>
                                         <option value="A.I.F">A.I.F</option>
                                         <option value="TERCEROS">Terceros</option>
                                       </select>
@@ -1049,7 +1049,7 @@
       params.append("action","setAsset");
       params.append("idactivo",id);
       params.append("idproyecto",idProyecto);
-      params.append("tipo_activo",("#tipo_activo").value);
+      params.append("tipo_activo",$("#tipo_activo").value);
       params.append("imagen",img);
       params.append("estado",dataAsset.estado);
       params.append("sublote",$("#sublote").value);

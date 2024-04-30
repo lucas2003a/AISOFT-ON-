@@ -88,11 +88,6 @@ if(isset($_POST["action"])){
                 "razon_social"     =>  $_POST["razon_social"],
                 "documento_tipo"   =>  $_POST["documento_tipo"],
                 "documento_nro"    =>  $_POST["documento_nro"],
-                "representante_legal"          =>  $_POST["representante_legal"],
-                "documento_t_representante"    =>  $_POST["documento_t_representante"],
-                "documento_nro_representante"  =>  $_POST["documento_nro_representante"],
-                "cargo"            =>  $_POST["cargo"],
-                "partida_elect"    =>  $_POST["partida_elect"],
                 "iddistrito"       =>  $_POST["iddistrito"],
                 "direccion"        =>  $_POST["direccion"],
                 "idusuario"        =>  1
@@ -113,16 +108,30 @@ if(isset($_POST["action"])){
                 "iddistrito"        => $_POST["iddistrito"],
                 "direccion"         => $_POST["direccion"],
                 "idusuario"         => 1,
-                "representante_legal"           => $_POST["representante_legal"],
-                "documento_t_representante"     => $_POST["documento_t_representante"],
-                "documento_nro_representante"   => $_POST["documento_nro_representante"],
-                "cargo"         => $_POST["cargo"],
-                "partida_elect" => $_POST["partida_elect"],
             ];
     
             echo json_encode($client->setLegalClient($dataObtained));
         
         break;
+
+        //REPRESENTANTES
+
+        case "addRepresents": 
+
+            $dataObtained = [
+                "idpersona_juridica"    => $_POST["idpersona_juridica"],
+                "representate_legal"    => $_POST["representate_legal"],
+                "documento_tipo"        => $_POST["documento_tipo"],
+                "documento_nro"         => $_POST["documento_nro"],
+                "cargo"                 => $_POST["cargo"],
+                "partida_elect"         => $_POST["partida_elect"],
+                "estado"                => $_POST["estado"]
+            ];
+
+            echo json_encode($client->addRepresents($dataObtained));
+            
+            break;
+
         case "inactiveClient": 
             
                 $idcliente = $_POST["idcliente"];

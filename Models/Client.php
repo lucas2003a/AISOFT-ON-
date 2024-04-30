@@ -132,24 +132,19 @@ class Client extends Conection{
     //PERSONAS JURÍDICCAS
 
     /**
-     * Método para registrar una persona jurídicia
+     * Método para registrar una persona jurídica
      */
     public function addLegalClient($dataClient = []){
 
         try{
 
-            $query = $this->conection->prepare("CALL spu_add_clients_personj(?,?,?,?,?,?,?,?,?,?,?,?)");
+            $query = $this->conection->prepare("CALL spu_add_clients_personj(?,?,?,?,?,?,?)");
             $query->execute(
                 array(
                     $dataClient["tipo_persona"],
                     $dataClient["razon_social"],
                     $dataClient["documento_tipo"],
                     $dataClient["documento_nro"],
-                    $dataClient["representante_legal"],
-                    $dataClient["documento_t_representante"],
-                    $dataClient["documento_nro_representante"],
-                    $dataClient["cargo"],
-                    $dataClient["partida_elect"],
                     $dataClient["iddistrito"],
                     $dataClient["direccion"],
                     $dataClient["idusuario"]
@@ -164,14 +159,14 @@ class Client extends Conection{
         }
     }
 
-    /**
+     /**
      * Método para actualizar a una persoma jurídica
      */
     public function setLegalClient($dataClient = []){
 
         try{
 
-            $query = $this->conection->prepare("CALL spu_set_clientJ(?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+            $query = $this->conection->prepare("CALL spu_set_clientJ(?,?,?,?,?,?,?,?,?)");
             $query->execute(
                 array(
                     $dataClient["idcliente"],
@@ -182,12 +177,7 @@ class Client extends Conection{
                     $dataClient["documento_nro"],
                     $dataClient["iddistrito"],
                     $dataClient["direccion"],
-                    $dataClient["idusuario"],
-                    $dataClient["representante_legal"],
-                    $dataClient["documento_t_representante"],
-                    $dataClient["documento_nro_representante"],
-                    $dataClient["cargo"],
-                    $dataClient["partida_elect"],
+                    $dataClient["idusuario"]
                 )
             );
 
@@ -198,8 +188,35 @@ class Client extends Conection{
             die($e->getMessage());
         }
     }
+
+
     /**
-     * Método para inactivar a un cliente
+     * Método para registrar a los representantes legales
+     */
+    public function addRepresents($dataClient = []){
+
+        try{
+
+            $query = $this->conection->prepare("CALL spu_add_represents(?,?,?,?,?,?,?)");
+            $query->execute(
+                array(
+                    $dataClient["idpersona_juridica"],
+                    $dataClient["representate_legal"],
+                    $dataClient["documento_tipo"],
+                    $dataClient["documento_nro"],
+                    $dataClient["cargo"],
+                    $dataClient["partida_elect"],
+                    $dataClient["estado"],
+                )
+            );
+        }
+        catch(Exception $e){
+            die($e->getMessage());
+        }
+    }
+
+    /**
+     * Método para eliminar a un cliente
      */
     public function inactiveClient($idcliente = 0){
         

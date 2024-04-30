@@ -1203,7 +1203,6 @@
 
   $("#add").addEventListener("click",()=>{
 
-
     if(idPresupuesto){
       
       validateInputs(createIputText);

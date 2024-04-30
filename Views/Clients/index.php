@@ -447,15 +447,15 @@
                   
                 </div>
 
-                <div class="col-md-3">
+                <div class="col-md-3 d-flex justify-content-end">
                   <a class="btn btn-outline-success btn-sm mb-0 me-3" target="_blank" href="./add_client.php" id="add-asset">AGREGAR CLIENTE</a>
-                  
                 </div>
 
               </div>
             </div>
             <div class="card-body px-0 pt-0 pb-2 mt-4">
               <div class="table-responsive text-center p-0">
+                <hr>
                   <table class="table align-items-center mb-0" id="table-clients">
                     <thead>
                     <tr>
@@ -665,10 +665,9 @@
           </div>        
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-            Close
+          <button type="button" class="btn btn-primary" data-bs-dismiss="modal">
+            Cerrar
           </button>
-          <button type="button" class="btn btn-primary">Save</button>
         </div>
       </div>
     </div>

@@ -651,10 +651,7 @@ BEGIN
 			persj.documento_tipo,
 			persj.documento_nro,
 			persj.razon_social,
-			persj.representante_legal,
-			persj.documento_t_representante,
-			persj.documento_nro_representante,
-			persj.partida_elect,
+            rep.idprespresentante,
 			dist.distrito,
 			prov.provincia,
 			dept.departamento,
@@ -662,6 +659,7 @@ BEGIN
 			persUsu.nombres AS usuario
 			FROM clientes AS clien
 			INNER JOIN personas_juridicas AS persj ON persj.idpersona_juridica = clien.idpersona_juridica
+            INNER JOIN rep_legales_clientes AS rep ON rep.idpersona_juridica = persj.idpersona_juridica
 			INNER JOIN distritos AS dist ON dist.iddistrito = persj.iddistrito
 			INNER JOIN provincias AS prov ON prov.idprovincia = dist.idprovincia
 			INNER JOIN departamentos AS dept ON dept.iddepartamento = prov.iddepartamento
@@ -715,11 +713,7 @@ BEGIN
 			persj.documento_tipo,
 			persj.documento_nro,
 			persj.razon_social,
-			persj.representante_legal,
-			persj.documento_t_representante AS repDocumento_tipo,
-			persj.documento_nro_representante AS repDocumento_nro,
-			persj.partida_elect,
-            persj.cargo,
+            rep.idprespresentante,
 			dist.distrito,
 			prov.provincia,
 			dept.departamento,
@@ -728,6 +722,7 @@ BEGIN
 			persUsu.nombres AS usuario
 			FROM clientes AS clien
 			INNER JOIN personas_juridicas AS persj ON persj.idpersona_juridica = clien.idpersona_juridica
+            INNER JOIN rep_legales_clientes AS rep ON rep.idpersona_juridica = persj.idpersona_juridica
 			INNER JOIN distritos AS dist ON dist.iddistrito = persj.iddistrito
 			INNER JOIN provincias AS prov ON prov.idprovincia = dist.idprovincia
 			INNER JOIN departamentos AS dept ON dept.iddepartamento = prov.iddepartamento
@@ -779,10 +774,7 @@ BEGIN
 			persj.documento_tipo,
 			persj.documento_nro,
 			persj.razon_social,
-			persj.representante_legal,
-			persj.documento_t_representante,
-			persj.documento_nro_representante,
-			persj.partida_elect,
+			rep.idprespresentante,
 			dist.distrito,
 			prov.provincia,
 			dept.departamento,
@@ -790,6 +782,7 @@ BEGIN
 			persUsu.nombres AS usuario
 			FROM clientes AS clien
 			INNER JOIN personas_juridicas AS persj ON persj.idpersona_juridica = clien.idpersona_juridica
+            INNER JOIN rep_legales_clientes AS rep ON rep.idpersona_juridica = persj.idpersona_juridica
 			INNER JOIN distritos AS dist ON dist.iddistrito = persj.iddistrito
 			INNER JOIN provincias AS prov ON prov.idprovincia = dist.idprovincia
 			INNER JOIN departamentos AS dept ON dept.iddepartamento = prov.iddepartamento
@@ -917,11 +910,6 @@ CREATE PROCEDURE spu_add_clients_personj
 	IN _razon_social 	VARCHAR(60),
     IN _documento_tipo 	VARCHAR(20),
     IN _documento_nro	VARCHAR(12),
-    IN _representante_legal 		VARCHAR(30),
-    IN _documento_t_representante 	VARCHAR(20),
-    IN _documento_nro_representante 	VARCHAR(12),
-    IN _cargo			VARCHAR(30),
-    IN _partida_elect	VARCHAR(100),
     IN _iddistrito 		INT,
     IN _direccion		VARCHAR(70),	
     IN _idusuario 		INT
@@ -935,11 +923,6 @@ BEGIN
 							razon_social,
                             documento_tipo,                            
                             documento_nro,
-                            representante_legal,
-                            documento_t_representante,
-                            documento_nro_representante,
-                            cargo,
-                            partida_elect,
                             iddistrito,
                             direccion
 							)
@@ -948,17 +931,14 @@ BEGIN
 							_razon_social,
                             _documento_tipo,                            
                             _documento_nro,
-                            _representante_legal,
-                            _documento_t_representante,
-                            _documento_nro_representante,
-                            _cargo,
-                            _partida_elect,
                             _iddistrito,
                             _direccion
                         );
                         
 		SET _idpersona_juridica = (SELECT @@last_insert_id);
 
+	SELECT _idpersona_juridica AS idpersona_juridica;
+    
 	-- registro a la persona como cliente
 	INSERT INTO clientes(
 						tipo_persona, 
@@ -971,8 +951,43 @@ BEGIN
                         _idpersona_juridica,
                         _idusuario
                     );
-	
-    SELECT ROW_COUNT() AS filasAfect;
+END $$
+DELIMITER ;
+
+DELIMITER $$
+CREATE PROCEDURE spu_add_represents
+(
+	IN _idpersona_juridica 		INT,
+	IN _representante_legal 	VARCHAR(30),
+    IN _documento_tipo 			VARCHAR(20),
+    IN _documento_nro	VARCHAR(12),
+    IN _cargo			VARCHAR(30),
+    IN _partida_elect	VARCHAR(100),
+    IN _estado			VARCHAR(20)
+)
+BEGIN
+	INSERT INTO rep_legales_clientes
+				(
+					idpersona_juridica,
+                    representate_legal,
+                    documento_tipo,
+                    documento_nro,
+                    cargo,
+                    partida_elect,
+                    estado
+                )
+                
+                VALUES(
+					_idpersona_juridica,
+                    _representate_legal,
+                    _documento_tipo,
+                    _documento_nro,
+                    _cargo,
+                    _partida_elect,
+                    _estado
+                );
+                
+		SELECT ROW_COUNT() AS filasAfect;
 END $$
 DELIMITER ;
 
@@ -987,81 +1002,14 @@ CREATE PROCEDURE spu_set_clientJ
     IN _documento_nro		VARCHAR(12),
     IN _iddistrito 			INT,
     IN _direccion			VARCHAR(70),
-    IN _idusuario 			INT,
-    IN _representante_legal 			VARCHAR(30),
-    IN _documento_t_representante 		VARCHAR(20),
-    IN _documento_nro_representante 	VARCHAR(12),
-    IN _cargo							VARCHAR(30),
-    IN _partida_elect					VARCHAR(100)
+    IN _idusuario 			INT
 )
 BEGIN
-	DECLARE _numDoc VARCHAR(12);
-    DECLARE _newClient INT;
-    
-    SET _numDoc = (SELECT documento_nro_representante FROM personas_juridicas WHERE idpersona_juridica = _idpersona_juridica);
-    
-    IF _numDoc != _documento_nro_representante THEN
-    
-		-- ELIMINA DE MANERA LÓGICA EL CLIENTE
-        UPDATE clientes
-			SET
-				inactive_at = CURDATE()
-			WHERE idcliente = _idcliente;
-		
-        -- REGISTRA A LA NUEVA PERSONA JURÍDICA
-        INSERT INTO personas_juridicas(
-						razon_social,
-                        documento_tipo,
-                        documento_nro,
-                        iddistrito,
-                        direccion,
-                        representante_legal,
-						documento_t_representante,
-						documento_nro_representante,
-						cargo,
-						partida_elect
-					)
-					VALUES(
-						_razon_social,
-                        _documento_tipo,
-                        _documento_nro,
-                        _iddistrito,
-                        _direccion,
-                        _representante_legal,
-						_documento_t_representante,
-						_documento_nro_representante,
-						_cargo,
-						_partida_elect	
-                    );
-                
-		SET _newClient = (SELECT @@last_insert_id);
-        
-        -- REGTISTRA AL CLIENTE
-        INSERT INTO clientes(
-					tipo_persona,
-                    idpersona_juridica,
-					idusuario
-                )
-				VALUES(
-					_tipo_persona,
-					_newClient,
-					_idusuario
-                );
-                
-		SELECT ROW_COUNT() AS filasAfect;
-	ELSE
-		-- SI EL NÚMERO DE DOCUMENTO DEL REPRESENTANTE LEGAL ES CAMBIADO
-		-- ACTUALIZA LOS DATOS DE LA PERSONA JURÍDICA
-		UPDATE personas_juridicas
+	UPDATE personas_juridicas
 			SET
 				razon_social	= _razon_social,
 				documento_tipo 	= _documento_tipo,
 				documento_nro 	= _documento_nro,
-                representante_legal	= _representante_legal,
-				documento_t_representante		= _documento_t_representante,
-				documento_nro_representante		= _documento_nro_representante,
-				cargo				= _cargo,
-                partida_elect	= _partida_elect,
 				iddistrito		= _iddistrito,
 				direccion 		= _direccion,
 				update_at 		= CURDATE()
@@ -1080,7 +1028,6 @@ BEGIN
 						idcliente = _idcliente;
         
 		SELECT ROW_COUNT() AS filasAfect;
-    END IF;
 	
 END $$
 DELIMITER ;
