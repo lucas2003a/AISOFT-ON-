@@ -12,7 +12,23 @@ class Asset extends Conection{
     }
 
     /**
-     * Método para listar los activos por el idproyecto
+     * Método para listar los lotes por el idproyecto
+     */
+    public function listAssetByIdProyect($idproyecto = 0){
+
+        try{
+
+            $query = $this->conection->prepare("CALL spu_list_assets_idProject(?)");
+            $query->execute(array($idproyecto));
+
+            return $query->fetchAll(PDO::FETCH_ASSOC);
+
+        }catch(Exception $e){
+            die($e->getMessage());
+        }
+    }
+    /**
+     * Método para listar los lotes por el idproyecto y el tipo de persona
      */
     public function listAssetProjectId($dataAsset = []){
 
@@ -33,7 +49,7 @@ class Asset extends Conection{
     }
 
     /**
-     * Método para listar un activo por el idactivo
+     * Método para listar un lote por el idactivo
      */
     public function listAssetId($idactivo = 0){
 
@@ -50,7 +66,7 @@ class Asset extends Conection{
     }
 
     /**
-     * Método para lista un activo por el idproyecto y el código del activo
+     * Método para lista un lote por el idproyecto y el código del lote
      */
     public function listAssetPASublote($dataAsset = []){
 
@@ -72,7 +88,7 @@ class Asset extends Conection{
     }
 
     /**
-     * Método para registrar un activo
+     * Método para registrar un lote
      */
     public function addAsset($dataAsset = []){
 
@@ -109,7 +125,7 @@ class Asset extends Conection{
     }
 
     /**
-     * Método para actualizar un activo
+     * Método para actualizar un lote
      */
     public function setAsset($dataAsset = []){
          
@@ -148,7 +164,7 @@ class Asset extends Conection{
     }
 
     /**
-     * Método para "inactivar" un activo
+     * Método para "inactivar" un lote
      */
     public function inactiveAsset($idactivo = 0){
 
@@ -165,7 +181,7 @@ class Asset extends Conection{
     }
 
     /**
-     * Método para recuperar un activo "inactivo"
+     * Método para recuperar un lote "inactivo"
      */
     public function restoreAsset($idactivo = 0){
          

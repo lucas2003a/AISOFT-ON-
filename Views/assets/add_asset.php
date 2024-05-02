@@ -928,7 +928,7 @@
     let url = "../../Controllers/asset.controller.php";
     let params = new FormData();
   
-    params.append("action","listAssetProjectId");
+    params.append("action","listAssetByIProyect");
     params.append("idproyecto",id);
 
     let results = await global.sendAction(url, params);

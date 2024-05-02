@@ -304,6 +304,13 @@ BEGIN
 END $$
 DELIMITER ;
 
+DELIMITER $$
+CREATE PROCEDURE spu_list_assets_idProject(IN _idproyecto INT)
+BEGIN
+	SELECT * FROM vws_list_assets_short
+    WHERE idproyecto = _idproyecto;
+END $$
+DELIMITER ;
 
 DELIMITER $$
 CREATE PROCEDURE spu_list_assets_short_idpr(IN _idproyecto INT, IN _propietario_lote VARCHAR(10))

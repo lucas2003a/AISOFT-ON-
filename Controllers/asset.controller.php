@@ -8,6 +8,13 @@ if(isset($_POST["action"])){
 
     switch($_POST["action"]){
 
+        case "listAssetByIProyect": 
+
+                $idproyecto = $_POST["idproyecto"];
+
+                echo json_encode($asset->listAssetByIdProyect($idproyecto));
+            break;
+
         case "listAssetProjectId": 
 
                 $dataObtained = [
