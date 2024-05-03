@@ -673,6 +673,7 @@ BEGIN
 			INNER JOIN usuarios AS usu ON usu.idusuario = clien.idusuario	
 			INNER JOIN personas AS persUsu ON persUsu.idpersona = usu.idpersona
 			WHERE clien.inactive_at IS NULL AND clien.tipo_persona = _tipo_persona
+            GROUP BY persj.razon_social
 			ORDER BY persj.documento_nro ASC;
     END IF;
 END$$
