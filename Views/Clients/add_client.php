@@ -705,7 +705,7 @@
   <!-- Modal -->
   <div class="modal fade" id="modal-data-represents" tabindex="-1" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
     <div class="modal-dialog  modal-fullscreen-sm-down modal-lg" role="document">
-      <form action="" id="data-represents">
+      <form action="" id="form-data-represents">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="modalTitleId">
@@ -758,6 +758,7 @@ document.addEventListener("DOMContentLoaded",()=>{
   const $All = id => global.$All(id);
 
   let dataClient;
+  let idpersonaJuridica;
 
   async function getClients(){
 
@@ -1154,6 +1155,7 @@ document.addEventListener("DOMContentLoaded",()=>{
     $("#guardar").disabled = false;
   }
 
+  //Registra un representante legal
   async function addRepresents(represents){
 
     try{
@@ -1162,6 +1164,7 @@ document.addEventListener("DOMContentLoaded",()=>{
 
       let params = new FormData();
 
+      params.append("action","addRepresents");
       params.append("idpersona_juridica",represents.idpersona_juridica);
       params.append("representante_legal",represents.representante_legal);
       params.append("documento_tipo",represents.documento_tipo);
@@ -1216,10 +1219,9 @@ document.addEventListener("DOMContentLoaded",()=>{
 
           $("#search_person").reset();
           $("#form-data-client").reset();
-          $("#form-data-client").reset();
           $("#form-data-client").classList.remove('was-validated');
-          $("#data-represents").reset();
-          $("#data-represents").classList.remove('was-validated');
+          $("#form-data-represents").reset();
+          $("#form-data-represents").classList.remove('was-validated');
 
         },()=>{
         window.location.href = "./index.php";
@@ -1272,7 +1274,7 @@ document.addEventListener("DOMContentLoaded",()=>{
 
         if(result.idpersona_juridica){
           
-          await processRepresents(result.idpersona_juridica);
+          idpersonaJuridica = result.idpersona_juridica;
           $("#open-modal-represents").click();
 
         }else if(result.filasAfect > 0){
@@ -1499,9 +1501,10 @@ document.addEventListener("DOMContentLoaded",()=>{
 
   });
 
-  $("#guardar-representante").addEventListener("click",()=>{
+  $("#form-data-represents").addEventListener("submit",(e)=>{
 
-    processRepresents(1);
+    e.preventDefault();
+    processRepresents(idpersonaJuridica);
   });
   
   createOptions($("#tipo_persona"));

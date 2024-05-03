@@ -658,7 +658,7 @@ BEGIN
 			persj.documento_tipo,
 			persj.documento_nro,
 			persj.razon_social,
-            rep.idprespresentante,
+            rep.idrepresentante,
 			dist.distrito,
 			prov.provincia,
 			dept.departamento,
@@ -720,7 +720,7 @@ BEGIN
 			persj.documento_tipo,
 			persj.documento_nro,
 			persj.razon_social,
-            rep.idprespresentante,
+            rep.idrepresentante,
 			dist.distrito,
 			prov.provincia,
 			dept.departamento,
@@ -781,7 +781,7 @@ BEGIN
 			persj.documento_tipo,
 			persj.documento_nro,
 			persj.razon_social,
-			rep.idprespresentante,
+			rep.idrepresentante,
 			dist.distrito,
 			prov.provincia,
 			dept.departamento,
@@ -1040,7 +1040,7 @@ END $$
 DELIMITER ;
 
 DELIMITER $$
-CREATE PROCEDURE spu_inactve_clients(IN _idcliente INT)
+CREATE PROCEDURE spu_inactive_clients(IN _idcliente INT)
 BEGIN
 	DECLARE _clienContrato INT;
     DECLARE _clienSeparacion INT;

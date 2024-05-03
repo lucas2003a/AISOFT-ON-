@@ -222,7 +222,7 @@ class Client extends Conection{
         
         try{
 
-            $query = $this->conection->prepare("CALL spu_inactve_clients(?)");
+            $query = $this->conection->prepare("CALL spu_inactive_clients(?)");
             $query->execute(array($idcliente));
 
             return $query->fetch(PDO::FETCH_ASSOC);

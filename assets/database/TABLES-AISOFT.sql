@@ -247,7 +247,7 @@ CREATE TABLE activos(
 -- REPRESENTATES LEGALES DE LOS CLIENTES DEL TIPO PERSONA JURÍDICA
 CREATE TABLE rep_legales_clientes
 (
-	idprespresentante 					INT PRIMARY KEY AUTO_INCREMENT,
+	idrepresentante 					INT PRIMARY KEY AUTO_INCREMENT,
     idpersona_juridica					INT 			NOT NULL,
     representante_legal					VARCHAR(100)	NOT NULL,
 	documento_tipo						VARCHAR(20) 	NOT NULL,
@@ -258,7 +258,6 @@ CREATE TABLE rep_legales_clientes
 )ENGINE= INNODB;
  
 -- persona jurìdicas
-
 CREATE TABLE  personas_juridicas
 (
 	idpersona_juridica 			INT PRIMARY KEY AUTO_INCREMENT,
@@ -350,6 +349,19 @@ CREATE TABLE contratos
     CONSTRAINT fk_idcliente_cont FOREIGN KEY(idcliente) REFERENCES clientes(idcliente),
     CONSTRAINT fk_idcliente2_cont FOREIGN KEY(idconyugue) REFERENCES clientes(idcliente),
     CONSTRAINT fk_idusuario_cont FOREIGN KEY(idusuario) REFERENCES usuarios(idusuario)
+)ENGINE = INNODB;
+
+-- DETALLE DE CONTRATOS
+CREATE TABLE detalles_contratos
+(
+	iddetalle_contrato 			INT PRIMARY KEY AUTO_INCREMENT,
+	idrepresentante				INT NOT NULL,
+    idcontrato					INT NOT NULL,
+    create_at					DATE NOT NULL DEFAULT(CURDATE()),
+    update_at					DATE NULL,
+    inactive_at	 				DATE NULL,
+    CONSTRAINT fk_idrepresentante_dtc FOREIGN KEY(idrepresentante) REFERENCES rep_legales_clientes(idrepresentante),
+    CONSTRAINT fk_idcontrato_dtc FOREIGN KEY(idcontrato) REFERENCES contratos(idcontrato)
 )ENGINE = INNODB;
 
 -- FINANCIERAS
