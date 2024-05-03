@@ -976,7 +976,7 @@ BEGIN
 	INSERT INTO rep_legales_clientes
 				(
 					idpersona_juridica,
-                    representate_legal,
+                    representante_legal,
                     documento_tipo,
                     documento_nro,
                     cargo,
@@ -986,7 +986,7 @@ BEGIN
                 
                 VALUES(
 					_idpersona_juridica,
-                    _representate_legal,
+                    _representante_legal,
                     _documento_tipo,
                     _documento_nro,
                     _cargo,

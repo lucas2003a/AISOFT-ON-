@@ -120,7 +120,7 @@ if(isset($_POST["action"])){
 
             $dataObtained = [
                 "idpersona_juridica"    => $_POST["idpersona_juridica"],
-                "representate_legal"    => $_POST["representate_legal"],
+                "representante_legal"    => $_POST["representante_legal"],
                 "documento_tipo"        => $_POST["documento_tipo"],
                 "documento_nro"         => $_POST["documento_nro"],
                 "cargo"                 => $_POST["cargo"],

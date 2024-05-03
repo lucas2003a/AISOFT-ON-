@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 02-05-2024 a las 20:38:01
+-- Tiempo de generación: 03-05-2024 a las 06:06:17
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -225,7 +225,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_add_represents` (IN `_idpersona
 	INSERT INTO rep_legales_clientes
 				(
 					idpersona_juridica,
-                    representate_legal,
+                    representante_legal,
                     documento_tipo,
                     documento_nro,
                     cargo,
@@ -235,7 +235,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_add_represents` (IN `_idpersona
                 
                 VALUES(
 					_idpersona_juridica,
-                    _representate_legal,
+                    _representante_legal,
                     _documento_tipo,
                     _documento_nro,
                     _cargo,
@@ -588,7 +588,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_clients_by_docNro` (IN `_t
 			persj.documento_tipo,
 			persj.documento_nro,
 			persj.razon_social,
-			rep.idprespresentante,
+			rep.idrepresentante,
 			dist.distrito,
 			prov.provincia,
 			dept.departamento,
@@ -649,7 +649,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_clients_by_id` (IN `_idcli
 			persj.documento_tipo,
 			persj.documento_nro,
 			persj.razon_social,
-            rep.idprespresentante,
+            rep.idrepresentante,
 			dist.distrito,
 			prov.provincia,
 			dept.departamento,
@@ -705,7 +705,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_clients_tpersona` (IN `_ti
 			persj.documento_tipo,
 			persj.documento_nro,
 			persj.razon_social,
-            rep.idprespresentante,
+            rep.idrepresentante,
 			dist.distrito,
 			prov.provincia,
 			dept.departamento,
@@ -1292,7 +1292,8 @@ INSERT INTO `clientes` (`idcliente`, `tipo_persona`, `idpersona`, `idpersona_jur
 (11, 'JURÍDICA', NULL, 16, '2024-04-26', '2024-04-27', NULL, 1),
 (12, 'JURÍDICA', NULL, 17, '2024-04-26', NULL, NULL, 1),
 (13, 'JURÍDICA', NULL, 20, '2024-04-27', NULL, NULL, 1),
-(14, 'JURÍDICA', NULL, 21, '2024-04-27', NULL, NULL, 1);
+(14, 'JURÍDICA', NULL, 21, '2024-04-27', NULL, NULL, 1),
+(15, 'JURÍDICA', NULL, 22, '2024-05-02', NULL, NULL, 1);
 
 -- --------------------------------------------------------
 
@@ -1509,6 +1510,21 @@ CREATE TABLE `desembolsos` (
 INSERT INTO `desembolsos` (`iddesembolso`, `idfinanciera`, `idactivo`, `monto_desemb`, `porcentaje`, `fecha_desembolso`, `create_at`, `update_at`, `inactive_at`, `idusuario`) VALUES
 (3, 3, 2, 5000.00, 10, '2024-04-19 18:27:35', '2024-04-19', NULL, NULL, 1),
 (4, 4, 5, 7000.00, 15, '2024-04-19 18:27:35', '2024-04-19', NULL, NULL, 1);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `detalles_contratos`
+--
+
+CREATE TABLE `detalles_contratos` (
+  `iddetalle_contrato` int(11) NOT NULL,
+  `idrepresentante` int(11) NOT NULL,
+  `idcontrato` int(11) NOT NULL,
+  `create_at` date NOT NULL DEFAULT curdate(),
+  `update_at` date DEFAULT NULL,
+  `inactive_at` date DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -3623,7 +3639,8 @@ INSERT INTO `personas_juridicas` (`idpersona_juridica`, `razon_social`, `documen
 (16, 'DIRECCION DE RED DE SALUD CONCHUCOS NORTE', 'RUC', '20234567845', 210, 'CAL. HUAJTACHACRA NRO. S/N URB. BUENA VISTA, ANCASH - POMABAMBA - POMA'),
 (17, 'UNIDAD DE GESTION EDUCATIVA LOCAL DE UTCUBAMBA - UGEL-UTCUBA', 'RUC', '20392286617', 78, 'AV. CHACHAPOYAS NRO. 1749, AMAZONAS - UTCUBAMBA - BAGUA GRANDE'),
 (20, 'Acme Corporation', 'RUC', '20234567888', 1, 'Lima'),
-(21, 'A.I.S. HOSPITAL APOYO IQUITOS', 'RUC', '20408453560', 1462, 'AV. ABELARDO QUIÑONES  KM. 1.4');
+(21, 'A.I.S. HOSPITAL APOYO IQUITOS', 'RUC', '20408453560', 1462, 'AV. ABELARDO QUIÑONES  KM. 1.4'),
+(22, 'A.I.S. HOSPITAL APOYO IQUITOS', 'RUC', '20408453560', 1462, 'AV. ABELARDO QUIÑONES  KM. 1.4, LORETO - MAYNAS - SAN JUAN BAUTISTA');
 
 -- --------------------------------------------------------
 
@@ -3941,7 +3958,7 @@ INSERT INTO `representantes` (`idrepresentante`, `idpersona`, `cargo`, `partida_
 --
 
 CREATE TABLE `rep_legales_clientes` (
-  `idprespresentante` int(11) NOT NULL,
+  `idrepresentante` int(11) NOT NULL,
   `idpersona_juridica` int(11) NOT NULL,
   `representante_legal` varchar(100) NOT NULL,
   `documento_tipo` varchar(20) NOT NULL,
@@ -3950,23 +3967,6 @@ CREATE TABLE `rep_legales_clientes` (
   `partida_elect` varchar(100) NOT NULL,
   `estado` varchar(20) NOT NULL DEFAULT 'DESHABILITADO'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Volcado de datos para la tabla `rep_legales_clientes`
---
-
-INSERT INTO `rep_legales_clientes` (`idprespresentante`, `idpersona_juridica`, `representante_legal`, `documento_tipo`, `documento_nro`, `cargo`, `partida_elect`, `estado`) VALUES
-(1, 1, 'AAAAAC1', 'DNI', '12356855', 'juez', 'PARTIDA Nº15', ''),
-(2, 2, 'AAAAAA', 'DNI', '12356855', 'GERENTE', 'PARTIDA Nº2', ''),
-(3, 3, 'AAAAAA', 'DNI', '12356855', 'GERENTE', 'PARTIDA Nº2', ''),
-(4, 4, 'AAAAAA', 'DNI', '12356855', 'GERENTE', 'PARTIDA Nº2', ''),
-(5, 5, 'AAAAAA', 'DNI', '12356855', 'GERENTE', 'PARTIDA Nº2', ''),
-(6, 9, 'AAAAAA', 'DNI', '12356855', 'GERENTE', 'PARTIDA Nº2', ''),
-(7, 10, 'AAAAAA', 'DNI', '12356855', 'GERENTE', 'PARTIDA Nº2', ''),
-(8, 16, 'AAAAAA', 'DNI', '12356855', 'GERENTE', 'PARTIDA Nº13', ''),
-(9, 17, 'AAAAAA', 'DNI', '12356855', 'GERENTE', 'PARTIDA Nº2', ''),
-(10, 20, 'AAAAAC1', 'DNI', '12356853', 'juez', 'PARTIDA Nº15', ''),
-(11, 21, 'CORAL GONZALES CARLOS ALBERTO', 'DNI', '05239595', 'DIRECTOR GENERAL', 'PARTIDA Nº2', '');
 
 -- --------------------------------------------------------
 
@@ -4321,6 +4321,14 @@ ALTER TABLE `desembolsos`
   ADD KEY `fk_idusuario_desemb` (`idusuario`);
 
 --
+-- Indices de la tabla `detalles_contratos`
+--
+ALTER TABLE `detalles_contratos`
+  ADD PRIMARY KEY (`iddetalle_contrato`),
+  ADD KEY `fk_idrepresentante_dtc` (`idrepresentante`),
+  ADD KEY `fk_idcontrato_dtc` (`idcontrato`);
+
+--
 -- Indices de la tabla `detalle_costos`
 --
 ALTER TABLE `detalle_costos`
@@ -4418,7 +4426,7 @@ ALTER TABLE `representantes`
 -- Indices de la tabla `rep_legales_clientes`
 --
 ALTER TABLE `rep_legales_clientes`
-  ADD PRIMARY KEY (`idprespresentante`);
+  ADD PRIMARY KEY (`idrepresentante`);
 
 --
 -- Indices de la tabla `roles`
@@ -4477,7 +4485,7 @@ ALTER TABLE `activos`
 -- AUTO_INCREMENT de la tabla `clientes`
 --
 ALTER TABLE `clientes`
-  MODIFY `idcliente` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `idcliente` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT de la tabla `constructora`
@@ -4514,6 +4522,12 @@ ALTER TABLE `departamentos`
 --
 ALTER TABLE `desembolsos`
   MODIFY `iddesembolso` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT de la tabla `detalles_contratos`
+--
+ALTER TABLE `detalles_contratos`
+  MODIFY `iddetalle_contrato` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `detalle_costos`
@@ -4561,7 +4575,7 @@ ALTER TABLE `personas`
 -- AUTO_INCREMENT de la tabla `personas_juridicas`
 --
 ALTER TABLE `personas_juridicas`
-  MODIFY `idpersona_juridica` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `idpersona_juridica` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- AUTO_INCREMENT de la tabla `presupuestos`
@@ -4591,7 +4605,7 @@ ALTER TABLE `representantes`
 -- AUTO_INCREMENT de la tabla `rep_legales_clientes`
 --
 ALTER TABLE `rep_legales_clientes`
-  MODIFY `idprespresentante` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `idrepresentante` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT de la tabla `roles`
@@ -4668,6 +4682,13 @@ ALTER TABLE `desembolsos`
   ADD CONSTRAINT `fk_idactivo_desemb` FOREIGN KEY (`idactivo`) REFERENCES `activos` (`idactivo`),
   ADD CONSTRAINT `fk_idfinanciera_desemb` FOREIGN KEY (`idfinanciera`) REFERENCES `financieras` (`idfinanciera`),
   ADD CONSTRAINT `fk_idusuario_desemb` FOREIGN KEY (`idusuario`) REFERENCES `usuarios` (`idusuario`);
+
+--
+-- Filtros para la tabla `detalles_contratos`
+--
+ALTER TABLE `detalles_contratos`
+  ADD CONSTRAINT `fk_idcontrato_dtc` FOREIGN KEY (`idcontrato`) REFERENCES `contratos` (`idcontrato`),
+  ADD CONSTRAINT `fk_idrepresentante_dtc` FOREIGN KEY (`idrepresentante`) REFERENCES `rep_legales_clientes` (`idrepresentante`);
 
 --
 -- Filtros para la tabla `detalle_costos`

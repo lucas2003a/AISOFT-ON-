@@ -879,7 +879,7 @@ document.addEventListener("DOMContentLoaded",()=>{
     let newRow = ``;
 
     if(results.length > 0){
-      
+console.log(results)
       results.forEach(client =>{
         
         let code = btoa(client.idcliente) //CODIFICACIÓN

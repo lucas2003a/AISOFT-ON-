@@ -201,7 +201,7 @@ class Client extends Conection{
             $query->execute(
                 array(
                     $dataClient["idpersona_juridica"],
-                    $dataClient["representate_legal"],
+                    $dataClient["representante_legal"],
                     $dataClient["documento_tipo"],
                     $dataClient["documento_nro"],
                     $dataClient["cargo"],
@@ -209,6 +209,8 @@ class Client extends Conection{
                     $dataClient["estado"],
                 )
             );
+
+            return $query->fetch(PDO::FETCH_ASSOC);
         }
         catch(Exception $e){
             die($e->getMessage());

@@ -594,7 +594,6 @@ document.addEventListener("DOMContentLoaded",()=>{
     let newRow = ``;
 
     if(results.length > 0){
-      
       results.forEach(asset =>{
         
         let code = btoa(asset.idactivo) //CODIFICACIÓN
