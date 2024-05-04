@@ -703,7 +703,7 @@
           </div>
           <div class="modal-body">
             <div class="text-end">
-              <button class="btn bg-gradient-dark" id="add"><i class="fas fa-plus"></i>&nbsp;&nbsp;Agregar</button>
+              <!-- <button type="button" class="btn bg-gradient-dark" id="add"><i class="fas fa-plus"></i>&nbsp;&nbsp;Agregar</button> -->
             </div>
             <div class="card-body pt-4 p-3">
 
