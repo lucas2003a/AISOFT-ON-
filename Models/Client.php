@@ -218,6 +218,51 @@ class Client extends Conection{
     }
 
     /**
+     * Método para obtener los representantes por el id de la persona jurídica
+     */
+    public function getRepresents($idpersona_juridica = 0){
+
+        try{
+
+            $query = $this->conection->prepare("CALL spu_list_represents_by_id_pj(?)");
+            $query->execute(array($idpersona_juridica));
+
+            return $query->fetchAll(PDO::FETCH_ASSOC);
+        }
+        catch(Exception $e){
+            die($e->getMessage());
+        }
+    }
+
+    /**
+     * Método para actualizar los datos de los representantes
+     */
+    public function setRepresents($dataRepresents = []){
+
+        try{
+
+            $query = $this->conection->prepare("CALL spu_set_represents(?,?,?,?,?,?,?,?)");
+            $query->execute(
+                array(
+                    $dataRepresents["idrepresentante"],
+                    $dataRepresents["idpersona_juridica"],
+                    $dataRepresents["representante_legal"],
+                    $dataRepresents["documento_tipo"],
+                    $dataRepresents["documento_nro"],
+                    $dataRepresents["cargo"],
+                    $dataRepresents["partida_elect"],
+                    $dataRepresents["estado"]
+                )
+            );
+
+            return $query->fetch(PDO::FETCH_ASSOC);
+        }
+        catch(Exception $e){
+            die($e->getMessage());
+        }
+    }
+
+    /**
      * Método para eliminar a un cliente
      */
     public function inactiveClient($idcliente = 0){

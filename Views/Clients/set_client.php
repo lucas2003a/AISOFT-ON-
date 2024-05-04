@@ -303,15 +303,22 @@
           <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
           <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="#">Dashboard</a></li>
           <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="#">CLientes</a></li>
-            <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Editar clientes</li>
+            <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Actualizar clientes</li>
           </ol>
-          <h6 class="font-weight-bolder mb-0" id="cabezera">EDITAR 
+          <h6 class="font-weight-bolder mb-0" id="cabezera">ACTUALIZAR 
             CIENTES </h6>
         </nav>
         <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
-          
+          <div class="ms-md-auto pe-md-3 d-flex align-items-center">
+            <div class="input-group">
+              <span class="input-group-text text-body"><i class="fas fa-search" aria-hidden="true"></i></span>
+              <input type="text" class="form-control" placeholder="Nº documento..." id="in-doumento-tipo">
+            </div>
+          </div>
           <ul class="navbar-nav  justify-content-end">
-            
+            <li class="nav-item d-flex align-items-center">
+              <a class="btn btn-outline-success btn-sm mb-0 me-3" target="_blank" href="./add_client.php" id="add-asset">AGREGAR CLIENTE</a>
+            </li>
             <li class="nav-item d-flex align-items-center">
               <a href="javascript:;" class="nav-link text-body font-weight-bold px-0">
                 <i class="fa fa-user me-sm-1"></i>
@@ -416,67 +423,67 @@
     <!-- CONTENIDO -->
 
     <div class="d-flex flex-column h-100">
-
-        <hr>
-        <form class="row needs-validation" id="form-data-client" novalidate>
-          <div class="row">
-            <div class="col-md-4">
-              <!-- TIPO DE PERSONA -->
-              <div class="mt-4">
-                <label for="tipo_persona" class="form-label">Tipo de persona</label>
-                  <select class="form-select custom-select-scroll" id="tipo_persona" required>
-                    <option selected value="NATURAL">Natural</option>
-                    <option value="JURÍDICA">Juridica</option>
-                  </select>
-                  <div class="invalid-feedback">
-                      Necesitas escojer un tipo de persona.
-                  </div>
-                  <div class="valid-feedback">
-                    Tipo de persona seleccionado correctamente.
-                  </div>
-              </div>
-            </div>
-            <div class="col-md-4">
-    
-              <!-- DOCUMENTO TIPO -->
-              <div class="mt-4">
-                <label for="documento_tipo" class="form-label">Tipo de documento</label>
-                <select name="documento_tipo" class="form-select" id="documento_tipo" required>
-                  <option value="">Tipo de documento</option>
+      
+      <form class="row needs-validation" id="form-data-client" novalidate>
+        <div class="row">
+          <div class="col-md-4">
+            <!-- TIPO DE PERSONA -->
+            <div class="mt-4">
+              <label for="tipo_persona" class="form-label">Tipo de persona</label>
+                <select class="form-select custom-select-scroll" id="tipo_persona" readonly>
+                  <option value="NATURAL">Natural</option>
+                  <option value="JURÍDICA">Jurídica</option>
                 </select>
                 <div class="invalid-feedback">
-                  Necesitas registrar el tipo de documento.
+                    Necesitas escojer un tipo de persona.
                 </div>
                 <div class="valid-feedback">
-                  Tipo de documento registrado correctamente.
+                  Tipo de persona seleccionado correctamente.
                 </div>
-              </div>
-            </div>
-            <div class="col-md-4 mt-4">
-              <label for="documento_nro" class="form-label">Nº de documento</label>
-              <div class="row">
-                <div class="col-md-9">
-      
-                  <input type="text" name="documento_nro" id="documento_nro" class="form-control" placeholder="Nº documento" required>
-                  <div class="invalid-feedback">
-                      Necesitas ingresar el número del documento.
-                  </div>
-                  <div class="valid-feedback">
-                      Nº de documento ingresado correctamente.
-                  </div>
-                </div>
-                <div class="col-md-3">
-                  <button type="submit" class="btn btn-success" id="buscar" disabled>Buscar</button>
-                  <button class="btn btn-success d-none" id="spinner" type="button" disabled>
-                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                  </button>
-                  
-                </div>
-              </div>
-    
             </div>
           </div>
-          <div class="row">
+          <div class="col-md-4">
+  
+            <!-- DOCUMENTO TIPO -->
+            <div class="mt-4">
+              <label for="documento_tipo" class="form-label">Tipo de documento</label>
+              <select name="documento_tipo" class="form-select" id="documento_tipo" readonly>
+                <option value="">Tipo de documento</option>
+              </select>
+              <div class="invalid-feedback">
+                Necesitas registrar el tipo de documento.
+              </div>
+              <div class="valid-feedback">
+                Tipo de documento registrado correctamente.
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4 mt-4">
+            <label for="documento_nro" class="form-label">Nº de documento</label>
+            <div class="row">
+              <div class="col-md-9">
+    
+                <input type="text" name="documento_nro" id="documento_nro" class="form-control" placeholder="Nº documento" readonly>
+                <div class="invalid-feedback">
+                    Necesitas ingresar el número del documento.
+                </div>
+                <div class="valid-feedback">
+                    Nº de documento ingresado correctamente.
+                </div>
+              </div>
+              <div class="col-md-3">
+                <button type="submit" class="btn btn-success" id="buscar" disabled>Buscar</button>
+                
+                
+              </div>
+            </div>
+  
+          </div>
+
+          <hr>
+        </div>
+        
+        <div class="row">
             <div class="col-md-6">
 
                 <!-- DATOS GENERALES -->
@@ -548,7 +555,30 @@
                     </div>
                 </div>  
 
-                   
+                 <!-- NRO DE DOCUMENTO DEL REPRESENTATE -->
+                 <div class="mt-4">
+                    <label for="documento_nro_representante" class="form-label">Nº de documento del representante</label>
+                    <input type="text" name="documento_nro_representante" id="documento_nro_representante" placeholder="Nº de documento del representante" class="form-control pern-j" disabled>
+                    <div class="invalid-feedback">
+                        Necesitas registrar el nº de documento del representante.
+                    </div>
+                    <div class="valid-feedback">
+                      Nº de documento del representante registrado correctamente.
+                    </div>
+                </div>  
+
+                
+                <!-- TIPO DE DOCUMENTO DEL REPRESENTATE -->
+                <div class="mt-4">
+                    <label for="documento_t_representante" class="form-label">Tipo de documento del representante</label>
+                    <input type="text" name="documento_t_representante" id="documento_t_representante" placeholder="Tipo de documento del representante" class="form-control pern-j" disabled>
+                    <div class="invalid-feedback">
+                        Necesitas registrar el tipo de documento del representante.
+                    </div>
+                    <div class="valid-feedback">
+                      Tipo de documento del representante registrado correctamente.
+                    </div>
+                </div>  
             </div>
 
             <div class="col-md-6">
@@ -600,18 +630,63 @@
                       Razón social registrada correctamente.
                     </div>
                 </div>  
+
+                <!-- REPRESENTANTE LEGAL -->
                 <div class="mt-4">
-                  <button type="button" class="btn btn-primary btn-lg  pern-j" id="open-modal-represents" data-bs-toggle="modal" data-bs-target="#modal-data-represents" disabled>
-                  Representantes
-                  </button>
+                  <label for="representante_legal" class="form-label">Representante legal</label>
+                  <div class="row">
+                    <div class="col-10">
+                      <input type="text" name="representante_legal" id="representante_legal" placeholder="Representante legal" class="form-control pern-j" disabled>
+                    </div>
+                      <div class="col-1">
+                        <button type="button" class="btn btn-primary pern-j" id="reloadRep"><i class="bi bi-arrow-clockwise"></i></button>
+                        <button class="btn btn-primary d-none" id="spinner" type="button" disabled>
+                          <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                        </button>
+                      </div>
+                  </div>
+                    <div class="invalid-feedback">
+                        Necesitas registrar al representante legal.
+                    </div>
+                    <div class="valid-feedback">
+                      Representante legal registrado correctamente.
+                    </div>
+
+                </div>  
+
+                <!-- PARTIDA ELECTRÓNICA -->
+                <div class="mt-1">
+                    <label for="partida_elect" class="form-label">Partida electrónica</label>
+                    <input type="text" name="partida_elect" id="partida_elect" placeholder="Partida electrónica" class="form-control pern-j" disabled>
+                    <div class="invalid-feedback">
+                        Necesitas registrar la partida electrónica.
+                    </div>
+                    <div class="valid-feedback">
+                      Partida electrónica registrada correctamente.
+                    </div>
                 </div>
+
+                <!-- CARGO -->
+                <div class="mt-4">
+                    <label for="cargo" class="form-label">Cargo</label>
+                    <input type="text" name="cargo" id="cargo" placeholder="Cargo" class="form-control pern-j" disabled>
+                    <div class="invalid-feedback">
+                        Necesitas registrar el cargo.
+                    </div>
+                    <div class="valid-feedback">
+                      Cargo registrado correctamente.
+                    </div>
+                </div>
+
+              </div>        
+
+               
               </div>                                    
               <div class="mt-4 mb-4">
 
                   <button class="btn btn-success" type="submit" id="guardar">Guardar</button>
+                  
               </div>
-                <!-- Button trigger modal -->
-
         </div>
       </form>
     </div>
@@ -688,126 +763,6 @@
       </div>
     </div>
   </div>
-
-  
-  <!-- Modal -->
-  <div class="modal fade" id="modal-data-represents" tabindex="-1" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
-    <div class="modal-dialog  modal-fullscreen-sm-down modal-lg" role="document">
-      <form action="" id="form-data-represents" class="row needs-validation">
-        <div class="modal-content p-0">
-          <div class="modal-header bg-secondary">
-            <h5 class="modal-title" id="modalTitleId">
-              Representantes legales
-            </h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-            <div class="text-end">
-              <button class="btn bg-gradient-dark" id="add"><i class="fas fa-plus"></i>&nbsp;&nbsp;Agregar</button>
-            </div>
-            <div class="card-body pt-4 p-3">
-
-              <ul class="list-group" id="list-represents">
-                
-              <!-- RENDER REPRESENTANTES -->
-                <li class="list-group-item border-0 d-flex p-4 mb-4 bg-gray-100 border-radius-lg">
-                  <div class="col-12">
-                    <div class="form-check">
-                      <input class="form-check-input" name="estado-check" type="checkbox" checked>
-                        <label class="form-check-label" style="width: 100%;">
-                        <div class="ms-auto text-end">
-                        <a class="btn btn-link text-danger text-gradient px-3 mb-0 delete" href="javascript:;"><i class="far fa-trash-alt me-2"></i>Eliminar</a>
-                      </div>
-                        <div class="row">
-                          
-                          <!-- REPRESENTANTE LEGAL -->
-                          <div class="mt-4">
-                              <label for="representante_legal" class="form-label">Representante legal</label>
-                              <input type="text" name="representante_legal" placeholder="Representante legal" class="form-control" required>
-                              <div class="invalid-feedback">
-                                  Necesitas registrar al representante legal.
-                              </div>
-                              <div class="valid-feedback">
-                                Representante legal registrado correctamente.
-                              </div>
-                          </div>  
-                        </div>
-
-                        <div class="row">
-
-                          <!-- NRO DE DOCUMENTO DEL REPRESENTATE -->
-                          <div class="mt-4 col-md-6">
-                              <label for="documento_nro_representante" class="form-label">Nº de documento</label>
-                              <input type="text" name="documento_nro" placeholder="Nº de documento" class="form-control" minlength="8" maxlength="8" required>
-                              <div class="invalid-feedback">
-                                  Necesitas registrar el nº de documento del representante.
-                              </div>
-                              <div class="valid-feedback">
-                                Nº de documento del representante registrado correctamente.
-                              </div>
-                          </div>  
-
-                          
-                          <!-- TIPO DE DOCUMENTO DEL REPRESENTATE -->
-                          <div class="mt-4 col-md-6">
-                              <label for="documento_t_representante" class="form-label">Tipo de documento</label>
-                              <input type="text" name="documento_tipo" placeholder="Tipo de documento" class="form-control" required>
-                              <div class="invalid-feedback">
-                                  Necesitas registrar el tipo de documento del representante.
-                              </div>
-                              <div class="valid-feedback">
-                                Tipo de documento del representante registrado correctamente.
-                              </div>
-                          </div>
-                        </div>
-                        <div class="row">
-
-                          <div class="mt-4 col-md-6">
-
-                              <!-- PARTIDA ELECTRÓNICA -->
-                              <label for="partida_elect" class="form-label">Partida electrónica</label>
-                              <input type="text" name="partida_elect" placeholder="Partida electrónica" class="form-control partida_elect" required>
-                              <div class="invalid-feedback">
-                                  Necesitas registrar la partida electrónica.
-                              </div>
-                              <div class="valid-feedback">
-                                Partida electrónica registrada correctamente.
-                              </div>
-                          </div>
-          
-                          <!-- CARGO -->
-                          <div class="mt-4 col-md-6">
-                              <label for="cargo" class="form-label">Cargo</label>
-                              <input type="text" name="cargo" placeholder="Cargo" class="form-control" required>
-                              <div class="invalid-feedback">
-                                  Necesitas registrar el cargo.
-                              </div>
-                              <div class="valid-feedback">
-                                Cargo registrado correctamente.
-                              </div>
-                          </div>
-                        </div>
-                        </label>
-                      </div>
-                    </div>
-                  </div>
-                </li>
-
-              </ul>
-
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="cerrar">
-                Cerrar
-              </button>
-              <button type="submit" class="btn btn-primary" id="guardar-representante">Guardar</button>
-            </div>
-          </div>
-        </div>
-      </form>
-    </div>
-  </div>
-  
   <!-- SWEET ALERT -->
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
@@ -830,186 +785,15 @@ document.addEventListener("DOMContentLoaded",()=>{
   const $ = id => global.$(id);
   const $All = id => global.$All(id);
 
-  let serchQuery = document.location.search;
-  let params = new URLSearchParams(serchQuery);
-  let code = params.get("id");
-
-  let idCliente = atob(code);
-  console.log()
-
-  
   let dataClient;
-  let idpersonaJuridica;
-  let register = false;
-  let numList = $All(".list-group-item").length;
+  let dataClients;
 
-  //Obtiene los datos del o los reppresentantes legales
-  async function getRepresents(id){
+  let url = window.location.search;
+  let stringQuery = new URLSearchParams(url);
+  let code = stringQuery.get("id");
+  let idCliente = atob(code);
 
-    try{
-
-      let url ="../../Controllers/client.controller.php";
-      let params = new FormData();
-  
-      params.append("action","getRepresents");
-      params.append("idpersona_juridica",id);
-
-      results = await global.sendAction(url, params);
-
-      if(results){
-
-        console.log(results)
-
-          let newCard = "";
-          $("#list-represents").innerHTML = "";
-          results.forEach(rep =>{
-
-            newCard = `
-            <li class="list-group-item border-0 d-flex p-4 mb-4 bg-gray-100 border-radius-lg">
-                    <div class="col-12">
-                      <div class="form-check">
-                        <input class="form-check-input" name="estado-check" type="checkbox" checked>
-                          <label class="form-check-label" style="width: 100%">
-
-                          <div class="row">
-                            
-                            <!-- REPRESENTANTE LEGAL -->
-                            <div class="mt-4">
-                                <label for="representante_legal" class="form-label">Representante legal</label>
-                                <input type="text" name="representante_legal" placeholder="Representante legal" class="form-control" value="${rep.representante_legal}" required>
-                                <div class="invalid-feedback">
-                                    Necesitas registrar al representante legal.
-                                </div>
-                                <div class="valid-feedback">
-                                  Representante legal registrado correctamente.
-                                </div>
-                            </div>  
-                          </div>
-
-                          <div class="row">
-
-                            <!-- NRO DE DOCUMENTO DEL REPRESENTATE -->
-                            <div class="mt-4 col-md-6">
-                                <label for="documento_nro_representante" class="form-label">Nº de documento</label>
-                                <input type="text" name="documento_nro" placeholder="Nº de documento" class="form-control" value="${rep.documento_nro}" min-length="8" max-length="8" required>
-                                <div class="invalid-feedback">
-                                    Necesitas registrar el nº de documento del representante.
-                                </div>
-                                <div class="valid-feedback">
-                                  Nº de documento del representante registrado correctamente.
-                                </div>
-                            </div>  
-
-                            
-                            <!-- TIPO DE DOCUMENTO DEL REPRESENTATE -->
-                            <div class="mt-4 col-md-6">
-                                <label for="documento_t_representante" class="form-label">Tipo de documento</label>
-                                <input type="text" name="documento_tipo" placeholder="Tipo de documento" class="form-control" value="${rep.documento_tipo}" required>
-                                <div class="invalid-feedback">
-                                    Necesitas registrar el tipo de documento del representante.
-                                </div>
-                                <div class="valid-feedback">
-                                  Tipo de documento del representante registrado correctamente.
-                                </div>
-                            </div>
-                          </div>
-                          <div class="row">
-
-                            <div class="mt-4 col-md-6">
-
-                                <!-- PARTIDA ELECTRÓNICA -->
-                                <label for="partida_elect" class="form-label">Partida electrónica</label>
-                                <input type="text" name="partida_elect" placeholder="Partida electrónica" class="form-control partida_elect" value="${rep.partida_elect}" required>
-                                <div class="invalid-feedback">
-                                    Necesitas registrar la partida electrónica.
-                                </div>
-                                <div class="valid-feedback">
-                                  Partida electrónica registrada correctamente.
-                                </div>
-                            </div>
-            
-                            <!-- CARGO -->
-                            <div class="mt-4 col-md-6">
-                                <label for="cargo" class="form-label">Cargo</label>
-                                <input type="text" name="cargo" placeholder="Cargo" class="form-control" value="${rep.cargo}" required>
-                                <div class="invalid-feedback">
-                                    Necesitas registrar el cargo.
-                                </div>
-                                <div class="valid-feedback">
-                                  Cargo registrado correctamente.
-                                </div>
-                            </div>
-                          </div>
-                          </label>
-                      </div>
-                    </div>
-                  </li>
-            `;
-            $("#list-represents").innerHTML += newCard;
-          });
-
-      }else{
-        console.log("no hay resultados")
-      }
-    }
-    catch(e){
-      console.error(e);
-    }
-  }
-  //Obtiene los datos del cliente
-  async function getClient(id){
-
-    try{
-
-      let url ="../../Controllers/client.controller.php";
-      let params = new FormData();
-  
-      params.append("action","listClientById");
-      params.append("idcliente",id);
-
-      results = await global.sendAction(url, params);
-
-      if(results){
-
-        console.log(results);
-        dataClient = results;
-        
-        $("#tipo_persona").value = dataClient.tipo_persona;
-
-        let tPersons = $("#tipo_persona");
-        await createOptions(tPersons);
-        await changeVisibilityInput(tPersons.value);
-
-        $("#documento_tipo").value = dataClient.documento_tipo;
-        $("#documento_nro").value = dataClient.documento_nro;
-
-        getUbigeo(dataClient.iddistrito);
-        $("#direccion").value = dataClient.direccion;
-
-        if(dataClient.tipo_persona == "JURÍDICA"){
-
-          $("#razon_social").value = dataClient.razon_social;
-          
-          
-          if(dataClient.idpersona_juridica){
-
-            getRepresents(dataClient.idpersona_juridica)
-          }
-
-        }else{
-
-          $("#nacionalidad").value = dataClient.nacionalidad;
-          $("#apellidos").value = dataClient.apellidos;
-          $("#nombres").value = dataClient.nombres;
-          $("#estado_civil").value = dataClient.estado_civil;
-        }
-      }
-    }
-    catch(e){
-      console.error(e);
-    }
-  };
-
+  //Obtengot todos los clientes
   async function getClients(){
 
     try{
@@ -1024,607 +808,18 @@ document.addEventListener("DOMContentLoaded",()=>{
 
       if(results){
 
-        dataClient = results;
-        console.log(dataClient)
+        console.log(results);
+        dataClients = results;
+
       }
     }
     catch(e){
       console.error(e);
     }
-  }
-
-  async function searchUbigeo(obj){
-
-    try{
-
-      let url = "../../Controllers/ubigeo/district.controller.php";
-
-      let params = new FormData();
-
-      params.append("action","listUbigeoFull");
-      params.append("distrito",obj.distrito);
-      params.append("provincia",obj.provincia);
-      params.append("departamento",obj.departamento);
-
-      let result = await global.sendAction(url, params);
-
-      if(result){
-
-        return result;
-      }
-
-    }
-    catch(e){
-      console.error(e);
-    }
-  }
-
-  async function searchUbigeoRUC(obj){
-
-    try{
-
-      let url = "../../Controllers/ubigeo/district.controller.php";
-
-      let params = new FormData();
-
-      params.append("action","listUbigeoFull");
-      params.append("distrito",obj.desDistrito);
-      params.append("provincia",obj.desProvincia);
-      params.append("departamento",obj.desDepartamento);
-
-      let result = await global.sendAction(url, params);
-
-      if(result){
-
-        return result;
-      }
-
-    }
-    catch(e){
-      console.error(e);
-    }
-  }
-
-  async function getUbigeo(iddistrito){
-
-    try{
-
-      let url = "../../Controllers/ubigeo/district.controller.php";
-      let params = new FormData();
-
-      params.append("action","getUbigeo");
-      params.append("iddistrito", iddistrito);
-
-      let result = await global.sendAction(url,params)
-
-      if(result){
-
-        const tagDistrito = document.createElement("option");
-        tagDistrito.value = result.iddistrito;
-        tagDistrito.innerHTML = result.distrito.trim();
-        $("#iddistrito").appendChild(tagDistrito);
-        $("#iddistrito").value = result.iddistrito;
-
-        const tagProvincia = document.createElement("option");
-        tagProvincia.value = result.idprovincia;
-        tagProvincia.innerHTML = result.provincia.trim();
-        $("#idprovincia").appendChild(tagProvincia);
-        $("#idprovincia").value = result.idprovincia;
-
-        $("#iddepartamento").value = result.iddepartamento;
-      }
-    }
-    catch(e){
-      console.error(e);
-    }
-  };
-
-  //Busca a una persona de acuerdo al número de DNI
-  async function searchDNI(dnro){
-    try{
-
-      $("#buscar").classList.toggle("d-none");
-      $("#spinner").classList.toggle("d-none");
-      let params = new URLSearchParams();
-
-      params.append("action","searchDNI");
-      params.append("documento_nro",$("#documento_nro").value);
-
-      let url = `../../Controllers/searchDocument.php?${params}`;
-
-      let result = await global.sendActionGET(url);
-
-      if(result){
-        
-        let docs = result.data.body;
-
-        let ubigeo = docs.ubigeo;
-
-        //OBTENGO LOS IDS DEL UBIGEO
-        let dataUbigeo = await searchUbigeo(ubigeo);
-
-        await getUbigeo(dataUbigeo.iddistrito);
-
-        $("#apellidos").value = `${docs.apePaterno} ${docs.apeMaterno}`;
-        $("#nombres").value = docs.preNombres;
-        $("#direccion").value = docs.desDireccion;
-        /* $("#documento_tipo").value = result.tipoDocumento; */
-
-      }else{
-        sAlert.sweetError("El documento ingresado no existe","No existe una persona con este documento");
-      }
-
-      $("#buscar").classList.toggle("d-none");
-      $("#spinner").classList.toggle("d-none");
-    }
-    catch(e){
-      $("#buscar").classList.toggle("d-none");
-      $("#spinner").classList.toggle("d-none");
-      sAlert.sweetError("El documento ingresado no existe","No existe una persona con este documento");
-      console.error(e);
-    }
-  }
-
-  //Busca los datos del prepresentante legal de una empresa POR SU RUC
-  async function searchRpRUC(dnro){
-
-    try{
-
-      let params = new URLSearchParams();
-      params.append("action","searchRpRUC");
-      params.append("documento_nro",$("#documento_nro").value)
-
-      let url = `../../Controllers/searchDocument.php?${params}`;
-
-      let result = await global.sendActionGET(url);
-
-      if(result){
-        if(result.data.success){
-
-          let docs = result.data.data;
-
-          let newCard = "";
-          $("#list-represents").innerHTML = "";
-          docs.forEach(rep =>{
-
-            newCard = `
-            <li class="list-group-item border-0 d-flex p-4 mb-4 bg-gray-100 border-radius-lg">
-                    <div class="d-flex flex-column">
-                      <div class="form-check">
-                        <input class="form-check-input" name="estado-check" type="checkbox" checked>
-                          <label class="form-check-label">
-
-                          <div class="row">
-                            
-                            <!-- REPRESENTANTE LEGAL -->
-                            <div class="mt-4">
-                                <label for="representante_legal" class="form-label">Representante legal</label>
-                                <input type="text" name="representante_legal" placeholder="Representante legal" class="form-control" value="${rep.nombre}" required>
-                                <div class="invalid-feedback">
-                                    Necesitas registrar al representante legal.
-                                </div>
-                                <div class="valid-feedback">
-                                  Representante legal registrado correctamente.
-                                </div>
-                            </div>  
-                          </div>
-
-                          <div class="row">
-
-                            <!-- NRO DE DOCUMENTO DEL REPRESENTATE -->
-                            <div class="mt-4 col-md-6">
-                                <label for="documento_nro_representante" class="form-label">Nº de documento</label>
-                                <input type="text" name="documento_nro" placeholder="Nº de documento" class="form-control" value="${rep.numero_de_documento}" min-length="8" max-length="8" required>
-                                <div class="invalid-feedback">
-                                    Necesitas registrar el nº de documento del representante.
-                                </div>
-                                <div class="valid-feedback">
-                                  Nº de documento del representante registrado correctamente.
-                                </div>
-                            </div>  
-
-                            
-                            <!-- TIPO DE DOCUMENTO DEL REPRESENTATE -->
-                            <div class="mt-4 col-md-6">
-                                <label for="documento_t_representante" class="form-label">Tipo de documento</label>
-                                <input type="text" name="documento_tipo" placeholder="Tipo de documento" class="form-control" value="${rep.tipo_de_documento}" required>
-                                <div class="invalid-feedback">
-                                    Necesitas registrar el tipo de documento del representante.
-                                </div>
-                                <div class="valid-feedback">
-                                  Tipo de documento del representante registrado correctamente.
-                                </div>
-                            </div>
-                          </div>
-                          <div class="row">
-
-                            <div class="mt-4 col-md-6">
-
-                                <!-- PARTIDA ELECTRÓNICA -->
-                                <label for="partida_elect" class="form-label">Partida electrónica</label>
-                                <input type="text" name="partida_elect" placeholder="Partida electrónica" class="form-control partida_elect" required>
-                                <div class="invalid-feedback">
-                                    Necesitas registrar la partida electrónica.
-                                </div>
-                                <div class="valid-feedback">
-                                  Partida electrónica registrada correctamente.
-                                </div>
-                            </div>
-            
-                            <!-- CARGO -->
-                            <div class="mt-4 col-md-6">
-                                <label for="cargo" class="form-label">Cargo</label>
-                                <input type="text" name="cargo" placeholder="Cargo" class="form-control" value="${rep.cargo}" required>
-                                <div class="invalid-feedback">
-                                    Necesitas registrar el cargo.
-                                </div>
-                                <div class="valid-feedback">
-                                  Cargo registrado correctamente.
-                                </div>
-                            </div>
-                          </div>
-                          </label>
-                      </div>
-                    </div>
-                  </li>
-            `;
-            $("#list-represents").innerHTML += newCard;
-          });
-
-        }else{
-          sAlert.sweetError("El documento ingresado no existe",`${result.data.message}`);
-        }
-      }
-    }catch(e){
-      console.error(e);
-    }
-  }
-
-  //Busca a una entidad de acuerdo a sun número de RUC
-  async function searchRUC(dnro){
-    try{
-
-      $("#buscar").classList.toggle("d-none");
-      $("#spinner").classList.toggle("d-none");
-      let params = new URLSearchParams();
-
-      params.append("action","searchRUC");
-      params.append("documento_nro",$("#documento_nro").value);
-
-      let url = `../../Controllers/searchDocument.php?${params}`;
-
-      let result = await global.sendActionGET(url);
-
-      if(result){
-        
-        let docs = result.data.data;
-
-        let ubigeo = {
-          desDistrito: docs.distrito,
-          desProvincia: docs.provincia,
-          desDepartamento: docs.departamento,
-        };
-
-
-        //OBTENGO LOS IDS DEL UBIGEO
-        let dataUbigeo = await searchUbigeoRUC(ubigeo);
-        if(dataUbigeo){
-
-          
-          await getUbigeo(dataUbigeo.iddistrito);
-        }
-
-        //OBTENGO AL REPRESENTANT LEGAL
-        await searchRpRUC(dnro);
-
-        $("#razon_social").value = docs.nombre_o_razon_social;
-        $("#direccion").value = docs.direccion_completa;
-
-      }else{
-        sAlert.sweetError("El documento ingresado no existe","No existe una persona con este documento");
-      }
-
-      $("#buscar").classList.toggle("d-none");
-      $("#spinner").classList.toggle("d-none");
-    }
-    catch(e){
-      $("#buscar").classList.toggle("d-none");
-      $("#spinner").classList.toggle("d-none");
-      sAlert.sweetError("El documento ingresado no existe","No existe una persona con este documento");
-      console.error(e);
-    }
-
-  }
-
-  async function searchCE(dnro){
-
-    try{
-
-      $("#buscar").classList.toggle("d-none");
-      $("#spinner").classList.toggle("d-none");
-      
-      let params = new URLSearchParams();
-
-      params.append("action","searchCE");
-      params.append("documento_nro",$("#documento_nro").value);
-
-      let url = `../../Controllers/searchDocument.php?${params}`;
-
-      let result = await global.sendActionGET(url);
-
-      if(result){
-        
-        let docs = result.data.body;
-
-        $("#nombres").value = docs.nombre_completo;
-        $("#apellidos").value = `${docs.apellido_paterno} ${docs.apellido_materno}`;
-        $("#nacionalidad").value = docs.nacionalidad;
-
-      }else{
-        sAlert.sweetError("El documento ingresado no existe","No existe una persona con este documento");
-      }
-
-      $("#buscar").classList.toggle("d-none");
-      $("#spinner").classList.toggle("d-none");
-
-    }
-    catch(e){
-      $("#buscar").classList.toggle("d-none");
-      $("#spinner").classList.toggle("d-none");
-      sAlert.sweetError("El documento ingresado no existe","No existe una persona con este documento");
-      console.error(e);
-    }
-  }
-  //Busca el documento de identidad consumiendo datos de la API
-  async function searchDocument(dnro){
-
-    $("#form-data-client").reset();
-    $("#guardar").disabled = true;
-
-    if($("#documento_tipo").value == "DNI"){
-
-      await searchDNI(dnro);
-      
-    }else if($("#documento_tipo").value == "CARNET DE EXTRANJERÍA"){
-
-      await searchCE(dnro);
-      
-    } else if($("#documento_tipo").value == "RUC"){
-      
-      await searchRUC(dnro);
-    }
-
-    $("#guardar").disabled = false;
-  }
-
-  //Registra un representante legal
-  async function addRepresents(represents){
-
-    try{
-      
-      let url = "../../Controllers/client.controller.php";
-
-      let params = new FormData();
-
-      params.append("action","addRepresents");
-      params.append("idpersona_juridica",represents.idpersona_juridica);
-      params.append("representante_legal",represents.representante_legal);
-      params.append("documento_tipo",represents.documento_tipo);
-      params.append("documento_nro",represents.documento_nro);
-      params.append("cargo",represents.cargo);
-      params.append("partida_elect",represents.partida_elect);
-      params.append("estado",represents.estado);
-
-      let results = await global.sendAction(url, params);
-
-      if(results){
-
-        if(results.filasAfect > 0){
-
-          return results.filasAfect;
-        }
-      }
-    }
-    catch(e){
-      console.error(e);
-    }
-  }
-
-  //Obtiene los datos del representante
-  async function processRepresents(idpesonajuridica){
-
-    const representsList = $All("#list-represents li");
-
-    let counter = 0;
-    let oneChecked = false;
-
-    for(list of representsList){
-
-      if(list.querySelector('input[name = "estado-check"]').checked){
-
-        oneChecked = true;
-        break;
-      }
-    }
-
-    if(!oneChecked){
-      
-      sAlert.sweetError("Error", "Debes seleccionar al menos un representante");
-
-    }else{
-      
-      for(list of representsList){
-  
-        let status = list.querySelector('input[name = "estado-check"]').checked ? "HABILITADO" : "DESHABILITADO";
-        let represents = {
-  
-          idpersona_juridica: idpesonajuridica,
-          representante_legal : list.querySelector('input[name = "representante_legal"]').value,
-          documento_tipo: list.querySelector('input[name = "documento_tipo"]').value,
-          documento_nro: list.querySelector('input[name = "documento_nro"]').value,
-          cargo: list.querySelector('input[name = "cargo"]').value,
-          partida_elect: list.querySelector('input[name = "partida_elect"]').value,
-          estado: status
-
-        };
-  
-        let result = await addRepresents(represents);
-        counter += result;
-  
-      }
-
-      if(counter > 0){
-
-        register = true;
-        sAlert.sweetConfirmAdd("Éxito",`Se han realizado ${counter} reigistros de forma exitosa, ¿Deseas registrar otro?`,()=>{
-  
-            $("#search_person").reset();
-            $("#search_person").classList.remove('was-validated');
-            $("#form-data-client").reset();
-            $("#form-data-client").classList.remove('was-validated');
-            $("#form-data-represents").reset();
-            $("#form-data-represents").classList.remove('was-validated');
-            $("#cerrar").click();
-            
-            getClients();
-          
-          register = false;
-          },()=>{
-          window.location.href = "./index.php";
-        });
-  
-      }else{
-        sAlert.sweetError("Ocurrió un error","No se han realizado registros");
-      }
-    }
-  }
-
-  //Agrega un cliente
-  async function addClient(){
-
-    try{
-
-      let url = "../../Controllers/client.controller.php";
-
-      let params = new FormData();
-
-      
-      if($("#tipo_persona").value == "JURÍDICA"){
-        
-        params.append("action","addLegalClient");
-        params.append("tipo_persona",$("#tipo_persona").value);
-        params.append("razon_social",$("#razon_social").value);
-        params.append("documento_tipo",$("#documento_tipo").value);
-        params.append("documento_nro",$("#documento_nro").value);
-        params.append("iddistrito",$("#iddistrito").value);
-        params.append("direccion",$("#direccion").value);
-
-      }else if($("#tipo_persona").value == "NATURAL"){
-        
-        params.append("action","addClientNatural");
-        params.append("tipo_persona",$("#tipo_persona").value);
-        params.append("nombres",$("#nombres").value);
-        params.append("apellidos",$("#apellidos").value);
-        params.append("documento_tipo",$("#documento_tipo").value);
-        params.append("documento_nro",$("#documento_nro").value);
-        params.append("estado_civil",$("#estado_civil").value);
-        params.append("iddistrito",$("#iddistrito").value);
-        params.append("direccion",$("#direccion").value);
-        params.append("nacionalidad",$("#nacionalidad").value);
-      }
-
-      
-      let result = await global.sendAction(url, params);
-
-      if(result){
-
-        if(result.idpersona_juridica){
-          
-          idpersonaJuridica = result.idpersona_juridica;
-          $("#open-modal-represents").removeAttribute("disabled");
-          $("#open-modal-represents").click();
-
-        }else if(result.filasAfect > 0){
-
-          sAlert.sweetConfirmAdd("Éxito","El registro se ha guardado de forma existosa, ¿Deseas registrar otro?",()=>{
-
-            $("#search_person").reset();
-            $("#form-data-client").reset();
-            $("#form-data-client").classList.remove('was-validated');
-            getClients();
-
-          },()=>{
-            window.location.href = "./index.php";
-          });
-
-        }else{
-          sAlert.sweetError("Ocurrió un error","No se han realizado registros");
-        }
-      }
-    }
-    catch(e){
-      
-      console.error(e);
-    }
-  }
-
-  //Validar formulario
-  function validateFom(form, callback) {
-    'use strict' //=> USO ESTRICTO POR POLITICAS DE SEGURIDAD EN EL FORMULARIO
-
-     //SELECCIONA TODOS LOS ELEMENTOS DEL FORMULARIO QUE TIENE LA CLASE "needs-validation
-    const forms = document.querySelectorAll(form)
-
-    // TOMA EL ELEMENTO "FORMS" Y LO CONVIERTE A UN ARRAY
-    // SE INCLUYE EN UN FOREAH PARA ITERAR SOBRE SUS ELEMENTOS
-
-    Array.from(forms).forEach(form => {
-        form.addEventListener('submit', event => {
-
-            //SI LA VALIDACIÓN DEL FORMULARIO ES FALSE
-        if (!form.checkValidity()) {
-            event.preventDefault()      //=> FRENA EL ENVÍO DEL FORMULARIO
-            event.stopPropagation()     //=> FRENA LA PROPAGACIÓN DE DATOS EN EL FORMULARIO
-            form.reportValidity();
-        }else{
-            event.preventDefault();
-            
-            callback();
-            /* sAlert.sweetConfirm("Datos nuevos","¿Deseas actualizar el registro?",()=>{
-                
-            }); */
-        }
-
-        form.classList.add('was-validated') //=> AGREGA ESTA CLASE A LOS ELEMENTOS DEL FORMULARIO(MUESTRA LOS COMENTARIOS)
-        }, false) //=> ESTE TERCER ARGUMENTO INDICA QUE EL EVENTO NO SE ESTA CAPTURANDO EN LA ""FASE DE CAPTURA" SINO EN "PROPAGACIÓN NORMAL"
-    })  
-  };
-
-  //Compara si existe un registro con el número de documento
-  async function validateDocument(array, params){
-
-    return new Promise((resolve, reject)  => {
-
-      const found = array.find(element => element.documento_nro == params);
-  
-      if(found){
-  
-        sAlert.sweetError("El documento ingresado ya existe","Ya existe un registro con este documento");
-        
-        reject();
-      
-      }else{
-  
-        validateFom("#form-data-client",addClient);
-        resolve();
-  
-      }
-    })
-
   }
 
   //Cambia la visibilidad de los inputs dependiendo del tipo de persona
-  function changeVisibilityInput(tPersona){
+  async function changeVisibilityInput(tPersona){
     
     let perJInputs = $All(".pern-j")
     let perNInputs = $All(".pern-n")
@@ -1670,11 +865,12 @@ document.addEventListener("DOMContentLoaded",()=>{
         }
       });
 
-    }else if(tPersona == "CARNET DE EXTRANJERÍA"){}
+    }
 
   }
 
-  function createOptions(tPersona){
+  //Crea opciones de tipos de documentos de acuerdo al tipo de persona
+  async function createOptions(tPersona){
 
     $("#documento_tipo").innerHTML = "";
 
@@ -1707,6 +903,281 @@ document.addEventListener("DOMContentLoaded",()=>{
     }
   }
 
+  //Obtiene el ubigeo por el iddistrito
+  async function getUbigeo(iddistrito){
+
+    try{
+
+      let url = "../../Controllers/ubigeo/district.controller.php";
+      let params = new FormData();
+
+      params.append("action","getUbigeo");
+      params.append("iddistrito", iddistrito);
+
+      let result = await global.sendAction(url,params)
+
+      if(result){
+
+        const tagDistrito = document.createElement("option");
+        tagDistrito.value = result.iddistrito;
+        tagDistrito.innerHTML = result.distrito.trim();
+        $("#iddistrito").appendChild(tagDistrito);
+        $("#iddistrito").value = result.iddistrito;
+
+        const tagProvincia = document.createElement("option");
+        tagProvincia.value = result.idprovincia;
+        tagProvincia.innerHTML = result.provincia.trim();
+        $("#idprovincia").appendChild(tagProvincia);
+        $("#idprovincia").value = result.idprovincia;
+
+        $("#iddepartamento").value = result.iddepartamento;
+      }
+    }
+    catch(e){
+      console.error(e);
+    }
+  };
+
+  //Obtiene los datos del cliente
+  async function getClient(id){
+
+    try{
+
+      let url ="../../Controllers/client.controller.php";
+      let params = new FormData();
+  
+      params.append("action","listClientById");
+      params.append("idcliente",id);
+
+      results = await global.sendAction(url, params);
+
+      if(results){
+
+        console.log(results);
+        dataClient = results;
+        
+        $("#tipo_persona").value = dataClient.tipo_persona;
+
+        let tPersons = $("#tipo_persona");
+        await createOptions(tPersons);
+        await changeVisibilityInput(tPersons.value);
+
+        $("#documento_tipo").value = dataClient.documento_tipo;
+        $("#documento_nro").value = dataClient.documento_nro;
+
+        getUbigeo(dataClient.iddistrito);
+        $("#direccion").value = dataClient.direccion;
+
+        if(dataClient.tipo_persona == "JURÍDICA"){
+
+          $("#documento_t_representante").value = dataClient.repDocumento_tipo;
+          $("#documento_nro_representante").value = dataClient.repDocumento_nro;
+          $("#razon_social").value = dataClient.razon_social;
+          $("#representante_legal").value = dataClient.representante_legal;
+          $("#partida_elect").value = dataClient.partida_elect;
+          $("#cargo").value = dataClient.cargo;
+
+        }else{
+
+          $("#nacionalidad").value = dataClient.nacionalidad;
+          $("#apellidos").value = dataClient.apellidos;
+          $("#nombres").value = dataClient.nombres;
+          $("#estado_civil").value = dataClient.estado_civil;
+        }
+      }
+    }
+    catch(e){
+      console.error(e);
+    }
+  }
+
+  //Agrega un cliente
+  async function setClient(){
+
+    try{
+
+      let url = "../../Controllers/client.controller.php";
+
+      let params = new FormData();
+
+      
+      if($("#tipo_persona").value == "JURÍDICA"){
+        
+        params.append("action","setLegalClient");
+        params.append("idcliente",idCliente);
+        params.append("tipo_persona",$("#tipo_persona").value);
+        params.append("idpersona_juridica",dataClient.idpersona_juridica);
+        params.append("razon_social",$("#razon_social").value);
+        params.append("documento_tipo",$("#documento_tipo").value);
+        params.append("documento_nro",$("#documento_nro").value);
+        params.append("iddistrito",$("#iddistrito").value);
+        params.append("direccion",$("#direccion").value);
+        params.append("representante_legal",$("#representante_legal").value);
+        params.append("documento_t_representante",$("#documento_t_representante").value);
+        params.append("documento_nro_representante",$("#documento_nro_representante").value);
+        params.append("partida_elect",$("#partida_elect").value);
+        params.append("cargo",$("#cargo").value);
+
+      }else if($("#tipo_persona").value == "NATURAL"){
+        
+        params.append("action","setClientNatural");
+        params.append("idcliente",idCliente);
+        params.append("tipo_persona",$("#tipo_persona").value);
+        params.append("idpersona",dataClient.idpersona);
+        params.append("nombres",$("#nombres").value);
+        params.append("apellidos",$("#apellidos").value);
+        params.append("documento_tipo",$("#documento_tipo").value);
+        params.append("documento_nro",$("#documento_nro").value);
+        params.append("estado_civil",$("#estado_civil").value);
+        params.append("iddistrito",$("#iddistrito").value);
+        params.append("direccion",$("#direccion").value);
+        params.append("nacionalidad",$("#nacionalidad").value);
+      }
+
+      
+      let result = await global.sendAction(url, params);
+
+      if(result){
+
+        console.log(result.filasAfect);
+        if(result.filasAfect > 0){
+          sAlert.sweetSuccess("Registro actualizado","El registro se ha actualizado correctamente",()=>{
+    
+            window.location.href = `./index.php`;
+          });
+
+        }
+      }else{
+        sAlert.sweetError("No se actualizó el registro","Vuelve a intentarlo");
+      }
+    }
+    catch(e){
+      
+      console.error(e);
+    }
+  }
+
+  //Validar formulario
+  function validateFom(form, callback) {
+    'use strict' //=> USO ESTRICTO POR POLITICAS DE SEGURIDAD EN EL FORMULARIO
+
+     //SELECCIONA TODOS LOS ELEMENTOS DEL FORMULARIO QUE TIENE LA CLASE "needs-validation
+    const forms = document.querySelectorAll(form)
+
+    // TOMA EL ELEMENTO "FORMS" Y LO CONVIERTE A UN ARRAY
+    // SE INCLUYE EN UN FOREAH PARA ITERAR SOBRE SUS ELEMENTOS
+
+    Array.from(forms).forEach(form => {
+        form.addEventListener('submit', event => {
+
+            //SI LA VALIDACIÓN DEL FORMULARIO ES FALSE
+        if (!form.checkValidity()) {
+            event.preventDefault()      //=> FRENA EL ENVÍO DEL FORMULARIO
+            event.stopPropagation()     //=> FRENA LA PROPAGACIÓN DE DATOS EN EL FORMULARIO
+            form.reportValidity();
+        }else{
+            event.preventDefault();
+            
+            callback();
+            /* sAlert.sweetConfirm("Datos nuevos","¿Deseas actualizar el registro?",()=>{
+                
+            }); */
+        }
+
+        form.classList.add('was-validated') //=> AGREGA ESTA CLASE A LOS ELEMENTOS DEL FORMULARIO(MUESTRA LOS COMENTARIOS)
+        }, false) //=> ESTE TERCER ARGUMENTO INDICA QUE EL EVENTO NO SE ESTA CAPTURANDO EN LA ""FASE DE CAPTURA" SINO EN "PROPAGACIÓN NORMAL"
+    })  
+  };
+
+  //Compara si existe un registro con el número de documento(de la entidad o persona)
+  async function validateDocument(array, params){
+
+    return new Promise((resolve, reject)  => {
+
+      const found = array.find(element => element.documento_nro == params);
+  
+      if(found){
+
+        sAlert.sweetError("El documento ingresado ya existe","Ya existe un registro con este documento");
+  
+        reject();
+      
+      }else{
+  
+        validateFom("#form-data-client",()=>{
+        setClient();
+        });
+        resolve();
+  
+      }
+    })
+
+  };
+
+  //Compara si existe un registro con el número de documento(del representante legal)
+  async function validateDocumentRep(array, params){
+
+    return new Promise((resolve, reject)  => {
+
+      const found = array.find(element => element.documento_nro_representante == params);
+  
+      if(found){
+
+        sAlert.sweetError("El documento ingresado ya existe","Ya existe un registro con este documento");
+  
+        reject();
+      
+      }else{
+  
+        validateFom("#form-data-client",()=>{
+        setClient();
+        });
+        resolve();
+  
+      }
+    })
+
+  }
+
+  //Busca el representante legal y lo cambia
+  async function reloadRep(){
+    
+    try{
+      
+      $("#reloadRep").classList.toggle("d-none");
+      $("#spinner").classList.toggle("d-none");
+
+      let params = new URLSearchParams();
+
+      params.append("action","searchRpRUC");
+      params.append("documento_nro",$("#documento_nro").value);
+
+      let url = `../../Controllers/searchDocument.php?${params}`;
+
+      let result = await global.sendActionGET(url);
+
+      if(result){
+
+        let docs = result.data.data[0];
+        console.log(docs);
+        $("#documento_t_representante").value = docs.tipo_de_documento;
+        $("#documento_nro_representante").value = docs.numero_de_documento;
+        $("#representante_legal").value = docs.nombre;
+        $("#cargo").value = docs.cargo;
+
+        $("#reloadRep").classList.toggle("d-none");
+        $("#spinner").classList.toggle("d-none");
+      }else{
+        
+        $("#reloadRep").classList.toggle("d-none");
+        $("#spinner").classList.toggle("d-none");
+        sAlert.sweetError("El documento ingresado no existe",`${result.data.message}`);
+      }
+    }
+    catch(e){
+      console.error(e);
+    }
+  }
   //Cambia la longitud de la cadena de acuerdo al tipo de documento escojido
   function lengthTDocument(tDocument){
 
@@ -1733,76 +1204,78 @@ document.addEventListener("DOMContentLoaded",()=>{
     }
   }
 
+  function validateDataPersonNatural(){
+    
+    if($("#documento_nro").value !== dataClient.documento_nro){
+
+      console.log("validando el docuento si existe");
+      validateDocument(dataClients, $("#documento_nro").value);
+
+    }else{
+      setClient();
+    }
+  };
+
+  function validateDataPersonLegal(){
+
+    if($("#documento_nro").value !== dataClient.documento_nro){
+
+      validateDocument(dataClients, $("#documento_nro").value);
+
+    }else if($("#documento_nro_representante").value !== dataClient.repDocumento_nro){
+
+      validateDocument(dataClients, $("#documento_nro_representante").value);
+
+    }else{
+      
+      setClient();
+    }
+
+  };
 
     $("#form-data-client").addEventListener("submit",(e)=>{
 
       e.preventDefault(); 
-      validateDocument(dataClient, $("#documento_nro").value);
+
+      if($("#tipo_persona").value == "JURÍDICA"){
+
+        validateDataPersonLegal();
+        
+      }else if($("#tipo_persona").value == "NATURAL"){
+        
+        validateDataPersonNatural();
+      }
+
     })
     
     $("#buscar").addEventListener("click",()=>{
 
       validateFom("#search_person",searchDocument);
     })
+    
 
   $("#documento_tipo").addEventListener("change",(e)=>{
 
+    console.log(e.target.value)
     lengthTDocument($("#documento_tipo"));
   });
 
   $("#tipo_persona").addEventListener("change",()=>{
 
-    getClients();
     changeVisibilityInput($("#tipo_persona").value);
     createOptions($("#tipo_persona"));
 
   });
 
-  $("#form-data-represents").addEventListener("submit",(e)=>{
+  $("#reloadRep").addEventListener("click",()=>{
 
-    e.preventDefault();
-    
-    if(idpersonaJuridica){
-
-      validateFom("#form-data-client",processRepresents(idpersonaJuridica));
-    }else{
-      sAlert.sweetError("No se ha realizado el registro","Necesitas registrar la empresa");
-    }
+    reloadRep();
   });
   
-  $("#list-represents li").addEventListener("click",(e)=>{
-
-    if(e.target.classList.contains("delete")){
-      if(numList > 1){
-        numList -= 1
-        
-        console.log(numList);
-        console.log("borrar");
-  
-        let li = e.target.closest(".list-group-item");
-  
-        li.remove();
-      }else{
-        sAlert.sweetError("No se puedo eliminar", "Necesitas al menos un registro")
-      }
-    }
-  });
-
-  createOptions($("#tipo_persona"));
   getClients();
   getClient(idCliente);
-
-  window.addEventListener("beforeunload",function(e){
-    
-    e.preventDefault();
-    if(!register){
-
-      e.returnValue = "";
-      return "";
-    }
-  });
+  
 });
-
   </script>
   <script>
     var win = navigator.platform.indexOf('Win') > -1;

@@ -666,7 +666,7 @@ BEGIN
 			persUsu.nombres AS usuario
 			FROM clientes AS clien
 			INNER JOIN personas_juridicas AS persj ON persj.idpersona_juridica = clien.idpersona_juridica
-            INNER JOIN rep_legales_clientes AS rep ON rep.idpersona_juridica = persj.idpersona_juridica
+            LEFT JOIN rep_legales_clientes AS rep ON rep.idpersona_juridica = persj.idpersona_juridica
 			INNER JOIN distritos AS dist ON dist.iddistrito = persj.iddistrito
 			INNER JOIN provincias AS prov ON prov.idprovincia = dist.idprovincia
 			INNER JOIN departamentos AS dept ON dept.iddepartamento = prov.iddepartamento
@@ -730,7 +730,7 @@ BEGIN
 			persUsu.nombres AS usuario
 			FROM clientes AS clien
 			INNER JOIN personas_juridicas AS persj ON persj.idpersona_juridica = clien.idpersona_juridica
-            INNER JOIN rep_legales_clientes AS rep ON rep.idpersona_juridica = persj.idpersona_juridica
+            LEFT JOIN rep_legales_clientes AS rep ON rep.idpersona_juridica = persj.idpersona_juridica
 			INNER JOIN distritos AS dist ON dist.iddistrito = persj.iddistrito
 			INNER JOIN provincias AS prov ON prov.idprovincia = dist.idprovincia
 			INNER JOIN departamentos AS dept ON dept.iddepartamento = prov.iddepartamento
@@ -790,7 +790,7 @@ BEGIN
 			persUsu.nombres AS usuario
 			FROM clientes AS clien
 			INNER JOIN personas_juridicas AS persj ON persj.idpersona_juridica = clien.idpersona_juridica
-            INNER JOIN rep_legales_clientes AS rep ON rep.idpersona_juridica = persj.idpersona_juridica
+            LEFT JOIN rep_legales_clientes AS rep ON rep.idpersona_juridica = persj.idpersona_juridica
 			INNER JOIN distritos AS dist ON dist.iddistrito = persj.iddistrito
 			INNER JOIN provincias AS prov ON prov.idprovincia = dist.idprovincia
 			INNER JOIN departamentos AS dept ON dept.iddepartamento = prov.iddepartamento
@@ -959,6 +959,55 @@ BEGIN
                         _idpersona_juridica,
                         _idusuario
                     );
+END $$
+DELIMITER ;
+
+-- REPRESENTANTES
+DELIMITER $$
+CREATE PROCEDURE spu_list_represents_by_id_pj(IN _idpersona_juridica INT)
+BEGIN
+	SELECT 
+		idrepresentante,
+        idpersona_juridica,
+        representante_legal,
+        documento_tipo,
+        documento_nro,
+        cargo,
+        partida_elect,
+        estado
+		FROM rep_legales_clientes
+        WHERE idpersona_juridica = _idpersona_juridica 
+        AND inactive_at IS NULL;
+END $$
+DELIMITER ;
+
+call spu_list_represents_by_id_pj(42);
+
+DELIMITER $$
+CREATE PROCEDURE spu_set_represents
+(
+	IN _idrepresentante		INT,
+    IN _idpersona_juridica 	INT,
+    IN _representante_legal VARCHAR(100),
+    IN _documento_tipo		VARCHAR(20),
+    IN _documento_nro		VARCHAR(12),
+    IN _cargo				VARCHAR(30),
+    IN _partida_elect 		VARCHAR(100),
+    IN _estado				VARCHAR(20)
+)
+BEGIN
+	UPDATE	rep_legales_clientes 
+		SET
+			idpersona_juridica 		= _idpersona_juridica,
+            representante_legal 	= _representante_legal,
+            documento_tipo			= _documento_tipo,
+            documento_nro 			= _documento_nro,
+            cargo					= _cargo,
+            partida_elect 			= _partida_elect,
+            estado 					= _estado 	
+        WHERE idrepresentante = _idrepresentante;
+        
+	SELECT ROW_COUNT() AS filasAfect;
 END $$
 DELIMITER ;
 

@@ -253,7 +253,11 @@ CREATE TABLE rep_legales_clientes
 	documento_nro						VARCHAR(12) 	NOT NULL,
 	cargo								VARCHAR(30)		NOT NULL,
 	partida_elect						VARCHAR(100) 	NOT NULL,
-    estado								VARCHAR(20) 	NOT NULL DEFAULT "DESHABILITADO"
+    estado								VARCHAR(20) 	NOT NULL DEFAULT "DESHABILITADO",
+    create_at 							DATE 			NOT NULL DEFAULT(CURDATE()),
+    update_at 							DATE 			NULL,
+    inactive_at 						DATE 			NULL,
+    CONSTRAINT uk_documento_nro_rep UNIQUE(documento_nro)
 )ENGINE= INNODB;
 
 -- persona jurìdicas

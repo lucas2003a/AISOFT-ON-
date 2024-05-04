@@ -42,9 +42,10 @@ SET ACT.ESTADO = 'SEPARADO';
 
 select * from personas_juridicas;
 select * from clientes;
-
-SELECT * FROM representantes_legales_clientes;
-
+update clientes set inactive_at  = NULL;
+SELECT * FROM rep_legales_clientes;
+DELETE FROM rep_legales_clientes;
+select * from clientes;
 
 
 INSERT INTO representantes_legales_clientes(idpersona_juridica, representante_legal, documento_tipo, documento_nro,partida_elect)
@@ -52,4 +53,12 @@ SELECT idpersona_juridica, representante_legal, documento_t_representante, docum
 	FROM personas_juridicas
     WHERE inactive_at IS NULL;
 
-SELECT * FROM representantes_legales_clientes;
+SELECT * FROM personas_juridicas;
+
+update personas_juridicas set representante_legal = "AAAAAA", 
+								documento_t_representante = "DNI", 
+                                documento_nro_representante = "12356855", 
+                                cargo = "GERENTE", 
+                                partida_elect = "PARTIDA Nº2";
+			
+select * from activos where det_casa IS NOT NULL;

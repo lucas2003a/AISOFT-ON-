@@ -116,6 +116,14 @@ if(isset($_POST["action"])){
 
         //REPRESENTANTES
 
+        case "getRepresents": 
+            
+                $idpersona_juridica = $_POST["idpersona_juridica"];
+
+                echo json_encode($client->getRepresents($idpersona_juridica));
+
+            break;
+            
         case "addRepresents": 
 
             $dataObtained = [
@@ -130,6 +138,23 @@ if(isset($_POST["action"])){
 
             echo json_encode($client->addRepresents($dataObtained));
             
+            break;
+
+        case "setRepresents": 
+
+                $dataObtained = [
+
+                    "idrepresentante"       => $_POST["idrepresentante"],
+                    "idpersona_juridica"    => $_POST["idpersona_juridica"],
+                    "representante_legal"   => $_POST["representante_legal"],
+                    "documento_tipo"        => $_POST["documento_tipo"],
+                    "documento_nro" => $_POST["documento_nro"],
+                    "cargo"         => $_POST["cargo"],
+                    "partida_elect" => $_POST["partida_elect"],
+                    "estado"        => $_POST["estado"]
+                ];
+
+                echo json_encode($client->setRepresents($dataObtained));
             break;
 
         case "inactiveClient": 

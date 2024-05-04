@@ -559,9 +559,9 @@
   <!-- Button trigger modal -->
   <!-- Modal -->
   <div class="modal fade" id="data_full_client" tabindex="-1" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
-    <div class="modal-dialog modal-xl modal-fullscreen-sm-down" role="document">
+    <div class="modal-dialog modal-dialog-scrollable modal-xl modal-fullscreen-sm-down" role="document">
       <div class="modal-content">
-        <div class="modal-header">
+        <div class="modal-header bg-secondary">
           <h5 class="modal-title" id="modalTitle">
             Modal title
           </h5>
@@ -707,6 +707,32 @@ document.addEventListener("DOMContentLoaded",()=>{
 
   let timer;
 
+  //Obtiene los datos del o los reppresentantes legales
+  async function getRepresents(id){
+
+    try{
+
+      let url ="../../Controllers/client.controller.php";
+      let params = new FormData();
+  
+      params.append("action","getRepresents");
+      params.append("idpersona_juridica",id);
+
+      results = await global.sendAction(url, params);
+
+      if(results){
+
+        console.log(results)
+        return results;
+      }else{
+        console.log("no hay resultados")
+      }
+    }
+    catch(e){
+      console.error(e);
+    }
+  }
+
   async function getClientModal(id){
 
     try{
@@ -725,6 +751,13 @@ document.addEventListener("DOMContentLoaded",()=>{
         dataClient = results;
 
         $("#data-client-modal").innerHTML = ""; 
+
+        for(let key in dataClient){
+
+          if(dataClient[key] == undefined){
+            dataClient[key] = "POR REGISTRAR";
+          }
+        }
 
         let row = "";
         row = `
@@ -758,7 +791,7 @@ document.addEventListener("DOMContentLoaded",()=>{
 
         if(dataClient.tipo_persona == "JURÍDICA"){
           $("#modalTitle").innerHTML = dataClient.razon_social;
-
+          
           row += `
 
             <li class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg">
@@ -772,53 +805,61 @@ document.addEventListener("DOMContentLoaded",()=>{
 
             <hr>
             <h6><strong>Datos del representante :</strong></h6>
-            <br>
+            <br>`;
+            
+          let dataRepresents = await getRepresents(dataClient.idpersona_juridica);
 
-            <li class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg">
-              <div class="d-flex flex-column">
-                <h6 class="mb-1 text-dark font-weight-bold text-sm">Nombres y apellidos</h6>
-              </div>
-              <div class="d-flex align-items-center text-sm">
-                    ${dataClient.representante_legal}
-                </div>
-            </li>
+          console.log(dataRepresents);
+          dataRepresents.forEach(represent => {
 
-            <li class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg">
-              <div class="d-flex flex-column">
-                <h6 class="mb-1 text-dark font-weight-bold text-sm">Tipo de documento</h6>
-              </div>
-              <div class="d-flex align-items-center text-sm">
-                    ${dataClient.repDocumento_tipo}
+            row +=  `
+              <li class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg">
+                <div class="d-flex flex-column">
+                  <h6 class="mb-1 text-dark font-weight-bold text-sm">Nombres y apellidos</h6>
                 </div>
-            </li>
-
-            <li class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg">
-              <div class="d-flex flex-column">
-                <h6 class="mb-1 text-dark font-weight-bold text-sm">Nº de documento</h6>
-              </div>
-              <div class="d-flex align-items-center text-sm">
-                    ${dataClient.repDocumento_nro}
+                <div class="d-flex align-items-center text-sm">
+                      ${represent.representante_legal || "POR REGISTRAR"}
+                  </div>
+              </li>
+  
+              <li class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg">
+                <div class="d-flex flex-column">
+                  <h6 class="mb-1 text-dark font-weight-bold text-sm">Tipo de documento</h6>
                 </div>
-            </li>
-
-            <li class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg">
-              <div class="d-flex flex-column">
-                <h6 class="mb-1 text-dark font-weight-bold text-sm">Cargo</h6>
-              </div>
-              <div class="d-flex align-items-center text-sm">
-                    ${dataClient.cargo}
+                <div class="d-flex align-items-center text-sm">
+                      ${represent.documento_tipo || "POR REGISTRAR"}
+                  </div>
+              </li>
+  
+              <li class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg">
+                <div class="d-flex flex-column">
+                  <h6 class="mb-1 text-dark font-weight-bold text-sm">Nº de documento</h6>
                 </div>
-            </li>
-
-            <li class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg">
-              <div class="d-flex flex-column">
-                <h6 class="mb-1 text-dark font-weight-bold text-sm">Partida electrónica</h6>
-              </div>
-              <div class="d-flex align-items-center text-sm">
-                    ${dataClient.partida_elect}
+                <div class="d-flex align-items-center text-sm">
+                      ${represent.documento_nro || "POR REGISTRAR"}
+                  </div>
+              </li>
+  
+              <li class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg">
+                <div class="d-flex flex-column">
+                  <h6 class="mb-1 text-dark font-weight-bold text-sm">Cargo</h6>
                 </div>
-            </li>
-            `;
+                <div class="d-flex align-items-center text-sm">
+                      ${dataClient.cargo || "POR REGISTRAR"}
+                  </div>
+              </li>
+  
+              <li class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg">
+                <div class="d-flex flex-column">
+                  <h6 class="mb-1 text-dark font-weight-bold text-sm">Partida electrónica</h6>
+                </div>
+                <div class="d-flex align-items-center text-sm">
+                      ${dataClient.partida_elect || "POR REGISTRAR"}
+                  </div>
+              </li>
+              <hr>
+              `;
+          });
 
         }else{
           $("#modalTitle").innerHTML = dataClient.apellidos + ", " + dataClient.nombres;
@@ -879,7 +920,7 @@ document.addEventListener("DOMContentLoaded",()=>{
     let newRow = ``;
 
     if(results.length > 0){
-console.log(results)
+    console.log(results)
       results.forEach(client =>{
         
         let code = btoa(client.idcliente) //CODIFICACIÓN
