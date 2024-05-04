@@ -841,8 +841,7 @@ document.addEventListener("DOMContentLoaded",()=>{
 
   function createInputs(){
 
-    let newCard = ``;
-    newCard = `
+    let newCard = `
     <li class="list-group-item border-0 d-flex p-4 mb-4 bg-gray-100 border-radius-lg">
                   <div class="col-12">
                     <div class="form-check">
@@ -1694,7 +1693,7 @@ document.addEventListener("DOMContentLoaded",()=>{
     }
   });
   
-  $("#list-represents li").addEventListener("click",(e)=>{
+  $("#list-represents").addEventListener("click",(e)=>{
 
     if(e.target.classList.contains("delete")){
       if(numList > 1){
@@ -1721,6 +1720,7 @@ document.addEventListener("DOMContentLoaded",()=>{
 
       if(input.value == ""){
 
+        complete = false;
         sAlert.sweetError("Completa el formulario", "No puedes crear otro registro, completa el formulario");
         input.classList.add('was-validated')
       }else{
@@ -1731,6 +1731,7 @@ document.addEventListener("DOMContentLoaded",()=>{
 
       if(complete){
         createInputs();
+        numList += 1;
       }
   });
 
