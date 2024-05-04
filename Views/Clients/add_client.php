@@ -926,7 +926,7 @@ document.addEventListener("DOMContentLoaded",()=>{
                 </li>
     `;
 
-    $("#list-represents").innerHTML += newCard;
+    $("#list-represents").insertAdjacentHTML("beforeend",newCard);
   }
 
   async function getClients(){
@@ -1189,11 +1189,6 @@ document.addEventListener("DOMContentLoaded",()=>{
             `;
             $("#list-represents").innerHTML += newCard;
           });
-
-          /* $("#documento_t_representante").value = docs.tipo_de_documento;
-          $("#documento_nro_representante").value = docs.numero_de_documento;
-          $("#representante_legal").value = docs.nombre;
-          $("#cargo").value = docs.cargo; */
         }else{
           sAlert.sweetError("El documento ingresado no existe",`${result.data.message}`);
         }

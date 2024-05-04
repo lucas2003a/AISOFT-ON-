@@ -467,9 +467,6 @@
                 </div>
                 <div class="col-md-3">
                   <button type="submit" class="btn btn-success" id="buscar" disabled>Buscar</button>
-                  <button class="btn btn-success d-none" id="spinner" type="button" disabled>
-                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                  </button>
                   
                 </div>
               </div>
@@ -704,6 +701,10 @@
           <div class="modal-body">
             <div class="text-end">
             <button type="button" class="btn bg-gradient-dark" id="add"><i class="fas fa-plus"></i>&nbsp;&nbsp;Agregar</button> 
+            <button type="button" class="btn bg-gradient-dark" id="queryApi">Consulta Api</button>
+            <button type="button" class="btn bg-gradient-dark d-none" id="spinner" disabled>
+                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                  </button> 
             </div>
             <div class="card-body pt-4 p-3">
 
@@ -841,12 +842,15 @@ document.addEventListener("DOMContentLoaded",()=>{
   let idpersonaJuridica;
   let register = false;
   let numList = $All(".list-group-item").length;
+  let idStoDelete = [];
+  let idStoEdit = [];
+  let dataRepresents;
+
   console.log(numList)
 
   function createInputs(){
 
-    let newCard = ``;
-    newCard = `
+    let newCard = `
     <li class="list-group-item border-0 d-flex p-4 mb-4 bg-gray-100 border-radius-lg">
                   <div class="col-12">
                     <div class="form-check">
@@ -931,8 +935,11 @@ document.addEventListener("DOMContentLoaded",()=>{
                 </li>
     `;
 
-    $("#list-represents").innerHTML += newCard;
+    //Renderiza sin borrar los registros anteriores
+    $("#list-represents").insertAdjacentHTML("beforeend",newCard);
   }
+
+  
   //Obtiene los datos del o los reppresentantes legales
   async function getRepresents(id){
 
@@ -950,11 +957,11 @@ document.addEventListener("DOMContentLoaded",()=>{
 
         console.log(results)
 
-          let newCard = `` 
-          
-          ;
+        dataRepresents = results;
+          let newCard = ``;
+
           $("#list-represents").innerHTML = "";
-          results.forEach(rep =>{
+          dataRepresents.forEach(rep =>{
 
             newCard = `
             <li class="list-group-item border-0 d-flex p-4 mb-4 bg-gray-100 border-radius-lg" >
@@ -963,7 +970,7 @@ document.addEventListener("DOMContentLoaded",()=>{
                         <input class="form-check-input edit-data" name="estado-check" type="checkbox" checked>
                           <label class="form-check-label" style="width: 100%">
                           <div class="ms-auto text-end">
-                          <a type="button" class="btn btn-link text-danger text-gradient px-3 mb-0 delete" href="javascript:;" data-id="${rep.idrepresentante}"><i class="far fa-trash-alt me-2"></i>Eliminar</a>
+                          <a type="button" class="btn btn-link text-danger text-gradient px-3 mb-0 delete edit-data" href="javascript:;" data-id="${rep.idrepresentante}"><i class="far fa-trash-alt me-2"></i>Eliminar</a>
                           </div>
                           <div class="row">
                             
@@ -1050,6 +1057,233 @@ document.addEventListener("DOMContentLoaded",()=>{
       console.error(e);
     }
   }
+
+  //Busca los datos del prepresentante legal de una empresa POR SU RUC
+  async function searchRpRUC(dnro){
+
+    try{
+
+      $("#guardar-representante").disabled = true;
+      $("#add").disabled = true;
+      $("#queryApi").classList.toggle("d-none");
+      $("#spinner").classList.toggle("d-none");
+
+      let params = new URLSearchParams();
+      params.append("action","searchRpRUC");
+      params.append("documento_nro",$("#documento_nro").value)
+
+      let url = `../../Controllers/searchDocument.php?${params}`;
+
+      let result = await global.sendActionGET(url);
+
+      if(result){
+        if(result.data.success){
+
+          let docs = result.data.data;
+
+          let newCard = "";
+          $("#list-represents").innerHTML = "";
+          docs.forEach(rep =>{
+
+            console.log(dataRepresents);
+            if(dataRepresents && dataRepresents.length > 0){
+
+              let found = dataRepresents.find(represent => represent.documento_nro == rep.numero_de_documento);
+  
+              if(!found){
+  
+                newCard = `
+                <li class="list-group-item border-0 d-flex p-4 mb-4 bg-gray-100 border-radius-lg">
+                        <div class="col-12">
+                          <div class="form-check">
+                            <input class="form-check-input" name="estado-check" type="checkbox" checked>
+                              <label class="form-check-label" style="width: 100%">
+    
+                              <div class="row">
+                                
+                                <!-- REPRESENTANTE LEGAL -->
+                                <div class="mt-4">
+                                    <label for="representante_legal" class="form-label">Representante legal</label>
+                                    <input type="text" name="representante_legal" placeholder="Representante legal" class="form-control" value="${rep.nombre}" required>
+                                    <div class="invalid-feedback">
+                                        Necesitas registrar al representante legal.
+                                    </div>
+                                    <div class="valid-feedback">
+                                      Representante legal registrado correctamente.
+                                    </div>
+                                </div>  
+                              </div>
+    
+                              <div class="row">
+    
+                                <!-- NRO DE DOCUMENTO DEL REPRESENTATE -->
+                                <div class="mt-4 col-md-6">
+                                    <label for="documento_nro_representante" class="form-label">Nº de documento</label>
+                                    <input type="text" name="documento_nro" placeholder="Nº de documento" class="form-control" value="${rep.numero_de_documento}" min-length="8" max-length="8" required>
+                                    <div class="invalid-feedback">
+                                        Necesitas registrar el nº de documento del representante.
+                                    </div>
+                                    <div class="valid-feedback">
+                                      Nº de documento del representante registrado correctamente.
+                                    </div>
+                                </div>  
+    
+                                
+                                <!-- TIPO DE DOCUMENTO DEL REPRESENTATE -->
+                                <div class="mt-4 col-md-6">
+                                    <label for="documento_t_representante" class="form-label">Tipo de documento</label>
+                                    <input type="text" name="documento_tipo" placeholder="Tipo de documento" class="form-control" value="${rep.tipo_de_documento}" required>
+                                    <div class="invalid-feedback">
+                                        Necesitas registrar el tipo de documento del representante.
+                                    </div>
+                                    <div class="valid-feedback">
+                                      Tipo de documento del representante registrado correctamente.
+                                    </div>
+                                </div>
+                              </div>
+                              <div class="row">
+    
+                                <div class="mt-4 col-md-6">
+    
+                                    <!-- PARTIDA ELECTRÓNICA -->
+                                    <label for="partida_elect" class="form-label">Partida electrónica</label>
+                                    <input type="text" name="partida_elect" placeholder="Partida electrónica" class="form-control partida_elect" required>
+                                    <div class="invalid-feedback">
+                                        Necesitas registrar la partida electrónica.
+                                    </div>
+                                    <div class="valid-feedback">
+                                      Partida electrónica registrada correctamente.
+                                    </div>
+                                </div>
+                
+                                <!-- CARGO -->
+                                <div class="mt-4 col-md-6">
+                                    <label for="cargo" class="form-label">Cargo</label>
+                                    <input type="text" name="cargo" placeholder="Cargo" class="form-control" value="${rep.cargo}" required>
+                                    <div class="invalid-feedback">
+                                        Necesitas registrar el cargo.
+                                    </div>
+                                    <div class="valid-feedback">
+                                      Cargo registrado correctamente.
+                                    </div>
+                                </div>
+                              </div>
+                              </label>
+                          </div>
+                        </div>
+                      </li>
+                `;
+                $("#list-represents").insertAdjacentHTML("beforeend",newCard);
+
+              }else{
+                sAlert.sweetWarning("El número de documento ya existe","El número de documento ya existe, revisa si no necesita una actualización");
+              }
+            }else{
+              newCard = `
+                <li class="list-group-item border-0 d-flex p-4 mb-4 bg-gray-100 border-radius-lg">
+                        <div class="col-12">
+                          <div class="form-check">
+                            <input class="form-check-input" name="estado-check" type="checkbox" checked>
+                              <label class="form-check-label" style="width: 100%">
+    
+                              <div class="row">
+                                
+                                <!-- REPRESENTANTE LEGAL -->
+                                <div class="mt-4">
+                                    <label for="representante_legal" class="form-label">Representante legal</label>
+                                    <input type="text" name="representante_legal" placeholder="Representante legal" class="form-control" value="${rep.nombre}" required>
+                                    <div class="invalid-feedback">
+                                        Necesitas registrar al representante legal.
+                                    </div>
+                                    <div class="valid-feedback">
+                                      Representante legal registrado correctamente.
+                                    </div>
+                                </div>  
+                              </div>
+    
+                              <div class="row">
+    
+                                <!-- NRO DE DOCUMENTO DEL REPRESENTATE -->
+                                <div class="mt-4 col-md-6">
+                                    <label for="documento_nro_representante" class="form-label">Nº de documento</label>
+                                    <input type="text" name="documento_nro" placeholder="Nº de documento" class="form-control" value="${rep.numero_de_documento}" min-length="8" max-length="8" required>
+                                    <div class="invalid-feedback">
+                                        Necesitas registrar el nº de documento del representante.
+                                    </div>
+                                    <div class="valid-feedback">
+                                      Nº de documento del representante registrado correctamente.
+                                    </div>
+                                </div>  
+    
+                                
+                                <!-- TIPO DE DOCUMENTO DEL REPRESENTATE -->
+                                <div class="mt-4 col-md-6">
+                                    <label for="documento_t_representante" class="form-label">Tipo de documento</label>
+                                    <input type="text" name="documento_tipo" placeholder="Tipo de documento" class="form-control" value="${rep.tipo_de_documento}" required>
+                                    <div class="invalid-feedback">
+                                        Necesitas registrar el tipo de documento del representante.
+                                    </div>
+                                    <div class="valid-feedback">
+                                      Tipo de documento del representante registrado correctamente.
+                                    </div>
+                                </div>
+                              </div>
+                              <div class="row">
+    
+                                <div class="mt-4 col-md-6">
+    
+                                    <!-- PARTIDA ELECTRÓNICA -->
+                                    <label for="partida_elect" class="form-label">Partida electrónica</label>
+                                    <input type="text" name="partida_elect" placeholder="Partida electrónica" class="form-control partida_elect" required>
+                                    <div class="invalid-feedback">
+                                        Necesitas registrar la partida electrónica.
+                                    </div>
+                                    <div class="valid-feedback">
+                                      Partida electrónica registrada correctamente.
+                                    </div>
+                                </div>
+                
+                                <!-- CARGO -->
+                                <div class="mt-4 col-md-6">
+                                    <label for="cargo" class="form-label">Cargo</label>
+                                    <input type="text" name="cargo" placeholder="Cargo" class="form-control" value="${rep.cargo}" required>
+                                    <div class="invalid-feedback">
+                                        Necesitas registrar el cargo.
+                                    </div>
+                                    <div class="valid-feedback">
+                                      Cargo registrado correctamente.
+                                    </div>
+                                </div>
+                              </div>
+                              </label>
+                          </div>
+                        </div>
+                      </li>
+                `;
+                $("#list-represents").insertAdjacentHTML("beforeend",newCard);
+            }
+          });
+
+        }else{
+          sAlert.sweetError("El documento ingresado no existe",`${result.data.message}`);
+        }
+      }
+
+      $("#guardar-representante").disabled = false;
+      $("#add").disabled = false;
+      $("#queryApi").classList.toggle("d-none");
+      $("#spinner").classList.toggle("d-none");
+
+    }catch(e){
+      $("#guardar-representante").disabled = false;
+      $("#add").disabled = false;
+      $("#queryApi").classList.toggle("d-none");
+      $("#spinner").classList.toggle("d-none");
+
+      console.error(e);
+    }
+  }
+
   //Obtiene los datos del cliente
   async function getClient(id){
 
@@ -1316,7 +1550,7 @@ document.addEventListener("DOMContentLoaded",()=>{
   }
 
   //Agrega un cliente
-  async function addClient(){
+  async function setClient(){
 
     try{
 
@@ -1327,8 +1561,10 @@ document.addEventListener("DOMContentLoaded",()=>{
       
       if($("#tipo_persona").value == "JURÍDICA"){
         
-        params.append("action","addLegalClient");
+        params.append("action","setLegalClient");
+        params.append("idcliente",idCliente);
         params.append("tipo_persona",$("#tipo_persona").value);
+        params.append("idpersona_juridica",dataClient.idpersona_juridica);
         params.append("razon_social",$("#razon_social").value);
         params.append("documento_tipo",$("#documento_tipo").value);
         params.append("documento_nro",$("#documento_nro").value);
@@ -1337,8 +1573,10 @@ document.addEventListener("DOMContentLoaded",()=>{
 
       }else if($("#tipo_persona").value == "NATURAL"){
         
-        params.append("action","addClientNatural");
+        params.append("action","setClientNatural");
+        params.append("idcliente",idCliente);
         params.append("tipo_persona",$("#tipo_persona").value);
+        params.append("idpersona",dataClient.idpersona);
         params.append("nombres",$("#nombres").value);
         params.append("apellidos",$("#apellidos").value);
         params.append("documento_tipo",$("#documento_tipo").value);
@@ -1354,13 +1592,12 @@ document.addEventListener("DOMContentLoaded",()=>{
 
       if(result){
 
-        if(result.idpersona_juridica){
-          
-          idpersonaJuridica = result.idpersona_juridica;
-          $("#open-modal-represents").removeAttribute("disabled");
-          $("#open-modal-represents").click();
-
-        }else if(result.filasAfect > 0){
+        idpersonaJuridica = dataClient.idpersona_juridica
+        ;
+        $("#open-modal-represents").removeAttribute("disabled");
+        $("#open-modal-represents").click();
+        
+        if(result.filasAfect > 0){
 
           sAlert.sweetConfirmAdd("Éxito","El registro se ha guardado de forma existosa, ¿Deseas registrar otro?",()=>{
 
@@ -1431,7 +1668,7 @@ document.addEventListener("DOMContentLoaded",()=>{
       
       }else{
   
-        validateFom("#form-data-client",addClient);
+        validateFom("#form-data-client",setClient);
         resolve();
   
       }
@@ -1549,6 +1786,16 @@ document.addEventListener("DOMContentLoaded",()=>{
     }
   }
 
+  function storageIDDeleted(event){
+
+    if(event.target.classList.contains("edit-data")){
+      
+      let idDeleted = event.target.dataset.id;
+
+      idStoDelete.push(idDeleted);
+      console.log(idStoDelete)
+    }
+  }
 
     $("#form-data-client").addEventListener("submit",(e)=>{
 
@@ -1583,7 +1830,6 @@ document.addEventListener("DOMContentLoaded",()=>{
   
   $("#list-represents").addEventListener("click",(e)=>{
 
-    console.log(e);
     if(e.target.classList.contains("delete")){
       if(numList > 1){
         numList -= 1
@@ -1594,6 +1840,7 @@ document.addEventListener("DOMContentLoaded",()=>{
         let li = e.target.closest(".list-group-item");
   
         li.remove();
+        storageIDDeleted(e);
       }else{
         sAlert.sweetError("No se puedo eliminar", "Necesitas al menos un registro")
       }
@@ -1640,6 +1887,11 @@ document.addEventListener("DOMContentLoaded",()=>{
         sAlert.sweetError("No se puedo eliminar", "Necesitas al menos un registro")
       }
     }
+  });
+
+  $("#queryApi").addEventListener("click",()=>{
+
+    searchRpRUC();
   });
 
   createOptions($("#tipo_persona"));
