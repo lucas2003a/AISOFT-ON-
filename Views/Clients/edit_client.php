@@ -711,7 +711,7 @@
               <ul class="list-group" id="list-represents">
                 
               <!-- RENDER REPRESENTANTES -->
-                <li class="list-group-item border-0 d-flex p-4 mb-4 bg-gray-100 border-radius-lg">
+                <li class="list-group-item border-0 d-flex p-4 mb-4 bg-gray-100 border-radius-lg add-data">
                   <div class="col-12">
                     <div class="form-check">
                       <input class="form-check-input" name="estado-check" type="checkbox" checked>
@@ -839,26 +839,26 @@ document.addEventListener("DOMContentLoaded",()=>{
   
   
   let dataClient;
+  let dataClients;
   let idpersonaJuridica;
   let register = false;
-  let numList = $All(".list-group-item").length;
+  
+  let numList;
   let idStoDelete = [];
-  let idStoEdit = [];
   let dataRepresents;
 
-  console.log(numList)
 
   function createInputs(){
 
     let newCard = `
-    <li class="list-group-item border-0 d-flex p-4 mb-4 bg-gray-100 border-radius-lg">
+    <li class="list-group-item border-0 d-flex p-4 mb-4 bg-gray-100 border-radius-lg add-data">
                   <div class="col-12">
                     <div class="form-check">
                       <input class="form-check-input" name="estado-check" type="checkbox" checked>
                         <label class="form-check-label" style="width: 100%;">
                         <div class="ms-auto text-end">
-                        <a class="btn btn-link text-danger text-gradient px-3 mb-0 delete" href="javascript:;"><i class="far fa-trash-alt me-2"></i>Eliminar</a>
-                      </div>
+                          <a class="btn btn-link text-danger text-gradient px-3 mb-0 delete" href="javascript:;"><i class="far fa-trash-alt me-2"></i>Eliminar</a>
+                        </div>
                         <div class="row">
                           
                           <!-- REPRESENTANTE LEGAL -->
@@ -964,10 +964,10 @@ document.addEventListener("DOMContentLoaded",()=>{
           dataRepresents.forEach(rep =>{
 
             newCard = `
-            <li class="list-group-item border-0 d-flex p-4 mb-4 bg-gray-100 border-radius-lg" >
+            <li class="list-group-item border-0 d-flex p-4 mb-4 bg-gray-100 border-radius-lg edit-data" >
                     <div class="col-12">
                       <div class="form-check">
-                        <input class="form-check-input edit-data" name="estado-check" type="checkbox" checked>
+                        <input class="form-check-input edit-data" name="estado-check" data-id="${rep.idrepresentante}" type="checkbox" checked>
                           <label class="form-check-label" style="width: 100%">
                           <div class="ms-auto text-end">
                           <a type="button" class="btn btn-link text-danger text-gradient px-3 mb-0 delete edit-data" href="javascript:;" data-id="${rep.idrepresentante}"><i class="far fa-trash-alt me-2"></i>Eliminar</a>
@@ -977,7 +977,7 @@ document.addEventListener("DOMContentLoaded",()=>{
                             <!-- REPRESENTANTE LEGAL -->
                             <div class="mt-4">
                                 <label for="representante_legal" class="form-label">Representante legal</label>
-                                <input type="text" name="representante_legal" placeholder="Representante legal" class="form-control edit-data" value="${rep.representante_legal}" required>
+                                <input type="text" name="representante_legal" placeholder="Representante legal" class="form-control" value="${rep.representante_legal}" required>
                                 <div class="invalid-feedback">
                                     Necesitas registrar al representante legal.
                                 </div>
@@ -992,7 +992,7 @@ document.addEventListener("DOMContentLoaded",()=>{
                             <!-- NRO DE DOCUMENTO DEL REPRESENTATE -->
                             <div class="mt-4 col-md-6">
                                 <label for="documento_nro_representante" class="form-label">Nº de documento</label>
-                                <input type="text" name="documento_nro" placeholder="Nº de documento" class="form-control edit-data" value="${rep.documento_nro}" min-length="8" max-length="8" required>
+                                <input type="text" name="documento_nro" placeholder="Nº de documento" class="form-control" value="${rep.documento_nro}" min-length="8" max-length="8" required>
                                 <div class="invalid-feedback">
                                     Necesitas registrar el nº de documento del representante.
                                 </div>
@@ -1005,7 +1005,7 @@ document.addEventListener("DOMContentLoaded",()=>{
                             <!-- TIPO DE DOCUMENTO DEL REPRESENTATE -->
                             <div class="mt-4 col-md-6">
                                 <label for="documento_t_representante" class="form-label">Tipo de documento</label>
-                                <input type="text" name="documento_tipo" placeholder="Tipo de documento" class="form-control edit-data" value="${rep.documento_tipo}" required>
+                                <input type="text" name="documento_tipo" placeholder="Tipo de documento" class="form-control" value="${rep.documento_tipo}" required>
                                 <div class="invalid-feedback">
                                     Necesitas registrar el tipo de documento del representante.
                                 </div>
@@ -1020,7 +1020,7 @@ document.addEventListener("DOMContentLoaded",()=>{
 
                                 <!-- PARTIDA ELECTRÓNICA -->
                                 <label for="partida_elect" class="form-label">Partida electrónica</label>
-                                <input type="text" name="partida_elect" placeholder="Partida electrónica" class="form-control edit-data" value="${rep.partida_elect}" required>
+                                <input type="text" name="partida_elect" placeholder="Partida electrónica" class="form-control" value="${rep.partida_elect}" required>
                                 <div class="invalid-feedback">
                                     Necesitas registrar la partida electrónica.
                                 </div>
@@ -1032,7 +1032,7 @@ document.addEventListener("DOMContentLoaded",()=>{
                             <!-- CARGO -->
                             <div class="mt-4 col-md-6">
                                 <label for="cargo" class="form-label">Cargo</label>
-                                <input type="text" name="cargo" placeholder="Cargo" class="form-control edit-data" value="${rep.cargo}" required>
+                                <input type="text" name="cargo" placeholder="Cargo" class="form-control" value="${rep.cargo}" required>
                                 <div class="invalid-feedback">
                                     Necesitas registrar el cargo.
                                 </div>
@@ -1093,12 +1093,14 @@ document.addEventListener("DOMContentLoaded",()=>{
               if(!found){
   
                 newCard = `
-                <li class="list-group-item border-0 d-flex p-4 mb-4 bg-gray-100 border-radius-lg">
+                <li class="list-group-item border-0 d-flex p-4 mb-4 bg-gray-100 border-radius-lg add-data">
                         <div class="col-12">
                           <div class="form-check">
                             <input class="form-check-input" name="estado-check" type="checkbox" checked>
                               <label class="form-check-label" style="width: 100%">
-    
+                              <div class="ms-auto text-end">
+                                <a class="btn btn-link text-danger text-gradient px-3 mb-0 delete" href="javascript:;"><i class="far fa-trash-alt me-2"></i>Eliminar</a>
+                              </div>
                               <div class="row">
                                 
                                 <!-- REPRESENTANTE LEGAL -->
@@ -1180,12 +1182,14 @@ document.addEventListener("DOMContentLoaded",()=>{
               }
             }else{
               newCard = `
-                <li class="list-group-item border-0 d-flex p-4 mb-4 bg-gray-100 border-radius-lg">
+                <li class="list-group-item border-0 d-flex p-4 mb-4 bg-gray-100 border-radius-lg add-data">
                         <div class="col-12">
                           <div class="form-check">
                             <input class="form-check-input" name="estado-check" type="checkbox" checked>
                               <label class="form-check-label" style="width: 100%">
-    
+                              <div class="ms-auto text-end">
+                                <a class="btn btn-link text-danger text-gradient px-3 mb-0 delete" href="javascript:;"><i class="far fa-trash-alt me-2"></i>Eliminar</a>
+                              </div>
                               <div class="row">
                                 
                                 <!-- REPRESENTANTE LEGAL -->
@@ -1321,7 +1325,8 @@ document.addEventListener("DOMContentLoaded",()=>{
           
           if(dataClient.idpersona_juridica){
 
-            getRepresents(dataClient.idpersona_juridica)
+            idpersonaJuridica = dataClient.idpersona_juridica
+            getRepresents(idpersonaJuridica);
           }
 
         }else{
@@ -1338,7 +1343,7 @@ document.addEventListener("DOMContentLoaded",()=>{
     }
   };
 
-  async function getClients(){
+  async function getClients(){  
 
     try{
 
@@ -1352,8 +1357,8 @@ document.addEventListener("DOMContentLoaded",()=>{
 
       if(results){
 
-        dataClient = results;
-        console.log(dataClient)
+        dataClients = results;
+        console.log(dataClients)
       }
     }
     catch(e){
@@ -1471,7 +1476,72 @@ document.addEventListener("DOMContentLoaded",()=>{
 
         if(results.filasAfect > 0){
 
-          return results.filasAfect;
+          let filasAfectAdd = results.filasAfect
+          return filasAfectAdd;
+        }
+      }
+    }
+    catch(e){
+      console.error(e);
+    }
+  };
+
+  //Elimina a los Representantes
+  async function deleteRepresents(id){
+    try{
+      
+      let idDelete = Number.parseInt(id);
+
+      let url = "../../Controllers/client.controller.php";
+
+      let params = new FormData();
+
+      params.append("action","inactiveRepresents");
+      params.append("idrepresentante",idDelete);
+
+      let results = await global.sendAction(url, params);
+
+      if(results){
+
+        if(results.filasAfect > 0){
+
+          let filasAfectDelete = results.filasAfect
+          return filasAfectDelete;
+        }
+      }
+    }
+    catch(e){
+      console.error(e);
+    }
+  }
+
+  //Actualiza un representante legal
+  async function editRepresents(represents){
+
+    try{
+      
+      let url = "../../Controllers/client.controller.php";
+
+      let params = new FormData();
+
+      params.append("action","setRepresents");
+      params.append("idrepresentante",represents.idrepresentante);
+      params.append("idpersona_juridica",represents.idpersona_juridica);
+      params.append("representante_legal",represents.representante_legal);
+      params.append("documento_tipo",represents.documento_tipo);
+      params.append("documento_nro",represents.documento_nro);
+      params.append("cargo",represents.cargo);
+      params.append("partida_elect",represents.partida_elect);
+      params.append("estado",represents.estado);
+
+      let results = await global.sendAction(url, params);
+
+      if(results){
+
+        if(results.filasAfect > 0){
+
+          filasAfectEdit = results.filasAfect;
+          return filasAfectEdit;
         }
       }
     }
@@ -1481,12 +1551,30 @@ document.addEventListener("DOMContentLoaded",()=>{
   }
 
   //Obtiene los datos del representante
-  async function processRepresents(idpesonajuridica){
+  async function processRepresents(idpersonaJuridica){
 
     const representsList = $All("#list-represents li");
+    let numList = representsList.length;
 
-    let counter = 0;
+    let counterEdit = 0;
+    let counterAdd = 0;
+    let counterDelete = 0;
     let oneChecked = false;
+    let textEdit = "";
+    let textAdd = "";
+    let textDelete = "";
+
+    for(id of idStoDelete){
+      
+      let resultDelete = await deleteRepresents(id);
+
+      if(resultDelete > 0){
+        
+        counterDelete += resultDelete;
+      }
+
+      textDelete = `Registros eliminados : ${counterDelete} \n`;
+    };
 
     for(list of representsList){
 
@@ -1502,49 +1590,77 @@ document.addEventListener("DOMContentLoaded",()=>{
       sAlert.sweetError("Error", "Debes seleccionar al menos un representante");
 
     }else{
-      
       for(list of representsList){
-  
-        let status = list.querySelector('input[name = "estado-check"]').checked ? "HABILITADO" : "DESHABILITADO";
-        let represents = {
-  
-          idpersona_juridica: idpesonajuridica,
-          representante_legal : list.querySelector('input[name = "representante_legal"]').value,
-          documento_tipo: list.querySelector('input[name = "documento_tipo"]').value,
-          documento_nro: list.querySelector('input[name = "documento_nro"]').value,
-          cargo: list.querySelector('input[name = "cargo"]').value,
-          partida_elect: list.querySelector('input[name = "partida_elect"]').value,
-          estado: status
 
-        };
-  
-        let result = await addRepresents(represents);
-        counter += result;
-  
+        if(list.classList.contains("edit-data")){
+          
+          let status = list.querySelector('input[name = "estado-check"]').checked ? "HABILITADO" : "DESHABILITADO";
+          let representsEdit = {
+            
+            idrepresentante : Number.parseInt(list.querySelector('input[name = "estado-check"]').dataset.id),
+            idpersona_juridica: idpersonaJuridica,
+            representante_legal : list.querySelector('input[name = "representante_legal"]').value,
+            documento_tipo: list.querySelector('input[name = "documento_tipo"]').value,
+            documento_nro: list.querySelector('input[name = "documento_nro"]').value,
+            cargo: list.querySelector('input[name = "cargo"]').value,
+            partida_elect: list.querySelector('input[name = "partida_elect"]').value,
+            estado: status
+            
+          };
+          
+          let resultEdit = await editRepresents(representsEdit);
+
+          if(resultEdit > 0){
+            
+            counterEdit += resultEdit;
+
+          }
+          textEdit = `Registros actualizados : ${counterEdit} \n`;
+
+          
+        }else if(list.classList.contains("add-data")){
+
+          let status = list.querySelector('input[name = "estado-check"]').checked ? "HABILITADO" : "DESHABILITADO";
+          let representsAdd = {
+              
+            idpersona_juridica: idpersonaJuridica,
+            representante_legal : list.querySelector('input[name = "representante_legal"]').value,
+            documento_tipo: list.querySelector('input[name = "documento_tipo"]').value,
+            documento_nro: list.querySelector('input[name = "documento_nro"]').value,
+            cargo: list.querySelector('input[name = "cargo"]').value,
+            partida_elect: list.querySelector('input[name = "partida_elect"]').value,
+            estado: status
+            
+          };
+          
+          let resultAdd = await addRepresents(representsAdd);
+          
+          if(resultAdd > 0){
+
+            counterAdd += resultAdd;
+
+            if(counterAdd > 0){
+      
+              register = true;
+              
+            }
+          }
+          textAdd = `Registros nuevos : ${counterAdd}\n`;
+          
+
+        }
+
       }
 
-      if(counter > 0){
+      if(counterEdit > 0 || counterAdd > 0 || counterDelete > 0){
+        sAlert.sweetWarningPromise("Actualizaciones realizadas", `${textEdit || ""} <br> ${textAdd || ""} <br> ${textDelete || ""}`)
+        .then(()=>{
 
-        register = true;
-        sAlert.sweetConfirmAdd("Éxito",`Se han realizado ${counter} reigistros de forma exitosa, ¿Deseas registrar otro?`,()=>{
-  
-            $("#search_person").reset();
-            $("#search_person").classList.remove('was-validated');
-            $("#form-data-client").reset();
-            $("#form-data-client").classList.remove('was-validated');
-            $("#form-data-represents").reset();
-            $("#form-data-represents").classList.remove('was-validated');
-            $("#cerrar").click();
-            
-            getClients();
-          
-          register = false;
-          },()=>{
-          window.location.href = "./index.php";
+          window.location.href = "./index.php"
         });
-  
+
       }else{
-        sAlert.sweetError("Ocurrió un error","No se han realizado registros");
+        sAlert.sweetWarning("No hay actualizaciones realizadas", "No has hecho nigun cambio de datos");
       }
     }
   }
@@ -1591,28 +1707,26 @@ document.addEventListener("DOMContentLoaded",()=>{
       let result = await global.sendAction(url, params);
 
       if(result){
-
-        idpersonaJuridica = dataClient.idpersona_juridica
-        ;
-        $("#open-modal-represents").removeAttribute("disabled");
-        $("#open-modal-represents").click();
         
-        if(result.filasAfect > 0){
+        if($("#tipo_persona").value == "JURÍDICA"){
+          
+          $("#open-modal-represents").removeAttribute("disabled");
+          $("#open-modal-represents").click();
+        
+        }else if($("#tipo_persona").value == "NATURAL"){
 
-          sAlert.sweetConfirmAdd("Éxito","El registro se ha guardado de forma existosa, ¿Deseas registrar otro?",()=>{
-
-            $("#search_person").reset();
-            $("#form-data-client").reset();
-            $("#form-data-client").classList.remove('was-validated');
-            getClients();
-
-          },()=>{
-            window.location.href = "./index.php";
-          });
-
-        }else{
-          sAlert.sweetError("Ocurrió un error","No se han realizado registros");
+          if(result.filasAfect > 0){
+  
+            sweetSuccess("Éxito", `Se han realizado logrado actualizar los reigistros de forma exitosa`, ()=>{
+  
+              window.location.href = "./index.php";
+            })
+  
+          }else{
+            sAlert.sweetError("Ocurrió un error","No se han realizado registros");
+          }
         }
+        
       }
     }
     catch(e){
@@ -1679,11 +1793,18 @@ document.addEventListener("DOMContentLoaded",()=>{
   //Cambia la visibilidad de los inputs dependiendo del tipo de persona
   function changeVisibilityInput(tPersona){
     
-    let perJInputs = $All(".pern-j")
-    let perNInputs = $All(".pern-n")
+    let perJInputs = $All(".pern-j");
+    let perNInputs = $All(".pern-n");
+
+    let forms = $("#form-data-client");
+    forms.classList.toggle("was-validated");
 
     if(tPersona == "JURÍDICA"){
 
+    
+      forms.classList.toggle("was-validated");
+
+      idpersonaJuridica = dataClient.idpersona_juridica;
 
       Array.from(perJInputs).forEach(input =>{
 
@@ -1705,6 +1826,9 @@ document.addEventListener("DOMContentLoaded",()=>{
 
     }else if(tPersona == "NATURAL"){
 
+      idpersonaJuridica = null;
+      forms.classList.toggle("was-validated");
+
       Array.from(perJInputs).forEach(input =>{
 
         if(input.disabled == false){
@@ -1723,7 +1847,7 @@ document.addEventListener("DOMContentLoaded",()=>{
         }
       });
 
-    }else if(tPersona == "CARNET DE EXTRANJERÍA"){}
+    }
 
   }
 
@@ -1732,7 +1856,7 @@ document.addEventListener("DOMContentLoaded",()=>{
     $("#documento_tipo").innerHTML = "";
 
     const defaultOption = document.createElement("option");
-    defaultOption.value = 0;
+    defaultOption.value = "";
     defaultOption.innerText = "Tipo de documento";
     $("#documento_tipo").appendChild(defaultOption);
 
@@ -1771,13 +1895,13 @@ document.addEventListener("DOMContentLoaded",()=>{
 
       $("#documento_nro").maxLength = 8;
       $("#documento_nro").minLength = 8;
-
+      
     }else if(tDocument.value == "CARNET DE EXTRANJERÍA"){
 
       $("#documento_nro").maxLength = 12;
       $("#documento_nro").minLength = 0;
       $("#nacionalidad").required = true;
-
+      
     }else if(tDocument.value == "RUC"){
 
       $("#documento_nro").maxLength = 11;
@@ -1800,7 +1924,7 @@ document.addEventListener("DOMContentLoaded",()=>{
     $("#form-data-client").addEventListener("submit",(e)=>{
 
       e.preventDefault(); 
-      validateDocument(dataClient, $("#documento_nro").value);
+      validateDocument(dataClients, $("#documento_nro").value);
     })
     
   $("#documento_tipo").addEventListener("change",(e)=>{
@@ -1819,31 +1943,11 @@ document.addEventListener("DOMContentLoaded",()=>{
   $("#form-data-represents").addEventListener("submit",(e)=>{
 
     e.preventDefault();
-    
     if(idpersonaJuridica){
 
       validateFom("#form-data-client",processRepresents(idpersonaJuridica));
     }else{
       sAlert.sweetError("No se ha realizado el registro","Necesitas registrar la empresa");
-    }
-  });
-  
-  $("#list-represents").addEventListener("click",(e)=>{
-
-    if(e.target.classList.contains("delete")){
-      if(numList > 1){
-        numList -= 1
-        
-        console.log(numList);
-        console.log("borrar");
-  
-        let li = e.target.closest(".list-group-item");
-  
-        li.remove();
-        storageIDDeleted(e);
-      }else{
-        sAlert.sweetError("No se puedo eliminar", "Necesitas al menos un registro")
-      }
     }
   });
 
@@ -1871,8 +1975,10 @@ document.addEventListener("DOMContentLoaded",()=>{
       }
   });
 
-  $("#list-represents li").addEventListener("click",(e)=>{
+  $("#list-represents").addEventListener("click",(e)=>{
+    numList = $All(".list-group-item").length;
 
+    console.log(numList);
     if(e.target.classList.contains("delete")){
       if(numList > 1){
         numList -= 1
@@ -1883,6 +1989,7 @@ document.addEventListener("DOMContentLoaded",()=>{
         let li = e.target.closest(".list-group-item");
   
         li.remove();
+        storageIDDeleted(e);
       }else{
         sAlert.sweetError("No se puedo eliminar", "Necesitas al menos un registro")
       }

@@ -157,6 +157,14 @@ if(isset($_POST["action"])){
                 echo json_encode($client->setRepresents($dataObtained));
             break;
 
+        case "inactiveRepresents": 
+            
+                $idrepresentante = $_POST["idrepresentante"];
+
+                echo json_encode($client->inactiveRepresents($idrepresentante));
+
+            break;
+        
         case "inactiveClient": 
             
                 $idcliente = $_POST["idcliente"];

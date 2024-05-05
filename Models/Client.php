@@ -263,6 +263,23 @@ class Client extends Conection{
     }
 
     /**
+     * Método para eliminar a un REPRESENTANTE LEGAL
+     */
+    public function inactiveRepresents($idrepresentante = 0){
+        
+        try{
+
+            $query = $this->conection->prepare("CALL spu_inactive_represents(?)");
+            $query->execute(array($idrepresentante));
+
+            return $query->fetch(PDO::FETCH_ASSOC);
+
+        }catch(Exception $e){
+            die($e->getMessage());
+        }
+    }
+
+    /**
      * Método para eliminar a un cliente
      */
     public function inactiveClient($idcliente = 0){

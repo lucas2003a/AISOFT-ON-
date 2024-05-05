@@ -845,7 +845,7 @@ document.addEventListener("DOMContentLoaded",()=>{
                   <h6 class="mb-1 text-dark font-weight-bold text-sm">Cargo</h6>
                 </div>
                 <div class="d-flex align-items-center text-sm">
-                      ${dataClient.cargo || "POR REGISTRAR"}
+                      ${represent.cargo || "POR REGISTRAR"}
                   </div>
               </li>
   
@@ -854,7 +854,7 @@ document.addEventListener("DOMContentLoaded",()=>{
                   <h6 class="mb-1 text-dark font-weight-bold text-sm">Partida electrónica</h6>
                 </div>
                 <div class="d-flex align-items-center text-sm">
-                      ${dataClient.partida_elect || "POR REGISTRAR"}
+                      ${represent.partida_elect || "POR REGISTRAR"}
                   </div>
               </li>
               <hr>

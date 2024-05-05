@@ -52,13 +52,36 @@ class Alert{
         
       Swal.fire({
           icon: "info",
-          title: "Oops...",
+          title: "Alerta",
           text: text,
           footer: footer,
           showConfirmButton: false,
-          timer:  3500
+          timer:  4000
         });
-  };
+    };
+
+    /**
+     * MUESTRA UN ALERTA TIPO WARNING CON PROMESA
+     * @param {string} text 
+     * @param {string} footer 
+     */
+    sweetWarningPromise(text, footer){
+
+      return new Promise ((resolve, reject) => {
+
+        Swal.fire({
+            icon: "info",
+            title: "Alerta",
+            text: text,
+            footer: footer,
+            showConfirmButton: false,
+            timer:  4000
+          }).then(()=>{
+            resolve();
+          });
+      });
+        
+    };
 
     /**
      * MUESTTRA MENSAJE DE ÉXITO CON PREGUNTA

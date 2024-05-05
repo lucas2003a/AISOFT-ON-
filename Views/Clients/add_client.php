@@ -1543,11 +1543,18 @@ document.addEventListener("DOMContentLoaded",()=>{
   //Cambia la visibilidad de los inputs dependiendo del tipo de persona
   function changeVisibilityInput(tPersona){
     
-    let perJInputs = $All(".pern-j")
-    let perNInputs = $All(".pern-n")
+    let perJInputs = $All(".pern-j");
+    let perNInputs = $All(".pern-n");
+
+    let forms = $("#form-data-client");
+    forms.classList.toggle("was-validated");
 
     if(tPersona == "JURÍDICA"){
 
+    
+      forms.classList.toggle("was-validated");
+
+      idpersonaJuridica = dataClient.idpersona_juridica;
 
       Array.from(perJInputs).forEach(input =>{
 
@@ -1569,6 +1576,9 @@ document.addEventListener("DOMContentLoaded",()=>{
 
     }else if(tPersona == "NATURAL"){
 
+      idpersonaJuridica = null;
+      forms.classList.toggle("was-validated");
+
       Array.from(perJInputs).forEach(input =>{
 
         if(input.disabled == false){
@@ -1587,7 +1597,7 @@ document.addEventListener("DOMContentLoaded",()=>{
         }
       });
 
-    }else if(tPersona == "CARNET DE EXTRANJERÍA"){}
+    }
 
   }
 
