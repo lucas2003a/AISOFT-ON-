@@ -981,7 +981,17 @@ BEGIN
 END $$
 DELIMITER ;
 
-call spu_list_represents_by_id_pj(42);
+DELIMITER $$
+CREATE PROCEDURE spu_inactive_represents(IN _idrepresentante INT)
+BEGIN
+	UPDATE rep_legales_clientes
+		SET
+			inactive_at = CURDATE()
+        WHERE idrepresentante = _idrepresentante;
+	
+    SELECT ROW_COUNT() AS filasAfect;
+END $$
+DELIMITER;
 
 DELIMITER $$
 CREATE PROCEDURE spu_set_represents
@@ -1004,7 +1014,8 @@ BEGIN
             documento_nro 			= _documento_nro,
             cargo					= _cargo,
             partida_elect 			= _partida_elect,
-            estado 					= _estado 	
+            estado 					= _estado, 	
+            update_at				= CURDATE()
         WHERE idrepresentante = _idrepresentante;
         
 	SELECT ROW_COUNT() AS filasAfect;

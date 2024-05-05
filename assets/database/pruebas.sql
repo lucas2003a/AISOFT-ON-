@@ -62,3 +62,12 @@ update personas_juridicas set representante_legal = "AAAAAA",
                                 partida_elect = "PARTIDA Nº2";
 			
 select * from activos where det_casa IS NOT NULL;
+
+select * from rep_legales_clientes where documento_nro = "10796377";
+select * from personas_juridicas where razon_social LIKE CONCAT("biblioteca","%");
+DELETE from rep_legales_clientes where documento_nro = "07266216";
+
+-- CONSULTA PARA LOS LOTES PARA TU PRESUPUESTO(BORRA TODOS LOS IDPRESUPUESTO 1)
+select act.idproyecto, act.sublote, act.idpresupuesto from activos act left join presupuestos pres ON pres.idpresupuesto = act.idpresupuesto
+WHERE pres.idpresupuesto IS NULL
+AND act.inactive_at IS NULL;
