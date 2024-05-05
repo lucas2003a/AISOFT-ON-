@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 05-05-2024 a las 13:38:52
+-- Tiempo de generación: 06-05-2024 a las 01:41:37
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -67,6 +67,13 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_add_assets` (IN `_idproyecto` I
                 );
                 
 	SELECT ROW_COUNT() as filasAfect;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_add_budget` (IN `_codigo` CHAR(8), IN `_modelo` VARCHAR(30), IN `_idusuario` INT)   BEGIN
+	INSERT INTO presupuestos(modelo, idusuario, codigo)
+					VALUES(_modelo, _idusuario, _codigo);
+                    
+	SELECT @@last_insert_id AS idpresupuesto;
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_add_clients_personj` (IN `_tipo_persona` VARCHAR(10), IN `_razon_social` VARCHAR(60), IN `_documento_tipo` VARCHAR(20), IN `_documento_nro` VARCHAR(12), IN `_iddistrito` INT, IN `_direccion` VARCHAR(70), IN `_idusuario` INT)   BEGIN
@@ -246,6 +253,20 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_add_represents` (IN `_idpersona
 		SELECT ROW_COUNT() AS filasAfect;
 END$$
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_get_budget_by_id` (IN `_idpresupuesto` INT)   BEGIN
+	SELECT
+		pres.idpresupuesto,
+        pres.codigo,
+        pres.modelo,
+        pers.nombres AS usuario
+		FROM presupuestos pres
+        INNER JOIN usuarios usu ON usu.idusuario = pres.idusuario
+        INNER JOIN personas pers ON pers.idpersona = usu.idpersona
+        WHERE pres.idpresupuesto = _idpresupuesto
+        AND pres.inactive_at IS NULL
+        ORDER BY pres.codigo ASC;
+END$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_get_fullUbigeo` (IN `_distrito` VARCHAR(45), IN `_provincia` VARCHAR(45), IN `_departamento` VARCHAR(45))   BEGIN
 	SELECT 	
 		dist.iddistrito,
@@ -398,6 +419,15 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_inactive_assets` (IN `_idactivo
     END IF;
     
     SELECT ROW_COUNT() AS filasAfect;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_inactive_budget` (IN `_idpresupuesto` INT)   BEGIN
+	UPDATE presupuestos
+		SET 
+			inactive_at = CURDATE()
+        WHERE idpresupuesto = _idpresupuesto;
+        
+	SELECT ROW_COUNT() AS filasAfect;
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_inactive_person` (IN `_idpersona` INT)   BEGIN 
@@ -562,6 +592,27 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_assets_short_idpr` (IN `_i
 	SELECT * FROM vws_list_assets_short
     WHERE idproyecto = _idproyecto
     AND propietario_lote = _propietario_lote;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_brands` ()   BEGIN
+	SELECT
+		idmarca,
+        marca
+		FROM marcas
+        ORDER BY marca ASC;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_budgets` ()   BEGIN
+	SELECT
+		pres.idpresupuesto,
+        pres.codigo,
+        pres.modelo,
+        pers.nombres AS usuario
+		FROM presupuestos pres
+        INNER JOIN usuarios usu ON usu.idusuario = pres.idusuario
+        INNER JOIN personas pers ON pers.idpersona = usu.idpersona
+        WHERE pres.inactive_at IS NULL
+        ORDER BY pres.codigo ASC;
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_clients_by_docNro` (IN `_tipo_persona` VARCHAR(10), IN `_documento_nro` VARCHAR(12))   BEGIN
@@ -739,9 +790,59 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_companies` ()   BEGIN
     ORDER BY 2;
 END$$
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_cost_category` ()   BEGIN
+	SELECT
+		idcategoria_costo,
+        categoria_costo
+		FROM categoria_costos;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_cost_subcategory` (IN `_idcategoria_costo` INT)   BEGIN
+	SELECT 
+		subcat.idsubcategoria_costo,
+		cat.idcategoria_costo,
+        cat.categoria_costo,
+        subcat.subcategoria_costo
+		FROM subcategoria_costos subcat
+        INNER JOIN categoria_costos cat ON cat.idcategoria_costo  = subcat.idcategoria_costo
+        WHERE subcat.idcategoria_costo = _idcategoria_costo 
+        ORDER BY subcat.subcategoria_costo ASC;
+END$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_departaments` ()   BEGIN
 	SELECT * FROM departamentos
     ORDER BY 2 ASC;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_detail_cost` (IN `_idpresupuesto` INT)   BEGIN
+		SELECT
+			detcost.iddetalle_costos,
+			detcost.idpresupuesto,
+			cat.categoria_costo,
+			subcategoria_costo,
+            CASE 
+				WHEN detcost.idtipo_material IS NULL THEN
+				(CONCAT(marc.marca, " - ", mat.material, " - ",tmat.tipo_material, " - ",unimed.unidad_medida))
+				ELSE
+                detcost.detalle
+			END AS detalle,
+            detcost.cantidad,
+            detcost.precio_unitario,
+            (detcost.cantidad * detcost.precio_unitario) AS total,
+            pers.nombres AS usuario
+			FROM detalle_costos detcost
+			INNER JOIN presupuestos pres ON pres.idpresupuesto = detcost.idpresupuesto
+			INNER JOIN subcategoria_costos subcat ON subcat.idsubcategoria_costo = detcost.idsubcategoria_costo
+			INNER JOIN categoria_costos cat ON cat.idcategoria_costo = subcat.idcategoria_costo
+			INNER JOIN tipos_materiales tmat ON tmat.idtipo_material = detcost.idtipo_material
+            INNER JOIN materiales mat ON mat.idmaterial = tmat.idmaterial
+            INNER JOIN marcas marc ON marc.idmarca = mat.idmarca
+            INNER JOIN unidades_medida unimed ON unimed.idunidad_medida = mat.idunidad_medida
+			INNER JOIN usuarios usu ON usu.idusuario = detcost.idusuario
+			INNER JOIN personas pers ON pers.idpersona = usu.idpersona
+			WHERE detcost.idpresupuesto = _idpresupuesto
+			AND detcost.inactive_at IS NULL
+			ORDER BY cat.categoria_costo, subcat.subcategoria_costo ASC;
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_districts` (IN `_idprovincia` INT)   BEGIN
@@ -749,6 +850,20 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_districts` (IN `_idprovinc
     FROM distritos
     WHERE idprovincia = _idprovincia
     ORDER BY 3 ASC;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_lots_ByIdBudget` (IN `_idpresupuesto` INT)   BEGIN
+	SELECT 	
+			act.idactivo,
+			act.idproyecto, 
+            proy.denominacion,
+			act.sublote, 
+            act.idpresupuesto 
+            FROM activos act 
+            INNER JOIN proyectos proy ON proy.idproyecto = act.idproyecto
+            INNER JOIN presupuestos pres ON pres.idpresupuesto = act.idpresupuesto
+			WHERE act.idpresupuesto = _idpresupuesto
+            AND act.inactive_at IS NULL;
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_lots_noBudgets` ()   BEGIN
@@ -763,6 +878,33 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_lots_noBudgets` ()   BEGIN
             LEFT JOIN presupuestos pres ON pres.idpresupuesto = act.idpresupuesto
 			WHERE pres.idpresupuesto IS NULL
 			AND act.inactive_at IS NULL;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_lots_withBudgets` ()   BEGIN
+	SELECT 	
+			act.idactivo,
+			act.idproyecto, 
+            proy.denominacion,
+			act.sublote, 
+            act.idpresupuesto 
+            FROM activos act 
+            INNER JOIN proyectos proy ON proy.idproyecto = act.idproyecto
+            INNER JOIN presupuestos pres ON pres.idpresupuesto = act.idpresupuesto
+			WHERE act.inactive_at IS NULL;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_materials` (IN `_idmarca` INT)   BEGIN
+	SELECT 
+		mat.idmaterial,
+        marc.idmarca,
+        marc.marca,
+        mat.material,
+        unimed.unidad_medida
+		FROM materiales mat
+        INNER JOIN marcas marc ON marc.idmarca = mat.idmarca
+        INNER JOIN unidades_medida unimed ON unimed.idunidad_medida = mat.idunidad_medida
+        WHERE marc.idmarca = _idmarca
+        ORDER BY mat.material ASC;
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_person` ()   BEGIN
@@ -907,6 +1049,26 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_separation_ByIdAsset` (IN 
         AND sep.inactive_at IS NULL;
 END$$
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_types_materials` (IN `_idmaterial` INT)   BEGIN
+	SELECT 
+		tmat.idtipo_material,
+        mat.idmaterial,
+        mat.material,
+        tmat.tipo_material,
+        tmat.precio_unitario,
+        tmat.create_at,
+        tmat.update_at
+		FROM tipos_materiales tmat
+        INNER JOIN materiales mat ON mat.idmaterial = tmat.idmaterial
+        WHERE tmat.idmaterial = _idmaterial
+        ORDER BY tmat.tipo_material ASC;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_units_measuraments` ()   BEGIN
+	SELECT * FROM unidades_medida
+    ORDER BY unidad_medida ASC;
+END$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_lits_contracts_full_by_id` (IN `_idcontrato` INT)   BEGIN
 	
     SELECT 
@@ -925,6 +1087,20 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_lits_contracts_full_by_id` (IN 
         FROM contatos
 		WHERE idcontrato = _idcontrato;
 			
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_search_budgets` (IN `_codigo` VARCHAR(8))   BEGIN
+	SELECT
+		pres.idpresupuesto,
+        pres.codigo,
+        pres.modelo,
+        pers.nombres AS usuario
+		FROM presupuestos pres
+        INNER JOIN usuarios usu ON usu.idusuario = pres.idusuario
+        INNER JOIN personas pers ON pers.idpersona = usu.idpersona
+        WHERE pres.codigo LIKE CONCAT(_codigo,"%")
+        AND pres.inactive_at IS NULL
+        ORDER BY pres.codigo ASC;
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_set_assets` (IN `_idactivo` INT, IN `_idproyecto` INT, IN `_tipo_activo` VARCHAR(10), IN `_imagen` VARCHAR(100), IN `_estado` VARCHAR(10), IN `_sublote` TINYINT, IN `_direccion` CHAR(70), IN `_moneda_venta` VARCHAR(10), IN `_area_terreno` DECIMAL(5,2), IN `_zcomunes_porcent` TINYINT, IN `_partida_elect` VARCHAR(100), IN `_latitud` VARCHAR(20), IN `_longitud` VARCHAR(20), IN `_perimetro` JSON, IN `_idpresupuesto` INT, IN `_propietario_lote` VARCHAR(70), IN `_precio_lote` DECIMAL(8,2), IN `_precio_construccion` DECIMAL(8,2), IN `_idusuario` INT)   BEGIN
@@ -953,6 +1129,18 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_set_assets` (IN `_idactivo` INT
 			idactivo = _idactivo;
             
 		SELECT ROW_COUNT() AS filasAfect;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_set_budget` (IN `_idpresupuesto` INT, IN `_codigo` CHAR(8), IN `_modelo` VARCHAR(30), IN `_idusuario` INT)   BEGIN
+	UPDATE presupuestos
+		SET
+			codigo 		= _codigo,
+            modelo		= _modelo,
+            idusuario 	= _idusuario,
+            update_at 	= CURDATE()
+		WHERE idpresupuesto = _idpresupuesto;
+        
+	SELECT ROW_COUNT() AS filasAfect;
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_set_clientJ` (IN `_idcliente` INT, IN `_tipo_persona` VARCHAR(10), IN `_idpersona_juridica` INT, IN `_razon_social` VARCHAR(60), IN `_documento_tipo` VARCHAR(20), IN `_documento_nro` VARCHAR(12), IN `_iddistrito` INT, IN `_direccion` VARCHAR(70), IN `_idusuario` INT)   BEGIN
@@ -3959,8 +4147,8 @@ CREATE TABLE `presupuestos` (
 --
 
 INSERT INTO `presupuestos` (`idpresupuesto`, `modelo`, `create_at`, `update_at`, `inactive_at`, `idusuario`, `codigo`) VALUES
-(1, 'casa propia', '2024-04-19', NULL, NULL, 1, ''),
-(2, 'casita mia', '2024-04-19', NULL, NULL, 1, ''),
+(1, 'casa propia', '2024-04-19', NULL, NULL, 1, 'PRES-007'),
+(2, 'casita mia', '2024-04-19', NULL, NULL, 1, 'PRES-006'),
 (3, 'Casa Moderna', '2024-05-05', NULL, NULL, 1, 'PRES-001'),
 (4, 'Oficina Ejecutiva', '2024-05-05', NULL, NULL, 2, 'PRES-002'),
 (5, 'Apartamento Minimalista', '2024-05-05', NULL, NULL, 3, 'PRES-003'),
@@ -4496,7 +4684,7 @@ INSERT INTO `sustentos_cuotas` (`idsustento_cuota`, `idcuota`, `ruta`, `create_a
 
 CREATE TABLE `tipos_materiales` (
   `idtipo_material` int(11) NOT NULL,
-  `idmarca` int(11) NOT NULL,
+  `idmaterial` int(11) NOT NULL,
   `tipo_material` varchar(45) NOT NULL,
   `precio_unitario` decimal(8,2) NOT NULL,
   `create_at` date NOT NULL DEFAULT curdate(),
@@ -4508,7 +4696,7 @@ CREATE TABLE `tipos_materiales` (
 -- Volcado de datos para la tabla `tipos_materiales`
 --
 
-INSERT INTO `tipos_materiales` (`idtipo_material`, `idmarca`, `tipo_material`, `precio_unitario`, `create_at`, `update_at`, `inactive_at`) VALUES
+INSERT INTO `tipos_materiales` (`idtipo_material`, `idmaterial`, `tipo_material`, `precio_unitario`, `create_at`, `update_at`, `inactive_at`) VALUES
 (1, 1, 'Tubo PVC 1\"', 25.00, '2024-05-05', NULL, NULL),
 (2, 1, 'Tubo PVC 2\"', 35.00, '2024-05-05', NULL, NULL),
 (3, 2, 'Bolsa de Cemento APU 50kg', 26.00, '2024-05-05', NULL, NULL),
@@ -4966,7 +5154,7 @@ ALTER TABLE `sustentos_cuotas`
 ALTER TABLE `tipos_materiales`
   ADD PRIMARY KEY (`idtipo_material`),
   ADD UNIQUE KEY `uk_tipo_material_t_material` (`tipo_material`),
-  ADD KEY `fk_idmarca_t_materiales` (`idmarca`);
+  ADD KEY `fk_idmaterial_t_materiales` (`idmaterial`);
 
 --
 -- Indices de la tabla `unidades_medida`
@@ -5353,7 +5541,7 @@ ALTER TABLE `sustentos_cuotas`
 -- Filtros para la tabla `tipos_materiales`
 --
 ALTER TABLE `tipos_materiales`
-  ADD CONSTRAINT `fk_idmarca_t_materiales` FOREIGN KEY (`idmarca`) REFERENCES `marcas` (`idmarca`);
+  ADD CONSTRAINT `fk_idmaterial_t_materiales` FOREIGN KEY (`idmaterial`) REFERENCES `materiales` (`idmaterial`);
 
 --
 -- Filtros para la tabla `usuarios`

@@ -219,13 +219,13 @@ CREATE TABLE materiales
 CREATE TABLE tipos_materiales
 (
 	idtipo_material 		INT PRIMARY KEY AUTO_INCREMENT,
-    idmarca					INT 			NOT NULL,
+    idmaterial				INT 			NOT NULL,
     tipo_material			VARCHAR(45)		NOT NULL,
     precio_unitario			DECIMAL(8,2)	NOT NULL,
     create_at				DATE 			NOT NULL DEFAULT(CURDATE()),
     update_at				DATE			NULL,
     inactive_at				DATE 			NULL,
-    CONSTRAINT fk_idmarca_t_materiales FOREIGN KEY(idmarca) REFERENCES marcas(idmarca),
+    CONSTRAINT fk_idmaterial_t_materiales FOREIGN KEY(idmaterial) REFERENCES materiales(idmaterial),
     CONSTRAINT uk_tipo_material_t_material UNIQUE(tipo_material) 
 )ENGINE = INNODB;
 

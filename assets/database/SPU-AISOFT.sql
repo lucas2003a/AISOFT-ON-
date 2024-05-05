@@ -1136,6 +1136,290 @@ BEGIN
 END $$
 DELIMITER ;
 
+-- CATEGORíAS COSTOS
+DELIMITER $$
+CREATE PROCEDURE spu_list_cost_category()
+BEGIN
+	SELECT
+		idcategoria_costo,
+        categoria_costo
+		FROM categoria_costos;
+END $$
+DELIMITER ;
+
+-- SUBCATEGORIAS COSTOS
+DELIMITER $$
+CREATE PROCEDURE spu_list_cost_subcategory(IN  _idcategoria_costo INT)
+BEGIN
+	SELECT 
+		subcat.idsubcategoria_costo,
+		cat.idcategoria_costo,
+        cat.categoria_costo,
+        subcat.subcategoria_costo
+		FROM subcategoria_costos subcat
+        INNER JOIN categoria_costos cat ON cat.idcategoria_costo  = subcat.idcategoria_costo
+        WHERE subcat.idcategoria_costo = _idcategoria_costo 
+        ORDER BY subcat.subcategoria_costo ASC;
+END $$
+DELIMITER ;
+
+-- MARCAS
+DELIMITER $$
+CREATE PROCEDURE spu_list_brands()
+BEGIN
+	SELECT
+		idmarca,
+        marca
+		FROM marcas
+        ORDER BY marca ASC;
+END $$
+DELIMITER ;
+
+-- UNIDADES DE MEDIDA
+DELIMITER $$
+CREATE PROCEDURE spu_list_units_measuraments()
+BEGIN
+	SELECT * FROM unidades_medida
+    ORDER BY unidad_medida ASC;
+END $$
+DELIMITER ;
+
+-- MATERIALES
+DELIMITER $$
+CREATE PROCEDURE spu_list_materials(IN _idmarca INT)
+BEGIN
+	SELECT 
+		mat.idmaterial,
+        marc.idmarca,
+        marc.marca,
+        mat.material,
+        unimed.unidad_medida
+		FROM materiales mat
+        INNER JOIN marcas marc ON marc.idmarca = mat.idmarca
+        INNER JOIN unidades_medida unimed ON unimed.idunidad_medida = mat.idunidad_medida
+        WHERE marc.idmarca = _idmarca
+        ORDER BY mat.material ASC;
+END $$
+DELIMITER ;
+
+-- TIPOS DE MATERIALES
+DELIMITER $$
+CREATE PROCEDURE spu_list_types_materials(IN _idmaterial INT)
+BEGIN
+	SELECT 
+		tmat.idtipo_material,
+        mat.idmaterial,
+        mat.material,
+        tmat.tipo_material,
+        tmat.precio_unitario,
+        tmat.create_at,
+        tmat.update_at
+		FROM tipos_materiales tmat
+        INNER JOIN materiales mat ON mat.idmaterial = tmat.idmaterial
+        WHERE tmat.idmaterial = _idmaterial
+        ORDER BY tmat.tipo_material ASC;
+END $$
+DELIMITER ;
+
+-- PRESUPUESTOS
+DELIMITER $$
+CREATE PROCEDURE spu_list_lots_noBudgets()
+BEGIN
+	SELECT 	
+			act.idactivo,
+			act.idproyecto, 
+            proy.denominacion,
+			act.sublote, 
+            act.idpresupuesto 
+            FROM activos act 
+            INNER JOIN proyectos proy ON proy.idproyecto = act.idproyecto
+            LEFT JOIN presupuestos pres ON pres.idpresupuesto = act.idpresupuesto
+			WHERE pres.idpresupuesto IS NULL
+			AND act.inactive_at IS NULL;
+END $$
+DELIMITER ;
+
+DELIMITER $$
+CREATE PROCEDURE spu_list_lots_withBudgets()
+BEGIN
+	SELECT 	
+			act.idactivo,
+			act.idproyecto, 
+            proy.denominacion,
+			act.sublote, 
+            act.idpresupuesto 
+            FROM activos act 
+            INNER JOIN proyectos proy ON proy.idproyecto = act.idproyecto
+            INNER JOIN presupuestos pres ON pres.idpresupuesto = act.idpresupuesto
+			WHERE act.inactive_at IS NULL;
+END $$
+DELIMITER ;
+
+DELIMITER $$
+CREATE PROCEDURE spu_list_lots_ByIdBudget(IN _idpresupuesto INT)
+BEGIN
+	SELECT 	
+			act.idactivo,
+			act.idproyecto, 
+            proy.denominacion,
+			act.sublote, 
+            act.idpresupuesto 
+            FROM activos act 
+            INNER JOIN proyectos proy ON proy.idproyecto = act.idproyecto
+            INNER JOIN presupuestos pres ON pres.idpresupuesto = act.idpresupuesto
+			WHERE act.idpresupuesto = _idpresupuesto
+            AND act.inactive_at IS NULL;
+END $$
+DELIMITER ;
+
+DELIMITER $$
+CREATE PROCEDURE spu_list_budgets()
+BEGIN
+	SELECT
+		pres.idpresupuesto,
+        pres.codigo,
+        pres.modelo,
+        pers.nombres AS usuario
+		FROM presupuestos pres
+        INNER JOIN usuarios usu ON usu.idusuario = pres.idusuario
+        INNER JOIN personas pers ON pers.idpersona = usu.idpersona
+        WHERE pres.inactive_at IS NULL
+        ORDER BY pres.codigo ASC;
+END $$
+DELIMITER ;
+
+DELIMITER $$
+CREATE PROCEDURE spu_search_budgets(IN _codigo VARCHAR(8))
+BEGIN
+	SELECT
+		pres.idpresupuesto,
+        pres.codigo,
+        pres.modelo,
+        pers.nombres AS usuario
+		FROM presupuestos pres
+        INNER JOIN usuarios usu ON usu.idusuario = pres.idusuario
+        INNER JOIN personas pers ON pers.idpersona = usu.idpersona
+        WHERE pres.codigo LIKE CONCAT(_codigo,"%")
+        AND pres.inactive_at IS NULL
+        ORDER BY pres.codigo ASC;
+END $$
+DELIMITER ;
+
+DELIMITER $$
+CREATE PROCEDURE spu_get_budget_by_id(IN _idpresupuesto INT)
+BEGIN
+	SELECT
+		pres.idpresupuesto,
+        pres.codigo,
+        pres.modelo,
+        pers.nombres AS usuario
+		FROM presupuestos pres
+        INNER JOIN usuarios usu ON usu.idusuario = pres.idusuario
+        INNER JOIN personas pers ON pers.idpersona = usu.idpersona
+        WHERE pres.idpresupuesto = _idpresupuesto
+        AND pres.inactive_at IS NULL
+        ORDER BY pres.codigo ASC;
+END $$
+DELIMITER ;
+
+DELIMITER $$
+CREATE PROCEDURE spu_add_budget
+(
+	IN _codigo		CHAR(8),
+    IN _modelo 		VARCHAR(30),
+    IN _idusuario 	INT
+)
+BEGIN
+	INSERT INTO presupuestos(modelo, idusuario, codigo)
+					VALUES(_modelo, _idusuario, _codigo);
+                    
+	SELECT @@last_insert_id AS idpresupuesto;
+END $$
+DELIMITER ;
+
+DELIMITER $$
+CREATE PROCEDURE spu_set_budget
+(
+	IN _idpresupuesto 		INT,
+    IN _codigo 				CHAR(8),
+    IN _modelo				VARCHAR(30),
+    IN _idusuario			INT
+)
+BEGIN
+	UPDATE presupuestos
+		SET
+			codigo 		= _codigo,
+            modelo		= _modelo,
+            idusuario 	= _idusuario,
+            update_at 	= CURDATE()
+		WHERE idpresupuesto = _idpresupuesto;
+        
+	SELECT ROW_COUNT() AS filasAfect;
+END $$
+DELIMITER ;
+
+DELIMITER $$
+CREATE PROCEDURE spu_inactive_budget(IN _idpresupuesto INT)
+BEGIN
+	UPDATE presupuestos
+		SET 
+			inactive_at = CURDATE()
+        WHERE idpresupuesto = _idpresupuesto;
+        
+	SELECT ROW_COUNT() AS filasAfect;
+END $$
+DELIMITER ;
+
+-- DETALLE DE COSTOS
+DELIMITER $$
+CREATE PROCEDURE spu_list_detail_cost(IN _idpresupuesto INT)
+BEGIN
+		SELECT
+			detcost.iddetalle_costos,
+			detcost.idpresupuesto,
+			cat.categoria_costo,
+			subcategoria_costo,
+            CASE 
+				WHEN detcost.idtipo_material IS NULL THEN
+				(CONCAT(marc.marca, " - ", mat.material, " - ",tmat.tipo_material, " - ",unimed.unidad_medida))
+				ELSE
+                detcost.detalle
+			END AS detalle,
+            detcost.cantidad,
+            detcost.precio_unitario,
+            (detcost.cantidad * detcost.precio_unitario) AS total,
+            pers.nombres AS usuario
+			FROM detalle_costos detcost
+			INNER JOIN presupuestos pres ON pres.idpresupuesto = detcost.idpresupuesto
+			INNER JOIN subcategoria_costos subcat ON subcat.idsubcategoria_costo = detcost.idsubcategoria_costo
+			INNER JOIN categoria_costos cat ON cat.idcategoria_costo = subcat.idcategoria_costo
+			INNER JOIN tipos_materiales tmat ON tmat.idtipo_material = detcost.idtipo_material
+            INNER JOIN materiales mat ON mat.idmaterial = tmat.idmaterial
+            INNER JOIN marcas marc ON marc.idmarca = mat.idmarca
+            INNER JOIN unidades_medida unimed ON unimed.idunidad_medida = mat.idunidad_medida
+			INNER JOIN usuarios usu ON usu.idusuario = detcost.idusuario
+			INNER JOIN personas pers ON pers.idpersona = usu.idpersona
+			WHERE detcost.idpresupuesto = _idpresupuesto
+			AND detcost.inactive_at IS NULL
+			ORDER BY cat.categoria_costo, subcat.subcategoria_costo ASC;
+END $$
+DELIMITER ;
+
+SELECT * FROM detalle_costos where idpresupuesto = 2 order by idtipo_material asc;
+CALL spu_list_detail_cost(1);
+
+DELIMITER $$
+CREATE PROCEDURE ()
+BEGIN
+END $$
+DELIMITER ;
+
+DELIMITER $$
+CREATE PROCEDURE ()
+BEGIN
+END $$
+DELIMITER ;
+
 -- SEPARACIONES
 DELIMITER $$
 CREATE PROCEDURE spu_list_separations()
@@ -1362,4 +1646,3 @@ BEGIN
 END $$
 DELIMITER ;
 
-SELECT * FROM personas;
