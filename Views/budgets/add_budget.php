@@ -365,7 +365,7 @@
 
       <!-- CONTENIDO -->
       <div class="row">
-        <div class="col-lg-8">
+        <div class="col-lg-9">
 
           <!-- IMAGEN -->
           <div class="row">
@@ -458,7 +458,7 @@
          
         <!-- ---------- -->  
         </div>
-        <div class="col-lg-4">
+        <div class="col-lg-3">
           <div class="card h-100">
             <div class="card-header pb-0 p-3">
               <div class="row">
@@ -470,44 +470,9 @@
             <div class="card-body p-3 pb-0">
               <ul class="list-group" id="proyectos">
                 <div class="accordion accordion-flush" id="accordion-proyectos">
-                  <div class="accordion-item">
-                    <h2 class="accordion-header">
-                      <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="" />
-                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
-                          <label class="form-check-label" for=""> Accordion Item #1 </label>
-                        </button>
-                      </div>
-                      
-                    </h2>
-                    <div id="flush-collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordion-proyectos">
-                      <div class="accordion-body">Placeholder content for this accordion, which is intended to demonstrate the <code>.accordion-flush</code> class. This is the first item's accordion body.</div>
-                    </div>
-                  </div>
-                  <div class="accordion-item">
-                    <h2 class="accordion-header">
-                      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
-                        Accordion Item #2
-                      </button>
-                    </h2>
-                    <div id="flush-collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordion-proyectos">
-                      <div class="accordion-body">Placeholder content for this accordion, which is intended to demonstrate the <code>.accordion-flush</code> class. This is the second item's accordion body. Let's imagine this being filled with some actual content.</div>
-                    </div>
-                  </div>
-                  <div class="accordion-item">
-                    <h2 class="accordion-header">
-                      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseThree" aria-expanded="false" aria-controls="flush-collapseThree">
-                        Accordion Item #3
-                      </button>
-                    </h2>
-                    <div id="flush-collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordion-proyectos">
-                      <div class="accordion-body">Placeholder content for this accordion, which is intended to demonstrate the <code>.accordion-flush</code> class. This is the third item's accordion body. Nothing more exciting happening here in terms of content, but just filling up the space to make it look, at least at first glance, a bit more representative of how this would look in a real-world application.</div>
-                    </div>
-                  </div>
+                  
+                  <!-- RENDER ACOORDION -->
                 </div>
-
-              
-
               </ul>
             </div>
           </div>
@@ -674,7 +639,12 @@
           
           newContent += `
           <div id="flush-collapse-${element.idproyecto}" class="accordion-collapse collapse" data-bs-parent="#accordion-proyectos">
-          <p class="accordion-body" style="line-height:0px; font-size:10px;">${element2.sublote}</p>
+            <div class="form-check" style="margin: 0px 20px; display:flex; align-content:center;">
+            <input class="form-check-input" type="checkbox" style="height:20px;" data-sublote="${element2.sublote}"/>
+              <label class="form-check-label" for="sublote" style="font-size:10px; margin-top:10px;"> 
+                Lote - ${element2.sublote}
+              </label>
+            </div>
           </div>
           `;
         }
@@ -683,18 +653,17 @@
       newButton  = `
       
       <div class="accordion-item">
-      <h2 class="accordion-header">
-      <div class="form-check">
-            <input class="form-check-input" type="checkbox" data-set="${element.idproyecto}"/>
+        <h2 class="accordion-header">
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" style="height:30px;" data-idproyecto="${element.idproyecto}"/>
             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapse-${element.idproyecto}" aria-expanded="false" aria-controls="flush-collapse-${element.idproyecto}">
-              <label class="form-check-label" for=""> ${element.denominacion} </label>
+              <label class="form-check-label" for="denominacion" style="font-size:10px;"> <strong>${element.denominacion}</strong> </label>
             </button>
-            </div>
-            <div class="scrollable-content">
+          </div>
+          <div class="scrollable-content">
             ${newContent}
-            </div>  
+          </div>  
         </h2>
-        
       </div>
       `;
 
