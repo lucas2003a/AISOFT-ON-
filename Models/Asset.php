@@ -237,5 +237,96 @@ class Asset extends Conection{
             die($e->getMessage());
         }
     }
+
+    /**
+     * Método para actualizar el idpresupuesto
+     */
+    public function setIdBudget($dataAsset = []){
+
+        try{
+
+            $query = $this->conection->prepare("CALL spu_set_idpresupuesto(?,?,?)");
+            $query->execute(
+                array(
+                    $dataAsset["idactivo"],
+                    $dataAsset["idpresupuesto"],
+                    $dataAsset["idusuario"]
+                )
+            );
+
+            return $query->fetch(PDO::FETCH_ASSOC);
+        }
+        catch(Exception $e){
+            die($e->getMessage());
+        }
+    }
+
+    /**
+     * Lista los lotes sin sin presupuesto
+     */
+    public function listLotsNoBudgets(){
+
+        try{
+
+            $query = $this->conection->prepare("CALL spu_list_lots_noBudgets()");
+            $query->execute();
+
+            return $query->fetchAll(PDO::FETCH_ASSOC);
+        }
+        catch(Exception $e){
+            die($e->getMessage());
+        }
+    }
+
+    /**
+     * Lista los lotes con presupuesto 
+     */
+    public function listLotsWithBudget(){
+
+        try{
+
+            $query = $this->conection->prepare("CALL spu_list_lots_withBudgets()");
+            $query->execute();
+
+            return $query->fetchAll(PDO::FETCH_ASSOC);
+        }
+        catch(Exception $e){
+            die($e->getMessage());
+        }
+    }
+
+    /**
+     * Lista los lotes por el idpresupuesto
+     */
+    public function listLotsByIdpresupuesto($idpresupuesto = 0){
+
+        try{
+
+            $query = $this->conection->prepare("CALL spu_list_lots_ByIdBudget(?)");
+            $query->execute(array($idpresupuesto));
+
+            return $query->fetchAll(PDO::FETCH_ASSOC);
+        }
+        catch(Exception $e){
+            die($e->getMessage());
+        }
+    }
+
+    /**
+     * Lista los lotes si contienen o no contien el idpresupuesto
+     */
+    public function listLostForBudget(){
+
+        try{
+
+            $query = $this->conection->prepare("CALL spu_list_lots_ForBudget()");
+            $query->execute();
+
+            return $query->fetchAll(PDO::FETCH_ASSOC);
+        }
+        catch(Exception $e){
+            die($e->getMessage());
+        }
+    }
 }
 ?>

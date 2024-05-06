@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 06-05-2024 a las 01:41:15
+-- Tiempo de generación: 06-05-2024 a las 09:21:28
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -193,6 +193,29 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_add_contracts` (IN `_tipo_contr
 	-- RETORNA EL ULTIMO IDCONTRATO
     SELECT @@LAST_INSERT_ID "idusuario";
 
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_add_detail_cost` (IN `_idpresupuesto` INT, IN `_idsubcategoria_costo` INT, IN `_idtipo_material` INT, IN `_detalle` VARCHAR(100), IN `_cantidad` TINYINT, IN `_precio_unitario` DECIMAL(8,2), IN `_idusuario` INT)   BEGIN
+	INSERT INTO detalle_costos(
+								idpresupuesto, 
+                                idsubacategoria_costo, 
+                                idtipo_material,
+                                detalle,
+                                cantidad,
+                                precio_unitario,
+                                idusuario
+                                )
+						VALUES(
+								_idpresupuesto, 
+                                _idsubacategoria_costo, 
+                                NULLIF(_idtipo_material,""),
+                                NULLIF(_detalle,""),
+                                _cantidad,
+                                _precio_unitario,
+                                _idusuario
+							);
+                            
+	SELECT ROW_COUNT() AS filasAfect;
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_add_person` (IN `_nombres` VARCHAR(40), IN `_apellidos` VARCHAR(40), IN `_documento_tipo` VARCHAR(20), IN `_documento_nro` VARCHAR(12), IN `_estado_civil` VARCHAR(10), IN `_iddistrito` INT, IN `_direccion` VARCHAR(60), IN `_idusuario` INT)   BEGIN
@@ -428,6 +451,16 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_inactive_budget` (IN `_idpresup
         WHERE idpresupuesto = _idpresupuesto;
         
 	SELECT ROW_COUNT() AS filasAfect;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_inactive_cost` (IN `_iddetalle_costo` INT)   BEGIN
+	UPDATE detalle_costos
+		SET
+			inactive_at = CURDATE()
+        WHERE iddetalle_costo = _iddetalle_costo;
+        
+	SELECT ROW_COUNT() AS filasAfect;
+    
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_inactive_person` (IN `_idpersona` INT)   BEGIN 
@@ -819,10 +852,10 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_detail_cost` (IN `_idpresu
 			detcost.iddetalle_costos,
 			detcost.idpresupuesto,
 			cat.categoria_costo,
-			subcategoria_costo,
+			subcat.subcategoria_costo,
             CASE 
-				WHEN detcost.idtipo_material IS NULL THEN
-				(CONCAT(marc.marca, " - ", mat.material, " - ",tmat.tipo_material, " - ",unimed.unidad_medida))
+				WHEN detcost.idtipo_material IS NOT NULL THEN
+				CONCAT(marc.marca, " // ", mat.material, " // ",tmat.tipo_material, " // ",unimed.unidad_medida)
 				ELSE
                 detcost.detalle
 			END AS detalle,
@@ -834,10 +867,10 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_detail_cost` (IN `_idpresu
 			INNER JOIN presupuestos pres ON pres.idpresupuesto = detcost.idpresupuesto
 			INNER JOIN subcategoria_costos subcat ON subcat.idsubcategoria_costo = detcost.idsubcategoria_costo
 			INNER JOIN categoria_costos cat ON cat.idcategoria_costo = subcat.idcategoria_costo
-			INNER JOIN tipos_materiales tmat ON tmat.idtipo_material = detcost.idtipo_material
-            INNER JOIN materiales mat ON mat.idmaterial = tmat.idmaterial
-            INNER JOIN marcas marc ON marc.idmarca = mat.idmarca
-            INNER JOIN unidades_medida unimed ON unimed.idunidad_medida = mat.idunidad_medida
+			LEFT JOIN tipos_materiales tmat ON tmat.idtipo_material = detcost.idtipo_material
+            LEFT JOIN materiales mat ON mat.idmaterial = tmat.idmaterial
+            LEFT JOIN marcas marc ON marc.idmarca = mat.idmarca
+            LEFT JOIN unidades_medida unimed ON unimed.idunidad_medida = mat.idunidad_medida
 			INNER JOIN usuarios usu ON usu.idusuario = detcost.idusuario
 			INNER JOIN personas pers ON pers.idpersona = usu.idpersona
 			WHERE detcost.idpresupuesto = _idpresupuesto
@@ -864,6 +897,19 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_lots_ByIdBudget` (IN `_idp
             INNER JOIN presupuestos pres ON pres.idpresupuesto = act.idpresupuesto
 			WHERE act.idpresupuesto = _idpresupuesto
             AND act.inactive_at IS NULL;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_lots_ForBudget` ()   BEGIN
+	SELECT 	
+			act.idactivo,
+			act.idproyecto, 
+            proy.denominacion,
+			act.sublote, 
+            act.idpresupuesto 
+            FROM activos act 
+            INNER JOIN proyectos proy ON proy.idproyecto = act.idproyecto
+            LEFT JOIN presupuestos pres ON pres.idpresupuesto = act.idpresupuesto
+            WHERE act.inactive_at IS NULL;
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_lots_noBudgets` ()   BEGIN
@@ -1089,6 +1135,35 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_lits_contracts_full_by_id` (IN 
 			
 END$$
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_resume_budget_category` (IN `_idpresupuesto` INT)   BEGIN
+	SELECT 
+		cat.idcategoria_costo,
+        cat.categoria_costo,
+        SUM(detcost.precio_unitario * detcost.cantidad) AS total
+		FROM detalle_costos detcost
+        INNER JOIN subcategoria_costos subcat ON subcat.idsubcategoria_costo = detcost.idsubcategoria_costo
+        INNER JOIN categoria_costos cat ON cat.idcategoria_costo = subcat.idcategoria_costo
+        WHERE detcost.idpresupuesto = _idpresupuesto
+        GROUP BY 
+			cat.idcategoria_costo;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_resume_budget_subcatgory` (IN `_idpresupuesto` INT)   BEGIN
+	SELECT 
+		cat.idcategoria_costo,
+        cat.categoria_costo,
+        subcat.idsubcategoria_costo,
+        subcat.subcategoria_costo,
+        SUM(detcost.precio_unitario * detcost.cantidad) AS total
+		FROM detalle_costos detcost
+        INNER JOIN subcategoria_costos subcat ON subcat.idsubcategoria_costo = detcost.idsubcategoria_costo
+        INNER JOIN categoria_costos cat ON cat.idcategoria_costo = subcat.idcategoria_costo
+		WHERE idpresupuesto = _idpresupuesto
+        GROUP BY 
+			cat.idcategoria_costo,
+            subcat.idsubcategoria_costo;
+END$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_search_budgets` (IN `_codigo` VARCHAR(8))   BEGIN
 	SELECT
 		pres.idpresupuesto,
@@ -1218,6 +1293,23 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_set_contracts` (IN `_idcontrato
 			idcontrato = _idcontrato;
 END$$
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_set_detail_cost` (IN `_iddetalle_costo` INT, IN `_idpresupuesto` INT, IN `_idsubcategoria_costo` INT, IN `_idtipo_material` INT, IN `_detalle` VARCHAR(100), IN `_cantidad` TINYINT, IN `_precio_unitario` DECIMAL(8,2), IN `_idusuario` INT)   BEGIN
+	UPDATE detalle_costos
+		SET
+			idpresupuesto 			= _idpresupuesto,
+            idsubcategoria_costo	= _idsubcategoria_costo,
+            idtipo_material			= NULLIF(_idtipo_material,""),
+            detalle					= NULLIF(_detalle,""),
+            cantidad				= _cantidad,
+            precio_cantidad 		= _precio_cantidad,
+            idusuario 				= _idusuario,
+            update_at 				= CURDATE()
+        WHERE
+			iddetalle_costo = _iddetalle_costo;
+            
+	SELECT ROW_COUNT() AS filasAfect;
+END$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_set_det_build` (IN `_idactivo` INT, IN `_det_casa` JSON)   BEGIN
 	DECLARE oldDetCasa JSON;
     
@@ -1236,6 +1328,17 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_set_det_build` (IN `_idactivo` 
 	ELSE 
 		(SELECT COUNT(*) -2 AS filasAfect FROM activos WHERE idactivo = _idactivo);
     END IF;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_set_idpresupuesto` (IN `_idactivo` INT, IN `_idpresupuesto` INT, IN `_idusuario` INT)   BEGIN
+	UPDATE activos
+		SET
+			idpresupuesto 	= _idpresupuesto,
+            idusuario 		= _idusuario,
+            update_at 		= CURDATE()
+		WHERE idactivo = _idactivo;
+        
+	SELECT ROW_COUNT() AS filasAfect;
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_set_inactive_contracts` (IN `_idcontrato` INT)   BEGIN
@@ -1915,7 +2018,113 @@ INSERT INTO `detalle_costos` (`iddetalle_costos`, `idpresupuesto`, `idsubcategor
 (157, 2, 6, 23, 'Paquete de Focos LED', 1, 6.00, '2024-05-05', NULL, NULL, 1),
 (158, 2, 6, 24, 'Metro de Cable eléctrico N° 14', 1, 2.00, '2024-05-05', NULL, NULL, 1),
 (159, 2, 6, 25, 'Tapa ciega rectangular', 1, 1.00, '2024-05-05', NULL, NULL, 1),
-(160, 2, 6, 26, 'Lija esmeril asa N° 40', 1, 2.50, '2024-05-05', NULL, NULL, 1);
+(160, 2, 6, 26, 'Lija esmeril asa N° 40', 1, 2.50, '2024-05-05', NULL, NULL, 1),
+(161, 3, 1, 1, 'Tubo PVC 1\"', 80, 30.00, '2024-05-05', NULL, NULL, 1),
+(162, 3, 2, 2, 'Tubo PVC 2\"', 40, 35.00, '2024-05-05', NULL, NULL, 1),
+(163, 3, 3, 3, 'Bolsa de Cemento APU 50kg', 15, 26.00, '2024-05-05', NULL, NULL, 1),
+(164, 3, 4, 4, 'Gallón de Pintura Látex', 8, 65.00, '2024-05-05', NULL, NULL, 1),
+(165, 3, 5, 5, 'Interruptor simple', 10, 7.50, '2024-05-05', NULL, NULL, 1),
+(166, 3, 6, 6, 'Bomba de agua 1/2 Hp', 1, 159.90, '2024-05-05', NULL, NULL, 1),
+(167, 3, 6, 7, 'Tanque elevado 250 litros', 1, 390.00, '2024-05-05', NULL, NULL, 1),
+(168, 3, 6, 8, 'Puerta de madera maciza', 1, 1150.00, '2024-05-05', NULL, NULL, 1),
+(169, 3, 6, 9, 'Grifería monomando', 1, 180.00, '2024-05-05', NULL, NULL, 1),
+(170, 3, 6, 10, 'Inodoro con tapa', 1, 381.90, '2024-05-05', NULL, NULL, 1),
+(171, 3, 6, 11, 'Ladrillo 18 huecos', 1, 0.72, '2024-05-05', NULL, NULL, 1),
+(172, 3, 6, 12, 'Bolsa de Arena fina', 1, 94.40, '2024-05-05', NULL, NULL, 1),
+(173, 3, 6, 13, 'Metro cúbico de Piedra chancada', 1, 61.36, '2024-05-05', NULL, NULL, 1),
+(174, 3, 6, 14, 'Rollo de Alambre N° 16', 1, 6.50, '2024-05-05', NULL, NULL, 1),
+(175, 3, 6, 15, 'Disco para cortar fierro de 7\"', 1, 8.50, '2024-05-05', NULL, NULL, 1),
+(176, 3, 6, 16, 'Tubo desagüe 4\"', 1, 40.50, '2024-05-05', NULL, NULL, 1),
+(177, 3, 6, 17, 'Tubo agua 3/4\"', 1, 6.40, '2024-05-05', NULL, NULL, 1),
+(178, 3, 6, 18, 'Bolsa de Fragua para cerámica', 1, 9.60, '2024-05-05', NULL, NULL, 1),
+(179, 3, 6, 19, 'Hoja de Sierra para madera', 1, 7.00, '2024-05-05', NULL, NULL, 1),
+(180, 3, 6, 20, 'Paquete de Tornillos', 1, 6.50, '2024-05-05', NULL, NULL, 1),
+(181, 3, 6, 21, 'Paquete de Clavos 2\"', 1, 6.50, '2024-05-05', NULL, NULL, 1),
+(182, 3, 6, 22, 'Lámpara LED 9W', 1, 6.00, '2024-05-05', NULL, NULL, 1),
+(183, 3, 6, 23, 'Paquete de Focos LED', 1, 6.00, '2024-05-05', NULL, NULL, 1),
+(184, 3, 6, 24, 'Metro de Cable eléctrico N° 14', 1, 2.00, '2024-05-05', NULL, NULL, 1),
+(185, 3, 6, 25, 'Tapa ciega rectangular', 1, 1.00, '2024-05-05', NULL, NULL, 1),
+(186, 3, 6, 26, 'Lija esmeril asa N° 40', 1, 2.50, '2024-05-05', NULL, NULL, 1),
+(187, 3, 6, 27, 'Caja eléctrica octogonal', 1, 2.50, '2024-05-05', NULL, NULL, 1),
+(188, 4, 1, 1, 'Tubo PVC 1\"', 80, 30.00, '2024-05-05', NULL, NULL, 1),
+(189, 4, 2, 2, 'Tubo PVC 2\"', 40, 35.00, '2024-05-05', NULL, NULL, 1),
+(190, 4, 3, 3, 'Bolsa de Cemento APU 50kg', 15, 26.00, '2024-05-05', NULL, NULL, 1),
+(191, 4, 4, 4, 'Gallón de Pintura Látex', 8, 65.00, '2024-05-05', NULL, NULL, 1),
+(192, 4, 5, 5, 'Interruptor simple', 10, 7.50, '2024-05-05', NULL, NULL, 1),
+(193, 4, 6, 6, 'Bomba de agua 1/2 Hp', 1, 159.90, '2024-05-05', NULL, NULL, 1),
+(194, 4, 6, 7, 'Tanque elevado 250 litros', 1, 390.00, '2024-05-05', NULL, NULL, 1),
+(195, 4, 6, 8, 'Puerta de madera maciza', 1, 1150.00, '2024-05-05', NULL, NULL, 1),
+(196, 4, 6, 9, 'Grifería monomando', 1, 180.00, '2024-05-05', NULL, NULL, 1),
+(197, 4, 6, 10, 'Inodoro con tapa', 1, 381.90, '2024-05-05', NULL, NULL, 1),
+(198, 4, 6, 11, 'Ladrillo 18 huecos', 1, 0.72, '2024-05-05', NULL, NULL, 1),
+(199, 4, 6, 12, 'Bolsa de Arena fina', 1, 94.40, '2024-05-05', NULL, NULL, 1),
+(200, 4, 6, 13, 'Metro cúbico de Piedra chancada', 1, 61.36, '2024-05-05', NULL, NULL, 1),
+(201, 4, 6, 14, 'Rollo de Alambre N° 16', 1, 6.50, '2024-05-05', NULL, NULL, 1),
+(202, 4, 6, 15, 'Disco para cortar fierro de 7\"', 1, 8.50, '2024-05-05', NULL, NULL, 1),
+(203, 4, 6, 16, 'Tubo desagüe 4\"', 1, 40.50, '2024-05-05', NULL, NULL, 1),
+(204, 4, 6, 17, 'Tubo agua 3/4\"', 1, 6.40, '2024-05-05', NULL, NULL, 1),
+(205, 4, 6, 18, 'Bolsa de Fragua para cerámica', 1, 9.60, '2024-05-05', NULL, NULL, 1),
+(206, 4, 6, 19, 'Hoja de Sierra para madera', 1, 7.00, '2024-05-05', NULL, NULL, 1),
+(207, 4, 6, 20, 'Paquete de Tornillos', 1, 6.50, '2024-05-05', NULL, NULL, 1),
+(208, 4, 6, 21, 'Paquete de Clavos 2\"', 1, 6.50, '2024-05-05', NULL, NULL, 1),
+(209, 4, 6, 22, 'Lámpara LED 9W', 1, 6.00, '2024-05-05', NULL, NULL, 1),
+(210, 4, 6, 23, 'Paquete de Focos LED', 1, 6.00, '2024-05-05', NULL, NULL, 1),
+(211, 4, 6, 24, 'Metro de Cable eléctrico N° 14', 1, 2.00, '2024-05-05', NULL, NULL, 1),
+(212, 4, 6, 25, 'Tapa ciega rectangular', 1, 1.00, '2024-05-05', NULL, NULL, 1),
+(213, 4, 6, 26, 'Lija esmeril asa N° 40', 1, 2.50, '2024-05-05', NULL, NULL, 1),
+(214, 4, 6, 27, 'Caja eléctrica octogonal', 1, 2.50, '2024-05-05', NULL, NULL, 1),
+(215, 5, 1, 1, 'Tubo PVC 1\"', 80, 30.00, '2024-05-05', NULL, NULL, 1),
+(216, 5, 2, 2, 'Tubo PVC 2\"', 40, 35.00, '2024-05-05', NULL, NULL, 1),
+(217, 5, 3, 3, 'Bolsa de Cemento APU 50kg', 15, 26.00, '2024-05-05', NULL, NULL, 1),
+(218, 5, 4, 4, 'Gallón de Pintura Látex', 8, 65.00, '2024-05-05', NULL, NULL, 1),
+(219, 5, 5, 5, 'Interruptor simple', 10, 7.50, '2024-05-05', NULL, NULL, 1),
+(220, 5, 6, 6, 'Bomba de agua 1/2 Hp', 1, 159.90, '2024-05-05', NULL, NULL, 1),
+(221, 5, 6, 7, 'Tanque elevado 250 litros', 1, 390.00, '2024-05-05', NULL, NULL, 1),
+(222, 5, 6, 8, 'Puerta de madera maciza', 1, 1150.00, '2024-05-05', NULL, NULL, 1),
+(223, 5, 6, 9, 'Grifería monomando', 1, 180.00, '2024-05-05', NULL, NULL, 1),
+(224, 5, 6, 10, 'Inodoro con tapa', 1, 381.90, '2024-05-05', NULL, NULL, 1),
+(225, 5, 6, 11, 'Ladrillo 18 huecos', 1, 0.72, '2024-05-05', NULL, NULL, 1),
+(226, 5, 6, 12, 'Bolsa de Arena fina', 1, 94.40, '2024-05-05', NULL, NULL, 1),
+(227, 5, 6, 13, 'Metro cúbico de Piedra chancada', 1, 61.36, '2024-05-05', NULL, NULL, 1),
+(228, 5, 6, 14, 'Rollo de Alambre N° 16', 1, 6.50, '2024-05-05', NULL, NULL, 1),
+(229, 5, 6, 15, 'Disco para cortar fierro de 7\"', 1, 8.50, '2024-05-05', NULL, NULL, 1),
+(230, 5, 6, 16, 'Tubo desagüe 4\"', 1, 40.50, '2024-05-05', NULL, NULL, 1),
+(231, 5, 6, 17, 'Tubo agua 3/4\"', 1, 6.40, '2024-05-05', NULL, NULL, 1),
+(232, 5, 6, 18, 'Bolsa de Fragua para cerámica', 1, 9.60, '2024-05-05', NULL, NULL, 1),
+(233, 5, 6, 19, 'Hoja de Sierra para madera', 1, 7.00, '2024-05-05', NULL, NULL, 1),
+(234, 5, 6, 20, 'Paquete de Tornillos', 1, 6.50, '2024-05-05', NULL, NULL, 1),
+(235, 5, 6, 21, 'Paquete de Clavos 2\"', 1, 6.50, '2024-05-05', NULL, NULL, 1),
+(236, 5, 6, 22, 'Lámpara LED 9W', 1, 6.00, '2024-05-05', NULL, NULL, 1),
+(237, 5, 6, 23, 'Paquete de Focos LED', 1, 6.00, '2024-05-05', NULL, NULL, 1),
+(238, 5, 6, 24, 'Metro de Cable eléctrico N° 14', 1, 2.00, '2024-05-05', NULL, NULL, 1),
+(239, 5, 6, 25, 'Tapa ciega rectangular', 1, 1.00, '2024-05-05', NULL, NULL, 1),
+(240, 5, 6, 26, 'Lija esmeril asa N° 40', 1, 2.50, '2024-05-05', NULL, NULL, 1),
+(241, 5, 6, 27, 'Caja eléctrica octogonal', 1, 2.50, '2024-05-05', NULL, NULL, 1),
+(267, 1, 18, NULL, 'Intereses por financiamiento', 1, 500.00, '2024-05-05', NULL, NULL, 1),
+(268, 1, 19, NULL, 'Limpieza de terreno', 1, 1000.00, '2024-05-05', NULL, NULL, 1),
+(269, 1, 20, NULL, 'Conexión de servicios básicos', 1, 1500.00, '2024-05-05', NULL, NULL, 1),
+(270, 1, 21, NULL, 'Costos administrativos', 1, 800.00, '2024-05-05', NULL, NULL, 1),
+(271, 1, 22, NULL, 'Impuestos municipales', 1, 1200.00, '2024-05-05', NULL, NULL, 1),
+(272, 2, 18, NULL, 'Intereses por financiamiento', 1, 500.00, '2024-05-05', NULL, NULL, 1),
+(273, 2, 19, NULL, 'Limpieza de terreno', 1, 1000.00, '2024-05-05', NULL, NULL, 1),
+(274, 2, 20, NULL, 'Conexión de servicios básicos', 1, 1500.00, '2024-05-05', NULL, NULL, 1),
+(275, 2, 21, NULL, 'Costos administrativos', 1, 800.00, '2024-05-05', NULL, NULL, 1),
+(276, 2, 22, NULL, 'Impuestos municipales', 1, 1200.00, '2024-05-05', NULL, NULL, 1),
+(277, 3, 18, NULL, 'Intereses por financiamiento', 1, 500.00, '2024-05-05', NULL, NULL, 1),
+(278, 3, 19, NULL, 'Limpieza de terreno', 1, 1000.00, '2024-05-05', NULL, NULL, 1),
+(279, 3, 20, NULL, 'Conexión de servicios básicos', 1, 1500.00, '2024-05-05', NULL, NULL, 1),
+(280, 3, 21, NULL, 'Costos administrativos', 1, 800.00, '2024-05-05', NULL, NULL, 1),
+(281, 3, 22, NULL, 'Impuestos municipales', 1, 1200.00, '2024-05-05', NULL, NULL, 1),
+(282, 4, 18, NULL, 'Intereses por financiamiento', 1, 500.00, '2024-05-05', NULL, NULL, 1),
+(283, 4, 19, NULL, 'Limpieza de terreno', 1, 1000.00, '2024-05-05', NULL, NULL, 1),
+(284, 4, 20, NULL, 'Conexión de servicios básicos', 1, 1500.00, '2024-05-05', NULL, NULL, 1),
+(285, 4, 21, NULL, 'Costos administrativos', 1, 800.00, '2024-05-05', NULL, NULL, 1),
+(286, 4, 22, NULL, 'Impuestos municipales', 1, 1200.00, '2024-05-05', NULL, NULL, 1),
+(287, 5, 18, NULL, 'Intereses por financiamiento', 1, 500.00, '2024-05-05', NULL, NULL, 1),
+(288, 5, 19, NULL, 'Limpieza de terreno', 1, 1000.00, '2024-05-05', NULL, NULL, 1),
+(289, 5, 20, NULL, 'Conexión de servicios básicos', 1, 1500.00, '2024-05-05', NULL, NULL, 1),
+(290, 5, 21, NULL, 'Costos administrativos', 1, 800.00, '2024-05-05', NULL, NULL, 1),
+(291, 5, 22, NULL, 'Impuestos municipales', 1, 1200.00, '2024-05-05', NULL, NULL, 1);
 
 -- --------------------------------------------------------
 
@@ -5235,7 +5444,7 @@ ALTER TABLE `detalles_contratos`
 -- AUTO_INCREMENT de la tabla `detalle_costos`
 --
 ALTER TABLE `detalle_costos`
-  MODIFY `iddetalle_costos` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=161;
+  MODIFY `iddetalle_costos` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=292;
 
 --
 -- AUTO_INCREMENT de la tabla `devoluciones`

@@ -161,6 +161,40 @@ if(isset($_POST["action"])){
 
                 echo json_encode($asset->setDetAssetBuid($dataObtained));
             break;
+
+        case "setIdBudget": 
+
+            $dataObtained = [
+                "idactivo"      => $_POST["idactivo"],
+                "idpresupuesto" => $_POST["idpresupuesto"],
+                "idusuario"      => 1
+                /* "idusuario"      => $_POST["idusuario"], */
+            ];
+
+            echo json_encode($asset->setIdBudget($dataObtained));
+            break;
+
+        case "listLotsNoBudget": 
+            
+                echo json_encode($asset->listLotsNoBudgets());
+            break;
+
+        case "listLotsWithBudget": 
+            
+                echo json_encode($asset->listLotsWithBudget());
+            break;
+
+        case "listLotsByIdpresupuesto": 
+
+                $idpresupuesto = $_POST["idpresupuesto"];
+            
+                echo json_encode($asset->listLotsByIdpresupuesto($idpresupuesto));
+            break;
+        
+        case "litsLotsForBudget": 
+
+                echo json_encode($asset->listLostForBudget());
+            break;
     }
 }
 ?>
