@@ -71,3 +71,9 @@ DELETE from rep_legales_clientes where documento_nro = "07266216";
 select act.idproyecto, act.sublote, act.idpresupuesto from activos act left join presupuestos pres ON pres.idpresupuesto = act.idpresupuesto
 WHERE pres.idpresupuesto IS NULL
 AND act.inactive_at IS NULL;
+
+SELECT * FROM subcategoria_costos where idcategoria_costo = 2;
+SELECT * FROM detalle_costos where idpresupuesto = 1 order by idtipo_material asc;
+CALL spu_list_detail_cost(3);
+-- Borrar los registros de subcategoria_costos con las descripciones específicas
+DELETE FROM detalle_costos WHERE detalle IN ('Intereses por financiamiento', 'Limpieza de terreno', 'Conexión de servicios básicos', 'Costos administrativos', 'Impuestos municipales');

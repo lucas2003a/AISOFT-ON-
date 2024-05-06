@@ -1315,11 +1315,14 @@ BEGIN
 		pres.idpresupuesto,
         pres.codigo,
         pres.modelo,
+        (SUM(detcost.cantidad * detcost.precio_unitario)) AS total,
         pers.nombres AS usuario
 		FROM presupuestos pres
+        INNER JOIN detalle_costos detcost ON detcost.idpresupuesto = pres.idpresupuesto
         INNER JOIN usuarios usu ON usu.idusuario = pres.idusuario
         INNER JOIN personas pers ON pers.idpersona = usu.idpersona
         WHERE pres.inactive_at IS NULL
+        GROUP BY pres.idpresupuesto
         ORDER BY pres.codigo ASC;
 END $$
 DELIMITER ;
@@ -1331,12 +1334,15 @@ BEGIN
 		pres.idpresupuesto,
         pres.codigo,
         pres.modelo,
+        (SUM(detcost.cantidad * detcost.precio_unitario)) AS total,
         pers.nombres AS usuario
 		FROM presupuestos pres
+        INNER JOIN detalle_costos detcost ON detcost.idpresupuesto = pres.idpresupuesto
         INNER JOIN usuarios usu ON usu.idusuario = pres.idusuario
         INNER JOIN personas pers ON pers.idpersona = usu.idpersona
         WHERE pres.codigo LIKE CONCAT(_codigo,"%")
         AND pres.inactive_at IS NULL
+        GROUP BY pres.idpresupuesto
         ORDER BY pres.codigo ASC;
 END $$
 DELIMITER ;
@@ -1348,12 +1354,15 @@ BEGIN
 		pres.idpresupuesto,
         pres.codigo,
         pres.modelo,
+        (SUM(detcost.cantidad * detcost.precio_unitario)) AS total,
         pers.nombres AS usuario
 		FROM presupuestos pres
+        INNER JOIN detalle_costos detcost ON detcost.idpresupuesto = pres.idpresupuesto
         INNER JOIN usuarios usu ON usu.idusuario = pres.idusuario
         INNER JOIN personas pers ON pers.idpersona = usu.idpersona
         WHERE pres.idpresupuesto = _idpresupuesto
         AND pres.inactive_at IS NULL
+        GROUP BY pres.idpresupuesto
         ORDER BY pres.codigo ASC;
 END $$
 DELIMITER ;

@@ -23,6 +23,12 @@
   <title>
     My Aisoft
   </title>
+  <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+      crossorigin="anonymous"
+    />
   <!--     Fonts and icons     -->
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
   <!-- Nucleo Icons -->
@@ -56,7 +62,7 @@
     <div class="collapse navbar-collapse  w-auto " id="sidenav-collapse-main">
       <ul class="navbar-nav">
 
-        <!-- BASHBOARD -->
+        <!-- DASHBOARD -->
         <li class="nav-item">
           <a class="nav-link" href="../../Views/dashboard.html">
             <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
@@ -314,7 +320,7 @@
             <span class="nav-link-text ms-1">Cerrar sesión</span>
           </a>
         </li>
-        
+
       </ul>
     </div>
   </aside>
@@ -324,26 +330,19 @@
       <div class="container-fluid py-1 px-3">
         <nav aria-label="breadcrumb">
           <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
-          <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="#">Dashboard</a></li>
-            <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="#">Proyectos</a></li>
-            <li class="breadcrumb-item text-sm text-dark active" aria-current="page"> Lotes </li>
+            <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="#">Dashboard</a></li>
+            <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="#">Presupuestos</a></li>
           </ol>
-          <h6 class="font-weight-bolder mb-0" id="cabezera">LOTES - </h6>
+          <h6 class="font-weight-bolder mb-0" id ="cabezera">Presupuesto - </h6>
         </nav>
         <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
-          <div class="ms-md-auto pe-md-3 d-flex align-items-center">
-            
-          </div>
+          
           <ul class="navbar-nav  justify-content-end">
-            <li class="nav-item d-flex align-items-center">
-              
-            </li>
-
-            <!-- DATOS DEL USUARIO -->
+            
             <li class="nav-item d-flex align-items-center">
               <a href="javascript:;" class="nav-link text-body font-weight-bold px-0">
                 <i class="fa fa-user me-sm-1"></i>
-                <span class="d-sm-inline d-none">DATOS DEL USUARIO</span>
+                <span class="d-sm-inline d-none">Sign In</span>
               </a>
             </li>
             <li class="nav-item d-xl-none ps-3 d-flex align-items-center">
@@ -356,7 +355,6 @@
               </a>
             </li>
             
-
           </ul>
         </div>
       </div>
@@ -365,75 +363,186 @@
     <!-- End Navbar -->
     <div class="container py-4">
 
-    <!-- CONTENIDO -->
+      <!-- CONTENIDO -->
+      <div class="row">
+        <div class="col-lg-8">
 
-    <div class="row">
-        <div class="col-12">
-          <div class="card mb-4">
-            <div class="card-header pb-0">
-              <div class="row">
-                <div class="col-md-6">
-
-                  <h6><strong>Tabla - lotes</strong></h6>
-                  
+          <!-- IMAGEN -->
+          <div class="row">
+            <div class="col-xl-6 mb-xl-0 mb-4">
+              <div class="card bg-transparent shadow-xl"  style="height: 100%;">
+                <div class="overflow-hidden position-relative border-radius-xl" style="background-image: url('../../assets/img/curved-images/curved14.jpg');" id="imagen">
+                  <span class="mask bg-gradient-dark" id="mask"></span>
+                  <div class="card-body position-relative z-index-1 p-3">
+                  </div>
                 </div>
               </div>
+            </div>
+
+            <!-- CABEZERA DEL DETALLE -->
+
+            <div class="col-xl-6">
               <div class="row">
-                
                 <div class="col-md-6">
-                  <div class="btn-group text-start">
-                    <button type="button" class="btn btn-sm bg-gradient-success opacity-10" id="generate-excel"><i class="fa-solid fa-file-excel"></i></button>
-                    <button type="button" class="btn btn-sm bg-gradient-danger opacity-10" id="generate-pdf"><i class="bi bi-filetype-pdf"></i></button>
-                    <a type="button" class="btn btn-sm btn-outline-success" target="_blank" href="./add_asset.php" id="add-asset">AGREGAR LOTE</a>
+                  <div class="card"  style="height: 100%;">
+                    <div class="card-header mx-4 p-3 text-center">
+                      <div class="icon icon-shape icon-lg bg-gradient-primary shadow text-center border-radius-lg">
+                      <i class="fa-solid fa-coins opacity-10"></i>
+                      </div>
+                    </div>
+                    <div class="card-body pt-0 p-3 text-center">
+                      <h6 class="text-center mb-0">Precio de construcción</h6>
+                      <hr class="horizontal dark my-3">
+                      <h5 class="mb-0" id="precio_construccion">--</h5>
+                    </div>
                   </div>
-                  
                 </div>
 
-                <div class="row">
-                  <div class="col-md-6">
-                    <label for="propietario_lote" class="form-label">Propietarios</label>
-                    <select name="propietario_lote" id="propietario_lote" class="form-select">
-                      <option value="A.I.F" selected>A.I.F</option>
-                      <option value="TERCEROS">Terceros</option>
-                    </select>
-                  </div>
-                  <div class="col-md-6">
-                    <label for="" class="form-label">Busqueda</label>
-                    <div class="input-group">
-                      <span class="input-group-text text-body"><i class="fas fa-search" aria-hidden="true"></i></span>
-                      <input type="text" class="form-control" placeholder="Escribe el Sublote..." id="in-sublote">
+                <div class="col-md-6 mt-md-0 mt-4">
+                  <div class="card"  style="height: 100%;">
+                    <div class="card-header mx-4 p-3 text-center">
+                      <div class="icon icon-shape icon-lg bg-gradient-primary shadow text-center border-radius-lg">
+                      <i class="fa-solid fa-hand-holding-dollar opacity-10"></i>
+                      </div>
+                    </div>
+                    <div class="card-body pt-0 p-3 text-center">
+                      <h6 class="text-center mb-0">Precio del lote</h6>
+                      <hr class="horizontal dark my-3">
+                      <h5 class="mb-0" id="precio_lote">--</h5>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-            <hr>
-            <div class="card-body px-0 pt-0 pb-2">
-              <div class="table-responsive text-center p-0">
-                  <table class="table align-items-center mb-0" id="table-assets">
-                    <thead>
-                    <tr>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">#</th>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Propietario</th>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Estado</th>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Sublote</th>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Direccion</th>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Operaciones</th>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10"></th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    
-                  <!-- RENDER -->
 
-                  </tbody>
-                </table>
+            <!-- /CABEZERA DEL DETALLE -->
+
+            <!-- CLIENTES --> 
+
+            <div class="col-md-12 mb-lg-0 mb-4">
+              <div class="card mt-4">
+                <div class="card-header pb-0 p-3">
+                  <div class="row">
+                    <div class="col-6 d-flex align-items-center">
+                      <h6 class="mb-0">Clientes</h6>
+                    </div>
+                  </div>
+                </div>
+                <div class="card-body p-3">
+                  <div class="row">
+                    <div class="table-responsive table-responsive-lg">
+                      <table class="table align-items-center mb-0" id="table-clients">
+                        <thead>
+                          <tr>
+                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Apellidos</th>
+                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Nombres</th>
+                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Tipo de documento</th>
+                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Nº de documento</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                    
+                        <!-- RENDER NUEVOS CLIENTES  -->
+                        
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
               </div>
+            </div>
+
+          </div>
+          <!-- /CLIENTES -->
+
+         
+        <!-- ---------- -->  
+        </div>
+        <div class="col-lg-4">
+          <div class="card h-100">
+            <div class="card-header pb-0 p-3">
+              <div class="row">
+                <div class="col-6 d-flex align-items-center">
+                  <h6 class="mb-0">Proyectos</h6>
+                </div>
+              </div>
+            </div>
+            <div class="card-body p-3 pb-0">
+              <ul class="list-group" id="proyectos">
+                <div class="accordion accordion-flush" id="accordion-proyectos">
+                  <div class="accordion-item">
+                    <h2 class="accordion-header">
+                      <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="" />
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                          <label class="form-check-label" for=""> Accordion Item #1 </label>
+                        </button>
+                      </div>
+                      
+                    </h2>
+                    <div id="flush-collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordion-proyectos">
+                      <div class="accordion-body">Placeholder content for this accordion, which is intended to demonstrate the <code>.accordion-flush</code> class. This is the first item's accordion body.</div>
+                    </div>
+                  </div>
+                  <div class="accordion-item">
+                    <h2 class="accordion-header">
+                      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
+                        Accordion Item #2
+                      </button>
+                    </h2>
+                    <div id="flush-collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordion-proyectos">
+                      <div class="accordion-body">Placeholder content for this accordion, which is intended to demonstrate the <code>.accordion-flush</code> class. This is the second item's accordion body. Let's imagine this being filled with some actual content.</div>
+                    </div>
+                  </div>
+                  <div class="accordion-item">
+                    <h2 class="accordion-header">
+                      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseThree" aria-expanded="false" aria-controls="flush-collapseThree">
+                        Accordion Item #3
+                      </button>
+                    </h2>
+                    <div id="flush-collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordion-proyectos">
+                      <div class="accordion-body">Placeholder content for this accordion, which is intended to demonstrate the <code>.accordion-flush</code> class. This is the third item's accordion body. Nothing more exciting happening here in terms of content, but just filling up the space to make it look, at least at first glance, a bit more representative of how this would look in a real-world application.</div>
+                    </div>
+                  </div>
+                </div>
+
+              
+
+              </ul>
             </div>
           </div>
         </div>
       </div>
+      <div class="row">
 
+        <!-- DETALLES DE CONSTRUCCIÓN -->
+
+        <div class="col-md-12 mb-lg-0 mb-4">
+          <div class="card mt-4">
+            <div class="card-header pb-0 p-3">
+              <div class="row">
+                <div class="col-6 d-flex align-items-center">
+                  <h6 class="mb-0">Detalles de constricción</h6>
+                  </div>
+                  <div class="col-6 text-end">
+                    <button class="btn bg-gradient-dark mb-0" id="add"><i class="fas fa-plus"></i>&nbsp;&nbsp;Agregar</button>
+                    <button type="button" class="btn bg-gradient-info mb-0" id="save"><i class="fa-solid fa-floppy-disk"></i> Guardar</button>
+                </div>
+              </div>
+            </div>
+            <div class="card-body p-3">
+            <div class="card-body pt-4 p-3">
+              <ul class="list-group"id="list-group">
+              
+                <!-- RENDER DETALLES DE CONSTRUCCIÓN -->
+
+              </ul>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    
     <footer class="footer pt-3  ">
         <div class="container-fluid">
           <div class="row align-items-center justify-content-lg-between">
@@ -450,7 +559,6 @@
           </div>
         </div>
       </footer>
-
     </div>
   </main>
   <div class="fixed-plugin">
@@ -510,217 +618,144 @@
     </div>
 
   </div>
- 
+   
+  <!-- JQUERY -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
   <!-- SWEET ALERT -->
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
   <!--   Core JS Files   -->
   <script src="../../assets/js/core/popper.min.js"></script>
   <script src="../../assets/js/core/bootstrap.min.js"></script>
+  <script src="../../assets/js/core/bootstrap.bundle.min.js"></script>
   <script src="../../assets/js/plugins/perfect-scrollbar.min.js"></script>
   <script src="../../assets/js/plugins/smooth-scrollbar.min.js"></script>
   <script src="../../assets/js/plugins/chartjs.min.js"></script>
   <script src="../../assets/js/globalFunctions.js"></script>
   <script src="../../assets/js/sweetAlert.js"></script>
+  <!-- <script src="../../assets/js/formMultiSteps.js"></script>
+  <script src="../../assets/js/projects/interactionForms.js"></script> -->
+  <!-- <script src="../../assets/js/renderUbigeo.js"></script>  -->
   <script>
-document.addEventListener("DOMContentLoaded",()=>{
 
-  /* INSTANCIAS */
   const global = new FunGlobal();
+  const sAlert = new Alert();
 
   const $ = id => global.$(id);
   const $All = id => global.$All(id);
 
-  /* VALOR EN LA URL */
-  const stringQuery = window.location.search;
-  const url = new URLSearchParams(stringQuery);
+  const queryString = window.location.search;
+  const url = new URLSearchParams(queryString);
+  
   const code = url.get("id");
-  const codeName = url.get("name");
 
-  const idProyecto = atob(code); //DECOFICA EL VALOR
-  const name = atob(codeName);
+  const idActivo = atob(code);
 
-  let timer;
+  const btnsEdit = $All(".edit");
 
-  function renderAssets(results){
+  let bootstrap;
 
-    let numberRow = 1;
+  let det_casaJSON;
+  let idPresupuesto;
+  let nombresUnicos = [];
+    
+  function renderAccordionButtons(array,array2){
 
-    $("#table-assets tbody").innerHTML = "";
+    for(element of array){
 
-    let newRow = ``;
+      let newButton = "";
+      let newContent = "";
 
-    if(results.length > 0){
-      results.forEach(asset =>{
+      array2.forEach(element2 => {
+
+        if(element.idproyecto == element2.idproyecto){
+          
+          newContent += `
+          <div id="flush-collapse-${element.idproyecto}" class="accordion-collapse collapse" data-bs-parent="#accordion-proyectos">
+          <p class="accordion-body" style="line-height:0px; font-size:10px;">${element2.sublote}</p>
+          </div>
+          `;
+        }
+      })
+
+      newButton  = `
+      
+      <div class="accordion-item">
+      <h2 class="accordion-header">
+      <div class="form-check">
+            <input class="form-check-input" type="checkbox" data-set="${element.idproyecto}"/>
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapse-${element.idproyecto}" aria-expanded="false" aria-controls="flush-collapse-${element.idproyecto}">
+              <label class="form-check-label" for=""> ${element.denominacion} </label>
+            </button>
+            </div>
+            <div class="scrollable-content">
+            ${newContent}
+            </div>  
+        </h2>
         
-        let code = btoa(asset.idactivo) //CODIFICACIÓN
-  
-        let IconStatus = asset.estado == "SIN VENDER" ?  `<span class="badge badge-sm bg-danger">${asset.estado}</span>` : 
-                                        asset.estado == "VENDIDO" ? `<span class="badge badge-sm bg-success">${asset.estado}</span>`: 
-                                                                  `<span class="badge badge-sm bg-warning">${asset.estado}</span>` ;
-  
-        newRow = `
-                <tr>
-                  <td>
-                    <div class="d-flex px-2 py-1">
-                      <div class="d-flex flex-column justify-content-center">
-                        <h6 class="mb-0 text-sm">${numberRow}</h6>
-                      </div>
-                    </div>
-                  </td>
-                  <td>
-                    <p class="text-xs font-weight-bold mb-0">${asset.propietario_lote}</p>
-                    </td>
-                    <td class="align-middle text-center text-sm">
-                      ${IconStatus}
-                    </td>
-                    <td>
-                      <p class="text-xs font-weight-bold mb-0">${asset.sublote}</p>
-                    </td>
-                  <td>
-                    <p class="text-xs font-weight-bold mb-0">${asset.direccion}</p>
-                  </td>
-                  <td class="align-middle">
-                    <div class="btn-group">
-                        <a type="button" href="./delete_asset.php?id=${code}" class="btn btn-link text-danger text-gradient px-3 mb-0" id="btn-delete"><i class="bi bi-trash-fill"></i></a>
-                        <a type="button" href="./edit_asset.php?id=${code}" class="btn btn-link text-dark px-3 mb-0" id="btn-edit"><i class="bi bi-pencil-fill"></i></a>
-                        <a type="button" href="./detail_asset.php?id=${code}" class="btn btn-link text-success px-3 mb-0"><i class="bi bi-arrow-right-square"></i></a>
-                        </div>
-                    </td>
-                </tr>           
-        `;
-        numberRow ++;
-
-        $("#table-assets tbody").innerHTML += newRow;
-      });
-
-    }else{
-      newRow =`
-      <div class="alert alert-danger m-4 text-white" role="alert">
-          <strong class="text-white">No existe lotes</strong> Asegurate de que existan los registros.
       </div>
       `;
-      $("#table-assets tbody").innerHTML += newRow;
-    }
-    
 
+      $("#accordion-proyectos").innerHTML += newButton;
+    }
   }
 
-
-  async function getAssets(id){
+  async function getBudgets(){
 
     try{
 
-      $("#add-asset").setAttribute("href",`./add_asset.php?idproy=${code}&name=${codeName}`);
+      let url = "../../Controllers/asset.controller.php";
 
-      let url ="../../Controllers/asset.controller.php";
       let params = new FormData();
-  
-      params.append("action","listAssetProjectId");
-      params.append("idproyecto",id);
-      params.append("propietario_lote",$("#propietario_lote").value);
+      params.append("action","listLotsNoBudget");
 
-      results = await global.sendAction(url, params);
+      let results = await global.sendAction(url,params);
 
       if(results){
-        $("#cabezera").innerHTML = "";
-        $("#cabezera").innerText +=`LOTES - ${name}`;
-        renderAssets(results);
 
-      }
-    }
-    catch(e){
-      console.error(e);
-    }
-  }
+        console.log(results);
+        results.forEach(result =>{
 
-  async function searchAsset(idproy,sublote){
-    try{
+          let nombresExist = nombresUnicos.find(nombre => nombre.idproyecto == result.idproyecto && nombre.denominacion == result.denominacion);
 
-      let url = `../../Controllers/asset.controller.php`;
-      let params = new FormData();
-
-      params.append("action", "listAssetPAcode");
-      params.append("idproyecto",idproy);
-      params.append("sublote",sublote);
-
-      let results = await global.sendAction(url, params);
-
-      if(results){
-        console.log(results)
-        renderAssets(results);
-      }
-    }
-    catch(e){
-      console.error(e);
-    }
-  }
-
-  //Genera u archivo PDF
-  async function generatePdf(id){
-
-    let codeID = btoa(id);
-    let url = `../../reports/reports_pdf.php?action=reportLots&idproyecto=${codeID}`;
-
-    window.location.href = url;
-  }
-
-  //Genera un archivo excel
-  async function generateExcel(id){
-
-    let codeID = btoa(id);
-    let url = `../../reports/reports_excel.php?idproyecto=${codeID}`;
-
-    window.location.href = url;
-  }
-
-  $("#in-sublote").addEventListener("input",()=>{
-
-      clearTimeout(timer);
-
-        timer = setTimeout(()=>{
-
-          let sublote = $("#in-sublote").value;
-
-          if(sublote != ""){
-
-            searchAsset(idProyecto,sublote);
-
-          }else{
-
-            getAssets(idProyecto);
+          if(!nombresExist){
+            nombresUnicos.push({idproyecto: result.idproyecto, denominacion: result.denominacion})
           }
-        },1500)
-    });
+        })
 
-      
-  $("#generate-excel").addEventListener("click",()=>{
-
-    generateExcel(idProyecto);
-  });
-
-  $("#generate-pdf").addEventListener("click",()=>{
-
-    generatePdf(idProyecto);
-  });
-
-  $("#propietario_lote").addEventListener("change",()=>{
-
-    $("#table-assets tbody").innerHTML = "";
-    getAssets(idProyecto);
-  });
-
-    getAssets(idProyecto);
-});
-  </script>
-  <script>
-    var win = navigator.platform.indexOf('Win') > -1;
-    if (win && document.querySelector('#sidenav-scrollbar')) {
-      var options = {
-        damping: '0.5'
+        console.log(nombresUnicos);
+        renderAccordionButtons(nombresUnicos,results);
       }
-      Scrollbar.init(document.querySelector('#sidenav-scrollbar'), options);
+
     }
+    catch(e){
+      console.error(e);
+    }
+  }
+
+   
+
+  $("#list-group").addEventListener("click",(e)=>{
+
+    if(e.target.classList.contains("edit")){
+
+      replaceTextLabel(e);
+
+    }else if(e.target.classList.contains("delete")){
+
+      sAlert.sweetConfirm("¿Deseas eliminar esta especifiación?","Una vez borrado no se podrá recuperar",()=>{
+        
+        dropTextli(e);
+      })
+    }
+  });
+
+  getBudgets();
+  /* getClients(idActivo);
+  getDetails(idActivo); */
+
   </script>
   <!-- Github buttons -->
   <script async defer src="https://buttons.github.io/buttons.js"></script>

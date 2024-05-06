@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 06-05-2024 a las 09:21:28
+-- Tiempo de generación: 06-05-2024 a las 13:18:21
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -281,12 +281,15 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_get_budget_by_id` (IN `_idpresu
 		pres.idpresupuesto,
         pres.codigo,
         pres.modelo,
+        (SUM(detcost.cantidad * detcost.precio_unitario)) AS total,
         pers.nombres AS usuario
 		FROM presupuestos pres
+        INNER JOIN detalle_costos detcost ON detcost.idpresupuesto = pres.idpresupuesto
         INNER JOIN usuarios usu ON usu.idusuario = pres.idusuario
         INNER JOIN personas pers ON pers.idpersona = usu.idpersona
         WHERE pres.idpresupuesto = _idpresupuesto
         AND pres.inactive_at IS NULL
+        GROUP BY pres.idpresupuesto
         ORDER BY pres.codigo ASC;
 END$$
 
@@ -640,11 +643,14 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_budgets` ()   BEGIN
 		pres.idpresupuesto,
         pres.codigo,
         pres.modelo,
+        (SUM(detcost.cantidad * detcost.precio_unitario)) AS total,
         pers.nombres AS usuario
 		FROM presupuestos pres
+        INNER JOIN detalle_costos detcost ON detcost.idpresupuesto = pres.idpresupuesto
         INNER JOIN usuarios usu ON usu.idusuario = pres.idusuario
         INNER JOIN personas pers ON pers.idpersona = usu.idpersona
         WHERE pres.inactive_at IS NULL
+        GROUP BY pres.idpresupuesto
         ORDER BY pres.codigo ASC;
 END$$
 
@@ -1169,12 +1175,15 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_search_budgets` (IN `_codigo` V
 		pres.idpresupuesto,
         pres.codigo,
         pres.modelo,
+        (SUM(detcost.cantidad * detcost.precio_unitario)) AS total,
         pers.nombres AS usuario
 		FROM presupuestos pres
+        INNER JOIN detalle_costos detcost ON detcost.idpresupuesto = pres.idpresupuesto
         INNER JOIN usuarios usu ON usu.idusuario = pres.idusuario
         INNER JOIN personas pers ON pers.idpersona = usu.idpersona
         WHERE pres.codigo LIKE CONCAT(_codigo,"%")
         AND pres.inactive_at IS NULL
+        GROUP BY pres.idpresupuesto
         ORDER BY pres.codigo ASC;
 END$$
 

@@ -333,14 +333,10 @@
         </nav>
         <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
           <div class="ms-md-auto pe-md-3 d-flex align-items-center">
-            <div class="input-group">
-              <span class="input-group-text text-body"><i class="fas fa-search" aria-hidden="true"></i></span>
-              <input type="text" class="form-control" placeholder="Escribe el Sublote..." id="in-sublote">
-            </div>
+            
           </div>
           <ul class="navbar-nav  justify-content-end">
             <li class="nav-item d-flex align-items-center">
-              <a class="btn btn-outline-success btn-sm mb-0 me-3" target="_blank" href="./add_asset.php" id="add-asset">AGREGAR PRESUPUESTO</a>
             </li>
             <li class="nav-item d-flex align-items-center">
               <a href="javascript:;" class="nav-link text-body font-weight-bold px-0">
@@ -375,27 +371,39 @@
               <div class="row">
                 <div class="col-md-6">
 
-                  <h6>Tabla - clientes</h6>
+                  <h6>Tabla - Presupuestos</h6>
                 </div>
-                <div class="col-md-6">
-                  <div class="text-end">
-                    <button type="button" class="btn btn-lg bg-gradient-success opacity-10" id="generate-excel"><i class="fa-solid fa-file-excel"></i></button>
-                    <button type="button" class="btn btn-lg bg-gradient-danger opacity-10" id="generate-pdf"><i class="bi bi-filetype-pdf"></i></button>
+              </div>
+              <div class="row">
+                <div class="col-md-5">
+                  <div class="btn-group text-start">
+                    <button type="button" class="btn btn-sm bg-gradient-success opacity-10" id="generate-excel"><i class="fa-solid fa-file-excel"></i></button>
+                    <button type="button" class="btn btn-sm bg-gradient-danger opacity-10" id="generate-pdf"><i class="bi bi-filetype-pdf"></i></button>
+                    <a type="button" class="btn btn-sm btn-outline-success" target="_blank" href="./add_budget.php" id="add-asset">AGREGAR PRESUPUESTO</a>
                   </div>
+                  
+                </div>
+                <div class="col-md-7">
+                  <div class="ms-md-auto pe-md-3 d-flex align-items-center">
+                  <div class="input-group">
+                      <span class="input-group-text text-body"><i class="fas fa-search" aria-hidden="true"></i></span>
+                      <input type="text" class="form-control" placeholder="Escribe el código..." id="in-codigo">
+                    </div>
+                  </div>
+                  
                 </div>
               </div>
             </div>
+            <hr>
             <div class="card-body px-0 pt-0 pb-2">
               <div class="table-responsive text-center p-0">
-                  <table class="table align-items-center mb-0" id="table-assets">
+                  <table class="table align-items-center mb-0" id="table-budgets">
                     <thead>
                     <tr>
                       <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">#</th>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Tipo de persona</th>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Apellidos</th>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Nombres</th>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Tipo de documento</th>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Nº de documento</th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Código</th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Modelo</th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Total</th>
                       <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Operaciones</th>
                     </tr>
                   </thead>
@@ -503,104 +511,85 @@ document.addEventListener("DOMContentLoaded",()=>{
   const $ = id => global.$(id);
   const $All = id => global.$All(id);
 
-  /* VALOR EN LA URL */
-  const stringQuery = window.location.search;
-  const url = new URLSearchParams(stringQuery);
-  const code = url.get("id");
-  const codeName = url.get("name");
-
-  const idProyecto = atob(code); //DECOFICA EL VALOR
-  const name = atob(codeName);
-
   let timer;
 
-  function renderAssets(results){
+  //Renderiza los presupuestos
+  function renderBudgets(results){
 
     let numberRow = 1;
 
-    $("#table-assets tbody").innerHTML = "";
+    $("#table-budgets tbody").innerHTML = "";
 
     let newRow = ``;
 
     if(results.length > 0){
       
-      results.forEach(asset =>{
-        
-        let code = btoa(asset.idactivo) //CODIFICACIÓN
-  
-        let IconStatus = asset.estado == "SIN VENDER" ?  `<span class="badge badge-sm bg-gradient-danger">${asset.estado}</span>` : 
-                                        asset.estado = "VENDIDO" ? `<span class="badge badge-sm bg-gradient-success">${asset.estado}</span>`: 
-                                                                  `<span class="badge badge-sm bg-gradient-secondary">${asset.estado}</span>` ;
+      results.forEach(budget =>{
+
+        let code = btoa(budget.idpresupuesto);
+        let total = budget.total;
+        let totalFormat = total.toLocaleString('es-ES',{
+          minimumFractionDigits : 2, //numero mínimo para mostrar decimales
+          maximumFractionDigits : 4
+          /* maximumFractionDigits : 4 //numero máximo para mostrar decimales */
+        });
   
         newRow = `
                 <tr>
                   <td>
-                    <div class="d-flex px-2 py-1">
-                      <div class="d-flex flex-column justify-content-center">
-                        <h6 class="mb-0 text-sm">${numberRow}</h6>
-                      </div>
-                    </div>
+                    <h6 class="mb-0 text-sm">${numberRow}</h6>
                   </td>
                   <td>
-                    <p class="text-xs font-weight-bold mb-0">${asset.denominacion}</p>
-                    </td>
-                    <td class="align-middle text-center text-sm">
-                      ${IconStatus}
-                    </td>
-                    <td>
-                      <p class="text-xs font-weight-bold mb-0">${asset.sublote}</p>
+                    <p class="text-xs font-weight-bold mb-0">${budget.codigo}</p>
                     </td>
                   <td>
-                    <p class="text-xs font-weight-bold mb-0">${asset.direccion}</p>
+                    <p class="text-xs font-weight-bold mb-0">${budget.modelo}</p>
+                  </td>
+                  <td>
+                    <p class="text-xs font-weight-bold mb-0">${totalFormat}</p>
                   </td>
                   <td class="align-middle">
                     <div class="btn-group">
-                        <a type="button" href="./delete_asset.php?id=${code}" class="btn btn-danger btn-sm" id="btn-delete"><i class="bi bi-trash-fill"></i></a>
-                        <a type="button" href="./edit_asset.php?id=${code}" class="btn btn-primary btn-sm" id="btn-edit"><i class="bi bi-pencil-fill"></i></a>
-                        <a type="button" href="./detail_asset.php?id=${code}" class="btn btn-success btn-sm"><i class="bi bi-arrow-right-square"></i></a>
+                        <a type="button" href="./delete_client.php?id=${code}" class="btn btn-link text-danger text-gradient px-3 mb-0"><i class="bi bi-trash-fill"></i></a>
+                        <a type="button" href="./edit_client.php?id=${code}" class="btn btn-link text-dark px-3 mb-0"><i class="bi bi-pencil-fill"></i></a>
+                        <a type="button" href="#" class="btn btn-link text-success px-3 mb-0 openModal" data-bs-toggle="modal" data-bs-target="#data_full_client" data-id="${budget.idpresupuesto}"><i class="bi bi-arrow-right-square openModal" data-id="${budget.idpresupuesto}"></i></a>
                         </div>
                     </td>
                 </tr>           
         `;
         numberRow ++;
 
-        $("#table-assets tbody").innerHTML += newRow;
+        $("#table-budgets tbody").innerHTML += newRow;
       });
 
     }else{
       newRow =`
       <div class="alert alert-danger m-4 text-white" role="alert">
-          <strong class="text-white">No existe sublotes</strong> Asegurate de que existan los registros.
+          <strong class="text-white">No existe el presupuesto</strong> Verifica el código.
       </div>
       `;
-      $("#table-assets tbody").innerHTML += newRow;
+      $("#table-budgets tbody").innerHTML += newRow;
     }
     
 
   }
 
-
-  async function getClients(id){
+  //Obtien los datos de los presupuestos
+  async function getBudgets(){
 
     try{
 
-      /* $("#add-asset").setAttribute("href",`./add_asset.php?idproy=${code}&name=${codeName}`); */
+      let url = "../../Controllers/budget.controller.php";
 
-      let url ="../../Controllers/client.controller.php";
-      let params = new FormData();
-  
-      params.append("action","listClienTperson");
-      params.append("tipo_persona",$("#tipo_persona"));
+      let params = new FormData()
 
-      results = await global.sendAction(url, params);
+      params.append("action","listBudgets");
 
+      let results = await global.sendAction(url,params);
+      
       if(results){
-
-        /* $("#cabezera").innerText +=` ${name}`;
-        renderAssets(results); */
-
-        console.log(results);
-
+         
+        renderBudgets(results);
       }
     }
     catch(e){
@@ -608,21 +597,20 @@ document.addEventListener("DOMContentLoaded",()=>{
     }
   }
 
-  async function searchAsset(idproy,sublote){
+  //Busca el presupuesto por su código
+  async function searchBudget(codigo){
     try{
 
-      let url = `../../Controllers/client.controller.php`;
+      let url = `../../Controllers/budget.controller.php`;
       let params = new FormData();
 
-      params.append("action", "listAssetPAcode");
-      params.append("idproyecto",idproy);
-      params.append("sublote",sublote);
+      params.append("action", "searchBudget");
+      params.append("codigo",codigo);
 
       let results = await global.sendAction(url, params);
 
       if(results){
-        console.log(results)
-        renderAssets(results);
+        renderBudgets(results);
       }
     }
     catch(e){
@@ -648,21 +636,21 @@ document.addEventListener("DOMContentLoaded",()=>{
     window.location.href = url;
   }
 
-  $("#in-sublote").addEventListener("input",()=>{
+  $("#in-codigo").addEventListener("input",()=>{
 
       clearTimeout(timer);
 
         timer = setTimeout(()=>{
 
-          let sublote = $("#in-sublote").value;
+          let codigo = $("#in-codigo").value;
 
-          if(sublote != ""){
+          if(codigo != ""){
 
-            searchAsset(idProyecto,sublote);
+            searchBudget(codigo);
 
           }else{
 
-            getClients(idProyecto);
+            getBudgets();
           }
         },1500)
     });
@@ -677,7 +665,7 @@ document.addEventListener("DOMContentLoaded",()=>{
     generatePdf(idProyecto);
   });
 
-    getClients(idProyecto);
+    getBudgets()
 });
   </script>
   <script>
