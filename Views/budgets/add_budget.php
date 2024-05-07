@@ -42,6 +42,7 @@
   <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
   <link href="../../assets/css/nucleo-svg.css" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  
   <!-- CSS Files -->
   <link id="Viewstyle" href="../../assets/css/soft-ui-dashboard.css?v=1.0.7" rel="stylesheet" />
   <!-- Nepcha Analytics (nepcha.com) -->
@@ -86,7 +87,7 @@
 
         <!-- PROYECTOS -->
         <li class="nav-item">
-          <a class="nav-link active" href="../projects/index.php">
+          <a class="nav-link" href="../projects/index.php">
             <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
               <svg width="12px" height="12px" viewBox="0 0 42 42" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <title>office</title>
@@ -131,7 +132,7 @@
         </li>
         <!-- PRSUPUESTOS -->
         <li class="nav-item">
-          <a class="nav-link" href="../budgets/index.php">
+          <a class="nav-link active" href="../budgets/index.php">
             <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
               <svg width="12px" height="12px" viewBox="0 0 42 42" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <title>office</title>
@@ -387,7 +388,7 @@
                       <div class="col-md-5">
                         <div class="m-2">
                           <label for="codigo" class="form-label">Código</label>
-                          <input class="form-control" type="text" name="codigo" id="codigo" minlength="1" maxlength="3" placeholder="Código" required>
+                          <input class="form-control" type="text" name="codigo" id="codigo" value="" minlength="1" maxlength="8" placeholder="Código" required>
                           <div class="invalid-feedback">
                             Necesitas ingresar el código del presupuesto.
                           </div>
@@ -410,7 +411,7 @@
                         </div>
                       </div>
                       <div class="col-md-2 mt-4 text-button align-bottom">
-                        <button type="button" class="btn btn-sm bg-gradient-info mb-0" id="save_budget"><i class="fa-solid fa-floppy-disk"></i> Guardar</button>
+                        <button type="submit" class="btn btn-sm bg-gradient-info mb-0" id="save_budget"><i class="fa-solid fa-floppy-disk"></i> Guardar</button>
                       </div>
                     </div>
                   </form>
@@ -457,7 +458,7 @@
                         </div>
                       </div>
                     </div>
-                    <div class="row d-flex align-items-center mb-4">
+                    <div class="row d-flex align-items-center mb-4 d-none" id="inputs_materials">
                       
                       <!-- MATERIALES -->
                       <div class="col-md-4">
@@ -537,34 +538,57 @@
               </div>
             </div>
 
-            <!-- /CABEZERA DEL DETALLE -->
-
-            <!-- CLIENTES --> 
+            <!-- TABLA DE DETALLES --> 
 
             <div class="col-md-12 mb-lg-0 mb-4">
               <div class="card mt-4">
                 <div class="card-header pb-0 p-3">
                   <div class="row">
                     <div class="col-6 d-flex align-items-center">
-                      <h6 class="mb-0">Clientes</h6>
+                      <h6 class="mb-0"></h6>
                     </div>
                   </div>
                 </div>
                 <div class="card-body p-3">
                   <div class="row">
                     <div class="table-responsive table-responsive-lg">
-                      <table class="table align-items-center mb-0" id="table-clients">
+                      <table class="table align-items-center mb-0" id="table-det-budgets">
                         <thead>
                           <tr>
-                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Apellidos</th>
-                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Nombres</th>
-                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Tipo de documento</th>
-                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Nº de documento</th>
+                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">#</th>
+                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Subcat. Costo</th>
+                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Detalle</th>
+                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Cantidad</th>
+                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Precio unitario</th>
+                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Total</th>
                           </tr>
                         </thead>
                         <tbody>
-                    
-                        <!-- RENDER NUEVOS CLIENTES  -->
+                          <tr>
+      <td>1</td>
+      <td class="material">Materiales de construcción</td>
+      <td>Ladrillos huecos de arcilla</td>
+      <td>1000</td>
+      <td>$0.50</td>
+      <td>$500.00</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>Herramientas</td>
+      <td>Martillo de carpintero</td>
+      <td>1</td>
+      <td>$25.00</td>
+      <td>$25.00</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>Acabados</td>
+      <td>Pintura acrílica blanca</td>
+      <td>50 litros</td>
+      <td>$20.00</td>
+      <td>$1000.00</td>
+    </tr>
+                        <!-- RENDER DETALLES  -->
                         
                         </tbody>
                       </table>
@@ -573,10 +597,7 @@
                 </div>
               </div>
             </div>
-
           </div>
-          <!-- /CLIENTES -->
-
          
         <!-- ---------- -->  
         </div>
@@ -708,10 +729,11 @@
     </div>
 
   </div>
-   
+
   <!-- JQUERY -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  
 
   <!-- SWEET ALERT -->
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -751,6 +773,69 @@
   let idPresupuesto;
   let nombresUnicos = [];
     
+  //Obtiene las caregorias de los costos
+  async function getCategoriesCosts(){
+
+    try{
+
+      let url = "../../Controllers/cost.controller.php";
+      let params = new FormData();
+      params.append("action", "listCategory");
+
+      let results = await global.sendAction(url,params);
+
+      if(results){
+        console.log(results)
+
+        results.forEach(result =>{
+          
+          let tagOption = document.createElement("option");
+          tagOption.value = result.idcategoria_costo;
+          tagOption.innerText = result.categoria_costo;
+
+          $("#categoria_costo").appendChild(tagOption);
+
+        })
+      }
+    }
+    catch(e){
+      console.log(e);
+    }
+  }
+
+
+  //Obtiene las subcategorías de los costos, según ka categoría
+  async function getSubcategoriesCosts(categoria){
+
+    try{
+
+      let url = "../../Controllers/cost.controller.php";
+
+      let params = new FormData();
+      params.append("action","listSubcategory")
+      params.append("idcategoria_costo",categoria)
+
+      let results = await global.sendAction(url,params);
+
+      if(results){
+        console.log(results);
+
+        results.forEach(result =>{
+
+          let tagOption = document.createElement("option");
+          tagOption.value = result.idsubcategoria_costo;
+          tagOption.innerText = result.subcategoria_costo;
+
+          $("#subcategoria_costo").appendChild(tagOption);
+        });
+      }
+    }
+    catch(e){
+      console.error(e);
+    }
+  }
+
+  //Renderiza los botones del acordion
   function renderAccordionButtons(array,array2){
 
     for(element of array){
@@ -796,6 +881,7 @@
     }
   }
 
+  //Obtiene los lotes sin presupuesto
   async function getBudgets(){
 
     try{
@@ -829,15 +915,100 @@
     }
   }
 
-   /* function getSelected(){
+  function changeRequired(boolean){
 
-    let selectProyects = $All('input [name = "data-proyectos"]');
+    if(!boolean){
 
-    Array.from(selectProyects).forEach(select =>{
-      console.log(select);
-    })
-   } */
+      $("#detalle").required = true;
+      $("#marca").required = false;
+      $("#material").required = false;
+      $("#tipo_material").required = false;
+    }else{
+      $("#detalle").required = false;
+      $("#marca").required = true;
+      $("#material").required = true;
+      $("#tipo_material").required = true;
+    }
+  }
 
+  $("#categoria_costo").addEventListener("change",(e)=>{
+
+    let required = false;
+
+    console.log(e.target.value);
+    $("#subcategoria_costo").innerHTML = "";
+    getSubcategoriesCosts(e.target.value);
+
+    if(e.target.value == 1 && $("#subcategoria_costo").textContent !== "MANO DE OBRA"){
+
+      required = true
+      $("#inputs_materials").classList.remove("d-none");  
+    }else{
+
+      required = false;
+      $("#inputs_materials").classList.add("d-none");
+    }
+
+    changeRequired(required);
+  });
+
+
+  $("#table-det-budgets tbody").addEventListener("click",(e)=>{
+
+    if(e.target.classList.contains("material")){
+      console.log("contiene material")
+
+      let input = document.createElement("input");
+      input.type = "text";
+      input.classList.add("form-control");
+      input.required = true;
+      input.focus()
+      input.value = e.target.textContent;
+      
+      let td = e.target.closest("td")
+      e.target.textContent = "";
+      td.appendChild(input)
+
+      input.addEventListener("blur",()=>{
+        let td = input.closest("td");
+        td.removeChild(input);
+        td.textContent = input.value;
+      });
+    }else{
+      console.log("no contiene la clase")
+    }
+  })
+
+  function validateForm(form){
+    'use strict' 
+
+     
+    const forms = document.querySelectorAll(form)
+
+    Array.from(forms).forEach(form => {
+        form.addEventListener('submit', event => {
+
+            if (!form.checkValidity()) {
+            event.preventDefault()      //=> FRENA EL ENVÍO DEL FORMULARIO
+            event.stopPropagation()     //=> FRENA LA PROPAGACIÓN DE DATOS EN EL FORMULARIO
+            form.reportValidity();
+        }else{
+            event.preventDefault();
+            sAlert.sweetConfirm("Datos nuevos","¿Deseas actualizar el registro?",()=>{
+                
+              addAsset(idProyecto); //Ejecuta la función
+            });
+        }
+
+        form.classList.add('was-validated') //=> AGREGA ESTA CLASE A LOS ELEMENTOS DEL FORMULARIO(MUESTRA LOS COMENTARIOS)
+        }, false) //=> ESTE TERCER ARGUMENTO INDICA QUE EL EVENTO NO SE ESTA CAPTURANDO EN LA ""FASE DE CAPTURA" SINO EN "PROPAGACIÓN NORMAL"
+    })  
+  };
+
+  $("#codigo").addEventListener("blur",()=>{
+    let result =  "PRES-" + $("#codigo").value.toString().padStart(3,"0");
+    $("#codigo").value = result;
+  })
 
   $("#save_lots").addEventListener("click",()=>{
 
@@ -872,6 +1043,15 @@
       });
     }
   });
+
+  $("#form-budget").addEventListener("submit",(e)=>{
+
+    e.preventDefault();
+    validateForm("#form-budget")
+
+  })
+
+  getCategoriesCosts();
   getBudgets();
 
   let acordionItems = document.querySelectorAll(".accordion-item");

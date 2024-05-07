@@ -77,3 +77,4 @@ SELECT * FROM detalle_costos where idpresupuesto = 1 order by idtipo_material as
 CALL spu_list_detail_cost(3);
 -- Borrar los registros de subcategoria_costos con las descripciones específicas
 DELETE FROM detalle_costos WHERE detalle IN ('Intereses por financiamiento', 'Limpieza de terreno', 'Conexión de servicios básicos', 'Costos administrativos', 'Impuestos municipales');
+SELECT * FRom presupuestos;
