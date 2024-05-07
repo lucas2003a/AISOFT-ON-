@@ -369,48 +369,170 @@
 
           <!-- IMAGEN -->
           <div class="row">
-            <div class="col-xl-6 mb-xl-0 mb-4">
-              <div class="card bg-transparent shadow-xl"  style="height: 100%;">
-                <div class="overflow-hidden position-relative border-radius-xl" style="background-image: url('../../assets/img/curved-images/curved14.jpg');" id="imagen">
-                  <span class="mask bg-gradient-dark" id="mask"></span>
-                  <div class="card-body position-relative z-index-1 p-3">
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- CABEZERA DEL DETALLE -->
-
-            <div class="col-xl-6">
-              <div class="row">
-                <div class="col-md-6">
-                  <div class="card"  style="height: 100%;">
-                    <div class="card-header mx-4 p-3 text-center">
-                      <div class="icon icon-shape icon-lg bg-gradient-primary shadow text-center border-radius-lg">
-                      <i class="fa-solid fa-coins opacity-10"></i>
-                      </div>
-                    </div>
-                    <div class="card-body pt-0 p-3 text-center">
-                      <h6 class="text-center mb-0">Precio de construcción</h6>
-                      <hr class="horizontal dark my-3">
-                      <h5 class="mb-0" id="precio_construccion">--</h5>
+            <div class="col-md-12 mb-lg-0 mb-4">
+              <div class="card mt-4">
+                <div class="card-header pb-0 p-3">
+                  <div class="row">
+                    <div class="col-6 d-flex align-items-center">
+                      <h6 class="mb-0"><strong>Información del presupuesto</strong></h6>
                     </div>
                   </div>
                 </div>
+                <div class="card-body p-3">
+                  
+                  <!-- FORMULARIO PARA EL PRESUPUESTO -->
+                  <form action="" class="row needs-validation" id="form-budget" novalidate>  
+                    <div class="row d-flex align-items-center">
 
-                <div class="col-md-6 mt-md-0 mt-4">
-                  <div class="card"  style="height: 100%;">
-                    <div class="card-header mx-4 p-3 text-center">
-                      <div class="icon icon-shape icon-lg bg-gradient-primary shadow text-center border-radius-lg">
-                      <i class="fa-solid fa-hand-holding-dollar opacity-10"></i>
+                      <div class="col-md-5">
+                        <div class="m-2">
+                          <label for="codigo" class="form-label">Código</label>
+                          <input class="form-control" type="text" name="codigo" id="codigo" minlength="1" maxlength="3" placeholder="Código" required>
+                          <div class="invalid-feedback">
+                            Necesitas ingresar el código del presupuesto.
+                          </div>
+                          <div class="valid-feedback">
+                            Código de presupuesto registrado correctamente.
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="col-md-5">
+                        <div class="m-2">
+                          <label for="modelo" class="form-label">Modelo</label>
+                          <input class="form-control" type="text" name="modelo" id="modelo" placeholder="Modelo" required>
+                          <div class="invalid-feedback">
+                            Necesitas ingresar el modelo del presupuesto.
+                          </div>
+                          <div class="valid-feedback">
+                            Modelo de presupuesto registrado correctamente.
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-2 mt-4 text-button align-bottom">
+                        <button type="button" class="btn btn-sm bg-gradient-info mb-0" id="save_budget"><i class="fa-solid fa-floppy-disk"></i> Guardar</button>
                       </div>
                     </div>
-                    <div class="card-body pt-0 p-3 text-center">
-                      <h6 class="text-center mb-0">Precio del lote</h6>
-                      <hr class="horizontal dark my-3">
-                      <h5 class="mb-0" id="precio_lote">--</h5>
+                  </form>
+
+                  <hr>
+                  <h6 class="mb-0 mt-4 mb-4"><strong>Detalles del presupuesto</strong></h6>
+                  <form action="" class="row needs-validation" id="form_det_budget">
+                    <div class="row d-flex align-items-center">
+
+                      <div class="col-md-3">
+                        <label for="categoria_costo" class="form-label">Categoría</label>
+                        <select name="categoria_costo" id="categoria_costo" class="form-select" required>
+                          <option value="" default>Categoría</option>
+                        </select>
+                        <div class="invalid-feedback">
+                            Necesitas ingresar la categoría del costo.
+                          </div>
+                          <div class="valid-feedback">
+                            Categoría de costo registrado correctamente.
+                          </div>
+                      </div>
+
+                      <div class="col-md-4">
+                        <label for="subcategoria_costo" class="form-label">Subcategoría</label>
+                        <select name="subcategoria_costo" id="subcategoria_costo" class="form-select" required>
+                          <option value="" default>Subcategoría</option>
+                        </select>
+                        <div class="invalid-feedback">
+                            Necesitas ingresar la subcategoría del costo.
+                        </div>
+                        <div class="valid-feedback">
+                          Subcategoría de costo registrado correctamente.
+                        </div>
+                      </div>
+
+                      <div class="col-md-5 mb-2">
+                        <label for="detalle" class="form-label">Detalle</label>
+                        <input type="text" name="detalle" id="detalle" class="form-control" placeholder="Detalle">
+                        <div class="invalid-feedback">
+                            Necesitas ingresar la un detalle.
+                        </div>
+                        <div class="valid-feedback">
+                          Detalle registrado correctamente.
+                        </div>
+                      </div>
                     </div>
-                  </div>
+                    <div class="row d-flex align-items-center mb-4">
+                      
+                      <!-- MATERIALES -->
+                      <div class="col-md-4">
+                        <label for="marca" class="form-label">Marca</label>
+                        <select name="marca" id="marca" class="form-select">
+                          <option value="" default>Marca</option>
+                        </select>
+                        <div class="invalid-feedback">
+                            Necesitas ingresar una marca.
+                        </div>
+                        <div class="valid-feedback">
+                          Marca registrado correctamente.
+                        </div>
+                      </div>
+
+                      <div class="col-md-4">
+                        <label for="material" class="form-label">Material</label>
+                        <select name="material" id="material" class="form-select">
+                          <option value="" default>Material</option>
+                        </select>
+                        <div class="invalid-feedback">
+                            Necesitas ingresar un material.
+                        </div>
+                        <div class="valid-feedback">
+                          Material registrado correctamente.
+                        </div>
+                      </div>
+
+                      <div class="col-md-4">
+                        <label for="tipo_material" class="form-label">Tipo de material</label>
+                        <select name="tipo_material" id="tipo_material"  class="form-select">
+                          <option value="" default>Tipo de material</option>
+                        </select>
+                        <div class="invalid-feedback">
+                            Necesitas ingresar un tipo de material.
+                        </div>
+                        <div class="valid-feedback">
+                          Tipo de material registrado correctamente.
+                        </div>
+                      </div>
+  
+                    </div>
+                    <hr>
+
+                    <!-- CANTIDAD -->
+                    <div class="row d-flex align-items-center">
+                      
+                      <div class="col-md-3">
+                        <label for="cantidad" class="form-label">Cantidad</label>
+                        <input type="number" name="cantidad" id="cantidad" min="1" class="form-control">
+                        <div class="invalid-feedback">
+                            Necesitas ingresar la cantidad.
+                        </div>
+                        <div class="valid-feedback">
+                          Cantidad registrada correctamente.
+                        </div>
+                      </div>
+
+                      <div class="col-md-3">
+                        <label for="precio_unitario" class="form-label">Precio Unitario</label>
+                        <input type="number" name="precio_unitario" id="precio_unitario" class="form-control" min="1">
+                        <div class="invalid-feedback">
+                            Necesitas ingresar el precio unitario.
+                        </div>
+                        <div class="valid-feedback">
+                          Precio unitario registrado correctamente.
+                        </div>
+                      </div>
+
+                      <div class="col-md-6 text-end">
+                        <button class="btn bg-gradient-dark mb-0 mt-3" id="add"><i class="fas fa-plus"></i>&nbsp;&nbsp;Agregar</button>
+                      </div>
+                    </div>
+
+                  </form>
                 </div>
               </div>
             </div>
@@ -465,10 +587,13 @@
                 <div class="col-6 d-flex align-items-center">
                   <h6 class="mb-0">Proyectos</h6>
                 </div>
+                <div class="col-6 text-end">
+                  <button type="button" class="btn btn-sm bg-gradient-info mb-0" id="save_lots"><i class="fa-solid fa-floppy-disk"></i> Guardar</button>
+                </div>
               </div>
             </div>
             <div class="card-body p-3 pb-0">
-              <ul class="list-group" id="proyectos">
+              <ul class="list-group" id="list-proyectos">
                 <div class="accordion accordion-flush" id="accordion-proyectos">
                   
                   <!-- RENDER ACOORDION -->
@@ -497,7 +622,7 @@
             </div>
             <div class="card-body p-3">
             <div class="card-body pt-4 p-3">
-              <ul class="list-group"id="list-group">
+              <ul class="list-group" id="list-group">
               
                 <!-- RENDER DETALLES DE CONSTRUCCIÓN -->
 
@@ -640,7 +765,7 @@
           newContent += `
           <div id="flush-collapse-${element.idproyecto}" class="accordion-collapse collapse" data-bs-parent="#accordion-proyectos">
             <div class="form-check" style="margin: 0px 20px; display:flex; align-content:center;">
-            <input class="form-check-input" type="checkbox" style="height:20px;" data-sublote="${element2.sublote}"/>
+              <input class="form-check-input form-lotes" type="checkbox" style="height:20px;" data-idactivo="${element2.idactivo}" data-idproyecto="${element2.idproyecto}" name="data-lotes"/>
               <label class="form-check-label" for="sublote" style="font-size:10px; margin-top:10px;"> 
                 Lote - ${element2.sublote}
               </label>
@@ -654,8 +779,8 @@
       
       <div class="accordion-item">
         <h2 class="accordion-header">
-          <div class="form-check">
-            <input class="form-check-input" type="checkbox" style="height:30px;" data-idproyecto="${element.idproyecto}"/>
+          <div class="form-check form-proyects">
+            <input class="form-check-input check-proyects" type="checkbox" style="height:30px;" data-idproyecto="${element.idproyecto}" name="data-proyectos"/>
             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapse-${element.idproyecto}" aria-expanded="false" aria-controls="flush-collapse-${element.idproyecto}">
               <label class="form-check-label" for="denominacion" style="font-size:10px;"> <strong>${element.denominacion}</strong> </label>
             </button>
@@ -704,24 +829,53 @@
     }
   }
 
-   
+   /* function getSelected(){
 
-  $("#list-group").addEventListener("click",(e)=>{
+    let selectProyects = $All('input [name = "data-proyectos"]');
 
-    if(e.target.classList.contains("edit")){
+    Array.from(selectProyects).forEach(select =>{
+      console.log(select);
+    })
+   } */
 
-      replaceTextLabel(e);
 
-    }else if(e.target.classList.contains("delete")){
+  $("#save_lots").addEventListener("click",()=>{
 
-      sAlert.sweetConfirm("¿Deseas eliminar esta especifiación?","Una vez borrado no se podrá recuperar",()=>{
-        
-        dropTextli(e);
-      })
-    }
+    let lotes = document.querySelectorAll(".form-check-input.form-lotes");
+
+    Array.from(lotes).forEach(lote => {
+
+      if(lote.checked){
+
+        console.log(lote.dataset.idactivo);
+      }
+    })
+
   });
 
+  $("#list-proyectos").addEventListener("click",(e)=>{
+
+    if(e.target.classList.contains("check-proyects")){
+
+      let idproyecto = e.target.dataset.idproyecto;
+      let isChecked = e.target.checked;
+      let contents = document.querySelectorAll(".form-check-input.form-lotes");
+
+      Array.from(contents).forEach(content => {
+
+        let idproyectoLote = content.dataset.idproyecto
+        
+        if(idproyectoLote == idproyecto){
+          content.checked = isChecked;
+          console.log(idproyectoLote)
+        }
+      });
+    }
+  });
   getBudgets();
+
+  let acordionItems = document.querySelectorAll(".accordion-item");
+  console.log(acordionItems)
   /* getClients(idActivo);
   getDetails(idActivo); */
 
