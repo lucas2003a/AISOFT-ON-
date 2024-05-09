@@ -418,7 +418,7 @@
 
                   <hr>
                   <h6 class="mb-0 mt-4 mb-4"><strong>Detalles del presupuesto</strong></h6>
-                  <form action="" class="row needs-validation" id="form_det_budget">
+                  <form action="" class="row needs-validation" id="form_det_budget" novalidate>
                     <div class="row d-flex align-items-center">
 
                       <div class="col-md-3">
@@ -449,7 +449,7 @@
 
                       <div class="col-md-5 mb-2">
                         <label for="detalle" class="form-label">Detalle</label>
-                        <input type="text" name="detalle" id="detalle" class="form-control" placeholder="Detalle">
+                        <input type="text" name="detalle" id="detalle" class="form-control" placeholder="Detalle" required>
                         <div class="invalid-feedback">
                             Necesitas ingresar la un detalle.
                         </div>
@@ -463,7 +463,7 @@
                       <!-- MATERIALES -->
                       <div class="col-md-4">
                         <label for="marca" class="form-label">Marca</label>
-                        <select name="marca" id="marca" class="form-select">
+                        <select name="marca" id="marca" class="form-select" required>
                           <option value="" default>Marca</option>
                         </select>
                         <div class="invalid-feedback">
@@ -476,7 +476,7 @@
 
                       <div class="col-md-4">
                         <label for="material" class="form-label">Material</label>
-                        <select name="material" id="material" class="form-select">
+                        <select name="material" id="material" class="form-select" required>
                           <option value="" default>Material</option>
                         </select>
                         <div class="invalid-feedback">
@@ -489,7 +489,7 @@
 
                       <div class="col-md-4">
                         <label for="tipo_material" class="form-label">Tipo de material</label>
-                        <select name="tipo_material" id="tipo_material"  class="form-select">
+                        <select name="tipo_material" id="tipo_material"  class="form-select" required>
                           <option value="" default>Tipo de material</option>
                         </select>
                         <div class="invalid-feedback">
@@ -508,7 +508,7 @@
                       
                       <div class="col-md-3">
                         <label for="cantidad" class="form-label">Cantidad</label>
-                        <input type="number" name="cantidad" id="cantidad" min="1" class="form-control">
+                        <input type="number" name="cantidad" id="cantidad" min="1" class="form-control" required>
                         <div class="invalid-feedback">
                             Necesitas ingresar la cantidad.
                         </div>
@@ -519,7 +519,7 @@
 
                       <div class="col-md-3">
                         <label for="precio_unitario" class="form-label">Precio Unitario</label>
-                        <input type="number" name="precio_unitario" id="precio_unitario" class="form-control" min="1">
+                        <input type="number" name="precio_unitario" id="precio_unitario" class="form-control" min="1"s required>
                         <div class="invalid-feedback">
                             Necesitas ingresar el precio unitario.
                         </div>
@@ -772,7 +772,134 @@
   let det_casaJSON;
   let idPresupuesto;
   let nombresUnicos = [];
-    
+  let dataStorage = [];
+
+  //Almacenar data en un array
+  function storageData(){
+
+    let data = {};
+
+    if($("#inputs_materials").classList.contains("d-none")){
+
+      data = {
+  
+        idsubcategoria_costo : $("#subcategoria_costo").value,
+        idtipo_material : null,
+        detalle : $("#detalle").value,
+        cantidad : $("#cantidad").value,
+        precio_unitario : $("#precio_unitario").value
+      };
+    }else{
+
+      let marca = $("#marca").options[$("#marca").selectedIndex].textContent;
+      let material = $("#material").options[$("#material").selectedIndex].textContent;
+      let tipo_material = $("#tipo_material").options[$("#tipo_material").selectedIndex].textContent;
+      
+      data = {
+  
+        idsubcategoria_costo : $("#subcategoria_costo").value,
+        idtipo_material : $("#tipo_material").value,
+        detalle : marca + " // " + material + " // " + tipo_material,
+        cantidad : $("#cantidad").value,
+        precio_unitario : $("#precio_unitario").value
+      }
+
+    }
+
+    dataStorage.push(data);
+    console.log(dataStorage);
+  }
+
+  //Obtiene las marcas
+  async function getBrands(){
+
+    try{
+
+      let url = "../../Controllers/brand.controller.php";
+
+      let params = new FormData();
+      params.append("action","listBrand")
+
+      let results = await global.sendAction(url,params);
+
+      if(results){
+        console.log(results);
+
+        results.forEach(result =>{
+
+          let newTag = document.createElement("option");
+          newTag.value = result.idmarca;
+          newTag.innerText = result.marca;
+
+          $("#marca").appendChild(newTag);
+        });
+      }
+    }
+    catch(e){
+      console.error(e);
+    }
+  }
+
+  //Obtiene los materiales
+  async function getMaterials(idmarca){
+    try{
+
+      let url = "../../Controllers/material.controller.php";
+
+      let params = new FormData();
+      params.append("action","listMaterials");
+      params.append("idmarca",idmarca);
+
+      let results = await global.sendAction(url,params);
+
+      if(results){
+        console.log(results)
+        results.forEach(result =>{
+
+          let newTag = document.createElement("option");
+          newTag.value = result.idmaterial;
+          newTag.innerText = result.material;
+
+          $("#material").appendChild(newTag);
+        });
+      }
+    }
+    catch(e){
+      console.error(e);
+    }
+  }
+
+  //Obtiene los tipos de materiales
+  async function getTypesMaterials(idmaterial){
+
+    try{
+
+      let url = "../../Controllers/material.controller.php";
+
+      let params = new FormData();
+
+      params.append("action","listTypeMaterials");
+      params.append("idmaterial",idmaterial);
+
+      let results = await global.sendAction(url,params);
+
+      if(results){
+        console.log(results);
+        results.forEach(result => {
+
+          let newTag = document.createElement("option");
+          newTag.value = result.idtipo_material;
+          newTag.innerText = result.tipo_material;
+
+          $("#tipo_material").appendChild(newTag);
+        });
+      }
+    }
+    catch(e){
+      console.error(e);
+    }
+  }
+
   //Obtiene las caregorias de los costos
   async function getCategoriesCosts(){
 
@@ -915,6 +1042,7 @@
     }
   }
 
+  //Cambiar el atributo required
   function changeRequired(boolean){
 
     if(!boolean){
@@ -931,6 +1059,39 @@
     }
   }
 
+  //Oculta/muestra los inputs
+  function toogleInputs(boolean){
+
+    if(!boolean){
+
+      $("#marca").required = false;
+      $("#material").required = false;
+      $("#tipo_material").required = false;
+      $("#detalle").disabled = true
+    }else{
+      /* $("#marca").required = true;
+      $("#material").required = true;
+      $("#tipo_material").required = true;*/
+      $("#detalle").disabled = false; 
+    }
+  }
+  
+  $("#material").addEventListener("change",()=>{
+
+    let idmaterial = $("#material").value
+    $("#tipo_material").innerHTML = "";
+    getTypesMaterials(idmaterial);
+
+  });
+
+  $("#marca").addEventListener("change",(e)=>{
+
+    let idmarca = $("#marca").value
+    $("#material").innerHTML = "";
+    console.log(idmarca)
+    getMaterials(idmarca)
+  });
+
   $("#categoria_costo").addEventListener("change",(e)=>{
 
     let required = false;
@@ -939,11 +1100,25 @@
     $("#subcategoria_costo").innerHTML = "";
     getSubcategoriesCosts(e.target.value);
 
-    if(e.target.value == 1 && $("#subcategoria_costo").textContent !== "MANO DE OBRA"){
+    if(e.target.value == 1 ){
 
-      required = true
-      $("#inputs_materials").classList.remove("d-none");  
-    }else{
+      $("#subcategoria_costo").addEventListener("change",()=>{
+
+        if($("#subcategoria_costo").value == 11){
+  
+          required = true
+          $("#inputs_materials").classList.add("d-none");  
+          toogleInputs(required)
+          console.log("mano de obra");
+
+        }else{
+
+          required = false;
+          $("#inputs_materials").classList.remove("d-none");
+          toogleInputs(required);
+        }
+      })
+    }else if(e.target.value == 2){
 
       required = false;
       $("#inputs_materials").classList.add("d-none");
@@ -996,7 +1171,8 @@
             event.preventDefault();
             sAlert.sweetConfirm("Datos nuevos","¿Deseas actualizar el registro?",()=>{
                 
-              addAsset(idProyecto); //Ejecuta la función
+              //addAsset(idProyecto); //Ejecuta la función
+              storageData();
             });
         }
 
@@ -1047,10 +1223,16 @@
   $("#form-budget").addEventListener("submit",(e)=>{
 
     e.preventDefault();
-    validateForm("#form-budget")
+    validateForm("#form-budget");
 
   })
 
+  $("#form_det_budget").addEventListener("submit",(e)=>{
+    e.preventDefault(e)
+    validateForm("#form_det_budget");
+  })
+
+  getBrands();
   getCategoriesCosts();
   getBudgets();
 
