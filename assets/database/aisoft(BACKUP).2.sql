@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 06-05-2024 a las 13:18:21
+-- Tiempo de generación: 12-05-2024 a las 11:45:35
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -209,7 +209,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_add_detail_cost` (IN `_idpresup
 								_idpresupuesto, 
                                 _idsubacategoria_costo, 
                                 NULLIF(_idtipo_material,""),
-                                NULLIF(_detalle,""),
+                                _detalle,
                                 _cantidad,
                                 _precio_unitario,
                                 _idusuario
@@ -841,7 +841,8 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_cost_subcategory` (IN `_id
 		subcat.idsubcategoria_costo,
 		cat.idcategoria_costo,
         cat.categoria_costo,
-        subcat.subcategoria_costo
+        subcat.subcategoria_costo,
+        subcat.requiere_material
 		FROM subcategoria_costos subcat
         INNER JOIN categoria_costos cat ON cat.idcategoria_costo  = subcat.idcategoria_costo
         WHERE subcat.idcategoria_costo = _idcategoria_costo 
@@ -1308,7 +1309,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_set_detail_cost` (IN `_iddetall
 			idpresupuesto 			= _idpresupuesto,
             idsubcategoria_costo	= _idsubcategoria_costo,
             idtipo_material			= NULLIF(_idtipo_material,""),
-            detalle					= NULLIF(_detalle,""),
+            detalle					= _detalle,
             cantidad				= _cantidad,
             precio_cantidad 		= _precio_cantidad,
             idusuario 				= _idusuario,
@@ -1908,7 +1909,7 @@ CREATE TABLE `detalle_costos` (
   `idpresupuesto` int(11) NOT NULL,
   `idsubcategoria_costo` int(11) NOT NULL,
   `idtipo_material` int(11) DEFAULT NULL,
-  `detalle` varchar(100) DEFAULT NULL,
+  `detalle` varchar(100) NOT NULL,
   `cantidad` tinyint(4) NOT NULL,
   `precio_unitario` decimal(8,2) NOT NULL,
   `create_at` date NOT NULL DEFAULT curdate(),
@@ -4839,30 +4840,31 @@ DELIMITER ;
 CREATE TABLE `subcategoria_costos` (
   `idsubcategoria_costo` int(11) NOT NULL,
   `idcategoria_costo` int(11) NOT NULL,
-  `subcategoria_costo` varchar(100) NOT NULL
+  `subcategoria_costo` varchar(100) NOT NULL,
+  `requiere_material` char(2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `subcategoria_costos`
 --
 
-INSERT INTO `subcategoria_costos` (`idsubcategoria_costo`, `idcategoria_costo`, `subcategoria_costo`) VALUES
-(1, 1, 'FERRETERIA'),
-(2, 1, 'ACCESORIOS'),
-(3, 1, 'LADRILLOS'),
-(4, 1, 'AGREGADOS'),
-(5, 1, 'ACCESORIOS DE LUZ'),
-(6, 1, 'ACCESORIOS DE BAÑO'),
-(7, 1, 'ACCESORIOS DE DESAGUE'),
-(8, 1, 'ACCESORIOS DE AGUA'),
-(9, 1, 'CERÁMICO'),
-(10, 1, 'ACABADOS EN SECOS'),
-(11, 1, 'MANO DE OBRA'),
-(18, 2, 'GASTOS FINANCIEROS'),
-(19, 2, 'COSTOS DE HABILITACION TERRENO - COSTOS DIRECTOS'),
-(20, 2, 'COSTO DE PROYECTO Y EJECUCION DE AGUA DESAGUE Y ELECTRICIDAD'),
-(21, 2, 'COSTOS ADMINISTRATIVOS DIRECTO'),
-(22, 2, 'IMPUESTOS');
+INSERT INTO `subcategoria_costos` (`idsubcategoria_costo`, `idcategoria_costo`, `subcategoria_costo`, `requiere_material`) VALUES
+(1, 1, 'FERRETERIA', 'SI'),
+(2, 1, 'ACCESORIOS', 'SI'),
+(3, 1, 'LADRILLOS', 'SI'),
+(4, 1, 'AGREGADOS', 'NO'),
+(5, 1, 'ACCESORIOS DE LUZ', 'SI'),
+(6, 1, 'ACCESORIOS DE BAÑO', 'SI'),
+(7, 1, 'ACCESORIOS DE DESAGUE', 'SI'),
+(8, 1, 'ACCESORIOS DE AGUA', 'SI'),
+(9, 1, 'CERÁMICO', 'SI'),
+(10, 1, 'ACABADOS EN SECOS', 'NO'),
+(11, 1, 'MANO DE OBRA', 'NO'),
+(18, 2, 'GASTOS FINANCIEROS', 'NO'),
+(19, 2, 'COSTOS DE HABILITACION TERRENO - COSTOS DIRECTOS', 'NO'),
+(20, 2, 'COSTO DE PROYECTO Y EJECUCION DE AGUA DESAGUE Y ELECTRICIDAD', 'NO'),
+(21, 2, 'COSTOS ADMINISTRATIVOS DIRECTO', 'NO'),
+(22, 2, 'IMPUESTOS', 'NO');
 
 -- --------------------------------------------------------
 

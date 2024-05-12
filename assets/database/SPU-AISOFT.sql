@@ -1240,7 +1240,8 @@ BEGIN
 		subcat.idsubcategoria_costo,
 		cat.idcategoria_costo,
         cat.categoria_costo,
-        subcat.subcategoria_costo
+        subcat.subcategoria_costo,
+        subcat.requiere_material
 		FROM subcategoria_costos subcat
         INNER JOIN categoria_costos cat ON cat.idcategoria_costo  = subcat.idcategoria_costo
         WHERE subcat.idcategoria_costo = _idcategoria_costo 
@@ -1475,7 +1476,7 @@ BEGIN
 								_idpresupuesto, 
                                 _idsubacategoria_costo, 
                                 NULLIF(_idtipo_material,""),
-                                NULLIF(_detalle,""),
+                                _detalle,
                                 _cantidad,
                                 _precio_unitario,
                                 _idusuario
@@ -1503,7 +1504,7 @@ BEGIN
 			idpresupuesto 			= _idpresupuesto,
             idsubcategoria_costo	= _idsubcategoria_costo,
             idtipo_material			= NULLIF(_idtipo_material,""),
-            detalle					= NULLIF(_detalle,""),
+            detalle					= _detalle,
             cantidad				= _cantidad,
             precio_cantidad 		= _precio_cantidad,
             idusuario 				= _idusuario,

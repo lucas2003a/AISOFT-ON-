@@ -187,6 +187,8 @@ CREATE TABLE subcategoria_costos
     CONSTRAINT fk_subactegoria_costo_subcat_costo UNIQUE(subactegoria_costo)
 )ENGINE = INNODB;
 
+ALTER TABLE subcategoria_costos CHANGE requiere_material requiere_material  CHAR(2) NOT NULL; 
+select * from subcategoria_costos;
 -- MARCAS
 CREATE TABLE marcas
 (
@@ -252,7 +254,7 @@ CREATE TABLE detalle_costos
     idpresupuesto 			INT 			NOT NULL,
     idsubcategoria_costo	INT 			NOT NULL,
     idtipo_material			INT 			NULL,
-    detalle 				VARCHAR(100)	NULL,
+    detalle 				VARCHAR(100)	NOT NULL,
     cantidad 				TINYINT 		NOT NULL,
     precio_unitario			DECIMAL(8,2)	NOT NULL,
     create_at 				DATE 			NOT NULL 	DEFAULT(CURDATE()),
