@@ -371,7 +371,7 @@
           <!-- IMAGEN -->
           <div class="row">
             <div class="col-md-12 mb-lg-0 mb-4">
-              <div class="card mt-4">
+              <div class="card">
                 <div class="card-header pb-0 p-3">
                   <div class="row">
                     <div class="col-6 d-flex align-items-center">
@@ -529,7 +529,7 @@
                       </div>
 
                       <div class="col-md-6 text-end">
-                        <button class="btn bg-gradient-dark mb-0 mt-3" id="add"><i class="fas fa-plus"></i>&nbsp;&nbsp;Agregar</button>
+                        <button class="btn bg-gradient-dark mb-0 mt-3" id="add" disabled><i class="fas fa-plus"></i>&nbsp;&nbsp;Agregar</button>
                       </div>
                     </div>
 
@@ -552,7 +552,16 @@
                 <div class="card-body p-3">
                   <div class="row">
                     <div class="table-responsive table-responsive-lg">
-                      <table class="table align-items-center mb-0" id="table-det-budgets">
+                      <table class="table align-items-center mb-0" id="table-det-budgets" style="table-layout: fixed;">
+                        <colgroup>
+                          <col width="5%">
+                          <col width="25%">
+                          <col width="25%">
+                          <col width="10%">
+                          <col width="10%">
+                          <col width="10%">
+                          <col width="10%">
+                        </colgroup>
                         <thead>
                           <tr>
                             <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">#</th>
@@ -587,7 +596,7 @@
                   <h6 class="mb-0">Proyectos</h6>
                 </div>
                 <div class="col-6 text-end">
-                  <button type="button" class="btn btn-sm bg-gradient-info mb-0" id="save_lots"><i class="fa-solid fa-floppy-disk"></i> Guardar</button>
+                  <button type="button" class="btn btn-sm bg-gradient-info mb-0" id="save_lots" disabled><i class="fa-solid fa-floppy-disk"></i> Guardar</button>
                 </div>
               </div>
             </div>
@@ -752,9 +761,53 @@
 
   //recuperando datos del sessionStorage
   const dataRestored = sessionStorage.getItem("dataStoraged");
-  let dataStorage = JSON.parse(dataRestored);
+  let dataStorage = JSON.parse(dataRestored) || []; //Si es falso, devuelve un array vacío
+  console.log(dataStorage)
   let nombresUnicos = [];
-  let index= 0;
+  let index = localStorage.getItem("index") || 0;
+  let idpresupuesto;
+  let dataBudget = JSON.parse(sessionStorage.getItem("dataBudget")) || null;
+
+  let rowDelete = [];
+
+  async function addBudget(){
+
+    try{
+
+      let url = "../../Controllers/budget.controller.php"
+
+      let params = new FormData();
+      params.append("action", "addBudget");
+      params.append("codigo", $("#codigo").value);
+      params.append("modelo", $("#modelo").value);
+
+      let result = await global.sendAction(url, params);
+
+      if(result){
+
+        let codeValue = $("#codigo").value;
+        let modelValue = $("#modelo").value
+        sAlert.sweetSuccess("Éxito","Presupuesto agregado correctamente",()=>{
+
+          idpresupuesto = result.idpresupuesto
+          $("#add").disabled = false;
+  
+          let data ={
+            idpresupuesto: result.idpresupuesto,
+            codigo: codeValue,
+            modelo: modelValue
+          };
+  
+          sessionStorage.setItem("dataBudget",JSON.stringify(data));
+        });
+
+      }else{
+        sAlert.error("Ocurrió un error","No se ha podido registrar el presupuesto");
+      }
+    }catch(e){
+      console.error(e);
+    }
+  };
 
   //Renderiza dataStorage en la tabla
   function renderDetbudgets(array){
@@ -764,14 +817,18 @@
     let numRow = 1;
     array.forEach(element => {
 
+      let precioUnitario = +element.precio_unitario;
+      let precioUnitarioFormat = precioUnitario.toPrecision(8);
+      let total = element.precio_unitario * element.cantidad;
+      let numberFormat = total.toPrecision(8);
       let newRow = `
         <tr>
           <td>${numRow}</td>
-          <td class="edit-row select" data-subcategoria="subcategoria"data-idcategoria_costo="${element.idcategoria_costo}">${element.subcategoria_costo}</td>
-          <td class="edit-row text" data-detalle="detalle">${element.detalle}</td>
+          <td class="edit-row select text-truncate" data-subcategoria="subcategoria"data-idcategoria_costo="${element.idcategoria_costo}">${element.subcategoria_costo}</td>
+          <td class="edit-row text text-truncate" data-detalle="detalle">${element.detalle}</td>
           <td class="edit-row number" data-cantidad="cantidad">${element.cantidad}</td>
-          <td class="edit-row number" data-precio="precio_unitario">${element.precio_unitario}</td>
-          <td>${element.precio_unitario * element.cantidad}</td>
+          <td class="edit-row number" data-precio="precio_unitario">${precioUnitarioFormat}</td>
+          <td>${numberFormat}</td>
           <td>
             <button type="button" data-index="${element.indice}" class="btn btn-link text-dark px-3 mb-0 save"><i data-index="${element.indice}" class="fa-solid fa-floppy-disk save"></i></button>
             <button type="button" data-index="${element.indice}" class="btn btn-link text-danger text-gradient px-3 mb-0 delete"><i data-index="${element.indice}" class="bi bi-trash-fill delete"></i></button>
@@ -783,7 +840,7 @@
       ++numRow;
     });
 
-  }
+  };
 
   //Almacenar data en un array
   function storageData(){
@@ -820,16 +877,17 @@
     }
 
     ++index;
+    localStorage.setItem("index",index); //Guardando el contador
 
     dataStorage.push(data);
     renderDetbudgets(dataStorage);
-    console.log(dataStorage);
 
     //Almacenando en sessionStorage
     const arrayConverted = JSON.stringify(dataStorage);
     sessionStorage.setItem("dataStoraged",arrayConverted);
-    console.log(arrayConverted)
-  }
+
+    $("#save_lots").disabled = false;
+  };
 
   //Obtiene las marcas
   async function getBrands(){
@@ -867,7 +925,7 @@
     catch(e){
       console.error(e);
     }
-  }
+  };
 
   //Obtiene los materiales
   async function getMaterials(idmarca){
@@ -904,7 +962,7 @@
     catch(e){
       console.error(e);
     }
-  }
+  };
 
   //Obtiene los tipos de materiales
   async function getTypesMaterials(idmaterial){
@@ -944,7 +1002,7 @@
     catch(e){
       console.error(e);
     }
-  }
+  };
 
   //Obtiene las caregorias de los costos
   async function getCategoriesCosts(){
@@ -978,8 +1036,7 @@
     catch(e){
       console.log(e);
     }
-  }
-
+  };
 
   //Obtiene las subcategorías de los costos, según ka categoría
   async function getSubcategoriesCosts(categoria){
@@ -1019,7 +1076,7 @@
     catch(e){
       console.error(e);
     }
-  }
+  };
 
   //Obtiene las subcategorías de los costos, según ka categoría (SOLO LOS DATOS)
   async function getSubcategoriesCostsData(categoria){
@@ -1051,7 +1108,7 @@
     catch(e){
       console.error(e);
     }
-  }
+  };
 
   //Renderiza los botones del acordion
   function renderAccordionButtons(array,array2){
@@ -1097,7 +1154,7 @@
 
       $("#accordion-proyectos").innerHTML += newButton;
     }
-  }
+  };
 
   //Obtiene los lotes sin presupuesto
   async function getBudgets(){
@@ -1131,7 +1188,7 @@
     catch(e){
       console.error(e);
     }
-  }
+  };
 
 
   //Oculta/muestra los inputs
@@ -1149,7 +1206,7 @@
       $("#tipo_material").required = true;*/
       $("#detalle").disabled = false; 
     }
-  }
+  };
 
   //Convierte los inputs a textos <td>
   function convertText(tr, index){
@@ -1182,8 +1239,39 @@
     const dataEdit = JSON.stringify(dataStorage);
     sessionStorage.setItem("dataStoraged",dataEdit);
     renderDetbudgets(dataStorage);
-  }
+  };
   
+  //Valida el formulario
+  async function validateForm(form,callback){
+    'use strict' 
+
+     
+    const forms = document.querySelectorAll(form)
+
+    Array.from(forms).forEach(form => {
+        form.addEventListener('submit', event => {
+
+            if (!form.checkValidity()) {
+            event.preventDefault()      //=> FRENA EL ENVÍO DEL FORMULARIO
+            event.stopPropagation()     //=> FRENA LA PROPAGACIÓN DE DATOS EN EL FORMULARIO
+            form.reportValidity();
+        }else{
+            event.preventDefault();
+
+            sAlert.sweetConfirm("Datos nuevos","¿Deseas actualizar el registro?",()=>{
+              
+              callback()
+              form.reset();
+              form.classList.remove("was-validated")
+              
+            });
+        }
+
+        form.classList.add('was-validated') //=> AGREGA ESTA CLASE A LOS ELEMENTOS DEL FORMULARIO(MUESTRA LOS COMENTARIOS)
+        }, false) //=> ESTE TERCER ARGUMENTO INDICA QUE EL EVENTO NO SE ESTA CAPTURANDO EN LA ""FASE DE CAPTURA" SINO EN "PROPAGACIÓN NORMAL"
+    })  
+  };
+
   $("#material").addEventListener("change",()=>{
 
     let idmaterial = $("#material").value
@@ -1311,42 +1399,37 @@
     }else if(e.target.classList.contains("delete")){
     
       console.log("elimina")
-      let tr = e.target.closest("tr");
-      tr.remove();  
+      sAlert.sweetConfirm("¿Deseas eliminar el registro?","",()=>{
+
+        console.log(dataStorage)
+
+        for(i = 1; i < dataStorage.length; ++i){
+
+          let data = dataStorage[i];
+
+          if(e.target.dataset.index == data.indice){
+            let index = data.indice
+            console.log(e.target.dataset.index)
+            
+            console.log(dataStorage[i]);
+
+             dataStorage[i]; // solucionar el undefined
+          }
+        };
+        console.log(dataStorage)
+        sessionStorage.setItem("dataStoraged", JSON.stringify(dataStorage));
+        renderDetbudgets(dataStorage);
+
+        let tr = e.target.closest("tr");
+        tr.remove();  
+
+      })
 
     }else{
       console.log("no contiene la clase")
 
     }
   })
-
-  function validateForm(form){
-    'use strict' 
-
-     
-    const forms = document.querySelectorAll(form)
-
-    Array.from(forms).forEach(form => {
-        form.addEventListener('submit', event => {
-
-            if (!form.checkValidity()) {
-            event.preventDefault()      //=> FRENA EL ENVÍO DEL FORMULARIO
-            event.stopPropagation()     //=> FRENA LA PROPAGACIÓN DE DATOS EN EL FORMULARIO
-            form.reportValidity();
-        }else{
-            event.preventDefault();
-            sAlert.sweetConfirm("Datos nuevos","¿Deseas actualizar el registro?",()=>{
-                
-              storageData();
-              form.classList.remove("was-validated")
-              form.reset();
-            });
-        }
-
-        form.classList.add('was-validated') //=> AGREGA ESTA CLASE A LOS ELEMENTOS DEL FORMULARIO(MUESTRA LOS COMENTARIOS)
-        }, false) //=> ESTE TERCER ARGUMENTO INDICA QUE EL EVENTO NO SE ESTA CAPTURANDO EN LA ""FASE DE CAPTURA" SINO EN "PROPAGACIÓN NORMAL"
-    })  
-  };
 
   $("#codigo").addEventListener("blur",()=>{
     let result =  "PRES-" + $("#codigo").value.toString().padStart(3,"0");
@@ -1390,13 +1473,13 @@
   $("#form-budget").addEventListener("submit",(e)=>{
 
     e.preventDefault();
-    validateForm("#form-budget");
+    validateForm("#form-budget",addBudget);
 
   })
 
   $("#form_det_budget").addEventListener("submit",(e)=>{
     e.preventDefault(e)
-    validateForm("#form_det_budget");
+    validateForm("#form_det_budget",storageData);
   })
 
   getBrands();
@@ -1405,6 +1488,15 @@
   
   if(dataStorage.length > 0){
     renderDetbudgets(dataStorage);
+    console.log(dataStorage)
+    $("#save_lots").disabled = false;
+  }
+
+  if(dataBudget){
+    idPresupuesto = dataBudget.idpresupuesto;
+    $("#codigo").value = dataBudget.codigo;
+    $("#modelo").value = dataBudget.modelo;
+    $("#add").disabled = false;
   }
 
   let acordionItems = document.querySelectorAll(".accordion-item");
