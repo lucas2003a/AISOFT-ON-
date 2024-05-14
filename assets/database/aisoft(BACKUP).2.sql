@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 12-05-2024 a las 11:45:35
+-- Tiempo de generación: 14-05-2024 a las 11:29:37
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -73,7 +73,11 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_add_budget` (IN `_codigo` CHAR(
 	INSERT INTO presupuestos(modelo, idusuario, codigo)
 					VALUES(_modelo, _idusuario, _codigo);
                     
-	SELECT @@last_insert_id AS idpresupuesto;
+	SELECT @@last_insert_id AS idpresupuesto,
+			codigo,
+            modelo
+            FROM presupuestos
+            WHERE idpresupuesto = @@last_insert_id;
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_add_clients_personj` (IN `_tipo_persona` VARCHAR(10), IN `_razon_social` VARCHAR(60), IN `_documento_tipo` VARCHAR(20), IN `_documento_nro` VARCHAR(12), IN `_iddistrito` INT, IN `_direccion` VARCHAR(70), IN `_idusuario` INT)   BEGIN
@@ -198,7 +202,7 @@ END$$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_add_detail_cost` (IN `_idpresupuesto` INT, IN `_idsubcategoria_costo` INT, IN `_idtipo_material` INT, IN `_detalle` VARCHAR(100), IN `_cantidad` TINYINT, IN `_precio_unitario` DECIMAL(8,2), IN `_idusuario` INT)   BEGIN
 	INSERT INTO detalle_costos(
 								idpresupuesto, 
-                                idsubacategoria_costo, 
+                                idsubcategoria_costo, 
                                 idtipo_material,
                                 detalle,
                                 cantidad,
@@ -207,7 +211,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_add_detail_cost` (IN `_idpresup
                                 )
 						VALUES(
 								_idpresupuesto, 
-                                _idsubacategoria_costo, 
+                                _idsubcategoria_costo, 
                                 NULLIF(_idtipo_material,""),
                                 _detalle,
                                 _cantidad,
@@ -639,14 +643,21 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_brands` ()   BEGIN
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_budgets` ()   BEGIN
+	DECLARE _valueDefault DECIMAL(8,2);
+    SET _valueDefault = 0.00;
 	SELECT
 		pres.idpresupuesto,
         pres.codigo,
         pres.modelo,
-        (SUM(detcost.cantidad * detcost.precio_unitario)) AS total,
+        CASE
+			WHEN detcost.idpresupuesto IS NOT NULL THEN
+				(SUM(detcost.cantidad * detcost.precio_unitario)) 
+			ELSE
+				_valueDefault
+		END AS total,
         pers.nombres AS usuario
 		FROM presupuestos pres
-        INNER JOIN detalle_costos detcost ON detcost.idpresupuesto = pres.idpresupuesto
+        LEFT JOIN detalle_costos detcost ON detcost.idpresupuesto = pres.idpresupuesto
         INNER JOIN usuarios usu ON usu.idusuario = pres.idusuario
         INNER JOIN personas pers ON pers.idpersona = usu.idpersona
         WHERE pres.inactive_at IS NULL
@@ -1453,70 +1464,70 @@ CREATE TABLE `activos` (
 --
 
 INSERT INTO `activos` (`idactivo`, `idproyecto`, `tipo_activo`, `imagen`, `estado`, `sublote`, `direccion`, `moneda_venta`, `area_terreno`, `zcomunes_porcent`, `partida_elect`, `latitud`, `longitud`, `perimetro`, `det_casa`, `idpresupuesto`, `propietario_lote`, `precio_lote`, `precio_construccion`, `create_at`, `update_at`, `inactive_at`, `idusuario`) VALUES
-(1, 1, 'LOTE', '4e867593bfa060bb4b701bc9bb387d7ad78c4acf.jpg', 'VENDIDO', 1, 'Urbanización Alpha', 'USD', 300.00, 2, 'Partida 001', NULL, NULL, '{\"clave\":[\"x\",\"x\",\"\"],\"valor\":[\"40\",\"10\",\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'TERCEROS', 80000.00, 0.00, '2024-04-19', '2024-04-30', NULL, 1),
+(1, 1, 'LOTE', '4e867593bfa060bb4b701bc9bb387d7ad78c4acf.jpg', 'VENDIDO', 1, 'Urbanización Alpha', 'USD', 300.00, 2, 'Partida 001', NULL, NULL, '{\"clave\":[\"x\",\"x\",\"\"],\"valor\":[\"40\",\"10\",\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'TERCEROS', 80000.00, 0.00, '2024-04-19', '2024-05-14', NULL, 1),
 (2, 2, 'LOTE', NULL, 'SIN VENDER', 1, 'Urbanización Gamma', 'USD', 250.00, NULL, 'Partida 003', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'A.I.F', 100000.00, 0.00, '2024-04-19', NULL, NULL, 1),
-(3, 1, 'LOTE', NULL, 'SIN VENDER', 3, 'Urbanización Epsilon', 'USD', 350.00, NULL, 'Partida 005', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'A.I.F', 90000.00, 0.00, '2024-04-19', NULL, NULL, 1),
+(3, 1, 'LOTE', NULL, 'SIN VENDER', 3, 'Urbanización Epsilon', 'USD', 350.00, NULL, 'Partida 005', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'A.I.F', 90000.00, 0.00, '2024-04-19', '2024-05-14', NULL, 1),
 (4, 3, 'LOTE', NULL, 'SIN VENDER', 2, 'Urbanización Eta', 'USD', 400.00, NULL, 'Partida 007', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'A.I.F', 120000.00, 0.00, '2024-04-19', NULL, NULL, 3),
 (5, 2, 'LOTE', NULL, 'VENDIDO', 3, 'Urbanización Iota', 'USD', 280.00, NULL, 'Partida 009', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'A.I.F', 110000.00, 0.00, '2024-04-19', '2024-04-19', NULL, 2),
 (6, 3, 'LOTE', NULL, 'VENDIDO', 5, 'Urbanización Lambda', 'USD', 320.00, NULL, 'Partida 011', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'A.I.F', 95000.00, 0.00, '2024-04-19', '2024-04-19', NULL, 2),
-(7, 4, 'LOTE', NULL, 'SEPARADO', 1, 'Urbanización Nu', 'USD', 300.00, NULL, 'Partida 013', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'A.I.F', 85000.00, 0.00, '2024-04-19', '2024-04-19', NULL, 2),
-(8, 4, 'LOTE', NULL, 'SEPARADO', 3, 'Urbanización Omicron', 'USD', 380.00, NULL, 'Partida 015', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'A.I.F', 110000.00, 0.00, '2024-04-19', '2024-04-19', NULL, 1),
-(9, 1, 'LOTE', NULL, 'SIN VENDER', 7, 'Urbanización Rho', 'USD', 420.00, NULL, 'Partida 017', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'A.I.F', 105000.00, 0.00, '2024-04-19', NULL, NULL, 3),
+(7, 4, 'LOTE', NULL, 'SEPARADO', 1, 'Urbanización Nu', 'USD', 300.00, NULL, 'Partida 013', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 23, 'A.I.F', 85000.00, 0.00, '2024-04-19', '2024-05-14', NULL, 1),
+(8, 4, 'LOTE', NULL, 'SEPARADO', 3, 'Urbanización Omicron', 'USD', 380.00, NULL, 'Partida 015', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 23, 'A.I.F', 110000.00, 0.00, '2024-04-19', '2024-05-14', NULL, 1),
+(9, 1, 'LOTE', NULL, 'SIN VENDER', 7, 'Urbanización Rho', 'USD', 420.00, NULL, 'Partida 017', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'A.I.F', 105000.00, 0.00, '2024-04-19', '2024-05-14', NULL, 1),
 (10, 2, 'LOTE', NULL, 'VENDIDO', 9, 'Urbanización Tau', 'USD', 450.00, NULL, 'Partida 019', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\":[\"implementacion de banquitos\",\"construccion de veredas\",\"acabados de construccion\"],\"valor\":[\"fueron de madera\",\"se hicieron de cemento\",\"detalles de los acabados de la construccion\"]}', NULL, 'A.I.F', 115000.00, 0.00, '2024-04-19', '2024-04-29', NULL, 3),
 (11, 3, 'LOTE', NULL, 'SIN VENDER', 11, 'Urbanización Phi', 'USD', 480.00, NULL, 'Partida 021', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'A.I.F', 100000.00, 0.00, '2024-04-19', NULL, NULL, 2),
-(12, 4, 'LOTE', NULL, 'SIN VENDER', 13, 'Urbanización Psi', 'USD', 500.00, NULL, 'Partida 023', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'A.I.F', 120000.00, 0.00, '2024-04-19', NULL, NULL, 2),
-(13, 1, 'LOTE', NULL, 'SIN VENDER', 15, 'Urbanización Beta', 'USD', 300.00, NULL, 'Partida 025', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'A.I.F', 90000.00, 0.00, '2024-04-19', NULL, NULL, 2),
-(14, 1, 'undefined', NULL, 'SIN VENDER', 2, 'Urbanización Zeta', 'USD', 280.00, 0, 'Partida 027', NULL, NULL, '{\"clave\":[\"primera clave\",\"segunda clave\",\"tercera clave\"],\"valor\":[\"primer valor\",\"segundo valor\",\"tercer valor\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'A.I.F', 95000.00, 0.00, '2024-04-19', '2024-04-29', NULL, 1),
-(15, 1, 'LOTE', NULL, 'SIN VENDER', 4, 'Urbanización Kappa', 'USD', 320.00, NULL, 'Partida 029', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'A.I.F', 110000.00, 0.00, '2024-04-19', NULL, NULL, 2),
-(16, 1, 'LOTE', NULL, 'SIN VENDER', 6, 'Urbanización Sigma', 'USD', 300.00, NULL, 'Partida 031', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'A.I.F', 85000.00, 0.00, '2024-04-19', NULL, NULL, 2),
-(17, 1, 'LOTE', NULL, 'SIN VENDER', 8, 'Urbanización Upsilon', 'USD', 380.00, NULL, 'Partida 033', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'A.I.F', 120000.00, 0.00, '2024-04-19', NULL, NULL, 1),
-(18, 1, 'LOTE', NULL, 'SIN VENDER', 10, 'Urbanización Omega', 'USD', 420.00, NULL, 'Partida 035', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'A.I.F', 105000.00, 0.00, '2024-04-19', NULL, NULL, 3),
-(19, 1, 'LOTE', NULL, 'SIN VENDER', 12, 'Urbanización Delta', 'USD', 450.00, NULL, 'Partida 037', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'A.I.F', 115000.00, 0.00, '2024-04-19', NULL, NULL, 3),
-(20, 1, 'LOTE', NULL, 'SIN VENDER', 14, 'Urbanización Gamma', 'USD', 480.00, NULL, 'Partida 039', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'A.I.F', 100000.00, 0.00, '2024-04-19', NULL, NULL, 2),
-(21, 1, 'LOTE', NULL, 'SIN VENDER', 16, 'Urbanización Epsilon', 'USD', 500.00, NULL, 'Partida 041', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'A.I.F', 120000.00, 0.00, '2024-04-19', NULL, NULL, 2),
-(22, 1, 'LOTE', NULL, 'SIN VENDER', 18, 'Urbanización Zeta', 'USD', 300.00, NULL, 'Partida 043', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'A.I.F', 90000.00, 0.00, '2024-04-19', NULL, NULL, 2),
-(23, 1, 'LOTE', NULL, 'SIN VENDER', 20, 'Urbanización Eta', 'USD', 250.00, NULL, 'Partida 045', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'A.I.F', 95000.00, 0.00, '2024-04-19', NULL, NULL, 1),
-(24, 1, 'LOTE', NULL, 'SIN VENDER', 22, 'Urbanización Theta', 'USD', 280.00, NULL, 'Partida 047', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'A.I.F', 110000.00, 0.00, '2024-04-19', NULL, NULL, 2),
-(25, 1, 'LOTE', NULL, 'SIN VENDER', 24, 'Urbanización Iota', 'USD', 320.00, NULL, 'Partida 049', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'A.I.F', 85000.00, 0.00, '2024-04-19', NULL, NULL, 2),
-(26, 1, 'LOTE', NULL, 'SIN VENDER', 26, 'Urbanización Kappa', 'USD', 380.00, NULL, 'Partida 051', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'A.I.F', 120000.00, 0.00, '2024-04-19', NULL, NULL, 1),
-(27, 1, 'LOTE', NULL, 'SIN VENDER', 28, 'Urbanización Lambda', 'USD', 420.00, NULL, 'Partida 053', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'A.I.F', 105000.00, 0.00, '2024-04-19', NULL, NULL, 3),
-(28, 1, 'LOTE', NULL, 'SIN VENDER', 30, 'Urbanización Mu', 'USD', 450.00, NULL, 'Partida 055', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'A.I.F', 115000.00, 0.00, '2024-04-19', NULL, NULL, 3),
-(29, 1, 'LOTE', NULL, 'SIN VENDER', 32, 'Urbanización Nu', 'USD', 480.00, NULL, 'Partida 057', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'A.I.F', 100000.00, 0.00, '2024-04-19', NULL, NULL, 2),
-(30, 1, 'LOTE', NULL, 'SIN VENDER', 34, 'Urbanización Xi', 'USD', 500.00, NULL, 'Partida 059', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'A.I.F', 120000.00, 0.00, '2024-04-19', NULL, NULL, 2),
-(31, 1, 'LOTE', NULL, 'SIN VENDER', 36, 'Urbanización Omicron', 'USD', 300.00, NULL, 'Partida 061', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'A.I.F', 90000.00, 0.00, '2024-04-19', NULL, NULL, 2),
-(32, 1, 'LOTE', NULL, 'SIN VENDER', 38, 'Urbanización Pi', 'USD', 250.00, NULL, 'Partida 063', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'A.I.F', 95000.00, 0.00, '2024-04-19', NULL, NULL, 1),
-(33, 1, 'LOTE', NULL, 'SIN VENDER', 40, 'Urbanización Rho', 'USD', 280.00, NULL, 'Partida 065', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'A.I.F', 110000.00, 0.00, '2024-04-19', NULL, NULL, 2),
-(34, 1, 'LOTE', NULL, 'SIN VENDER', 42, 'Urbanización Sigma', 'USD', 320.00, NULL, 'Partida 067', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'A.I.F', 85000.00, 0.00, '2024-04-19', NULL, NULL, 2),
-(35, 1, 'LOTE', NULL, 'SIN VENDER', 44, 'Urbanización Tau', 'USD', 380.00, NULL, 'Partida 069', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'A.I.F', 120000.00, 0.00, '2024-04-19', NULL, NULL, 1),
-(36, 1, 'LOTE', NULL, 'SIN VENDER', 46, 'Urbanización Upsilon', 'USD', 420.00, NULL, 'Partida 071', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'A.I.F', 105000.00, 0.00, '2024-04-19', NULL, NULL, 3),
-(37, 1, 'LOTE', NULL, 'SIN VENDER', 48, 'Urbanización Phi', 'USD', 450.00, NULL, 'Partida 073', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'A.I.F', 115000.00, 0.00, '2024-04-19', NULL, NULL, 3),
-(38, 1, 'LOTE', NULL, 'SIN VENDER', 50, 'Urbanización Chi', 'USD', 480.00, NULL, 'Partida 075', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'A.I.F', 100000.00, 0.00, '2024-04-19', NULL, NULL, 2),
-(39, 1, 'LOTE', NULL, 'SIN VENDER', 52, 'Urbanización Psi', 'USD', 500.00, NULL, 'Partida 077', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'A.I.F', 120000.00, 0.00, '2024-04-19', NULL, NULL, 2),
-(40, 1, 'LOTE', NULL, 'SIN VENDER', 54, 'Urbanización Omega', 'USD', 300.00, NULL, 'Partida 079', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'A.I.F', 90000.00, 0.00, '2024-04-19', NULL, NULL, 2),
-(41, 1, 'LOTE', NULL, 'SIN VENDER', 56, 'Urbanización Alpha', 'USD', 250.00, NULL, 'Partida 081', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'A.I.F', 95000.00, 0.00, '2024-04-19', NULL, NULL, 1),
-(42, 1, 'LOTE', NULL, 'SIN VENDER', 58, 'Urbanización Beta', 'USD', 280.00, NULL, 'Partida 083', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'A.I.F', 110000.00, 0.00, '2024-04-19', NULL, NULL, 2),
-(43, 1, 'LOTE', NULL, 'SIN VENDER', 60, 'Urbanización Gamma', 'USD', 320.00, NULL, 'Partida 085', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'A.I.F', 85000.00, 0.00, '2024-04-19', NULL, NULL, 2),
-(44, 1, 'LOTE', NULL, 'SIN VENDER', 62, 'Urbanización Delta', 'USD', 380.00, NULL, 'Partida 087', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'A.I.F', 120000.00, 0.00, '2024-04-19', NULL, NULL, 1),
-(45, 1, 'LOTE', NULL, 'SIN VENDER', 64, 'Urbanización Epsilon', 'USD', 420.00, NULL, 'Partida 089', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'A.I.F', 105000.00, 0.00, '2024-04-19', NULL, NULL, 3),
-(46, 1, 'LOTE', NULL, 'SIN VENDER', 66, 'Urbanización Zeta', 'USD', 450.00, NULL, 'Partida 091', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'A.I.F', 115000.00, 0.00, '2024-04-19', NULL, NULL, 3),
-(47, 1, 'LOTE', NULL, 'SIN VENDER', 68, 'Urbanización Eta', 'USD', 480.00, NULL, 'Partida 093', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'A.I.F', 100000.00, 0.00, '2024-04-19', NULL, NULL, 2),
-(48, 1, 'LOTE', NULL, 'SIN VENDER', 70, 'Urbanización Theta', 'USD', 500.00, NULL, 'Partida 095', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'A.I.F', 120000.00, 0.00, '2024-04-19', NULL, NULL, 2),
-(49, 1, 'LOTE', NULL, 'SIN VENDER', 72, 'Urbanización Iota', 'USD', 300.00, NULL, 'Partida 097', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'A.I.F', 90000.00, 0.00, '2024-04-19', NULL, NULL, 2),
-(50, 1, 'LOTE', NULL, 'SIN VENDER', 74, 'Urbanización Kappa', 'USD', 250.00, NULL, 'Partida 099', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'A.I.F', 95000.00, 0.00, '2024-04-19', NULL, NULL, 1),
-(51, 1, 'LOTE', NULL, 'SIN VENDER', 76, 'Urbanización Lambda', 'USD', 280.00, NULL, 'Partida 101', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'TERCEROS', 110000.00, 0.00, '2024-04-19', NULL, NULL, 2),
-(52, 1, 'LOTE', NULL, 'SIN VENDER', 78, 'Urbanización Mu', 'USD', 320.00, NULL, 'Partida 103', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'TERCEROS', 85000.00, 0.00, '2024-04-19', NULL, NULL, 2),
-(53, 1, 'LOTE', NULL, 'SIN VENDER', 80, 'Urbanización Nu', 'USD', 380.00, NULL, 'Partida 105', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'TERCEROS', 120000.00, 0.00, '2024-04-19', NULL, NULL, 1),
-(54, 1, 'LOTE', NULL, 'SIN VENDER', 82, 'Urbanización Xi', 'USD', 420.00, NULL, 'Partida 107', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'TERCEROS', 105000.00, 0.00, '2024-04-19', NULL, NULL, 3),
-(55, 1, 'LOTE', NULL, 'SIN VENDER', 84, 'Urbanización Omicron', 'USD', 450.00, NULL, 'Partida 109', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 1, 'TERCEROS', 115000.00, 0.00, '2024-04-19', NULL, NULL, 3),
-(56, 1, 'LOTE', NULL, 'SIN VENDER', 86, 'Urbanización Pi', 'USD', 480.00, NULL, 'Partida 111', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 1, 'TERCEROS', 100000.00, 0.00, '2024-04-19', NULL, NULL, 2),
-(57, 1, 'LOTE', NULL, 'SIN VENDER', 88, 'Urbanización Rho', 'USD', 500.00, NULL, 'Partida 113', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 1, 'TERCEROS', 120000.00, 0.00, '2024-04-19', NULL, NULL, 2),
-(58, 1, 'LOTE', NULL, 'SIN VENDER', 90, 'Urbanización Sigma', 'USD', 300.00, NULL, 'Partida 115', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 1, 'TERCEROS', 90000.00, 0.00, '2024-04-19', NULL, NULL, 2),
-(59, 1, 'LOTE', NULL, 'SIN VENDER', 92, 'Urbanización Tau', 'USD', 250.00, NULL, 'Partida 117', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 1, 'TERCEROS', 95000.00, 0.00, '2024-04-19', NULL, NULL, 1),
-(60, 1, 'LOTE', NULL, 'SIN VENDER', 94, 'Urbanización Upsilon', 'USD', 280.00, NULL, 'Partida 119', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 1, 'TERCEROS', 110000.00, 0.00, '2024-04-19', NULL, NULL, 2),
-(61, 1, 'LOTE', NULL, 'SIN VENDER', 96, 'Urbanización Phi', 'USD', 320.00, NULL, 'Partida 121', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 1, 'TERCEROS', 85000.00, 0.00, '2024-04-19', NULL, NULL, 2),
-(62, 1, 'LOTE', NULL, 'SIN VENDER', 98, 'Urbanización Chi', 'USD', 380.00, NULL, 'Partida 123', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 1, 'TERCEROS', 120000.00, 0.00, '2024-04-19', NULL, NULL, 1),
-(63, 1, 'LOTE', NULL, 'SIN VENDER', 100, 'Urbanización Psi', 'USD', 420.00, NULL, 'Partida 125', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 1, 'TERCEROS', 105000.00, 0.00, '2024-04-19', NULL, NULL, 3),
-(76, 1, 'LOTE', '933e9c5ac6fd6724d4b36d32152cc973f14dc579jpg', 'SIN VENDER', 59, 'av santa rosa#541', 'SOL', 0.00, 2, 'PARTIDA 3', NULL, NULL, '{\"clave\":[\"\"],\"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 1, 'A.I.F', 0.00, NULL, '2024-04-21', NULL, NULL, 1);
+(12, 4, 'LOTE', NULL, 'SIN VENDER', 13, 'Urbanización Psi', 'USD', 500.00, NULL, 'Partida 023', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 23, 'A.I.F', 120000.00, 0.00, '2024-04-19', '2024-05-14', NULL, 1),
+(13, 1, 'LOTE', NULL, 'SIN VENDER', 15, 'Urbanización Beta', 'USD', 300.00, NULL, 'Partida 025', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'A.I.F', 90000.00, 0.00, '2024-04-19', '2024-05-14', NULL, 1),
+(14, 1, 'LOTE', NULL, 'SIN VENDER', 2, 'Urbanización Zeta', 'USD', 280.00, 0, 'Partida 027', NULL, NULL, '{\"clave\":[\"primera clave\",\"segunda clave\",\"tercera clave\"],\"valor\":[\"primer valor\",\"segundo valor\",\"tercer valor\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'A.I.F', 95000.00, 0.00, '2024-04-19', '2024-05-14', NULL, 1),
+(15, 1, 'LOTE', NULL, 'SIN VENDER', 4, 'Urbanización Kappa', 'USD', 320.00, NULL, 'Partida 029', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'A.I.F', 110000.00, 0.00, '2024-04-19', '2024-05-14', NULL, 1),
+(16, 1, 'LOTE', NULL, 'SIN VENDER', 6, 'Urbanización Sigma', 'USD', 300.00, NULL, 'Partida 031', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'A.I.F', 85000.00, 0.00, '2024-04-19', '2024-05-14', NULL, 1),
+(17, 1, 'LOTE', NULL, 'SIN VENDER', 8, 'Urbanización Upsilon', 'USD', 380.00, NULL, 'Partida 033', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'A.I.F', 120000.00, 0.00, '2024-04-19', '2024-05-14', NULL, 1),
+(18, 1, 'LOTE', NULL, 'SIN VENDER', 10, 'Urbanización Omega', 'USD', 420.00, NULL, 'Partida 035', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'A.I.F', 105000.00, 0.00, '2024-04-19', '2024-05-14', NULL, 1),
+(19, 1, 'LOTE', NULL, 'SIN VENDER', 12, 'Urbanización Delta', 'USD', 450.00, NULL, 'Partida 037', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'A.I.F', 115000.00, 0.00, '2024-04-19', '2024-05-14', NULL, 1),
+(20, 1, 'LOTE', NULL, 'SIN VENDER', 14, 'Urbanización Gamma', 'USD', 480.00, NULL, 'Partida 039', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'A.I.F', 100000.00, 0.00, '2024-04-19', '2024-05-14', NULL, 1),
+(21, 1, 'LOTE', NULL, 'SIN VENDER', 16, 'Urbanización Epsilon', 'USD', 500.00, NULL, 'Partida 041', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'A.I.F', 120000.00, 0.00, '2024-04-19', '2024-05-14', NULL, 1),
+(22, 1, 'LOTE', NULL, 'SIN VENDER', 18, 'Urbanización Zeta', 'USD', 300.00, NULL, 'Partida 043', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'A.I.F', 90000.00, 0.00, '2024-04-19', '2024-05-14', NULL, 1),
+(23, 1, 'LOTE', NULL, 'SIN VENDER', 20, 'Urbanización Eta', 'USD', 250.00, NULL, 'Partida 045', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'A.I.F', 95000.00, 0.00, '2024-04-19', '2024-05-14', NULL, 1),
+(24, 1, 'LOTE', NULL, 'SIN VENDER', 22, 'Urbanización Theta', 'USD', 280.00, NULL, 'Partida 047', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'A.I.F', 110000.00, 0.00, '2024-04-19', '2024-05-14', NULL, 1),
+(25, 1, 'LOTE', NULL, 'SIN VENDER', 24, 'Urbanización Iota', 'USD', 320.00, NULL, 'Partida 049', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'A.I.F', 85000.00, 0.00, '2024-04-19', '2024-05-14', NULL, 1),
+(26, 1, 'LOTE', NULL, 'SIN VENDER', 26, 'Urbanización Kappa', 'USD', 380.00, NULL, 'Partida 051', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'A.I.F', 120000.00, 0.00, '2024-04-19', '2024-05-14', NULL, 1),
+(27, 1, 'LOTE', NULL, 'SIN VENDER', 28, 'Urbanización Lambda', 'USD', 420.00, NULL, 'Partida 053', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'A.I.F', 105000.00, 0.00, '2024-04-19', '2024-05-14', NULL, 1),
+(28, 1, 'LOTE', NULL, 'SIN VENDER', 30, 'Urbanización Mu', 'USD', 450.00, NULL, 'Partida 055', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'A.I.F', 115000.00, 0.00, '2024-04-19', '2024-05-14', NULL, 1),
+(29, 1, 'LOTE', NULL, 'SIN VENDER', 32, 'Urbanización Nu', 'USD', 480.00, NULL, 'Partida 057', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'A.I.F', 100000.00, 0.00, '2024-04-19', '2024-05-14', NULL, 1),
+(30, 1, 'LOTE', NULL, 'SIN VENDER', 34, 'Urbanización Xi', 'USD', 500.00, NULL, 'Partida 059', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'A.I.F', 120000.00, 0.00, '2024-04-19', '2024-05-14', NULL, 1),
+(31, 1, 'LOTE', NULL, 'SIN VENDER', 36, 'Urbanización Omicron', 'USD', 300.00, NULL, 'Partida 061', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'A.I.F', 90000.00, 0.00, '2024-04-19', '2024-05-14', NULL, 1),
+(32, 1, 'LOTE', NULL, 'SIN VENDER', 38, 'Urbanización Pi', 'USD', 250.00, NULL, 'Partida 063', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'A.I.F', 95000.00, 0.00, '2024-04-19', '2024-05-14', NULL, 1),
+(33, 1, 'LOTE', NULL, 'SIN VENDER', 40, 'Urbanización Rho', 'USD', 280.00, NULL, 'Partida 065', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'A.I.F', 110000.00, 0.00, '2024-04-19', '2024-05-14', NULL, 1),
+(34, 1, 'LOTE', NULL, 'SIN VENDER', 42, 'Urbanización Sigma', 'USD', 320.00, NULL, 'Partida 067', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'A.I.F', 85000.00, 0.00, '2024-04-19', '2024-05-14', NULL, 1),
+(35, 1, 'LOTE', NULL, 'SIN VENDER', 44, 'Urbanización Tau', 'USD', 380.00, NULL, 'Partida 069', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'A.I.F', 120000.00, 0.00, '2024-04-19', '2024-05-14', NULL, 1),
+(36, 1, 'LOTE', NULL, 'SIN VENDER', 46, 'Urbanización Upsilon', 'USD', 420.00, NULL, 'Partida 071', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'A.I.F', 105000.00, 0.00, '2024-04-19', '2024-05-14', NULL, 1),
+(37, 1, 'LOTE', NULL, 'SIN VENDER', 48, 'Urbanización Phi', 'USD', 450.00, NULL, 'Partida 073', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'A.I.F', 115000.00, 0.00, '2024-04-19', '2024-05-14', NULL, 1),
+(38, 1, 'LOTE', NULL, 'SIN VENDER', 50, 'Urbanización Chi', 'USD', 480.00, NULL, 'Partida 075', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'A.I.F', 100000.00, 0.00, '2024-04-19', '2024-05-14', NULL, 1),
+(39, 1, 'LOTE', NULL, 'SIN VENDER', 52, 'Urbanización Psi', 'USD', 500.00, NULL, 'Partida 077', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'A.I.F', 120000.00, 0.00, '2024-04-19', '2024-05-14', NULL, 1),
+(40, 1, 'LOTE', NULL, 'SIN VENDER', 54, 'Urbanización Omega', 'USD', 300.00, NULL, 'Partida 079', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'A.I.F', 90000.00, 0.00, '2024-04-19', '2024-05-14', NULL, 1),
+(41, 1, 'LOTE', NULL, 'SIN VENDER', 56, 'Urbanización Alpha', 'USD', 250.00, NULL, 'Partida 081', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'A.I.F', 95000.00, 0.00, '2024-04-19', '2024-05-14', NULL, 1),
+(42, 1, 'LOTE', NULL, 'SIN VENDER', 58, 'Urbanización Beta', 'USD', 280.00, NULL, 'Partida 083', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'A.I.F', 110000.00, 0.00, '2024-04-19', '2024-05-14', NULL, 1),
+(43, 1, 'LOTE', NULL, 'SIN VENDER', 60, 'Urbanización Gamma', 'USD', 320.00, NULL, 'Partida 085', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'A.I.F', 85000.00, 0.00, '2024-04-19', '2024-05-14', NULL, 1),
+(44, 1, 'LOTE', NULL, 'SIN VENDER', 62, 'Urbanización Delta', 'USD', 380.00, NULL, 'Partida 087', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'A.I.F', 120000.00, 0.00, '2024-04-19', '2024-05-14', NULL, 1),
+(45, 1, 'LOTE', NULL, 'SIN VENDER', 64, 'Urbanización Epsilon', 'USD', 420.00, NULL, 'Partida 089', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'A.I.F', 105000.00, 0.00, '2024-04-19', '2024-05-14', NULL, 1),
+(46, 1, 'LOTE', NULL, 'SIN VENDER', 66, 'Urbanización Zeta', 'USD', 450.00, NULL, 'Partida 091', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'A.I.F', 115000.00, 0.00, '2024-04-19', '2024-05-14', NULL, 1),
+(47, 1, 'LOTE', NULL, 'SIN VENDER', 68, 'Urbanización Eta', 'USD', 480.00, NULL, 'Partida 093', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'A.I.F', 100000.00, 0.00, '2024-04-19', '2024-05-14', NULL, 1),
+(48, 1, 'LOTE', NULL, 'SIN VENDER', 70, 'Urbanización Theta', 'USD', 500.00, NULL, 'Partida 095', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'A.I.F', 120000.00, 0.00, '2024-04-19', '2024-05-14', NULL, 1),
+(49, 1, 'LOTE', NULL, 'SIN VENDER', 72, 'Urbanización Iota', 'USD', 300.00, NULL, 'Partida 097', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'A.I.F', 90000.00, 0.00, '2024-04-19', '2024-05-14', NULL, 1),
+(50, 1, 'LOTE', NULL, 'SIN VENDER', 74, 'Urbanización Kappa', 'USD', 250.00, NULL, 'Partida 099', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'A.I.F', 95000.00, 0.00, '2024-04-19', '2024-05-14', NULL, 1),
+(51, 1, 'LOTE', NULL, 'SIN VENDER', 76, 'Urbanización Lambda', 'USD', 280.00, NULL, 'Partida 101', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'TERCEROS', 110000.00, 0.00, '2024-04-19', '2024-05-14', NULL, 1),
+(52, 1, 'LOTE', NULL, 'SIN VENDER', 78, 'Urbanización Mu', 'USD', 320.00, NULL, 'Partida 103', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'TERCEROS', 85000.00, 0.00, '2024-04-19', '2024-05-14', NULL, 1),
+(53, 1, 'LOTE', NULL, 'SIN VENDER', 80, 'Urbanización Nu', 'USD', 380.00, NULL, 'Partida 105', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'TERCEROS', 120000.00, 0.00, '2024-04-19', '2024-05-14', NULL, 1),
+(54, 1, 'LOTE', NULL, 'SIN VENDER', 82, 'Urbanización Xi', 'USD', 420.00, NULL, 'Partida 107', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'TERCEROS', 105000.00, 0.00, '2024-04-19', '2024-05-14', NULL, 1),
+(55, 1, 'LOTE', NULL, 'SIN VENDER', 84, 'Urbanización Omicron', 'USD', 450.00, NULL, 'Partida 109', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'TERCEROS', 115000.00, 0.00, '2024-04-19', '2024-05-14', NULL, 1),
+(56, 1, 'LOTE', NULL, 'SIN VENDER', 86, 'Urbanización Pi', 'USD', 480.00, NULL, 'Partida 111', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'TERCEROS', 100000.00, 0.00, '2024-04-19', '2024-05-14', NULL, 1),
+(57, 1, 'LOTE', NULL, 'SIN VENDER', 88, 'Urbanización Rho', 'USD', 500.00, NULL, 'Partida 113', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'TERCEROS', 120000.00, 0.00, '2024-04-19', '2024-05-14', NULL, 1),
+(58, 1, 'LOTE', NULL, 'SIN VENDER', 90, 'Urbanización Sigma', 'USD', 300.00, NULL, 'Partida 115', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'TERCEROS', 90000.00, 0.00, '2024-04-19', '2024-05-14', NULL, 1),
+(59, 1, 'LOTE', NULL, 'SIN VENDER', 92, 'Urbanización Tau', 'USD', 250.00, NULL, 'Partida 117', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'TERCEROS', 95000.00, 0.00, '2024-04-19', '2024-05-14', NULL, 1),
+(60, 1, 'LOTE', NULL, 'SIN VENDER', 94, 'Urbanización Upsilon', 'USD', 280.00, NULL, 'Partida 119', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'TERCEROS', 110000.00, 0.00, '2024-04-19', '2024-05-14', NULL, 1),
+(61, 1, 'LOTE', NULL, 'SIN VENDER', 96, 'Urbanización Phi', 'USD', 320.00, NULL, 'Partida 121', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'TERCEROS', 85000.00, 0.00, '2024-04-19', '2024-05-14', NULL, 1),
+(62, 1, 'LOTE', NULL, 'SIN VENDER', 98, 'Urbanización Chi', 'USD', 380.00, NULL, 'Partida 123', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'TERCEROS', 120000.00, 0.00, '2024-04-19', '2024-05-14', NULL, 1),
+(63, 1, 'LOTE', NULL, 'SIN VENDER', 100, 'Urbanización Psi', 'USD', 420.00, NULL, 'Partida 125', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'TERCEROS', 105000.00, 0.00, '2024-04-19', '2024-05-14', NULL, 1),
+(76, 1, 'LOTE', '933e9c5ac6fd6724d4b36d32152cc973f14dc579jpg', 'SIN VENDER', 59, 'av santa rosa#541', 'SOL', 0.00, 2, 'PARTIDA 3', NULL, NULL, '{\"clave\":[\"\"],\"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'A.I.F', 0.00, NULL, '2024-04-21', '2024-05-14', NULL, 1);
 
 --
 -- Disparadores `activos`
@@ -2134,7 +2145,31 @@ INSERT INTO `detalle_costos` (`iddetalle_costos`, `idpresupuesto`, `idsubcategor
 (288, 5, 19, NULL, 'Limpieza de terreno', 1, 1000.00, '2024-05-05', NULL, NULL, 1),
 (289, 5, 20, NULL, 'Conexión de servicios básicos', 1, 1500.00, '2024-05-05', NULL, NULL, 1),
 (290, 5, 21, NULL, 'Costos administrativos', 1, 800.00, '2024-05-05', NULL, NULL, 1),
-(291, 5, 22, NULL, 'Impuestos municipales', 1, 1200.00, '2024-05-05', NULL, NULL, 1);
+(291, 5, 22, NULL, 'Impuestos municipales', 1, 1200.00, '2024-05-05', NULL, NULL, 1),
+(295, 23, 2, 6, '3M // Cinta aislante // Rollo de Cinta aislante', 1, 0.00, '2024-05-14', NULL, NULL, 1),
+(296, 23, 2, 21, 'Amanco // Hoja de Sierra // Paquete de Tornillos', 3, 0.00, '2024-05-14', NULL, NULL, 1),
+(297, 23, 6, 13, 'Acindar // Arena // Bolsa de Arena fina', 2, 0.00, '2024-05-14', NULL, NULL, 1),
+(298, 23, 2, 21, 'Amanco // Hoja de Sierra // Paquete de Tornillos', 3, 0.00, '2024-05-14', NULL, NULL, 1),
+(299, 23, 6, 13, 'Acindar // Arena // Bolsa de Arena fina', 2, 0.00, '2024-05-14', NULL, NULL, 1),
+(300, 23, 2, 6, '3M // Cinta aislante // Rollo de Cinta aislante', 1, 0.00, '2024-05-14', NULL, NULL, 1),
+(301, 23, 2, 6, '3M // Cinta aislante // Rollo de Cinta aislante', 1, 0.00, '2024-05-14', NULL, NULL, 1),
+(302, 23, 2, 21, 'Amanco // Hoja de Sierra // Paquete de Tornillos', 3, 0.00, '2024-05-14', NULL, NULL, 1),
+(303, 23, 6, 13, 'Acindar // Arena // Bolsa de Arena fina', 2, 0.00, '2024-05-14', NULL, NULL, 1),
+(304, 23, 2, 6, '3M // Cinta aislante // Rollo de Cinta aislante', 1, 0.00, '2024-05-14', NULL, NULL, 1),
+(305, 23, 2, 21, 'Amanco // Hoja de Sierra // Paquete de Tornillos', 3, 0.00, '2024-05-14', NULL, NULL, 1),
+(306, 23, 6, 13, 'Acindar // Arena // Bolsa de Arena fina', 2, 0.00, '2024-05-14', NULL, NULL, 1),
+(307, 23, 2, 6, '3M // Cinta aislante // Rollo de Cinta aislante', 1, 0.00, '2024-05-14', NULL, NULL, 1),
+(308, 23, 2, 21, 'Amanco // Hoja de Sierra // Paquete de Tornillos', 3, 0.00, '2024-05-14', NULL, NULL, 1),
+(309, 23, 6, 13, 'Acindar // Arena // Bolsa de Arena fina', 2, 0.00, '2024-05-14', NULL, NULL, 1),
+(310, 23, 2, 6, '3M // Cinta aislante // Rollo de Cinta aislante', 1, 30.00, '2024-05-14', NULL, NULL, 1),
+(311, 23, 2, 21, 'Amanco // Hoja de Sierra // Paquete de Tornillos', 3, 210.00, '2024-05-14', NULL, NULL, 1),
+(312, 23, 6, 13, 'Acindar // Arena // Bolsa de Arena fina', 2, 320.00, '2024-05-14', NULL, NULL, 1),
+(313, 23, 2, 6, '3M // Cinta aislante // Rollo de Cinta aislante', 1, 30.00, '2024-05-14', NULL, NULL, 1),
+(314, 23, 2, 21, 'Amanco // Hoja de Sierra // Paquete de Tornillos', 3, 210.00, '2024-05-14', NULL, NULL, 1),
+(315, 23, 6, 13, 'Acindar // Arena // Bolsa de Arena fina', 2, 320.00, '2024-05-14', NULL, NULL, 1),
+(316, 23, 2, 6, '3M // Cinta aislante // Rollo de Cinta aislante', 1, 30.00, '2024-05-14', NULL, NULL, 1),
+(317, 23, 2, 21, 'Amanco // Hoja de Sierra // Paquete de Tornillos', 3, 210.00, '2024-05-14', NULL, NULL, 1),
+(318, 23, 6, 13, 'Acindar // Arena // Bolsa de Arena fina', 2, 320.00, '2024-05-14', NULL, NULL, 1);
 
 -- --------------------------------------------------------
 
@@ -4372,7 +4407,23 @@ INSERT INTO `presupuestos` (`idpresupuesto`, `modelo`, `create_at`, `update_at`,
 (4, 'Oficina Ejecutiva', '2024-05-05', NULL, NULL, 2, 'PRES-002'),
 (5, 'Apartamento Minimalista', '2024-05-05', NULL, NULL, 3, 'PRES-003'),
 (6, 'Chalet Clásico', '2024-05-05', NULL, NULL, 4, 'PRES-004'),
-(7, 'Estudio Contemporáneo', '2024-05-05', NULL, NULL, 5, 'PRES-005');
+(7, 'Estudio Contemporáneo', '2024-05-05', NULL, NULL, 5, 'PRES-005'),
+(8, 'CASA SOLA', '2024-05-12', NULL, NULL, 1, 'PRES-016'),
+(9, 'CASA STARK', '2024-05-12', NULL, NULL, 1, 'PRES-020'),
+(10, 'CASA AVENGER', '2024-05-12', NULL, NULL, 1, 'PRES-018'),
+(11, 'CASA HULK', '2024-05-12', NULL, NULL, 1, 'PRES-029'),
+(12, 'CASA IRON-MAN', '2024-05-12', NULL, NULL, 1, 'PRES-056'),
+(13, 'CASA FALCON', '2024-05-12', NULL, NULL, 1, 'PRES-045'),
+(14, 'CASA THANOS', '2024-05-12', NULL, NULL, 1, 'PRES-045'),
+(15, 'CASA FIURI', '2024-05-12', NULL, NULL, 1, 'PRES-041'),
+(16, 'MARK50', '2024-05-12', NULL, NULL, 1, 'PRES-025'),
+(17, 'casa N', '2024-05-13', NULL, NULL, 1, 'PRES-056'),
+(18, 'MODELO X', '2024-05-13', NULL, NULL, 1, 'PRES-096'),
+(19, '', '2024-05-13', NULL, NULL, 1, '96'),
+(20, 'Laptop HP EliteBook', '2024-05-13', NULL, NULL, 1, 'PRES-099'),
+(21, 'modelo casa otra', '2024-05-13', NULL, NULL, 1, 'PRES-078'),
+(22, 'MODELO MADERA', '2024-05-13', NULL, NULL, 1, 'PRES-091'),
+(23, 'MODELO PLASTICO', '2024-05-13', NULL, NULL, 1, 'PRES-039');
 
 -- --------------------------------------------------------
 
@@ -5455,7 +5506,7 @@ ALTER TABLE `detalles_contratos`
 -- AUTO_INCREMENT de la tabla `detalle_costos`
 --
 ALTER TABLE `detalle_costos`
-  MODIFY `iddetalle_costos` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=292;
+  MODIFY `iddetalle_costos` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=319;
 
 --
 -- AUTO_INCREMENT de la tabla `devoluciones`
@@ -5515,7 +5566,7 @@ ALTER TABLE `personas_juridicas`
 -- AUTO_INCREMENT de la tabla `presupuestos`
 --
 ALTER TABLE `presupuestos`
-  MODIFY `idpresupuesto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `idpresupuesto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT de la tabla `provincias`

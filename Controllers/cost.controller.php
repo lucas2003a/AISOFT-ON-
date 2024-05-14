@@ -37,7 +37,8 @@ if(isset($_POST["action"])){
                     "detalle"               => $_POST["detalle"],
                     "cantidad"              => $_POST["cantidad"],
                     "precio_unitario"       => $_POST["precio_unitario"],
-                    "idusuario"             => $_POST["idusuario"]
+                    "idusuario"             => 1
+                    // "idusuario"             => $_POST["idusuario"]
                 ];
 
                 echo json_encode($cost->addDetailCost($dataObtained));

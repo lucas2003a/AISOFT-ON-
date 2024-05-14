@@ -329,7 +329,7 @@
             <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="#">Dashboard</a></li>
             <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="#">Presupuestos</a></li>
           </ol>
-          <h6 class="font-weight-bolder mb-0" id="cabezera">Presupuesto</h6>
+          <h6 class="font-weight-bolder mb-0" id="cabezera">Presupuesto - </h6>
         </nav>
         <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
 
@@ -716,6 +716,15 @@
     const $ = id => global.$(id);
     const $All = id => global.$All(id);
 
+    const queryString = window.location.search;
+    const url = new URLSearchParams(queryString);
+
+    const code = url.get("id");
+
+    const idActivo = atob(code);
+
+    const btnsEdit = $All(".edit");
+
     let bootstrap;
 
     let det_casaJSON;
@@ -737,20 +746,19 @@
 
 
     // Valida los datos de la cabezera del presupuesto
-    function validateData(value,column,array){
+    function validateData(value, column, array) {
 
-      return new Promise((resolve,reject)=>{
+      return new Promise((resolve, reject) => {
 
-        for(element of array){
+        for (element of array) {
 
           let exist = array.find(element => element[column] == value);
-  
-          if(exist){
+
+          if (exist) {
             console.log("no validado");
             reject();
-            sAlert.sweetWarning("Se ha encontrado coincidencias", `"${value}" ya existe, ingresa otro`);
-  
-          }else{
+
+          } else {
             console.log("valido");
             resolve();
           }
@@ -759,7 +767,7 @@
     }
 
     //Obtiene los datos de los presupuestos
-    async function getBudgetsData(){
+    async function getBudgetsData() {
 
       try {
 
@@ -1646,30 +1654,30 @@
       validateForm("#form_det_budget", storageData);
     })
 
-    $("#modelo").addEventListener("focus",(e)=>{
-      
+    $("#modelo").addEventListener("focus", (e) => {
+
       e.preventDefault();
-      validateData($("#codigo").value,"codigo",allDataBudget)
-      .then(()=>{
+      validateData($("#codigo").value, "codigo", allDataBudget)
+        .then(() => {
 
-        $("#modelo").focus();
+          $("#modelo").focus();
 
-        $("#modelo").addEventListener("blur",(e)=>{
-          e.preventDefault();
-          validateData($("#modelo").value,"modelo",allDataBudget)
-          .then(()=>{
-            $("#save_budget").disabled = false;
-          })
-          .catch(e=>{
-            console.error(e);
-            $("#modelo").focus();
-          })
+          $("#modelo").addEventListener("blur", (e) => {
+            e.preventDefault();
+            validateData($("#modelo").value, "modelo", allDataBudget)
+              .then(() => {
+                $("#save_budget").disabled = false;
+              })
+              .catch(e => {
+                console.error(e);
+                $("#modelo").focus();
+              })
+          });
+        })
+        .catch(e => {
+          console.error(e);
+          $("#codigo").focus();
         });
-      })
-      .catch(e=>{
-        console.error(e);
-        $("#codigo").focus();
-      });
     });
 
 

@@ -1312,14 +1312,21 @@ DELIMITER ;
 DELIMITER $$
 CREATE PROCEDURE spu_list_budgets()
 BEGIN
+	DECLARE _valueDefault DECIMAL(8,2);
+    SET _valueDefault = 0.00;
 	SELECT
 		pres.idpresupuesto,
         pres.codigo,
         pres.modelo,
-        (SUM(detcost.cantidad * detcost.precio_unitario)) AS total,
+        CASE
+			WHEN detcost.idpresupuesto IS NOT NULL THEN
+				(SUM(detcost.cantidad * detcost.precio_unitario)) 
+			ELSE
+				_valueDefault
+		END AS total,
         pers.nombres AS usuario
 		FROM presupuestos pres
-        INNER JOIN detalle_costos detcost ON detcost.idpresupuesto = pres.idpresupuesto
+        LEFT JOIN detalle_costos detcost ON detcost.idpresupuesto = pres.idpresupuesto
         INNER JOIN usuarios usu ON usu.idusuario = pres.idusuario
         INNER JOIN personas pers ON pers.idpersona = usu.idpersona
         WHERE pres.inactive_at IS NULL
@@ -1379,7 +1386,11 @@ BEGIN
 	INSERT INTO presupuestos(modelo, idusuario, codigo)
 					VALUES(_modelo, _idusuario, _codigo);
                     
-	SELECT @@last_insert_id AS idpresupuesto;
+	SELECT @@last_insert_id AS idpresupuesto,
+			codigo,
+            modelo
+            FROM presupuestos
+            WHERE idpresupuesto = @@last_insert_id;
 END $$
 DELIMITER ;
 
@@ -1465,7 +1476,7 @@ CREATE PROCEDURE spu_add_detail_cost
 BEGIN
 	INSERT INTO detalle_costos(
 								idpresupuesto, 
-                                idsubacategoria_costo, 
+                                idsubcategoria_costo, 
                                 idtipo_material,
                                 detalle,
                                 cantidad,
@@ -1474,7 +1485,7 @@ BEGIN
                                 )
 						VALUES(
 								_idpresupuesto, 
-                                _idsubacategoria_costo, 
+                                _idsubcategoria_costo, 
                                 NULLIF(_idtipo_material,""),
                                 _detalle,
                                 _cantidad,
