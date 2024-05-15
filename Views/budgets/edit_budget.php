@@ -721,11 +721,7 @@
 
     const code = url.get("id");
 
-    const idActivo = atob(code);
-
-    const btnsEdit = $All(".edit");
-
-    let bootstrap;
+    const idpresupuestoOBT = atob(code);
 
     let det_casaJSON;
     let idPresupuesto;
@@ -745,6 +741,30 @@
     let allDataBudget;
 
 
+    async function getBudgetsById(idpres){
+      try{
+
+        let url = "../../Controllers/budget.controller.php";
+        let params = new FormData();
+
+        params.append("action","getBudgetById");
+        params.append("idpresupuesto",idpres);
+
+        let results = await global.sendAction(url,params);
+
+        if(results){
+          console.log(results);
+          $("#codigo").value = results.codigo;
+          $("#modelo").value = results.modelo;
+
+        }
+      }
+      catch(e){
+        console.error(e);
+      }
+    }
+
+    getBudgetsById(idpresupuestoOBT)
     // Valida los datos de la cabezera del presupuesto
     function validateData(value, column, array) {
 
@@ -1662,7 +1682,14 @@
 
           $("#modelo").focus();
 
-          $("#modelo").addEventListener("blur", (e) => {
+          
+        })
+        .catch(e => {
+          console.error(e);
+          $("#codigo").focus();
+        });
+    });
+    $("#modelo").addEventListener("blur", (e) => {
             e.preventDefault();
             validateData($("#modelo").value, "modelo", allDataBudget)
               .then(() => {
@@ -1673,19 +1700,13 @@
                 $("#modelo").focus();
               })
           });
-        })
-        .catch(e => {
-          console.error(e);
-          $("#codigo").focus();
-        });
-    });
-
 
     getBrands();
     getCategoriesCosts();
     getBudgets();
     renderDetbudgets(dataStorage);
     getBudgetsData();
+    getBudgetsById(idpresupuestoOBT);
 
     if (dataStorage.length > 0) {
       renderDetbudgets(dataStorage);

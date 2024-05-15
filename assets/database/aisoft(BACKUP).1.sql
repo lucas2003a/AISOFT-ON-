@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 14-05-2024 a las 11:28:46
+-- Tiempo de generación: 15-05-2024 a las 14:53:56
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -288,7 +288,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_get_budget_by_id` (IN `_idpresu
         (SUM(detcost.cantidad * detcost.precio_unitario)) AS total,
         pers.nombres AS usuario
 		FROM presupuestos pres
-        INNER JOIN detalle_costos detcost ON detcost.idpresupuesto = pres.idpresupuesto
+        LEFT JOIN detalle_costos detcost ON detcost.idpresupuesto = pres.idpresupuesto
         INNER JOIN usuarios usu ON usu.idusuario = pres.idusuario
         INNER JOIN personas pers ON pers.idpersona = usu.idpersona
         WHERE pres.idpresupuesto = _idpresupuesto

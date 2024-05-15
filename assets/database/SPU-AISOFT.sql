@@ -1365,7 +1365,7 @@ BEGIN
         (SUM(detcost.cantidad * detcost.precio_unitario)) AS total,
         pers.nombres AS usuario
 		FROM presupuestos pres
-        INNER JOIN detalle_costos detcost ON detcost.idpresupuesto = pres.idpresupuesto
+        LEFT JOIN detalle_costos detcost ON detcost.idpresupuesto = pres.idpresupuesto
         INNER JOIN usuarios usu ON usu.idusuario = pres.idusuario
         INNER JOIN personas pers ON pers.idpersona = usu.idpersona
         WHERE pres.idpresupuesto = _idpresupuesto
@@ -1374,7 +1374,8 @@ BEGIN
         ORDER BY pres.codigo ASC;
 END $$
 DELIMITER ;
-
+call spu_get_budget_by_id(19);
+select * from presupuestos;
 DELIMITER $$
 CREATE PROCEDURE spu_add_budget
 (

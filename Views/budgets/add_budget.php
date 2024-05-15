@@ -1541,14 +1541,27 @@
       }
     })
 
-    $("#codigo").addEventListener("blur", () => {
+    $("#codigo").addEventListener("blur", (e) => {
 
+      e.preventDefault();
 
       if (!lastCode) {
 
         currentCode = "PRES-" + $("#codigo").value.toString().padStart(3, "0");
         $("#codigo").value = currentCode;
         lastCode = true;
+      }
+
+      if($("#codigo").value !==""){
+
+        validateData($("#codigo").value,"codigo",allDataBudget)
+        .then(()=>{
+          $("#modelo").focus();
+        })
+        .catch(e=>{
+          console.error(e);
+          $("#codigo").focus();
+        });
       }
     })
 
@@ -1646,32 +1659,22 @@
       validateForm("#form_det_budget", storageData);
     })
 
-    $("#modelo").addEventListener("focus",(e)=>{
-      
+    $("#modelo").addEventListener("blur",(e)=>{
       e.preventDefault();
-      validateData($("#codigo").value,"codigo",allDataBudget)
-      .then(()=>{
 
-        $("#modelo").focus();
-
-        $("#modelo").addEventListener("blur",(e)=>{
-          e.preventDefault();
-          validateData($("#modelo").value,"modelo",allDataBudget)
-          .then(()=>{
-            $("#save_budget").disabled = false;
-          })
-          .catch(e=>{
-            console.error(e);
-            $("#modelo").focus();
-          })
+      if($("#modelo").value !== ""){
+        
+        validateData($("#modelo").value,"modelo",allDataBudget)
+        .then(()=>{
+  
+          $("#save_budget").disabled = false;
+        })
+        .catch(e=>{
+          console.error(e);
+          $("#modelo").focus();
         });
-      })
-      .catch(e=>{
-        console.error(e);
-        $("#codigo").focus();
-      });
+      }
     });
-
 
     getBrands();
     getCategoriesCosts();
