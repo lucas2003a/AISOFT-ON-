@@ -77,4 +77,51 @@ SELECT * FROM detalle_costos where idpresupuesto = 1 order by idtipo_material as
 CALL spu_list_detail_cost(3);
 -- Borrar los registros de subcategoria_costos con las descripciones específicas
 DELETE FROM detalle_costos WHERE detalle IN ('Intereses por financiamiento', 'Limpieza de terreno', 'Conexión de servicios básicos', 'Costos administrativos', 'Impuestos municipales');
-SELECT * FRom presupuestos;
+SELECT * FRom activos where idpresupuesto is not null;
+update activos set idpresupuesto = null;
+SELECT * FROM presupuestos;
+select * from detalle_costos where idpresupuesto = 23;
+
+SELECT 	
+			act.idactivo,
+			act.idproyecto, 
+            proy.denominacion,
+			act.sublote, 
+            act.idpresupuesto 
+            FROM activos act 
+            INNER JOIN proyectos proy ON proy.idproyecto = act.idproyecto
+            LEFT JOIN presupuestos pres ON pres.idpresupuesto = act.idpresupuesto
+            WHERE act.inactive_at IS NULL
+				AND act.idpresupuesto = 24 OR act.idpresupuesto IS NULL;
+                
+                select * from detalle_costos where idpresupuesto = 3;
+                
+SELECT * FROM detalle_costos where iddetalle_costos = 4521;
+DELETE FROM detalle_costos where update_at IS NOT NULL;
+
+SELECT 
+    m.idmaterial AS id_material,
+    m.material AS nombre_material,
+    tm.idtipo_material AS id_tipo_material,
+    tm.tipo_material AS nombre_tipo_material,
+    um.idunidad_medida AS id_unidad_medida,
+    um.unidad_medida AS nombre_unidad_medida
+FROM 
+    tipos_materiales tm
+INNER JOIN 
+    materiales m ON tm.idmaterial = m.idmaterial
+INNER JOIN 
+    unidades_medida um ON m.idunidad_medida = um.idunidad_medida;
+    
+SELECT * FROM tipos_materiales where idmaterial = 10;
+
+SELECT * FROM MATERIALES MAT INNER JOIN MARCAS MAR ON MAR.idmarca = MAT.idmarca ;
+DELETE FROM MATERIALES
+WHERE idmaterial NOT IN (
+    SELECT idmaterial
+    FROM (
+        SELECT MIN(idmaterial) AS idmaterial
+        FROM MATERIALES
+        GROUP BY idmarca
+    ) AS MaterialesSinRepetir
+);

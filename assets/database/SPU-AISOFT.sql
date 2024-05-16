@@ -1445,6 +1445,7 @@ BEGIN
             cat.idcategoria_costo,
 			subcat.subcategoria_costo,
             subcat.idsubcategoria_costo,
+            detcost.idtipo_material,
             CASE 
 				WHEN detcost.idtipo_material IS NOT NULL THEN
 				CONCAT(marc.marca, " // ", mat.material, " // ",tmat.tipo_material, " // ",unimed.unidad_medida)
