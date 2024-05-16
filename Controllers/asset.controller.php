@@ -193,7 +193,9 @@ if(isset($_POST["action"])){
         
         case "litsLotsForBudget": 
 
-                echo json_encode($asset->listLostForBudget());
+                $idpresupuesto = $_POST["idpresupuesto"];
+
+                echo json_encode($asset->listLostForBudget($idpresupuesto));
             break;
     }
 }

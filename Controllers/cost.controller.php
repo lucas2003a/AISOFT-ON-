@@ -32,7 +32,7 @@ if(isset($_POST["action"])){
             
                 $dataObtained = [
                     "idpresupuesto"         => $_POST["idpresupuesto"],
-                    "idsubacategoria_costo" => $_POST["idsubacategoria_costo"],
+                    "idsubcategoria_costo" => $_POST["idsubcategoria_costo"],
                     "idtipo_material"       => $_POST["idtipo_material"],
                     "detalle"               => $_POST["detalle"],
                     "cantidad"              => $_POST["cantidad"],
@@ -49,12 +49,13 @@ if(isset($_POST["action"])){
                 $dataObtained = [
                     "iddetalle_costo"       => $_POST["iddetalle_costo"],
                     "idpresupuesto"         => $_POST["idpresupuesto"],
-                    "idsubacategoria_costo" => $_POST["idsubacategoria_costo"],
+                    "idsubcategoria_costo" => $_POST["idsubcategoria_costo"],
                     "idtipo_material"       => $_POST["idtipo_material"],
                     "detalle"               => $_POST["detalle"],
                     "cantidad"              => $_POST["cantidad"],
                     "precio_unitario"       => $_POST["precio_unitario"],
-                    "idusuario"             => $_POST["idusuario"]
+                    "idusuario"             => 1
+                    // "idusuario"             => $_POST["idusuario"]
                 ];
 
                 echo json_encode($cost->setDetailCost($dataObtained));

@@ -815,7 +815,7 @@
 
         params.append("action", "addDetailCost");
         params.append("idpresupuesto", dataBudget.idpresupuesto);
-        params.append("idsubacategoria_costo", obj.idsubcategoria_costo);
+        params.append("idsubcategoria_costo", obj.idsubcategoria_costo);
         params.append("idtipo_material", obj.idtipo_material)
         params.append("detalle", obj.detalle)
         params.append("cantidad", obj.cantidad)
@@ -1254,7 +1254,7 @@
     };
 
     //Obtiene los lotes sin presupuesto
-    async function getBudgets() {
+    async function getLotsAll() {
 
       try {
 
@@ -1290,19 +1290,19 @@
 
 
     //Oculta/muestra los inputs
-    function toggleInputs(boolean) {
+    function toggleInputs(required) {
 
-      if (!boolean) {
+      if (!required) {
 
         $("#marca").required = false;
         $("#material").required = false;
         $("#tipo_material").required = false;
-        $("#detalle").disabled = true
+        $("#detalle").disabled = false
       } else {
-        /* $("#marca").required = true;
+        $("#marca").required = true;
         $("#material").required = true;
-        $("#tipo_material").required = true;*/
-        $("#detalle").disabled = false;
+        $("#tipo_material").required = true;
+        $("#detalle").disabled = true;
       }
     };
 
@@ -1412,14 +1412,14 @@
       let option = e.target.options[e.target.selectedIndex].dataset.material;
       if (option == "NO") {
 
-        required = true
+        required = false;
         $("#inputs_materials").classList.add("d-none");
         toggleInputs(required)
 
 
       } else {
 
-        required = false;
+        required = true;
         $("#inputs_materials").classList.remove("d-none");
         toggleInputs(required);
       }
@@ -1678,7 +1678,7 @@
 
     getBrands();
     getCategoriesCosts();
-    getBudgets();
+    getLotsAll();
     renderDetbudgets(dataStorage);
     getBudgetsData();
 

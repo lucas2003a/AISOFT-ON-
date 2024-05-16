@@ -315,12 +315,12 @@ class Asset extends Conection{
     /**
      * Lista los lotes si contienen o no contien el idpresupuesto
      */
-    public function listLostForBudget(){
+    public function listLostForBudget($idpresupuesto = 0){
 
         try{
 
-            $query = $this->conection->prepare("CALL spu_list_lots_ForBudget()");
-            $query->execute();
+            $query = $this->conection->prepare("CALL spu_list_lots_ForBudget(?)");
+            $query->execute(array($idpresupuesto));
 
             return $query->fetchAll(PDO::FETCH_ASSOC);
         }

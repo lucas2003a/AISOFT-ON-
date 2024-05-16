@@ -567,7 +567,7 @@ END $$
 DELIMITER ;
 
 DELIMITER $$
-CREATE PROCEDURE spu_list_lots_ForBudget()
+CREATE PROCEDURE spu_list_lots_ForBudget(IN _idpresupuesto INT)
 BEGIN
 	SELECT 	
 			act.idactivo,
@@ -578,10 +578,11 @@ BEGIN
             FROM activos act 
             INNER JOIN proyectos proy ON proy.idproyecto = act.idproyecto
             LEFT JOIN presupuestos pres ON pres.idpresupuesto = act.idpresupuesto
-            WHERE act.inactive_at IS NULL;
+            WHERE act.inactive_at IS NULL
+				AND act.idpresupuesto = _idpresupuesto OR act.idpresupuesto IS NULL;
 END $$
 DELIMITER ;
-
+call spu_list_lots_ForBudget(23);
 -- PERSONAS
 DELIMITER $$
 CREATE PROCEDURE spu_list_person()
@@ -1374,8 +1375,7 @@ BEGIN
         ORDER BY pres.codigo ASC;
 END $$
 DELIMITER ;
-call spu_get_budget_by_id(19);
-select * from presupuestos;
+
 DELIMITER $$
 CREATE PROCEDURE spu_add_budget
 (
@@ -1412,7 +1412,13 @@ BEGIN
             update_at 	= CURDATE()
 		WHERE idpresupuesto = _idpresupuesto;
         
-	SELECT ROW_COUNT() AS filasAfect;
+	SELECT 
+		(SELECT ROW_COUNT()) AS filasAfect,
+        idpresupuesto,
+        codigo,
+        modelo
+        FROM presupuestos
+		WHERE idpresupuesto = _idpresupuesto;
 END $$
 DELIMITER ;
 
@@ -1436,7 +1442,9 @@ BEGIN
 			detcost.iddetalle_costos,
 			detcost.idpresupuesto,
 			cat.categoria_costo,
+            cat.idcategoria_costo,
 			subcat.subcategoria_costo,
+            subcat.idsubcategoria_costo,
             CASE 
 				WHEN detcost.idtipo_material IS NOT NULL THEN
 				CONCAT(marc.marca, " // ", mat.material, " // ",tmat.tipo_material, " // ",unimed.unidad_medida)
@@ -1462,7 +1470,7 @@ BEGIN
 			ORDER BY cat.categoria_costo, subcat.subcategoria_costo ASC;
 END $$
 DELIMITER ;
-
+call spu_list_detail_cost(3);
 DELIMITER $$
 CREATE PROCEDURE spu_add_detail_cost
 (
@@ -1518,11 +1526,11 @@ BEGIN
             idtipo_material			= NULLIF(_idtipo_material,""),
             detalle					= _detalle,
             cantidad				= _cantidad,
-            precio_cantidad 		= _precio_cantidad,
+            precio_unitario			= _precio_unitario,
             idusuario 				= _idusuario,
             update_at 				= CURDATE()
         WHERE
-			iddetalle_costo = _iddetalle_costo;
+			iddetalle_costos = _iddetalle_costo;
             
 	SELECT ROW_COUNT() AS filasAfect;
 END $$

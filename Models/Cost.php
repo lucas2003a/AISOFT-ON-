@@ -71,7 +71,7 @@ class Cost extends Conection {
             $query->execute(
                 array(
                     $dataCost["idpresupuesto"],
-                    $dataCost["idsubacategoria_costo"],
+                    $dataCost["idsubcategoria_costo"],
                     $dataCost["idtipo_material"],
                     $dataCost["detalle"],
                     $dataCost["cantidad"],
@@ -97,7 +97,7 @@ class Cost extends Conection {
                 array(
                     $dataCost["iddetalle_costo"],
                     $dataCost["idpresupuesto"],
-                    $dataCost["idsubacategoria_costo"],
+                    $dataCost["idsubcategoria_costo"],
                     $dataCost["idtipo_material"],
                     $dataCost["detalle"],
                     $dataCost["cantidad"],
