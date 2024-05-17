@@ -514,7 +514,7 @@
 
                       <div class="col-md-3">
                         <label for="precio_unitario" class="form-label">Precio Unitario</label>
-                        <input type="number" name="precio_unitario" id="precio_unitario" class="form-control" min="1" required>
+                        <input type="number" name="precio_unitario" id="precio_unitario" class="form-control" min="1" step="0.001" required>
                         <div class="invalid-feedback">
                           Necesitas ingresar el precio unitario.
                         </div>
@@ -739,6 +739,37 @@
     let isAddForm = true;
     let iddetalleCosto;
 
+    // Elimina un detalle del presupuesto
+    async function deleteDetBudget(iddet){
+      
+      try{
+
+        let url = "../../Controllers/cost.controller.php";
+
+        let params = new FormData();
+        
+        params.append("action","inactiveDetailCost");
+        params.append("iddetalle_costo",iddet);
+
+        let result = await global.sendAction(url,params);
+
+        if(result){
+
+          if(result.filasAfect > 0){
+            
+            sAlert.sweetSuccess("Éxito", "Detalle eliminado correctamente", () => {
+              getDetCostByIdBudget(idpresupuestoOBT)
+            }); 
+          }else{
+            sAlert.sweetError("Ocurrió un error", "No se ha podido eliminar el detalle");
+          }
+        }
+      }
+      catch(e){
+        console.error(e);
+      }
+    }
+
     // Valida los datos de la cabezera del presupuesto
     function validateData(value, column, array) {
 
@@ -749,11 +780,11 @@
           let exist = array.find(element => element[column] == value);
 
           if (exist) {
-            console.log("no validado");
+            
             sAlert.sweetWarning("Se ha encontrado coincidencias", `"${value}" ya existe, ingresa otro`);
             reject();
           } else {
-            console.log("valido");
+            
             resolve();
           }
         }
@@ -776,7 +807,7 @@
         if (results) {
 
           allDataBudget = results;
-          console.log(allDataBudget)
+          
         }
       } catch (e) {
         console.error(e);
@@ -799,11 +830,8 @@
         let result = await global.sendAction(url, params);
 
         if (result) {
-          if(result.filasAfect > 0){
-            sAlert.sweetSuccess("Éxito", "Presupuesto actualizado correctamente", () => {
-
-            });
-          }
+          
+          return result.filasAfect;
         }
 
       } catch (e) {
@@ -812,7 +840,7 @@
     }
 
     //Agrega detalle de presupuesto
-    async function uppSetDetCost(obj, isAdd) {
+    async function upSetDetCost(obj, isAdd) {
       try {
 
         let url = "../../Controllers/cost.controller.php";
@@ -897,7 +925,7 @@
     //Renderiza dataStorage en la tabla
     function renderDetbudgets(array) {
 
-      console.log(array)
+      
       $("#table-det-budgets tbody").innerHTML = "";
       $("#message-info").innerHTML = "";
 
@@ -945,6 +973,7 @@
 
     };
 
+    //Obtiene los detalles del costo por el idresupuesto
     async function getDetCostByIdBudget(idpres) {
 
       try {
@@ -993,7 +1022,8 @@
         console.error(e);
       }
     }
-    //Almacenar data en un array
+
+    //Almacena datos en un array
     function storageData() {
 
       let data = {};
@@ -1025,8 +1055,9 @@
         }
       }
 
-      console.log(isAddForm)
-      uppSetDetCost(data, isAddForm);
+      
+      
+      upSetDetCost(data, isAddForm);
 
 
       $("#save_lots").disabled = false;
@@ -1275,10 +1306,11 @@
 
         let newButton = "";
         let newContent = "";
+        let isChecked;
         arrayContent.forEach(content => {
 
-          let isCheked = !content.idpresupuesto ? false : true;
-          let checkedAttribute = isCheked ? "checked" : "";
+          isChecked = !content.idpresupuesto ? false : true;
+          let checkedAttribute = isChecked ? "checked" : "";
           let idpresupuesto = content.idpresupuesto ? content.idpresupuesto : null;
 
           if (element.idproyecto == content.idproyecto) {
@@ -1295,7 +1327,7 @@
           `;
           }
         })
-
+        
         newButton = `
       
       <div class="accordion-item">
@@ -1368,11 +1400,6 @@
         $("#tipo_material").required = true;
         $("#detalle").disabled = true;
       }
-
-      console.log($("#marca").required)
-      console.log($("#material").required)
-      console.log($("#tipo_material").required)
-      console.log($("#detalle").disabled)
     };
 
     //Valida el formulario
@@ -1470,8 +1497,8 @@
         $("#form-budget").scrollIntoView({behavior:"auto"});
 
         isAddForm = false;
-        iddetalleCosto = e.target.dataset.index;
-
+        iddetalleCosto = Number.parseInt(e.target.dataset.index);
+        
         let dataObt = dataStorage.find(data => data.iddetalle_costos == iddetalleCosto)
         if (dataObt) {
 
@@ -1483,48 +1510,18 @@
           $("#cantidad").value = dataObt.cantidad;
           $("#precio_unitario").value = dataObt.precio_unitario;
 
-          storageData()
-          
-          
         }
 
       } else if (e.target.classList.contains("delete")) {
 
+        let iddetalle = e.target.dataset.index
+        console.log(iddetalle)          
 
-        sAlert.sweetConfirm("¿Deseas eliminar el registro?", "", () => {
+        sAlert.sweetConfirm("¿Deseas eliminar el registro?", "", async function(){
 
-
-          let indexDelete = dataStorage.filter(data => {
-            if (data.indice == e.target.dataset.index) {
-              return data.indice
-            }
-          });
-
-
-          if (indexDelete.length > 0) {
-
-
-            let indexDrop = indexDelete[0];
-            //El metodo splice borra un elemento especificando su indice y cuandas coincidencias(indice, n de coindicencias)
-            dataStorage.forEach(element => {
-
-              if (element.indice == indexDrop.indice) {
-
-                dataStorage.splice(dataStorage.indexOf(element), 1); //Splice solo funciona con arrays y indeof obtien el indice de un objeto seleccionado
-              }
-            });
-          }
-
-
-          sessionStorage.setItem("dataStoraged", JSON.stringify(dataStorage));
-          renderDetbudgets(dataStorage);
-
-          if (dataStorage.length == 0) {
-            $("#save_lots").disabled = true;
-          }
-
-          let tr = e.target.closest("tr");
-          tr.remove();
+          await deleteDetBudget(iddetalle)
+          // let tr = e.target.closest("tr");
+          // tr.remove();
 
         })
 
@@ -1570,32 +1567,26 @@
       let lotes = document.querySelectorAll(".form-check-input.form-lotes");
 
       let counter = 0;
+      let result = 0; 
       let arrayLotes = Array.from(lotes);
-      let resultAddDet = 0;
-      let resultSetDet = 0;
-      let resultDeleteDet = 0;
-      let counterAddDet = 0;
-      let counterSetDet = 0;
+        
+      for(lote of lotes){
 
-      console.log("entrada al for")
-      for (data of dataStorage) {
-        if (data.action == "add-det") {
+        let idactivo = lote.dataset.idactivo;
 
-          console.log("agregado");
+        let idpresupuestoEdit = lote.checked ? idpresupuestoOBT : "";
+        counter += await setIdBudget(idactivo,idpresupuestoEdit)
 
-        } else if (data.action == "edit-det") {
-          console.log("se editara")
-        }
       }
-      console.log("fin del for")
-      /*if (counterAddDet || counterSetDet) {
+      
+      if (counter) {
 
-        sAlert.sweetSuccess("Datos nuevos", `Registros Agregados : ${counterAddDet}<br>`,`Registros actualizados: ${counterSetDet}`, () => {
+        sAlert.sweetSuccess("Datos nuevos", `Registros Actualizados : ${counter}<br>`, () => {
           window.location.href = "./index.php";
         });
       } else {
         sAlert.sweetError("No se han realizado registro", "Por favor vuelvelo a intentar");
-      } */
+      }  
 
     });
 

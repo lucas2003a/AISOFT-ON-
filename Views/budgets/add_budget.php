@@ -456,7 +456,7 @@
                     <div class="row d-flex align-items-center mb-4 d-none" id="inputs_materials">
 
                       <!-- MATERIALES -->
-                      <div class="col-md-4">
+                      <div class="col-md-6">
                         <label for="marca" class="form-label">Marca</label>
                         <select name="marca" id="marca" class="form-select" required>
                           <option value="" default>Marca</option>
@@ -469,7 +469,7 @@
                         </div>
                       </div>
 
-                      <div class="col-md-4">
+                      <div class="col-md-6">
                         <label for="material" class="form-label">Material</label>
                         <select name="material" id="material" class="form-select" required>
                           <option value="" default>Material</option>
@@ -481,20 +481,6 @@
                           Material registrado correctamente.
                         </div>
                       </div>
-
-                      <div class="col-md-4">
-                        <label for="tipo_material" class="form-label">Tipo de material</label>
-                        <select name="tipo_material" id="tipo_material" class="form-select" required>
-                          <option value="" default>Tipo de material</option>
-                        </select>
-                        <div class="invalid-feedback">
-                          Necesitas ingresar un tipo de material.
-                        </div>
-                        <div class="valid-feedback">
-                          Tipo de material registrado correctamente.
-                        </div>
-                      </div>
-
                     </div>
                     <hr>
 
@@ -734,6 +720,7 @@
     let rowEdit = [];
     let lastCode = false;
     let allDataBudget;
+    let dataHeader;
 
 
     // Valida los datos de la cabezera del presupuesto
@@ -848,6 +835,7 @@
 
         if (result) {
 
+          dataHeader = result;
           idpresupuesto = result.idpresupuesto
 
           let data = {
@@ -863,7 +851,7 @@
           dataBudget = JSON.parse(sessionStorage.getItem("dataBudget"));
 
           sAlert.sweetSuccess("Éxito", "Presupuesto agregado correctamente", () => {
-
+            $("#add").disabled = false;
           });
 
         } else {
@@ -935,7 +923,7 @@
           idcategoria_costo: Number.parseInt($("#categoria_costo").value),
           idsubcategoria_costo: Number.parseInt($("#subcategoria_costo").value),
           subcategoria_costo: $("#subcategoria_costo").options[$("#subcategoria_costo").selectedIndex].textContent,
-          idtipo_material: null,
+          idmaterial: null,
           detalle: $("#detalle").value,
           cantidad: Number.parseInt($("#cantidad").value),
           precio_unitario: Number.parseInt($("#precio_unitario").value)
@@ -944,15 +932,15 @@
 
         let marca = $("#marca").options[$("#marca").selectedIndex].textContent;
         let material = $("#material").options[$("#material").selectedIndex].textContent;
-        let tipo_material = $("#tipo_material").options[$("#tipo_material").selectedIndex].textContent;
+        let unidad_medida = $("#material").options[$("#material").selectedIndex].dataset.uni_medida;
 
         data = {
           indice: Number.parseInt(index),
           idcategoria_costo: Number.parseInt($("#categoria_costo").value),
           idsubcategoria_costo: Number.parseInt($("#subcategoria_costo").value),
           subcategoria_costo: $("#subcategoria_costo").options[$("#subcategoria_costo").selectedIndex].textContent,
-          idtipo_material: Number.parseInt($("#tipo_material").value),
-          detalle: marca + " // " + material + " // " + tipo_material,
+          idmaterial: Number.parseInt($("#tipo_material").value),
+          detalle: marca + " // " + material + " // " + unidad_medida,
           cantidad: Number.parseInt($("#cantidad").value),
           precio_unitario: Number.parseInt($("#precio_unitario").value)
         }
@@ -1034,6 +1022,7 @@
             let newTag = document.createElement("option");
             newTag.value = result.idmaterial;
             newTag.innerText = result.material;
+            newTag.dataset.uni_medida = result.unidad_medida
 
             $("#material").appendChild(newTag);
           });
@@ -1045,53 +1034,6 @@
           newTag.innerText = message;
 
           $("#material").appendChild(newTag);
-        }
-      } catch (e) {
-        console.error(e);
-      }
-    };
-
-    //Obtiene los tipos de materiales
-    async function getTypesMaterials(idmaterial) {
-
-      try {
-
-        let url = "../../Controllers/material.controller.php";
-
-        let params = new FormData();
-
-        params.append("action", "listTypeMaterials");
-        params.append("idmaterial", idmaterial);
-
-        let results = await global.sendAction(url, params);
-
-        if (results.length > 0) {
-
-          //Opcion por defecto
-          let tagDefault = document.createElement("option");
-          tagDefault.value = "";
-          tagDefault.innerText = "Seleccione un tipo de material";
-          tagDefault.selected = true;
-
-          $("#tipo_material").append(tagDefault);
-
-          results.forEach(result => {
-
-            let newTag = document.createElement("option");
-            newTag.value = result.idtipo_material;
-            newTag.innerText = result.tipo_material;
-
-            $("#tipo_material").appendChild(newTag);
-          });
-        } else {
-
-          let message = "Tipo material";
-
-          let newTag = document.createElement("option");
-          newTag.value = "";
-          newTag.innerText = message;
-
-          $("#tipo_material").appendChild(newTag);
         }
       } catch (e) {
         console.error(e);
@@ -1288,7 +1230,6 @@
       }
     };
 
-
     //Oculta/muestra los inputs
     function toggleInputs(required) {
 
@@ -1377,14 +1318,6 @@
 
       });
     };
-
-    $("#material").addEventListener("change", () => {
-
-      let idmaterial = $("#material").value
-      $("#tipo_material").innerHTML = "";
-      getTypesMaterials(idmaterial);
-
-    });
 
     $("#marca").addEventListener("change", (e) => {
 
@@ -1552,7 +1485,7 @@
         lastCode = true;
       }
 
-      if($("#codigo").value !==""){
+      if($("#codigo").value !=="" && $("#codigo").value !== dataHeader.codigo){
 
         validateData($("#codigo").value,"codigo",allDataBudget)
         .then(()=>{
@@ -1662,7 +1595,7 @@
     $("#modelo").addEventListener("blur",(e)=>{
       e.preventDefault();
 
-      if($("#modelo").value !== ""){
+      if($("#modelo").value !== "" && $("#modelo").value !== dataHeader.modelo){
         
         validateData($("#modelo").value,"modelo",allDataBudget)
         .then(()=>{

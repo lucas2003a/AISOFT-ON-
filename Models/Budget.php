@@ -105,7 +105,6 @@ class Budget extends Conection{
         }
     }
 
-
     /**
      * Elimina un presupuesto
     */
@@ -121,5 +120,7 @@ class Budget extends Conection{
             die($e->getMessage());
         }
     }
+/* 
+    public function  */
 }
 ?>

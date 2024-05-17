@@ -459,7 +459,7 @@ CREATE PROCEDURE spu_set_idpresupuesto
 BEGIN
 	UPDATE activos
 		SET
-			idpresupuesto 	= _idpresupuesto,
+			idpresupuesto 	= NULLIF(_idpresupuesto,""),
             idusuario 		= _idusuario,
             update_at 		= CURDATE()
 		WHERE idactivo = _idactivo;
@@ -1280,31 +1280,13 @@ BEGIN
         marc.idmarca,
         marc.marca,
         mat.material,
-        unimed.unidad_medida
+        unimed.unidad_medida,
+        mat.precio_unitario
 		FROM materiales mat
         INNER JOIN marcas marc ON marc.idmarca = mat.idmarca
         INNER JOIN unidades_medida unimed ON unimed.idunidad_medida = mat.idunidad_medida
         WHERE marc.idmarca = _idmarca
         ORDER BY mat.material ASC;
-END $$
-DELIMITER ;
-
--- TIPOS DE MATERIALES /////////////////////////////////////////////////////////////////////////////////////////
-DELIMITER $$
-CREATE PROCEDURE spu_list_types_materials(IN _idmaterial INT)
-BEGIN
-	SELECT 
-		tmat.idtipo_material,
-        mat.idmaterial,
-        mat.material,
-        tmat.tipo_material,
-        tmat.precio_unitario,
-        tmat.create_at,
-        tmat.update_at
-		FROM tipos_materiales tmat
-        INNER JOIN materiales mat ON mat.idmaterial = tmat.idmaterial
-        WHERE tmat.idmaterial = _idmaterial
-        ORDER BY tmat.tipo_material ASC;
 END $$
 DELIMITER ;
 
@@ -1331,6 +1313,7 @@ BEGIN
         INNER JOIN usuarios usu ON usu.idusuario = pres.idusuario
         INNER JOIN personas pers ON pers.idpersona = usu.idpersona
         WHERE pres.inactive_at IS NULL
+        AND detcost.inactive_at IS NULL
         GROUP BY pres.idpresupuesto
         ORDER BY pres.codigo ASC;
 END $$
@@ -1351,6 +1334,7 @@ BEGIN
         INNER JOIN personas pers ON pers.idpersona = usu.idpersona
         WHERE pres.codigo LIKE CONCAT(_codigo,"%")
         AND pres.inactive_at IS NULL
+        AND detcost.inactive_at IS NULL
         GROUP BY pres.idpresupuesto
         ORDER BY pres.codigo ASC;
 END $$
@@ -1371,6 +1355,7 @@ BEGIN
         INNER JOIN personas pers ON pers.idpersona = usu.idpersona
         WHERE pres.idpresupuesto = _idpresupuesto
         AND pres.inactive_at IS NULL
+        AND detcost.inactive_at IS NULL
         GROUP BY pres.idpresupuesto
         ORDER BY pres.codigo ASC;
 END $$
@@ -1394,6 +1379,15 @@ BEGIN
             WHERE idpresupuesto = @@last_insert_id;
 END $$
 DELIMITER ;
+
+DELIMITER $$
+CREATE PROCEDURE spu_count_budgets(IN _idpresuspuesto INT)
+BEGIN
+	SELECT COUNT(idpresupuesto)
+		FROM presupuestos
+		WHERE idpresupuesto = _idpresuspuesto;
+END $$
+DELIMTER ;
 
 DELIMITER $$
 CREATE PROCEDURE spu_set_budget
@@ -1471,7 +1465,7 @@ BEGIN
 			ORDER BY cat.categoria_costo, subcat.subcategoria_costo ASC;
 END $$
 DELIMITER ;
-call spu_list_detail_cost(3);
+call spu_list_detail_cost(5);
 DELIMITER $$
 CREATE PROCEDURE spu_add_detail_cost
 (
@@ -1543,7 +1537,7 @@ BEGIN
 	UPDATE detalle_costos
 		SET
 			inactive_at = CURDATE()
-        WHERE iddetalle_costo = _iddetalle_costo;
+        WHERE iddetalle_costos = _iddetalle_costo;
         
 	SELECT ROW_COUNT() AS filasAfect;
     

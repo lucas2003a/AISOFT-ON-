@@ -209,26 +209,16 @@ CREATE TABLE unidades_medida
 CREATE TABLE materiales
 (
 	idmaterial			INT PRIMARY KEY AUTO_INCREMENT,
-	idmarca				INT 		NOT NULL,
-    material			VARCHAR(45) NOT NULL,
-    idunidad_medida		INT 		NOT NULL,
+	idmarca				INT 			NOT NULL,
+    material			VARCHAR(45) 	NOT NULL,
+    idunidad_medida		INT 			NOT NULL,
+    precio_unitario		DECIMAL(8,2)	NOT NULL,
+    create_at			DATE 			NOT NULL DEFAULT(CURDATE()),
+    update_at			DATE			NULL,
+    inactive_at			DATE 			NULL,
     CONSTRAINT fk_idmarca_materiales FOREIGN KEY (idmarca) REFERENCES marcas(idmarca),
     CONSTRAINT uk_material UNIQUE(material),
     CONSTRAINT fk_unidad_medida_materiales FOREIGN KEY(idunidad_medida) REFERENCES unidades_medida(idunidad_medida)
-)ENGINE = INNODB;
-
--- TIPOS MATERIALES
-CREATE TABLE tipos_materiales
-(
-	idtipo_material 		INT PRIMARY KEY AUTO_INCREMENT,
-    idmaterial				INT 			NOT NULL,
-    tipo_material			VARCHAR(45)		NOT NULL,
-    precio_unitario			DECIMAL(8,2)	NOT NULL,
-    create_at				DATE 			NOT NULL DEFAULT(CURDATE()),
-    update_at				DATE			NULL,
-    inactive_at				DATE 			NULL,
-    CONSTRAINT fk_idmaterial_t_materiales FOREIGN KEY(idmaterial) REFERENCES materiales(idmaterial),
-    CONSTRAINT uk_tipo_material_t_material UNIQUE(tipo_material) 
 )ENGINE = INNODB;
 
 -- PRESUPUESTOS
@@ -250,10 +240,10 @@ ENGINE = INNODB;
 -- DETALLE COSTOS
 CREATE TABLE detalle_costos
 (
-	iddetalle_costos		INT PRIMARY KEY AUTO_INCREMENT,
+	iddetalle_costo		INT PRIMARY KEY AUTO_INCREMENT,
     idpresupuesto 			INT 			NOT NULL,
     idsubcategoria_costo	INT 			NOT NULL,
-    idtipo_material			INT 			NULL,
+    idmaterial				INT 			NULL,
     detalle 				VARCHAR(100)	NOT NULL,
     cantidad 				TINYINT 		NOT NULL,
     precio_unitario			DECIMAL(8,2)	NOT NULL,
@@ -263,7 +253,7 @@ CREATE TABLE detalle_costos
     idusuario				INT 			NOT NULL,
     CONSTRAINT fk_idpresupuesto_det_costo FOREIGN KEY(idpresupuesto) REFERENCES presupuestos(idpresupuesto),
     CONSTRAINT fk_idsubcategoria_costo_det_costo FOREIGN KEY(idsubcategoria_costo) REFERENCES subcategoria_costos(idsubcategoria_costo),
-    CONSTRAINT fk_idtipo_material_det_costo	FOREIGN KEY(idtipo_material) REFERENCES tipos_materiales(idtipo_material),
+    CONSTRAINT fk_idmaterial_det_costo	FOREIGN KEY(idmaterial) REFERENCES materiales(idmaterial),
     CONSTRAINT fk_idusuario_det_costo FOREIGN KEY(idusuario) REFERENCES usuarios(idusuario)
 )ENGINE = INNODB;
 

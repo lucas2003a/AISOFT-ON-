@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 16-05-2024 a las 19:39:48
+-- Tiempo de generación: 17-05-2024 a las 02:16:56
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -280,6 +280,12 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_add_represents` (IN `_idpersona
 		SELECT ROW_COUNT() AS filasAfect;
 END$$
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_count_budgets` (IN `_idpresuspuesto` INT)   BEGIN
+	SELECT COUNT(idpresupuesto)
+		FROM presupuestos
+		WHERE idpresupuesto = _idpresuspuesto;
+END$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_get_budget_by_id` (IN `_idpresupuesto` INT)   BEGIN
 	SELECT
 		pres.idpresupuesto,
@@ -293,6 +299,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_get_budget_by_id` (IN `_idpresu
         INNER JOIN personas pers ON pers.idpersona = usu.idpersona
         WHERE pres.idpresupuesto = _idpresupuesto
         AND pres.inactive_at IS NULL
+        AND detcost.inactive_at IS NULL
         GROUP BY pres.idpresupuesto
         ORDER BY pres.codigo ASC;
 END$$
@@ -464,7 +471,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_inactive_cost` (IN `_iddetalle_
 	UPDATE detalle_costos
 		SET
 			inactive_at = CURDATE()
-        WHERE iddetalle_costo = _iddetalle_costo;
+        WHERE iddetalle_costos = _iddetalle_costo;
         
 	SELECT ROW_COUNT() AS filasAfect;
     
@@ -661,6 +668,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_budgets` ()   BEGIN
         INNER JOIN usuarios usu ON usu.idusuario = pres.idusuario
         INNER JOIN personas pers ON pers.idpersona = usu.idpersona
         WHERE pres.inactive_at IS NULL
+        AND detcost.inactive_at IS NULL
         GROUP BY pres.idpresupuesto
         ORDER BY pres.codigo ASC;
 END$$
@@ -967,7 +975,8 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_materials` (IN `_idmarca` 
         marc.idmarca,
         marc.marca,
         mat.material,
-        unimed.unidad_medida
+        unimed.unidad_medida,
+        mat.precio_unitario
 		FROM materiales mat
         INNER JOIN marcas marc ON marc.idmarca = mat.idmarca
         INNER JOIN unidades_medida unimed ON unimed.idunidad_medida = mat.idunidad_medida
@@ -1117,21 +1126,6 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_separation_ByIdAsset` (IN 
         AND sep.inactive_at IS NULL;
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_types_materials` (IN `_idmaterial` INT)   BEGIN
-	SELECT 
-		tmat.idtipo_material,
-        mat.idmaterial,
-        mat.material,
-        tmat.tipo_material,
-        tmat.precio_unitario,
-        tmat.create_at,
-        tmat.update_at
-		FROM tipos_materiales tmat
-        INNER JOIN materiales mat ON mat.idmaterial = tmat.idmaterial
-        WHERE tmat.idmaterial = _idmaterial
-        ORDER BY tmat.tipo_material ASC;
-END$$
-
 CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_units_measuraments` ()   BEGIN
 	SELECT * FROM unidades_medida
     ORDER BY unidad_medida ASC;
@@ -1199,6 +1193,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_search_budgets` (IN `_codigo` V
         INNER JOIN personas pers ON pers.idpersona = usu.idpersona
         WHERE pres.codigo LIKE CONCAT(_codigo,"%")
         AND pres.inactive_at IS NULL
+        AND detcost.inactive_at IS NULL
         GROUP BY pres.idpresupuesto
         ORDER BY pres.codigo ASC;
 END$$
@@ -1364,7 +1359,7 @@ END$$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_set_idpresupuesto` (IN `_idactivo` INT, IN `_idpresupuesto` INT, IN `_idusuario` INT)   BEGIN
 	UPDATE activos
 		SET
-			idpresupuesto 	= _idpresupuesto,
+			idpresupuesto 	= NULLIF(_idpresupuesto,""),
             idusuario 		= _idusuario,
             update_at 		= CURDATE()
 		WHERE idactivo = _idactivo;
@@ -1474,70 +1469,70 @@ CREATE TABLE `activos` (
 --
 
 INSERT INTO `activos` (`idactivo`, `idproyecto`, `tipo_activo`, `imagen`, `estado`, `sublote`, `direccion`, `moneda_venta`, `area_terreno`, `zcomunes_porcent`, `partida_elect`, `latitud`, `longitud`, `perimetro`, `det_casa`, `idpresupuesto`, `propietario_lote`, `precio_lote`, `precio_construccion`, `create_at`, `update_at`, `inactive_at`, `idusuario`) VALUES
-(1, 1, 'LOTE', '4e867593bfa060bb4b701bc9bb387d7ad78c4acf.jpg', 'VENDIDO', 1, 'Urbanización Alpha', 'USD', 300.00, 2, 'Partida 001', NULL, NULL, '{\"clave\":[\"x\",\"x\",\"\"],\"valor\":[\"40\",\"10\",\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'TERCEROS', 80000.00, 0.00, '2024-04-19', '2024-05-14', NULL, 1),
-(2, 2, 'LOTE', NULL, 'SIN VENDER', 1, 'Urbanización Gamma', 'USD', 250.00, NULL, 'Partida 003', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'A.I.F', 100000.00, 0.00, '2024-04-19', NULL, NULL, 1),
-(3, 1, 'LOTE', NULL, 'SIN VENDER', 3, 'Urbanización Epsilon', 'USD', 350.00, NULL, 'Partida 005', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'A.I.F', 90000.00, 0.00, '2024-04-19', '2024-05-14', NULL, 1),
+(1, 1, 'LOTE', '4e867593bfa060bb4b701bc9bb387d7ad78c4acf.jpg', 'VENDIDO', 1, 'Urbanización Alpha', 'USD', 300.00, 2, 'Partida 001', NULL, NULL, '{\"clave\":[\"x\",\"x\",\"\"],\"valor\":[\"40\",\"10\",\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 5, 'TERCEROS', 80000.00, 0.00, '2024-04-19', '2024-05-16', NULL, 1),
+(2, 2, 'LOTE', NULL, 'SIN VENDER', 1, 'Urbanización Gamma', 'USD', 250.00, NULL, 'Partida 003', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'A.I.F', 100000.00, 0.00, '2024-04-19', '2024-05-16', NULL, 1),
+(3, 1, 'LOTE', NULL, 'SIN VENDER', 3, 'Urbanización Epsilon', 'USD', 350.00, NULL, 'Partida 005', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 5, 'A.I.F', 90000.00, 0.00, '2024-04-19', '2024-05-16', NULL, 1),
 (4, 3, 'LOTE', NULL, 'SIN VENDER', 2, 'Urbanización Eta', 'USD', 400.00, NULL, 'Partida 007', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 24, 'A.I.F', 120000.00, 0.00, '2024-04-19', '2024-05-15', NULL, 1),
-(5, 2, 'LOTE', NULL, 'VENDIDO', 3, 'Urbanización Iota', 'USD', 280.00, NULL, 'Partida 009', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'A.I.F', 110000.00, 0.00, '2024-04-19', '2024-04-19', NULL, 2),
+(5, 2, 'LOTE', NULL, 'VENDIDO', 3, 'Urbanización Iota', 'USD', 280.00, NULL, 'Partida 009', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 19, 'A.I.F', 110000.00, 0.00, '2024-04-19', '2024-05-16', NULL, 1),
 (6, 3, 'LOTE', NULL, 'VENDIDO', 5, 'Urbanización Lambda', 'USD', 320.00, NULL, 'Partida 011', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 24, 'A.I.F', 95000.00, 0.00, '2024-04-19', '2024-05-15', NULL, 1),
 (7, 4, 'LOTE', NULL, 'SEPARADO', 1, 'Urbanización Nu', 'USD', 300.00, NULL, 'Partida 013', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 23, 'A.I.F', 85000.00, 0.00, '2024-04-19', '2024-05-14', NULL, 1),
 (8, 4, 'LOTE', NULL, 'SEPARADO', 3, 'Urbanización Omicron', 'USD', 380.00, NULL, 'Partida 015', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 23, 'A.I.F', 110000.00, 0.00, '2024-04-19', '2024-05-14', NULL, 1),
-(9, 1, 'LOTE', NULL, 'SIN VENDER', 7, 'Urbanización Rho', 'USD', 420.00, NULL, 'Partida 017', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'A.I.F', 105000.00, 0.00, '2024-04-19', '2024-05-14', NULL, 1),
-(10, 2, 'LOTE', NULL, 'VENDIDO', 9, 'Urbanización Tau', 'USD', 450.00, NULL, 'Partida 019', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\":[\"implementacion de banquitos\",\"construccion de veredas\",\"acabados de construccion\"],\"valor\":[\"fueron de madera\",\"se hicieron de cemento\",\"detalles de los acabados de la construccion\"]}', NULL, 'A.I.F', 115000.00, 0.00, '2024-04-19', '2024-04-29', NULL, 3),
+(9, 1, 'LOTE', NULL, 'SIN VENDER', 7, 'Urbanización Rho', 'USD', 420.00, NULL, 'Partida 017', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 5, 'A.I.F', 105000.00, 0.00, '2024-04-19', '2024-05-16', NULL, 1),
+(10, 2, 'LOTE', NULL, 'VENDIDO', 9, 'Urbanización Tau', 'USD', 450.00, NULL, 'Partida 019', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\":[\"implementacion de banquitos\",\"construccion de veredas\",\"acabados de construccion\"],\"valor\":[\"fueron de madera\",\"se hicieron de cemento\",\"detalles de los acabados de la construccion\"]}', 19, 'A.I.F', 115000.00, 0.00, '2024-04-19', '2024-05-16', NULL, 1),
 (11, 3, 'LOTE', NULL, 'SIN VENDER', 11, 'Urbanización Phi', 'USD', 480.00, NULL, 'Partida 021', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 24, 'A.I.F', 100000.00, 0.00, '2024-04-19', '2024-05-15', NULL, 1),
 (12, 4, 'LOTE', NULL, 'SIN VENDER', 13, 'Urbanización Psi', 'USD', 500.00, NULL, 'Partida 023', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 23, 'A.I.F', 120000.00, 0.00, '2024-04-19', '2024-05-14', NULL, 1),
-(13, 1, 'LOTE', NULL, 'SIN VENDER', 15, 'Urbanización Beta', 'USD', 300.00, NULL, 'Partida 025', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'A.I.F', 90000.00, 0.00, '2024-04-19', '2024-05-14', NULL, 1),
-(14, 1, 'LOTE', NULL, 'SIN VENDER', 2, 'Urbanización Zeta', 'USD', 280.00, 0, 'Partida 027', NULL, NULL, '{\"clave\":[\"primera clave\",\"segunda clave\",\"tercera clave\"],\"valor\":[\"primer valor\",\"segundo valor\",\"tercer valor\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'A.I.F', 95000.00, 0.00, '2024-04-19', '2024-05-14', NULL, 1),
-(15, 1, 'LOTE', NULL, 'SIN VENDER', 4, 'Urbanización Kappa', 'USD', 320.00, NULL, 'Partida 029', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'A.I.F', 110000.00, 0.00, '2024-04-19', '2024-05-14', NULL, 1),
-(16, 1, 'LOTE', NULL, 'SIN VENDER', 6, 'Urbanización Sigma', 'USD', 300.00, NULL, 'Partida 031', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'A.I.F', 85000.00, 0.00, '2024-04-19', '2024-05-14', NULL, 1),
-(17, 1, 'LOTE', NULL, 'SIN VENDER', 8, 'Urbanización Upsilon', 'USD', 380.00, NULL, 'Partida 033', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'A.I.F', 120000.00, 0.00, '2024-04-19', '2024-05-14', NULL, 1),
-(18, 1, 'LOTE', NULL, 'SIN VENDER', 10, 'Urbanización Omega', 'USD', 420.00, NULL, 'Partida 035', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'A.I.F', 105000.00, 0.00, '2024-04-19', '2024-05-14', NULL, 1),
-(19, 1, 'LOTE', NULL, 'SIN VENDER', 12, 'Urbanización Delta', 'USD', 450.00, NULL, 'Partida 037', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'A.I.F', 115000.00, 0.00, '2024-04-19', '2024-05-14', NULL, 1),
-(20, 1, 'LOTE', NULL, 'SIN VENDER', 14, 'Urbanización Gamma', 'USD', 480.00, NULL, 'Partida 039', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'A.I.F', 100000.00, 0.00, '2024-04-19', '2024-05-14', NULL, 1),
-(21, 1, 'LOTE', NULL, 'SIN VENDER', 16, 'Urbanización Epsilon', 'USD', 500.00, NULL, 'Partida 041', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'A.I.F', 120000.00, 0.00, '2024-04-19', '2024-05-14', NULL, 1),
-(22, 1, 'LOTE', NULL, 'SIN VENDER', 18, 'Urbanización Zeta', 'USD', 300.00, NULL, 'Partida 043', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'A.I.F', 90000.00, 0.00, '2024-04-19', '2024-05-14', NULL, 1),
-(23, 1, 'LOTE', NULL, 'SIN VENDER', 20, 'Urbanización Eta', 'USD', 250.00, NULL, 'Partida 045', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'A.I.F', 95000.00, 0.00, '2024-04-19', '2024-05-14', NULL, 1),
-(24, 1, 'LOTE', NULL, 'SIN VENDER', 22, 'Urbanización Theta', 'USD', 280.00, NULL, 'Partida 047', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'A.I.F', 110000.00, 0.00, '2024-04-19', '2024-05-14', NULL, 1),
-(25, 1, 'LOTE', NULL, 'SIN VENDER', 24, 'Urbanización Iota', 'USD', 320.00, NULL, 'Partida 049', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'A.I.F', 85000.00, 0.00, '2024-04-19', '2024-05-14', NULL, 1),
-(26, 1, 'LOTE', NULL, 'SIN VENDER', 26, 'Urbanización Kappa', 'USD', 380.00, NULL, 'Partida 051', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'A.I.F', 120000.00, 0.00, '2024-04-19', '2024-05-14', NULL, 1),
-(27, 1, 'LOTE', NULL, 'SIN VENDER', 28, 'Urbanización Lambda', 'USD', 420.00, NULL, 'Partida 053', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'A.I.F', 105000.00, 0.00, '2024-04-19', '2024-05-14', NULL, 1),
-(28, 1, 'LOTE', NULL, 'SIN VENDER', 30, 'Urbanización Mu', 'USD', 450.00, NULL, 'Partida 055', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'A.I.F', 115000.00, 0.00, '2024-04-19', '2024-05-14', NULL, 1),
-(29, 1, 'LOTE', NULL, 'SIN VENDER', 32, 'Urbanización Nu', 'USD', 480.00, NULL, 'Partida 057', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'A.I.F', 100000.00, 0.00, '2024-04-19', '2024-05-14', NULL, 1),
-(30, 1, 'LOTE', NULL, 'SIN VENDER', 34, 'Urbanización Xi', 'USD', 500.00, NULL, 'Partida 059', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'A.I.F', 120000.00, 0.00, '2024-04-19', '2024-05-14', NULL, 1),
-(31, 1, 'LOTE', NULL, 'SIN VENDER', 36, 'Urbanización Omicron', 'USD', 300.00, NULL, 'Partida 061', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'A.I.F', 90000.00, 0.00, '2024-04-19', '2024-05-14', NULL, 1),
-(32, 1, 'LOTE', NULL, 'SIN VENDER', 38, 'Urbanización Pi', 'USD', 250.00, NULL, 'Partida 063', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'A.I.F', 95000.00, 0.00, '2024-04-19', '2024-05-14', NULL, 1),
-(33, 1, 'LOTE', NULL, 'SIN VENDER', 40, 'Urbanización Rho', 'USD', 280.00, NULL, 'Partida 065', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'A.I.F', 110000.00, 0.00, '2024-04-19', '2024-05-14', NULL, 1),
-(34, 1, 'LOTE', NULL, 'SIN VENDER', 42, 'Urbanización Sigma', 'USD', 320.00, NULL, 'Partida 067', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'A.I.F', 85000.00, 0.00, '2024-04-19', '2024-05-14', NULL, 1),
-(35, 1, 'LOTE', NULL, 'SIN VENDER', 44, 'Urbanización Tau', 'USD', 380.00, NULL, 'Partida 069', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'A.I.F', 120000.00, 0.00, '2024-04-19', '2024-05-14', NULL, 1),
-(36, 1, 'LOTE', NULL, 'SIN VENDER', 46, 'Urbanización Upsilon', 'USD', 420.00, NULL, 'Partida 071', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'A.I.F', 105000.00, 0.00, '2024-04-19', '2024-05-14', NULL, 1),
-(37, 1, 'LOTE', NULL, 'SIN VENDER', 48, 'Urbanización Phi', 'USD', 450.00, NULL, 'Partida 073', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'A.I.F', 115000.00, 0.00, '2024-04-19', '2024-05-14', NULL, 1),
-(38, 1, 'LOTE', NULL, 'SIN VENDER', 50, 'Urbanización Chi', 'USD', 480.00, NULL, 'Partida 075', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'A.I.F', 100000.00, 0.00, '2024-04-19', '2024-05-14', NULL, 1),
-(39, 1, 'LOTE', NULL, 'SIN VENDER', 52, 'Urbanización Psi', 'USD', 500.00, NULL, 'Partida 077', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'A.I.F', 120000.00, 0.00, '2024-04-19', '2024-05-14', NULL, 1),
-(40, 1, 'LOTE', NULL, 'SIN VENDER', 54, 'Urbanización Omega', 'USD', 300.00, NULL, 'Partida 079', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'A.I.F', 90000.00, 0.00, '2024-04-19', '2024-05-14', NULL, 1),
-(41, 1, 'LOTE', NULL, 'SIN VENDER', 56, 'Urbanización Alpha', 'USD', 250.00, NULL, 'Partida 081', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'A.I.F', 95000.00, 0.00, '2024-04-19', '2024-05-14', NULL, 1),
-(42, 1, 'LOTE', NULL, 'SIN VENDER', 58, 'Urbanización Beta', 'USD', 280.00, NULL, 'Partida 083', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'A.I.F', 110000.00, 0.00, '2024-04-19', '2024-05-14', NULL, 1),
-(43, 1, 'LOTE', NULL, 'SIN VENDER', 60, 'Urbanización Gamma', 'USD', 320.00, NULL, 'Partida 085', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'A.I.F', 85000.00, 0.00, '2024-04-19', '2024-05-14', NULL, 1),
-(44, 1, 'LOTE', NULL, 'SIN VENDER', 62, 'Urbanización Delta', 'USD', 380.00, NULL, 'Partida 087', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'A.I.F', 120000.00, 0.00, '2024-04-19', '2024-05-14', NULL, 1),
-(45, 1, 'LOTE', NULL, 'SIN VENDER', 64, 'Urbanización Epsilon', 'USD', 420.00, NULL, 'Partida 089', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'A.I.F', 105000.00, 0.00, '2024-04-19', '2024-05-14', NULL, 1),
-(46, 1, 'LOTE', NULL, 'SIN VENDER', 66, 'Urbanización Zeta', 'USD', 450.00, NULL, 'Partida 091', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'A.I.F', 115000.00, 0.00, '2024-04-19', '2024-05-14', NULL, 1),
-(47, 1, 'LOTE', NULL, 'SIN VENDER', 68, 'Urbanización Eta', 'USD', 480.00, NULL, 'Partida 093', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'A.I.F', 100000.00, 0.00, '2024-04-19', '2024-05-14', NULL, 1),
-(48, 1, 'LOTE', NULL, 'SIN VENDER', 70, 'Urbanización Theta', 'USD', 500.00, NULL, 'Partida 095', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'A.I.F', 120000.00, 0.00, '2024-04-19', '2024-05-14', NULL, 1),
-(49, 1, 'LOTE', NULL, 'SIN VENDER', 72, 'Urbanización Iota', 'USD', 300.00, NULL, 'Partida 097', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'A.I.F', 90000.00, 0.00, '2024-04-19', '2024-05-14', NULL, 1),
-(50, 1, 'LOTE', NULL, 'SIN VENDER', 74, 'Urbanización Kappa', 'USD', 250.00, NULL, 'Partida 099', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'A.I.F', 95000.00, 0.00, '2024-04-19', '2024-05-14', NULL, 1),
-(51, 1, 'LOTE', NULL, 'SIN VENDER', 76, 'Urbanización Lambda', 'USD', 280.00, NULL, 'Partida 101', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'TERCEROS', 110000.00, 0.00, '2024-04-19', '2024-05-14', NULL, 1),
-(52, 1, 'LOTE', NULL, 'SIN VENDER', 78, 'Urbanización Mu', 'USD', 320.00, NULL, 'Partida 103', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'TERCEROS', 85000.00, 0.00, '2024-04-19', '2024-05-14', NULL, 1),
-(53, 1, 'LOTE', NULL, 'SIN VENDER', 80, 'Urbanización Nu', 'USD', 380.00, NULL, 'Partida 105', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'TERCEROS', 120000.00, 0.00, '2024-04-19', '2024-05-14', NULL, 1),
-(54, 1, 'LOTE', NULL, 'SIN VENDER', 82, 'Urbanización Xi', 'USD', 420.00, NULL, 'Partida 107', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'TERCEROS', 105000.00, 0.00, '2024-04-19', '2024-05-14', NULL, 1),
-(55, 1, 'LOTE', NULL, 'SIN VENDER', 84, 'Urbanización Omicron', 'USD', 450.00, NULL, 'Partida 109', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'TERCEROS', 115000.00, 0.00, '2024-04-19', '2024-05-14', NULL, 1),
-(56, 1, 'LOTE', NULL, 'SIN VENDER', 86, 'Urbanización Pi', 'USD', 480.00, NULL, 'Partida 111', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'TERCEROS', 100000.00, 0.00, '2024-04-19', '2024-05-14', NULL, 1),
-(57, 1, 'LOTE', NULL, 'SIN VENDER', 88, 'Urbanización Rho', 'USD', 500.00, NULL, 'Partida 113', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'TERCEROS', 120000.00, 0.00, '2024-04-19', '2024-05-14', NULL, 1),
-(58, 1, 'LOTE', NULL, 'SIN VENDER', 90, 'Urbanización Sigma', 'USD', 300.00, NULL, 'Partida 115', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'TERCEROS', 90000.00, 0.00, '2024-04-19', '2024-05-14', NULL, 1),
-(59, 1, 'LOTE', NULL, 'SIN VENDER', 92, 'Urbanización Tau', 'USD', 250.00, NULL, 'Partida 117', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'TERCEROS', 95000.00, 0.00, '2024-04-19', '2024-05-14', NULL, 1),
-(60, 1, 'LOTE', NULL, 'SIN VENDER', 94, 'Urbanización Upsilon', 'USD', 280.00, NULL, 'Partida 119', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'TERCEROS', 110000.00, 0.00, '2024-04-19', '2024-05-14', NULL, 1),
-(61, 1, 'LOTE', NULL, 'SIN VENDER', 96, 'Urbanización Phi', 'USD', 320.00, NULL, 'Partida 121', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'TERCEROS', 85000.00, 0.00, '2024-04-19', '2024-05-14', NULL, 1),
-(62, 1, 'LOTE', NULL, 'SIN VENDER', 98, 'Urbanización Chi', 'USD', 380.00, NULL, 'Partida 123', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'TERCEROS', 120000.00, 0.00, '2024-04-19', '2024-05-14', NULL, 1),
-(63, 1, 'LOTE', NULL, 'SIN VENDER', 100, 'Urbanización Psi', 'USD', 420.00, NULL, 'Partida 125', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'TERCEROS', 105000.00, 0.00, '2024-04-19', '2024-05-14', NULL, 1),
-(76, 1, 'LOTE', '933e9c5ac6fd6724d4b36d32152cc973f14dc579jpg', 'SIN VENDER', 59, 'av santa rosa#541', 'SOL', 0.00, 2, 'PARTIDA 3', NULL, NULL, '{\"clave\":[\"\"],\"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'A.I.F', 0.00, NULL, '2024-04-21', '2024-05-14', NULL, 1);
+(13, 1, 'LOTE', NULL, 'SIN VENDER', 15, 'Urbanización Beta', 'USD', 300.00, NULL, 'Partida 025', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 5, 'A.I.F', 90000.00, 0.00, '2024-04-19', '2024-05-16', NULL, 1),
+(14, 1, 'LOTE', NULL, 'SIN VENDER', 2, 'Urbanización Zeta', 'USD', 280.00, 0, 'Partida 027', NULL, NULL, '{\"clave\":[\"primera clave\",\"segunda clave\",\"tercera clave\"],\"valor\":[\"primer valor\",\"segundo valor\",\"tercer valor\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 5, 'A.I.F', 95000.00, 0.00, '2024-04-19', '2024-05-16', NULL, 1),
+(15, 1, 'LOTE', NULL, 'SIN VENDER', 4, 'Urbanización Kappa', 'USD', 320.00, NULL, 'Partida 029', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 5, 'A.I.F', 110000.00, 0.00, '2024-04-19', '2024-05-16', NULL, 1),
+(16, 1, 'LOTE', NULL, 'SIN VENDER', 6, 'Urbanización Sigma', 'USD', 300.00, NULL, 'Partida 031', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 5, 'A.I.F', 85000.00, 0.00, '2024-04-19', '2024-05-16', NULL, 1),
+(17, 1, 'LOTE', NULL, 'SIN VENDER', 8, 'Urbanización Upsilon', 'USD', 380.00, NULL, 'Partida 033', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 5, 'A.I.F', 120000.00, 0.00, '2024-04-19', '2024-05-16', NULL, 1),
+(18, 1, 'LOTE', NULL, 'SIN VENDER', 10, 'Urbanización Omega', 'USD', 420.00, NULL, 'Partida 035', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 5, 'A.I.F', 105000.00, 0.00, '2024-04-19', '2024-05-16', NULL, 1),
+(19, 1, 'LOTE', NULL, 'SIN VENDER', 12, 'Urbanización Delta', 'USD', 450.00, NULL, 'Partida 037', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 5, 'A.I.F', 115000.00, 0.00, '2024-04-19', '2024-05-16', NULL, 1),
+(20, 1, 'LOTE', NULL, 'SIN VENDER', 14, 'Urbanización Gamma', 'USD', 480.00, NULL, 'Partida 039', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 5, 'A.I.F', 100000.00, 0.00, '2024-04-19', '2024-05-16', NULL, 1),
+(21, 1, 'LOTE', NULL, 'SIN VENDER', 16, 'Urbanización Epsilon', 'USD', 500.00, NULL, 'Partida 041', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 5, 'A.I.F', 120000.00, 0.00, '2024-04-19', '2024-05-16', NULL, 1),
+(22, 1, 'LOTE', NULL, 'SIN VENDER', 18, 'Urbanización Zeta', 'USD', 300.00, NULL, 'Partida 043', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 5, 'A.I.F', 90000.00, 0.00, '2024-04-19', '2024-05-16', NULL, 1),
+(23, 1, 'LOTE', NULL, 'SIN VENDER', 20, 'Urbanización Eta', 'USD', 250.00, NULL, 'Partida 045', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 5, 'A.I.F', 95000.00, 0.00, '2024-04-19', '2024-05-16', NULL, 1),
+(24, 1, 'LOTE', NULL, 'SIN VENDER', 22, 'Urbanización Theta', 'USD', 280.00, NULL, 'Partida 047', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 5, 'A.I.F', 110000.00, 0.00, '2024-04-19', '2024-05-16', NULL, 1),
+(25, 1, 'LOTE', NULL, 'SIN VENDER', 24, 'Urbanización Iota', 'USD', 320.00, NULL, 'Partida 049', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 5, 'A.I.F', 85000.00, 0.00, '2024-04-19', '2024-05-16', NULL, 1),
+(26, 1, 'LOTE', NULL, 'SIN VENDER', 26, 'Urbanización Kappa', 'USD', 380.00, NULL, 'Partida 051', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 5, 'A.I.F', 120000.00, 0.00, '2024-04-19', '2024-05-16', NULL, 1),
+(27, 1, 'LOTE', NULL, 'SIN VENDER', 28, 'Urbanización Lambda', 'USD', 420.00, NULL, 'Partida 053', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 5, 'A.I.F', 105000.00, 0.00, '2024-04-19', '2024-05-16', NULL, 1),
+(28, 1, 'LOTE', NULL, 'SIN VENDER', 30, 'Urbanización Mu', 'USD', 450.00, NULL, 'Partida 055', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 5, 'A.I.F', 115000.00, 0.00, '2024-04-19', '2024-05-16', NULL, 1),
+(29, 1, 'LOTE', NULL, 'SIN VENDER', 32, 'Urbanización Nu', 'USD', 480.00, NULL, 'Partida 057', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 5, 'A.I.F', 100000.00, 0.00, '2024-04-19', '2024-05-16', NULL, 1),
+(30, 1, 'LOTE', NULL, 'SIN VENDER', 34, 'Urbanización Xi', 'USD', 500.00, NULL, 'Partida 059', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 5, 'A.I.F', 120000.00, 0.00, '2024-04-19', '2024-05-16', NULL, 1),
+(31, 1, 'LOTE', NULL, 'SIN VENDER', 36, 'Urbanización Omicron', 'USD', 300.00, NULL, 'Partida 061', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 5, 'A.I.F', 90000.00, 0.00, '2024-04-19', '2024-05-16', NULL, 1),
+(32, 1, 'LOTE', NULL, 'SIN VENDER', 38, 'Urbanización Pi', 'USD', 250.00, NULL, 'Partida 063', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 5, 'A.I.F', 95000.00, 0.00, '2024-04-19', '2024-05-16', NULL, 1),
+(33, 1, 'LOTE', NULL, 'SIN VENDER', 40, 'Urbanización Rho', 'USD', 280.00, NULL, 'Partida 065', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 5, 'A.I.F', 110000.00, 0.00, '2024-04-19', '2024-05-16', NULL, 1),
+(34, 1, 'LOTE', NULL, 'SIN VENDER', 42, 'Urbanización Sigma', 'USD', 320.00, NULL, 'Partida 067', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 5, 'A.I.F', 85000.00, 0.00, '2024-04-19', '2024-05-16', NULL, 1),
+(35, 1, 'LOTE', NULL, 'SIN VENDER', 44, 'Urbanización Tau', 'USD', 380.00, NULL, 'Partida 069', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 5, 'A.I.F', 120000.00, 0.00, '2024-04-19', '2024-05-16', NULL, 1),
+(36, 1, 'LOTE', NULL, 'SIN VENDER', 46, 'Urbanización Upsilon', 'USD', 420.00, NULL, 'Partida 071', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 5, 'A.I.F', 105000.00, 0.00, '2024-04-19', '2024-05-16', NULL, 1),
+(37, 1, 'LOTE', NULL, 'SIN VENDER', 48, 'Urbanización Phi', 'USD', 450.00, NULL, 'Partida 073', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 5, 'A.I.F', 115000.00, 0.00, '2024-04-19', '2024-05-16', NULL, 1),
+(38, 1, 'LOTE', NULL, 'SIN VENDER', 50, 'Urbanización Chi', 'USD', 480.00, NULL, 'Partida 075', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 5, 'A.I.F', 100000.00, 0.00, '2024-04-19', '2024-05-16', NULL, 1),
+(39, 1, 'LOTE', NULL, 'SIN VENDER', 52, 'Urbanización Psi', 'USD', 500.00, NULL, 'Partida 077', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 5, 'A.I.F', 120000.00, 0.00, '2024-04-19', '2024-05-16', NULL, 1),
+(40, 1, 'LOTE', NULL, 'SIN VENDER', 54, 'Urbanización Omega', 'USD', 300.00, NULL, 'Partida 079', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 5, 'A.I.F', 90000.00, 0.00, '2024-04-19', '2024-05-16', NULL, 1),
+(41, 1, 'LOTE', NULL, 'SIN VENDER', 56, 'Urbanización Alpha', 'USD', 250.00, NULL, 'Partida 081', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 5, 'A.I.F', 95000.00, 0.00, '2024-04-19', '2024-05-16', NULL, 1),
+(42, 1, 'LOTE', NULL, 'SIN VENDER', 58, 'Urbanización Beta', 'USD', 280.00, NULL, 'Partida 083', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 5, 'A.I.F', 110000.00, 0.00, '2024-04-19', '2024-05-16', NULL, 1),
+(43, 1, 'LOTE', NULL, 'SIN VENDER', 60, 'Urbanización Gamma', 'USD', 320.00, NULL, 'Partida 085', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 5, 'A.I.F', 85000.00, 0.00, '2024-04-19', '2024-05-16', NULL, 1),
+(44, 1, 'LOTE', NULL, 'SIN VENDER', 62, 'Urbanización Delta', 'USD', 380.00, NULL, 'Partida 087', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 5, 'A.I.F', 120000.00, 0.00, '2024-04-19', '2024-05-16', NULL, 1),
+(45, 1, 'LOTE', NULL, 'SIN VENDER', 64, 'Urbanización Epsilon', 'USD', 420.00, NULL, 'Partida 089', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 5, 'A.I.F', 105000.00, 0.00, '2024-04-19', '2024-05-16', NULL, 1),
+(46, 1, 'LOTE', NULL, 'SIN VENDER', 66, 'Urbanización Zeta', 'USD', 450.00, NULL, 'Partida 091', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 5, 'A.I.F', 115000.00, 0.00, '2024-04-19', '2024-05-16', NULL, 1),
+(47, 1, 'LOTE', NULL, 'SIN VENDER', 68, 'Urbanización Eta', 'USD', 480.00, NULL, 'Partida 093', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 5, 'A.I.F', 100000.00, 0.00, '2024-04-19', '2024-05-16', NULL, 1),
+(48, 1, 'LOTE', NULL, 'SIN VENDER', 70, 'Urbanización Theta', 'USD', 500.00, NULL, 'Partida 095', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 5, 'A.I.F', 120000.00, 0.00, '2024-04-19', '2024-05-16', NULL, 1),
+(49, 1, 'LOTE', NULL, 'SIN VENDER', 72, 'Urbanización Iota', 'USD', 300.00, NULL, 'Partida 097', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 5, 'A.I.F', 90000.00, 0.00, '2024-04-19', '2024-05-16', NULL, 1),
+(50, 1, 'LOTE', NULL, 'SIN VENDER', 74, 'Urbanización Kappa', 'USD', 250.00, NULL, 'Partida 099', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 5, 'A.I.F', 95000.00, 0.00, '2024-04-19', '2024-05-16', NULL, 1),
+(51, 1, 'LOTE', NULL, 'SIN VENDER', 76, 'Urbanización Lambda', 'USD', 280.00, NULL, 'Partida 101', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 5, 'TERCEROS', 110000.00, 0.00, '2024-04-19', '2024-05-16', NULL, 1),
+(52, 1, 'LOTE', NULL, 'SIN VENDER', 78, 'Urbanización Mu', 'USD', 320.00, NULL, 'Partida 103', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 5, 'TERCEROS', 85000.00, 0.00, '2024-04-19', '2024-05-16', NULL, 1),
+(53, 1, 'LOTE', NULL, 'SIN VENDER', 80, 'Urbanización Nu', 'USD', 380.00, NULL, 'Partida 105', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 5, 'TERCEROS', 120000.00, 0.00, '2024-04-19', '2024-05-16', NULL, 1),
+(54, 1, 'LOTE', NULL, 'SIN VENDER', 82, 'Urbanización Xi', 'USD', 420.00, NULL, 'Partida 107', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 5, 'TERCEROS', 105000.00, 0.00, '2024-04-19', '2024-05-16', NULL, 1),
+(55, 1, 'LOTE', NULL, 'SIN VENDER', 84, 'Urbanización Omicron', 'USD', 450.00, NULL, 'Partida 109', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 5, 'TERCEROS', 115000.00, 0.00, '2024-04-19', '2024-05-16', NULL, 1),
+(56, 1, 'LOTE', NULL, 'SIN VENDER', 86, 'Urbanización Pi', 'USD', 480.00, NULL, 'Partida 111', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 5, 'TERCEROS', 100000.00, 0.00, '2024-04-19', '2024-05-16', NULL, 1),
+(57, 1, 'LOTE', NULL, 'SIN VENDER', 88, 'Urbanización Rho', 'USD', 500.00, NULL, 'Partida 113', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 5, 'TERCEROS', 120000.00, 0.00, '2024-04-19', '2024-05-16', NULL, 1),
+(58, 1, 'LOTE', NULL, 'SIN VENDER', 90, 'Urbanización Sigma', 'USD', 300.00, NULL, 'Partida 115', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 5, 'TERCEROS', 90000.00, 0.00, '2024-04-19', '2024-05-16', NULL, 1),
+(59, 1, 'LOTE', NULL, 'SIN VENDER', 92, 'Urbanización Tau', 'USD', 250.00, NULL, 'Partida 117', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 5, 'TERCEROS', 95000.00, 0.00, '2024-04-19', '2024-05-16', NULL, 1),
+(60, 1, 'LOTE', NULL, 'SIN VENDER', 94, 'Urbanización Upsilon', 'USD', 280.00, NULL, 'Partida 119', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 5, 'TERCEROS', 110000.00, 0.00, '2024-04-19', '2024-05-16', NULL, 1),
+(61, 1, 'LOTE', NULL, 'SIN VENDER', 96, 'Urbanización Phi', 'USD', 320.00, NULL, 'Partida 121', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 5, 'TERCEROS', 85000.00, 0.00, '2024-04-19', '2024-05-16', NULL, 1),
+(62, 1, 'LOTE', NULL, 'SIN VENDER', 98, 'Urbanización Chi', 'USD', 380.00, NULL, 'Partida 123', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 5, 'TERCEROS', 120000.00, 0.00, '2024-04-19', '2024-05-16', NULL, 1),
+(63, 1, 'LOTE', NULL, 'SIN VENDER', 100, 'Urbanización Psi', 'USD', 420.00, NULL, 'Partida 125', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 5, 'TERCEROS', 105000.00, 0.00, '2024-04-19', '2024-05-16', NULL, 1),
+(76, 1, 'LOTE', '933e9c5ac6fd6724d4b36d32152cc973f14dc579jpg', 'SIN VENDER', 59, 'av santa rosa#541', 'SOL', 0.00, 2, 'PARTIDA 3', NULL, NULL, '{\"clave\":[\"\"],\"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 5, 'A.I.F', 0.00, NULL, '2024-04-21', '2024-05-16', NULL, 1);
 
 --
 -- Disparadores `activos`
@@ -1926,10 +1921,10 @@ CREATE TABLE `detalles_contratos` (
 --
 
 CREATE TABLE `detalle_costos` (
-  `iddetalle_costos` int(11) NOT NULL,
+  `iddetalle_costo` int(11) NOT NULL,
   `idpresupuesto` int(11) NOT NULL,
   `idsubcategoria_costo` int(11) NOT NULL,
-  `idtipo_material` int(11) DEFAULT NULL,
+  `idmaterial` int(11) DEFAULT NULL,
   `detalle` varchar(100) NOT NULL,
   `cantidad` tinyint(4) NOT NULL,
   `precio_unitario` decimal(8,2) NOT NULL,
@@ -1938,192 +1933,6 @@ CREATE TABLE `detalle_costos` (
   `inactive_at` date DEFAULT NULL,
   `idusuario` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Volcado de datos para la tabla `detalle_costos`
---
-
-INSERT INTO `detalle_costos` (`iddetalle_costos`, `idpresupuesto`, `idsubcategoria_costo`, `idtipo_material`, `detalle`, `cantidad`, `precio_unitario`, `create_at`, `update_at`, `inactive_at`, `idusuario`) VALUES
-(55, 1, 1, 1, 'Tubo PVC 1\"', 100, 30.00, '2024-05-05', NULL, NULL, 1),
-(56, 1, 2, 2, 'Tubo PVC 2\"', 50, 35.00, '2024-05-05', NULL, NULL, 1),
-(57, 1, 3, 3, 'Bolsa de Cemento APU 50kg', 20, 26.00, '2024-05-05', NULL, NULL, 1),
-(58, 1, 4, 4, 'Gallón de Pintura Látex', 10, 65.00, '2024-05-05', NULL, NULL, 1),
-(59, 1, 5, 5, 'Interruptor simple', 15, 7.50, '2024-05-05', NULL, NULL, 1),
-(60, 1, 6, 6, 'Bomba de agua 1/2 Hp', 2, 159.90, '2024-05-05', NULL, NULL, 1),
-(61, 1, 6, 7, 'Tanque elevado 250 litros', 1, 390.00, '2024-05-05', NULL, NULL, 1),
-(62, 1, 6, 8, 'Puerta de madera maciza', 1, 1150.00, '2024-05-05', NULL, NULL, 1),
-(63, 1, 6, 9, 'Grifería monomando', 1, 180.00, '2024-05-05', NULL, NULL, 1),
-(64, 1, 6, 10, 'Inodoro con tapa', 1, 381.90, '2024-05-05', NULL, NULL, 1),
-(65, 1, 6, 11, 'Ladrillo 18 huecos', 1, 0.72, '2024-05-05', NULL, NULL, 1),
-(66, 1, 6, 12, 'Bolsa de Arena fina', 1, 94.40, '2024-05-05', NULL, NULL, 1),
-(67, 1, 6, 13, 'Metro cúbico de Piedra chancada', 1, 61.36, '2024-05-05', NULL, NULL, 1),
-(68, 1, 6, 14, 'Rollo de Alambre N° 16', 1, 6.50, '2024-05-05', NULL, NULL, 1),
-(69, 1, 6, 15, 'Disco para cortar fierro de 7\"', 1, 8.50, '2024-05-05', NULL, NULL, 1),
-(70, 1, 6, 16, 'Tubo desagüe 4\"', 1, 40.50, '2024-05-05', NULL, NULL, 1),
-(71, 1, 6, 17, 'Tubo agua 3/4\"', 1, 6.40, '2024-05-05', NULL, NULL, 1),
-(72, 1, 6, 18, 'Bolsa de Fragua para cerámica', 1, 9.60, '2024-05-05', NULL, NULL, 1),
-(73, 1, 6, 19, 'Hoja de Sierra para madera', 1, 7.00, '2024-05-05', NULL, NULL, 1),
-(74, 1, 6, 20, 'Paquete de Tornillos', 1, 6.50, '2024-05-05', NULL, NULL, 1),
-(75, 1, 6, 21, 'Paquete de Clavos 2\"', 1, 6.50, '2024-05-05', NULL, NULL, 1),
-(76, 1, 6, 22, 'Lámpara LED 9W', 1, 6.00, '2024-05-05', NULL, NULL, 1),
-(77, 1, 6, 23, 'Paquete de Focos LED', 1, 6.00, '2024-05-05', NULL, NULL, 1),
-(78, 1, 6, 24, 'Metro de Cable eléctrico N° 14', 1, 2.00, '2024-05-05', NULL, NULL, 1),
-(79, 1, 6, 25, 'Tapa ciega rectangular', 1, 1.00, '2024-05-05', NULL, NULL, 1),
-(80, 1, 6, 26, 'Lija esmeril asa N° 40', 1, 2.50, '2024-05-05', NULL, NULL, 1),
-(81, 1, 6, 27, 'Caja eléctrica octogonal', 1, 2.50, '2024-05-05', NULL, NULL, 1),
-(82, 2, 1, 1, 'Tubo PVC 1\"', 80, 30.00, '2024-05-05', NULL, NULL, 1),
-(83, 2, 2, 2, 'Tubo PVC 2\"', 40, 35.00, '2024-05-05', NULL, NULL, 1),
-(84, 2, 3, 3, 'Bolsa de Cemento APU 50kg', 15, 26.00, '2024-05-05', NULL, NULL, 1),
-(85, 2, 4, 4, 'Gallón de Pintura Látex', 8, 65.00, '2024-05-05', NULL, NULL, 1),
-(86, 2, 5, 5, 'Interruptor simple', 10, 7.50, '2024-05-05', NULL, NULL, 1),
-(87, 2, 6, 6, 'Bomba de agua 1/2 Hp', 1, 159.90, '2024-05-05', NULL, NULL, 1),
-(88, 2, 6, 7, 'Tanque elevado 250 litros', 1, 390.00, '2024-05-05', NULL, NULL, 1),
-(89, 2, 6, 8, 'Puerta de madera maciza', 1, 1150.00, '2024-05-05', NULL, NULL, 1),
-(90, 2, 6, 9, 'Grifería monomando', 1, 180.00, '2024-05-05', NULL, NULL, 1),
-(91, 2, 6, 10, 'Inodoro con tapa', 1, 381.90, '2024-05-05', NULL, NULL, 1),
-(92, 2, 6, 11, 'Ladrillo 18 huecos', 1, 0.72, '2024-05-05', NULL, NULL, 1),
-(93, 2, 6, 12, 'Bolsa de Arena fina', 1, 94.40, '2024-05-05', NULL, NULL, 1),
-(94, 2, 6, 13, 'Metro cúbico de Piedra chancada', 1, 61.36, '2024-05-05', NULL, NULL, 1),
-(95, 2, 6, 14, 'Rollo de Alambre N° 16', 1, 6.50, '2024-05-05', NULL, NULL, 1),
-(96, 2, 6, 15, 'Disco para cortar fierro de 7\"', 1, 8.50, '2024-05-05', NULL, NULL, 1),
-(97, 2, 6, 16, 'Tubo desagüe 4\"', 1, 40.50, '2024-05-05', NULL, NULL, 1),
-(98, 2, 6, 17, 'Tubo agua 3/4\"', 1, 6.40, '2024-05-05', NULL, NULL, 1),
-(99, 2, 6, 18, 'Bolsa de Fragua para cerámica', 1, 9.60, '2024-05-05', NULL, NULL, 1),
-(100, 2, 6, 19, 'Hoja de Sierra para madera', 1, 7.00, '2024-05-05', NULL, NULL, 1),
-(101, 2, 6, 20, 'Paquete de Tornillos', 1, 6.50, '2024-05-05', NULL, NULL, 1),
-(102, 2, 6, 21, 'Paquete de Clavos 2\"', 1, 6.50, '2024-05-05', NULL, NULL, 1),
-(103, 2, 6, 22, 'Lámpara LED 9W', 1, 6.00, '2024-05-05', NULL, NULL, 1),
-(104, 2, 6, 23, 'Paquete de Focos LED', 1, 6.00, '2024-05-05', NULL, NULL, 1),
-(105, 2, 6, 24, 'Metro de Cable eléctrico N° 14', 1, 2.00, '2024-05-05', NULL, NULL, 1),
-(106, 2, 6, 25, 'Tapa ciega rectangular', 1, 1.00, '2024-05-05', NULL, NULL, 1),
-(107, 2, 6, 26, 'Lija esmeril asa N° 40', 1, 2.50, '2024-05-05', NULL, NULL, 1),
-(108, 1, 1, 1, 'Tubo PVC 1\"', 100, 30.00, '2024-05-05', NULL, NULL, 1),
-(109, 1, 2, 2, 'Tubo PVC 2\"', 50, 35.00, '2024-05-05', NULL, NULL, 1),
-(110, 1, 3, 3, 'Bolsa de Cemento APU 50kg', 20, 26.00, '2024-05-05', NULL, NULL, 1),
-(111, 1, 4, 4, 'Gallón de Pintura Látex', 10, 65.00, '2024-05-05', NULL, NULL, 1),
-(112, 1, 5, 5, 'Interruptor simple', 15, 7.50, '2024-05-05', NULL, NULL, 1),
-(113, 1, 6, 6, 'Bomba de agua 1/2 Hp', 2, 159.90, '2024-05-05', NULL, NULL, 1),
-(114, 1, 6, 7, 'Tanque elevado 250 litros', 1, 390.00, '2024-05-05', NULL, NULL, 1),
-(115, 1, 6, 8, 'Puerta de madera maciza', 1, 1150.00, '2024-05-05', NULL, NULL, 1),
-(116, 1, 6, 9, 'Grifería monomando', 1, 180.00, '2024-05-05', NULL, NULL, 1),
-(117, 1, 6, 10, 'Inodoro con tapa', 1, 381.90, '2024-05-05', NULL, NULL, 1),
-(118, 1, 6, 11, 'Ladrillo 18 huecos', 1, 0.72, '2024-05-05', NULL, NULL, 1),
-(119, 1, 6, 12, 'Bolsa de Arena fina', 1, 94.40, '2024-05-05', NULL, NULL, 1),
-(120, 1, 6, 13, 'Metro cúbico de Piedra chancada', 1, 61.36, '2024-05-05', NULL, NULL, 1),
-(121, 1, 6, 14, 'Rollo de Alambre N° 16', 1, 6.50, '2024-05-05', NULL, NULL, 1),
-(122, 1, 6, 15, 'Disco para cortar fierro de 7\"', 1, 8.50, '2024-05-05', NULL, NULL, 1),
-(123, 1, 6, 16, 'Tubo desagüe 4\"', 1, 40.50, '2024-05-05', NULL, NULL, 1),
-(124, 1, 6, 17, 'Tubo agua 3/4\"', 1, 6.40, '2024-05-05', NULL, NULL, 1),
-(125, 1, 6, 18, 'Bolsa de Fragua para cerámica', 1, 9.60, '2024-05-05', NULL, NULL, 1),
-(126, 1, 6, 19, 'Hoja de Sierra para madera', 1, 7.00, '2024-05-05', NULL, NULL, 1),
-(127, 1, 6, 20, 'Paquete de Tornillos', 1, 6.50, '2024-05-05', NULL, NULL, 1),
-(128, 1, 6, 21, 'Paquete de Clavos 2\"', 1, 6.50, '2024-05-05', NULL, NULL, 1),
-(129, 1, 6, 22, 'Lámpara LED 9W', 1, 6.00, '2024-05-05', NULL, NULL, 1),
-(130, 1, 6, 23, 'Paquete de Focos LED', 1, 6.00, '2024-05-05', NULL, NULL, 1),
-(131, 1, 6, 24, 'Metro de Cable eléctrico N° 14', 1, 2.00, '2024-05-05', NULL, NULL, 1),
-(132, 1, 6, 25, 'Tapa ciega rectangular', 1, 1.00, '2024-05-05', NULL, NULL, 1),
-(133, 1, 6, 26, 'Lija esmeril asa N° 40', 1, 2.50, '2024-05-05', NULL, NULL, 1),
-(134, 1, 6, 27, 'Caja eléctrica octogonal', 1, 2.50, '2024-05-05', NULL, NULL, 1),
-(135, 2, 1, 1, 'Tubo PVC 1\"', 80, 30.00, '2024-05-05', NULL, NULL, 1),
-(136, 2, 2, 2, 'Tubo PVC 2\"', 40, 35.00, '2024-05-05', NULL, NULL, 1),
-(137, 2, 3, 3, 'Bolsa de Cemento APU 50kg', 15, 26.00, '2024-05-05', NULL, NULL, 1),
-(138, 2, 4, 4, 'Gallón de Pintura Látex', 8, 65.00, '2024-05-05', NULL, NULL, 1),
-(139, 2, 5, 5, 'Interruptor simple', 10, 7.50, '2024-05-05', NULL, NULL, 1),
-(140, 2, 6, 6, 'Bomba de agua 1/2 Hp', 1, 159.90, '2024-05-05', NULL, NULL, 1),
-(141, 2, 6, 7, 'Tanque elevado 250 litros', 1, 390.00, '2024-05-05', NULL, NULL, 1),
-(142, 2, 6, 8, 'Puerta de madera maciza', 1, 1150.00, '2024-05-05', NULL, NULL, 1),
-(143, 2, 6, 9, 'Grifería monomando', 1, 180.00, '2024-05-05', NULL, NULL, 1),
-(144, 2, 6, 10, 'Inodoro con tapa', 1, 381.90, '2024-05-05', NULL, NULL, 1),
-(145, 2, 6, 11, 'Ladrillo 18 huecos', 1, 0.72, '2024-05-05', NULL, NULL, 1),
-(146, 2, 6, 12, 'Bolsa de Arena fina', 1, 94.40, '2024-05-05', NULL, NULL, 1),
-(147, 2, 6, 13, 'Metro cúbico de Piedra chancada', 1, 61.36, '2024-05-05', NULL, NULL, 1),
-(148, 2, 6, 14, 'Rollo de Alambre N° 16', 1, 6.50, '2024-05-05', NULL, NULL, 1),
-(149, 2, 6, 15, 'Disco para cortar fierro de 7\"', 1, 8.50, '2024-05-05', NULL, NULL, 1),
-(150, 2, 6, 16, 'Tubo desagüe 4\"', 1, 40.50, '2024-05-05', NULL, NULL, 1),
-(151, 2, 6, 17, 'Tubo agua 3/4\"', 1, 6.40, '2024-05-05', NULL, NULL, 1),
-(152, 2, 6, 18, 'Bolsa de Fragua para cerámica', 1, 9.60, '2024-05-05', NULL, NULL, 1),
-(153, 2, 6, 19, 'Hoja de Sierra para madera', 1, 7.00, '2024-05-05', NULL, NULL, 1),
-(154, 2, 6, 20, 'Paquete de Tornillos', 1, 6.50, '2024-05-05', NULL, NULL, 1),
-(155, 2, 6, 21, 'Paquete de Clavos 2\"', 1, 6.50, '2024-05-05', NULL, NULL, 1),
-(156, 2, 6, 22, 'Lámpara LED 9W', 1, 6.00, '2024-05-05', NULL, NULL, 1),
-(157, 2, 6, 23, 'Paquete de Focos LED', 1, 6.00, '2024-05-05', NULL, NULL, 1),
-(158, 2, 6, 24, 'Metro de Cable eléctrico N° 14', 1, 2.00, '2024-05-05', NULL, NULL, 1),
-(159, 2, 6, 25, 'Tapa ciega rectangular', 1, 1.00, '2024-05-05', NULL, NULL, 1),
-(160, 2, 6, 26, 'Lija esmeril asa N° 40', 1, 2.50, '2024-05-05', NULL, NULL, 1),
-(188, 4, 1, 1, 'Tubo PVC 1\"', 80, 30.00, '2024-05-05', NULL, NULL, 1),
-(189, 4, 2, 2, 'Tubo PVC 2\"', 40, 35.00, '2024-05-05', NULL, NULL, 1),
-(190, 4, 3, 3, 'Bolsa de Cemento APU 50kg', 15, 26.00, '2024-05-05', NULL, NULL, 1),
-(191, 4, 4, 4, 'Gallón de Pintura Látex', 8, 65.00, '2024-05-05', NULL, NULL, 1),
-(192, 4, 5, 5, 'Interruptor simple', 10, 7.50, '2024-05-05', NULL, NULL, 1),
-(193, 4, 6, 6, 'Bomba de agua 1/2 Hp', 1, 159.90, '2024-05-05', NULL, NULL, 1),
-(194, 4, 6, 7, 'Tanque elevado 250 litros', 1, 390.00, '2024-05-05', NULL, NULL, 1),
-(195, 4, 6, 8, 'Puerta de madera maciza', 1, 1150.00, '2024-05-05', NULL, NULL, 1),
-(196, 4, 6, 9, 'Grifería monomando', 1, 180.00, '2024-05-05', NULL, NULL, 1),
-(197, 4, 6, 10, 'Inodoro con tapa', 1, 381.90, '2024-05-05', NULL, NULL, 1),
-(198, 4, 6, 11, 'Ladrillo 18 huecos', 1, 0.72, '2024-05-05', NULL, NULL, 1),
-(199, 4, 6, 12, 'Bolsa de Arena fina', 1, 94.40, '2024-05-05', NULL, NULL, 1),
-(200, 4, 6, 13, 'Metro cúbico de Piedra chancada', 1, 61.36, '2024-05-05', NULL, NULL, 1),
-(201, 4, 6, 14, 'Rollo de Alambre N° 16', 1, 6.50, '2024-05-05', NULL, NULL, 1),
-(202, 4, 6, 15, 'Disco para cortar fierro de 7\"', 1, 8.50, '2024-05-05', NULL, NULL, 1),
-(203, 4, 6, 16, 'Tubo desagüe 4\"', 1, 40.50, '2024-05-05', NULL, NULL, 1),
-(204, 4, 6, 17, 'Tubo agua 3/4\"', 1, 6.40, '2024-05-05', NULL, NULL, 1),
-(205, 4, 6, 18, 'Bolsa de Fragua para cerámica', 1, 9.60, '2024-05-05', NULL, NULL, 1),
-(206, 4, 6, 19, 'Hoja de Sierra para madera', 1, 7.00, '2024-05-05', NULL, NULL, 1),
-(207, 4, 6, 20, 'Paquete de Tornillos', 1, 6.50, '2024-05-05', NULL, NULL, 1),
-(208, 4, 6, 21, 'Paquete de Clavos 2\"', 1, 6.50, '2024-05-05', NULL, NULL, 1),
-(209, 4, 6, 22, 'Lámpara LED 9W', 1, 6.00, '2024-05-05', NULL, NULL, 1),
-(210, 4, 6, 23, 'Paquete de Focos LED', 1, 6.00, '2024-05-05', NULL, NULL, 1),
-(211, 4, 6, 24, 'Metro de Cable eléctrico N° 14', 1, 2.00, '2024-05-05', NULL, NULL, 1),
-(212, 4, 6, 25, 'Tapa ciega rectangular', 1, 1.00, '2024-05-05', NULL, NULL, 1),
-(213, 4, 6, 26, 'Lija esmeril asa N° 40', 1, 2.50, '2024-05-05', NULL, NULL, 1),
-(214, 4, 6, 27, 'Caja eléctrica octogonal', 1, 2.50, '2024-05-05', NULL, NULL, 1),
-(215, 5, 1, 1, 'Tubo PVC 1\"', 80, 30.00, '2024-05-05', NULL, NULL, 1),
-(216, 5, 2, 2, 'Tubo PVC 2\"', 40, 35.00, '2024-05-05', NULL, NULL, 1),
-(217, 5, 3, 3, 'Bolsa de Cemento APU 50kg', 15, 26.00, '2024-05-05', NULL, NULL, 1),
-(218, 5, 4, 4, 'Gallón de Pintura Látex', 8, 65.00, '2024-05-05', NULL, NULL, 1),
-(219, 5, 5, 5, 'Interruptor simple', 10, 7.50, '2024-05-05', NULL, NULL, 1),
-(220, 5, 6, 6, 'Bomba de agua 1/2 Hp', 1, 159.90, '2024-05-05', NULL, NULL, 1),
-(221, 5, 6, 7, 'Tanque elevado 250 litros', 1, 390.00, '2024-05-05', NULL, NULL, 1),
-(222, 5, 6, 8, 'Puerta de madera maciza', 1, 1150.00, '2024-05-05', NULL, NULL, 1),
-(223, 5, 6, 9, 'Grifería monomando', 1, 180.00, '2024-05-05', NULL, NULL, 1),
-(224, 5, 6, 10, 'Inodoro con tapa', 1, 381.90, '2024-05-05', NULL, NULL, 1),
-(225, 5, 6, 11, 'Ladrillo 18 huecos', 1, 0.72, '2024-05-05', NULL, NULL, 1),
-(226, 5, 6, 12, 'Bolsa de Arena fina', 1, 94.40, '2024-05-05', NULL, NULL, 1),
-(227, 5, 6, 13, 'Metro cúbico de Piedra chancada', 1, 61.36, '2024-05-05', NULL, NULL, 1),
-(228, 5, 6, 14, 'Rollo de Alambre N° 16', 1, 6.50, '2024-05-05', NULL, NULL, 1),
-(229, 5, 6, 15, 'Disco para cortar fierro de 7\"', 1, 8.50, '2024-05-05', NULL, NULL, 1),
-(230, 5, 6, 16, 'Tubo desagüe 4\"', 1, 40.50, '2024-05-05', NULL, NULL, 1),
-(231, 5, 6, 17, 'Tubo agua 3/4\"', 1, 6.40, '2024-05-05', NULL, NULL, 1),
-(232, 5, 6, 18, 'Bolsa de Fragua para cerámica', 1, 9.60, '2024-05-05', NULL, NULL, 1),
-(233, 5, 6, 19, 'Hoja de Sierra para madera', 1, 7.00, '2024-05-05', NULL, NULL, 1),
-(234, 5, 6, 20, 'Paquete de Tornillos', 1, 6.50, '2024-05-05', NULL, NULL, 1),
-(235, 5, 6, 21, 'Paquete de Clavos 2\"', 1, 6.50, '2024-05-05', NULL, NULL, 1),
-(236, 5, 6, 22, 'Lámpara LED 9W', 1, 6.00, '2024-05-05', NULL, NULL, 1),
-(237, 5, 6, 23, 'Paquete de Focos LED', 1, 6.00, '2024-05-05', NULL, NULL, 1),
-(238, 5, 6, 24, 'Metro de Cable eléctrico N° 14', 1, 2.00, '2024-05-05', NULL, NULL, 1),
-(239, 5, 6, 25, 'Tapa ciega rectangular', 1, 1.00, '2024-05-05', NULL, NULL, 1),
-(240, 5, 6, 26, 'Lija esmeril asa N° 40', 1, 2.50, '2024-05-05', NULL, NULL, 1),
-(241, 5, 6, 27, 'Caja eléctrica octogonal', 1, 2.50, '2024-05-05', NULL, NULL, 1),
-(267, 1, 18, NULL, 'Intereses por financiamiento', 1, 500.00, '2024-05-05', NULL, NULL, 1),
-(268, 1, 19, NULL, 'Limpieza de terreno', 1, 1000.00, '2024-05-05', NULL, NULL, 1),
-(269, 1, 20, NULL, 'Conexión de servicios básicos', 1, 1500.00, '2024-05-05', NULL, NULL, 1),
-(270, 1, 21, NULL, 'Costos administrativos', 1, 800.00, '2024-05-05', NULL, NULL, 1),
-(271, 1, 22, NULL, 'Impuestos municipales', 1, 1200.00, '2024-05-05', NULL, NULL, 1),
-(272, 2, 18, NULL, 'Intereses por financiamiento', 1, 500.00, '2024-05-05', NULL, NULL, 1),
-(273, 2, 19, NULL, 'Limpieza de terreno', 1, 1000.00, '2024-05-05', NULL, NULL, 1),
-(274, 2, 20, NULL, 'Conexión de servicios básicos', 1, 1500.00, '2024-05-05', NULL, NULL, 1),
-(275, 2, 21, NULL, 'Costos administrativos', 1, 800.00, '2024-05-05', NULL, NULL, 1),
-(276, 2, 22, NULL, 'Impuestos municipales', 1, 1200.00, '2024-05-05', NULL, NULL, 1),
-(282, 4, 18, NULL, 'Intereses por financiamiento', 1, 500.00, '2024-05-05', NULL, NULL, 1),
-(283, 4, 19, NULL, 'Limpieza de terreno', 1, 1000.00, '2024-05-05', NULL, NULL, 1),
-(284, 4, 20, NULL, 'Conexión de servicios básicos', 1, 1500.00, '2024-05-05', NULL, NULL, 1),
-(285, 4, 21, NULL, 'Costos administrativos', 1, 800.00, '2024-05-05', NULL, NULL, 1),
-(286, 4, 21, NULL, 'IMPUESTOS AL DIA DE HOY', 1, 1200.00, '2024-05-05', '2024-05-16', NULL, 1),
-(287, 5, 18, NULL, 'Intereses por financiamiento', 1, 500.00, '2024-05-05', NULL, NULL, 1),
-(288, 5, 19, NULL, 'Limpieza de terreno', 1, 1000.00, '2024-05-05', NULL, NULL, 1),
-(289, 5, 20, NULL, 'Conexión de servicios básicos', 1, 1500.00, '2024-05-05', NULL, NULL, 1),
-(290, 5, 21, NULL, 'Costos administrativos', 1, 800.00, '2024-05-05', NULL, NULL, 1),
-(291, 5, 22, NULL, 'Impuestos municipales', 1, 1200.00, '2024-05-05', NULL, NULL, 1);
 
 -- --------------------------------------------------------
 
@@ -4110,41 +3919,60 @@ CREATE TABLE `materiales` (
   `idmaterial` int(11) NOT NULL,
   `idmarca` int(11) NOT NULL,
   `material` varchar(45) NOT NULL,
-  `idunidad_medida` int(11) NOT NULL
+  `idunidad_medida` int(11) NOT NULL,
+  `precio_unitario` decimal(8,2) NOT NULL,
+  `create_at` date NOT NULL DEFAULT curdate(),
+  `update_at` date DEFAULT NULL,
+  `inactive_at` date DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `materiales`
 --
 
-INSERT INTO `materiales` (`idmaterial`, `idmarca`, `material`, `idunidad_medida`) VALUES
-(1, 1, 'Tubo PVC', 1),
-(2, 2, 'Cemento APU', 2),
-(3, 3, 'Pintura Látex', 3),
-(4, 4, 'Interruptor', 1),
-(5, 5, 'Cinta aislante', 1),
-(6, 6, 'Bomba de agua', 4),
-(7, 7, 'Tanque elevado', 4),
-(8, 8, 'Puerta de madera', 1),
-(9, 9, 'Grifería', 1),
-(10, 10, 'Inodoro', 1),
-(11, 11, 'Ladrillo', 5),
-(12, 12, 'Arena', 5),
-(13, 13, 'Piedra chancada', 5),
-(14, 14, 'Alambre', 6),
-(15, 15, 'Disco para fierro', 6),
-(16, 16, 'Tubo desagüe', 7),
-(17, 17, 'Tubo agua', 7),
-(18, 18, 'Fragua', 1),
-(19, 19, 'Lija', 1),
-(20, 20, 'Hoja de Sierra', 1),
-(21, 21, 'Tornillos', 6),
-(22, 22, 'Clavos', 6),
-(23, 23, 'Lámpara LED', 1),
-(24, 24, 'Focos', 1),
-(25, 25, 'Cable eléctrico', 6),
-(26, 26, 'Tapa ciega', 6),
-(27, 27, 'Lija esmeril', 1);
+INSERT INTO `materiales` (`idmaterial`, `idmarca`, `material`, `idunidad_medida`, `precio_unitario`, `create_at`, `update_at`, `inactive_at`) VALUES
+(43, 1, 'Tubo PVC 1\"', 1, 25.00, '2024-05-16', NULL, NULL),
+(44, 1, 'Tubo PVC 2\"', 1, 35.00, '2024-05-16', NULL, NULL),
+(45, 2, 'Bolsa de Cemento APU 50kg', 2, 26.00, '2024-05-16', NULL, NULL),
+(46, 3, 'Gallón de Pintura Látex', 3, 65.00, '2024-05-16', NULL, NULL),
+(47, 4, 'Interruptor simple', 1, 7.50, '2024-05-16', NULL, NULL),
+(48, 5, 'Rollo de Cinta aislante', 1, 5.00, '2024-05-16', NULL, NULL),
+(49, 6, 'Bomba de agua 1/2 Hp', 4, 159.90, '2024-05-16', NULL, NULL),
+(50, 7, 'Tanque elevado 250 litros', 4, 390.00, '2024-05-16', NULL, NULL),
+(51, 8, 'Puerta de madera maciza', 1, 1150.00, '2024-05-16', NULL, NULL),
+(52, 9, 'Grifería monomando', 1, 180.00, '2024-05-16', NULL, NULL),
+(53, 10, 'Inodoro con tapa', 1, 381.90, '2024-05-16', NULL, NULL),
+(54, 11, 'Ladrillo 18 huecos', 5, 0.72, '2024-05-16', NULL, NULL),
+(55, 12, 'Bolsa de Arena fina', 8, 94.40, '2024-05-16', NULL, NULL),
+(56, 13, 'Metro cúbico de Piedra chancada', 9, 61.36, '2024-05-16', NULL, NULL),
+(57, 14, 'Rollo de Alambre N° 16', 10, 6.50, '2024-05-16', NULL, NULL),
+(58, 15, 'Disco para cortar fierro de 7\"', 11, 8.50, '2024-05-16', NULL, NULL),
+(59, 16, 'Tubo desagüe 4\"', 12, 40.50, '2024-05-16', NULL, NULL),
+(60, 17, 'Tubo agua 3/4\"', 13, 6.40, '2024-05-16', NULL, NULL),
+(61, 18, 'Bolsa de Fragua para cerámica', 14, 9.60, '2024-05-16', NULL, NULL),
+(62, 19, 'Hoja de Sierra para madera', 15, 7.00, '2024-05-16', NULL, NULL),
+(63, 20, 'Paquete de Tornillos', 16, 6.50, '2024-05-16', NULL, NULL),
+(64, 21, 'Paquete de Clavos 2\"', 16, 6.50, '2024-05-16', NULL, NULL),
+(65, 22, 'Lámpara LED 9W', 17, 6.00, '2024-05-16', NULL, NULL),
+(66, 23, 'Paquete de Focos LED', 18, 6.00, '2024-05-16', NULL, NULL),
+(67, 24, 'Metro de Cable eléctrico N° 14', 19, 2.00, '2024-05-16', NULL, NULL),
+(68, 25, 'Tapa ciega rectangular', 20, 1.00, '2024-05-16', NULL, NULL),
+(69, 26, 'Lija esmeril asa N° 40', 21, 2.50, '2024-05-16', NULL, NULL),
+(70, 27, 'Caja eléctrica octogonal', 22, 2.50, '2024-05-16', NULL, NULL),
+(71, 1, 'Registro roscado de 4\"', 22, 13.00, '2024-05-16', NULL, NULL),
+(72, 2, 'Sumidero de 2\"', 22, 5.00, '2024-05-16', NULL, NULL),
+(73, 3, 'Tapa de desagüe roscada', 22, 5.00, '2024-05-16', NULL, NULL),
+(74, 4, 'Metro de Tubería de agua PVC 1\"', 22, 28.50, '2024-05-16', NULL, NULL),
+(75, 5, 'Tubo corrugado de 3 metros', 22, 1.40, '2024-05-16', NULL, NULL),
+(76, 6, 'Lavabo ovalado', 22, 205.00, '2024-05-16', NULL, NULL),
+(77, 7, 'Lavadero de cocina con accesorios', 22, 81.50, '2024-05-16', NULL, NULL),
+(78, 8, 'Tubería de luz de 3/4\"', 22, 6.60, '2024-05-16', NULL, NULL),
+(79, 9, 'Caja de empalme eléctrico', 22, 2.50, '2024-05-16', NULL, NULL),
+(80, 10, 'Conector para cables eléctricos', 22, 2.40, '2024-05-16', NULL, NULL),
+(81, 11, 'Enchufe doble', 22, 7.50, '2024-05-16', NULL, NULL),
+(82, 12, 'Revestimiento cerámico 60x60', 22, 70.00, '2024-05-16', NULL, NULL),
+(83, 13, 'Puertas contraplacadas pintadas', 22, 325.00, '2024-05-16', NULL, NULL),
+(84, 14, 'Tubo de plástico 4\"', 22, 40.50, '2024-05-16', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -4364,7 +4192,8 @@ INSERT INTO `presupuestos` (`idpresupuesto`, `modelo`, `create_at`, `update_at`,
 (22, 'MODELO MADERA', '2024-05-13', NULL, NULL, 1, 'PRES-091'),
 (23, 'MODELO PLASTICO', '2024-05-13', NULL, NULL, 1, 'PRES-039'),
 (24, 'Casa Moderna 2', '2024-05-15', NULL, NULL, 1, 'PRES-015'),
-(26, '123', '2024-05-16', NULL, NULL, 1, 'PRES-12');
+(26, '123', '2024-05-16', NULL, NULL, 1, 'PRES-12'),
+(27, 'CASA DE CAMPO', '2024-05-16', NULL, NULL, 1, 'PRES-090');
 
 -- --------------------------------------------------------
 
@@ -4891,70 +4720,6 @@ INSERT INTO `sustentos_cuotas` (`idsustento_cuota`, `idcuota`, `ruta`, `create_a
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `tipos_materiales`
---
-
-CREATE TABLE `tipos_materiales` (
-  `idtipo_material` int(11) NOT NULL,
-  `idmaterial` int(11) NOT NULL,
-  `tipo_material` varchar(45) NOT NULL,
-  `precio_unitario` decimal(8,2) NOT NULL,
-  `create_at` date NOT NULL DEFAULT curdate(),
-  `update_at` date DEFAULT NULL,
-  `inactive_at` date DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Volcado de datos para la tabla `tipos_materiales`
---
-
-INSERT INTO `tipos_materiales` (`idtipo_material`, `idmaterial`, `tipo_material`, `precio_unitario`, `create_at`, `update_at`, `inactive_at`) VALUES
-(1, 1, 'Tubo PVC 1\"', 25.00, '2024-05-05', NULL, NULL),
-(2, 1, 'Tubo PVC 2\"', 35.00, '2024-05-05', NULL, NULL),
-(3, 2, 'Bolsa de Cemento APU 50kg', 26.00, '2024-05-05', NULL, NULL),
-(4, 3, 'Gallón de Pintura Látex', 65.00, '2024-05-05', NULL, NULL),
-(5, 4, 'Interruptor simple', 7.50, '2024-05-05', NULL, NULL),
-(6, 5, 'Rollo de Cinta aislante', 5.00, '2024-05-05', NULL, NULL),
-(7, 6, 'Bomba de agua 1/2 Hp', 159.90, '2024-05-05', NULL, NULL),
-(8, 7, 'Tanque elevado 250 litros', 390.00, '2024-05-05', NULL, NULL),
-(9, 8, 'Puerta de madera maciza', 1150.00, '2024-05-05', NULL, NULL),
-(10, 9, 'Grifería monomando', 180.00, '2024-05-05', NULL, NULL),
-(11, 10, 'Inodoro con tapa', 381.90, '2024-05-05', NULL, NULL),
-(12, 11, 'Ladrillo 18 huecos', 0.72, '2024-05-05', NULL, NULL),
-(13, 12, 'Bolsa de Arena fina', 94.40, '2024-05-05', NULL, NULL),
-(14, 13, 'Metro cúbico de Piedra chancada', 61.36, '2024-05-05', NULL, NULL),
-(15, 14, 'Rollo de Alambre N° 16', 6.50, '2024-05-05', NULL, NULL),
-(16, 15, 'Disco para cortar fierro de 7\"', 8.50, '2024-05-05', NULL, NULL),
-(17, 16, 'Tubo desagüe 4\"', 40.50, '2024-05-05', NULL, NULL),
-(18, 17, 'Tubo agua 3/4\"', 6.40, '2024-05-05', NULL, NULL),
-(19, 18, 'Bolsa de Fragua para cerámica', 9.60, '2024-05-05', NULL, NULL),
-(20, 19, 'Hoja de Sierra para madera', 7.00, '2024-05-05', NULL, NULL),
-(21, 20, 'Paquete de Tornillos', 6.50, '2024-05-05', NULL, NULL),
-(22, 21, 'Paquete de Clavos 2\"', 6.50, '2024-05-05', NULL, NULL),
-(23, 22, 'Lámpara LED 9W', 6.00, '2024-05-05', NULL, NULL),
-(24, 23, 'Paquete de Focos LED', 6.00, '2024-05-05', NULL, NULL),
-(25, 24, 'Metro de Cable eléctrico N° 14', 2.00, '2024-05-05', NULL, NULL),
-(26, 25, 'Tapa ciega rectangular', 1.00, '2024-05-05', NULL, NULL),
-(27, 26, 'Lija esmeril asa N° 40', 2.50, '2024-05-05', NULL, NULL),
-(28, 27, 'Caja eléctrica octogonal', 2.50, '2024-05-05', NULL, NULL),
-(29, 1, 'Tubo PVC 4\"', 13.00, '2024-05-05', NULL, NULL),
-(30, 2, 'Bolsa de Cemento APU 25kg', 50.00, '2024-05-05', NULL, NULL),
-(31, 3, 'Gallón de Pintura Látex ULTRA', 5.00, '2024-05-05', NULL, NULL),
-(32, 4, 'Interruptor de conmutación', 28.50, '2024-05-05', NULL, NULL),
-(33, 5, 'Rollo de Cinta aislante negro', 1.40, '2024-05-05', NULL, NULL),
-(34, 6, 'Bomba de agua 1 Hp', 205.00, '2024-05-05', NULL, NULL),
-(35, 7, 'Tanque elevado 500 litros', 81.50, '2024-05-05', NULL, NULL),
-(36, 8, 'Puerta de madera barnizada', 6.60, '2024-05-05', NULL, NULL),
-(37, 9, 'Grifería monomando II', 2.50, '2024-05-05', NULL, NULL),
-(38, 10, 'Inodoro con tapa color negro', 2.40, '2024-05-05', NULL, NULL),
-(39, 11, 'Ladrillo pandereta', 7.50, '2024-05-05', NULL, NULL),
-(40, 12, 'Bolsa de Arena gruesa', 70.00, '2024-05-05', NULL, NULL),
-(41, 13, 'Metro cúbico de Piedra caliza', 325.00, '2024-05-05', NULL, NULL),
-(42, 14, 'Rollo de Alambre N° 18', 40.50, '2024-05-05', NULL, NULL);
-
--- --------------------------------------------------------
-
---
 -- Estructura de tabla para la tabla `unidades_medida`
 --
 
@@ -5203,10 +4968,10 @@ ALTER TABLE `detalles_contratos`
 -- Indices de la tabla `detalle_costos`
 --
 ALTER TABLE `detalle_costos`
-  ADD PRIMARY KEY (`iddetalle_costos`),
+  ADD PRIMARY KEY (`iddetalle_costo`),
   ADD KEY `fk_idpresupuesto_det_costo` (`idpresupuesto`),
   ADD KEY `fk_idsubcategoria_costo_det_costo` (`idsubcategoria_costo`),
-  ADD KEY `fk_idtipo_material_det_costo` (`idtipo_material`),
+  ADD KEY `fk_idmaterial_det_costo` (`idmaterial`),
   ADD KEY `fk_idusuario_det_costo` (`idusuario`);
 
 --
@@ -5361,14 +5126,6 @@ ALTER TABLE `sustentos_cuotas`
   ADD KEY `fk_idusuario_sust_cuo` (`idusuario`);
 
 --
--- Indices de la tabla `tipos_materiales`
---
-ALTER TABLE `tipos_materiales`
-  ADD PRIMARY KEY (`idtipo_material`),
-  ADD UNIQUE KEY `uk_tipo_material_t_material` (`tipo_material`),
-  ADD KEY `fk_idmaterial_t_materiales` (`idmaterial`);
-
---
 -- Indices de la tabla `unidades_medida`
 --
 ALTER TABLE `unidades_medida`
@@ -5447,7 +5204,7 @@ ALTER TABLE `detalles_contratos`
 -- AUTO_INCREMENT de la tabla `detalle_costos`
 --
 ALTER TABLE `detalle_costos`
-  MODIFY `iddetalle_costos` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4522;
+  MODIFY `iddetalle_costo` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `devoluciones`
@@ -5477,7 +5234,7 @@ ALTER TABLE `marcas`
 -- AUTO_INCREMENT de la tabla `materiales`
 --
 ALTER TABLE `materiales`
-  MODIFY `idmaterial` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
+  MODIFY `idmaterial` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=85;
 
 --
 -- AUTO_INCREMENT de la tabla `metricas`
@@ -5507,7 +5264,7 @@ ALTER TABLE `personas_juridicas`
 -- AUTO_INCREMENT de la tabla `presupuestos`
 --
 ALTER TABLE `presupuestos`
-  MODIFY `idpresupuesto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+  MODIFY `idpresupuesto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 
 --
 -- AUTO_INCREMENT de la tabla `provincias`
@@ -5562,12 +5319,6 @@ ALTER TABLE `subcategoria_costos`
 --
 ALTER TABLE `sustentos_cuotas`
   MODIFY `idsustento_cuota` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
-
---
--- AUTO_INCREMENT de la tabla `tipos_materiales`
---
-ALTER TABLE `tipos_materiales`
-  MODIFY `idtipo_material` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
 
 --
 -- AUTO_INCREMENT de la tabla `unidades_medida`
@@ -5638,9 +5389,9 @@ ALTER TABLE `detalles_contratos`
 -- Filtros para la tabla `detalle_costos`
 --
 ALTER TABLE `detalle_costos`
+  ADD CONSTRAINT `fk_idmaterial_det_costo` FOREIGN KEY (`idmaterial`) REFERENCES `materiales` (`idmaterial`),
   ADD CONSTRAINT `fk_idpresupuesto_det_costo` FOREIGN KEY (`idpresupuesto`) REFERENCES `presupuestos` (`idpresupuesto`),
   ADD CONSTRAINT `fk_idsubcategoria_costo_det_costo` FOREIGN KEY (`idsubcategoria_costo`) REFERENCES `subcategoria_costos` (`idsubcategoria_costo`),
-  ADD CONSTRAINT `fk_idtipo_material_det_costo` FOREIGN KEY (`idtipo_material`) REFERENCES `tipos_materiales` (`idtipo_material`),
   ADD CONSTRAINT `fk_idusuario_det_costo` FOREIGN KEY (`idusuario`) REFERENCES `usuarios` (`idusuario`);
 
 --
@@ -5748,12 +5499,6 @@ ALTER TABLE `subcategoria_costos`
 ALTER TABLE `sustentos_cuotas`
   ADD CONSTRAINT `fk_idcuota_sust_cuo` FOREIGN KEY (`idcuota`) REFERENCES `cuotas` (`idcuota`),
   ADD CONSTRAINT `fk_idusuario_sust_cuo` FOREIGN KEY (`idusuario`) REFERENCES `usuarios` (`idusuario`);
-
---
--- Filtros para la tabla `tipos_materiales`
---
-ALTER TABLE `tipos_materiales`
-  ADD CONSTRAINT `fk_idmaterial_t_materiales` FOREIGN KEY (`idmaterial`) REFERENCES `materiales` (`idmaterial`);
 
 --
 -- Filtros para la tabla `usuarios`
