@@ -456,7 +456,7 @@
                     <div class="row d-flex align-items-center mb-4 d-none" id="inputs_materials">
 
                       <!-- MATERIALES -->
-                      <div class="col-md-4">
+                      <div class="col-md-6">
                         <label for="marca" class="form-label">Marca</label>
                         <select name="marca" id="marca" class="form-select" required>
                           <option value="" default>Marca</option>
@@ -469,7 +469,7 @@
                         </div>
                       </div>
 
-                      <div class="col-md-4">
+                      <div class="col-md-6">
                         <label for="material" class="form-label">Material</label>
                         <select name="material" id="material" class="form-select" required>
                           <option value="" default>Material</option>
@@ -481,20 +481,6 @@
                           Material registrado correctamente.
                         </div>
                       </div>
-
-                      <div class="col-md-4">
-                        <label for="tipo_material" class="form-label">Tipo de material</label>
-                        <select name="tipo_material" id="tipo_material" class="form-select" required>
-                          <option value="" default>Tipo de material</option>
-                        </select>
-                        <div class="invalid-feedback">
-                          Necesitas ingresar un tipo de material.
-                        </div>
-                        <div class="valid-feedback">
-                          Tipo de material registrado correctamente.
-                        </div>
-                      </div>
-
                     </div>
                     <hr>
 
@@ -503,7 +489,7 @@
 
                       <div class="col-md-3">
                         <label for="cantidad" class="form-label">Cantidad</label>
-                        <input type="number" name="cantidad" id="cantidad" min="1" class="form-control" required>
+                        <input type="number" name="cantidad" id="cantidad" min="1.0" class="form-control" required>
                         <div class="invalid-feedback">
                           Necesitas ingresar la cantidad.
                         </div>
@@ -514,7 +500,7 @@
 
                       <div class="col-md-3">
                         <label for="precio_unitario" class="form-label">Precio Unitario</label>
-                        <input type="number" name="precio_unitario" id="precio_unitario" class="form-control" min="1" step="0.001" required>
+                        <input type="number" name="precio_unitario" id="precio_unitario" class="form-control" min="1.0" step="0.001" required>
                         <div class="invalid-feedback">
                           Necesitas ingresar el precio unitario.
                         </div>
@@ -536,7 +522,7 @@
             <!-- TABLA DE DETALLES -->
 
             <div class="col-md-12 mb-lg-0 mb-4">
-              <div class="card mt-4"  style="max-height: 50rem ; overflow-y: auto;">
+              <div class="card mt-4" style="max-height: 50rem ; overflow-y: auto;">
                 <div class="card-header pb-0 p-3">
                   <div class="row">
                     <div class="col-6 d-flex align-items-center">
@@ -738,34 +724,34 @@
     let index = 0;
     let isAddForm = true;
     let iddetalleCosto;
+    let indexDelete = []
 
     // Elimina un detalle del presupuesto
-    async function deleteDetBudget(iddet){
-      
-      try{
+    async function deleteDetBudget(iddet) {
+
+      try {
 
         let url = "../../Controllers/cost.controller.php";
 
         let params = new FormData();
-        
-        params.append("action","inactiveDetailCost");
-        params.append("iddetalle_costo",iddet);
 
-        let result = await global.sendAction(url,params);
+        params.append("action", "inactiveDetailCost");
+        params.append("iddetalle_costo", iddet);
 
-        if(result){
+        let result = await global.sendAction(url, params);
 
-          if(result.filasAfect > 0){
-            
+        if (result) {
+
+          if (result.filasAfect > 0) {
+
             sAlert.sweetSuccess("Éxito", "Detalle eliminado correctamente", () => {
               getDetCostByIdBudget(idpresupuestoOBT)
-            }); 
-          }else{
+            });
+          } else {
             sAlert.sweetError("Ocurrió un error", "No se ha podido eliminar el detalle");
           }
         }
-      }
-      catch(e){
+      } catch (e) {
         console.error(e);
       }
     }
@@ -780,11 +766,11 @@
           let exist = array.find(element => element[column] == value);
 
           if (exist) {
-            
+
             sAlert.sweetWarning("Se ha encontrado coincidencias", `"${value}" ya existe, ingresa otro`);
             reject();
           } else {
-            
+
             resolve();
           }
         }
@@ -807,7 +793,7 @@
         if (results) {
 
           allDataBudget = results;
-          
+
         }
       } catch (e) {
         console.error(e);
@@ -830,7 +816,7 @@
         let result = await global.sendAction(url, params);
 
         if (result) {
-          
+
           return result.filasAfect;
         }
 
@@ -844,35 +830,35 @@
       try {
 
         let url = "../../Controllers/cost.controller.php";
-        
+
         let params = new FormData();
 
-        if(!isAdd){
+        if (!isAdd) {
           params.append("action", "setDetailCost");
           params.append("iddetalle_costo", obj.iddetalle_costo);
-        }else{
+        } else {
 
           params.append("action", "addDetailCost");
         }
-          params.append("idpresupuesto", idpresupuestoOBT);
-          params.append("idsubcategoria_costo", obj.idsubcategoria_costo);
-          params.append("idtipo_material", obj.idtipo_material)
-          params.append("detalle", obj.detalle)
-          params.append("cantidad", obj.cantidad)
-          params.append("precio_unitario", obj.precio_unitario);
-        
+        params.append("idpresupuesto", idpresupuestoOBT);
+        params.append("idsubcategoria_costo", obj.idsubcategoria_costo);
+        params.append("idmaterial", obj.idmaterial)
+        params.append("detalle", obj.detalle)
+        params.append("cantidad", obj.cantidad)
+        params.append("precio_unitario", obj.precio_unitario);
+
 
         let results = await global.sendAction(url, params);
 
         if (results) {
-          
-          if(results.filasAfect > 0){
-            
+
+          if (results.filasAfect > 0) {
+
             sAlert.sweetSuccess("Éxito", "Detalle actualizado correctamente", () => {
               getDetCostByIdBudget(idpresupuestoOBT)
               $("#add").innerHTML = `<i class="fa fa-plus"></i>&nbsp;&nbsp;Agregar`;
               isAddForm = true;
-            }); 
+            });
           }
         }
       } catch (e) {
@@ -925,7 +911,7 @@
     //Renderiza dataStorage en la tabla
     function renderDetbudgets(array) {
 
-      
+
       $("#table-det-budgets tbody").innerHTML = "";
       $("#message-info").innerHTML = "";
 
@@ -948,11 +934,12 @@
             <td class="edit-row number" data-precio="precio_unitario">${precioUnitarioFormat}</td>
             <td>${numberFormat}</td>
             <td>
-              <button type="button" data-index="${element.iddetalle_costos}" class="btn btn-link text-dark px-3 mb-0 edit"><i class="bi bi-pencil-fill edit" data-index="${element.iddetalle_costos}"></i></button>
-              <button type="button" data-index="${element.iddetalle_costos}" class="btn btn-link text-danger text-gradient px-3 mb-0 delete"><i data-index="${element.iddetalle_costos}" class="bi bi-trash-fill delete"></i></button>
+              <button type="button" data-index="${element.iddetalle_costo}" class="btn btn-link text-dark px-3 mb-0 edit"><i class="bi bi-pencil-fill edit" data-index="${element.iddetalle_costo}"></i></button>
+              <button type="button" data-index="${element.iddetalle_costo}" class="btn btn-link text-danger text-gradient px-3 mb-0 delete"><i data-index="${element.iddetalle_costo}" class="bi bi-trash-fill delete"></i></button>
             </td>
           </tr>
         `;
+
 
           $("#table-det-budgets tbody").innerHTML += newRow;
           ++numRow;
@@ -988,6 +975,9 @@
 
         if (results) {
           dataStorage = results
+          if (dataStorage.length == 0) {
+            $("#save_lots").disabled = true;
+          }
           renderDetbudgets(results)
         }
       } catch (e) {
@@ -1030,10 +1020,10 @@
       if ($("#inputs_materials").classList.contains("d-none")) {
 
         data = {
-          iddetalle_costo : iddetalleCosto,
+          iddetalle_costo: iddetalleCosto,
           idcategoria_costo: $("#categoria_costo").value,
           idsubcategoria_costo: $("#subcategoria_costo").value,
-          idtipo_material: null,
+          idmaterial: null,
           detalle: $("#detalle").value,
           cantidad: $("#cantidad").value,
           precio_unitario: $("#precio_unitario").value
@@ -1042,21 +1032,21 @@
 
         let marca = $("#marca").options[$("#marca").selectedIndex].textContent;
         let material = $("#material").options[$("#material").selectedIndex].textContent;
-        let tipo_material = $("#tipo_material").options[$("#tipo_material").selectedIndex].textContent;
+        let unidad_medida = $("#material").options[$("#material").selectedIndex].dataset.unidad_medida;
 
         data = {
-          iddetalle_costo : iddetalleCosto,
+          iddetalle_costo: iddetalleCosto,
           idcategoria_costo: $("#categoria_costo").value,
           idsubcategoria_costo: $("#subcategoria_costo").value,
-          idtipo_material: Number.parseInt($("#tipo_material").value),
-          detalle: marca + " // " + material + " // " + tipo_material,
+          idmaterial: Number.parseInt($("#material").value),
+          detalle: marca + " // " + material + " // " + unidad_medida,
           cantidad: $("#cantidad").value,
           precio_unitario: $("#precio_unitario").value
         }
       }
 
-      
-      
+
+
       upSetDetCost(data, isAddForm);
 
 
@@ -1126,6 +1116,8 @@
             let newTag = document.createElement("option");
             newTag.value = result.idmaterial;
             newTag.innerText = result.material;
+            newTag.dataset.unidad_medida = result.unidad_medida;
+            newTag.dataset.precio = result.precio_unitario;
 
             $("#material").appendChild(newTag);
           });
@@ -1137,53 +1129,6 @@
           newTag.innerText = message;
 
           $("#material").appendChild(newTag);
-        }
-      } catch (e) {
-        console.error(e);
-      }
-    };
-
-    //Obtiene los tipos de materiales
-    async function getTypesMaterials(idmaterial) {
-
-      try {
-
-        let url = "../../Controllers/material.controller.php";
-
-        let params = new FormData();
-
-        params.append("action", "listTypeMaterials");
-        params.append("idmaterial", idmaterial);
-
-        let results = await global.sendAction(url, params);
-
-        if (results.length > 0) {
-
-          //Opcion por defecto
-          let tagDefault = document.createElement("option");
-          tagDefault.value = "";
-          tagDefault.innerText = "Seleccione un tipo de material";
-          tagDefault.selected = true;
-
-          $("#tipo_material").append(tagDefault);
-
-          results.forEach(result => {
-
-            let newTag = document.createElement("option");
-            newTag.value = result.idtipo_material;
-            newTag.innerText = result.tipo_material;
-
-            $("#tipo_material").appendChild(newTag);
-          });
-        } else {
-
-          let message = "Tipo material";
-
-          let newTag = document.createElement("option");
-          newTag.value = "";
-          newTag.innerText = message;
-
-          $("#tipo_material").appendChild(newTag);
         }
       } catch (e) {
         console.error(e);
@@ -1327,7 +1272,7 @@
           `;
           }
         })
-        
+
         newButton = `
       
       <div class="accordion-item">
@@ -1346,7 +1291,29 @@
       `;
 
         $("#accordion-proyectos").innerHTML += newButton;
+
       }
+
+      let buttonsProyects = document.querySelectorAll(".form-check-input.form-lotes")
+
+      Array.from(buttonsProyects).forEach(element => {
+
+        if (element.checked) {
+
+          let idproyectoChecked = Number.parseInt(element.dataset.idproyecto);
+          let checkProyects = document.querySelectorAll(".form-check-input.check-proyects");
+
+          Array.from(checkProyects).forEach(checkProyect =>{
+
+            let buttonProyectChecked = checkProyect.dataset.idproyecto;
+  
+            if (buttonProyectChecked == idproyectoChecked) {
+  
+              checkProyect.checked = true
+            }
+          })
+        }
+      });
     };
 
     //Obtiene los lotes filtrando los que coninciden con el id lote o los que son null
@@ -1392,12 +1359,10 @@
 
         $("#marca").required = false;
         $("#material").required = false;
-        $("#tipo_material").required = false;
         $("#detalle").disabled = false
       } else {
         $("#marca").required = true;
         $("#material").required = true;
-        $("#tipo_material").required = true;
         $("#detalle").disabled = true;
       }
     };
@@ -1441,15 +1406,32 @@
       });
     };
 
+    async function setSubcategryValue(obj) {
+
+      return new Promise((resolve, reject)=>{
+
+        setTimeout(()=>{
+          
+          Array.from($("#subcategoria_costo").options).forEach(option => {
+            console.log(option)
+            console.log("dentro delforeach")
+            if(obj.idsubcategoria_costo == option.value){
+              option.selected = true;
+            }
+          })
+          resolve();
+        },1000);
+      })
+    }
+
     $("#material").addEventListener("change", () => {
 
-      let idmaterial = $("#material").value
-      $("#tipo_material").innerHTML = "";
-      getTypesMaterials(idmaterial);
-
+      let precio = Number.parseFloat($("#material").options[$("#material").selectedIndex].dataset.precio);
+      console.log(precio)
+      $("#precio_unitario").value = precio
     });
 
-    $("#marca").addEventListener("change", (e) => {
+    $("#marca").addEventListener("change", () => {
 
       let idmarca = $("#marca").value
       $("#material").innerHTML = "";
@@ -1486,47 +1468,74 @@
         $("#inputs_materials").classList.remove("d-none");
         toggleInputs(required);
       }
-
-      $("#detalle").value = "";
     });
 
     $("#table-det-budgets tbody").addEventListener("click", async function(e) {
 
       if (e.target.classList.contains("edit")) {
 
-        $("#form-budget").scrollIntoView({behavior:"auto"});
+        $("#form_det_budget").reset();
+
+        $("#form-budget").scrollIntoView({
+          behavior: "auto"
+        });
 
         isAddForm = false;
         iddetalleCosto = Number.parseInt(e.target.dataset.index);
-        
-        let dataObt = dataStorage.find(data => data.iddetalle_costos == iddetalleCosto)
-        if (dataObt) {
+        console.log(iddetalleCosto)
+        console.log("incio del filtro")
 
+        let dataObt = dataStorage.find(data => data.iddetalle_costo == iddetalleCosto)
+        console.log(dataObt)
+        if (dataObt) {
+          
+          console.log("filtrando")
           $("#add").innerHTML = `<i class="bi bi-pencil-fill edit"></i>Actualizar`;
           $("#categoria_costo").value = dataObt.idcategoria_costo
           $("#categoria_costo").dispatchEvent(new Event("change"));
 
+          console.log("inicio del recorrido")
+          await setSubcategryValue(dataObt);
+          console.log("fin del recorrido")
           $("#detalle").value = dataObt.detalle;
           $("#cantidad").value = dataObt.cantidad;
           $("#precio_unitario").value = dataObt.precio_unitario;
 
+          if(!dataObt.idmarca){
+            $("#inputs_materials").classList.add("d-none");
+            $("#marca").required = false;
+            $("#material").required = false;
+          }else{
+            $("#marca").required = true;
+            $("#material").required = true;
+            $("#inputs_materials").classList.remove("d-none");
+          }
         }
 
+        console.log("fin del filtro")
       } else if (e.target.classList.contains("delete")) {
 
         let iddetalle = e.target.dataset.index
-        console.log(iddetalle)          
+        console.log(iddetalle)
 
-        sAlert.sweetConfirm("¿Deseas eliminar el registro?", "", async function(){
+        
+        if (dataStorage.length > 1) {
+          $("#save_lots").disabled = false;
+            sAlert.sweetConfirm("¿Deseas eliminar el registro?", "", async function() {
+              console.log(dataStorage)
+              let iddetalle = parseInt(e.target.dataset.index);
 
-          await deleteDetBudget(iddetalle)
-          // let tr = e.target.closest("tr");
-          // tr.remove();
+              await deleteDetBudget(iddetalle);
+            })
+        }else if(dataStorage.length == 1){
+          
+        sAlert.sweetError("No puede elimnar este registro","Necesitas al menos un registro");
 
-        })
+        }else if(dataStorage.length < 1){
 
-      } else {
-
+          $("#save_lots").disabled = true;
+          
+        }
 
       }
     })
@@ -1567,26 +1576,26 @@
       let lotes = document.querySelectorAll(".form-check-input.form-lotes");
 
       let counter = 0;
-      let result = 0; 
+      let result = 0;
       let arrayLotes = Array.from(lotes);
-        
-      for(lote of lotes){
+
+      for (lote of lotes) {
 
         let idactivo = lote.dataset.idactivo;
 
         let idpresupuestoEdit = lote.checked ? idpresupuestoOBT : "";
-        counter += await setIdBudget(idactivo,idpresupuestoEdit)
+        counter += await setIdBudget(idactivo, idpresupuestoEdit)
 
       }
-      
+
       if (counter) {
 
-        sAlert.sweetSuccess("Datos nuevos", `Registros Actualizados : ${counter}<br>`, () => {
+        sAlert.sweetSuccess("Datos nuevos", `Registros actualizados : ${counter}<br>`, () => {
           window.location.href = "./index.php";
         });
       } else {
-        sAlert.sweetError("No se han realizado registro", "Por favor vuelvelo a intentar");
-      }  
+        sAlert.sweetError("Lotes no actualizados", "No se ha registrado actualizaciones en los lotes");
+      }
 
     });
 
@@ -1607,6 +1616,15 @@
 
           }
         });
+
+      } else if (e.target.classList.contains("form-lotes")) {
+        let idproyecto = e.target.dataset.idproyecto;
+        let accordionHeader = e.target.closest(".accordion-header")
+        let checkAncestro = accordionHeader.querySelector(".check-proyects")
+
+        if (e.target.checked) {
+          checkAncestro.checked = true;
+        }
       }
     });
 
@@ -1653,14 +1671,21 @@
           })
       }
     });
-
+    
     getBrands();
     getCategoriesCosts();
     getFilteredLots();
 
     getBudgetsData();
     getBudgetsById(idpresupuestoOBT);
-    getDetCostByIdBudget(idpresupuestoOBT)
+    getDetCostByIdBudget(idpresupuestoOBT);
+
+    window.addEventListener("beforeunload",(e)=>{
+
+      e.preventDefault();
+      e.returnValue = "¿Estás seguro de que quieres salir?";
+      return "¿Estás seguro de que quieres salir?";
+    })
 
 
     let acordionItems = document.querySelectorAll(".accordion-item");

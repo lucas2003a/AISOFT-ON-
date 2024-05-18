@@ -62,9 +62,11 @@ if(isset($_POST["action"])){
                     "latitud"               => $_POST["latitud"],
                     "longitud"              => $_POST["longitud"],
                     "perimetro"             => $_POST["perimetro"],
+                    "idpresupuesto"         => $_POST["idpresupuesto"],
                     "propietario_lote"      => $_POST["propietario_lote"],
                     "precio_lote"           => $_POST["precio_lote"],
                     "precio_construccion"   => $_POST["precio_construccion"],
+                    "precio_venta"          => $_POST["precio_venta"],
                     "idusuario"             => 1
                     /* "idusuario"     => $_POST["idusuario"] */
                 ];
@@ -110,7 +112,8 @@ if(isset($_POST["action"])){
                     "propietario_lote"      => $_POST["propietario_lote"],
                     "precio_lote"           => $_POST["precio_lote"],
                     "precio_construccion"    => $_POST["precio_construccion"],
-                    "idusuario"             => 1
+                    "precio_venta"      => $_POST["precio_venta"],
+                    "idusuario"         => 1
                     /* "idusuario"     => $_POST["idusuario"] */
                 ];
                 

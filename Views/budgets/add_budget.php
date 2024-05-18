@@ -489,7 +489,7 @@
 
                       <div class="col-md-3">
                         <label for="cantidad" class="form-label">Cantidad</label>
-                        <input type="number" name="cantidad" id="cantidad" min="1" class="form-control" required>
+                        <input type="number" name="cantidad" id="cantidad" min="1.0" class="form-control" required>
                         <div class="invalid-feedback">
                           Necesitas ingresar la cantidad.
                         </div>
@@ -500,7 +500,7 @@
 
                       <div class="col-md-3">
                         <label for="precio_unitario" class="form-label">Precio Unitario</label>
-                        <input type="number" name="precio_unitario" id="precio_unitario" class="form-control" min="1" s required>
+                        <input type="number" name="precio_unitario" id="precio_unitario" class="form-control" min="1.0" s required>
                         <div class="invalid-feedback">
                           Necesitas ingresar el precio unitario.
                         </div>
@@ -696,940 +696,959 @@
   <script src="../../assets/js/projects/interactionForms.js"></script> -->
   <!-- <script src="../../assets/js/renderUbigeo.js"></script>  -->
   <script>
-    const global = new FunGlobal();
-    const sAlert = new Alert();
+    document.addEventListener("DOMContentLoaded", () => {
 
-    const $ = id => global.$(id);
-    const $All = id => global.$All(id);
+      const global = new FunGlobal();
+      const sAlert = new Alert();
 
-    let bootstrap;
+      const $ = id => global.$(id);
+      const $All = id => global.$All(id);
 
-    let det_casaJSON;
-    let idPresupuesto;
+      if (sessionStorage.getItem("isRecovered") == "true") {
 
-    //recuperando datos del sessionStorage
-    const dataRestored = sessionStorage.getItem("dataStoraged");
-
-    let dataStorage = JSON.parse(dataRestored) || []; //Si es falso, devuelve un array vacío
-    let nombresUnicos = [];
-    let index = localStorage.getItem("index") || 0;
-    let idpresupuesto;
-    let dataBudget = JSON.parse(sessionStorage.getItem("dataBudget")) || null;
-
-    let rowDelete = [];
-    let rowEdit = [];
-    let lastCode = false;
-    let allDataBudget;
-    let dataHeader;
-
-
-    // Valida los datos de la cabezera del presupuesto
-    function validateData(value,column,array){
-
-      return new Promise((resolve,reject)=>{
-
-        for(element of array){
-
-          let exist = array.find(element => element[column] == value);
-  
-          if(exist){
-            console.log("no validado");
-            reject();
-            sAlert.sweetWarning("Se ha encontrado coincidencias", `"${value}" ya existe, ingresa otro`);
-  
-          }else{
-            console.log("valido");
-            resolve();
-          }
-        }
-      })
-    }
-
-    //Obtiene los datos de los presupuestos
-    async function getBudgetsData(){
-
-      try {
-
-        let url = "../../Controllers/budget.controller.php";
-
-        let params = new FormData()
-
-        params.append("action", "listBudgets");
-
-        let results = await global.sendAction(url, params);
-
-        if (results) {
-
-          allDataBudget = results;
-          console.log(allDataBudget)
-        }
-      } catch (e) {
-        console.error(e);
-      }
-    }
-
-    //Cambia el idpresupuesto de un lote
-    async function setIdBudget(idactivo) {
-
-      try {
-
-        let url = "../../Controllers/asset.controller.php"
-
-        let params = new FormData();
-
-        params.append("action", "setIdBudget");
-        params.append("idactivo", idactivo);
-        params.append("idpresupuesto", dataBudget.idpresupuesto);
-
-        let result = await global.sendAction(url, params);
-
-        if (result) {
-          return result.filasAfect;
-        }
-
-      } catch (e) {
-        console.error(e);
-      }
-    }
-
-    //Agrega detalle de presupuesto
-    async function addDetCost(obj) {
-      try {
-
-        let url = "../../Controllers/cost.controller.php";
-
-        let params = new FormData();
-
-        params.append("action", "addDetailCost");
-        params.append("idpresupuesto", dataBudget.idpresupuesto);
-        params.append("idsubcategoria_costo", obj.idsubcategoria_costo);
-        params.append("idtipo_material", obj.idtipo_material)
-        params.append("detalle", obj.detalle)
-        params.append("cantidad", obj.cantidad)
-        params.append("precio_unitario", obj.precio_unitario);
-
-        let results = await global.sendAction(url, params);
-
-        if (results) {
-
-          return results.filasAfect;
-        }
-      } catch (e) {
-        console.error(e);
-      }
-    }
-
-    //Agrega presupuesto
-    async function addBudget() {
-
-      try {
-
-        let url = "../../Controllers/budget.controller.php"
-
-        let params = new FormData();
-        params.append("action", "addBudget");
-        params.append("codigo", $("#codigo").value);
-        params.append("modelo", $("#modelo").value);
-
-        let result = await global.sendAction(url, params);
-
-        if (result) {
-
-          dataHeader = result;
-          idpresupuesto = result.idpresupuesto
-
-          let data = {
-            idpresupuesto: result.idpresupuesto,
-            codigo: result.codigo,
-            modelo: result.modelo
-          };
-
-          $("#codigo").value = result.codigo;
-          $("#modelo").value = result.modelo;
-
-          sessionStorage.setItem("dataBudget", JSON.stringify(data));
-          dataBudget = JSON.parse(sessionStorage.getItem("dataBudget"));
-
-          sAlert.sweetSuccess("Éxito", "Presupuesto agregado correctamente", () => {
-            $("#add").disabled = false;
-          });
-
-        } else {
-          sAlert.error("Ocurrió un error", "No se ha podido registrar el presupuesto");
-        }
-      } catch (e) {
-        console.error(e);
-      }
-    };
-
-    //Renderiza dataStorage en la tabla
-    function renderDetbudgets(array) {
-
-      $("#table-det-budgets tbody").innerHTML = "";
-      $("#message-info").innerHTML = "";
-
-      let numRow = 1;
-
-      if (array.length > 0) {
-
-        array.forEach(element => {
-
-          let precioUnitario = +element.precio_unitario;
-          let precioUnitarioFormat = precioUnitario.toPrecision(8);
-          let total = element.precio_unitario * element.cantidad;
-          let numberFormat = total.toPrecision(8);
-          let newRow = `
-          <tr>
-            <td>${numRow}</td>
-            <td class="edit-row select text-truncate" data-subcategoria="subcategoria"data-idcategoria_costo="${element.idcategoria_costo}">${element.subcategoria_costo}</td>
-            <td class="edit-row text text-truncate" data-detalle="detalle">${element.detalle}</td>
-            <td class="edit-row number" data-cantidad="cantidad">${element.cantidad}</td>
-            <td class="edit-row number" data-precio="precio_unitario">${precioUnitarioFormat}</td>
-            <td>${numberFormat}</td>
-            <td>
-              <button type="button" data-index="${element.indice}" class="btn btn-link text-dark px-3 mb-0 save"><i data-index="${element.indice}" class="fa-solid fa-floppy-disk save"></i></button>
-              <button type="button" data-index="${element.indice}" class="btn btn-link text-danger text-gradient px-3 mb-0 delete"><i data-index="${element.indice}" class="bi bi-trash-fill delete"></i></button>
-            </td>
-          </tr>
-        `;
-
-          $("#table-det-budgets tbody").innerHTML += newRow;
-          ++numRow;
-        });
-
+        $("#codigo").disabled = true;
+        $("#modelo").disabled = true;
       } else {
-
-        let cardInfo = `
-        <div class="alert alert-info text-white" role="alert">
-          <h4 class="alert-heading">No hay registros</h4>
-          <hr />
-          <p class="mb-0">Necesitas registrar un item</p>
-          </div>
-        `;
-
-        $("#message-info").innerHTML = cardInfo;
+        $("#codigo").disabled = false;
+        $("#modelo").disabled = false;
       }
 
-    };
+      let bootstrap;
 
-    //Almacenar data en un array
-    function storageData() {
+      let det_casaJSON;
+      let idPresupuesto;
 
-      let data = {};
-      if ($("#inputs_materials").classList.contains("d-none")) {
+      //recuperando datos del sessionStorage
+      const dataRestored = sessionStorage.getItem("dataStoraged");
 
-        data = {
-          indice: Number.parseInt(index),
-          idcategoria_costo: Number.parseInt($("#categoria_costo").value),
-          idsubcategoria_costo: Number.parseInt($("#subcategoria_costo").value),
-          subcategoria_costo: $("#subcategoria_costo").options[$("#subcategoria_costo").selectedIndex].textContent,
-          idmaterial: null,
-          detalle: $("#detalle").value,
-          cantidad: Number.parseInt($("#cantidad").value),
-          precio_unitario: Number.parseInt($("#precio_unitario").value)
-        };
-      } else {
+      let dataStorage = JSON.parse(dataRestored) || []; //Si es falso, devuelve un array vacío
+      let nombresUnicos = [];
+      let index = Number.parseInt(localStorage.getItem("index")) || 0;
+      let idpresupuesto;
+      let dataBudget = JSON.parse(sessionStorage.getItem("dataBudget")) || null;
 
-        let marca = $("#marca").options[$("#marca").selectedIndex].textContent;
-        let material = $("#material").options[$("#material").selectedIndex].textContent;
-        let unidad_medida = $("#material").options[$("#material").selectedIndex].dataset.uni_medida;
+      let rowDelete = [];
+      let rowEdit = [];
+      let lastCode = false;
+      let allDataBudget;
 
-        data = {
-          indice: Number.parseInt(index),
-          idcategoria_costo: Number.parseInt($("#categoria_costo").value),
-          idsubcategoria_costo: Number.parseInt($("#subcategoria_costo").value),
-          subcategoria_costo: $("#subcategoria_costo").options[$("#subcategoria_costo").selectedIndex].textContent,
-          idmaterial: Number.parseInt($("#tipo_material").value),
-          detalle: marca + " // " + material + " // " + unidad_medida,
-          cantidad: Number.parseInt($("#cantidad").value),
-          precio_unitario: Number.parseInt($("#precio_unitario").value)
-        }
-      }
+      // Valida los datos de la cabezera del presupuesto
+      function validateData(value, column, array) {
 
-      ++index;
-      localStorage.setItem("index", index); //Guardando el contador
+        return new Promise((resolve, reject) => {
 
-      dataStorage.push(data);
-      renderDetbudgets(dataStorage);
+          for (element of array) {
 
-      //Almacenando en sessionStorage
-      const arrayConverted = JSON.stringify(dataStorage);
-      sessionStorage.setItem("dataStoraged", arrayConverted);
+            let exist = array.find(element => element[column] == value);
 
-      $("#save_lots").disabled = false;
-    };
-
-    //Obtiene las marcas
-    async function getBrands() {
-
-      try {
-
-        let url = "../../Controllers/brand.controller.php";
-
-        let params = new FormData();
-        params.append("action", "listBrand")
-
-        let results = await global.sendAction(url, params);
-
-        if (results.length > 0) {
-
-          results.forEach(result => {
-
-            let newTag = document.createElement("option");
-            newTag.value = result.idmarca;
-            newTag.innerText = result.marca;
-
-            $("#marca").appendChild(newTag);
-          });
-        } else {
-          let message = "Marcas";
-
-          let newTag = document.createElement("option");
-          newTag.value = "";
-          newTag.innerText = message;
-
-          $("#marca").appendChild(newTag);
-        }
-      } catch (e) {
-        console.error(e);
-      }
-    };
-
-    //Obtiene los materiales
-    async function getMaterials(idmarca) {
-      try {
-
-        let url = "../../Controllers/material.controller.php";
-
-        let params = new FormData();
-        params.append("action", "listMaterials");
-        params.append("idmarca", idmarca);
-
-        let results = await global.sendAction(url, params);
-
-        if (results.length > 0) {
-
-          //Opcion por defecto
-          let tagDefault = document.createElement("option");
-          tagDefault.value = "";
-          tagDefault.textContent = "Seleccione un material";
-          tagDefault.selected = true;
-
-          $("#material").append(tagDefault);
-
-          results.forEach(result => {
-
-            let newTag = document.createElement("option");
-            newTag.value = result.idmaterial;
-            newTag.innerText = result.material;
-            newTag.dataset.uni_medida = result.unidad_medida
-
-            $("#material").appendChild(newTag);
-          });
-        } else {
-          let message = "Material";
-
-          let newTag = document.createElement("option");
-          newTag.value = "";
-          newTag.innerText = message;
-
-          $("#material").appendChild(newTag);
-        }
-      } catch (e) {
-        console.error(e);
-      }
-    };
-
-    //Obtiene las caregorias de los costos
-    async function getCategoriesCosts() {
-
-      try {
-
-        let url = "../../Controllers/cost.controller.php";
-        let params = new FormData();
-        params.append("action", "listCategory");
-
-        let results = await global.sendAction(url, params);
-
-        if (results.length > 0) {
-
-          results.forEach(result => {
-
-            let tagOption = document.createElement("option");
-            tagOption.value = result.idcategoria_costo;
-            tagOption.innerText = result.categoria_costo;
-
-            $("#categoria_costo").appendChild(tagOption);
-
-          })
-        } else {
-          let message = "Categoría";
-
-          $("#categoria_costo").appendChild(newTag);
-        }
-      } catch (e) {
-
-      }
-    };
-
-    //Obtiene las subcategorías de los costos, según ka categoría
-    async function getSubcategoriesCosts(categoria) {
-
-      try {
-
-        let url = "../../Controllers/cost.controller.php";
-
-        let params = new FormData();
-        params.append("action", "listSubcategory")
-        params.append("idcategoria_costo", categoria)
-
-        let results = await global.sendAction(url, params);
-
-        if (results.length > 0) {
-
-          //Opción por defecto
-          let tagOption = document.createElement("option");
-          tagOption.value = "";
-          tagOption.innerText = "Seleccione una subcategoría";
-          tagOption.selected = true;
-
-          $("#subcategoria_costo").appendChild(tagOption);
-
-          results.forEach(result => {
-
-            let tagOption = document.createElement("option");
-            tagOption.value = result.idsubcategoria_costo;
-            tagOption.innerText = result.subcategoria_costo;
-            tagOption.setAttribute("data-material", result.requiere_material);
-
-            $("#subcategoria_costo").appendChild(tagOption);
-          });
-        } else {
-          let message = "Subcategoría";
-
-          let newTag = document.createElement("option");
-          newTag.value = "";
-          newTag.innerText = message;
-
-          $("#subcategoria_costo").appendChild(newTag);
-        }
-      } catch (e) {
-        console.error(e);
-      }
-    };
-
-    //Obtiene las subcategorías de los costos, según ka categoría (SOLO LOS DATOS) usado en los selects de la tabla
-    async function getSubcategoriesCostsData(categoria) {
-
-      try {
-
-        let url = "../../Controllers/cost.controller.php";
-
-        let params = new FormData();
-        params.append("action", "listSubcategory")
-        params.append("idcategoria_costo", categoria)
-
-        let results = await global.sendAction(url, params);
-
-        if (results.length > 0) {
-
-
-          return results;
-        } else {
-          let message = "Subcategoría";
-
-          let newTag = document.createElement("option");
-          newTag.value = "";
-          newTag.innerText = message;
-
-          $("#subcategoria_costo").appendChild(newTag);
-        }
-      } catch (e) {
-        console.error(e);
-      }
-    };
-
-    //Renderiza los botones del acordion
-    function renderAccordionButtons(array, array2) {
-
-      for (element of array) {
-
-        let newButton = "";
-        let newContent = "";
-
-        array2.forEach(element2 => {
-
-          if (element.idproyecto == element2.idproyecto) {
-
-            newContent += `
-          <div id="flush-collapse-${element.idproyecto}" class="accordion-collapse collapse" data-bs-parent="#accordion-proyectos">
-            <div class="form-check" style="margin: 0px 20px; display:flex; align-content:center;">
-              <input class="form-check-input form-lotes" type="checkbox" style="height:20px;" data-idactivo="${element2.idactivo}" data-idproyecto="${element2.idproyecto}" name="data-lotes"/>
-              <label class="form-check-label" for="sublote" style="font-size:10px; margin-top:10px;"> 
-                Lote - ${element2.sublote}
-              </label>
-            </div>
-          </div>
-          `;
-          }
-        })
-
-        newButton = `
-      
-      <div class="accordion-item">
-        <h2 class="accordion-header">
-          <div class="form-check form-proyects">
-            <input class="form-check-input check-proyects" type="checkbox" style="height:30px;" data-idproyecto="${element.idproyecto}" name="data-proyectos"/>
-            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapse-${element.idproyecto}" aria-expanded="false" aria-controls="flush-collapse-${element.idproyecto}">
-              <label class="form-check-label" for="denominacion" style="font-size:10px;"> <strong>${element.denominacion}</strong> </label>
-            </button>
-          </div>
-          <div class="scrollable-content">
-            ${newContent}
-          </div>  
-        </h2>
-      </div>
-      `;
-
-        $("#accordion-proyectos").innerHTML += newButton;
-      }
-    };
-
-    //Obtiene los lotes sin presupuesto
-    async function getLotsAll() {
-
-      try {
-
-        let url = "../../Controllers/asset.controller.php";
-
-        let params = new FormData();
-        params.append("action", "listLotsNoBudget");
-
-        let results = await global.sendAction(url, params);
-
-        if (results) {
-
-          results.forEach(result => {
-
-            let nombresExist = nombresUnicos.find(nombre => nombre.idproyecto == result.idproyecto && nombre.denominacion == result.denominacion);
-
-            if (!nombresExist) {
-              nombresUnicos.push({
-                idproyecto: result.idproyecto,
-                denominacion: result.denominacion
-              })
-            }
-          })
-
-
-          renderAccordionButtons(nombresUnicos, results);
-        }
-
-      } catch (e) {
-        console.error(e);
-      }
-    };
-
-    //Oculta/muestra los inputs
-    function toggleInputs(required) {
-
-      if (!required) {
-
-        $("#marca").required = false;
-        $("#material").required = false;
-        $("#tipo_material").required = false;
-        $("#detalle").disabled = false
-      } else {
-        $("#marca").required = true;
-        $("#material").required = true;
-        $("#tipo_material").required = true;
-        $("#detalle").disabled = true;
-      }
-    };
-
-    //Convierte los inputs a textos <td>
-    function convertText(tr, index) {
-
-      let tds = tr.querySelectorAll("td");
-
-      Array.from(tds).forEach(td => {
-
-        if (td.querySelector("select")) {
-          let select = td.querySelector("select");
-
-          let content = select.options[select.selectedIndex].textContent;
-
-
-          dataStorage[index].idsubcategoria_costo = select.value;
-          dataStorage[index].subcategoria_costo = content;
-
-          td.textContent = content;
-
-        } else if (td.querySelector("input")) {
-          let input = td.querySelector("input");
-
-          dataStorage[index][input.name] = input.value;
-          td.textContent = input.value;
-
-        }
-      })
-
-      //Almacena en sessionStorage
-      const dataEdit = JSON.stringify(dataStorage);
-      sessionStorage.setItem("dataStoraged", dataEdit);
-      renderDetbudgets(dataStorage);
-    };
-
-    //Valida el formulario
-    async function validateForm(form, callback) {
-      return new Promise((resolve, reject) => {
-
-        'use strict'
-
-        const forms = document.querySelectorAll(form)
-
-        Array.from(forms).forEach(form => {
-          form.addEventListener('submit', event => {
-
-            if (!form.checkValidity()) {
-              event.preventDefault() //=> FRENA EL ENVÍO DEL FORMULARIO
-              event.stopPropagation() //=> FRENA LA PROPAGACIÓN DE DATOS EN EL FORMULARIO
-              form.reportValidity();
+            if (exist) {
 
               reject();
+              sAlert.sweetWarning("Se ha encontrado coincidencias", `"${value}" ya existe, ingresa otro`);
+
             } else {
-
-              event.preventDefault();
-
-              sAlert.sweetConfirm("Datos nuevos", "¿Deseas actualizar el registro?", () => {
-
-                callback()
-                form.reset();
-                form.classList.remove("was-validated")
-
-              });
 
               resolve();
             }
-
-            form.classList.add('was-validated') //=> AGREGA ESTA CLASE A LOS ELEMENTOS DEL FORMULARIO(MUESTRA LOS COMENTARIOS)
-          }, false) //=> ESTE TERCER ARGUMENTO INDICA QUE EL EVENTO NO SE ESTA CAPTURANDO EN LA ""FASE DE CAPTURA" SINO EN "PROPAGACIÓN NORMAL"
-        })
-
-      });
-    };
-
-    $("#marca").addEventListener("change", (e) => {
-
-      let idmarca = $("#marca").value
-      $("#material").innerHTML = "";
-
-      getMaterials(idmarca)
-    });
-
-    $("#categoria_costo").addEventListener("change", (e) => {
-
-
-      $("#subcategoria_costo").innerHTML = "";
-      getSubcategoriesCosts(e.target.value);
-
-      if (e.target.value == 2) {
-        $("#inputs_materials").classList.add("d-none");
-      }
-    });
-
-    $("#subcategoria_costo").addEventListener("change", (e) => {
-
-      let required = false;
-
-      let option = e.target.options[e.target.selectedIndex].dataset.material;
-      if (option == "NO") {
-
-        required = false;
-        $("#inputs_materials").classList.add("d-none");
-        toggleInputs(required)
-
-
-      } else {
-
-        required = true;
-        $("#inputs_materials").classList.remove("d-none");
-        toggleInputs(required);
-      }
-    });
-
-    $("#table-det-budgets tbody").addEventListener("click", async function(e) {
-
-      if (e.target.classList.contains("edit-row")) {
-
-
-        if (e.target.classList.contains("select")) {
-
-          let idcategoria = Number.parseInt(e.target.dataset.idcategoria_costo);
-
-
-          let tagSelect = document.createElement("select");
-          tagSelect.name = e.target.dataset.subcategoria;
-          tagSelect.classList.add("form-select");
-
-          let dataSubcategorias = await getSubcategoriesCostsData(idcategoria);
-
-
-          dataSubcategorias.forEach(subcategoria => {
-
-            let tagOption = document.createElement("option");
-            tagOption.value = subcategoria.idsubcategoria_costo;
-            tagOption.innerText = subcategoria.subcategoria_costo;
-
-            tagSelect.appendChild(tagOption);
-          });
-
-          e.target.textContent = "";
-          let td = e.target.closest("td");
-
-          td.appendChild(tagSelect);
-
-        } else if (e.target.classList.contains("text")) {
-
-          let input = document.createElement("input");
-          input.type = "text";
-          input.classList.add("form-control");
-          input.name = e.target.dataset.detalle
-          input.required = true;
-          input.focus()
-          input.value = e.target.textContent;
-
-          let td = e.target.closest("td")
-          e.target.textContent = "";
-          td.appendChild(input);
-
-        } else if (e.target.classList.contains("number")) {
-
-          let inputNumber = document.createElement("input");
-          inputNumber.type = "number";
-          inputNumber.classList.add("form-control");
-          inputNumber.name = e.target.dataset.cantidad ? e.target.dataset.cantidad : e.target.dataset.precio
-          inputNumber.focus();
-          inputNumber.min = 1;
-          inputNumber.value = Number.parseInt(e.target.textContent)
-
-          let td = e.target.closest("td")
-          e.target.textContent = "";
-          td.appendChild(inputNumber);
-
-        }
-
-      } else if (e.target.classList.contains("save")) {
-
-
-        let tr = e.target.closest("tr");
-        let index = e.target.dataset.index;
-
-
-        convertText(tr, index);
-
-      } else if (e.target.classList.contains("delete")) {
-
-
-        sAlert.sweetConfirm("¿Deseas eliminar el registro?", "", () => {
-
-
-          let indexDelete = dataStorage.filter(data => {
-            if (data.indice == e.target.dataset.index) {
-              return data.indice
-            }
-          });
-
-
-          if (indexDelete.length > 0) {
-
-
-            let indexDrop = indexDelete[0];
-            //El metodo splice borra un elemento especificando su indice y cuandas coincidencias(indice, n de coindicencias)
-            dataStorage.forEach(element => {
-
-              if (element.indice == indexDrop.indice) {
-
-                dataStorage.splice(dataStorage.indexOf(element), 1); //Splice solo funciona con arrays y indeof obtien el indice de un objeto seleccionado
-              }
-            });
           }
+        })
+      }
 
+      //Obtiene los datos de los presupuestos
+      async function getBudgetsData() {
 
-          sessionStorage.setItem("dataStoraged", JSON.stringify(dataStorage));
-          renderDetbudgets(dataStorage);
+        try {
 
-          if (dataStorage.length == 0) {
-            $("#save_lots").disabled = true;
+          let url = "../../Controllers/budget.controller.php";
+
+          let params = new FormData()
+
+          params.append("action", "listBudgets");
+
+          let results = await global.sendAction(url, params);
+
+          if (results) {
+
+            allDataBudget = results;
+
           }
-
-          let tr = e.target.closest("tr");
-          tr.remove();
-
-        })
-
-      } else {
-
-
-      }
-    })
-
-    $("#codigo").addEventListener("blur", (e) => {
-
-      e.preventDefault();
-
-      if (!lastCode) {
-
-        currentCode = "PRES-" + $("#codigo").value.toString().padStart(3, "0");
-        $("#codigo").value = currentCode;
-        lastCode = true;
-      }
-
-      if($("#codigo").value !=="" && $("#codigo").value !== dataHeader.codigo){
-
-        validateData($("#codigo").value,"codigo",allDataBudget)
-        .then(()=>{
-          $("#modelo").focus();
-        })
-        .catch(e=>{
+        } catch (e) {
           console.error(e);
-          $("#codigo").focus();
-        });
+        }
       }
-    })
 
-    $("#codigo").addEventListener("input", (e) => {
-      if ($("#codigo").value == "") {
-        lastCode = false;
-      }
-    });
+      //Cambia el idpresupuesto de un lote
+      async function setIdBudget(idactivo) {
 
-    $("#save_lots").addEventListener("click", async function() {
+        try {
 
-      let lotes = document.querySelectorAll(".form-check-input.form-lotes");
+          let url = "../../Controllers/asset.controller.php"
 
-      let counter = 0;
-      let arrayLotes = Array.from(lotes);
-      let resultDet = 0;
-      let counterDet = 0;
+          let params = new FormData();
 
-      for (lote of arrayLotes) {
+          params.append("action", "setIdBudget");
+          params.append("idactivo", idactivo);
+          params.append("idpresupuesto", dataBudget.idpresupuesto);
 
+          let result = await global.sendAction(url, params);
 
-        if (lote.checked) {
-
-          let idactivo = Number.parseInt(lote.dataset.idactivo);
-          for (data of dataStorage) {
-
-            resultDet = await addDetCost(data);
-            counterDet += resultDet
-          };
-
-          if (resultDet > 0) {
-
-            let result = await setIdBudget(idactivo);
-
-            counter += result;
+          if (result) {
+            return result.filasAfect;
           }
+
+        } catch (e) {
+          console.error(e);
+        }
+      }
+
+      //Agrega detalle de presupuesto
+      async function addDetCost(obj) {
+        try {
+
+          let url = "../../Controllers/cost.controller.php";
+
+          let params = new FormData();
+
+          params.append("action", "addDetailCost");
+          params.append("idpresupuesto", dataBudget.idpresupuesto);
+          params.append("idsubcategoria_costo", obj.idsubcategoria_costo);
+          params.append("idmaterial", obj.idmaterial)
+          params.append("detalle", obj.detalle)
+          params.append("cantidad", obj.cantidad)
+          params.append("precio_unitario", obj.precio_unitario);
+
+          let results = await global.sendAction(url, params);
+
+          if (results) {
+
+            return results.filasAfect;
+          }
+        } catch (e) {
+          console.error(e);
+        }
+      }
+
+      //Agrega presupuesto
+      async function addBudget() {
+
+        try {
+
+          let url = "../../Controllers/budget.controller.php"
+
+          let params = new FormData();
+          params.append("action", "addBudget");
+          params.append("codigo", $("#codigo").value);
+          params.append("modelo", $("#modelo").value);
+
+          let result = await global.sendAction(url, params);
+
+          if (result) {
+
+            isRecovering = true;
+            idpresupuesto = result.idpresupuesto
+
+            let data = {
+              idpresupuesto: result.idpresupuesto,
+              codigo: result.codigo,
+              modelo: result.modelo
+            };
+
+            $("#codigo").value = result.codigo;
+            $("#modelo").value = result.modelo;
+
+            sessionStorage.setItem("dataBudget", JSON.stringify(data));
+            dataBudget = JSON.parse(sessionStorage.getItem("dataBudget"));
+
+            sAlert.sweetSuccess("Éxito", "Presupuesto agregado correctamente", () => {
+              sessionStorage.setItem("isRecovered", "true");
+              $("#codigo").disabled = true;
+              $("#modelo").disabled = true;
+              $("#add").disabled = false;
+            });
+
+          } else {
+            sAlert.sweetError("Ocurrió un error", "No se ha podido registrar el presupuesto");
+          }
+        } catch (e) {
+          console.error(e);
         }
       };
 
-      if (counter) {
+      //Renderiza dataStorage en la tabla
+      function renderDetbudgets(array) {
 
-        sAlert.sweetSuccess("Datos nuevos", `Registros actualizados : ${counter}`, () => {
-          window.location.href = "./index.php";
-        });
-      } else {
-        sAlert.sweetError("No se han realizado registro", "Por favor vuelvelo a intentar");
-      }
+        $("#table-det-budgets tbody").innerHTML = "";
+        $("#message-info").innerHTML = "";
 
-    });
+        let numRow = 1;
 
-    $("#list-proyectos").addEventListener("click", (e) => {
+        if (array.length > 0) {
 
-      if (e.target.classList.contains("check-proyects")) {
+          array.forEach(element => {
 
-        let idproyecto = e.target.dataset.idproyecto;
-        let isChecked = e.target.checked;
-        let contents = document.querySelectorAll(".form-check-input.form-lotes");
+            let precioUnitario = +element.precio_unitario;
+            let precioUnitarioFormat = precioUnitario.toPrecision(8);
+            let total = element.precio_unitario * element.cantidad;
+            let numberFormat = total.toPrecision(8);
+            let newRow = `
+            <tr data-index_tr="${element.indice}">
+              <td>${numRow}</td>
+              <td class="edit-row select text-truncate" data-subcategoria="subcategoria"data-idcategoria_costo="${element.idcategoria_costo}">${element.subcategoria_costo}</td>
+              <td class="edit-row text text-truncate" data-detalle="detalle">${element.detalle}</td>
+              <td class="edit-row number" data-cantidad="cantidad">${element.cantidad}</td>
+              <td class="edit-row number" data-precio="precio_unitario">${precioUnitarioFormat}</td>
+              <td>${numberFormat}</td>
+              <td>
+                <button type="button" data-index="${element.indice}" class="btn btn-link text-dark px-3 mb-0 save"><i data-index="${element.indice}" class="fa-solid fa-floppy-disk save"></i></button>
+                <button type="button" data-index="${element.indice}" class="btn btn-link text-danger text-gradient px-3 mb-0 delete"><i data-index="${element.indice}" class="bi bi-trash-fill delete"></i></button>
+              </td>
+            </tr>
+          `;
 
-        Array.from(contents).forEach(content => {
-
-          let idproyectoLote = content.dataset.idproyecto
-
-          if (idproyectoLote == idproyecto) {
-            content.checked = isChecked;
-
-          }
-        });
-      }
-    });
-
-    $("#form-budget").addEventListener("submit", (e) => {
-
-      e.preventDefault();
-      let codigo = $("#codigo").value;
-      let modelo = $("#modelo").value;
-
-      validateForm("#form-budget", addBudget)
-        .then(() => {
-
-          Array.from(document.querySelectorAll("#form-budget input")).forEach(input => {
-
-            input.readOnly = true;
+            $("#table-det-budgets tbody").innerHTML += newRow;
+            ++numRow;
           });
 
-          $("#form-budget button").disabled = true;
-        })
-        .catch(e => {
+        } else {
+
+          let cardInfo = `
+          <div class="alert alert-info text-white" role="alert">
+            <h4 class="alert-heading">No hay registros</h4>
+            <hr />
+            <p class="mb-0">Necesitas registrar un item</p>
+            </div>
+          `;
+
+          $("#message-info").innerHTML = cardInfo;
+        }
+
+      };
+
+      //Almacena data en un array
+      function storageData() {
+
+        let data = {};
+        if ($("#inputs_materials").classList.contains("d-none")) {
+
+          data = {
+            indice: Number.parseInt(index),
+            idcategoria_costo: Number.parseInt($("#categoria_costo").value),
+            idsubcategoria_costo: Number.parseInt($("#subcategoria_costo").value),
+            subcategoria_costo: $("#subcategoria_costo").options[$("#subcategoria_costo").selectedIndex].textContent,
+            idmaterial: null,
+            detalle: $("#detalle").value,
+            cantidad: Number.parseInt($("#cantidad").value),
+            precio_unitario: Number.parseInt($("#precio_unitario").value)
+          };
+        } else {
+
+          let marca = $("#marca").options[$("#marca").selectedIndex].textContent;
+          let material = $("#material").options[$("#material").selectedIndex].textContent;
+          let unidad_medida = $("#material").options[$("#material").selectedIndex].dataset.uni_medida;
+
+          data = {
+            indice: Number.parseInt(index),
+            idcategoria_costo: Number.parseInt($("#categoria_costo").value),
+            idsubcategoria_costo: Number.parseInt($("#subcategoria_costo").value),
+            subcategoria_costo: $("#subcategoria_costo").options[$("#subcategoria_costo").selectedIndex].textContent,
+            idmaterial: Number.parseInt($("#material").value),
+            detalle: marca + " // " + material + " // " + unidad_medida,
+            cantidad: Number.parseInt($("#cantidad").value),
+            precio_unitario: Number.parseInt($("#precio_unitario").value)
+          }
+        }
+
+        ++index;
+        localStorage.setItem("index", index); //Guardando el contador
+
+        dataStorage.push(data);
+        renderDetbudgets(dataStorage);
+
+        //Almacenando en sessionStorage
+        const arrayConverted = JSON.stringify(dataStorage);
+        sessionStorage.setItem("dataStoraged", arrayConverted);
+
+        $("#save_lots").disabled = false;
+      };
+
+      //Obtiene las marcas
+      async function getBrands() {
+
+        try {
+
+          let url = "../../Controllers/brand.controller.php";
+
+          let params = new FormData();
+          params.append("action", "listBrand")
+
+          let results = await global.sendAction(url, params);
+
+          if (results.length > 0) {
+
+            results.forEach(result => {
+
+              let newTag = document.createElement("option");
+              newTag.value = result.idmarca;
+              newTag.innerText = result.marca;
+
+              $("#marca").appendChild(newTag);
+            });
+          } else {
+            let message = "Marcas";
+
+            let newTag = document.createElement("option");
+            newTag.value = "";
+            newTag.innerText = message;
+
+            $("#marca").appendChild(newTag);
+          }
+        } catch (e) {
           console.error(e);
-        });
+        }
+      };
 
-    })
+      //Obtiene los materiales
+      async function getMaterials(idmarca) {
+        try {
 
-    $("#form_det_budget").addEventListener("submit", (e) => {
-      e.preventDefault(e)
-      validateForm("#form_det_budget", storageData);
-    })
+          let url = "../../Controllers/material.controller.php";
 
-    $("#modelo").addEventListener("blur",(e)=>{
-      e.preventDefault();
+          let params = new FormData();
+          params.append("action", "listMaterials");
+          params.append("idmarca", idmarca);
 
-      if($("#modelo").value !== "" && $("#modelo").value !== dataHeader.modelo){
+          let results = await global.sendAction(url, params);
+
+          if (results.length > 0) {
+
+            //Opcion por defecto
+            let tagDefault = document.createElement("option");
+            tagDefault.value = "";
+            tagDefault.textContent = "Seleccione un material";
+            tagDefault.selected = true;
+
+            $("#material").append(tagDefault);
+
+            results.forEach(result => {
+
+              let newTag = document.createElement("option");
+              newTag.value = result.idmaterial;
+              newTag.innerText = result.material;
+              newTag.dataset.uni_medida = result.unidad_medida;
+              newTag.dataset.precio = result.precio_unitario;
+
+              $("#material").appendChild(newTag);
+            });
+          } else {
+            let message = "Material";
+
+            let newTag = document.createElement("option");
+            newTag.value = "";
+            newTag.innerText = message;
+
+            $("#material").appendChild(newTag);
+          }
+        } catch (e) {
+          console.error(e);
+        }
+      };
+
+      //Obtiene las caregorias de los costos
+      async function getCategoriesCosts() {
+
+        try {
+
+          let url = "../../Controllers/cost.controller.php";
+          let params = new FormData();
+          params.append("action", "listCategory");
+
+          let results = await global.sendAction(url, params);
+
+          if (results.length > 0) {
+
+            results.forEach(result => {
+
+              let tagOption = document.createElement("option");
+              tagOption.value = result.idcategoria_costo;
+              tagOption.innerText = result.categoria_costo;
+
+              $("#categoria_costo").appendChild(tagOption);
+
+            })
+          } else {
+            let message = "Categoría";
+
+            $("#categoria_costo").appendChild(newTag);
+          }
+        } catch (e) {
+
+        }
+      };
+
+      //Obtiene las subcategorías de los costos, según ka categoría
+      async function getSubcategoriesCosts(categoria) {
+
+        try {
+
+          let url = "../../Controllers/cost.controller.php";
+
+          let params = new FormData();
+          params.append("action", "listSubcategory")
+          params.append("idcategoria_costo", categoria)
+
+          let results = await global.sendAction(url, params);
+
+          if (results.length > 0) {
+
+            //Opción por defecto
+            let tagOption = document.createElement("option");
+            tagOption.value = "";
+            tagOption.innerText = "Seleccione una subcategoría";
+            tagOption.selected = true;
+
+            $("#subcategoria_costo").appendChild(tagOption);
+
+            results.forEach(result => {
+
+              let tagOption = document.createElement("option");
+              tagOption.value = result.idsubcategoria_costo;
+              tagOption.innerText = result.subcategoria_costo;
+              tagOption.setAttribute("data-material", result.requiere_material);
+
+              $("#subcategoria_costo").appendChild(tagOption);
+            });
+          } else {
+            let message = "Subcategoría";
+
+            let newTag = document.createElement("option");
+            newTag.value = "";
+            newTag.innerText = message;
+
+            $("#subcategoria_costo").appendChild(newTag);
+          }
+        } catch (e) {
+          console.error(e);
+        }
+      };
+
+      //Obtiene las subcategorías de los costos, según ka categoría (SOLO LOS DATOS) usado en los selects de la tabla
+      async function getSubcategoriesCostsData(categoria) {
+
+        try {
+
+          let url = "../../Controllers/cost.controller.php";
+
+          let params = new FormData();
+          params.append("action", "listSubcategory")
+          params.append("idcategoria_costo", categoria)
+
+          let results = await global.sendAction(url, params);
+
+          if (results.length > 0) {
+
+
+            return results;
+          } else {
+            let message = "Subcategoría";
+
+            let newTag = document.createElement("option");
+            newTag.value = "";
+            newTag.innerText = message;
+
+            $("#subcategoria_costo").appendChild(newTag);
+          }
+        } catch (e) {
+          console.error(e);
+        }
+      };
+
+      //Renderiza los botones del acordion
+      function renderAccordionButtons(array, array2) {
+
+        for (element of array) {
+
+          let newButton = "";
+          let newContent = "";
+
+          array2.forEach(element2 => {
+
+            if (element.idproyecto == element2.idproyecto) {
+
+              newContent += `
+            <div id="flush-collapse-${element.idproyecto}" class="accordion-collapse collapse" data-bs-parent="#accordion-proyectos">
+              <div class="form-check" style="margin: 0px 20px; display:flex; align-content:center;">
+                <input class="form-check-input form-lotes" type="checkbox" style="height:20px;" data-idactivo="${element2.idactivo}" data-idproyecto="${element2.idproyecto}" name="data-lotes"/>
+                <label class="form-check-label" for="sublote" style="font-size:10px; margin-top:10px;"> 
+                  Lote - ${element2.sublote}
+                </label>
+              </div>
+            </div>
+            `;
+            }
+          })
+
+          newButton = `
         
-        validateData($("#modelo").value,"modelo",allDataBudget)
-        .then(()=>{
-  
-          $("#save_budget").disabled = false;
-        })
-        .catch(e=>{
+        <div class="accordion-item">
+          <h2 class="accordion-header">
+            <div class="form-check form-proyects">
+              <input class="form-check-input check-proyects" type="checkbox" style="height:30px;" data-idproyecto="${element.idproyecto}" name="data-proyectos"/>
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapse-${element.idproyecto}" aria-expanded="false" aria-controls="flush-collapse-${element.idproyecto}">
+                <label class="form-check-label" for="denominacion" style="font-size:10px;"> <strong>${element.denominacion}</strong> </label>
+              </button>
+            </div>
+            <div class="scrollable-content">
+              ${newContent}
+            </div>  
+          </h2>
+        </div>
+        `;
+
+          $("#accordion-proyectos").innerHTML += newButton;
+        }
+      };
+
+      //Obtiene los lotes sin presupuesto
+      async function getLotsAll() {
+
+        try {
+
+          let url = "../../Controllers/asset.controller.php";
+
+          let params = new FormData();
+          params.append("action", "listLotsNoBudget");
+
+          let results = await global.sendAction(url, params);
+
+          if (results) {
+
+            results.forEach(result => {
+
+              let nombresExist = nombresUnicos.find(nombre => nombre.idproyecto == result.idproyecto && nombre.denominacion == result.denominacion);
+
+              if (!nombresExist) {
+                nombresUnicos.push({
+                  idproyecto: result.idproyecto,
+                  denominacion: result.denominacion
+                })
+              }
+            })
+
+
+            renderAccordionButtons(nombresUnicos, results);
+          }
+
+        } catch (e) {
           console.error(e);
-          $("#modelo").focus();
+        }
+      };
+
+      //Oculta/muestra los inputs
+      function toggleInputs(required) {
+
+        if (!required) {
+
+          $("#marca").required = false;
+          $("#material").required = false;
+          $("#detalle").disabled = false
+        } else {
+          $("#marca").required = true;
+          $("#material").required = true;
+          $("#detalle").disabled = true;
+        }
+      };
+
+      //Convierte los inputs a textos <td>
+      function convertText(tr, indexElement) {
+
+        let tds = tr.querySelectorAll("td");
+
+        Array.from(tds).forEach(td => {
+
+          let indexObject = dataStorage.find(data => data.indice == indexElement)
+          if (indexObject) {
+            indexObject = dataStorage.indexOf(indexObject);
+          };
+
+          if (td.querySelector("select")) {
+            let select = td.querySelector("select");
+
+            let content = select.options[select.selectedIndex].textContent;
+
+
+            dataStorage[indexObject].idsubcategoria_costo = select.value;
+            dataStorage[indexObject].subcategoria_costo = content;
+
+            td.textContent = content;
+
+          } else if (td.querySelector("input")) {
+            let input = td.querySelector("input");
+            console.log(input)
+            dataStorage[indexObject][input.name] = input.value;
+            td.textContent = input.value;
+
+          }
+        })
+
+        //Almacena en sessionStorage
+        const dataEdit = JSON.stringify(dataStorage);
+        sessionStorage.setItem("dataStoraged", dataEdit);
+      };
+
+      //Valida el formulario
+      async function validateForm(form, callback) {
+        return new Promise((resolve, reject) => {
+
+          'use strict'
+
+          const forms = document.querySelectorAll(form)
+
+          Array.from(forms).forEach(form => {
+            form.addEventListener('submit', event => {
+
+              if (!form.checkValidity()) {
+                event.preventDefault() //=> FRENA EL ENVÍO DEL FORMULARIO
+                event.stopPropagation() //=> FRENA LA PROPAGACIÓN DE DATOS EN EL FORMULARIO
+                form.reportValidity();
+
+                reject();
+              } else {
+
+                event.preventDefault();
+
+                sAlert.sweetConfirm("Datos nuevos", "¿Deseas actualizar el registro?", () => {
+
+                  callback()
+                  form.reset();
+                  form.classList.remove("was-validated")
+
+                });
+
+                resolve();
+              }
+
+              form.classList.add('was-validated') //=> AGREGA ESTA CLASE A LOS ELEMENTOS DEL FORMULARIO(MUESTRA LOS COMENTARIOS)
+            }, false) //=> ESTE TERCER ARGUMENTO INDICA QUE EL EVENTO NO SE ESTA CAPTURANDO EN LA ""FASE DE CAPTURA" SINO EN "PROPAGACIÓN NORMAL"
+          })
+
         });
-      }
-    });
+      };
 
-    getBrands();
-    getCategoriesCosts();
-    getLotsAll();
-    renderDetbudgets(dataStorage);
-    getBudgetsData();
+      $("#material").addEventListener("change",()=>{
 
-    if (dataStorage.length > 0) {
+        let precio = Number.parseFloat($("#material").options[$("#material").selectedIndex].dataset.precio);
+        console.log(precio)
+        $("#precio_unitario").value = precio
+      });
+
+      $("#marca").addEventListener("change", (e) => {
+
+        let idmarca = $("#marca").value
+        $("#material").innerHTML = "";
+
+        getMaterials(idmarca)
+      });
+
+      $("#categoria_costo").addEventListener("change", (e) => {
+
+
+        $("#subcategoria_costo").innerHTML = "";
+        getSubcategoriesCosts(e.target.value);
+
+        if (e.target.value == 2) {
+          $("#inputs_materials").classList.add("d-none");
+        }
+      });
+
+      $("#subcategoria_costo").addEventListener("change", (e) => {
+
+        let required = false;
+
+        let option = e.target.options[e.target.selectedIndex].dataset.material;
+        if (option == "NO") {
+
+          required = false;
+          $("#inputs_materials").classList.add("d-none");
+          toggleInputs(required)
+
+
+        } else {
+
+          required = true;
+          $("#inputs_materials").classList.remove("d-none");
+          toggleInputs(required);
+        }
+      });
+
+      $("#table-det-budgets tbody").addEventListener("click", async function(e) {
+
+        if (e.target.classList.contains("edit-row")) {
+
+          if (e.target.classList.contains("select")) {
+
+            let idcategoria = Number.parseInt(e.target.dataset.idcategoria_costo);
+
+
+            let tagSelect = document.createElement("select");
+            tagSelect.name = e.target.dataset.subcategoria;
+            tagSelect.classList.add("form-select");
+
+            let dataSubcategorias = await getSubcategoriesCostsData(idcategoria);
+
+
+            dataSubcategorias.forEach(subcategoria => {
+
+              let tagOption = document.createElement("option");
+              tagOption.value = subcategoria.idsubcategoria_costo;
+              tagOption.innerText = subcategoria.subcategoria_costo;
+
+              tagSelect.appendChild(tagOption);
+            });
+
+            e.target.textContent = "";
+            let td = e.target.closest("td");
+
+            td.appendChild(tagSelect);
+
+          } else if (e.target.classList.contains("text")) {
+
+            let input = document.createElement("input");
+            input.type = "text";
+            input.classList.add("form-control");
+            input.name = e.target.dataset.detalle
+            input.required = true;
+            input.focus()
+            input.value = e.target.textContent;
+
+            let td = e.target.closest("td")
+            e.target.textContent = "";
+            td.appendChild(input);
+
+          } else if (e.target.classList.contains("number")) {
+
+            let inputNumber = document.createElement("input");
+            inputNumber.type = "number";
+            inputNumber.classList.add("form-control");
+            inputNumber.name = e.target.dataset.cantidad ? e.target.dataset.cantidad : e.target.dataset.precio
+            inputNumber.focus();
+            inputNumber.min = 1;
+            inputNumber.value = Number.parseInt(e.target.textContent)
+
+            let td = e.target.closest("td")
+            e.target.textContent = "";
+            td.appendChild(inputNumber);
+
+          }
+
+        }
+      })
+
+      $("#table-det-budgets tbody").addEventListener("click", async function(e) {
+        if (e.target.classList.contains("save")) {
+  
+          let tr = e.target.closest("tr");
+          let indexElement = Number.parseInt(e.target.dataset.index);
+          console.log("Indice boton :" + indexElement)
+
+          convertText(tr, indexElement);
+
+        }else if (e.target.classList.contains("delete")) {
+
+
+          sAlert.sweetConfirm("¿Deseas eliminar el registro?", "", () => {
+
+            let indexDelete = dataStorage.find(data => data.indice == e.target.dataset.index);
+
+            //El metodo splice borra un elemento especificando su indice y cuandas coincidencias(indice, n de coindicencias)
+            dataStorage.splice(dataStorage.indexOf(element), 1); //Splice solo funciona con arrays y indeof obtien el indice de un objeto seleccionado
+
+            sessionStorage.setItem("dataStoraged", JSON.stringify(dataStorage));
+            renderDetbudgets(dataStorage);
+
+            if (dataStorage.length == 0) {
+              $("#save_lots").disabled = true;
+            }
+
+            let tr = e.target.closest("tr");
+            tr.remove();
+
+          })
+
+        } 
+      })
+
+      $("#codigo").addEventListener("blur", (e) => {
+
+        e.preventDefault();
+
+        if (!lastCode) {
+
+          currentCode = "PRES-" + $("#codigo").value.toString().padStart(3, "0");
+          $("#codigo").value = currentCode;
+          lastCode = true;
+        }
+
+        if ($("#codigo").value !== "") {
+
+          validateData($("#codigo").value, "codigo", allDataBudget)
+            .then(() => {
+              $("#modelo").focus();
+            })
+            .catch(e => {
+              console.error(e);
+              $("#codigo").focus();
+            });
+        }
+      })
+
+      $("#codigo").addEventListener("input", (e) => {
+        if ($("#codigo").value == "") {
+          lastCode = false;
+        }
+      });
+
+      $("#save_lots").addEventListener("click", async function() {
+
+        let lotes = document.querySelectorAll(".form-check-input.form-lotes");
+
+        let counter = 0;
+        let arrayLotes = Array.from(lotes);
+        let resultDet = 0;
+        let counterDet = 0;
+
+        for (lote of arrayLotes) {
+
+
+          if (lote.checked) {
+
+            let idactivo = Number.parseInt(lote.dataset.idactivo);
+            for (data of dataStorage) {
+
+              resultDet = await addDetCost(data);
+              counterDet += resultDet
+            };
+
+            if (resultDet > 0) {
+
+              let result = await setIdBudget(idactivo);
+
+              counter += result;
+            }
+          }
+        };
+
+        if (counter) {
+
+          sAlert.sweetSuccess("Datos nuevos", `Registros actualizados : ${counter}`, () => {
+            window.location.href = "./index.php";
+          });
+        } else {
+          sAlert.sweetError("No se han realizado registro", "Por favor vuelvelo a intentar");
+        }
+
+      });
+
+      $("#list-proyectos").addEventListener("click", (e) => {
+
+        if (e.target.classList.contains("check-proyects")) {
+
+          let idproyecto = e.target.dataset.idproyecto;
+          let isChecked = e.target.checked;
+          let contents = document.querySelectorAll(".form-check-input.form-lotes");
+
+          Array.from(contents).forEach(content => {
+
+            let idproyectoLote = content.dataset.idproyecto
+
+            if (idproyectoLote == idproyecto) {
+              content.checked = isChecked;
+
+            }
+          });
+        }else if(e.target.classList.contains("form-lotes")){
+          let idproyecto = e.target.dataset.idproyecto;
+          let accordionHeader = e.target.closest(".accordion-header")
+          let checkAncestro = accordionHeader.querySelector(".check-proyects")
+          
+          if(e.target.checked){
+            checkAncestro.checked = true;
+          }
+        }
+      });
+
+      $("#form-budget").addEventListener("submit", (e) => {
+
+        e.preventDefault();
+        let codigo = $("#codigo").value;
+        let modelo = $("#modelo").value;
+
+        validateForm("#form-budget", addBudget)
+          .then(() => {
+
+            Array.from(document.querySelectorAll("#form-budget input")).forEach(input => {
+
+              input.readOnly = true;
+            });
+
+            $("#form-budget button").disabled = true;
+          })
+          .catch(e => {
+            console.error(e);
+          });
+
+      })
+
+      $("#form_det_budget").addEventListener("submit", (e) => {
+        e.preventDefault(e)
+        validateForm("#form_det_budget", storageData);
+      })
+
+      $("#modelo").addEventListener("blur", (e) => {
+        e.preventDefault();
+
+        if ($("#modelo").value !== "") {
+          console.log(allDataBudget)
+          validateData($("#modelo").value, "modelo", allDataBudget)
+            .then(() => {
+
+              $("#save_budget").disabled = false;
+            })
+            .catch(e => {
+              console.error(e);
+              $("#modelo").focus();
+            });
+        }
+      });
+
+      getBrands();
+      getCategoriesCosts();
+      getLotsAll();
       renderDetbudgets(dataStorage);
+      getBudgetsData();
 
-      $("#save_lots").disabled = false;
+      if (dataStorage.length > 0) {
+        renderDetbudgets(dataStorage);
 
-    }
+        $("#save_lots").disabled = false;
 
-    if (dataBudget) {
-      idPresupuesto = dataBudget.idpresupuesto;
-      $("#codigo").value = dataBudget.codigo;
-      $("#modelo").value = dataBudget.modelo;
-      $("#add").disabled = false;
-    }
+      }
 
-    let acordionItems = document.querySelectorAll(".accordion-item");
+      if (dataBudget) {
+        idPresupuesto = dataBudget.idpresupuesto;
+        $("#codigo").value = dataBudget.codigo;
+        $("#modelo").value = dataBudget.modelo;
+        $("#add").disabled = false;
+      }
+
+      window.addEventListener("beforeunload",(e)=>{
+
+        e.preventDefault();
+        e.returnValue = "¿Estás seguro de que quieres salir?";
+        return "¿Estás seguro de que quieres salir?";
+      });
+
+      let acordionItems = document.querySelectorAll(".accordion-item");
+    })
   </script>
   <!-- Github buttons -->
   <script async defer src="https://buttons.github.io/buttons.js"></script>

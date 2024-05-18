@@ -58,6 +58,11 @@ if(isset($_POST["action"])){
 
                 echo json_encode($budget->inactiveBudget($idpresupuesto));
             break;
+
+        case "listBudgetsAsset": 
+
+                echo json_encode($budget->listBudgetsAsset());
+            break;
     }
 }
 ?>

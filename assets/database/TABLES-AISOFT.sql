@@ -232,6 +232,7 @@ CREATE TABLE presupuestos
     inactive_at 			DATE 			NULL,
     idusuario 				INT 			NOT NULL,
     CONSTRAINT uk_codigo_presupuesto UNIQUE(codigo),
+    CONSTRAINT chk_codigo_pres CHECK(codigo LIKE 'PRES-%'),
     CONSTRAINT uk_modelo_pres UNIQUE(modelo),
     CONSTRAINT fk_idusuario_pres FOREIGN KEY(idusuario) REFERENCES usuarios(idusuario)
 )
@@ -276,8 +277,9 @@ CREATE TABLE activos(
     det_casa 			JSON 				NOT NULL DEFAULT '{"clave" :[""], "valor":[""]}',
     idpresupuesto		INT					NULL,
     propietario_lote 	VARCHAR(70)			NOT NULL,
-    precio_lote 		DECIMAL(8,2)		NULL,
+    precio_lote 		DECIMAL(8,2)		NOT NULL,
     precio_construccion	DECIMAL(8,2)		NULL,
+    precio_venta 		DECIMAL(8,2) 		NOT NULL,
 	create_at 			DATE 				NOT NULL	DEFAULT(CURDATE()),
     update_at			DATE 				NULL,
     inactive_at			DATE 				NULL,

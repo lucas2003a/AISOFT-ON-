@@ -125,3 +125,23 @@ WHERE idmaterial NOT IN (
         GROUP BY idmarca
     ) AS MaterialesSinRepetir
 );
+
+SELECT * FROM activos;
+
+SELECT
+		pres.idpresupuesto,
+        pres.codigo,
+        pres.modelo,
+		(SUM(detcost.cantidad * detcost.precio_unitario)) AS total,
+        pers.nombres AS usuario
+		FROM presupuestos pres
+        INNER JOIN detalle_costos detcost ON detcost.idpresupuesto = pres.idpresupuesto
+        INNER JOIN usuarios usu ON usu.idusuario = pres.idusuario
+        INNER JOIN personas pers ON pers.idpersona = usu.idpersona
+        WHERE pres.inactive_at IS NULL
+        AND detcost.inactive_at IS NULL
+        GROUP BY pres.idpresupuesto
+        ORDER BY pres.codigo ASC;
+        
+SELECT * FROM detalle_costos where inactive_at IS NULL;
+select * from activos where sublote = 10;

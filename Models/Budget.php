@@ -120,7 +120,21 @@ class Budget extends Conection{
             die($e->getMessage());
         }
     }
-/* 
-    public function  */
+
+    /**
+     * Método para listar los presupuestos con contenido
+     */
+    public function listBudgetsAsset(){
+
+        try{
+            $query = $this->conection->prepare("CALL spu_list_budgets_assets()");
+            $query->execute();
+            
+            return $query->fetchAll(PDO::FETCH_ASSOC);
+        }
+        catch(Exception $e){
+            die($e->getMessage());
+        }
+    }
 }
 ?>

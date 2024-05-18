@@ -94,7 +94,7 @@ class Asset extends Conection{
 
         try{
 
-            $query = $this->conection->prepare("CALL spu_add_assets(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+            $query = $this->conection->prepare("CALL spu_add_assets(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
             $query->execute(
                 array(
                     $dataAsset["idproyecto"],
@@ -110,9 +110,11 @@ class Asset extends Conection{
                     $dataAsset["latitud"],
                     $dataAsset["longitud"],
                     $dataAsset["perimetro"],
+                    $dataAsset["idpresupuesto"],
                     $dataAsset["propietario_lote"],
                     $dataAsset["precio_lote"],
                     $dataAsset["precio_construccion"],
+                    $dataAsset["precio_venta"],
                     $dataAsset["idusuario"]
                 )
             );
@@ -131,7 +133,7 @@ class Asset extends Conection{
          
         try{
 
-            $query = $this->conection->prepare("CALL spu_set_assets(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+            $query = $this->conection->prepare("CALL spu_set_assets(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
             $query->execute(
                 array(
                     $dataAsset["idactivo"],
@@ -152,6 +154,7 @@ class Asset extends Conection{
                     $dataAsset["propietario_lote"],
                     $dataAsset["precio_lote"],
                     $dataAsset["precio_construccion"],
+                    $dataAsset["precio_venta"],
                     $dataAsset["idusuario"]
                 )
             );

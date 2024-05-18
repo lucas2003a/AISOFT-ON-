@@ -32,8 +32,8 @@ if(isset($_POST["action"])){
             
                 $dataObtained = [
                     "idpresupuesto"         => $_POST["idpresupuesto"],
-                    "idsubcategoria_costo" => $_POST["idsubcategoria_costo"],
-                    "idtipo_material"       => $_POST["idtipo_material"],
+                    "idsubcategoria_costo"  => $_POST["idsubcategoria_costo"],
+                    "idmaterial"            => $_POST["idmaterial"],
                     "detalle"               => $_POST["detalle"],
                     "cantidad"              => $_POST["cantidad"],
                     "precio_unitario"       => $_POST["precio_unitario"],
@@ -49,8 +49,8 @@ if(isset($_POST["action"])){
                 $dataObtained = [
                     "iddetalle_costo"       => $_POST["iddetalle_costo"],
                     "idpresupuesto"         => $_POST["idpresupuesto"],
-                    "idsubcategoria_costo" => $_POST["idsubcategoria_costo"],
-                    "idtipo_material"       => $_POST["idtipo_material"],
+                    "idsubcategoria_costo"  => $_POST["idsubcategoria_costo"],
+                    "idmaterial "           => $_POST["idmaterial"],
                     "detalle"               => $_POST["detalle"],
                     "cantidad"              => $_POST["cantidad"],
                     "precio_unitario"       => $_POST["precio_unitario"],
@@ -81,7 +81,7 @@ if(isset($_POST["action"])){
             
                 $idpresupuesto = $_POST["idpresupuesto"];
 
-                echo json_encode($cost->resumeBudgetCategory($idpresupuesto));
+                echo json_encode($cost->resumeBudgetSubategory($idpresupuesto));
             break;
 
     }

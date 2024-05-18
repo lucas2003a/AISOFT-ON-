@@ -72,7 +72,7 @@ class Cost extends Conection {
                 array(
                     $dataCost["idpresupuesto"],
                     $dataCost["idsubcategoria_costo"],
-                    $dataCost["idtipo_material"],
+                    $dataCost["idmaterial"],
                     $dataCost["detalle"],
                     $dataCost["cantidad"],
                     $dataCost["precio_unitario"],
@@ -98,7 +98,7 @@ class Cost extends Conection {
                     $dataCost["iddetalle_costo"],
                     $dataCost["idpresupuesto"],
                     $dataCost["idsubcategoria_costo"],
-                    $dataCost["idtipo_material"],
+                    $dataCost["idmaterial"],
                     $dataCost["detalle"],
                     $dataCost["cantidad"],
                     $dataCost["precio_unitario"],

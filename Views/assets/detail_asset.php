@@ -23,12 +23,7 @@
   <title>
     My Aisoft
   </title>
-  <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-      integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
-      crossorigin="anonymous"
-    />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous" />
   <!--     Fonts and icons     -->
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
   <!-- Nucleo Icons -->
@@ -118,7 +113,7 @@
                       <g id="office" transform="translate(153.000000, 2.000000)">
                         <path class="color-background opacity-6" d="M12.25,17.5 L8.75,17.5 L8.75,1.75 C8.75,0.78225 9.53225,0 10.5,0 L31.5,0 C32.46775,0 33.25,0.78225 33.25,1.75 L33.25,12.25 L29.75,12.25 L29.75,3.5 L12.25,3.5 L12.25,17.5 Z"></path>
                         <svg class="color-background" xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-person-lines-fill" viewBox="0 0 16 16">
-                          <path  d="M6 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m-5 6s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zM11 3.5a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 0 1h-4a.5.5 0 0 1-.5-.5m.5 2.5a.5.5 0 0 0 0 1h4a.5.5 0 0 0 0-1zm2 3a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1zm0 3a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1z"/>
+                          <path d="M6 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m-5 6s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zM11 3.5a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 0 1h-4a.5.5 0 0 1-.5-.5m.5 2.5a.5.5 0 0 0 0 1h4a.5.5 0 0 0 0-1zm2 3a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1zm0 3a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1z" />
                         </svg>
                       </g>
                     </g>
@@ -140,9 +135,9 @@
                     <g transform="translate(1716.000000, 291.000000)">
                       <g id="office" transform="translate(153.000000, 2.000000)">
                         <path class="color-background opacity-6" d="M12.25,17.5 L8.75,17.5 L8.75,1.75 C8.75,0.78225 9.53225,0 10.5,0 L31.5,0 C32.46775,0 33.25,0.78225 33.25,1.75 L33.25,12.25 L29.75,12.25 L29.75,3.5 L12.25,3.5 L12.25,17.5 Z"></path>
-                        <svg  class="color-background" xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-calculator" viewBox="0 0 16 16">
-                          <path d="M12 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1zM4 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z"/>
-                          <path d="M4 2.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5h-7a.5.5 0 0 1-.5-.5zm0 4a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm0 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm0 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm3-6a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm0 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm0 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm3-6a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm0 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5z"/>
+                        <svg class="color-background" xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-calculator" viewBox="0 0 16 16">
+                          <path d="M12 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1zM4 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z" />
+                          <path d="M4 2.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5h-7a.5.5 0 0 1-.5-.5zm0 4a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm0 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm0 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm3-6a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm0 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm0 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm3-6a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm0 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5z" />
                         </svg>
                       </g>
                     </g>
@@ -164,8 +159,8 @@
                     <g transform="translate(1716.000000, 291.000000)">
                       <g id="office" transform="translate(153.000000, 2.000000)">
                         <svg class="color-background" xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-list-stars" viewBox="0 0 16 16">
-                          <path fill-rule="evenodd" d="M5 11.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5"/>
-                          <path d="M2.242 2.194a.27.27 0 0 1 .516 0l.162.53c.035.115.14.194.258.194h.551c.259 0 .37.333.164.493l-.468.363a.28.28 0 0 0-.094.3l.173.569c.078.256-.213.462-.423.3l-.417-.324a.27.27 0 0 0-.328 0l-.417.323c-.21.163-.5-.043-.423-.299l.173-.57a.28.28 0 0 0-.094-.299l-.468-.363c-.206-.16-.095-.493.164-.493h.55a.27.27 0 0 0 .259-.194zm0 4a.27.27 0 0 1 .516 0l.162.53c.035.115.14.194.258.194h.551c.259 0 .37.333.164.493l-.468.363a.28.28 0 0 0-.094.3l.173.569c.078.255-.213.462-.423.3l-.417-.324a.27.27 0 0 0-.328 0l-.417.323c-.21.163-.5-.043-.423-.299l.173-.57a.28.28 0 0 0-.094-.299l-.468-.363c-.206-.16-.095-.493.164-.493h.55a.27.27 0 0 0 .259-.194zm0 4a.27.27 0 0 1 .516 0l.162.53c.035.115.14.194.258.194h.551c.259 0 .37.333.164.493l-.468.363a.28.28 0 0 0-.094.3l.173.569c.078.255-.213.462-.423.3l-.417-.324a.27.27 0 0 0-.328 0l-.417.323c-.21.163-.5-.043-.423-.299l.173-.57a.28.28 0 0 0-.094-.299l-.468-.363c-.206-.16-.095-.493.164-.493h.55a.27.27 0 0 0 .259-.194z"/>
+                          <path fill-rule="evenodd" d="M5 11.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5" />
+                          <path d="M2.242 2.194a.27.27 0 0 1 .516 0l.162.53c.035.115.14.194.258.194h.551c.259 0 .37.333.164.493l-.468.363a.28.28 0 0 0-.094.3l.173.569c.078.256-.213.462-.423.3l-.417-.324a.27.27 0 0 0-.328 0l-.417.323c-.21.163-.5-.043-.423-.299l.173-.57a.28.28 0 0 0-.094-.299l-.468-.363c-.206-.16-.095-.493.164-.493h.55a.27.27 0 0 0 .259-.194zm0 4a.27.27 0 0 1 .516 0l.162.53c.035.115.14.194.258.194h.551c.259 0 .37.333.164.493l-.468.363a.28.28 0 0 0-.094.3l.173.569c.078.255-.213.462-.423.3l-.417-.324a.27.27 0 0 0-.328 0l-.417.323c-.21.163-.5-.043-.423-.299l.173-.57a.28.28 0 0 0-.094-.299l-.468-.363c-.206-.16-.095-.493.164-.493h.55a.27.27 0 0 0 .259-.194zm0 4a.27.27 0 0 1 .516 0l.162.53c.035.115.14.194.258.194h.551c.259 0 .37.333.164.493l-.468.363a.28.28 0 0 0-.094.3l.173.569c.078.255-.213.462-.423.3l-.417-.324a.27.27 0 0 0-.328 0l-.417.323c-.21.163-.5-.043-.423-.299l.173-.57a.28.28 0 0 0-.094-.299l-.468-.363c-.206-.16-.095-.493.164-.493h.55a.27.27 0 0 0 .259-.194z" />
                         </svg>
                       </g>
                     </g>
@@ -188,8 +183,8 @@
                     <g transform="translate(1716.000000, 291.000000)">
                       <g id="office" transform="translate(153.000000, 2.000000)">
                         <svg class="color-background" xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-credit-card" viewBox="0 0 16 16">
-                          <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v1h14V4a1 1 0 0 0-1-1zm13 4H1v5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1z"/>
-                          <path d="M2 10a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1z"/>
+                          <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v1h14V4a1 1 0 0 0-1-1zm13 4H1v5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1z" />
+                          <path d="M2 10a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1z" />
                         </svg>
                       </g>
                     </g>
@@ -212,7 +207,7 @@
                     <g transform="translate(1716.000000, 291.000000)">
                       <g id="office" transform="translate(153.000000, 2.000000)">
                         <svg class="color-background" xmlns="http://www.w3.org/2000/svg" width="40" height="50" fill="currentColor" class="bi bi-people-fill" viewBox="0 0 16 16">
-                          <path d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6m-5.784 6A2.24 2.24 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.3 6.3 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1zM4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5"/>
+                          <path d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6m-5.784 6A2.24 2.24 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.3 6.3 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1zM4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5" />
                         </svg>
                       </g>
                     </g>
@@ -235,8 +230,8 @@
                     <g transform="translate(1716.000000, 291.000000)">
                       <g id="office" transform="translate(153.000000, 2.000000)">
                         <svg class="color-background" xmlns="http://www.w3.org/2000/svg" width="50" height="43" fill="currentColor" class="bi bi-file-earmark-font" viewBox="0 0 16 16">
-                          <path d="M10.943 6H5.057L5 8h.5c.18-1.096.356-1.192 1.694-1.235l.293-.01v5.09c0 .47-.1.582-.898.655v.5H9.41v-.5c-.803-.073-.903-.184-.903-.654V6.755l.298.01c1.338.043 1.514.14 1.694 1.235h.5l-.057-2z"/>
-                          <path d="M14 4.5V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h5.5zm-3 0A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V4.5z"/>
+                          <path d="M10.943 6H5.057L5 8h.5c.18-1.096.356-1.192 1.694-1.235l.293-.01v5.09c0 .47-.1.582-.898.655v.5H9.41v-.5c-.803-.073-.903-.184-.903-.654V6.755l.298.01c1.338.043 1.514.14 1.694 1.235h.5l-.057-2z" />
+                          <path d="M14 4.5V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h5.5zm-3 0A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V4.5z" />
                         </svg>
                       </g>
                     </g>
@@ -259,8 +254,8 @@
                     <g transform="translate(1716.000000, 291.000000)">
                       <g id="office" transform="translate(153.000000, 2.000000)">
                         <svg class="color-background" xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-eye" viewBox="0 0 16 16">
-                          <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8M1.173 8a13 13 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5s3.879 1.168 5.168 2.457A13 13 0 0 1 14.828 8q-.086.13-.195.288c-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5s-3.879-1.168-5.168-2.457A13 13 0 0 1 1.172 8z"/>
-                          <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5M4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0"/>
+                          <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8M1.173 8a13 13 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5s3.879 1.168 5.168 2.457A13 13 0 0 1 14.828 8q-.086.13-.195.288c-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5s-3.879-1.168-5.168-2.457A13 13 0 0 1 1.172 8z" />
+                          <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5M4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0" />
                         </svg>
                       </g>
                     </g>
@@ -271,7 +266,7 @@
             <span class="nav-link-text ms-1">Monitoreo</span>
           </a>
         </li>
-        
+
         <li class="nav-item mt-3">
           <h6 class="ps-4 ms-2 text-uppercase text-xs font-weight-bolder opacity-6">Panel de usuario</h6>
         </li>
@@ -336,12 +331,12 @@
             <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="#"></a>Detalles</li>
             <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Detalles del lote</li>
           </ol>
-          <h6 class="font-weight-bolder mb-0" id ="cabezera">DETALLES DEL LOTE - </h6>
+          <h6 class="font-weight-bolder mb-0" id="cabezera">DETALLES DEL LOTE - </h6>
         </nav>
         <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
-          
+
           <ul class="navbar-nav  justify-content-end">
-            
+
             <li class="nav-item d-flex align-items-center">
               <a href="javascript:;" class="nav-link text-body font-weight-bold px-0">
                 <i class="fa fa-user me-sm-1"></i>
@@ -357,7 +352,7 @@
                 </div>
               </a>
             </li>
-            
+
           </ul>
         </div>
       </div>
@@ -373,7 +368,7 @@
           <!-- IMAGEN -->
           <div class="row">
             <div class="col-xl-6 mb-xl-0 mb-4">
-              <div class="card bg-transparent shadow-xl"  style="height: 100%;">
+              <div class="card bg-transparent shadow-xl" style="height: 100%;">
                 <div class="overflow-hidden position-relative border-radius-xl" style="background-image: url('../../assets/img/curved-images/curved14.jpg');" id="imagen">
                   <span class="mask bg-gradient-dark" id="mask"></span>
                   <div class="card-body position-relative z-index-1 p-3">
@@ -387,10 +382,10 @@
             <div class="col-xl-6">
               <div class="row">
                 <div class="col-md-6">
-                  <div class="card"  style="height: 100%;">
+                  <div class="card" style="height: 100%;">
                     <div class="card-header mx-4 p-3 text-center">
                       <div class="icon icon-shape icon-lg bg-gradient-primary shadow text-center border-radius-lg">
-                      <i class="fa-solid fa-coins opacity-10"></i>
+                        <i class="fa-solid fa-coins opacity-10"></i>
                       </div>
                     </div>
                     <div class="card-body pt-0 p-3 text-center">
@@ -402,10 +397,10 @@
                 </div>
 
                 <div class="col-md-6 mt-md-0 mt-4">
-                  <div class="card"  style="height: 100%;">
+                  <div class="card" style="height: 100%;">
                     <div class="card-header mx-4 p-3 text-center">
                       <div class="icon icon-shape icon-lg bg-gradient-primary shadow text-center border-radius-lg">
-                      <i class="fa-solid fa-hand-holding-dollar opacity-10"></i>
+                        <i class="fa-solid fa-hand-holding-dollar opacity-10"></i>
                       </div>
                     </div>
                     <div class="card-body pt-0 p-3 text-center">
@@ -420,7 +415,30 @@
 
             <!-- /CABEZERA DEL DETALLE -->
 
-            <!-- CLIENTES --> 
+            <!-- RESUMEN -->
+            <div class="col-md-12 mb-lg-0 mb-4">
+              <div class="card mt-4">
+                <div class="card-header pb-0 p-3">
+                  <div class="row">
+                    <div class="col-6 d-flex align-items-center">
+                      <h6 class="mb-0"><strong>RESUMEN</strong></h6>
+                    </div>
+                    <div id="list-resume" class="m-4">
+
+                      <!-- RENDER RESUMEN -->
+
+                    </div>
+                  </div>
+                </div>
+                <div class="card-body p-3">
+                  <div class="row">
+                    
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- CLIENTES -->
 
             <div class="col-md-12 mb-lg-0 mb-4">
               <div class="card mt-4">
@@ -444,9 +462,9 @@
                           </tr>
                         </thead>
                         <tbody>
-                    
-                        <!-- RENDER NUEVOS CLIENTES  -->
-                        
+
+                          <!-- RENDER NUEVOS CLIENTES  -->
+
                         </tbody>
                       </table>
                     </div>
@@ -458,8 +476,8 @@
           </div>
           <!-- /CLIENTES -->
 
-         
-        <!-- ---------- -->  
+
+          <!-- ---------- -->
         </div>
         <div class="col-lg-4">
           <div class="card h-100">
@@ -474,96 +492,120 @@
               <ul class="list-group" id="caracteristicas">
 
                 <!-- ESTADO -->
-                  <li class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg">
-                    <div class="d-flex flex-column">
-                      <h6 class="mb-1 text-dark font-weight-bold text-sm">Estado </h6>
-                    </div>
-                    <div class="d-flex align-items-center text-sm" id="estado">
-                      
-                      <!-- RENDER -->
-  
-                    </div>
-                  </li>
+                <li class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg">
+                  <div class="d-flex flex-column">
+                    <h6 class="mb-1 text-dark font-weight-bold text-sm">Estado </h6>
+                  </div>
+                  <div class="d-flex align-items-center text-sm" id="estado">
 
-              <!-- UBIGEO -->
+                    <!-- RENDER -->
+
+                  </div>
+                </li>
+
+                <!-- UBIGEO -->
                 <li class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg">
                   <div class="d-flex flex-column">
                     <h6 class="mb-1 text-dark font-weight-bold text-sm">Ubigeo</h6>
                   </div>
                   <div class="d-flex align-items-center text-sm" id="ubigeo">
-                    
+
                     <!-- RENDER -->
-                    
+
                   </div>
                 </li>
 
-              <!-- DIRECCION -->
+                <!-- DIRECCION -->
                 <li class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg">
                   <div class="d-flex flex-column">
                     <h6 class="mb-1 text-dark font-weight-bold text-sm">Dirección</h6>
                   </div>
                   <div class="d-flex align-items-center text-sm" id="direccion">
-                    
+
                     <!-- RENDER -->
 
                   </div>
                 </li>
 
-              <!-- TIPO ACTIVO -->
+                <!-- TIPO ACTIVO -->
                 <li class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg">
                   <div class="d-flex flex-column">
                     <h6 class="mb-1 text-dark font-weight-bold text-sm">Tipo </h6>
                   </div>
                   <div class="d-flex align-items-center text-sm" id="tipo_activo">
-                    
+
                     <!-- RENDER -->
 
                   </div>
                 </li>
 
-              <!-- MONEDA VENTA -->
+                <!-- MONEDA VENTA -->
                 <li class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg">
                   <div class="d-flex flex-column">
                     <h6 class="mb-1 text-dark font-weight-bold text-sm">Moneda de venta </h6>
                   </div>
                   <div class="d-flex align-items-center text-sm" id="moneda_venta">
-                    
+
                     <!-- RENDER -->
 
                   </div>
                 </li>
 
-              <!-- PARTIDA ELECTRÓNICA -->
+                <!-- PARTIDA ELECTRÓNICA -->
                 <li class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg">
                   <div class="d-flex flex-column">
                     <h6 class="mb-1 text-dark font-weight-bold text-sm">Partida electrónica</h6>
                   </div>
                   <div class="d-flex align-items-center text-sm" id="partida_elect">
-                    
+
                     <!-- RENDER -->
 
                   </div>
                 </li>
 
-              <!-- PARTIDA ELECTRÓNICA -->
+                <!-- PARTIDA ELECTRÓNICA -->
                 <li class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg">
                   <div class="d-flex flex-column">
                     <h6 class="mb-1 text-dark font-weight-bold text-sm">Área del terreno</h6>
                   </div>
                   <div class="d-flex align-items-center text-sm" id="area_terreno">
-                    
+
                     <!-- RENDER -->
 
                   </div>
                 </li>
 
-              <!-- ZONAS COMUNES -->
+                <!-- ZONAS COMUNES -->
                 <li class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg">
                   <div class="d-flex flex-column">
                     <h6 class="mb-1 text-dark font-weight-bold text-sm">Zonas comunes</h6>
                   </div>
                   <div class="d-flex align-items-center text-sm" id="zcomunes_porcent">
-                    
+
+                    <!-- RENDER -->
+
+                  </div>
+                </li>
+
+                <!-- PRECIO VENTA -->
+                <li class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg">
+                  <div class="d-flex flex-column">
+                    <h6 class="mb-1 text-dark font-weight-bold text-sm">Precio de venta</h6>
+                  </div>
+                  <div class="d-flex align-items-center text-sm" id="precio_venta">
+
+                    <!-- RENDER -->
+
+                  </div>
+                </li>
+
+                <!-- MODELO DE PRESUPUESTO -->
+                <li class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg">
+                  <div class="d-flex flex-column">
+                    <h6 class="mb-1 text-dark font-weight-bold text-sm">MODELO DE PRESUPUESTO</h6>
+                  </div>
+                  <div class="d-flex align-items-center text-sm" id="modelo_presupuesto">
+
                     <!-- RENDER -->
 
                   </div>
@@ -584,42 +626,43 @@
               <div class="row">
                 <div class="col-6 d-flex align-items-center">
                   <h6 class="mb-0">Detalles de constricción</h6>
-                  </div>
-                  <div class="col-6 text-end">
-                    <button class="btn bg-gradient-dark mb-0" id="add"><i class="fas fa-plus"></i>&nbsp;&nbsp;Agregar</button>
-                    <button type="button" class="btn bg-gradient-info mb-0" id="save"><i class="fa-solid fa-floppy-disk"></i> Guardar</button>
+                </div>
+                <div class="col-6 text-end">
+                  <button class="btn bg-gradient-dark mb-0" id="add"><i class="fas fa-plus"></i>&nbsp;&nbsp;Agregar</button>
+                  <button type="button" class="btn bg-gradient-info mb-0" id="save"><i class="fa-solid fa-floppy-disk"></i> Guardar</button>
                 </div>
               </div>
             </div>
             <div class="card-body p-3">
-            <div class="card-body pt-4 p-3">
-              <ul class="list-group"id="list-group">
-              
-                <!-- RENDER DETALLES DE CONSTRUCCIÓN -->
+              <div class="card-body pt-4 p-3">
+                <ul class="list-group" id="list-group">
 
-              </ul>
-            </div>
-          </div>
-        </div>
+                  <!-- RENDER DETALLES DE CONSTRUCCIÓN -->
 
-      </div>
-    
-    <footer class="footer pt-3  ">
-        <div class="container-fluid">
-          <div class="row align-items-center justify-content-lg-between">
-            <div class="col-lg-6 mb-lg-0 mb-4">
-              <div class="copyright text-center text-sm text-muted text-lg-start">
-                © <script>
-                  document.write(new Date().getFullYear())
-                </script>,
-                auspiciado por
-                <a href="https://aifperu.com/" class="font-weight-bold" target="_blank">A.I.F Contratistas Generales S.A.C</a>
-                (sistema web).
+                </ul>
               </div>
             </div>
           </div>
+
         </div>
-      </footer>
+
+        <footer class="footer pt-3  ">
+          <div class="container-fluid">
+            <div class="row align-items-center justify-content-lg-between">
+              <div class="col-lg-6 mb-lg-0 mb-4">
+                <div class="copyright text-center text-sm text-muted text-lg-start">
+                  © <script>
+                    document.write(new Date().getFullYear())
+                  </script>,
+                  auspiciado por
+                  <a href="https://aifperu.com/" class="font-weight-bold" target="_blank">A.I.F Contratistas Generales S.A.C</a>
+                  (sistema web).
+                </div>
+              </div>
+            </div>
+          </div>
+        </footer>
+      </div>
     </div>
   </main>
   <div class="fixed-plugin">
@@ -679,7 +722,89 @@
     </div>
 
   </div>
-   
+
+  <!-- Button trigger modal -->
+  <button id="show-modal" type="button" class="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#modalId" style="position: absolute; left: -9999px; top: -9999px;">
+    Launch
+  </button>
+
+  <!-- Modal -->
+  <div class="modal fade" id="modalId" tabindex="-1" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <form class="row needs-validation" id="form-montos" novalidate>
+        <div class="modal-content p-0">
+          <div class="modal-header bg-secondary">
+            <h5 class="modal-title text-white" id="modalTitleId">
+              Los datos no tienen relacion !!
+            </h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <h4>Actualiza los datos</h4>
+            <!-- PRECIO LOTE -->
+            <div class="mt-4">
+              <label for="precio_lote" class="form-label">Precio del lote</label>
+              <input type="number" class="form-control" id="precio_lote_modal" placeholder="Precio de venta" maxlength="7" minlength="7" min="1.00" value="0.00" required autofocus>
+              <div class="invalid-feedback">
+                Necesitas ingresar el precio del lote.
+              </div>
+              <div class="valid-feedback">
+                Precio del lote registrado correctamente.
+              </div>
+            </div>
+
+            <!-- PRESUPUESTO -->
+            <div class="mt-4">
+              <label for="idpresupuesto" class="form-label">Presupuesto</label>
+              <select class="form-select custom-select-scroll" id="idpresupuesto_modal">
+                <option value="">Presupuesto</option>
+              </select>
+              <div class="invalid-feedback">
+                Necesitas ingresar el presupuesto.
+              </div>
+              <div class="valid-feedback">
+                Presupuesto registrado correctamente.
+              </div>
+            </div>
+
+            <!-- PRECIO CONSTRUCCION -->
+            <div class="mt-4">
+              <label for="precio_construccion" class="form-label">Precio de la construcción</label>
+              <input type="number" class="form-control" id="precio_construccion_modal" placeholder="Precio de construcción" maxlength="7" minlength="7" min="1.00" value="0.00">
+              <div class="invalid-feedback">
+                Necesitas ingresar el precio de construcción.
+              </div>
+              <div class="valid-feedback">
+                Precio de construcción registrado correctamente.
+              </div>
+            </div>
+
+            <!-- PRECIO VENTA -->
+            <div class="mt-4">
+              <label for="precio_venta" class="form-label">Precio de la venta</label>
+              <input type="number" class="form-control" id="precio_venta_modal" placeholder="Precio de venta" maxlength="8" minlength="8" min="1.00" value="0.00">
+              <div class="invalid-feedback">
+                Necesitas ingresar el precio de venta.
+              </div>
+              <div class="valid-feedback">
+                Precio de venta registrado correctamente.
+              </div>
+            </div>
+
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+              Cerrar
+            </button>
+            <button type="submit" class="btn btn-primary">Guardar</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+
+
   <!-- JQUERY -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
@@ -699,485 +824,701 @@
   <!-- <script src="../../assets/js/formMultiSteps.js"></script>
   <script src="../../assets/js/projects/interactionForms.js"></script> -->
   <!-- <script src="../../assets/js/renderUbigeo.js"></script>  -->
+  <!-- jQuery and Bootstrap Bundle JS -->
+
   <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const global = new FunGlobal();
+      const sAlert = new Alert();
 
-  const global = new FunGlobal();
-  const sAlert = new Alert();
+      const $ = id => global.$(id);
+      const $All = id => global.$All(id);
 
-  const $ = id => global.$(id);
-  const $All = id => global.$All(id);
+      const queryString = window.location.search;
+      const url = new URLSearchParams(queryString);
 
-  const queryString = window.location.search;
-  const url = new URLSearchParams(queryString);
-  
-  const code = url.get("id");
+      const code = url.get("id");
 
-  const idActivo = atob(code);
+      const idActivo = atob(code);
 
-  const btnsEdit = $All(".edit");
+      const btnsEdit = $All(".edit");
 
-  let bootstrap;
+      let bootstrap;
 
-  let det_casaJSON;
-  let idPresupuesto;
-    
-    /**
-     * Renderiza los de talles de la construcción - recive un JSON
-     */
-    function renderDetBuild(json){
+      let det_casaJSON;
+      let idPresupuesto;
+      let dataDetAsset;
 
-      const jsonObj = JSON.parse(json);
+      //Edita los montos
+      async function setAsset(id) {
 
-      const keys = jsonObj.clave;
-      const values = jsonObj.valor;
+      try {
 
-      keys.forEach((key, index) => {
-
-        const value = values[index];
-
-        if(key != "" || value != ""){
-          
-          let newDetail = 
-          `
-            <li class="list-group-item border-0 p-4 mb-2 bg-gray-100 border-radius-lg">
-    
-              <div class="row">
-                <div class="col-md-9">
-                  <div class="d-flex flex-column">
-                    <h6 class="mb-3 text-sm text-key">${key}</h6>
-                    <span class="mb-2 text-xs text-value"><span class="text-dark font-weight-bold ms-sm-2">${value}</span></span>
-                  </div>
-                </div>
-    
-                <div class="col-md-3">
-                  <div class="ms-auto text-end">
-                    <a class="btn btn-link text-danger text-gradient px-3 mb-0 delete" href="javascript:;"><i class="far fa-trash-alt me-2"></i>Eliminar</a>
-                    <a class="btn btn-link text-dark px-3 mb-0 edit" href="javascript:;"><i class="fas fa-pencil-alt text-dark me-2" aria-hidden="true"></i>Editar</a>
-                  </div>
-                </div>
-    
-              </div>
-    
-            </li>
-          `;
-    
-          $("#list-group").innerHTML += newDetail;
-        }
-      });
-    }
-
-    function renderListError(id){
-
-      newDetail =`
-      <div class="alert alert-danger m-4 text-white" role="alert">
-          <strong class="text-white">No se ha encontrado registros</strong><br>Asegurate que exista la conformidad de datos.
-      </div>
-      `;
-      $(id).innerHTML += newDetail;
-    }
-
-    /**
-     * Obtiene los detalles de cosntrucción
-     */
-    async function getDetails(id){
-
-      try{
         let url = "../../Controllers/asset.controller.php";
 
         let params = new FormData();
 
-        params.append("action","listAssetId")
-        params.append("idactivo",id)
+        params.append("action", "setAsset");
+        params.append("idactivo", id);
+        params.append("idproyecto", dataDetAsset.idproyecto);
+        params.append("tipo_activo", dataDetAsset.tipo_activo);
+        params.append("imagen", dataDetAsset.imagen);
+        params.append("estado", dataDetAsset.estado);
+        params.append("sublote", dataDetAsset.sublote);
+        params.append("direccion", dataDetAsset.direccion);
+        params.append("moneda_venta", dataDetAsset.moneda_venta);
+        params.append("precio_venta", $("#precio_venta_modal").value);
+        params.append("area_terreno", dataDetAsset.area_terreno);
+        params.append("zcomunes_porcent", dataDetAsset.zcomunes_porcent);
+        params.append("partida_elect", dataDetAsset.partida_elect);
+        params.append("latitud", dataDetAsset.latitud);
+        params.append("longitud", dataDetAsset.longitud);
+        params.append("perimetro", dataDetAsset.perimetro);
+        params.append("idpresupuesto", idPresupuesto);
+        params.append("propietario_lote", dataDetAsset.propietario_lote);
+        params.append("precio_lote", $("#precio_lote_modal").value);
+        params.append("precio_construccion", $("#precio_construccion_modal").value);
+        params.append("precio_venta", $("#precio_venta_modal").value);
 
-        let result =  await global.sendAction(url, params);
+        let results = await global.sendAction(url, params);
 
-        if(result){
-          
-          idPresupuesto = result.idPresupuesto;
+        if (results) {
 
-          let imagen = result.imagen ? result.imagen : "NoImage.jpg";
-          
-          $("#cabezera").innerHTML += `${result.sublote} - ${result.denominacion}`;
-          
-          $("#imagen").setAttribute("style",`background-image: url('../../media/lotes/${imagen}');background-size: cover; background-repeat: no-repeat; height:12rem; width: 100%`);
-          $("#mask").classList.remove("bg-gradient-dark");
-          $("#moneda_venta").innerText = result.moneda_venta;
-          $("#precio_lote").innerText = result.precio_lote;
+          console.log(results);
 
-          $("#estado").innerHTML = result.estado;
-          $("#ubigeo").innerHTML = `${result.distrito} - ${result.provincia} - ${result.departamento}`;
-          $("#direccion").innerHTML = result.direccion;
-          $("#tipo_activo").innerHTML = result.tipo_activo;
-          $("#partida_elect").innerHTML = result.partida_elect;
-          $("#area_terreno").innerHTML = `${notNullResult.area_terreno} m2`;
-          $("#zcomunes_porcent").innerHTML = `${notNullResult.zcomunes_porcent} %`;
+          if (results.filasAfect > 0) {
 
-          
-
-          det_casaJSON = result.det_casa
-          renderDetBuild(det_casaJSON);
-        
-        }else{
-
-          renderListError("#list-group");
-        }
-      }
-      catch{
-
-      }
-    }
-    
-    /**
-     * Actualiza los detalles de construcción
-     */
-    async function setDetAssetBuild(id, json){
-
-      try{
-        
-        let url = "../../Controllers/asset.controller.php"
-        let params = new FormData();
-
-        params.append("action","setDetAssetBuild");
-        params.append("idactivo",id);
-        params.append("det_casa",json);
-
-        let result = await global.sendAction(url, params);
-
-        if(result){
-          
-          if(result.filasAfect > 0){
-              sAlert.sweetSuccess("Registro actualizado","El registro se ha actualizado correctamente",()=>{
-
-             });
-          }else if(result.filasAfect == 0){
-
-            sAlert.sweetError("No se actualizó el registro","Vuelve a intentarlo");
-
-          }else{
-
-            sAlert.sweetWarning("No hay actualizaciones", "No hay datos nuevos para actualizar");
+            sAlert.sweetSuccess("Registro actualizado", "El registro se ha actualizado correctamente", () => {
+              getDetails(idActivo);
+            });
+          } else {
+            sAlert.sweetError("No se actualizó el registro", "Vuelve a intentarlo");
           }
         }
-      }
-      catch(e){
 
+      } catch (e) {
         console.error(e);
       }
     }
 
-    /**
-     *Obtentine el constenido de etiquetas de texto y las convierte a etiquetas el tipo input
-     */
-    async function getText(){
+      //Obtiene los presupuestos
+      async function getBudgets() {
 
-      const keyClass = ".list-group-item .text-key";
-      const valueClass = ".list-group-item .text-value";
+        try {
+          let url = "../../Controllers/budget.controller.php";
 
-      const textContent = await global.getJsonTxT(keyClass, valueClass); // => Contenido del texto econvertido a JSON
-      
-      if(textContent){
+          let params = new FormData();
+          params.append("action", "listBudgetsAsset");
 
-        setDetAssetBuild(idActivo, textContent);
+          let results = await global.sendAction(url, params);
 
-      }else{
-        console.error("no hay datos")
+          if (results) {
+
+            results.forEach(option => {
+
+              let newTag = document.createElement("option");
+              newTag.value = option.idpresupuesto;
+              newTag.innerText = option.codigo;
+              newTag.dataset.monto = option.total;
+
+              $("#idpresupuesto_modal").appendChild(newTag);
+            })
+          }
+        } catch (e) {
+          console.error(e)
+        }
       }
+      //Obtiene los presupuestos
+      async function getBudgetsID(id) {
+
+        try {
+          let url = "../../Controllers/budget.controller.php";
+
+          let params = new FormData();
+          params.append("action", "getBudgetById");
+          params.append("idpresupuesto", id);
+
+          let results = await global.sendAction(url, params);
+
+          if (results) {
+
+            if (results.total !== dataDetAsset.precio_construccion) {
+              $("#show-modal").click();
+
+              
+              getBudgets();
+              $("#precio_lote_modal").value = dataDetAsset.precio_lote;
+
+              setTimeout(() => {
+                
+                Array.from($("#idpresupuesto_modal").options).forEach(option =>{
+                  console.log(option.value)
+                  console.log(results.idpresupuesto)
+                  if (option.value == results.idpresupuesto) {
+                    option.selected = true;
+                  }
+                }) 
+              }, 1000);
+
+              $("#precio_construccion_modal").value = results.total;
+            }
+            console.log(results)
+          }
+        } catch (e) {
+          console.error(e)
+        }
+      }
+
+      //Obitiene el resumen del presupuesto por subcategorìas de costos
+      async function getResumeSubcategory(idpres) {
+
+        try {
+
+          let url = "../../Controllers/cost.controller.php";
+
+          let params = new FormData();
+
+          params.append("action", "resumeBudgetSubategory");
+          params.append("idpresupuesto", idpres);
+
+          let results = await global.sendAction(url, params);
+
+          if (results) {
+
+            let total = 0;
+            let content = ``;
+
+            results.forEach(result => {
+
+              total += Number.parseFloat(result.total);
+
+              content = `<p><strong>${result.subcategoria_costo}:  </strong> ${result.total}</p>`
+
+              $("#list-resume").innerHTML += content;
+            });
+
+            let contentTotal = `<h6><strong>Total:  </strong> ${total}</h6>`
+            $("#list-resume").innerHTML += contentTotal;
+
+            console.log(total);
+          }
+        } catch (e) {
+          console.error(e);
+        }
+      }
+
+      /**
+       * Renderiza los de talles de la construcción - recive un JSON
+       */
+      function renderDetBuild(json) {
+
+        const jsonObj = JSON.parse(json);
+
+        const keys = jsonObj.clave;
+        const values = jsonObj.valor;
+
+        keys.forEach((key, index) => {
+
+          const value = values[index];
+
+          if (key != "" || value != "") {
+
+            let newDetail =
+              `
+              <li class="list-group-item border-0 p-4 mb-2 bg-gray-100 border-radius-lg">
       
-    }
+                <div class="row">
+                  <div class="col-md-9">
+                    <div class="d-flex flex-column">
+                      <h6 class="mb-3 text-sm text-key">${key}</h6>
+                      <span class="mb-2 text-xs text-value"><span class="text-dark font-weight-bold ms-sm-2">${value}</span></span>
+                    </div>
+                  </div>
+      
+                  <div class="col-md-3">
+                    <div class="ms-auto text-end">
+                      <a class="btn btn-link text-danger text-gradient px-3 mb-0 delete" href="javascript:;"><i class="far fa-trash-alt me-2"></i>Eliminar</a>
+                      <a class="btn btn-link text-dark px-3 mb-0 edit" href="javascript:;"><i class="fas fa-pencil-alt text-dark me-2" aria-hidden="true"></i>Editar</a>
+                    </div>
+                  </div>
+      
+                </div>
+      
+              </li>
+            `;
 
-    /**
-     * Transforma las etiquetas del tipo inputa a etiquetas de texto
-     */
-    async function restoreText(){
+            $("#list-group").innerHTML += newDetail;
+          }
+        });
+      }
 
-      const textareas = $All("textarea");
-      const inputs = $All("input");
+      function renderListError(id) {
 
-      inputs.forEach(input => {
+        newDetail = `
+        <div class="alert alert-danger m-4 text-white" role="alert">
+            <strong class="text-white">No se ha encontrado registros</strong><br>Asegurate que exista la conformidad de datos.
+        </div>
+        `;
+        $(id).innerHTML += newDetail;
+      }
 
-        const h6 = document.createElement("h6");
-        h6.classList.add("mb-3" ,"text-sm" ,"text-key")
-        h6.textContent = input.value
+      /**
+       * Obtiene los detalles de cosntrucción
+       */
+      async function getDetails(id) {
 
-        input.parentNode.replaceChild(h6, input);
+        try {
+          let url = "../../Controllers/asset.controller.php";
+
+          let params = new FormData();
+
+          params.append("action", "listAssetId")
+          params.append("idactivo", id)
+
+          let result = await global.sendAction(url, params);
+
+          if (result) {
+
+            dataDetAsset = result;
+            idPresupuesto = result.idpresupuesto;
+
+            await getResumeSubcategory(idPresupuesto);
+
+            let imagen = result.imagen ? result.imagen : "NoImage.jpg";
+
+            $("#cabezera").innerHTML += `${result.sublote} - ${result.denominacion}`;
+
+            $("#imagen").setAttribute("style", `background-image: url('../../media/lotes/${imagen}');background-size: cover; background-repeat: no-repeat; height:12rem; width: 100%`);
+            $("#mask").classList.remove("bg-gradient-dark");
+            $("#moneda_venta").innerText = result.moneda_venta;
+            $("#precio_lote").innerText = result.precio_lote;
+            $("#precio_construccion").innerText = result.precio_construccion;
+
+            $("#estado").innerHTML = result.estado;
+            $("#ubigeo").innerHTML = `${result.distrito} - ${result.provincia} - ${result.departamento}`;
+            $("#direccion").innerHTML = result.direccion;
+            $("#tipo_activo").innerHTML = result.tipo_activo;
+            $("#partida_elect").innerHTML = result.partida_elect;
+            $("#area_terreno").innerHTML = result.area_terreno ? `${result.area_terreno} m2` : 0 + "m2";
+
+            $("#zcomunes_porcent").innerHTML = result.zcomunes_porcen ? `${result.zcomunes_porcent} %` : 0 + " %";
+
+            $("#precio_venta").innerHTML = result.moneda_venta == "USD" ? `$ ${result.precio_venta}` : `S ${result.precio_venta}`;
+            $("#modelo_presupuesto").innerHTML = result.modelo;
+
+            det_casaJSON = result.det_casa
+            getBudgetsID(idPresupuesto);
+            renderDetBuild(det_casaJSON);
+
+          } else {
+
+            renderListError("#list-group");
+          }
+        } catch {
+
+        }
+      }
+
+      /**
+       * Actualiza los detalles de construcción
+       */
+      async function setDetAssetBuild(id, json) {
+
+        try {
+
+          let url = "../../Controllers/asset.controller.php"
+          let params = new FormData();
+
+          params.append("action", "setDetAssetBuild");
+          params.append("idactivo", id);
+          params.append("det_casa", json);
+
+          let result = await global.sendAction(url, params);
+
+          if (result) {
+
+            if (result.filasAfect > 0) {
+              sAlert.sweetSuccess("Registro actualizado", "El registro se ha actualizado correctamente", () => {
+
+              });
+            } else if (result.filasAfect == 0) {
+
+              sAlert.sweetError("No se actualizó el registro", "Vuelve a intentarlo");
+
+            } else {
+
+              sAlert.sweetWarning("No hay actualizaciones", "No hay datos nuevos para actualizar");
+            }
+          }
+        } catch (e) {
+
+          console.error(e);
+        }
+      }
+
+      /**
+       *Obtentine el constenido de etiquetas de texto y las convierte a etiquetas el tipo input
+       */
+      async function getText() {
+
+        const keyClass = ".list-group-item .text-key";
+        const valueClass = ".list-group-item .text-value";
+
+        const textContent = await global.getJsonTxT(keyClass, valueClass); // => Contenido del texto econvertido a JSON
+
+        if (textContent) {
+
+          setDetAssetBuild(idActivo, textContent);
+
+        } else {
+          console.error("no hay datos")
+        }
+
+      }
+
+      /**
+       * Transforma las etiquetas del tipo inputa a etiquetas de texto
+       */
+      async function restoreText() {
+
+        const textareas = $All("textarea");
+        const inputs = $All("input");
+
+        inputs.forEach(input => {
+
+          const h6 = document.createElement("h6");
+          h6.classList.add("mb-3", "text-sm", "text-key")
+          h6.textContent = input.value
+
+          input.parentNode.replaceChild(h6, input);
+        });
+
+
+        textareas.forEach(textarea => {
+
+          const span = document.createElement("span");
+          span.classList.add("text-dark", "font-weight-bold", "ms-sm-2");
+          span.textContent = textarea.value;
+
+          const spanParent = document.createElement("span");
+          spanParent.classList.add("mb-2", "text-xs", "text-value");
+
+          spanParent.appendChild(span)
+
+          textarea.parentNode.replaceChild(spanParent, textarea);
+        });
+
+        await getText()
+
+      }
+
+      /**
+       * Elimina la etiqueta Li del botón seleccionado
+       */
+      async function dropTextli(event) {
+
+        let li = event.target.closest(".list-group-item");
+
+        li.remove();
+
+        getText();
+      }
+
+      /**
+       *Reemplaza las etiquetas de texto a una etiqueta input
+       */
+      function replaceTextLabel(e) {
+
+        //reemplazando a una etiqueta input
+        const h6 = e.target.parentNode.parentNode.previousElementSibling.querySelector(".text-key");
+
+        const input = document.createElement("input");
+        input.classList.add("form-control", "mb-2", "text-dark", "font-weight-bold", "ms-sm-2", "text-key");
+        input.setAttribute("required", true);
+
+        input.value = h6.textContent;
+        input.innerHTML = h6.textContent;
+        console.log(input.value),
+
+          h6.parentNode.replaceChild(input, h6);
+
+        //Remplazando a una etiqueta textarea
+        const span = e.target.parentNode.parentNode.previousElementSibling.querySelector(".text-value");
+
+        const textarea = document.createElement("textarea");
+
+        textarea.classList.add("form-control", "mb-2", "text-dark", "font-weight-bold", "ms-sm-2", "text-value");
+        textarea.setAttribute("cols", "70");
+        textarea.setAttribute("rows", "10");
+        textarea.value = span.textContent;
+        textarea.innerHTML = span.textContent;
+
+        span.parentNode.replaceChild(textarea, span);
+      }
+
+      function createIputText() {
+
+        //CREA EL INPUT
+        const input = document.createElement("input");
+        input.classList.add("form-control", "mb-2", "text-dark", "font-weight-bold", "ms-sm-2", "text-key");
+
+        //Crea el TEXTAREA
+        const textarea = document.createElement("textarea");
+
+        textarea.classList.add("form-control", "mb-2", "text-dark", "font-weight-bold", "ms-sm-2", "text-value");
+        textarea.setAttribute("cols", "70");
+        textarea.setAttribute("rows", "10");
+
+        //Div flex-column
+        const flexColumn = document.createElement("div");
+        flexColumn.classList.add("d-flex", "flex-column");
+
+        flexColumn.appendChild(input);
+        flexColumn.appendChild(textarea);
+
+        //Div col-md-9
+        const colMd9 = document.createElement("div");
+        colMd9.classList.add("col-md-9");
+
+        colMd9.appendChild(flexColumn);
+
+        //Botón edit
+        const btnDelete = document.createElement("a");
+        btnDelete.classList.add("btn", "btn-link", "text-danger", "text-gradient", "px-3", "mb-0", "delete");
+        btnDelete.setAttribute("href", "#");
+        btnDelete.innerText = "Eliminar";
+
+        const iconTrash = document.createElement("i");
+        iconTrash.classList.add("far", "fa-trash-alt", "me-2");
+
+        btnDelete.insertBefore(iconTrash, btnDelete.firstChild);
+
+        //Botón edit
+        const btnEdit = document.createElement("a");
+        btnEdit.classList.add("btn", "btn-link", "text-dark", "px-3", "mb-0", "edit");
+        btnEdit.setAttribute("href", "#");
+        btnEdit.innerText = "Editar";
+
+        const iconPencil = document.createElement("i");
+        iconPencil.classList.add("fas", "fa-pencil-alt", "text-dark", "me-2");
+        iconPencil.setAttribute("aria-hidden", true);
+
+
+        btnEdit.insertBefore(iconPencil, btnEdit.firstChild);
+
+        //Div ms-auto
+        const msAuto = document.createElement("div");
+        msAuto.classList.add("ms-auto", "text-end")
+
+        msAuto.appendChild(btnDelete);
+        msAuto.appendChild(btnEdit);
+
+        //Div col-md-3
+        const colMd3 = document.createElement("div");
+        colMd3.classList.add("col-md-3")
+
+        colMd3.appendChild(msAuto);
+
+        //Div row
+        const row = document.createElement("div");
+        row.classList.add("row");
+
+        row.appendChild(colMd9);
+        row.appendChild(colMd3);
+
+        //Etiqueta LI 
+        const li = document.createElement("li");
+        li.classList.add("list-group-item", "border-0", "p-4", "mb-2", "bg-gray-100", "border-radius-lg");
+
+        li.appendChild(row);
+
+        let firstList = $("#list-group").firstChild;
+
+        $("#list-group").insertBefore(li, firstList);
+      }
+
+      //FUnción para validar si las cajas están vacías
+      function validateInputs(callback) {
+
+        const form = $All(".list-group input, textarea");
+
+        let isValid = true;
+
+        Array.from(form).forEach(input => {
+
+          if (input.value == "") {
+
+            input.classList.add('was-validated'), //MUESTRA LOS LABELS EN ROJO
+              isValid = false;
+
+            input.reportValidity();
+
+            sAlert.sweetWarning("Cajas vacías", "Necesitas completar los campos");
+          } else {
+
+            input.classList.remove('was-validated');
+            isValid = true;
+
+          }
+        });
+
+        if (isValid) {
+
+          callback();
+        }
+
+      }
+
+      function renderTable(idtable, data) {
+
+        newRow = `
+        <tr>
+          <td>
+            <p class="text-xs font-weight-bold mb-0">${data.apellidos}</p>
+          </td>
+          <td>
+            <p class="text-xs font-weight-bold mb-0">${data.nombres}</p>
+          </td>
+          <td>
+            <p class="text-xs font-weight-bold mb-0">${data.documento_tipo}</p>
+          </td>
+          <td>
+            <p class="text-xs font-weight-bold mb-0">${data.documento_nro}</p>
+          </td>
+          <td class="align-middle">
+            <div class="btn-group">
+              <a type="button" href="#" class="btn btn-success btn-sm"><i class="bi bi-arrow-right-square"></i> Ver más</a>
+            </div>
+          </td>
+        </tr>           
+          `;
+
+        $(idtable).innerHTML += newRow;
+      }
+
+      async function getClients(id) {
+
+        try {
+
+          let url = "../../Controllers/separation.controller.php";
+
+          let params = new FormData();
+
+          params.append("action", "listSeparaction");
+          params.append("idactivo", id);
+
+          let results = await global.sendAction(url, params);
+
+          $("#table-clients tbody").innerHTML = "";
+          if (results) {
+
+            console.log(results);
+            renderTable("#table-clients tbody", results);
+          } else {
+
+            renderListError("#table-clients tbody")
+          }
+        } catch (e) {
+
+          console.error(e);
+
+        }
+      }
+
+      $("#add").addEventListener("click", () => {
+
+        if (idPresupuesto) {
+
+          validateInputs(createIputText);
+        } else {
+          sAlert.sweetError("Registra el presupuesto", "El lote no tiene aún un presupuesto asignado");
+        }
+
       });
 
+      $("#save").addEventListener("click", () => {
 
-      textareas.forEach(textarea => {
+        const form = $All(".list-group input, textarea");
 
-        const span = document.createElement("span");
-        span.classList.add("text-dark", "font-weight-bold","ms-sm-2");
-        span.textContent = textarea.value;
+        if (form.length > 0) {
 
-        const spanParent = document.createElement("span");
-        spanParent.classList.add("mb-2", "text-xs", "text-value");
+          validateInputs(restoreText);
 
-        spanParent.appendChild(span)
-        
-        textarea.parentNode.replaceChild(spanParent, textarea);
+        } else {
+
+          sAlert.sweetWarning("No hay actualizaciones", "No hay datos nuevos para actualizar");
+        }
+
       });
 
-      await getText()
+      $("#list-group").addEventListener("click", (e) => {
 
-    }
+        if (e.target.classList.contains("edit")) {
 
-    /**
-     * Elimina la etiqueta Li del botón seleccionado
-     */
-    async function dropTextli(event){
+          replaceTextLabel(e);
 
-      let li = event.target.closest(".list-group-item");
+        } else if (e.target.classList.contains("delete")) {
 
-      li.remove();
+          sAlert.sweetConfirm("¿Deseas eliminar esta especifiación?", "Una vez borrado no se podrá recuperar", () => {
 
-      getText();
-    }
+            dropTextli(e);
+          })
+        }
+      });
 
-    /**
-     *Reemplaza las etiquetas de texto a una etiqueta input
-     */
-    function replaceTextLabel(e){
+      $("#precio_lote_modal").addEventListener("input", (e) => {
+      let precioLote = Number.parseFloat(e.target.value || 0);
 
-      //reemplazando a una etiqueta input
-      const h6 = e.target.parentNode.parentNode.previousElementSibling.querySelector(".text-key");
-        
-      const input = document.createElement("input");
-      input.classList.add("form-control","mb-2", "text-dark", "font-weight-bold", "ms-sm-2", "text-key");
-      input.setAttribute("required",true);
-  
-      input.value = h6.textContent;
-      input.innerHTML = h6.textContent;
-      console.log(input.value),
-  
-      h6.parentNode.replaceChild(input, h6);
+      let precioConstruccion = Number.parseFloat($("#precio_construccion_modal").value == false ? 0 : $("#precio_construccion_modal").value);
 
-      //Remplazando a una etiqueta textarea
-      const span = e.target.parentNode.parentNode.previousElementSibling.querySelector(".text-value");
-  
-      const textarea = document.createElement("textarea");
-  
-      textarea.classList.add("form-control","mb-2", "text-dark", "font-weight-bold", "ms-sm-2", "text-value");
-      textarea.setAttribute("cols","70");
-      textarea.setAttribute("rows","10");
-      textarea.value = span.textContent;
-      textarea.innerHTML = span.textContent;
-  
-      span.parentNode.replaceChild(textarea, span);
-    }
+      $("#precio_venta_modal").value = precioLote + precioConstruccion;
 
-    function createIputText(){
+    })
 
-      //CREA EL INPUT
-      const input = document.createElement("input");
-      input.classList.add("form-control","mb-2", "text-dark", "font-weight-bold", "ms-sm-2", "text-key");
+    $("#idpresupuesto_modal").addEventListener("change", () => {
 
-      //Crea el TEXTAREA
-      const textarea = document.createElement("textarea");
-  
-      textarea.classList.add("form-control","mb-2", "text-dark", "font-weight-bold", "ms-sm-2", "text-value");
-      textarea.setAttribute("cols","70");
-      textarea.setAttribute("rows","10");
+      let presupuesto = $("#idpresupuesto_modal").options[$("#idpresupuesto_modal").selectedIndex].dataset.monto;
+      let monto = Number.parseFloat(presupuesto);
+      let precioLote = Number.parseFloat($("#precio_lote_modal").value || 0);
 
-      //Div flex-column
-      const flexColumn = document.createElement("div");
-      flexColumn.classList.add("d-flex", "flex-column");
-
-      flexColumn.appendChild(input);
-      flexColumn.appendChild(textarea);
-
-      //Div col-md-9
-      const colMd9 = document.createElement("div");
-      colMd9.classList.add("col-md-9");
-
-      colMd9.appendChild(flexColumn);
-
-      //Botón edit
-      const btnDelete = document.createElement("a");
-      btnDelete.classList.add("btn", "btn-link","text-danger", "text-gradient", "px-3", "mb-0" ,"delete");
-      btnDelete.setAttribute("href","#");
-      btnDelete.innerText = "Eliminar";
-
-      const iconTrash = document.createElement("i");
-      iconTrash.classList.add("far", "fa-trash-alt", "me-2");
-
-      btnDelete.insertBefore(iconTrash, btnDelete.firstChild);
-
-      //Botón edit
-      const btnEdit = document.createElement("a");
-      btnEdit.classList.add("btn", "btn-link", "text-dark", "px-3", "mb-0", "edit");
-      btnEdit.setAttribute("href","#");
-      btnEdit.innerText = "Editar";
-      
-      const iconPencil = document.createElement("i");
-      iconPencil.classList.add("fas", "fa-pencil-alt", "text-dark", "me-2");
-      iconPencil.setAttribute("aria-hidden",true);
-      
-
-      btnEdit.insertBefore(iconPencil, btnEdit.firstChild);
-
-      //Div ms-auto
-      const msAuto = document.createElement("div");
-      msAuto.classList.add("ms-auto", "text-end")
-
-      msAuto.appendChild(btnDelete);
-      msAuto.appendChild(btnEdit);
-
-      //Div col-md-3
-      const colMd3 = document.createElement("div");
-      colMd3.classList.add("col-md-3")
-
-      colMd3.appendChild(msAuto);
-
-      //Div row
-      const row = document.createElement("div");
-      row.classList.add("row");
-
-      row.appendChild(colMd9);
-      row.appendChild(colMd3);
-
-      //Etiqueta LI 
-      const li = document.createElement("li");
-      li.classList.add("list-group-item", "border-0", "p-4", "mb-2", "bg-gray-100", "border-radius-lg");
-
-      li.appendChild(row);
-
-      let firstList = $("#list-group").firstChild;
-
-      $("#list-group").insertBefore(li, firstList);
-    }
-
-    //FUnción para validar si las cajas están vacías
-  function validateInputs(callback){
-    
-    const form = $All(".list-group input, textarea");
-
-    let isValid = true;
-    
-    Array.from(form).forEach(input => {
-      
-      if(input.value == ""){
-
-        input.classList.add('was-validated'), //MUESTRA LOS LABELS EN ROJO
-        isValid = false;
-
-        input.reportValidity();
-
-        sAlert.sweetWarning("Cajas vacías", "Necesitas completar los campos");
-      }else{
-
-        input.classList.remove('was-validated');
-        isValid = true;
-
-      }
+      $("#precio_construccion_modal").value = monto;
+      $("#precio_venta_modal").value = monto + precioLote;
     });
 
-    if(isValid){
+      getClients(idActivo);
+      getDetails(idActivo);
 
-      callback();
-    }
-
-  }
-
-  function renderTable(idtable, data){
+      (() => {
+        'use strict' //=> USO ESTRICTO POR POLITICAS DE SEGURIDAD EN EL FORMULARIO
   
-    newRow = `
-      <tr>
-        <td>
-          <p class="text-xs font-weight-bold mb-0">${data.apellidos}</p>
-        </td>
-        <td>
-          <p class="text-xs font-weight-bold mb-0">${data.nombres}</p>
-        </td>
-        <td>
-          <p class="text-xs font-weight-bold mb-0">${data.documento_tipo}</p>
-        </td>
-        <td>
-          <p class="text-xs font-weight-bold mb-0">${data.documento_nro}</p>
-        </td>
-        <td class="align-middle">
-          <div class="btn-group">
-            <a type="button" href="#" class="btn btn-success btn-sm"><i class="bi bi-arrow-right-square"></i> Ver más</a>
-          </div>
-        </td>
-      </tr>           
-        `;
-
-      $(idtable).innerHTML += newRow;
-  }
-
-  async function getClients(id){
-
-    try{
-
-      let url = "../../Controllers/separation.controller.php";
-
-      let params = new FormData();
-
-      params.append("action","listSeparaction");
-      params.append("idactivo",id);
-
-      let results = await global.sendAction(url, params);
-
-      $("#table-clients tbody").innerHTML = "";
-      if(results){
-
-        console.log(results);
-        renderTable("#table-clients tbody", results);
-      }else{
-        
-        renderListError("#table-clients tbody")
-      }
-    }
-    catch(e){
-      
-      console.error(e);
-
-    }
-  }
-
-  $("#add").addEventListener("click",()=>{
-
-    if(idPresupuesto){
-      
-      validateInputs(createIputText);
-    }else{
-      sAlert.sweetError("Registra el presupuesto","El lote no tiene aún un presupuesto asignado");
-    }
-    
-  });
-
-  $("#save").addEventListener("click",()=>{
-
-    const form = $All(".list-group input, textarea");
-
-    if(form.length > 0){
-      
-      validateInputs(restoreText);
-      
-    }else{
-
-      sAlert.sweetWarning("No hay actualizaciones", "No hay datos nuevos para actualizar");
-    }
-    
-  });
-
-  $("#list-group").addEventListener("click",(e)=>{
-
-    if(e.target.classList.contains("edit")){
-
-      replaceTextLabel(e);
-
-    }else if(e.target.classList.contains("delete")){
-
-      sAlert.sweetConfirm("¿Deseas eliminar esta especifiación?","Una vez borrado no se podrá recuperar",()=>{
-        
-        dropTextli(e);
-      })
-    }
-  });
-
-  getClients(idActivo);
-  getDetails(idActivo);
+        //SELECCIONA TODOS LOS ELEMENTOS DEL FORMULARIO QUE TIENE LA CLASE "needs-validation
+        const forms = document.querySelectorAll('.needs-validation')
+  
+        // TOMA EL ELEMENTO "FORMS" Y LO CONVIERTE A UN ARRAY
+        // SE INCLUYE EN UN FOREAH PARA ITERAR SOBRE SUS ELEMENTOS
+  
+        Array.from(forms).forEach(form => {
+          form.addEventListener('submit', event => {
+  
+            //SI LA VALIDACIÓN DEL FORMULARIO ES FALSE
+            if (!form.checkValidity()) {
+              event.preventDefault() //=> FRENA EL ENVÍO DEL FORMULARIO
+              event.stopPropagation() //=> FRENA LA PROPAGACIÓN DE DATOS EN EL FORMULARIO
+              form.reportValidity();
+            } else {
+              event.preventDefault();
+              sAlert.sweetConfirm("Datos nuevos", "¿Deseas actualizar el registro?", () => {
+  
+                setAsset(idActivo); //Ejecuta la función
+                window.location.reload();
+              });
+            }
+  
+            form.classList.add('was-validated') //=> AGREGA ESTA CLASE A LOS ELEMENTOS DEL FORMULARIO(MUESTRA LOS COMENTARIOS)
+          }, false) //=> ESTE TERCER ARGUMENTO INDICA QUE EL EVENTO NO SE ESTA CAPTURANDO EN LA ""FASE DE CAPTURA" SINO EN "PROPAGACIÓN NORMAL"
+        })
+      })();
+    })
 
   </script>
   <!-- Github buttons -->

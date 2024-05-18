@@ -286,10 +286,10 @@ BEGIN
         act.det_casa,
         pres.idpresupuesto,
         pres.modelo,
-        pres.medidas,
         act.propietario_lote,
         act.precio_lote,
         act.precio_construccion,
+        act.precio_venta,
         pers.nombres AS usuario
 		FROM activos AS act
         INNER JOIN proyectos AS proy ON proy.idproyecto = act.idproyecto
@@ -338,7 +338,7 @@ CREATE PROCEDURE spu_add_assets
 	IN _tipo_activo 	VARCHAR(10),
     IN _imagen  		VARCHAR(100),
     IN _estado	 		VARCHAR(10),
-    IN _sublote 		TINYINT,
+    IN _sublote 		VARCHAR(6),
     IN _direccion 		CHAR(70),
     IN _moneda_venta 	VARCHAR(10),
     IN _area_terreno 	DECIMAL(5,2),
@@ -347,9 +347,11 @@ CREATE PROCEDURE spu_add_assets
     IN _latitud			VARCHAR(20),
     IN _longitud 		VARCHAR(20),
     IN _perimetro      	JSON,
+    IN _idpresupuesto 	INT,
     IN _propietario_lote varchar(70),
     IN _precio_lote		DECIMAL(8,2),
     IN _precio_construccion		DECIMAL(8,2),
+    IN _precio_venta	DECIMAL(8,2),
     IN _idusuario 		INT
 )
 BEGIN
@@ -367,9 +369,11 @@ BEGIN
 						latitud, 
                         longitud, 
                         perimetro, 
+                        idpresupuesto,
                         propietario_lote,
                         precio_lote,
                         precio_construccion,
+                        precio_venta,
                         idusuario
                         )
 			VALUES
@@ -387,9 +391,11 @@ BEGIN
 				NULLIF(_latitud,""), 
                 NULLIF(_longitud, ""), 
                 NULLIF(_perimetro,""),
+                NULLIF(_idpresupuesto,""),
                 _propietario_lote,
                 _precio_lote,
                 NULLIF(_precio_construccion, ""), 
+                _precio_venta,
                 _idusuario
                 );
                 
@@ -405,7 +411,7 @@ CREATE PROCEDURE spu_set_assets
 	IN _tipo_activo 	VARCHAR(10),
     IN _imagen  		VARCHAR(100),
     IN _estado	 		VARCHAR(10),
-    IN _sublote 		TINYINT,
+    IN _sublote 		VARCHAR(6),
     IN _direccion 		CHAR(70),
     IN _moneda_venta 	VARCHAR(10),
     IN _area_terreno 	DECIMAL(5,2),
@@ -418,6 +424,7 @@ CREATE PROCEDURE spu_set_assets
     IN _propietario_lote varchar(70),
     IN _precio_lote		DECIMAL(8,2),
     IN _precio_construccion		DECIMAL(8,2),
+    IN _precio_venta	DECIMAL(8,2),
     IN _idusuario 		INT
 )
 BEGIN
@@ -439,7 +446,9 @@ BEGIN
             idpresupuesto	= NULLIF(_idpresupuesto, ""),
             propietario_lote = _propietario_lote,
             precio_lote		= precio_lote,
-            precio_construccion = _precio_construccion,
+            precio_construccion = NULLIF(_precio_construccion,""),
+            precio_venta 	= _precio_venta,
+            precio_venta	= _precio_venta,
             idusuario		= _idusuario,
             update_at		= CURDATE() 
 		WHERE
@@ -1302,7 +1311,7 @@ BEGIN
         pres.codigo,
         pres.modelo,
         CASE
-			WHEN detcost.idpresupuesto IS NOT NULL THEN
+			WHEN detcost.idpresupuesto IS NOT NULL AND detcost.inactive_at IS NULL THEN
 				(SUM(detcost.cantidad * detcost.precio_unitario)) 
 			ELSE
 				_valueDefault
@@ -1313,7 +1322,7 @@ BEGIN
         INNER JOIN usuarios usu ON usu.idusuario = pres.idusuario
         INNER JOIN personas pers ON pers.idpersona = usu.idpersona
         WHERE pres.inactive_at IS NULL
-        AND detcost.inactive_at IS NULL
+		AND detcost.inactive_at IS NULL
         GROUP BY pres.idpresupuesto
         ORDER BY pres.codigo ASC;
 END $$
@@ -1322,18 +1331,25 @@ DELIMITER ;
 DELIMITER $$
 CREATE PROCEDURE spu_search_budgets(IN _codigo VARCHAR(8))
 BEGIN
+	DECLARE _valueDefault DECIMAL(8,2);
+    SET _valueDefault = 0.00;
 	SELECT
 		pres.idpresupuesto,
         pres.codigo,
         pres.modelo,
-        (SUM(detcost.cantidad * detcost.precio_unitario)) AS total,
+        CASE
+			WHEN detcost.idpresupuesto IS NOT NULL AND detcost.inactive_at IS NULL THEN
+				(SUM(detcost.cantidad * detcost.precio_unitario)) 
+			ELSE
+				_valueDefault
+		END AS total,
         pers.nombres AS usuario
 		FROM presupuestos pres
-        INNER JOIN detalle_costos detcost ON detcost.idpresupuesto = pres.idpresupuesto
+        LEFT JOIN detalle_costos detcost ON detcost.idpresupuesto = pres.idpresupuesto
         INNER JOIN usuarios usu ON usu.idusuario = pres.idusuario
         INNER JOIN personas pers ON pers.idpersona = usu.idpersona
-        WHERE pres.codigo LIKE CONCAT(_codigo,"%")
-        AND pres.inactive_at IS NULL
+        WHERE pres.inactive_at IS NULL
+        AND pres.codigo LIKE CONCAT(_codigo,'%')
         AND detcost.inactive_at IS NULL
         GROUP BY pres.idpresupuesto
         ORDER BY pres.codigo ASC;
@@ -1343,24 +1359,52 @@ DELIMITER ;
 DELIMITER $$
 CREATE PROCEDURE spu_get_budget_by_id(IN _idpresupuesto INT)
 BEGIN
+	DECLARE _valueDefault DECIMAL(8,2);
+    SET _valueDefault = 0.00;
 	SELECT
 		pres.idpresupuesto,
         pres.codigo,
         pres.modelo,
-        (SUM(detcost.cantidad * detcost.precio_unitario)) AS total,
+        CASE
+			WHEN detcost.idpresupuesto IS NOT NULL AND detcost.inactive_at IS NULL THEN
+				(SUM(detcost.cantidad * detcost.precio_unitario)) 
+			ELSE
+				_valueDefault
+		END AS total,
         pers.nombres AS usuario
 		FROM presupuestos pres
         LEFT JOIN detalle_costos detcost ON detcost.idpresupuesto = pres.idpresupuesto
         INNER JOIN usuarios usu ON usu.idusuario = pres.idusuario
         INNER JOIN personas pers ON pers.idpersona = usu.idpersona
-        WHERE pres.idpresupuesto = _idpresupuesto
-        AND pres.inactive_at IS NULL
+        WHERE pres.inactive_at IS NULL
+        AND pres.idpresupuesto = _idpresupuesto
         AND detcost.inactive_at IS NULL
         GROUP BY pres.idpresupuesto
         ORDER BY pres.codigo ASC;
 END $$
 DELIMITER ;
 
+
+DELIMITER $$
+CREATE PROCEDURE spu_list_budgets_assets()
+BEGIN
+	SELECT
+		pres.idpresupuesto,
+        pres.codigo,
+        pres.modelo,
+		(SUM(detcost.cantidad * detcost.precio_unitario)) AS total,
+        pers.nombres AS usuario
+		FROM presupuestos pres
+        INNER JOIN detalle_costos detcost ON detcost.idpresupuesto = pres.idpresupuesto
+        INNER JOIN usuarios usu ON usu.idusuario = pres.idusuario
+        INNER JOIN personas pers ON pers.idpersona = usu.idpersona
+        WHERE pres.inactive_at IS NULL
+        AND detcost.inactive_at IS NULL
+        GROUP BY pres.idpresupuesto
+        ORDER BY pres.codigo ASC;
+END $$
+DELIMITER ;
+call spu_list_budgets_assets();
 DELIMITER $$
 CREATE PROCEDURE spu_add_budget
 (
@@ -1433,16 +1477,16 @@ DELIMITER $$
 CREATE PROCEDURE spu_list_detail_cost(IN _idpresupuesto INT)
 BEGIN
 		SELECT
-			detcost.iddetalle_costos,
+			detcost.iddetalle_costo,
 			detcost.idpresupuesto,
 			cat.categoria_costo,
             cat.idcategoria_costo,
 			subcat.subcategoria_costo,
             subcat.idsubcategoria_costo,
-            detcost.idtipo_material,
+            detcost.idmaterial,
             CASE 
-				WHEN detcost.idtipo_material IS NOT NULL THEN
-				CONCAT(marc.marca, " // ", mat.material, " // ",tmat.tipo_material, " // ",unimed.unidad_medida)
+				WHEN detcost.idmaterial IS NOT NULL THEN
+				CONCAT(marc.marca, " // ", mat.material, " // ",unimed.unidad_medida)
 				ELSE
                 detcost.detalle
 			END AS detalle,
@@ -1454,8 +1498,7 @@ BEGIN
 			INNER JOIN presupuestos pres ON pres.idpresupuesto = detcost.idpresupuesto
 			INNER JOIN subcategoria_costos subcat ON subcat.idsubcategoria_costo = detcost.idsubcategoria_costo
 			INNER JOIN categoria_costos cat ON cat.idcategoria_costo = subcat.idcategoria_costo
-			LEFT JOIN tipos_materiales tmat ON tmat.idtipo_material = detcost.idtipo_material
-            LEFT JOIN materiales mat ON mat.idmaterial = tmat.idmaterial
+            LEFT JOIN materiales mat ON mat.idmaterial = detcost.idmaterial
             LEFT JOIN marcas marc ON marc.idmarca = mat.idmarca
             LEFT JOIN unidades_medida unimed ON unimed.idunidad_medida = mat.idunidad_medida
 			INNER JOIN usuarios usu ON usu.idusuario = detcost.idusuario
@@ -1465,13 +1508,13 @@ BEGIN
 			ORDER BY cat.categoria_costo, subcat.subcategoria_costo ASC;
 END $$
 DELIMITER ;
-call spu_list_detail_cost(5);
+
 DELIMITER $$
 CREATE PROCEDURE spu_add_detail_cost
 (
 	IN _idpresupuesto 			INT,
     IN _idsubcategoria_costo	INT,
-    IN _idtipo_material			INT,
+    IN _idmaterial				INT,
     IN _detalle 				VARCHAR(100),
     IN _cantidad 				TINYINT,
     IN _precio_unitario 		DECIMAL(8,2),
@@ -1481,7 +1524,7 @@ BEGIN
 	INSERT INTO detalle_costos(
 								idpresupuesto, 
                                 idsubcategoria_costo, 
-                                idtipo_material,
+                                idmaterial,
                                 detalle,
                                 cantidad,
                                 precio_unitario,
@@ -1490,7 +1533,7 @@ BEGIN
 						VALUES(
 								_idpresupuesto, 
                                 _idsubcategoria_costo, 
-                                NULLIF(_idtipo_material,""),
+                                NULLIF(_idmaterial,""),
                                 _detalle,
                                 _cantidad,
                                 _precio_unitario,
@@ -1507,7 +1550,7 @@ CREATE PROCEDURE spu_set_detail_cost
 	IN _iddetalle_costo	 		INT,
 	IN _idpresupuesto 			INT,
     IN _idsubcategoria_costo	INT,
-    IN _idtipo_material			INT,
+    IN _idmaterial				INT,
     IN _detalle 				VARCHAR(100),
     IN _cantidad 				TINYINT,
     IN _precio_unitario 		DECIMAL(8,2),
@@ -1518,7 +1561,7 @@ BEGIN
 		SET
 			idpresupuesto 			= _idpresupuesto,
             idsubcategoria_costo	= _idsubcategoria_costo,
-            idtipo_material			= NULLIF(_idtipo_material,""),
+            idmaterial				= NULLIF(_idmaterial,""),
             detalle					= _detalle,
             cantidad				= _cantidad,
             precio_unitario			= _precio_unitario,
@@ -1537,7 +1580,7 @@ BEGIN
 	UPDATE detalle_costos
 		SET
 			inactive_at = CURDATE()
-        WHERE iddetalle_costos = _iddetalle_costo;
+        WHERE iddetalle_costo = _iddetalle_costo;
         
 	SELECT ROW_COUNT() AS filasAfect;
     
@@ -1581,7 +1624,7 @@ BEGIN
             subcat.idsubcategoria_costo;
 END $$
 DELIMITER ;
-
+call spu_resume_budget_subcatgory(30);
 -- SEPARACIONES
 DELIMITER $$
 CREATE PROCEDURE spu_list_separations()

@@ -112,7 +112,7 @@
                       <g id="office" transform="translate(153.000000, 2.000000)">
                         <path class="color-background opacity-6" d="M12.25,17.5 L8.75,17.5 L8.75,1.75 C8.75,0.78225 9.53225,0 10.5,0 L31.5,0 C32.46775,0 33.25,0.78225 33.25,1.75 L33.25,12.25 L29.75,12.25 L29.75,3.5 L12.25,3.5 L12.25,17.5 Z"></path>
                         <svg class="color-background" xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-person-lines-fill" viewBox="0 0 16 16">
-                          <path  d="M6 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m-5 6s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zM11 3.5a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 0 1h-4a.5.5 0 0 1-.5-.5m.5 2.5a.5.5 0 0 0 0 1h4a.5.5 0 0 0 0-1zm2 3a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1zm0 3a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1z"/>
+                          <path d="M6 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m-5 6s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zM11 3.5a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 0 1h-4a.5.5 0 0 1-.5-.5m.5 2.5a.5.5 0 0 0 0 1h4a.5.5 0 0 0 0-1zm2 3a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1zm0 3a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1z" />
                         </svg>
                       </g>
                     </g>
@@ -134,9 +134,9 @@
                     <g transform="translate(1716.000000, 291.000000)">
                       <g id="office" transform="translate(153.000000, 2.000000)">
                         <path class="color-background opacity-6" d="M12.25,17.5 L8.75,17.5 L8.75,1.75 C8.75,0.78225 9.53225,0 10.5,0 L31.5,0 C32.46775,0 33.25,0.78225 33.25,1.75 L33.25,12.25 L29.75,12.25 L29.75,3.5 L12.25,3.5 L12.25,17.5 Z"></path>
-                        <svg  class="color-background" xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-calculator" viewBox="0 0 16 16">
-                          <path d="M12 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1zM4 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z"/>
-                          <path d="M4 2.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5h-7a.5.5 0 0 1-.5-.5zm0 4a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm0 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm0 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm3-6a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm0 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm0 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm3-6a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm0 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5z"/>
+                        <svg class="color-background" xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-calculator" viewBox="0 0 16 16">
+                          <path d="M12 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1zM4 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z" />
+                          <path d="M4 2.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5h-7a.5.5 0 0 1-.5-.5zm0 4a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm0 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm0 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm3-6a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm0 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm0 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm3-6a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm0 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5z" />
                         </svg>
                       </g>
                     </g>
@@ -158,8 +158,8 @@
                     <g transform="translate(1716.000000, 291.000000)">
                       <g id="office" transform="translate(153.000000, 2.000000)">
                         <svg class="color-background" xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-list-stars" viewBox="0 0 16 16">
-                          <path fill-rule="evenodd" d="M5 11.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5"/>
-                          <path d="M2.242 2.194a.27.27 0 0 1 .516 0l.162.53c.035.115.14.194.258.194h.551c.259 0 .37.333.164.493l-.468.363a.28.28 0 0 0-.094.3l.173.569c.078.256-.213.462-.423.3l-.417-.324a.27.27 0 0 0-.328 0l-.417.323c-.21.163-.5-.043-.423-.299l.173-.57a.28.28 0 0 0-.094-.299l-.468-.363c-.206-.16-.095-.493.164-.493h.55a.27.27 0 0 0 .259-.194zm0 4a.27.27 0 0 1 .516 0l.162.53c.035.115.14.194.258.194h.551c.259 0 .37.333.164.493l-.468.363a.28.28 0 0 0-.094.3l.173.569c.078.255-.213.462-.423.3l-.417-.324a.27.27 0 0 0-.328 0l-.417.323c-.21.163-.5-.043-.423-.299l.173-.57a.28.28 0 0 0-.094-.299l-.468-.363c-.206-.16-.095-.493.164-.493h.55a.27.27 0 0 0 .259-.194zm0 4a.27.27 0 0 1 .516 0l.162.53c.035.115.14.194.258.194h.551c.259 0 .37.333.164.493l-.468.363a.28.28 0 0 0-.094.3l.173.569c.078.255-.213.462-.423.3l-.417-.324a.27.27 0 0 0-.328 0l-.417.323c-.21.163-.5-.043-.423-.299l.173-.57a.28.28 0 0 0-.094-.299l-.468-.363c-.206-.16-.095-.493.164-.493h.55a.27.27 0 0 0 .259-.194z"/>
+                          <path fill-rule="evenodd" d="M5 11.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5" />
+                          <path d="M2.242 2.194a.27.27 0 0 1 .516 0l.162.53c.035.115.14.194.258.194h.551c.259 0 .37.333.164.493l-.468.363a.28.28 0 0 0-.094.3l.173.569c.078.256-.213.462-.423.3l-.417-.324a.27.27 0 0 0-.328 0l-.417.323c-.21.163-.5-.043-.423-.299l.173-.57a.28.28 0 0 0-.094-.299l-.468-.363c-.206-.16-.095-.493.164-.493h.55a.27.27 0 0 0 .259-.194zm0 4a.27.27 0 0 1 .516 0l.162.53c.035.115.14.194.258.194h.551c.259 0 .37.333.164.493l-.468.363a.28.28 0 0 0-.094.3l.173.569c.078.255-.213.462-.423.3l-.417-.324a.27.27 0 0 0-.328 0l-.417.323c-.21.163-.5-.043-.423-.299l.173-.57a.28.28 0 0 0-.094-.299l-.468-.363c-.206-.16-.095-.493.164-.493h.55a.27.27 0 0 0 .259-.194zm0 4a.27.27 0 0 1 .516 0l.162.53c.035.115.14.194.258.194h.551c.259 0 .37.333.164.493l-.468.363a.28.28 0 0 0-.094.3l.173.569c.078.255-.213.462-.423.3l-.417-.324a.27.27 0 0 0-.328 0l-.417.323c-.21.163-.5-.043-.423-.299l.173-.57a.28.28 0 0 0-.094-.299l-.468-.363c-.206-.16-.095-.493.164-.493h.55a.27.27 0 0 0 .259-.194z" />
                         </svg>
                       </g>
                     </g>
@@ -182,8 +182,8 @@
                     <g transform="translate(1716.000000, 291.000000)">
                       <g id="office" transform="translate(153.000000, 2.000000)">
                         <svg class="color-background" xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-credit-card" viewBox="0 0 16 16">
-                          <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v1h14V4a1 1 0 0 0-1-1zm13 4H1v5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1z"/>
-                          <path d="M2 10a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1z"/>
+                          <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v1h14V4a1 1 0 0 0-1-1zm13 4H1v5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1z" />
+                          <path d="M2 10a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1z" />
                         </svg>
                       </g>
                     </g>
@@ -206,7 +206,7 @@
                     <g transform="translate(1716.000000, 291.000000)">
                       <g id="office" transform="translate(153.000000, 2.000000)">
                         <svg class="color-background" xmlns="http://www.w3.org/2000/svg" width="40" height="50" fill="currentColor" class="bi bi-people-fill" viewBox="0 0 16 16">
-                          <path d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6m-5.784 6A2.24 2.24 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.3 6.3 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1zM4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5"/>
+                          <path d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6m-5.784 6A2.24 2.24 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.3 6.3 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1zM4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5" />
                         </svg>
                       </g>
                     </g>
@@ -229,8 +229,8 @@
                     <g transform="translate(1716.000000, 291.000000)">
                       <g id="office" transform="translate(153.000000, 2.000000)">
                         <svg class="color-background" xmlns="http://www.w3.org/2000/svg" width="50" height="43" fill="currentColor" class="bi bi-file-earmark-font" viewBox="0 0 16 16">
-                          <path d="M10.943 6H5.057L5 8h.5c.18-1.096.356-1.192 1.694-1.235l.293-.01v5.09c0 .47-.1.582-.898.655v.5H9.41v-.5c-.803-.073-.903-.184-.903-.654V6.755l.298.01c1.338.043 1.514.14 1.694 1.235h.5l-.057-2z"/>
-                          <path d="M14 4.5V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h5.5zm-3 0A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V4.5z"/>
+                          <path d="M10.943 6H5.057L5 8h.5c.18-1.096.356-1.192 1.694-1.235l.293-.01v5.09c0 .47-.1.582-.898.655v.5H9.41v-.5c-.803-.073-.903-.184-.903-.654V6.755l.298.01c1.338.043 1.514.14 1.694 1.235h.5l-.057-2z" />
+                          <path d="M14 4.5V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h5.5zm-3 0A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V4.5z" />
                         </svg>
                       </g>
                     </g>
@@ -253,8 +253,8 @@
                     <g transform="translate(1716.000000, 291.000000)">
                       <g id="office" transform="translate(153.000000, 2.000000)">
                         <svg class="color-background" xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-eye" viewBox="0 0 16 16">
-                          <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8M1.173 8a13 13 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5s3.879 1.168 5.168 2.457A13 13 0 0 1 14.828 8q-.086.13-.195.288c-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5s-3.879-1.168-5.168-2.457A13 13 0 0 1 1.172 8z"/>
-                          <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5M4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0"/>
+                          <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8M1.173 8a13 13 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5s3.879 1.168 5.168 2.457A13 13 0 0 1 14.828 8q-.086.13-.195.288c-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5s-3.879-1.168-5.168-2.457A13 13 0 0 1 1.172 8z" />
+                          <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5M4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0" />
                         </svg>
                       </g>
                     </g>
@@ -265,7 +265,7 @@
             <span class="nav-link-text ms-1">Monitoreo</span>
           </a>
         </li>
-        
+
         <li class="nav-item mt-3">
           <h6 class="ps-4 ms-2 text-uppercase text-xs font-weight-bolder opacity-6">Panel de usuario</h6>
         </li>
@@ -314,7 +314,7 @@
             <span class="nav-link-text ms-1">Cerrar sesión</span>
           </a>
         </li>
-        
+
       </ul>
     </div>
   </aside>
@@ -324,17 +324,17 @@
       <div class="container-fluid py-1 px-3">
         <nav aria-label="breadcrumb">
           <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
-          <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="#">Dashboard</a></li>
+            <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="#">Dashboard</a></li>
             <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="#">Proyectos</a></li>
             <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="#">Lotes</a></li>
             <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Editar lote</li>
           </ol>
-          <h6 class="font-weight-bolder mb-0" id ="cabezera">EDITAR LOTE - </h6>
+          <h6 class="font-weight-bolder mb-0" id="cabezera">EDITAR LOTE - </h6>
         </nav>
         <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
-          
+
           <ul class="navbar-nav  justify-content-end">
-            
+
             <li class="nav-item d-flex align-items-center">
               <a href="javascript:;" class="nav-link text-body font-weight-bold px-0">
                 <i class="fa fa-user me-sm-1"></i>
@@ -350,7 +350,7 @@
                 </div>
               </a>
             </li>
-            
+
           </ul>
         </div>
       </div>
@@ -362,264 +362,290 @@
       <!-- FORMULARIO -->
       <div>
         <div class="col-lg-12 mb-lg-0 mb-4 mt-4">
-            <div class="card">
-              <div class="card-body" style="padding: 50px">
-                <div class="row">
-                  <div class="col-lg-12">
-                    <div class="d-flex flex-column h-100">
-                      <form class="row needs-validation" id="form-assset-set" novalidate>
-                            <div class="tab">
-                              <div class="row">
-                                <div class="col-md-6">
+          <div class="card">
+            <div class="card-body" style="padding: 50px">
+              <div class="row">
+                <div class="col-lg-12">
+                  <div class="d-flex flex-column h-100">
+                    <form class="row needs-validation" id="form-assset-set" novalidate>
+                      <div class="tab">
+                        <div class="row">
+                          <div class="col-md-6">
 
-                                    <!-- DATOS GENERALES -->
-                                    
-                                    <!-- UBIGEO -->
-                                    <div >
-                                      <label for="ubigeo" class="form-label">Ubigeo</label>
-                                        <input type="text" class="form-control" id="ubigeo" readonly>
+                            <!-- DATOS GENERALES -->
 
-                                    </div>
+                            <!-- UBIGEO -->
+                            <div>
+                              <label for="ubigeo" class="form-label">Ubigeo</label>
+                              <input type="text" class="form-control" id="ubigeo" readonly>
 
-                                    <!-- ESTADO -->
-                                    <div class="mt-4">
-                                      <label for="estado" class="form-label">Estado</label>
-                                        <input type="text" class="form-control" id="estado" readonly>
+                            </div>
 
-                                    </div>
-    
-                                    <!-- TIPO ACTIVO -->
-                                    <div class="mt-4">
-                                      <label for="estado" class="form-label">Tipo de propiedad</label>
-                                      <select name="tipo_activo" class="form-select" id="tipo_activo">
-                                        <option value="LOTE">Lote</option>
-                                        <option value="CASA">Casa</option>
-                                      </select>
-                                      <div class="invalid-feedback">
-                                            Necesitas ingresar el tipo (casa/lote).
-                                        </div>
-                                        <div class="valid-feedback">
-                                            Casa/lote registrado correctamente.
-                                        </div>
-                                    </div>
-    
-                                    <!-- PROPIETARIO LOTE -->
-                                    <div class="mt-4">
-                                      <label for="estado" class="form-label">Propietarios</label>
-                                      <select name="propietario_lote" class="form-select" id="propietario_lote" readonly>
-                                        <option value="A.I.F">A.I.F</option>
-                                        <option value="TERCEROS">Terceros</option>
-                                      </select>
-                                      <div class="invalid-feedback">
-                                            Necesitas ingresar el propietario.
-                                        </div>
-                                        <div class="valid-feedback">
-                                            Propietario registrado correctamente.
-                                        </div>
-                                    </div>
-    
-                                    <!-- SUBLOTE -->
-                                    <div class="mt-4">
-                                        <label for="sublote" class="form-label">Sublote</label>
-                                        <input type="text" class="form-control" id="sublote" placeholder="Sublote" required>
-                                        <div class="invalid-feedback">
-                                            Necesitas ingresar el sublote.
-                                        </div>
-                                        <div class="valid-feedback">
-                                            Sublote registrado correctamente.
-                                        </div>
-                                    </div>
-                                    
-                                    <!-- DIRECCIÓN -->
-                                    <div class="mt-4">
-                                        <label for="direccion" class="form-label">Dirección</label>
-                                        <input type="text" class="form-control" id="direccion" placeholder="Dirección" required>
-                                        <div class="invalid-feedback">
-                                            Necesitas ingresar una dirección.
-                                        </div>
-                                        <div class="valid-feedback">
-                                            Dirección ingresada correctamente.
-                                        </div>
-                                    </div>
+                            <!-- ESTADO -->
+                            <div class="mt-4">
+                              <label for="estado" class="form-label">Estado</label>
+                              <input type="text" class="form-control" id="estado" readonly>
 
-                                    <!-- IMAGEN -->
-                                    <div class="form-group">
-                                        <label for="in-image" class="label-img">
-                                            <i class="material-icons"></i>
-                                            <span class="title d-flex justify-content-center">Agregar imagen</span>
-                                            <input type="file" accept=".jpg" id="in-image">
-                                        </label>
-                                    </div>
+                            </div>
+
+                            <!-- TIPO ACTIVO -->
+                            <div class="mt-4">
+                              <label for="estado" class="form-label">Tipo de propiedad</label>
+                              <select name="tipo_activo" class="form-select" id="tipo_activo">
+                                <option value="LOTE">Lote</option>
+                                <option value="CASA">Casa</option>
+                              </select>
+                              <div class="invalid-feedback">
+                                Necesitas ingresar el tipo (casa/lote).
+                              </div>
+                              <div class="valid-feedback">
+                                Casa/lote registrado correctamente.
+                              </div>
+                            </div>
+
+                            <!-- PROPIETARIO LOTE -->
+                            <div class="mt-4">
+                              <label for="estado" class="form-label">Propietarios</label>
+                              <select name="propietario_lote" class="form-select" id="propietario_lote" readonly>
+                                <option value="A.I.F">A.I.F</option>
+                                <option value="TERCEROS">Terceros</option>
+                              </select>
+                              <div class="invalid-feedback">
+                                Necesitas ingresar el propietario.
+                              </div>
+                              <div class="valid-feedback">
+                                Propietario registrado correctamente.
+                              </div>
+                            </div>
+
+                            <!-- SUBLOTE -->
+                            <div class="mt-4">
+                              <label for="sublote" class="form-label">Sublote</label>
+                              <input type="text" class="form-control" id="sublote" placeholder="Sublote" required>
+                              <div class="invalid-feedback">
+                                Necesitas ingresar el sublote.
+                              </div>
+                              <div class="valid-feedback">
+                                Sublote registrado correctamente.
+                              </div>
+                            </div>
+
+                            <!-- DIRECCIÓN -->
+                            <div class="mt-4">
+                              <label for="direccion" class="form-label">Dirección</label>
+                              <input type="text" class="form-control" id="direccion" placeholder="Dirección" required>
+                              <div class="invalid-feedback">
+                                Necesitas ingresar una dirección.
+                              </div>
+                              <div class="valid-feedback">
+                                Dirección ingresada correctamente.
+                              </div>
+                            </div>
+
+                            <!-- IMAGEN -->
+                            <div class="form-group">
+                              <label for="in-image" class="label-img">
+                                <i class="material-icons"></i>
+                                <span class="title d-flex justify-content-center">Agregar imagen</span>
+                                <input type="file" accept=".jpg" id="in-image">
+                              </label>
+                            </div>
+                          </div>
+                          <div class="col-md-6">
+
+                            <div class="col-lg-12 ms-auto text-center mt-5 mt-lg-0">
+                              <div class="h-100" style="display: flex; justify-content: center;">
+
+                                <div class="position-relative d-flex align-items-center justify-content-center h-100">
+                                  <img class="w-100 position-relative z-index-2 pt-4" id="file-view" style="min-height: max-content; padding: 2rem;" src="" alt="">
                                 </div>
-                                <div class="col-md-6">
-                                  
-                                  <div class="col-lg-12 ms-auto text-center mt-5 mt-lg-0">
-                                    <div class="h-100" style="display: flex; justify-content: center;">
-                                    
-                                      <div class="position-relative d-flex align-items-center justify-content-center h-100">
-                                        <img class="w-100 position-relative z-index-2 pt-4" id="file-view" style="min-height: max-content; padding: 2rem;" src="" alt="">
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="d-flex justify-content-center">
+                          <div class="btn-group">
+                            <button type="button" class="btn btn-secondary prevBtn" disabled>Anterior</button>
+                            <button type="button" class="btn btn-success nextBtn">Siguiente</button>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="tab">
+                        <div class="row">
+                          <div class="col-md-6">
+
+                            <!-- DESCRPCIÓN -->
+
+                            <!-- ÁREA -->
+                            <div>
+                              <label for="area" class="form-label">Área</label>
+                              <input type="number" class="form-control" id="area" min="1.0" value="000.00" placeholder="Àrea (m2)" required>
+                              <div class="invalid-feedback">
+                                Necesitas ingresar el área del lote.
+                              </div>
+                              <div class="valid-feedback">
+                                Área del lote registrado correctamente.
+                              </div>
+                            </div>
+
+                            <!-- ZONAS COMUNES -->
+                            <div class="mt-4">
+                              <label for="z-comunes" class="form-label">Zonas comunes</label>
+                              <input type="number" class="form-control" id="z-comunes" min="1.0" max="100" placeholder="Zonas comúnes (%)">
+
+                            </div>
+
+
+                            <!-- MONEDA VENTA -->
+                            <div class="mt-4">
+                              <label for="moneda-venta" class="form-label">Moneda de venta</label>
+                              <select class="form-control custom-select-scroll" id="moneda-venta" required>
+                                <option value="">Tipo moneda</option>
+                                <option value="USD">Dólares</option>
+                                <option value="SOL">Soles</option>
+                              </select>
+                              <div class="invalid-feedback">
+                                Necesitas ingresar la moneda de venta.
+                              </div>
+                              <div class="valid-feedback">
+                                Moneda de venta registrada correctamente.
+                              </div>
+                            </div>
+
+                            <!-- PRECIO LOTE -->
+                            <div class="mt-4">
+                              <label for="precio_lote" class="form-label">Precio del lote</label>
+                              <input type="number" class="form-control" id="precio_lote" placeholder="Precio de venta" maxlength="7" minlength="7" min="1.00" value="0.00" required autofocus>
+                              <div class="invalid-feedback">
+                                Necesitas ingresar el precio del lote.
+                              </div>
+                              <div class="valid-feedback">
+                                Precio del lote registrado correctamente.
+                              </div>
+                            </div>
+
+                            <!-- PRESUPUESTO -->
+                            <div class="mt-4">
+                              <label for="idpresupuesto" class="form-label">Presupuesto</label>
+                              <select class="form-select custom-select-scroll" id="idpresupuesto">
+                                <option value="">Presupuesto</option>
+                              </select>
+                              <div class="invalid-feedback">
+                                Necesitas ingresar el presupuesto.
+                              </div>
+                              <div class="valid-feedback">
+                                Presupuesto registrado correctamente.
+                              </div>
+                            </div>
+
+                            <!-- PRECIO CONSTRUCCION -->
+                            <div class="mt-4">
+                              <label for="precio_construccion" class="form-label">Precio de la construcción</label>
+                              <input type="number" class="form-control" id="precio_construccion" placeholder="Precio de construcción" maxlength="7" minlength="7" min="1.00" value="0.00">
+                              <div class="invalid-feedback">
+                                Necesitas ingresar el preecio de construcción.
+                              </div>
+                              <div class="valid-feedback">
+                                Precio de construcción registrado correctamente.
+                              </div>
+                            </div>
+
+                            <!-- PRECIO VENTA -->
+                            <div class="mt-4">
+                              <label for="precio_venta" class="form-label">Precio de la venta</label>
+                              <input type="number" class="form-control" id="precio_venta" placeholder="Precio de venta" maxlength="8" minlength="8" min="1.00" value="0.00">
+                              <div class="invalid-feedback">
+                                Necesitas ingresar el precio de venta.
+                              </div>
+                              <div class="valid-feedback">
+                                Precio de venta registrado correctamente.
+                              </div>
+                            </div>
+
+                            <!-- PRTIDA ELECTRÓNICA -->
+                            <div class="mt-4">
+                              <label for="partida-elect" class="form-label">Partida electrónica</label>
+
+                              <textarea name="partida-elect" class="form-control" id="partida-elect" cols="38" rows="3" required></textarea>
+                              <div class="invalid-feedback">
+                                Necesitas ingresar la partida electrónica.
+                              </div>
+                              <div class="valid-feedback">
+                                Partida electrónica registrada correctamente.
+                              </div>
+                            </div>
+                          </div>
+
+                          <div class="col-md-6">
+
+                            <!-- LATITUD -->
+                            <div>
+                              <label for="latitud" class="form-label">Latitud</label>
+
+                              <input type="text" name="partida-elect" class="form-control" id="latitud" placeholder="Latitud">
+                              <div class="invalid-feedback">
+                                Necesitas ingresar la latitud.
+                              </div>
+                              <div class="valid-feedback">
+                                Latitud registrada correctamente.
+                              </div>
+                            </div>
+
+                            <!-- LONGITUD -->
+                            <div class="mt-4">
+                              <label for="longitud" class="form-label">Longitud</label>
+
+                              <input type="text" name="longitud" class="form-control" id="longitud" placeholder="Longitud">
+                              <div class="invalid-feedback">
+                                Necesitas ingresar la longitud.
+                              </div>
+                              <div class="valid-feedback">
+                                Longitud registrada correctamente.
+                              </div>
+                            </div>
+                            <!-- PERIMTETRO -->
+                            <label for="longitud" class="form-label">Perímetro</label>
+                            <div id="perim">
+                              <div id="patern">
+
+                                <div class="row">
+                                  <div class="col-md-11">
+
+                                    <div class="row">
+                                      <div class="col-md-6 mb-2">
+                                        <input type="text" class="form-control perim-key" name="clave" id="clave">
+                                      </div>
+                                      <div class="col-md-6">
+                                        <input type="text" class="form-control perim-value" name="valor" id="valor">
                                       </div>
                                     </div>
                                   </div>
-                                </div>
-                              </div>
-                              <div class="d-flex justify-content-center">
-                                <div class="btn-group">
-                                  <button type="button" class="btn btn-secondary prevBtn" disabled>Anterior</button>
-                                  <button type="button" class="btn btn-success nextBtn">Siguiente</button>
+                                  <div class="col-md-1">
+                                    <button type="button" class="btn btn-success pluss" id="add-textBox">+</button>
+                                  </div>
                                 </div>
                               </div>
                             </div>
-                            
-                            <div class="tab">
-                              <div class="row">
-                                <div class="col-md-6">
+                          </div>
+                        </div>
+                        <div class="d-flex justify-content-center">
 
-                                    <!-- DESCRPCIÓN -->
-                                    
-                                    <!-- ÁREA -->
-                                    <div>
-                                      <label for="area" class="form-label">Área</label>
-                                        <input type="number" class="form-control" id="area" min="0" value="000.00" placeholder="Àrea (m2)" required>
-                                        <div class="invalid-feedback">
-                                            Necesitas ingresar el área del lote.
-                                        </div>
-                                        <div class="valid-feedback">
-                                            Área del lote registrado correctamente.
-                                        </div>
-                                    </div>
+                          <div class="btn-group mt-4">
+                            <button type="button" class="btn btn-secondary prevBtn">Anterior</button>
+                            <button type="submit" class="btn btn-success submit" id="guardar">Guardar</button>
+                          </div>
+                        </div>
+                      </div>
+                    </form>
 
-                                    <!-- ZONAS COMUNES -->
-                                    <div class="mt-4">
-                                      <label for="z-comunes" class="form-label">Zonas comunes</label>
-                                        <input type="number" class="form-control" id="z-comunes" min="0" max="100" placeholder="Zonas comúnes (%)">
-
-                                    </div>
-
-    
-                                    <!-- MONEDA VENTA -->
-                                    <div class="mt-4">
-                                      <label for="moneda-venta" class="form-label">Moneda de venta</label>
-                                        <select class="form-control custom-select-scroll" id="moneda-venta" required>
-                                            <option value="">Tipo moneda</option>
-                                            <option value="USD">Dólares</option>
-                                            <option value="SOL">Soles</option>
-                                        </select>
-                                        <div class="invalid-feedback">
-                                            Necesitas ingresar la moneda de venta.
-                                        </div>
-                                        <div class="valid-feedback">
-                                            Moneda de venta registrada correctamente.
-                                        </div>
-                                    </div>
-                                    
-                                    <!-- PRECIO LOTE -->
-                                    <div class="mt-4">
-                                        <label for="precio_lote" class="form-label">Precio del lote</label>
-                                        <input type="number" class="form-control" id="precio_lote" placeholder="Precio de venta" maxlength="7" minlength="7" min="0.00" value="0.00" required autofocus>
-                                        <div class="invalid-feedback">
-                                            Necesitas ingresar el precio del lote.
-                                        </div>
-                                        <div class="valid-feedback">
-                                            Precio del lote registrado correctamente.
-                                        </div>
-                                    </div>
-                                    
-                                    <!-- PRECIO CONSTRUCCION -->
-                                    <div class="mt-4">
-                                        <label for="precio_construccion" class="form-label">Precio de la construcción</label>
-                                        <input type="number" class="form-control" id="precio_construccion" placeholder="Precio de construcción" maxlength="7" minlength="7" min="0.00" value="0.00">
-                                        <div class="invalid-feedback">
-                                            Necesitas ingresar el preecio de construcción.
-                                        </div>
-                                        <div class="valid-feedback">
-                                            Precio de construcción registrado correctamente.
-                                        </div>
-                                    </div>
-    
-                                    <!-- SUBLOTE -->
-                                    <div class="mt-4">
-                                        <label for="partida-elect" class="form-label">Partida electrónica</label>
-                                        
-                                        <textarea name="partida-elect" class="form-control" id="partida-elect" cols="38" rows="3" required></textarea>
-                                        <div class="invalid-feedback">
-                                            Necesitas ingresar la partida electrónica.
-                                        </div>
-                                        <div class="valid-feedback">
-                                            Partida electrónica registrada correctamente.
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <div class="col-md-6">
-                                    
-                                    <!-- LATITUD -->
-                                    <div>
-                                        <label for="latitud" class="form-label">Latitud</label>
-                                        
-                                        <input type="text" name="partida-elect" class="form-control" id="latitud" placeholder="Latitud">
-                                        <div class="invalid-feedback">
-                                            Necesitas ingresar la latitud.
-                                        </div>
-                                        <div class="valid-feedback">
-                                            Latitud registrada correctamente.
-                                        </div>
-                                    </div>
-    
-                                    <!-- LONGITUD -->
-                                    <div class="mt-4">
-                                        <label for="longitud" class="form-label">Longitud</label>
-                                        
-                                        <input type="text" name="longitud" class="form-control" id="longitud" placeholder="Longitud">
-                                        <div class="invalid-feedback">
-                                            Necesitas ingresar la longitud.
-                                        </div>
-                                        <div class="valid-feedback">
-                                            Longitud registrada correctamente.
-                                        </div>
-                                    </div>
-                                    <!-- PERIMTETRO -->
-                                    <label for="longitud" class="form-label">Perímetro</label>
-                                    <div id="perim">
-                                      <div id="patern">
-                                        
-                                        <div class="row">
-                                            <div class="col-md-11">
-
-                                                <div class="row">
-                                                    <div class="col-md-6 mb-2">
-                                                        <input type="text" class="form-control perim-key" name="clave" id="clave">
-                                                    </div>
-                                                    <div class="col-md-6">
-                                                        <input type="text" class="form-control perim-value" name="valor" id="valor">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-1">
-                                                <button type="button" class="btn btn-success pluss" id="add-textBox">+</button>
-                                            </div>
-                                        </div>
-                                    </div>                                    
-                                      </div>
-                                </div>
-                              </div>
-                              <div class="d-flex justify-content-center">
-
-                                <div class="btn-group mt-4">
-                                  <button type="button" class="btn btn-secondary prevBtn">Anterior</button>
-                                  <button type="submit" class="btn btn-success submit" id="guardar">Guardar</button>
-                                </div>
-                              </div>
-                            </div>
-                        </form> 
-                      
-                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-      </div>     
+        </div>
+      </div>
       <!-- /FORMULARIO -->
 
       <footer class="footer pt-3  ">
@@ -715,364 +741,432 @@
   <script src="../../assets/js/formMultiSteps.js"></script>
   <script src="../../assets/js/projects/interactionForms.js"></script>
   <script src="../../assets/js/renderInputs.js"></script>
-  
+
   <!-- <script src="../../assets/js/renderUbigeo.js"></script>  -->
 
   <!-- SELECT2 - JQUERY -->
   <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
   <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
   <script>
-
     /* $('#propetario_lote').select2();  */
-
   </script>
   <script>
+    const global = new FunGlobal();
+    const sAlert = new Alert();
 
-  const global = new FunGlobal();
-  const sAlert = new Alert();
+    //formulario
+    const idform = "#form-assset-set"
+    const formMS = new multiStepsForm(idform);
 
-  //formulario
-  const idform = "#form-assset-set" 
-  const formMS = new multiStepsForm(idform);
+    const $ = id => global.$(id);
+    const $All = id => global.$All(id);
 
-  const $ = id => global.$(id);
-  const $All = id => global.$All(id);
+    //OBTIENE EL ID DEL URL
+    const stringQuery = window.location.search;
 
-  //OBTIENE EL ID DEL URL
-  const stringQuery = window.location.search;
+    const url = new URLSearchParams(stringQuery);
 
-  const url = new URLSearchParams(stringQuery);
+    const code = url.get("id");
 
-  const code = url.get("id");
+    const codePr = url.get("idproy");
+    const nameProy = url.get("name");
 
-  const codePr = url.get("idproy");
-  const nameProy = url.get("name");
+    const idActivo = atob(code);
 
-  const idActivo = atob(code);
+    let dataAsset;
 
-  let dataAsset;
+    let oldImage;
+    let AllDataAssets;
+    let idProyecto;
 
-  let oldImage;
-  let AllDataAssets;
-  let idProyecto;
+    //Obtiene los presupuestos
+    async function getBudgets() {
 
-  async function bucleOptions(select, param){
+      try {
+        let url = "../../Controllers/budget.controller.php";
 
-    for(i = 0; i < select.options.length; i++){
+        let params = new FormData();
+        params.append("action", "listBudgetsAsset");
 
-      if(select.options[i].value == param){
+        let results = await global.sendAction(url, params);
 
-        select.options[i].selected = true;
+        if (results) {
 
-        break;
+          results.forEach(option => {
 
+            let newTag = document.createElement("option");
+            newTag.value = option.idpresupuesto;
+            newTag.innerText = option.codigo;
+            newTag.dataset.monto = option.total;
+
+            $("#idpresupuesto").appendChild(newTag);
+          })
+
+          await getAsset(idActivo);
+        }
+      } catch (e) {
+        console.error(e)
       }
     }
-  }
 
-  function renderInputs(key, value){
+    async function bucleOptions(select, param) {
 
-    /*INPUT KEY */
-    let inputKey = document.createElement("input");
-    inputKey.classList.add("form-control","perim-key")
-    inputKey.value = key;
+      for (i = 0; i < select.options.length; i++) {
 
-    /* INPUT VALUE */
-    let inputValue = document.createElement("input");
-    inputValue.classList.add("form-control","perim-value");
-    inputValue.value = value;
+        if (select.options[i].value == param) {
 
-    /* DIV KEY */
-    let divKey = document.createElement("div");
-    divKey.classList.add("col-md-6");
+          select.options[i].selected = true;
 
-    /* DIV VALUE */
-    let divValue = document.createElement("div");
-    divValue.classList.add("col-md-6");
+          break;
 
-    divKey.appendChild(inputKey);
-    divValue.appendChild(inputValue);
-
-    
-    let rowInputs = document.createElement("div");
-    rowInputs.classList.add("row","mt.2");
-    
-    rowInputs.appendChild(divKey);
-    rowInputs.appendChild(divValue);
-
-    let divInputs = document.createElement("div");
-    divInputs.classList.add("col-md-11");
-
-    divInputs.appendChild(rowInputs);
-
-    /* -------------------------------------------------- */
-
-    /* BOTÓN "-" */
-    let buttonLess = document.createElement("button");
-    buttonLess.classList.add("btn","btn-danger","less","mt-2","active");
-    buttonLess.setAttribute("id","add-textBox");
-    buttonLess.setAttribute("type","button");
-    buttonLess.innerText = "-";
-    
-    let divButton = document.createElement("div");
-    divButton.classList.add("col-md-1");
-
-    divButton.appendChild(buttonLess);
-
-    /* -------------------------------------------------- */
-
-    let rowMaster = document.createElement("div");
-    rowMaster.classList.add("row");
-
-    rowMaster.appendChild(divInputs);
-    rowMaster.appendChild(divButton);
-
-    let firstRow = $("#perim").firstChild;
-    $("#perim").insertBefore(rowMaster,firstRow);  
-  }  
-
-  /**
-  * Funcion para obtener los lotes asociados a un idproyecto
-  */
- async function getAssetsAll(id){
-  
-  try{
-    
-    let url = "../../Controllers/asset.controller.php";
-    let params = new FormData();
-  
-    params.append("action","listAssetByIProyect");
-    params.append("idproyecto",id);
-
-    let results = await global.sendAction(url, params);
-
-    if(results){
-      
-      AllDataAssets = results;
-    }
-  }
-  catch(e){
-    console.error(e);
-  }
- };
-  
- /**
-  * Función para renderizar los datos obtenidos
-  * */
- async function renderData(asset){
-  
-  try{
-    console.log(asset);
-    
-    oldImage = asset.imagen;
-    let img = asset.imagen != null ? asset.imagen : "NoImage.jpg";
-    
-    $("#cabezera").innerText += ` ${asset.sublote} - ${asset.denominacion}`;
-    
-    /* FORMULARIO DATOS GENERALES  */
-    $("#ubigeo").value = `${asset.distrito} - ${asset.provincia} - ${asset.departamento}`;
-    $("#estado").value = asset.estado;
-    
-    bucleOptions($("#tipo_activo"), asset.tipo_activo)
-
-    bucleOptions($("#propietario_lote"), asset.propietario_lote);
-
-    $("#sublote").value = asset.sublote;
-    $("#direccion").value = asset.direccion;
-    $("#file-view").setAttribute("src",`../../media/lotes/${img}`);
-    
-    /* FORMULARIO DESCRIPCIÓN  */
-    $("#area").value = asset.area_terreno;
-    $("#z-comunes").value = asset.zcomunes_porcent;
-    $("#moneda-venta").value = asset.moneda_venta;
-    $("#precio_lote").value = asset.precio_lote;
-    $("#precio_construccion").value = asset.precio_construccion;
-    $("#partida-elect").value = asset.partida_elect;
-    $("#latitud").value = asset.latitud;
-    $("#longitud").value = asset.longitud;
-    
-    const perimetro = await global.JSONtoObject(asset.perimetro);
-    
-      console.log(perimetro);
-  }
-  catch(e){
-    console.error(e);
-  }
- }
- 
- /**
-   * Funciòn para obtener la data de un lote por su ID
-   */
-  async function getAsset(id){
-
-    try{
-      
-      $("#add-asset").setAttribute("href",`./add_asset.php?idproy=${codePr}&name=${nameProy}`);
-
-      let url ="../../Controllers/asset.controller.php";
-      let params = new FormData();
-  
-      params.append("action","listAssetId");
-      params.append("idactivo",id);
-
-      let result =  await global.sendAction(url, params);
-
-      if(result){
-        console.log(result);
-
-        dataAsset = result;
-        idProyecto = dataAsset.idproyecto;
-        console.log(dataAsset);
-
-        getAssetsAll(idProyecto);
-        renderData(dataAsset);
-
+        }
       }
     }
-    catch(e){
-      console.error(e);
-    }
- };
 
- /**
-  * FUNCIÓN PARA COMPARA INFORMACIÓN
-  */
-  async function searchInfo(array, column, param){
-  
-     if(column == "sublote"){
-      
-      return new Promise((resolve, reject) => {
-        
-        for(let element of array){
+    function renderInputs(key, value) {
+
+      /*INPUT KEY */
+      let inputKey = document.createElement("input");
+      inputKey.classList.add("form-control", "perim-key")
+      inputKey.value = key;
+
+      /* INPUT VALUE */
+      let inputValue = document.createElement("input");
+      inputValue.classList.add("form-control", "perim-value");
+      inputValue.value = value;
+
+      /* DIV KEY */
+      let divKey = document.createElement("div");
+      divKey.classList.add("col-md-6");
+
+      /* DIV VALUE */
+      let divValue = document.createElement("div");
+      divValue.classList.add("col-md-6");
+
+      divKey.appendChild(inputKey);
+      divValue.appendChild(inputValue);
+
+
+      let rowInputs = document.createElement("div");
+      rowInputs.classList.add("row", "mt.2");
+
+      rowInputs.appendChild(divKey);
+      rowInputs.appendChild(divValue);
+
+      let divInputs = document.createElement("div");
+      divInputs.classList.add("col-md-11");
+
+      divInputs.appendChild(rowInputs);
+
+      /* -------------------------------------------------- */
+
+      /* BOTÓN "-" */
+      let buttonLess = document.createElement("button");
+      buttonLess.classList.add("btn", "btn-danger", "less", "mt-2", "active");
+      buttonLess.setAttribute("id", "add-textBox");
+      buttonLess.setAttribute("type", "button");
+      buttonLess.innerText = "-";
+
+      let divButton = document.createElement("div");
+      divButton.classList.add("col-md-1");
+
+      divButton.appendChild(buttonLess);
+
+      /* -------------------------------------------------- */
+
+      let rowMaster = document.createElement("div");
+      rowMaster.classList.add("row");
+
+      rowMaster.appendChild(divInputs);
+      rowMaster.appendChild(divButton);
+
+      let firstRow = $("#perim").firstChild;
+      $("#perim").insertBefore(rowMaster, firstRow);
+    }
+
+    /**
+     * Funcion para obtener los lotes asociados a un idproyecto
+     */
+    async function getAssetsAll(id) {
+
+      try {
+
+        let url = "../../Controllers/asset.controller.php";
+        let params = new FormData();
+
+        params.append("action", "listAssetByIProyect");
+        params.append("idproyecto", id);
+
+        let results = await global.sendAction(url, params);
+
+        if (results) {
+
+          AllDataAssets = results;
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    };
+
+    /**
+     * Función para renderizar los datos obtenidos
+     * */
+    async function renderData(asset) {
+
+      try {
+        console.log(asset);
+
+        oldImage = asset.imagen;
+        let img = asset.imagen != null ? asset.imagen : "NoImage.jpg";
+
+        $("#cabezera").innerText += ` ${asset.sublote} - ${asset.denominacion}`;
+
+        /* FORMULARIO DATOS GENERALES  */
+        $("#ubigeo").value = `${asset.distrito} - ${asset.provincia} - ${asset.departamento}`;
+        $("#estado").value = asset.estado;
+
+        bucleOptions($("#tipo_activo"), asset.tipo_activo)
+
+        bucleOptions($("#propietario_lote"), asset.propietario_lote);
+
+        $("#sublote").value = asset.sublote;
+        $("#direccion").value = asset.direccion;
+        $("#file-view").setAttribute("src", `../../media/lotes/${img}`);
+
+        /* FORMULARIO DESCRIPCIÓN  */
+        $("#area").value = asset.area_terreno;
+        $("#z-comunes").value = asset.zcomunes_porcent;
+        $("#moneda-venta").value = asset.moneda_venta;
+        $("#precio_lote").value = asset.precio_lote;
+
+        setTimeout(() => {
           
-          const found = array.find(element => element[column] == param);
+          Array.from($("#idpresupuesto").options).forEach(option =>{
+            if(option.value == asset.idpresupuesto){
+              option.selected = true;
+            }
+          });
+        }, 1000);
+        $("#precio_construccion").value = asset.precio_construccion;
+        $("#precio_venta").value = asset. precio_venta;
+        $("#partida-elect").value = asset.partida_elect;
+        $("#latitud").value = asset.latitud;
+        $("#longitud").value = asset.longitud;
 
-          if(found){
-  
+        const perimetro = await global.JSONtoObject(asset.perimetro);
+
+        console.log(perimetro);
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
+    /**
+     * Funciòn para obtener la data de un lote por su ID
+     */
+    async function getAsset(id) {
+
+      try {
+
+
+        let url = "../../Controllers/asset.controller.php";
+        let params = new FormData();
+
+        params.append("action", "listAssetId");
+        params.append("idactivo", id);
+
+        let result = await global.sendAction(url, params);
+
+        if (result) {
+          console.log(result);
+
+          dataAsset = result;
+          idProyecto = dataAsset.idproyecto;
+          console.log(dataAsset);
+
+          getAssetsAll(idProyecto);
+          renderData(dataAsset);
+
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    };
+
+    /**
+     * FUNCIÓN PARA COMPARA INFORMACIÓN
+     */
+    async function searchInfo(array, column, param) {
+
+      if (column == "sublote") {
+
+        return new Promise((resolve, reject) => {
+
+          for (let element of array) {
+
+            const found = array.find(element => element[column] == param);
+
+            if (found) {
+
               sAlert.sweetWarning("Se ha encontrado coincidencias", `"${param}" ya existe, ingresa otro`);
 
               reject();
-          }else{
-              
+            } else {
+
               $("#sublote").removeAttribute("autofocus");
               $("#direccion").removeAttribute("readonly");
               $("#direccion").focus();
 
               resolve();
+            }
+          }
+        });
+      }
+    };
+
+    async function setAsset(id) {
+
+      try {
+
+        const keyClass = ".form-control.perim-key";
+        const keyValue = ".form-control.perim-value";
+
+        const json = await global.getJson(keyClass, keyValue)
+
+        let url = "../../Controllers/asset.controller.php";
+
+        let params = new FormData();
+
+        let img = $("#in-image").files[0] != null ? $("#in-image").files[0] : oldImage;
+
+        params.append("action", "setAsset");
+        params.append("idactivo", id);
+        params.append("idproyecto", idProyecto);
+        params.append("tipo_activo", $("#tipo_activo").value);
+        params.append("imagen", img);
+        params.append("estado", dataAsset.estado);
+        params.append("sublote", $("#sublote").value);
+        params.append("direccion", $("#direccion").value);
+        params.append("moneda_venta", $("#moneda-venta").value);
+        params.append("precio_venta", $("#precio_lote").value);
+        params.append("area_terreno", $("#area").value);
+        params.append("zcomunes_porcent", $("#z-comunes").value);
+        params.append("partida_elect", $("#partida-elect").value);
+        params.append("latitud", $("#latitud").value);
+        params.append("longitud", $("#longitud").value);
+        params.append("perimetro", json);
+        params.append("idpresupuesto", $("#idpresupuesto").value);
+        params.append("propietario_lote", $("#propietario_lote").value);
+        params.append("precio_lote", $("#precio_lote").value);
+        params.append("precio_construccion", $("#precio_construccion").value);
+        params.append("precio_venta", $("#precio_venta").value);
+
+        let results = await global.sendAction(url, params);
+
+        if (results) {
+
+          console.log(results);
+
+          if (results.filasAfect > 0) {
+
+            let codeName = btoa(dataAsset.denominacion)
+            let codeid = btoa(idProyecto);
+            sAlert.sweetSuccess("Registro actualizado", "El registro se ha actualizado correctamente", () => {
+
+              window.location.href = `./index.php?id=${codeid}&name=${codeName}`;
+            });
+          } else {
+            sAlert.sweetError("No se actualizó el registro", "Vuelve a intentarlo");
           }
         }
-      });
+
+      } catch (e) {
+        console.error(e);
+      }
     }
-  };
 
-  async function setAsset(id){
+    $("#sublote").addEventListener("keypress", (e) => {
 
-    try{
+      if (e.keyCode == 13) {
 
-      const keyClass = ".form-control.perim-key";
-      const keyValue = ".form-control.perim-value";
-  
-      const json = await global.getJson(keyClass, keyValue)
+        let sublote = $("#sublote").value;
 
-      let url = "../../Controllers/asset.controller.php";
-  
-      let params = new FormData();
+        if (sublote != "") {
 
-      let img = $("#in-image").files[0] != null ? $("#in-image").files[0] : oldImage;
-  
-      params.append("action","setAsset");
-      params.append("idactivo",id);
-      params.append("idproyecto",idProyecto);
-      params.append("tipo_activo",$("#tipo_activo").value);
-      params.append("imagen",img);
-      params.append("estado",dataAsset.estado);
-      params.append("sublote",$("#sublote").value);
-      params.append("direccion",$("#direccion").value);
-      params.append("moneda_venta",$("#moneda-venta").value);
-      params.append("precio_venta",$("#precio_lote").value);
-      params.append("area_terreno",$("#area").value);
-      params.append("zcomunes_porcent",$("#z-comunes").value);
-      params.append("partida_elect",$("#partida-elect").value);
-      params.append("latitud",$("#latitud").value);
-      params.append("longitud",$("#longitud").value);
-      params.append("perimetro",json);
-      params.append("idpresupuesto","");
-      params.append("propietario_lote",$("#propietario_lote").value);
-      params.append("precio_lote",$("#precio_lote").value);
-      params.append("precio_construccion",$("#precio_construccion").value);
+          searchInfo(AllDataAssets, "sublote", sublote);
 
-      let results = await global.sendAction(url, params);
+        } else {
 
-      if(results){
-
-        console.log(results);
-
-        if(results.filasAfect > 0){
-           
-          let codeName = btoa(dataAsset.denominacion)
-          let codeid = btoa(idProyecto);
-           sAlert.sweetSuccess("Registro actualizado","El registro se ha actualizado correctamente",()=>{
-    
-                window.location.href = `./index.php?id=${codeid}&name=${codeName}`;
-            });
-        }else{
-            sAlert.sweetError("No se actualizó el registro","Vuelve a intentarlo");
+          $("#direccion").removeAttribute("readonly");
+          $("#direccion").focus();
         }
       }
-
-    }
-    catch(e){
-      console.error(e);
-    }
-  }
-
-  $("#tipo_activo").addEventListener("change",(e)=>{
-
-    if(e.target.value == "CASA"){
-      $("#propietario_lote").removeAttribute("disabled");
-    
-    }else{
-    
-      $("#propietario_lote").setAttribute("disabled",true);
-      bucleOptions($("#propietario_lote"), "A.I.F");
-    }
-  });
-
-  getAsset(idActivo);
+    });
 
 
-  /* --------------------------------- FUNCIÓN DE VALIDACIÓN --------------------------------------------------------- */
-  
-  (() => {
-    'use strict' //=> USO ESTRICTO POR POLITICAS DE SEGURIDAD EN EL FORMULARIO
+    $("#tipo_activo").addEventListener("change", (e) => {
 
-     //SELECCIONA TODOS LOS ELEMENTOS DEL FORMULARIO QUE TIENE LA CLASE "needs-validation
-    const forms = document.querySelectorAll('.needs-validation')
+      if (e.target.value == "CASA") {
+        $("#propietario_lote").removeAttribute("disabled");
 
-    // TOMA EL ELEMENTO "FORMS" Y LO CONVIERTE A UN ARRAY
-    // SE INCLUYE EN UN FOREAH PARA ITERAR SOBRE SUS ELEMENTOS
+      } else {
 
-    Array.from(forms).forEach(form => {
+        bucleOptions($("#propietario_lote"), "A.I.F");
+      }
+    });
+
+    $("#precio_lote").addEventListener("input", (e) => {
+      let precioLote = Number.parseFloat(e.target.value || 0);
+
+      let precioConstruccion = Number.parseFloat($("#precio_construccion").value == false ? 0 : $("#precio_construccion").value);
+
+      $("#precio_venta").value = precioLote + precioConstruccion;
+
+    })
+
+    $("#idpresupuesto").addEventListener("change", () => {
+
+      let presupuesto = $("#idpresupuesto").options[$("#idpresupuesto").selectedIndex].dataset.monto;
+      let monto = Number.parseFloat(presupuesto);
+      let precioLote = Number.parseFloat($("#precio_lote").value || 0);
+
+      $("#precio_construccion").value = monto;
+      $("#precio_venta").value = monto + precioLote;
+    });
+
+    getBudgets();
+
+    /* --------------------------------- FUNCIÓN DE VALIDACIÓN --------------------------------------------------------- */
+
+    (() => {
+      'use strict' //=> USO ESTRICTO POR POLITICAS DE SEGURIDAD EN EL FORMULARIO
+
+      //SELECCIONA TODOS LOS ELEMENTOS DEL FORMULARIO QUE TIENE LA CLASE "needs-validation
+      const forms = document.querySelectorAll('.needs-validation')
+
+      // TOMA EL ELEMENTO "FORMS" Y LO CONVIERTE A UN ARRAY
+      // SE INCLUYE EN UN FOREAH PARA ITERAR SOBRE SUS ELEMENTOS
+
+      Array.from(forms).forEach(form => {
         form.addEventListener('submit', event => {
 
-            //SI LA VALIDACIÓN DEL FORMULARIO ES FALSE
-            if (!form.checkValidity()) {
-            event.preventDefault()      //=> FRENA EL ENVÍO DEL FORMULARIO
-            event.stopPropagation()     //=> FRENA LA PROPAGACIÓN DE DATOS EN EL FORMULARIO
+          //SI LA VALIDACIÓN DEL FORMULARIO ES FALSE
+          if (!form.checkValidity()) {
+            event.preventDefault() //=> FRENA EL ENVÍO DEL FORMULARIO
+            event.stopPropagation() //=> FRENA LA PROPAGACIÓN DE DATOS EN EL FORMULARIO
             form.reportValidity();
-        }else{
+          } else {
             event.preventDefault();
-            sAlert.sweetConfirm("Datos nuevos","¿Deseas actualizar el registro?",()=>{
-                
+            sAlert.sweetConfirm("Datos nuevos", "¿Deseas actualizar el registro?", () => {
+
               setAsset(idActivo); //Ejecuta la función
             });
-        }
+          }
 
-        form.classList.add('was-validated') //=> AGREGA ESTA CLASE A LOS ELEMENTOS DEL FORMULARIO(MUESTRA LOS COMENTARIOS)
+          form.classList.add('was-validated') //=> AGREGA ESTA CLASE A LOS ELEMENTOS DEL FORMULARIO(MUESTRA LOS COMENTARIOS)
         }, false) //=> ESTE TERCER ARGUMENTO INDICA QUE EL EVENTO NO SE ESTA CAPTURANDO EN LA ""FASE DE CAPTURA" SINO EN "PROPAGACIÓN NORMAL"
-    })  
-  })();
-
+      })
+    })();
   </script>
   <script>
     var win = navigator.platform.indexOf('Win') > -1;
