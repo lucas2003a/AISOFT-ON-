@@ -1627,7 +1627,6 @@ BEGIN
             subcat.idsubcategoria_costo;
 END $$
 DELIMITER ;
-call spu_resume_budget_subcatgory(30);
 
 -- SEPARACIONES   ////////////////////////////////////////////////////////////////////////////////////////////
 DELIMITER $$
@@ -1693,13 +1692,23 @@ BEGIN
         ORDER BY sep.idseparacion DESC;
     END IF;
 END $$
-SELECT * FROM separaciones;
-SELECT * FROM clientes;
+
 DELIMITER ;
-call spu_list_separations();
+
+call spu_list_separation_tPersona("JURÍDICA","2024-03-09","2024-03-09");
 DELIMITER $$
 CREATE PROCEDURE spu_list_separation_ByIdAsset(IN _idactivo INT)
 BEGIN
+    DECLARE _tpersona VARCHAR(10);
+
+    SET _tpersona = (
+        SELECT tipo_persona
+        FROM clientes cli 
+        INNER JOIN separaciones sep on sep.idcliente = cli.idcliente
+        WHERE sep.idactivo = _idactivo
+    );
+
+    IF _tpersona = "NATURAL" THEN
 	SELECT 
 		sep.idseparacion,
         act.sublote,
@@ -1707,15 +1716,10 @@ BEGIN
         dist.distrito,
         prov.provincia,
         dept.departamento,
-        pers.nombres,
-        pers.apellidos,
+        CONCAT(UPPER(pers.apellidos),", ",LOWER(pers.nombres)) AS cliente,
         pers.documento_tipo,
         pers.documento_nro,
-        persj.razon_social AS razon_social,
-        persj.documento_tipo AS persj_documento_nro,
-        persj.documento_nro AS persj_documento_nro,
-        conyPers.nombres	AS conyPers_nombres,
-        conyPers.apellidos AS conyPers_apellidos,
+        CONCAT(UPPER(conyPers.apellidos)," ,",LOWER(conyPers.nombres)) AS conyugue,
         conyPers.documento_tipo AS conyPers_documento_tipo,
         conyPers.documento_nro As conyPers_documento_nro,
         sep.separacion_monto,
@@ -1730,9 +1734,7 @@ BEGIN
         INNER JOIN departamentos AS dept ON dept.iddepartamento = prov.iddepartamento
         
         INNER JOIN clientes AS clien ON clien.idcliente = sep.idcliente
-        LEFT JOIN personas AS pers ON pers.idpersona = clien.idpersona
-        
-        LEFT JOIN personas_juridicas AS persj ON persj.idpersona_juridica = clien.idpersona_juridica
+        INNER JOIN personas AS pers ON pers.idpersona = clien.idpersona
         
 		LEFT JOIN clientes AS cony ON cony.idcliente = sep.idconyugue
         LEFT JOIN personas AS conyPers ON conyPers.idpersona = cony.idpersona
@@ -1742,9 +1744,109 @@ BEGIN
         
         WHERE sep.idactivo = _idactivo
         AND sep.inactive_at IS NULL;
+
+    ELSEIF _tpersona = "JURÍDICA" THEN
+        SELECT
+            sep.idseparacion,
+            act.sublote,
+            proy.denominacion,
+            dist.distrito,
+            prov.provincia,
+            dept.departamento,
+            persj.razon_social AS cliente,
+            persj.documento_tipo,
+            persj.documento_nro,
+            sep.separacion_monto,
+            sep.fecha_pago,
+            sep.imagen,
+            usuPers.nombres AS usuario
+            FROM separaciones AS sep
+            INNER JOIN activos AS act ON act.idactivo = sep.idactivo
+            INNER JOIN proyectos AS proy ON proy.idproyecto = act.idproyecto
+            INNER JOIN distritos AS dist ON dist.iddistrito = proy.iddistrito
+            INNER JOIN provincias AS prov ON prov.idprovincia = dist.idprovincia
+            INNER JOIN departamentos AS dept ON dept.iddepartamento = prov.iddepartamento
+            
+            INNER JOIN clientes AS clien ON clien.idcliente = sep.idcliente
+            INNER JOIN personas_juridicas AS persj ON persj.idpersona_juridica = clien.idpersona_juridica
+            
+            INNER JOIN usuarios AS usu ON usu.idusuario = sep.idusuario
+            INNER JOIN personas AS usuPers ON usuPers.idpersona = usu.idpersona
+            
+            WHERE sep.idactivo = _idactivo
+            AND sep.inactive_at IS NULL;
+    END IF;
 END $$
 DELIMITER ;
 
+DELIMITER $$
+CREATE PROCEDURE spu_list_separation_n_expediente
+(
+    IN _tipo_persona VARCHAR(10),
+    IN _fechaInicio DATE,
+    IN _fechaFin DATE,
+    IN _n_expediente VARCHAR(10)
+)
+BEGIN
+
+    IF _tipo_persona = "NATURAL" THEN
+
+	SELECT 
+		sep.idseparacion,
+        sep.n_expediente,
+		act.idactivo,
+		act.sublote,
+		proy.denominacion,
+		CONCAT(UPPER(pers.apellidos),", ",LOWER(pers.nombres)) AS cliente,
+        clien.tipo_persona,
+        pers.documento_tipo,
+        pers.documento_nro,
+		sep.separacion_monto,
+		sep.fecha_pago,
+        usuPers.nombres AS usuario
+		FROM separaciones AS sep
+		INNER JOIN activos AS act ON act.idactivo = sep.idactivo
+        INNER JOIN proyectos AS proy ON proy.idproyecto = act.idproyecto
+        INNER JOIN clientes AS clien ON clien.idcliente = sep.idcliente
+        INNER JOIN personas AS pers ON pers.idpersona = clien.idpersona
+        INNER JOIN usuarios AS usu ON usu.idusuario = sep.idusuario 
+        INNER JOIN personas AS usuPers ON usuPers.idpersona = usu.idpersona
+		WHERE sep.inactive_at IS NULL
+            AND clien.inactive_at IS NULL
+            AND fecha_pago BETWEEN _fechaInicio AND _fechaFin
+            AND n_expediente LIKE CONCAT(_n_expediente,'%')
+        ORDER BY sep.idseparacion DESC;
+
+    ELSEIF _tipo_persona = "JURÍDICA" THEN
+        SELECT 
+		sep.idseparacion,
+        sep.n_expediente,
+		act.idactivo,
+		act.sublote,
+		proy.denominacion,
+		persj.razon_social AS cliente,
+        clien.tipo_persona,
+        persj.documento_tipo,
+        persj.documento_nro,
+		sep.separacion_monto,
+		sep.fecha_pago,
+        usuPers.nombres AS usuario
+		FROM separaciones AS sep
+		INNER JOIN activos AS act ON act.idactivo = sep.idactivo
+        INNER JOIN proyectos AS proy ON proy.idproyecto = act.idproyecto
+        INNER JOIN clientes AS clien ON clien.idcliente = sep.idcliente
+        INNER JOIN personas_juridicas AS persj ON persj.idpersona_juridica = clien.idpersona_juridica
+        INNER JOIN usuarios AS usu ON usu.idusuario = sep.idusuario 
+        INNER JOIN personas AS usuPers ON usuPers.idpersona = usu.idpersona
+		WHERE sep.inactive_at IS NULL
+            AND clien.inactive_at IS NULL
+            AND fecha_pago BETWEEN _fechaInicio AND _fechaFin
+            AND n_expediente LIKE CONCAT(_n_expediente,'%')
+        ORDER BY sep.idseparacion DESC;
+    END IF;
+END $$
+DELIMITER ;
+call spu_list_separation_n_expediente("JURÍDICA","2024-03-09","2024-03-09","SEC-00000");
 SELECT * FROM clientes;
 -- CONTRATOS
 DELIMITER $$
