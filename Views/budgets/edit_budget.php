@@ -1573,6 +1573,7 @@
 
     $("#save_lots").addEventListener("click", async function() {
 
+      $("#save_lots").disabled = true;
       let lotes = document.querySelectorAll(".form-check-input.form-lotes");
 
       let counter = 0;
@@ -1592,10 +1593,13 @@
 
         sAlert.sweetSuccess("Datos nuevos", `Registros actualizados : ${counter}<br>`, () => {
           window.location.href = "./index.php";
+          $("#save_lots").disabled = false;
         });
       } else {
         sAlert.sweetError("Lotes no actualizados", "No se ha registrado actualizaciones en los lotes");
       }
+
+      $("#save_lots").disabled = false;
 
     });
 

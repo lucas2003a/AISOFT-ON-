@@ -343,6 +343,7 @@ CREATE TABLE clientes
 CREATE TABLE separaciones
 (
 	idseparacion  			INT PRIMARY KEY AUTO_INCREMENT,
+    n_expediente            VARCHAR(10) NOT NULL
     idactivo				INT 			NOT NULL,
     idcliente 				INT  			NOT NULL,
     idconyugue 				INT 			NULL,

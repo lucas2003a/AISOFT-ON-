@@ -73,10 +73,6 @@ BEGIN
 END $$
 DELIMITER ;
 
-CALL spu_get_fullUbigeo("LA PERLA","PROV. CONST. DEL CALLAO","PROV. CONST. DEL CALLAO");
-select * from distritos where distrito ="LA PERLA";
-select * from provincias where provincia ="PROV. CONST. DEL CALLAO";
-select * from departamentos where departamento ="ANCASH";
 -- constructora
 DELIMITER $$
 CREATE PROCEDURE spu_list_companies()
@@ -137,6 +133,8 @@ BEGIN
         WHERE sed.idconstructora = _idconstructora;
 END $$
 DELIMITER ;
+
+use aisoft;
 
 -- representates
 DELIMITER $$
@@ -1471,6 +1469,13 @@ BEGIN
 	SELECT ROW_COUNT() AS filasAfect;
 END $$
 DELIMITER ;
+
+DELIMITER $$
+CREATE PROCEDURE spu_count_budget_idbudget(IN _idpresupuesto INT)
+BEGIN
+    SELECT EXISTS(SELECT 1 FROM activos WHERE idpresupuesto = _idpresupuesto AND inactive_at IS NULL) AS cantidad;
+END
+DELIMITER ;
  
 -- DETALLE DE COSTOS /////////////////////////////////////////////////////////////////////////////////////////
 DELIMITER $$
@@ -1604,8 +1609,6 @@ BEGIN
 END $$
 DELIMITER ;
 
--- CALL spu_resume_budget_category(1);
-
 DELIMITER $$
 CREATE PROCEDURE spu_resume_budget_subcatgory(IN _idpresupuesto INT)
 BEGIN
@@ -1625,17 +1628,29 @@ BEGIN
 END $$
 DELIMITER ;
 call spu_resume_budget_subcatgory(30);
--- SEPARACIONES
+
+-- SEPARACIONES   ////////////////////////////////////////////////////////////////////////////////////////////
 DELIMITER $$
-CREATE PROCEDURE spu_list_separations()
+CREATE PROCEDURE spu_list_separation_tPersona
+(
+    IN _tipo_persona VARCHAR(10),
+    IN _fechaInicio DATE,
+    IN _fechaFin DATE
+)
 BEGIN
+
+    IF _tipo_persona = "NATURAL" THEN
+
 	SELECT 
 		sep.idseparacion,
+        sep.n_expediente,
 		act.idactivo,
 		act.sublote,
 		proy.denominacion,
-		clien.apellidos,
-		clien.nombres,
+		CONCAT(UPPER(pers.apellidos),", ",LOWER(pers.nombres)) AS cliente,
+        clien.tipo_persona,
+        pers.documento_tipo,
+        pers.documento_nro,
 		sep.separacion_monto,
 		sep.fecha_pago,
         usuPers.nombres AS usuario
@@ -1643,13 +1658,45 @@ BEGIN
 		INNER JOIN activos AS act ON act.idactivo = sep.idactivo
         INNER JOIN proyectos AS proy ON proy.idproyecto = act.idproyecto
         INNER JOIN clientes AS clien ON clien.idcliente = sep.idcliente
+        INNER JOIN personas AS pers ON pers.idpersona = clien.idpersona
         INNER JOIN usuarios AS usu ON usu.idusuario = sep.idusuario 
         INNER JOIN personas AS usuPers ON usuPers.idpersona = usu.idpersona
 		WHERE sep.inactive_at IS NULL
+            AND clien.inactive_at IS NULL
+            AND fecha_pago BETWEEN _fechaInicio AND _fechaFin
         ORDER BY sep.idseparacion DESC;
-END $$
-DELIMITER ;
 
+    ELSEIF _tipo_persona = "JURÍDICA" THEN
+        SELECT 
+		sep.idseparacion,
+        sep.n_expediente,
+		act.idactivo,
+		act.sublote,
+		proy.denominacion,
+		persj.razon_social AS cliente,
+        clien.tipo_persona,
+        persj.documento_tipo,
+        persj.documento_nro,
+		sep.separacion_monto,
+		sep.fecha_pago,
+        usuPers.nombres AS usuario
+		FROM separaciones AS sep
+		INNER JOIN activos AS act ON act.idactivo = sep.idactivo
+        INNER JOIN proyectos AS proy ON proy.idproyecto = act.idproyecto
+        INNER JOIN clientes AS clien ON clien.idcliente = sep.idcliente
+        INNER JOIN personas_juridicas AS persj ON persj.idpersona_juridica = clien.idpersona_juridica
+        INNER JOIN usuarios AS usu ON usu.idusuario = sep.idusuario 
+        INNER JOIN personas AS usuPers ON usuPers.idpersona = usu.idpersona
+		WHERE sep.inactive_at IS NULL
+            AND clien.inactive_at IS NULL
+            AND fecha_pago BETWEEN _fechaInicio AND _fechaFin
+        ORDER BY sep.idseparacion DESC;
+    END IF;
+END $$
+SELECT * FROM separaciones;
+SELECT * FROM clientes;
+DELIMITER ;
+call spu_list_separations();
 DELIMITER $$
 CREATE PROCEDURE spu_list_separation_ByIdAsset(IN _idactivo INT)
 BEGIN

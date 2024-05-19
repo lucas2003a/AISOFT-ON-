@@ -1005,21 +1005,18 @@
       }
     }
 
-    $("#sublote").addEventListener("keypress", (e) => {
+    $("#sublote").addEventListener("blur", (e) => {
 
-      if (e.keyCode == 13) {
+      let sublote = $("#sublote").value;
 
-        let sublote = $("#sublote").value;
+      if (sublote != "") {
 
-        if (sublote != "") {
+        searchInfo(AllDataAssets, "sublote", sublote);
 
-          searchInfo(AllDataAssets, "sublote", sublote);
+      } else {
 
-        } else {
-
-          $("#direccion").removeAttribute("readonly");
-          $("#direccion").focus();
-        }
+        $("#direccion").removeAttribute("readonly");
+        $("#direccion").focus();
       }
     });
 

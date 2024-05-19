@@ -1509,6 +1509,7 @@
 
       $("#save_lots").addEventListener("click", async function() {
 
+        $("#save_lots").disabled = true;
         let lotes = document.querySelectorAll(".form-check-input.form-lotes");
 
         let counter = 0;
@@ -1541,11 +1542,12 @@
 
           sAlert.sweetSuccess("Datos nuevos", `Registros actualizados : ${counter}`, () => {
             window.location.href = "./index.php";
+            $("#save_lots").disabled = false;
           });
         } else {
           sAlert.sweetError("No se han realizado registro", "Por favor vuelvelo a intentar");
         }
-
+        $("#save_lots").disabled = false;
       });
 
       $("#list-proyectos").addEventListener("click", (e) => {

@@ -2,7 +2,8 @@
 
 require_once "Conection.php";
 
-class Budget extends Conection{
+class Budget extends Conection
+{
 
     private $conection;
 
@@ -13,58 +14,59 @@ class Budget extends Conection{
 
     /**
      * Lista los presupuestos
-    */
-    public function listBudgets(){
+     */
+    public function listBudgets()
+    {
 
-        try{
+        try {
 
             $query = $this->conection->prepare("CALL spu_list_budgets()");;
             $query->execute();
 
             return $query->fetchAll(PDO::FETCH_ASSOC);
-        }
-        catch(Exception $e){
+        } catch (Exception $e) {
             die($e->getMessage());
         }
     }
 
     /**
      * Busca un presupuesto por el código
-    */
-    public function searchBudget($codigo = ""){
-        try{
+     */
+    public function searchBudget($codigo = "")
+    {
+        try {
 
             $query = $this->conection->prepare("CALL spu_search_budgets(?)");
             $query->execute(array($codigo));
 
             return $query->fetchAll(PDO::FETCH_ASSOC);
-        }
-        catch(Exception $e){
+        } catch (Exception $e) {
             die($e->getMessage());
         }
     }
 
     /**
      *Obtiene un presupuesto por su id 
-    */
-    public function getBudgetById($idpresupuesto = 0){
-        try{
+     */
+    public function getBudgetById($idpresupuesto = 0)
+    {
+        try {
 
             $query = $this->conection->prepare("CALL spu_get_budget_by_id(?)");
             $query->execute(array($idpresupuesto));
 
             return $query->fetch(PDO::FETCH_ASSOC);
-        }
-        catch(Exception $e){
+        } catch (Exception $e) {
             die($e->getMessage());
         }
     }
 
     /**
      * Agrega un presupuesto
-    */
-    public function addBudget($dataBudget = []){
-        try{
+     */
+    public function addBudget($dataBudget = [])
+    {
+        try {
 
             $query = $this->conection->prepare("CALL spu_add_budget(?,?,?)");
             $query->execute(
@@ -76,17 +78,17 @@ class Budget extends Conection{
             );
 
             return $query->fetch(PDO::FETCH_ASSOC);
-        }
-        catch(Exception $e){
+        } catch (Exception $e) {
             die($e->getMessage());
         }
     }
 
     /**
      * Actualiza un presupuesto
-    */
-    public function setBudget($dataBudget = []){
-        try{
+     */
+    public function setBudget($dataBudget = [])
+    {
+        try {
 
             $query = $this->conection->prepare("CALL spu_set_budget(?,?,?,?)");
             $query->execute(
@@ -99,24 +101,23 @@ class Budget extends Conection{
             );
 
             return $query->fetch(PDO::FETCH_ASSOC);
-        }
-        catch(Exception $e){
+        } catch (Exception $e) {
             die($e->getMessage());
         }
     }
 
     /**
      * Elimina un presupuesto
-    */
-    public function inactiveBudget($idpresupuesto){
-        try{
+     */
+    public function inactiveBudget($idpresupuesto = 0)
+    {
+        try {
 
             $query = $this->conection->prepare("CALL spu_inactive_budget(?)");
             $query->execute(array($idpresupuesto));
 
             return $query->fetch(PDO::FETCH_ASSOC);
-        }
-        catch(Exception $e){
+        } catch (Exception $e) {
             die($e->getMessage());
         }
     }
@@ -124,17 +125,31 @@ class Budget extends Conection{
     /**
      * Método para listar los presupuestos con contenido
      */
-    public function listBudgetsAsset(){
+    public function listBudgetsAsset()
+    {
 
-        try{
+        try {
             $query = $this->conection->prepare("CALL spu_list_budgets_assets()");
             $query->execute();
-            
+
             return $query->fetchAll(PDO::FETCH_ASSOC);
+        } catch (Exception $e) {
+            die($e->getMessage());
         }
-        catch(Exception $e){
+    }
+
+    /**
+     * Métddo para contar si exxiste un presupuesto realacionado a algún lote 
+     */
+    public function countBudgets($idpresupuesto = 0)
+    {
+        try {
+            $query = $this->conection->prepare("CALL spu_count_budget_idbudget(?)");
+            $query->execute(array($idpresupuesto));
+
+            return $query->fetch(PDO::FETCH_ASSOC);
+        } catch (Exception $e) {
             die($e->getMessage());
         }
     }
 }
-?>

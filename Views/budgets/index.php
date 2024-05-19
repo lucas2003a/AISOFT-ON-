@@ -507,11 +507,70 @@
 
       /* INSTANCIAS */
       const global = new FunGlobal();
+      const sAlert = new Alert();
 
       const $ = id => global.$(id);
       const $All = id => global.$All(id);
 
       let timer;
+
+      //Elimina un prespuesto 
+      async function deleteBudget(id){
+        try{
+
+          let url = "../../Controllers/budget.controller.php";
+          let params = new FormData(); 
+          
+          params.append("action", "inactiveBudget");
+          params.append("idpresupuesto", id);
+
+          let result = await global.sendAction(url,params);
+
+          if(result){
+            console.log(result)
+            if(result.filasAfect > 0){
+
+              sAlert.sweetSuccess("Presupuesto eliminado correctamente","",()=>{
+                getBudgets()
+              });
+            }else{
+              sAlert.sweetError("No se pudo eliminar el registro","No se pudo eliminar el presupuesto");
+            }
+          }
+        }
+        catch(e){
+          console.error(e);
+        }
+      }
+
+      //cuenta si el presupuesto tiene algun lote asignado un presupuesto
+      async function countBudgets(id){
+        try{
+
+          let params = new URLSearchParams();
+          params.append("action", "countBudgets");
+          params.append("idpresupuesto", atob(id));
+
+          let url = `../../Controllers/budget.controller.php?${params}`;
+
+          let result = await global.sendActionGET(url);
+
+          if(result){
+
+            console.log(result)
+            if(!result.cantidad){
+              sAlert.sweetConfirm("¿Deseas eliminar el registro?", "", async function() {
+             
+              await deleteBudget(atob(id));
+            })
+            }else{
+              sAlert.sweetError("No se puede eliminar el registro", "El prespuesto está asignado a un lote");
+            }
+          }
+        }catch(e){
+          console.error(e);
+        }
+      }
 
       //Renderiza los presupuestos
       function renderBudgets(results) {
@@ -550,9 +609,8 @@
                   </td>
                   <td class="align-middle">
                     <div class="btn-group">
-                        <a type="button" href="./delete_budget.php?id=${code}" class="btn btn-link text-danger text-gradient px-3 mb-0"><i class="bi bi-trash-fill"></i></a>
+                        <a type="button" href="#" data-idpresupuesto="${code}" class="btn btn-link text-danger text-gradient px-3 mb-0 delete"><i data-idpresupuesto="${code}" class="bi bi-trash-fill delete"></i></a>
                         <a type="button" href="./edit_budget.php?id=${code}" class="btn btn-link text-dark px-3 mb-0"><i class="bi bi-pencil-fill"></i></a>
-                        <a type="button" href="#" class="btn btn-link text-success px-3 mb-0 openModal" data-bs-toggle="modal" data-bs-target="#data_full_client" data-id="${budget.idpresupuesto}"><i class="bi bi-arrow-right-square openModal" data-id="${budget.idpresupuesto}"></i></a>
                         </div>
                     </td>
                 </tr>           
@@ -661,6 +719,14 @@
       $("#generate-pdf").addEventListener("click", () => {
 
         generatePdf(idProyecto);
+      });
+
+      $("#table-budgets tbody").addEventListener("click",(e)=>{
+
+        if(e.target.classList.contains("delete")){
+          let id = e.target.getAttribute("data-idpresupuesto");
+          countBudgets(id);
+        }
       });
 
       getBudgets()

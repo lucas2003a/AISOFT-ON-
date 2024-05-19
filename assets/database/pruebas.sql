@@ -145,3 +145,6 @@ SELECT
         
 SELECT * FROM detalle_costos where inactive_at IS NULL;
 select * from activos where sublote = 10;
+
+UPDATE activos SET idpresupuesto = NULL;
+SELECT * FROM presupuestos;

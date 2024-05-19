@@ -384,7 +384,7 @@
                 <div class="col-md-6">
                   <div class="card" style="height: 100%;">
                     <div class="card-header mx-4 p-3 text-center">
-                      <div class="icon icon-shape icon-lg bg-gradient-primary shadow text-center border-radius-lg">
+                      <div class="icon icon-shape icon-lg bg-primary shadow text-center border-radius-lg">
                         <i class="fa-solid fa-coins opacity-10"></i>
                       </div>
                     </div>
@@ -399,7 +399,7 @@
                 <div class="col-md-6 mt-md-0 mt-4">
                   <div class="card" style="height: 100%;">
                     <div class="card-header mx-4 p-3 text-center">
-                      <div class="icon icon-shape icon-lg bg-gradient-primary shadow text-center border-radius-lg">
+                      <div class="icon icon-shape icon-lg bg-primary shadow text-center border-radius-lg">
                         <i class="fa-solid fa-hand-holding-dollar opacity-10"></i>
                       </div>
                     </div>
@@ -432,7 +432,7 @@
                 </div>
                 <div class="card-body p-3">
                   <div class="row">
-                    
+
                   </div>
                 </div>
               </div>
@@ -852,54 +852,54 @@
       //Edita los montos
       async function setAsset(id) {
 
-      try {
+        try {
 
-        let url = "../../Controllers/asset.controller.php";
+          let url = "../../Controllers/asset.controller.php";
 
-        let params = new FormData();
+          let params = new FormData();
 
-        params.append("action", "setAsset");
-        params.append("idactivo", id);
-        params.append("idproyecto", dataDetAsset.idproyecto);
-        params.append("tipo_activo", dataDetAsset.tipo_activo);
-        params.append("imagen", dataDetAsset.imagen);
-        params.append("estado", dataDetAsset.estado);
-        params.append("sublote", dataDetAsset.sublote);
-        params.append("direccion", dataDetAsset.direccion);
-        params.append("moneda_venta", dataDetAsset.moneda_venta);
-        params.append("precio_venta", $("#precio_venta_modal").value);
-        params.append("area_terreno", dataDetAsset.area_terreno);
-        params.append("zcomunes_porcent", dataDetAsset.zcomunes_porcent);
-        params.append("partida_elect", dataDetAsset.partida_elect);
-        params.append("latitud", dataDetAsset.latitud);
-        params.append("longitud", dataDetAsset.longitud);
-        params.append("perimetro", dataDetAsset.perimetro);
-        params.append("idpresupuesto", idPresupuesto);
-        params.append("propietario_lote", dataDetAsset.propietario_lote);
-        params.append("precio_lote", $("#precio_lote_modal").value);
-        params.append("precio_construccion", $("#precio_construccion_modal").value);
-        params.append("precio_venta", $("#precio_venta_modal").value);
+          params.append("action", "setAsset");
+          params.append("idactivo", id);
+          params.append("idproyecto", dataDetAsset.idproyecto);
+          params.append("tipo_activo", dataDetAsset.tipo_activo);
+          params.append("imagen", dataDetAsset.imagen);
+          params.append("estado", dataDetAsset.estado);
+          params.append("sublote", dataDetAsset.sublote);
+          params.append("direccion", dataDetAsset.direccion);
+          params.append("moneda_venta", dataDetAsset.moneda_venta);
+          params.append("precio_venta", $("#precio_venta_modal").value);
+          params.append("area_terreno", dataDetAsset.area_terreno);
+          params.append("zcomunes_porcent", dataDetAsset.zcomunes_porcent);
+          params.append("partida_elect", dataDetAsset.partida_elect);
+          params.append("latitud", dataDetAsset.latitud);
+          params.append("longitud", dataDetAsset.longitud);
+          params.append("perimetro", dataDetAsset.perimetro);
+          params.append("idpresupuesto", idPresupuesto);
+          params.append("propietario_lote", dataDetAsset.propietario_lote);
+          params.append("precio_lote", $("#precio_lote_modal").value);
+          params.append("precio_construccion", $("#precio_construccion_modal").value);
+          params.append("precio_venta", $("#precio_venta_modal").value);
 
-        let results = await global.sendAction(url, params);
+          let results = await global.sendAction(url, params);
 
-        if (results) {
+          if (results) {
 
-          console.log(results);
+            console.log(results);
 
-          if (results.filasAfect > 0) {
+            if (results.filasAfect > 0) {
 
-            sAlert.sweetSuccess("Registro actualizado", "El registro se ha actualizado correctamente", () => {
-              getDetails(idActivo);
-            });
-          } else {
-            sAlert.sweetError("No se actualizó el registro", "Vuelve a intentarlo");
+              sAlert.sweetSuccess("Registro actualizado", "El registro se ha actualizado correctamente", () => {
+                getDetails(idActivo);
+              });
+            } else {
+              sAlert.sweetError("No se actualizó el registro", "Vuelve a intentarlo");
+            }
           }
-        }
 
-      } catch (e) {
-        console.error(e);
+        } catch (e) {
+          console.error(e);
+        }
       }
-    }
 
       //Obtiene los presupuestos
       async function getBudgets() {
@@ -945,19 +945,19 @@
             if (results.total !== dataDetAsset.precio_construccion) {
               $("#show-modal").click();
 
-              
+
               getBudgets();
               $("#precio_lote_modal").value = dataDetAsset.precio_lote;
 
               setTimeout(() => {
-                
-                Array.from($("#idpresupuesto_modal").options).forEach(option =>{
+
+                Array.from($("#idpresupuesto_modal").options).forEach(option => {
                   console.log(option.value)
                   console.log(results.idpresupuesto)
                   if (option.value == results.idpresupuesto) {
                     option.selected = true;
                   }
-                }) 
+                })
               }, 1000);
 
               $("#precio_construccion_modal").value = results.total;
@@ -1467,39 +1467,39 @@
       });
 
       $("#precio_lote_modal").addEventListener("input", (e) => {
-      let precioLote = Number.parseFloat(e.target.value || 0);
+        let precioLote = Number.parseFloat(e.target.value || 0);
 
-      let precioConstruccion = Number.parseFloat($("#precio_construccion_modal").value == false ? 0 : $("#precio_construccion_modal").value);
+        let precioConstruccion = Number.parseFloat($("#precio_construccion_modal").value == false ? 0 : $("#precio_construccion_modal").value);
 
-      $("#precio_venta_modal").value = precioLote + precioConstruccion;
+        $("#precio_venta_modal").value = precioLote + precioConstruccion;
 
-    })
+      })
 
-    $("#idpresupuesto_modal").addEventListener("change", () => {
+      $("#idpresupuesto_modal").addEventListener("change", () => {
 
-      let presupuesto = $("#idpresupuesto_modal").options[$("#idpresupuesto_modal").selectedIndex].dataset.monto;
-      let monto = Number.parseFloat(presupuesto);
-      let precioLote = Number.parseFloat($("#precio_lote_modal").value || 0);
+        let presupuesto = $("#idpresupuesto_modal").options[$("#idpresupuesto_modal").selectedIndex].dataset.monto;
+        let monto = Number.parseFloat(presupuesto);
+        let precioLote = Number.parseFloat($("#precio_lote_modal").value || 0);
 
-      $("#precio_construccion_modal").value = monto;
-      $("#precio_venta_modal").value = monto + precioLote;
-    });
+        $("#precio_construccion_modal").value = monto;
+        $("#precio_venta_modal").value = monto + precioLote;
+      });
 
       getClients(idActivo);
       getDetails(idActivo);
 
       (() => {
         'use strict' //=> USO ESTRICTO POR POLITICAS DE SEGURIDAD EN EL FORMULARIO
-  
+
         //SELECCIONA TODOS LOS ELEMENTOS DEL FORMULARIO QUE TIENE LA CLASE "needs-validation
         const forms = document.querySelectorAll('.needs-validation')
-  
+
         // TOMA EL ELEMENTO "FORMS" Y LO CONVIERTE A UN ARRAY
         // SE INCLUYE EN UN FOREAH PARA ITERAR SOBRE SUS ELEMENTOS
-  
+
         Array.from(forms).forEach(form => {
           form.addEventListener('submit', event => {
-  
+
             //SI LA VALIDACIÓN DEL FORMULARIO ES FALSE
             if (!form.checkValidity()) {
               event.preventDefault() //=> FRENA EL ENVÍO DEL FORMULARIO
@@ -1508,18 +1508,17 @@
             } else {
               event.preventDefault();
               sAlert.sweetConfirm("Datos nuevos", "¿Deseas actualizar el registro?", () => {
-  
+
                 setAsset(idActivo); //Ejecuta la función
                 window.location.reload();
               });
             }
-  
+
             form.classList.add('was-validated') //=> AGREGA ESTA CLASE A LOS ELEMENTOS DEL FORMULARIO(MUESTRA LOS COMENTARIOS)
           }, false) //=> ESTE TERCER ARGUMENTO INDICA QUE EL EVENTO NO SE ESTA CAPTURANDO EN LA ""FASE DE CAPTURA" SINO EN "PROPAGACIÓN NORMAL"
         })
       })();
     })
-
   </script>
   <!-- Github buttons -->
   <script async defer src="https://buttons.github.io/buttons.js"></script>

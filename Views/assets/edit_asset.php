@@ -1137,7 +1137,7 @@
     getBudgets();
 
     /* --------------------------------- FUNCIÓN DE VALIDACIÓN --------------------------------------------------------- */
-
+    
     (() => {
       'use strict' //=> USO ESTRICTO POR POLITICAS DE SEGURIDAD EN EL FORMULARIO
 
