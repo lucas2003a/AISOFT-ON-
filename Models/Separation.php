@@ -11,12 +11,21 @@ class Separation extends Conection{
         $this->conection = parent::getConection();
     }
 
-    public function listSeparations(){
+    /**
+     * Método para listar las separaciones en base a 3 criterios(Tipo de persona, fecha inicio,fecha fin)
+     */
+    public function listSeparationsTPersona($dataSep = []){
 
         try{
 
-            $query = $this->conection->prepare("CALL spu_lis_separations()");
-            $query->execute();
+            $query = $this->conection->prepare("CALL spu_list_separation_tPersona(?,?,?)");
+            $query->execute(
+                array(
+                    $dataSep['tipoPersona'],
+                    $dataSep['fechaInicio'],
+                    $dataSep['fechaFin']
+                )
+            );
 
             return $query->fetchAll(PDO::FETCH_ASSOC);
 
@@ -25,6 +34,50 @@ class Separation extends Conection{
         }
     }
 
+    /**
+     * Método para listar las separaciones en base a 4 criterios(Tipo de persona, fecha inicio,fecha fin, nº expediente)
+     */
+    public function listSeparationsNExpediente($dataSep = []){
+
+        try{
+
+            $query = $this->conection->prepare("CALL spu_list_separation_n_expediente(?,?,?,?)");
+            $query->execute(
+                array(
+                    $dataSep['tipoPersona'],
+                    $dataSep['fechaInicio'],
+                    $dataSep['fechaFin'],
+                    $dataSep['n_expediente']
+                )
+            );
+
+            return $query->fetchAll(PDO::FETCH_ASSOC);
+
+        }catch(Exception $e){
+            die($e->getMessage());
+        }
+    }
+
+    /**
+     * Método para listar una separación en base a un idseparacion
+     */
+    public function listSeparationById($idseparacion = 0){
+
+        try{
+
+            $query = $this->conection->prepare("CALL spu_get_sepraration_ById(?)");
+            $query->execute(array($idseparacion));
+
+            return $query->fetchAll(PDO::FETCH_ASSOC);
+
+        }catch(Exception $e){
+            die($e->getMessage());
+        }
+    }
+
+    /**
+     * Método para obtener los datos de la separación por el idavtivo
+     */
     public function listByIdAsset($idactivo = 0){
 
         try{
@@ -40,6 +93,76 @@ class Separation extends Conection{
         }
     }
 
+    /**
+     * Método para registrar una separación
+     */
+    public function addSeparation($dataSep = []){
+
+        try{
+            $query = $this->conection->prepare("CALL spu_add_separation(?,?,?,?,?,?,?)");
+            $query->execute(
+                array(
+                    $dataSep["n_expediente"],
+                    $dataSep["idactivo"],
+                    $dataSep["idcliente"],
+                    $dataSep["idconyugue"],
+                    $dataSep["separacion_monto"],
+                    $dataSep["imagen"],
+                    $dataSep["idusuario"]
+                )
+            );
+
+            return $query->fetch(PDO::FETCH_ASSOC);
+        }
+        catch(Exception $e){
+            die($e->getMessage());
+        }
+    }
+
+    /**
+     * Método para actualizar una separación
+     */
+    public function setSeparation($dataSep = []){
+
+        try{
+            $query = $this->conection->prepare("CALL spu_set_separation(?,?,?,?,?,?,?,?)");
+            $query->execute(
+                array(
+                    $dataSep["idseparacion"],
+                    $dataSep["n_expediente"],
+                    $dataSep["idactivo"],
+                    $dataSep["idcliente"],
+                    $dataSep["idconyugue"],
+                    $dataSep["separacion_monto"],
+                    $dataSep["imagen"],
+                    $dataSep["idusuario"]
+                )
+            );
+
+            return $query->fetch(PDO::FETCH_ASSOC);
+        }
+        catch(Exception $e){
+            die($e->getMessage());
+        }
+    }
+
+    /**
+     * Método para eliminar una separación
+     */
+    public function inactiveSeparation($idseparacion = 0){
+        try{
+            $query = $this->conection->prepare("CALL spu_inactive_separation(?)");
+            $query->execute(array($idseparacion));
+
+            return $query->fetch(PDO::FETCH_ASSOC);
+        }catch(Exception $e){
+            die($e->getMessage());
+        }
+    }
+
+    /**
+     * Metodo para obtener los nuevos clientes
+     */
     public function listNewClients(){
 
         try{

@@ -347,13 +347,15 @@ CREATE TABLE separaciones
     idactivo				INT 			NOT NULL,
     idcliente 				INT  			NOT NULL,
     idconyugue 				INT 			NULL,
-    separacion_monto		DECIMAL(4,2) 	NOT NULL,
+    separacion_monto		DECIMAL(8,2) 	NOT NULL,
     fecha_pago				DATE 			NOT NULL,
     imagen					VARCHAR(100) 	NOT NULL,
+    detalle                 VARCHAR(200)    NOT NULL
 	create_at 				DATE 			NOT NULL	DEFAULT (CURDATE()),
     update_at				DATE 			NULL,
     inactive_at				DATE 			NULL,
     idusuario 				INT 			NOT NULL,
+    CONSTRAINT chk_n_expediente_sep CHECK(n_expediente LIKE 'SEC-%')
     CONSTRAINT fk_idactivo_sep FOREIGN KEY(idactivo) REFERENCES activos(idactivo),
     CONSTRAINT fk_idcliente_sep FOREIGN KEY(idcliente) REFERENCES clientes(idcliente),
     CONSTRAINT fk_idconyugue_sep FOREIGN KEY(idconyugue) REFERENCES clientes(idcliente),
@@ -364,17 +366,20 @@ CREATE TABLE separaciones
 CREATE TABLE devoluciones
 (
 	iddevolucion 		INT PRIMARY KEY AUTO_INCREMENT,
+    n_expediente        VARCHAR(10)     NOT NULL
     idseparacion		INT 			NOT NULL,
-    fecha_devolucion	DATE 			NOT NULL,
-    monto_devolucion 	DECIMAL(4,2)	NOT NULL,
+    detalle             VARCHAR(200)    NOT NULL,
+    monto_devolucion 	DECIMAL(8,2)	NOT NULL,
+    imagen                  VARCHAR(100) NOT NULL,
     create_at 				DATE 		NOT NULL	DEFAULT (CURDATE()),
     update_at				DATE 		NULL,
     inactive_at				DATE 		NULL,
     idusuario 				INT 		NOT NULL,
+    CONSTRAINT chk_n_expediente_dev CHECK(n_expediente LIKE 'DEC-%'),
     CONSTRAINT fk_idseparacion_dev FOREIGN KEY(idseparacion) REFERENCES separaciones(idseparacion),
     CONSTRAINT fk_idusuario_dev FOREIGN KEY(idusuario) REFERENCES usuarios(idusuario)
 )ENGINE= INNODB;
-
+ALTER TABLE devoluciones CHANGE monto_devolucion monto_devolucion 	DECIMAL(8,2)	NOT NULL;
 -- CONTRATOS
 CREATE TABLE contratos
 (

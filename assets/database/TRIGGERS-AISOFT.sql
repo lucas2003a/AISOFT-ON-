@@ -122,11 +122,20 @@ CREATE TRIGGER trgr_asset_status_separation AFTER UPDATE ON separaciones
 FOR EACH ROW
 BEGIN
 	
-    UPDATE activos
-		SET 
-			estado = "SEPARADO"
-		WHERE 
-			idactivo = NEW.idactivo;
+	IF NEW.idactivo != OLD.idactivo THEN
+
+		UPDATE activos
+			SET 
+				estado = "SEPARADO"
+			WHERE 
+				idactivo = NEW.idactivo;
+
+		UPDATE activos
+			SET 
+				estado = "SIN VENDER"
+			WHERE 
+				idactivo = OLD.idactivo;
+	END IF;
 	
     IF NEW.inactive_at IS NOT NULL THEN
 		UPDATE activos
@@ -136,6 +145,56 @@ BEGIN
 				idactivo = NEW.idactivo;
     END IF;
     
+END $$
+DELIMITER ;
+
+DELIMITER $$
+CREATE TRIGGER trgr_asset_status_refund AFTER INSERT ON devoluciones
+FOR EACH ROW
+BEGIN
+	DECLARE _idactivo INT;
+
+	SET _idactivo = (
+		SELECT idactivo FROM separaciones
+		WHERE idseparacion = NEW.idseparacion
+	);
+
+	UPDATE activos
+		SET
+			estado = "SIN VENDER"
+		WHERE
+			idactivo = _idactivo;
+
+	UPDATE separaciones
+		SET
+			inactive_at = CURDATE()
+		WHERE
+			idseparacion = NEW.idseparacion;
+
+END $$
+DELIMITER ;
+
+DELIMITER $$
+CREATE TRIGGER trgr_new_asset_status_refund AFTER UPDATE ON devoluciones
+FOR EACH ROW
+BEGIN
+
+	IF NEW.idseparacion != OLD.idseparacion THEN
+		UPDATE separaciones
+			SET
+				inactive_at = CURDATE(),
+				idusuario = NEW.idusuario
+		WHERE
+			idseparacion = NEW.idseparacion;
+
+		UPDATE separaciones
+			SET
+				inactive_at = NULL,
+				idusuario = NEW.idusuario
+		WHERE
+			idseparacion = OLD.idseparacion;
+
+	END IF;
 END $$
 DELIMITER ;
 

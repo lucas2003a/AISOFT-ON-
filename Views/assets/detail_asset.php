@@ -1404,7 +1404,7 @@
 
           let params = new FormData();
 
-          params.append("action", "listSeparaction");
+          params.append("action", "listByIdAsset");
           params.append("idactivo", id);
 
           let results = await global.sendAction(url, params);

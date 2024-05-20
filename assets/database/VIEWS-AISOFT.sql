@@ -71,28 +71,6 @@ DELIMITER ;
 SELECT * FROM vws_list_projects;
 
 DELIMITER $$
-CREATE VIEW vws_list_drop_projects AS
-		SELECT 
-			proy.idproyecto,
-            proy.imagen,
-			proy.codigo,
-			proy.denominacion,
-			dist.distrito,
-			prov.provincia,
-			dept.departamento,
-			proy.direccion,
-            usu.nombres AS usuario
-        FROM proyectos AS proy
-        INNER JOIN distritos AS dist ON dist.iddistrito = proy.iddistrito
-        INNER JOIN provincias AS prov ON prov.idprovincia = dist.idprovincia
-        INNER JOIN departamentos AS dept ON dept.iddepartamento = prov.iddepartamento
-        INNER JOIN usuarios AS usu ON usu.idusuario = proy.idusuario
-        WHERE proy.inactive_at IS NOT NULL
-        ORDER BY codigo ASC;
-$$
-DELIMITER ;
-
-SELECT * FROM vws_list_drop_projects;
 
 -- ACTIVOS
 
@@ -126,30 +104,6 @@ DELIMITER ;
 SELECT * FROM vws_list_assets_short;
 
 DELIMITER $$
-CREATE VIEW vws_list_inactive_assets AS
-	SELECT
-		act.idactivo,
-        proy.denominacion,
-        act.estado,
-        act.sublote,
-        act.direccion,
-        dist.distrito,
-        prov.provincia,
-        dept.departamento,
-        usu.nombres AS usuario
-		FROM activos AS act
-        INNER JOIN proyectos AS proy ON proy.idproyecto = act.idproyecto
-        INNER JOIN distritos AS dist ON dist.iddistrito = proy.iddistrito
-        INNER JOIN provincias AS prov ON prov.idprovincia = dist.idprovincia
-        INNER JOIN departamentos AS dept ON dept.iddepartamento = prov.iddepartamento
-        INNER JOIN usuarios AS usu ON usu.idusuario = act.idusuario
-        WHERE act.tipo_activo = "LOTE" 
-        AND act.inactive_at IS NOT NULL
-        ORDER BY proy.denominacion
-$$
-DELIMITER ;
-
-SELECT * FROM vws_list_inactive_assets;
 
 -- CLIENTES
 DELIMITER $$
@@ -214,5 +168,154 @@ CREATE VIEW vws_list_inactive_clients AS
 $$
 DELIMITER ;
 
-SELECT * FROM vws_list_inactive_clients;
+-- SEPARACIONES
+DELIMITER $$
+CREATE VIEW vws_list_seperations_tpersona_natural AS
+    SELECT 
+		sep.idseparacion,
+        sep.n_expediente,
+		act.idactivo,
+		act.sublote,
+		proy.denominacion,
+		CONCAT(UPPER(pers.apellidos),", ",LOWER(pers.nombres)) AS cliente,
+        clien.tipo_persona,
+        clien.inactive_at AS inactive_at_client,
+        pers.documento_tipo,
+        pers.documento_nro,
+		sep.separacion_monto,
+        sep.inactive_at AS inactive_at_sep,
+        usuPers.nombres AS usuario,
+        sep.create_at
+		FROM separaciones AS sep
+		INNER JOIN activos AS act ON act.idactivo = sep.idactivo
+        INNER JOIN proyectos AS proy ON proy.idproyecto = act.idproyecto
+        INNER JOIN clientes AS clien ON clien.idcliente = sep.idcliente
+        INNER JOIN personas AS pers ON pers.idpersona = clien.idpersona
+        INNER JOIN usuarios AS usu ON usu.idusuario = sep.idusuario 
+        INNER JOIN personas AS usuPers ON usuPers.idpersona = usu.idpersona
+        ORDER BY sep.idseparacion DESC;
+DELIMITER ;
+
+DELIMITER $$
+CREATE VIEW vws_list_seperations_tpersona_juridica AS
+    SELECT 
+		sep.idseparacion,
+        sep.n_expediente,
+		act.idactivo,
+		act.sublote,
+		proy.denominacion,
+		persj.razon_social AS cliente,
+        clien.tipo_persona,
+        clien.inactive_at AS inactive_at_client,
+        persj.documento_tipo,
+        persj.documento_nro,
+		sep.separacion_monto,
+		sep.create_at,
+        sep.inactive_at AS inactive_at_sep,
+        usuPers.nombres AS usuario
+		FROM separaciones AS sep
+		INNER JOIN activos AS act ON act.idactivo = sep.idactivo
+        INNER JOIN proyectos AS proy ON proy.idproyecto = act.idproyecto
+        INNER JOIN clientes AS clien ON clien.idcliente = sep.idcliente
+        INNER JOIN personas_juridicas AS persj ON persj.idpersona_juridica = clien.idpersona_juridica
+        INNER JOIN usuarios AS usu ON usu.idusuario = sep.idusuario 
+        INNER JOIN personas AS usuPers ON usuPers.idpersona = usu.idpersona
+        ORDER BY sep.idseparacion DESC;
+DELIMITER ;
+
+DELIMITER $$
+CREATE VIEW vws_list_seperations_tpersona_natural_full AS
+SELECT 
+		sep.idseparacion,
+        act.sublote,
+        proy.denominacion,
+        dist.distrito,
+        prov.provincia,
+        dept.departamento,
+        CONCAT(UPPER(pers.apellidos),", ",LOWER(pers.nombres)) AS cliente,
+        pers.documento_tipo,
+        pers.documento_nro,
+        CONCAT(UPPER(conyPers.apellidos)," ,",LOWER(conyPers.nombres)) AS conyugue,
+        conyPers.documento_tipo AS conyPers_documento_tipo,
+        conyPers.documento_nro As conyPers_documento_nro,
+        sep.separacion_monto,
+        sep.create_at,
+		sep.imagen,
+        sep.inactive_at,
+        usuPers.nombres AS usuario
+		FROM separaciones AS sep
+        INNER JOIN activos AS act ON act.idactivo = sep.idactivo
+        INNER JOIN proyectos AS proy ON proy.idproyecto = act.idproyecto
+        INNER JOIN distritos AS dist ON dist.iddistrito = proy.iddistrito
+        INNER JOIN provincias AS prov ON prov.idprovincia = dist.idprovincia
+        INNER JOIN departamentos AS dept ON dept.iddepartamento = prov.iddepartamento
+        
+        INNER JOIN clientes AS clien ON clien.idcliente = sep.idcliente
+        INNER JOIN personas AS pers ON pers.idpersona = clien.idpersona
+        
+		LEFT JOIN clientes AS cony ON cony.idcliente = sep.idconyugue
+        LEFT JOIN personas AS conyPers ON conyPers.idpersona = cony.idpersona
+        
+        INNER JOIN usuarios AS usu ON usu.idusuario = sep.idusuario
+        INNER JOIN personas AS usuPers ON usuPers.idpersona = usu.idpersona;
+DELIMITER ;
+
+DELIMITER $$
+CREATE VIEW vws_list_seperations_tpersona_juridica_full AS
+        SELECT
+            sep.idseparacion,
+            act.sublote,
+            proy.denominacion,
+            dist.distrito,
+            prov.provincia,
+            dept.departamento,
+            persj.razon_social AS cliente,
+            persj.documento_tipo,
+            persj.documento_nro,
+            sep.separacion_monto,
+            sep.create_at,
+            sep.imagen,
+            usuPers.nombres AS usuario
+            FROM separaciones AS sep
+            INNER JOIN activos AS act ON act.idactivo = sep.idactivo
+            INNER JOIN proyectos AS proy ON proy.idproyecto = act.idproyecto
+            INNER JOIN distritos AS dist ON dist.iddistrito = proy.iddistrito
+            INNER JOIN provincias AS prov ON prov.idprovincia = dist.idprovincia
+            INNER JOIN departamentos AS dept ON dept.iddepartamento = prov.iddepartamento
+            
+            INNER JOIN clientes AS clien ON clien.idcliente = sep.idcliente
+            INNER JOIN personas_juridicas AS persj ON persj.idpersona_juridica = clien.idpersona_juridica
+            
+            INNER JOIN usuarios AS usu ON usu.idusuario = sep.idusuario
+            INNER JOIN personas AS usuPers ON usuPers.idpersona = usu.idpersona
+DELIMITER ;
+
+-- DEVOLUCIONES ///////////////////////////////////////////////////////
+DELIMITER $$
+CREATE VIEW vws_list_refunds AS
+    SELECT
+        dev.iddevolucion,
+        dev.n_expediente AS n_expediente_dev,
+        sep.idseparacion,
+        sep.n_expediente AS n_expediente_sep,
+        dev.detalle,
+        dev.monto_devolucion,
+        COALESCE(persj.tipo_persona,persn.tipo_persona) AS tipo_persona,
+        COALESCE(persj.cliente,persn.cliente) AS cliente,
+        COALESCE(persj.documento_tipo,persn.documento_tipo) AS documento_tipo,
+        COALESCE(persj.documento_nro,persn.documento_nro) AS documento_nro,
+        dev.imagen,
+        dev.create_at,
+        dev.inactive_at,
+        usuPers.nombres
+        FROM devoluciones dev
+        INNER JOIN separaciones sep ON sep.idseparacion = dev.idseparacion
+        LEFT JOIN vws_list_seperations_tpersona_juridica AS persj ON persj.idseparacion = dev.idseparacion
+        LEFT JOIN vws_list_seperations_tpersona_natural AS persn ON persn.idseparacion = dev.idseparacion
+        INNER JOIN usuarios usu ON usu.idusuario = dev.idusuario
+        INNER JOIN personas AS usuPers ON usuPers.idpersona = usu.idpersona
+        ORDER BY dev.iddevolucion DESC;
+DELIMITER ;
+
+
 

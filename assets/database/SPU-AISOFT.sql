@@ -1640,62 +1640,20 @@ BEGIN
 
     IF _tipo_persona = "NATURAL" THEN
 
-	SELECT 
-		sep.idseparacion,
-        sep.n_expediente,
-		act.idactivo,
-		act.sublote,
-		proy.denominacion,
-		CONCAT(UPPER(pers.apellidos),", ",LOWER(pers.nombres)) AS cliente,
-        clien.tipo_persona,
-        pers.documento_tipo,
-        pers.documento_nro,
-		sep.separacion_monto,
-		sep.fecha_pago,
-        usuPers.nombres AS usuario
-		FROM separaciones AS sep
-		INNER JOIN activos AS act ON act.idactivo = sep.idactivo
-        INNER JOIN proyectos AS proy ON proy.idproyecto = act.idproyecto
-        INNER JOIN clientes AS clien ON clien.idcliente = sep.idcliente
-        INNER JOIN personas AS pers ON pers.idpersona = clien.idpersona
-        INNER JOIN usuarios AS usu ON usu.idusuario = sep.idusuario 
-        INNER JOIN personas AS usuPers ON usuPers.idpersona = usu.idpersona
-		WHERE sep.inactive_at IS NULL
-            AND clien.inactive_at IS NULL
-            AND fecha_pago BETWEEN _fechaInicio AND _fechaFin
-        ORDER BY sep.idseparacion DESC;
+        SELECT * FROM vws_list_speractions_tpersona_natural
+		WHERE inactive_at_sep IS NULL
+            AND inactive_at_client IS NULL
+            AND create_at BETWEEN _fechaInicio AND _fechaFin;
 
     ELSEIF _tipo_persona = "JURÍDICA" THEN
-        SELECT 
-		sep.idseparacion,
-        sep.n_expediente,
-		act.idactivo,
-		act.sublote,
-		proy.denominacion,
-		persj.razon_social AS cliente,
-        clien.tipo_persona,
-        persj.documento_tipo,
-        persj.documento_nro,
-		sep.separacion_monto,
-		sep.fecha_pago,
-        usuPers.nombres AS usuario
-		FROM separaciones AS sep
-		INNER JOIN activos AS act ON act.idactivo = sep.idactivo
-        INNER JOIN proyectos AS proy ON proy.idproyecto = act.idproyecto
-        INNER JOIN clientes AS clien ON clien.idcliente = sep.idcliente
-        INNER JOIN personas_juridicas AS persj ON persj.idpersona_juridica = clien.idpersona_juridica
-        INNER JOIN usuarios AS usu ON usu.idusuario = sep.idusuario 
-        INNER JOIN personas AS usuPers ON usuPers.idpersona = usu.idpersona
-		WHERE sep.inactive_at IS NULL
-            AND clien.inactive_at IS NULL
-            AND fecha_pago BETWEEN _fechaInicio AND _fechaFin
-        ORDER BY sep.idseparacion DESC;
+        SELECT * FROM vws_list_separactions_tpersona_juridica
+        WHERE inactive_at_sep IS NULL
+            AND inactive_at_client IS NULL
+            AND create_at BETWEEN _fechaInicio AND _fechaFin;
     END IF;
 END $$
-
 DELIMITER ;
 
-call spu_list_separation_tPersona("JURÍDICA","2024-03-09","2024-03-09");
 DELIMITER $$
 CREATE PROCEDURE spu_list_separation_ByIdAsset(IN _idactivo INT)
 BEGIN
@@ -1709,72 +1667,14 @@ BEGIN
     );
 
     IF _tpersona = "NATURAL" THEN
-	SELECT 
-		sep.idseparacion,
-        act.sublote,
-        proy.denominacion,
-        dist.distrito,
-        prov.provincia,
-        dept.departamento,
-        CONCAT(UPPER(pers.apellidos),", ",LOWER(pers.nombres)) AS cliente,
-        pers.documento_tipo,
-        pers.documento_nro,
-        CONCAT(UPPER(conyPers.apellidos)," ,",LOWER(conyPers.nombres)) AS conyugue,
-        conyPers.documento_tipo AS conyPers_documento_tipo,
-        conyPers.documento_nro As conyPers_documento_nro,
-        sep.separacion_monto,
-        sep.fecha_pago,
-		sep.imagen,
-        usuPers.nombres AS usuario
-		FROM separaciones AS sep
-        INNER JOIN activos AS act ON act.idactivo = sep.idactivo
-        INNER JOIN proyectos AS proy ON proy.idproyecto = act.idproyecto
-        INNER JOIN distritos AS dist ON dist.iddistrito = proy.iddistrito
-        INNER JOIN provincias AS prov ON prov.idprovincia = dist.idprovincia
-        INNER JOIN departamentos AS dept ON dept.iddepartamento = prov.iddepartamento
-        
-        INNER JOIN clientes AS clien ON clien.idcliente = sep.idcliente
-        INNER JOIN personas AS pers ON pers.idpersona = clien.idpersona
-        
-		LEFT JOIN clientes AS cony ON cony.idcliente = sep.idconyugue
-        LEFT JOIN personas AS conyPers ON conyPers.idpersona = cony.idpersona
-        
-        INNER JOIN usuarios AS usu ON usu.idusuario = sep.idusuario
-        INNER JOIN personas AS usuPers ON usuPers.idpersona = usu.idpersona
-        
-        WHERE sep.idactivo = _idactivo
-        AND sep.inactive_at IS NULL;
+        SELECT * FROM vws_list_speractions_tpersona_natural_full
+            WHERE idactivo = _idactivo
+                AND inactive_at IS NULL;
 
     ELSEIF _tpersona = "JURÍDICA" THEN
-        SELECT
-            sep.idseparacion,
-            act.sublote,
-            proy.denominacion,
-            dist.distrito,
-            prov.provincia,
-            dept.departamento,
-            persj.razon_social AS cliente,
-            persj.documento_tipo,
-            persj.documento_nro,
-            sep.separacion_monto,
-            sep.fecha_pago,
-            sep.imagen,
-            usuPers.nombres AS usuario
-            FROM separaciones AS sep
-            INNER JOIN activos AS act ON act.idactivo = sep.idactivo
-            INNER JOIN proyectos AS proy ON proy.idproyecto = act.idproyecto
-            INNER JOIN distritos AS dist ON dist.iddistrito = proy.iddistrito
-            INNER JOIN provincias AS prov ON prov.idprovincia = dist.idprovincia
-            INNER JOIN departamentos AS dept ON dept.iddepartamento = prov.iddepartamento
-            
-            INNER JOIN clientes AS clien ON clien.idcliente = sep.idcliente
-            INNER JOIN personas_juridicas AS persj ON persj.idpersona_juridica = clien.idpersona_juridica
-            
-            INNER JOIN usuarios AS usu ON usu.idusuario = sep.idusuario
-            INNER JOIN personas AS usuPers ON usuPers.idpersona = usu.idpersona
-            
-            WHERE sep.idactivo = _idactivo
-            AND sep.inactive_at IS NULL;
+        SELECT * FROM vws_list_separactions_tpersona_juridica_full
+            WHERE idactivo = _idactivo
+                AND inactive_at IS NULL;
     END IF;
 END $$
 DELIMITER ;
@@ -1791,64 +1691,243 @@ BEGIN
 
     IF _tipo_persona = "NATURAL" THEN
 
-	SELECT 
-		sep.idseparacion,
-        sep.n_expediente,
-		act.idactivo,
-		act.sublote,
-		proy.denominacion,
-		CONCAT(UPPER(pers.apellidos),", ",LOWER(pers.nombres)) AS cliente,
-        clien.tipo_persona,
-        pers.documento_tipo,
-        pers.documento_nro,
-		sep.separacion_monto,
-		sep.fecha_pago,
-        usuPers.nombres AS usuario
-		FROM separaciones AS sep
-		INNER JOIN activos AS act ON act.idactivo = sep.idactivo
-        INNER JOIN proyectos AS proy ON proy.idproyecto = act.idproyecto
-        INNER JOIN clientes AS clien ON clien.idcliente = sep.idcliente
-        INNER JOIN personas AS pers ON pers.idpersona = clien.idpersona
-        INNER JOIN usuarios AS usu ON usu.idusuario = sep.idusuario 
-        INNER JOIN personas AS usuPers ON usuPers.idpersona = usu.idpersona
-		WHERE sep.inactive_at IS NULL
-            AND clien.inactive_at IS NULL
-            AND fecha_pago BETWEEN _fechaInicio AND _fechaFin
-            AND n_expediente LIKE CONCAT(_n_expediente,'%')
-        ORDER BY sep.idseparacion DESC;
+        SELECT * FROM vws_list_speractions_tpersona_natural
+            WHERE inactive_at_sep IS NULL
+                AND inactive_at_client IS NULL
+                AND create_at BETWEEN _fechaInicio AND _fechaFin
+                AND n_expediente LIKE CONCAT(_n_expediente,'%');
 
     ELSEIF _tipo_persona = "JURÍDICA" THEN
-        SELECT 
-		sep.idseparacion,
-        sep.n_expediente,
-		act.idactivo,
-		act.sublote,
-		proy.denominacion,
-		persj.razon_social AS cliente,
-        clien.tipo_persona,
-        persj.documento_tipo,
-        persj.documento_nro,
-		sep.separacion_monto,
-		sep.fecha_pago,
-        usuPers.nombres AS usuario
-		FROM separaciones AS sep
-		INNER JOIN activos AS act ON act.idactivo = sep.idactivo
-        INNER JOIN proyectos AS proy ON proy.idproyecto = act.idproyecto
-        INNER JOIN clientes AS clien ON clien.idcliente = sep.idcliente
-        INNER JOIN personas_juridicas AS persj ON persj.idpersona_juridica = clien.idpersona_juridica
-        INNER JOIN usuarios AS usu ON usu.idusuario = sep.idusuario 
-        INNER JOIN personas AS usuPers ON usuPers.idpersona = usu.idpersona
-		WHERE sep.inactive_at IS NULL
-            AND clien.inactive_at IS NULL
-            AND fecha_pago BETWEEN _fechaInicio AND _fechaFin
-            AND n_expediente LIKE CONCAT(_n_expediente,'%')
-        ORDER BY sep.idseparacion DESC;
+        SELECT * FROM vws_list_separactions_tpersona_juridica
+        WHERE inactive_at_sep IS NULL
+            AND inactive_at_client IS NULL
+            AND create_at BETWEEN _fechaInicio AND _fechaFin
+           AND n_expediente LIKE CONCAT(_n_expediente,'%');
     END IF;
 END $$
 DELIMITER ;
-call spu_list_separation_n_expediente("JURÍDICA","2024-03-09","2024-03-09","SEC-00000");
-SELECT * FROM clientes;
--- CONTRATOS
+
+DELIMITER $$
+CREATE PROCEDURE spu_add_separation
+(
+    IN _n_expediente    VARCHAR(200),
+    IN _idactivo        INT,
+    IN _idcliente       INT,
+    IN _idconyugue      INT,
+    IN _separacion_monto DECIMAL(8,2),
+    IN _imagen          VARCHAR(200),
+    IN _idusuario       INT
+)
+BEGIN
+    INSERT INTO activos (
+            n_expediente,
+            idactivo,
+            idcliente,
+            idconyugue,
+            separacion_monto,
+            imagen,
+            idusuario
+    ) 
+        VALUES(
+            _n_expediente,
+            _idactivo,
+            _idcliente,
+            NULLIF(_idconyugue,''),
+            _separacion_monto,
+            _imagen,
+            _idusuario
+        );
+
+    SELECT ROW_COUNT() AS filasAfect;
+END $$
+DELIMITER ;
+
+DELIMITER $$
+CREATE PROCEDURE spu_set_separation
+(
+    IN _idseparacion    INT,
+    IN _n_expediente    VARCHAR(200),
+    IN _idactivo        INT,
+    IN _idcliente       INT,
+    IN _idconyugue      INT,
+    IN _separacion_monto DECIMAL(8,2),
+    IN _imagen          VARCHAR(200),
+    IN _idusuario       INT
+)
+BEGIN
+    UPDATE activos 
+        SET
+            n_expediente   = _n_expediente,
+            idactivo       = _idactivo,
+            idcliente      = _idcliente,
+            idconyugue     = NULLIF(_idconyugue,''),
+            separacion_monto = _separacion_monto,
+            imagen         = _imagen,
+            idusuario      = _idusuario,
+            update_at      = CURDATE()
+        WHERE idseparacion = _idseparacion;
+    
+    SELECT ROW_COUNT() AS filasAfect;
+END $$
+
+DELIMITER $$
+CREATE PROCEDURE spu_inactive_separation
+(IN _idseparacion INT)
+BEGIN
+    UPDATE activos
+        SET
+            inactive_at = CURDATE()
+        WHERE idseparacion = _idseparacion;
+    
+    SELECT ROW_COUNT() AS filasAfect;
+END $$
+DELIMITER ;
+
+DELIMITER $$
+CREATE PROCEDURE spu_get_sepraration_ById
+(IN _idseparacion INT)
+BEGIN
+    DECLARE _tpersona VARCHAR(10);
+
+    SET _tpersona = (
+        SELECT tipo_persona
+        FROM clientes cli 
+        INNER JOIN separaciones sep on sep.idcliente = cli.idcliente
+        WHERE sep.idactivo = _idactivo
+    );
+
+    IF _tpersona = "NATURAL" THEN
+        SELECT * FROM vws_list_speractions_tpersona_natural_full
+            WHERE idseparacion = _idseparacion
+                AND inactive_at IS NULL;
+
+    ELSEIF _tpersona = "JURÍDICA" THEN
+        SELECT * FROM vws_list_separactions_tpersona_juridica_full
+            WHERE idseparacion = _idseparacion
+                AND inactive_at IS NULL;
+    END IF;
+END $$
+DELIMITER ;
+
+-- DEVLOUCIONES   //////////////////////////////////////
+DELIMITER $$
+CREATE PROCEDURE sup_list_refunds
+(
+    IN _tipo_persona    VARCHAR(10),
+    IN _fechaInicio     DATE,
+    IN _fechaFin        DATE
+)
+BEGIN
+    SELECT * 
+        FROM vws_list_refunds
+        WHERE tipo_persona = _tipo_persona
+            AND create_at BETWEEN _fechaInicio AND _fechaFin
+            AND inactive_at IS NULL;
+END $$
+DELIMITER ;
+
+DELIMITER $$
+CREATE PROCEDURE sup_list_refunds_n_expedientes
+(
+    IN _tipo_persona    VARCHAR(10),
+    IN _fechaInicio     DATE,
+    IN _fechaFin        DATE,
+    IN _n_expediente    VARCHAR(10)
+)
+BEGIN
+    SELECT * 
+        FROM vws_list_refunds
+        WHERE tipo_persona = _tipo_persona
+            AND create_at BETWEEN _fechaInicio AND _fechaFin
+            AND inactive_at IS NULL
+            AND n_expediente_dev LIKE CONCAT(_n_expediente,'%');
+END $$
+DELIMITER ;
+
+DELIMITER $$
+CREATE PROCEDURE sup_list_refunds_ById
+(IN _iddevolucion INT)
+BEGIN
+    SELECT * 
+        FROM vws_list_refunds
+        WHERE iddevolucion = _iddevolucion;
+END $$
+DELIMITER ;
+
+DELIMITER $$
+CREATE PROCEDURE spu_add_refund
+(
+    IN _n_expediente    VARCHAR(10),
+    IN _idseparacion    INT,
+    IN _detalle         VARCHAR(200),
+    IN _monto_devolucion DECIMAL(8,2),
+    IN _imagen          VARCHAR(100),
+    IN _idusuario       INT
+)
+BEGIN
+    INSERT INTO devoluciones(
+                    n_expediente,
+                    idseparacion,
+                    detalle,
+                    monto_devolucion,
+                    imagen,
+                    idusuario
+                )
+                VALUES(
+                    _n_expediente,
+                    _idseparacion,
+                    _detalle,
+                    _monto_devolucion,
+                    _imagen,
+                    _idusuario
+                );
+
+    SELECT ROW_COUNT() AS filasAfect;
+END
+DELIMITER ;
+
+DELIMITER $$
+CREATE PROCEDURE spu_set_refund
+(
+    IN _iddevolucion    INT,
+    IN _n_expediente    VARCHAR(10),
+    IN _idseparacion    INT,
+    IN _detalle         VARCHAR(200),
+    IN _monto_devolucion DECIMAL(8,2),
+    IN _imagen          VARCHAR(100),
+    IN _idusuario       INT
+)
+BEGIN
+    UPDATE devoluciones
+        SET
+            n_expediente   = _n_expediente,
+            idseparacion   = _idseparacion,
+            detalle        = _detalle,
+            monto_devolucion = _monto_devolucion,
+            imagen         = _imagen,
+            update_at      = CURDATE(),
+            idusuario      = _idusuario
+        WHERE
+            iddevolucion = _iddevolucion;
+    
+    SELECT ROW_COUNT() AS filasAfect;
+END $$
+DELIMITER ;
+
+DELIMITER $$
+CREATE PROCEDURE spu_inactive_refund
+(IN _iddevolucion INT)
+BEGIN
+    UPDATE devoluciones
+        SET
+            inactive_at = CURDATE()
+        WHERE
+            iddevolucion = _iddevolucion;
+
+    SELECT ROW_COUNT() AS filasAfect;
+END $$
+DELIMITER ;
+-- CONTRATOS  ////////////////////////////////////////////////////////////////////////////////////
 DELIMITER $$
 CREATE PROCEDURE spu_lits_contracts_full_by_id(IN _idcontrato INT)
 BEGIN
@@ -1973,23 +2052,6 @@ BEGIN
 			idcontrato = _idcontrato;
             
   SELECT ROW_COUNT() AS filasAfect;
-END $$
-DELIMITER ;
-
--- PRESUPUESTOS
-DELIMITER $$
-CREATE PROCEDURE spu_list_budgets()
-BEGIN
-	SELECT
-		pres.idpresupuesto,
-        pres.modelo,
-        pres.medidas,
-        pres.descripcion,
-        pers.nombres AS usuario
-		FROM presupuestos AS pres
-        INNER JOIN usuarios AS usu ON usu.idusuario = pres.idusuario
-        INNER JOIN personas AS pers ON pers.idpersona = usu.idpersona
-        WHERE pres.inactive_at IS NULL;
 END $$
 DELIMITER ;
 

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 19-05-2024 a las 12:19:44
+-- Tiempo de generación: 20-05-2024 a las 11:36:27
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -259,6 +259,26 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_add_projects` (IN `_idsede` INT
 	SELECT ROW_COUNT() AS filasAfect; -- FILAS AFECTADAS
 END$$
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_add_refund` (IN `_n_expediente` VARCHAR(10), IN `_idseparacion` INT, IN `_detalle` VARCHAR(200), IN `_monto_devolucion` DECIMAL(8,2), IN `_imagen` VARCHAR(100), IN `_idusuario` INT)   BEGIN
+    INSERT INTO devoluciones(
+                    n_expediente,
+                    idseparacion,
+                    detalle,
+                    monto_devolucion,
+                    imagen,
+                    idusuario
+                )
+                VALUES(
+                    _n_expediente,
+                    _idseparacion,
+                    _detalle,
+                    _monto_devolucion,
+                    _imagen,
+                    _idusuario
+                );
+    SELECT ROW_COUNT() AS filasAfect;
+END$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_add_represents` (IN `_idpersona_juridica` INT, IN `_representante_legal` VARCHAR(30), IN `_documento_tipo` VARCHAR(20), IN `_documento_nro` VARCHAR(12), IN `_cargo` VARCHAR(30), IN `_partida_elect` VARCHAR(100), IN `_estado` VARCHAR(20))   BEGIN
 	INSERT INTO rep_legales_clientes
 				(
@@ -282,6 +302,28 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_add_represents` (IN `_idpersona
                 );
                 
 		SELECT ROW_COUNT() AS filasAfect;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_add_separation` (IN `_n_expediente` VARCHAR(200), IN `_idactivo` INT, IN `_idcliente` INT, IN `_idconyugue` INT, IN `_separacion_monto` DECIMAL(8,2), IN `_imagen` VARCHAR(200), IN `_idusuario` INT)   BEGIN
+    INSERT INTO activos (
+            n_expediente,
+            idactivo,
+            idcliente,
+            idconyugue,
+            separacion_monto,
+            imagen,
+            idusuario
+    ) 
+        VALUES(
+            _n_expediente,
+            _idactivo,
+            _idcliente,
+            NULLIF(_idconyugue,''),
+            _separacion_monto,
+            _imagen,
+            _idusuario
+        );
+    SELECT ROW_COUNT() AS filasAfect;
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_count_budgets` (IN `_idpresuspuesto` INT)   BEGIN
@@ -426,6 +468,25 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_get_represents` (IN `_idreprese
         AND rep.inactive_at IS NULL;
 END$$
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_get_sepraration_ById` (IN `_idseparacion` INT)   BEGIN
+    DECLARE _tpersona VARCHAR(10);
+    SET _tpersona = (
+        SELECT tipo_persona
+        FROM clientes cli 
+        INNER JOIN separaciones sep on sep.idcliente = cli.idcliente
+        WHERE sep.idactivo = _idactivo
+    );
+    IF _tpersona = "NATURAL" THEN
+        SELECT * FROM vws_list_speractions_tpersona_natural_full
+            WHERE idseparacion = _idseparacion
+                AND inactive_at IS NULL;
+    ELSEIF _tpersona = "JURÍDICA" THEN
+        SELECT * FROM vws_list_separactions_tpersona_juridica_full
+            WHERE idseparacion = _idseparacion
+                AND inactive_at IS NULL;
+    END IF;
+END$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_get_ubigeo` (IN `_iddistrito` INT)   BEGIN
 	SELECT 
 		dist.iddistrito,
@@ -511,12 +572,29 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_inactive_projects` (IN `_idproy
     SELECT ROW_COUNT() AS filasAfect;
 END$$
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_inactive_refund` (IN `_iddevolucion` INT)   BEGIN
+    UPDATE devoluciones
+        SET
+            inactive_at = CURDATE()
+        WHERE
+            iddevolucion = _iddevolucion;
+    SELECT ROW_COUNT() AS filasAfect;
+END$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_inactive_represents` (IN `_idrepresentante` INT)   BEGIN
 	UPDATE rep_legales_clientes
 		SET
 			inactive_at = CURDATE()
         WHERE idrepresentante = _idrepresentante;
 	
+    SELECT ROW_COUNT() AS filasAfect;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_inactive_separation` (IN `_idseparacion` INT)   BEGIN
+    UPDATE activos
+        SET
+            inactive_at = CURDATE()
+        WHERE idseparacion = _idseparacion;
     SELECT ROW_COUNT() AS filasAfect;
 END$$
 
@@ -1092,48 +1170,60 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_represents_by_id_pj` (IN `
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_separation_ByIdAsset` (IN `_idactivo` INT)   BEGIN
-	SELECT 
-		sep.idseparacion,
-        act.sublote,
-        proy.denominacion,
-        dist.distrito,
-        prov.provincia,
-        dept.departamento,
-        pers.nombres,
-        pers.apellidos,
-        pers.documento_tipo,
-        pers.documento_nro,
-        persj.razon_social AS razon_social,
-        persj.documento_tipo AS persj_documento_nro,
-        persj.documento_nro AS persj_documento_nro,
-        conyPers.nombres	AS conyPers_nombres,
-        conyPers.apellidos AS conyPers_apellidos,
-        conyPers.documento_tipo AS conyPers_documento_tipo,
-        conyPers.documento_nro As conyPers_documento_nro,
-        sep.separacion_monto,
-        sep.fecha_pago,
-		sep.imagen,
-        usuPers.nombres AS usuario
-		FROM separaciones AS sep
-        INNER JOIN activos AS act ON act.idactivo = sep.idactivo
-        INNER JOIN proyectos AS proy ON proy.idproyecto = act.idproyecto
-        INNER JOIN distritos AS dist ON dist.iddistrito = proy.iddistrito
-        INNER JOIN provincias AS prov ON prov.idprovincia = dist.idprovincia
-        INNER JOIN departamentos AS dept ON dept.iddepartamento = prov.iddepartamento
-        
-        INNER JOIN clientes AS clien ON clien.idcliente = sep.idcliente
-        LEFT JOIN personas AS pers ON pers.idpersona = clien.idpersona
-        
-        LEFT JOIN personas_juridicas AS persj ON persj.idpersona_juridica = clien.idpersona_juridica
-        
-		LEFT JOIN clientes AS cony ON cony.idcliente = sep.idconyugue
-        LEFT JOIN personas AS conyPers ON conyPers.idpersona = cony.idpersona
-        
-        INNER JOIN usuarios AS usu ON usu.idusuario = sep.idusuario
-        INNER JOIN personas AS usuPers ON usuPers.idpersona = usu.idpersona
-        
+    DECLARE _tpersona VARCHAR(10);
+
+    SET _tpersona = (
+        SELECT tipo_persona
+        FROM clientes cli 
+        INNER JOIN separaciones sep on sep.idcliente = cli.idcliente
         WHERE sep.idactivo = _idactivo
-        AND sep.inactive_at IS NULL;
+    );
+
+    IF _tpersona = "NATURAL" THEN
+        SELECT * FROM vws_list_speractions_tpersona_natural_full
+            WHERE idactivo = _idactivo
+                AND inactive_at IS NULL;
+
+    ELSEIF _tpersona = "JURÍDICA" THEN
+        SELECT * FROM vws_list_separactions_tpersona_juridica_full
+            WHERE idactivo = _idactivo
+                AND inactive_at IS NULL;
+    END IF;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_separation_n_expediente` (IN `_tipo_persona` VARCHAR(10), IN `_fechaInicio` DATE, IN `_fechaFin` DATE, IN `_n_expediente` VARCHAR(10))   BEGIN
+
+    IF _tipo_persona = "NATURAL" THEN
+
+        SELECT * FROM vws_list_speractions_tpersona_natural
+            WHERE inactive_at_sep IS NULL
+                AND inactive_at_client IS NULL
+                AND create_at BETWEEN _fechaInicio AND _fechaFin
+                AND n_expediente LIKE CONCAT(_n_expediente,'%');
+
+    ELSEIF _tipo_persona = "JURÍDICA" THEN
+        SELECT * FROM vws_list_separactions_tpersona_juridica
+        WHERE inactive_at_sep IS NULL
+            AND inactive_at_client IS NULL
+            AND create_at BETWEEN _fechaInicio AND _fechaFin
+           AND n_expediente LIKE CONCAT(_n_expediente,'%');
+    END IF;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_separation_tPersona` (IN `_tipo_persona` VARCHAR(10), IN `_fechaInicio` DATE, IN `_fechaFin` DATE)   BEGIN
+
+    IF _tipo_persona = "NATURAL" THEN
+
+        SELECT * FROM vws_list_speractions_tpersona_natural
+		WHERE inactive_at_sep IS NULL
+            AND inactive_at_client IS NULL
+            AND create_at BETWEEN _fechaInicio AND _fechaFin;
+    ELSEIF _tipo_persona = "JURÍDICA" THEN
+        SELECT * FROM vws_list_separactions_tpersona_juridica
+        WHERE inactive_at_sep IS NULL
+            AND inactive_at_client IS NULL
+            AND create_at BETWEEN _fechaInicio AND _fechaFin;
+    END IF;
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_units_measuraments` ()   BEGIN
@@ -1433,6 +1523,21 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_set_projects` (IN `_idproyecto`
 	SELECT ROW_COUNT() AS filasAfect; -- FILAS AFECTADAS
 END$$
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_set_refund` (IN `_iddevolucion` INT, IN `_n_expediente` VARCHAR(10), IN `_idseparacion` INT, IN `_detalle` VARCHAR(200), IN `_monto_devolucion` DECIMAL(8,2), IN `_imagen` VARCHAR(100), IN `_idusuario` INT)   BEGIN
+    UPDATE devoluciones
+        SET
+            n_expediente   = _n_expediente,
+            idseparacion   = _idseparacion,
+            detalle        = _detalle,
+            monto_devolucion = _monto_devolucion,
+            imagen         = _imagen,
+            update_at      = CURDATE(),
+            idusuario      = _idusuario
+        WHERE
+            iddevolucion = _iddevolucion;
+    SELECT ROW_COUNT() AS filasAfect;
+END$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_set_represents` (IN `_idrepresentante` INT, IN `_idpersona_juridica` INT, IN `_representante_legal` VARCHAR(100), IN `_documento_tipo` VARCHAR(20), IN `_documento_nro` VARCHAR(12), IN `_cargo` VARCHAR(30), IN `_partida_elect` VARCHAR(100), IN `_estado` VARCHAR(20))   BEGIN
 	UPDATE	rep_legales_clientes 
 		SET
@@ -1447,6 +1552,44 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_set_represents` (IN `_idreprese
         WHERE idrepresentante = _idrepresentante;
         
 	SELECT ROW_COUNT() AS filasAfect;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_set_separation` (IN `_idseparacion` INT, IN `_n_expediente` VARCHAR(200), IN `_idactivo` INT, IN `_idcliente` INT, IN `_idconyugue` INT, IN `_separacion_monto` DECIMAL(8,2), IN `_imagen` VARCHAR(200), IN `_idusuario` INT)   BEGIN
+    UPDATE activos 
+        SET
+            n_expediente   = _n_expediente,
+            idactivo       = _idactivo,
+            idcliente      = _idcliente,
+            idconyugue     = NULLIF(_idconyugue,''),
+            separacion_monto = _separacion_monto,
+            imagen         = _imagen,
+            idusuario      = _idusuario,
+            update_at      = CURDATE()
+        WHERE idseparacion = _idseparacion;
+    SELECT ROW_COUNT() AS filasAfect;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sup_list_refunds` (IN `_tipo_persona` VARCHAR(10), IN `_fechaInicio` DATE, IN `_fechaFin` DATE)   BEGIN
+    SELECT * 
+        FROM vws_list_refunds
+        WHERE tipo_persona = _tipo_persona
+            AND create_at BETWEEN _fechaInicio AND _fechaFin
+            AND inactive_at IS NULL;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sup_list_refunds_ById` (IN `_iddevolucion` INT)   BEGIN
+    SELECT * 
+        FROM vws_list_refunds
+        WHERE iddevolucion = _iddevolucion;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sup_list_refunds_n_expedientes` (IN `_tipo_persona` VARCHAR(10), IN `_fechaInicio` DATE, IN `_fechaFin` DATE, IN `_n_expediente` VARCHAR(10))   BEGIN
+    SELECT * 
+        FROM vws_list_refunds
+        WHERE tipo_persona = _tipo_persona
+            AND create_at BETWEEN _fechaInicio AND _fechaFin
+            AND inactive_at IS NULL
+            AND n_expediente_dev LIKE CONCAT(_n_expediente,'%');
 END$$
 
 DELIMITER ;
@@ -1494,9 +1637,9 @@ INSERT INTO `activos` (`idactivo`, `idproyecto`, `tipo_activo`, `imagen`, `estad
 (3, 1, 'LOTE', 'dc52c8c0f2e8111674786ae5e5e6eb5a48f2c678.jpg', 'SIN VENDER', '3', 'Urbanización Epsilon', 'USD', 350.00, 0, 'Partida 005', NULL, NULL, '{\"clave\":[\"\"],\"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 19, 'A.I.F', 90000.00, 0.00, '2024-04-19', '2024-05-19', NULL, 1, 0.00),
 (4, 3, 'LOTE', NULL, 'SIN VENDER', '2', 'Urbanización Eta', 'USD', 400.00, 0, 'Partida 007', 'null', 'null', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 15, 'A.I.F', 120000.00, 710.00, '2024-04-19', '2024-05-19', NULL, 1, 120710.00),
 (5, 2, 'LOTE', NULL, 'SEPARADO', '3', 'Urbanización Iota', 'USD', 280.00, 0, 'Partida 009', 'null', 'null', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 12, 'A.I.F', 110000.00, 1160.00, '2024-04-19', '2024-05-19', NULL, 1, 111160.00),
-(6, 3, 'LOTE', NULL, 'SEPARADO', '5', 'Urbanización Lambda', 'USD', 320.00, NULL, 'Partida 011', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 30, 'A.I.F', 95000.00, 0.00, '2024-04-19', '2024-05-19', NULL, 1, 0.00),
+(6, 3, 'LOTE', NULL, 'SIN VENDER', '5', 'Urbanización Lambda', 'USD', 320.00, NULL, 'Partida 011', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 30, 'A.I.F', 95000.00, 0.00, '2024-04-19', '2024-05-19', NULL, 1, 0.00),
 (7, 4, 'LOTE', NULL, 'SEPARADO', '1', 'Urbanización Nu', 'USD', 300.00, NULL, 'Partida 013', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'A.I.F', 85000.00, 0.00, '2024-04-19', '2024-05-19', NULL, 1, 0.00),
-(8, 4, 'LOTE', NULL, 'SEPARADO', '3', 'Urbanización Omicron', 'USD', 380.00, NULL, 'Partida 015', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'A.I.F', 110000.00, 0.00, '2024-04-19', '2024-05-19', NULL, 1, 0.00),
+(8, 4, 'LOTE', NULL, 'SIN VENDER', '3', 'Urbanización Omicron', 'USD', 380.00, NULL, 'Partida 015', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'A.I.F', 110000.00, 0.00, '2024-04-19', '2024-05-19', NULL, 1, 0.00),
 (9, 1, 'LOTE', NULL, 'SIN VENDER', '7', 'Urbanización Rho', 'USD', 420.00, NULL, 'Partida 017', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 19, 'A.I.F', 105000.00, 0.00, '2024-04-19', '2024-05-19', NULL, 1, 0.00),
 (10, 2, 'LOTE', NULL, 'VENDIDO', '9', 'Urbanización Tau', 'USD', 450.00, 0, 'Partida 019', 'null', 'null', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\":[\"implementacion de banquitos\",\"construccion de veredas\",\"acabados de construccion\"],\"valor\":[\"fueron de madera\",\"se hicieron de cemento\",\"detalles de los acabados de la construccion\"]}', 12, 'A.I.F', 115000.00, 1160.00, '2024-04-19', '2024-05-19', NULL, 1, 116160.00),
 (11, 3, 'LOTE', NULL, 'SIN VENDER', '11', 'Urbanización Phi', 'USD', 480.00, NULL, 'Partida 021', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'A.I.F', 100000.00, 0.00, '2024-04-19', '2024-05-19', NULL, 1, 0.00),
@@ -1983,13 +2126,67 @@ INSERT INTO `detalle_costos` (`iddetalle_costo`, `idpresupuesto`, `idsubcategori
 CREATE TABLE `devoluciones` (
   `iddevolucion` int(11) NOT NULL,
   `idseparacion` int(11) NOT NULL,
-  `fecha_devolucion` date NOT NULL,
-  `monto_devolucion` decimal(4,2) NOT NULL,
+  `monto_devolucion` decimal(8,2) NOT NULL,
   `create_at` date NOT NULL DEFAULT curdate(),
   `update_at` date DEFAULT NULL,
   `inactive_at` date DEFAULT NULL,
-  `idusuario` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `idusuario` int(11) NOT NULL,
+  `detalle` varchar(200) NOT NULL,
+  `n_expediente` varchar(10) NOT NULL,
+  `imagen` varchar(100) NOT NULL
+) ;
+
+--
+-- Volcado de datos para la tabla `devoluciones`
+--
+
+INSERT INTO `devoluciones` (`iddevolucion`, `idseparacion`, `monto_devolucion`, `create_at`, `update_at`, `inactive_at`, `idusuario`, `detalle`, `n_expediente`, `imagen`) VALUES
+(2, 5, 99.99, '2024-05-20', NULL, NULL, 1, 'No aprobado por el banco', 'DEC-000001', ''),
+(3, 3, 99.99, '2024-05-20', NULL, NULL, 1, 'No aprobado por el banco', 'DEC-000002', '');
+
+--
+-- Disparadores `devoluciones`
+--
+DELIMITER $$
+CREATE TRIGGER `trgr_asset_status_refund` AFTER INSERT ON `devoluciones` FOR EACH ROW BEGIN
+	DECLARE _idactivo INT;
+	SET _idactivo = (
+		SELECT idactivo FROM separaciones
+		WHERE idseparacion = NEW.idseparacion
+	);
+	UPDATE activos
+		SET
+			estado = "SIN VENDER"
+		WHERE
+			idactivo = _idactivo;
+	UPDATE separaciones
+		SET
+			inactive_at = CURDATE()
+		WHERE
+			idseparacion = NEW.idseparacion;
+END
+$$
+DELIMITER ;
+DELIMITER $$
+CREATE TRIGGER `trgr_new_asset_status_refund` AFTER UPDATE ON `devoluciones` FOR EACH ROW BEGIN
+
+	IF NEW.idseparacion != OLD.idseparacion THEN
+		UPDATE separaciones
+			SET
+				inactive_at = CURDATE(),
+				idusuario = NEW.idusuario
+		WHERE
+			idseparacion = NEW.idseparacion;
+		UPDATE separaciones
+			SET
+				inactive_at = NULL,
+				idusuario = NEW.idusuario
+		WHERE
+			idseparacion = OLD.idseparacion;
+	END IF;
+END
+$$
+DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -4036,8 +4233,8 @@ CREATE TABLE `metricas` (
 INSERT INTO `metricas` (`idmetrica`, `idproyecto`, `l_vendidos`, `l_noVendidos`, `l_separados`, `update_at`) VALUES
 (1, 1, 0, 58, 1, '2024-05-19 04:21:01'),
 (2, 2, 1, 5, 1, '2024-05-19 04:21:01'),
-(3, 3, 0, 5, 1, '2024-05-19 03:59:44'),
-(4, 4, 0, 4, 2, '2024-04-19 17:58:13'),
+(3, 3, 0, 6, 0, '2024-05-20 01:53:15'),
+(4, 4, 0, 5, 1, '2024-05-20 01:44:34'),
 (5, 5, 0, 0, 0, '2024-04-19 17:21:35'),
 (6, 6, 0, 0, 0, '2024-04-20 20:51:01');
 
@@ -4641,26 +4838,26 @@ CREATE TABLE `separaciones` (
   `idactivo` int(11) NOT NULL,
   `idcliente` int(11) NOT NULL,
   `idconyugue` int(11) DEFAULT NULL,
-  `separacion_monto` decimal(4,2) NOT NULL,
-  `fecha_pago` date NOT NULL,
+  `separacion_monto` decimal(8,2) NOT NULL,
   `imagen` varchar(100) NOT NULL,
   `create_at` date NOT NULL DEFAULT curdate(),
   `update_at` date DEFAULT NULL,
   `inactive_at` date DEFAULT NULL,
   `idusuario` int(11) NOT NULL,
-  `n_expediente` varchar(10) NOT NULL
+  `n_expediente` varchar(10) NOT NULL,
+  `detalle` varchar(200) NOT NULL
 ) ;
 
 --
 -- Volcado de datos para la tabla `separaciones`
 --
 
-INSERT INTO `separaciones` (`idseparacion`, `idactivo`, `idcliente`, `idconyugue`, `separacion_monto`, `fecha_pago`, `imagen`, `create_at`, `update_at`, `inactive_at`, `idusuario`, `n_expediente`) VALUES
-(1, 1, 1, NULL, 99.99, '2024-03-08', '', '2024-03-08', NULL, NULL, 1, 'SEC-000001'),
-(2, 5, 1, NULL, 99.99, '2024-03-08', '', '2024-03-08', NULL, NULL, 1, 'SEC-000002'),
-(3, 6, 7, NULL, 99.99, '2024-03-08', '', '2024-03-08', NULL, NULL, 1, 'SEC-000003'),
-(4, 7, 2, NULL, 99.99, '2024-03-08', '', '2024-03-08', NULL, NULL, 1, 'SEC-000004'),
-(5, 8, 2, NULL, 99.99, '2024-03-08', '', '2024-03-08', NULL, NULL, 1, 'SEC-000005');
+INSERT INTO `separaciones` (`idseparacion`, `idactivo`, `idcliente`, `idconyugue`, `separacion_monto`, `imagen`, `create_at`, `update_at`, `inactive_at`, `idusuario`, `n_expediente`, `detalle`) VALUES
+(1, 1, 1, NULL, 99.99, '', '2024-03-07', NULL, NULL, 1, 'SEC-000001', ''),
+(2, 5, 1, NULL, 99.99, '', '2024-03-08', NULL, NULL, 1, 'SEC-000002', ''),
+(3, 6, 7, NULL, 99.99, '', '2024-03-08', NULL, '2024-05-20', 1, 'SEC-000003', ''),
+(4, 7, 2, NULL, 99.99, '', '2024-03-09', NULL, NULL, 1, 'SEC-000004', ''),
+(5, 8, 2, NULL, 99.99, '', '2024-03-09', NULL, '2024-05-20', 1, 'SEC-000005', '');
 
 --
 -- Disparadores `separaciones`
@@ -4668,12 +4865,19 @@ INSERT INTO `separaciones` (`idseparacion`, `idactivo`, `idcliente`, `idconyugue
 DELIMITER $$
 CREATE TRIGGER `trgr_asset_status_separation` AFTER UPDATE ON `separaciones` FOR EACH ROW BEGIN
 	
-    UPDATE activos
-		SET 
-			estado = "SEPARADO"
-		WHERE 
-			idactivo = NEW.idactivo;
-	
+	IF NEW.idactivo != OLD.idactivo THEN
+
+		UPDATE activos
+			SET 
+				estado = "SEPARADO"
+			WHERE 
+				idactivo = NEW.idactivo;
+		UPDATE activos
+			SET 
+				estado = "SIN VENDER"
+			WHERE 
+				idactivo = OLD.idactivo;
+	END IF;
     IF NEW.inactive_at IS NOT NULL THEN
 		UPDATE activos
 			SET
@@ -4681,7 +4885,6 @@ CREATE TRIGGER `trgr_asset_status_separation` AFTER UPDATE ON `separaciones` FOR
 			WHERE 
 				idactivo = NEW.idactivo;
     END IF;
-    
 END
 $$
 DELIMITER ;
@@ -4892,6 +5095,123 @@ CREATE TABLE `vws_list_projects` (
 -- --------------------------------------------------------
 
 --
+-- Estructura Stand-in para la vista `vws_list_refunds`
+-- (Véase abajo para la vista actual)
+--
+CREATE TABLE `vws_list_refunds` (
+`iddevolucion` int(11)
+,`n_expediente_dev` varchar(10)
+,`idseparacion` int(11)
+,`n_expediente_sep` varchar(10)
+,`detalle` varchar(200)
+,`monto_devolucion` decimal(8,2)
+,`tipo_persona` varchar(10)
+,`cliente` varchar(82)
+,`documento_tipo` varchar(20)
+,`documento_nro` varchar(12)
+,`imagen` varchar(100)
+,`create_at` date
+,`inactive_at` date
+,`nombres` varchar(40)
+);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura Stand-in para la vista `vws_list_seperations_tpersona_juridica`
+-- (Véase abajo para la vista actual)
+--
+CREATE TABLE `vws_list_seperations_tpersona_juridica` (
+`idseparacion` int(11)
+,`n_expediente` varchar(10)
+,`idactivo` int(11)
+,`sublote` varchar(6)
+,`denominacion` varchar(30)
+,`cliente` varchar(60)
+,`tipo_persona` varchar(10)
+,`inactive_at_client` date
+,`documento_tipo` varchar(20)
+,`documento_nro` varchar(12)
+,`separacion_monto` decimal(8,2)
+,`create_at` date
+,`inactive_at_sep` date
+,`usuario` varchar(40)
+);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura Stand-in para la vista `vws_list_seperations_tpersona_juridica_full`
+-- (Véase abajo para la vista actual)
+--
+CREATE TABLE `vws_list_seperations_tpersona_juridica_full` (
+`idseparacion` int(11)
+,`sublote` varchar(6)
+,`denominacion` varchar(30)
+,`distrito` varchar(45)
+,`provincia` varchar(45)
+,`departamento` varchar(45)
+,`cliente` varchar(60)
+,`documento_tipo` varchar(20)
+,`documento_nro` varchar(12)
+,`separacion_monto` decimal(8,2)
+,`create_at` date
+,`imagen` varchar(100)
+,`usuario` varchar(40)
+);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura Stand-in para la vista `vws_list_seperations_tpersona_natural`
+-- (Véase abajo para la vista actual)
+--
+CREATE TABLE `vws_list_seperations_tpersona_natural` (
+`idseparacion` int(11)
+,`n_expediente` varchar(10)
+,`idactivo` int(11)
+,`sublote` varchar(6)
+,`denominacion` varchar(30)
+,`cliente` varchar(82)
+,`tipo_persona` varchar(10)
+,`inactive_at_client` date
+,`documento_tipo` varchar(20)
+,`documento_nro` varchar(12)
+,`separacion_monto` decimal(8,2)
+,`inactive_at_sep` date
+,`usuario` varchar(40)
+,`create_at` date
+);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura Stand-in para la vista `vws_list_seperations_tpersona_natural_full`
+-- (Véase abajo para la vista actual)
+--
+CREATE TABLE `vws_list_seperations_tpersona_natural_full` (
+`idseparacion` int(11)
+,`sublote` varchar(6)
+,`denominacion` varchar(30)
+,`distrito` varchar(45)
+,`provincia` varchar(45)
+,`departamento` varchar(45)
+,`cliente` varchar(82)
+,`documento_tipo` varchar(20)
+,`documento_nro` varchar(12)
+,`conyugue` varchar(82)
+,`conyPers_documento_tipo` varchar(20)
+,`conyPers_documento_nro` varchar(12)
+,`separacion_monto` decimal(8,2)
+,`create_at` date
+,`imagen` varchar(100)
+,`inactive_at` date
+,`usuario` varchar(40)
+);
+
+-- --------------------------------------------------------
+
+--
 -- Estructura Stand-in para la vista `vws_ubigeo`
 -- (Véase abajo para la vista actual)
 --
@@ -4919,6 +5239,51 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 DROP TABLE IF EXISTS `vws_list_projects`;
 
 CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vws_list_projects`  AS SELECT `proy`.`idproyecto` AS `idproyecto`, `proy`.`imagen` AS `imagen`, `proy`.`idsede` AS `idsede`, `sed`.`direccion` AS `sede`, `proy`.`codigo` AS `codigo`, `proy`.`denominacion` AS `denominacion`, `proy`.`latitud` AS `latitud`, `proy`.`longitud` AS `longitud`, `dist`.`iddistrito` AS `iddistrito`, `dist`.`distrito` AS `distrito`, `prov`.`idprovincia` AS `idprovincia`, `prov`.`provincia` AS `provincia`, `dept`.`iddepartamento` AS `iddepartamento`, `dept`.`departamento` AS `departamento`, `proy`.`direccion` AS `direccion`, `met`.`l_vendidos` AS `l_vendidos`, `met`.`l_noVendidos` AS `l_noVendidos`, `met`.`l_separados` AS `l_separados`, `met`.`l_vendidos`+ `met`.`l_noVendidos` + `met`.`l_separados` AS `l_total`, `pers`.`nombres` AS `usuario` FROM (((((((`proyectos` `proy` join `distritos` `dist` on(`dist`.`iddistrito` = `proy`.`iddistrito`)) join `provincias` `prov` on(`prov`.`idprovincia` = `dist`.`idprovincia`)) join `departamentos` `dept` on(`dept`.`iddepartamento` = `prov`.`iddepartamento`)) join `sedes` `sed` on(`sed`.`idsede` = `proy`.`idsede`)) join `usuarios` `usu` on(`usu`.`idusuario` = `proy`.`idusuario`)) join `personas` `pers` on(`pers`.`idpersona` = `usu`.`idpersona`)) join `metricas` `met` on(`met`.`idproyecto` = `proy`.`idproyecto`)) WHERE `proy`.`inactive_at` is null ORDER BY `proy`.`codigo` ASC ;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura para la vista `vws_list_refunds`
+--
+DROP TABLE IF EXISTS `vws_list_refunds`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vws_list_refunds`  AS SELECT `dev`.`iddevolucion` AS `iddevolucion`, `dev`.`n_expediente` AS `n_expediente_dev`, `sep`.`idseparacion` AS `idseparacion`, `sep`.`n_expediente` AS `n_expediente_sep`, `dev`.`detalle` AS `detalle`, `dev`.`monto_devolucion` AS `monto_devolucion`, coalesce(`persj`.`tipo_persona`,`persn`.`tipo_persona`) AS `tipo_persona`, coalesce(`persj`.`cliente`,`persn`.`cliente`) AS `cliente`, coalesce(`persj`.`documento_tipo`,`persn`.`documento_tipo`) AS `documento_tipo`, coalesce(`persj`.`documento_nro`,`persn`.`documento_nro`) AS `documento_nro`, `dev`.`imagen` AS `imagen`, `dev`.`create_at` AS `create_at`, `dev`.`inactive_at` AS `inactive_at`, `usupers`.`nombres` AS `nombres` FROM (((((`devoluciones` `dev` join `separaciones` `sep` on(`sep`.`idseparacion` = `dev`.`idseparacion`)) left join `vws_list_seperations_tpersona_juridica` `persj` on(`persj`.`idseparacion` = `dev`.`idseparacion`)) left join `vws_list_seperations_tpersona_natural` `persn` on(`persn`.`idseparacion` = `dev`.`idseparacion`)) join `usuarios` `usu` on(`usu`.`idusuario` = `dev`.`idusuario`)) join `personas` `usupers` on(`usupers`.`idpersona` = `usu`.`idpersona`)) ORDER BY `dev`.`iddevolucion` DESC ;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura para la vista `vws_list_seperations_tpersona_juridica`
+--
+DROP TABLE IF EXISTS `vws_list_seperations_tpersona_juridica`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vws_list_seperations_tpersona_juridica`  AS SELECT `sep`.`idseparacion` AS `idseparacion`, `sep`.`n_expediente` AS `n_expediente`, `act`.`idactivo` AS `idactivo`, `act`.`sublote` AS `sublote`, `proy`.`denominacion` AS `denominacion`, `persj`.`razon_social` AS `cliente`, `clien`.`tipo_persona` AS `tipo_persona`, `clien`.`inactive_at` AS `inactive_at_client`, `persj`.`documento_tipo` AS `documento_tipo`, `persj`.`documento_nro` AS `documento_nro`, `sep`.`separacion_monto` AS `separacion_monto`, `sep`.`create_at` AS `create_at`, `sep`.`inactive_at` AS `inactive_at_sep`, `usupers`.`nombres` AS `usuario` FROM ((((((`separaciones` `sep` join `activos` `act` on(`act`.`idactivo` = `sep`.`idactivo`)) join `proyectos` `proy` on(`proy`.`idproyecto` = `act`.`idproyecto`)) join `clientes` `clien` on(`clien`.`idcliente` = `sep`.`idcliente`)) join `personas_juridicas` `persj` on(`persj`.`idpersona_juridica` = `clien`.`idpersona_juridica`)) join `usuarios` `usu` on(`usu`.`idusuario` = `sep`.`idusuario`)) join `personas` `usupers` on(`usupers`.`idpersona` = `usu`.`idpersona`)) ORDER BY `sep`.`idseparacion` DESC ;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura para la vista `vws_list_seperations_tpersona_juridica_full`
+--
+DROP TABLE IF EXISTS `vws_list_seperations_tpersona_juridica_full`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vws_list_seperations_tpersona_juridica_full`  AS SELECT `sep`.`idseparacion` AS `idseparacion`, `act`.`sublote` AS `sublote`, `proy`.`denominacion` AS `denominacion`, `dist`.`distrito` AS `distrito`, `prov`.`provincia` AS `provincia`, `dept`.`departamento` AS `departamento`, `persj`.`razon_social` AS `cliente`, `persj`.`documento_tipo` AS `documento_tipo`, `persj`.`documento_nro` AS `documento_nro`, `sep`.`separacion_monto` AS `separacion_monto`, `sep`.`create_at` AS `create_at`, `sep`.`imagen` AS `imagen`, `usupers`.`nombres` AS `usuario` FROM (((((((((`separaciones` `sep` join `activos` `act` on(`act`.`idactivo` = `sep`.`idactivo`)) join `proyectos` `proy` on(`proy`.`idproyecto` = `act`.`idproyecto`)) join `distritos` `dist` on(`dist`.`iddistrito` = `proy`.`iddistrito`)) join `provincias` `prov` on(`prov`.`idprovincia` = `dist`.`idprovincia`)) join `departamentos` `dept` on(`dept`.`iddepartamento` = `prov`.`iddepartamento`)) join `clientes` `clien` on(`clien`.`idcliente` = `sep`.`idcliente`)) join `personas_juridicas` `persj` on(`persj`.`idpersona_juridica` = `clien`.`idpersona_juridica`)) join `usuarios` `usu` on(`usu`.`idusuario` = `sep`.`idusuario`)) join `personas` `usupers` on(`usupers`.`idpersona` = `usu`.`idpersona`)) ;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura para la vista `vws_list_seperations_tpersona_natural`
+--
+DROP TABLE IF EXISTS `vws_list_seperations_tpersona_natural`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vws_list_seperations_tpersona_natural`  AS SELECT `sep`.`idseparacion` AS `idseparacion`, `sep`.`n_expediente` AS `n_expediente`, `act`.`idactivo` AS `idactivo`, `act`.`sublote` AS `sublote`, `proy`.`denominacion` AS `denominacion`, concat(ucase(`pers`.`apellidos`),', ',lcase(`pers`.`nombres`)) AS `cliente`, `clien`.`tipo_persona` AS `tipo_persona`, `clien`.`inactive_at` AS `inactive_at_client`, `pers`.`documento_tipo` AS `documento_tipo`, `pers`.`documento_nro` AS `documento_nro`, `sep`.`separacion_monto` AS `separacion_monto`, `sep`.`inactive_at` AS `inactive_at_sep`, `usupers`.`nombres` AS `usuario`, `sep`.`create_at` AS `create_at` FROM ((((((`separaciones` `sep` join `activos` `act` on(`act`.`idactivo` = `sep`.`idactivo`)) join `proyectos` `proy` on(`proy`.`idproyecto` = `act`.`idproyecto`)) join `clientes` `clien` on(`clien`.`idcliente` = `sep`.`idcliente`)) join `personas` `pers` on(`pers`.`idpersona` = `clien`.`idpersona`)) join `usuarios` `usu` on(`usu`.`idusuario` = `sep`.`idusuario`)) join `personas` `usupers` on(`usupers`.`idpersona` = `usu`.`idpersona`)) ORDER BY `sep`.`idseparacion` DESC ;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura para la vista `vws_list_seperations_tpersona_natural_full`
+--
+DROP TABLE IF EXISTS `vws_list_seperations_tpersona_natural_full`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vws_list_seperations_tpersona_natural_full`  AS SELECT `sep`.`idseparacion` AS `idseparacion`, `act`.`sublote` AS `sublote`, `proy`.`denominacion` AS `denominacion`, `dist`.`distrito` AS `distrito`, `prov`.`provincia` AS `provincia`, `dept`.`departamento` AS `departamento`, concat(ucase(`pers`.`apellidos`),', ',lcase(`pers`.`nombres`)) AS `cliente`, `pers`.`documento_tipo` AS `documento_tipo`, `pers`.`documento_nro` AS `documento_nro`, concat(ucase(`conypers`.`apellidos`),' ,',lcase(`conypers`.`nombres`)) AS `conyugue`, `conypers`.`documento_tipo` AS `conyPers_documento_tipo`, `conypers`.`documento_nro` AS `conyPers_documento_nro`, `sep`.`separacion_monto` AS `separacion_monto`, `sep`.`create_at` AS `create_at`, `sep`.`imagen` AS `imagen`, `sep`.`inactive_at` AS `inactive_at`, `usupers`.`nombres` AS `usuario` FROM (((((((((((`separaciones` `sep` join `activos` `act` on(`act`.`idactivo` = `sep`.`idactivo`)) join `proyectos` `proy` on(`proy`.`idproyecto` = `act`.`idproyecto`)) join `distritos` `dist` on(`dist`.`iddistrito` = `proy`.`iddistrito`)) join `provincias` `prov` on(`prov`.`idprovincia` = `dist`.`idprovincia`)) join `departamentos` `dept` on(`dept`.`iddepartamento` = `prov`.`iddepartamento`)) join `clientes` `clien` on(`clien`.`idcliente` = `sep`.`idcliente`)) join `personas` `pers` on(`pers`.`idpersona` = `clien`.`idpersona`)) left join `clientes` `cony` on(`cony`.`idcliente` = `sep`.`idconyugue`)) left join `personas` `conypers` on(`conypers`.`idpersona` = `cony`.`idpersona`)) join `usuarios` `usu` on(`usu`.`idusuario` = `sep`.`idusuario`)) join `personas` `usupers` on(`usupers`.`idpersona` = `usu`.`idpersona`)) ;
 
 -- --------------------------------------------------------
 
