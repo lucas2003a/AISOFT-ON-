@@ -141,9 +141,13 @@ if(isset($_POST["action"])){
             
         case "inactiveAsset": 
             
-                $idactivo = $_POST["idactivo"];
+                $dataObtained = [
+
+                    "idactivo"  =>  $_POST["idactivo"],
+                    "idusuario" =>  1
+                ];
             
-                echo json_encode($asset->inactiveAsset($idactivo));
+                echo json_encode($asset->inactiveAsset($dataObtained));
 
             break;
 
@@ -158,7 +162,8 @@ if(isset($_POST["action"])){
         case "setDetAssetBuild": 
                 $dataObtained = [
                     "idactivo" => $_POST["idactivo"],
-                    "det_casa" => $_POST["det_casa"]
+                    "det_casa" => $_POST["det_casa"],
+                    "idusuario" => 1,
                 ];
 
 

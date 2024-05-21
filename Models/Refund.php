@@ -120,10 +120,15 @@ class Refund extends Conection{
     /**
      * Método para eliminar una devolución
      */
-    public function inactiveRefund($iddevolucion = 0){
+    public function inactiveRefund($dataDev = []){
         try{
-            $query = $this->conection->prepare("CALL spu_inactive_refund(?)");
-            $query->execute(array($iddevolucion));
+            $query = $this->conection->prepare("CALL spu_inactive_refund(?,?)");
+            $query->execute(
+                array(
+                    $dataDev["iddevolucion"],
+                    $dataDev["idusuario"]
+                )
+            );
 
             return $query->fetch(PDO::FETCH_ASSOC);
         }

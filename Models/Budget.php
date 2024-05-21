@@ -109,12 +109,17 @@ class Budget extends Conection
     /**
      * Elimina un presupuesto
      */
-    public function inactiveBudget($idpresupuesto = 0)
+    public function inactiveBudget($dataBudget = [])
     {
         try {
 
-            $query = $this->conection->prepare("CALL spu_inactive_budget(?)");
-            $query->execute(array($idpresupuesto));
+            $query = $this->conection->prepare("CALL spu_inactive_budget(?,?)");
+            $query->execute(
+                array(
+                    $dataBudget["idpresupuesto"],
+                    $dataBudget["idusuario"]
+                )
+            );
 
             return $query->fetch(PDO::FETCH_ASSOC);
         } catch (Exception $e) {

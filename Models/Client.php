@@ -282,12 +282,17 @@ class Client extends Conection{
     /**
      * Método para eliminar a un cliente
      */
-    public function inactiveClient($idcliente = 0){
+    public function inactiveClient($dataClient = []){
         
         try{
 
-            $query = $this->conection->prepare("CALL spu_inactive_clients(?)");
-            $query->execute(array($idcliente));
+            $query = $this->conection->prepare("CALL spu_inactive_clients(?,?)");
+            $query->execute(
+                array(
+                    $dataClient["idcliente"],
+                    $dataClient["idusuario"]
+                )
+            );
 
             return $query->fetch(PDO::FETCH_ASSOC);
 

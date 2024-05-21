@@ -18,7 +18,6 @@ class Project extends Conection{
 
         try{
 
-
             $query = $this->conection->prepare("CALL spu_list_projects()");
             $query->execute();
 
@@ -124,14 +123,19 @@ class Project extends Conection{
     }
 
     /**
-     * Método para inactivar un proyecto
+     * Método para eliminar un proyecto
      */
-    public function inactiveProject($idproyecto = 0){
+    public function inactiveProject($dataProject = []){
 
         try{
 
-            $query =$this->conection->prepare("CALL spu_inactive_projects(?)");
-            $query->execute(array($idproyecto));
+            $query =$this->conection->prepare("CALL spu_inactive_projects(?,?)");
+            $query->execute(
+                array(
+                    $$dataProject["idproyecto"],
+                    $$dataProject["idusuario"]
+                )
+            );
 
             return $query->fetch(PDO::FETCH_ASSOC);
 

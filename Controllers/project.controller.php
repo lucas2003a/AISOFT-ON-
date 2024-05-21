@@ -115,9 +115,13 @@ if(isset($_POST["action"])){
                 
                 case "inactiveProject": 
                     
-                    $idproyecto = $_POST["idproyecto"];
+                    $dataObtained = [
+                        
+                        "idproyecto"    =>  $_POST["idproyecto"],
+                        "idusuario"     =>  1
+                    ];
                     
-                    echo json_encode($project->inactiveProject($idproyecto));
+                    echo json_encode($project->inactiveProject($dataObtained));
                     break;
 
     }

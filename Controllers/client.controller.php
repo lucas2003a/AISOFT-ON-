@@ -167,9 +167,13 @@ if(isset($_POST["action"])){
         
         case "inactiveClient": 
             
-                $idcliente = $_POST["idcliente"];
+                $dataObtained = [
+                    
+                    "idcliente"     =>  $_POST["idcliente"],
+                    "idusuario"     =>  1
+                ];
 
-                echo json_encode($client->inactiveClient($idcliente));
+                echo json_encode($client->inactiveClient($dataObtained));
 
             break;
     }

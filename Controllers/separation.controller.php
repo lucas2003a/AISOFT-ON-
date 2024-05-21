@@ -75,9 +75,13 @@ if(isset($_POST["action"])){
             break;
 
         case "inactiveSeparation": 
-                $idseparacion = $_POST["idseparacion"];
+                $dataObtained = [
 
-                echo json_encode($separation->inactiveSeparation($idseparacion));
+                    "idseparacion"  =>  $_POST["idseparacion"],
+                    "idusuario"     => 1
+                ];
+
+                echo json_encode($separation->inactiveSeparation($dataObtained));
             break; 
         case "listNewClients": 
 

@@ -116,10 +116,15 @@ class Cost extends Conection {
     /***
      * Elimina un detalle de costo
      */
-    public function inactiveDetailCost($iddetalle_costo = 0){
+    public function inactiveDetailCost($dataCost = []){
         try{
-            $query = $this->conection->prepare("CALL spu_inactive_cost(?)");
-            $query->execute(array($iddetalle_costo));
+            $query = $this->conection->prepare("CALL spu_inactive_cost(?,?)");
+            $query->execute(
+                array(
+                    $dataCost["iddetalle_costo"],
+                    $dataCost["idusuario"]
+                )
+            );
 
             return $query->fetch(PDO::FETCH_ASSOC);
         }

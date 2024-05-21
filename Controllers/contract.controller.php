@@ -56,7 +56,11 @@ if(isset($_POST["action"])){
         
         case "inactiveContract": 
 
-                $idcontratoo = $_POST["idcontrato"];
+                $idcontratoo = [
+
+                    "idcontrato"    =>  $_POST["idcontrato"],
+                    "idusuario"     =>  0
+                ];
 
                 echo json_encode($contract->inactiveContract($idcontrato));
 

@@ -169,12 +169,17 @@ class Asset extends Conection{
     /**
      * Método para "inactivar" un lote
      */
-    public function inactiveAsset($idactivo = 0){
+    public function inactiveAsset($dataAsset = []){
 
         try{
 
-            $query = $this->conection->prepare("CALL spu_inactive_assets(?)");
-            $query->execute(array($idactivo));
+            $query = $this->conection->prepare("CALL spu_inactive_assets(?,?)");
+            $query->execute(
+                array(
+                    $dataAsset["idactivo"],
+                    $dataAsset["idusuario"]
+                )
+            );
 
             return $query->fetch(PDO::FETCH_ASSOC);
 
@@ -208,12 +213,13 @@ class Asset extends Conection{
 
         try{
 
-            $query =  $this->conection->prepare("CALL spu_set_det_build(?,?)");
+            $query =  $this->conection->prepare("CALL spu_set_det_build(?,?,?)");
             $query->execute(
                 array(
 
                     $dataAsset["idactivo"],
                     $dataAsset["det_casa"],
+                    $dataAsset["idusuario"],
                 )
             );
 

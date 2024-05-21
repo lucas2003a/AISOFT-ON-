@@ -149,10 +149,15 @@ class Separation extends Conection{
     /**
      * Método para eliminar una separación
      */
-    public function inactiveSeparation($idseparacion = 0){
+    public function inactiveSeparation($dataSep = []){
         try{
-            $query = $this->conection->prepare("CALL spu_inactive_separation(?)");
-            $query->execute(array($idseparacion));
+            $query = $this->conection->prepare("CALL spu_inactive_separation(?,?)");
+            $query->execute(
+                array(
+                    $dataSep["idseparacion"],
+                    $dataSep["idusuario"]
+                )
+            );
 
             return $query->fetch(PDO::FETCH_ASSOC);
         }catch(Exception $e){

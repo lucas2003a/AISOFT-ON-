@@ -90,12 +90,17 @@ class Contract extends Conection{
     /**
      * Método para inactivar un contrato
      */
-    public function inactiveContract($idcontrato = 0){
+    public function inactiveContract($dataContract = []){
 
         try{
             
-            $query = $this->conection->prepare("CALL spu_inactive_contracts(?)");
-            $query->execute(array($idcontrato));
+            $query = $this->conection->prepare("CALL spu_inactive_contracts(?,?)");
+            $query->execute(
+                array(
+                    $dataContract["idcontrato"],
+                    $dataContract["idusuario"]
+                )
+            );
 
             return $query->fetch(PDO::FETCH_ASSOC);
 

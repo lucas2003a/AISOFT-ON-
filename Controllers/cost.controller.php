@@ -63,9 +63,13 @@ if(isset($_POST["action"])){
 
         case "inactiveDetailCost": 
             
-                $iddetalle_costo = $_POST["iddetalle_costo"];
+                $dataObtained = [
+
+                    "iddetalle_costo"   =>  $_POST["iddetalle_costo"],
+                    "idusuario"         =>  1
+                ];
                 
-                echo json_encode($cost->inactiveDetailCost($iddetalle_costo));
+                echo json_encode($cost->inactiveDetailCost($dataObtained));
             break;
 
         //              REPORTES        //////////////////

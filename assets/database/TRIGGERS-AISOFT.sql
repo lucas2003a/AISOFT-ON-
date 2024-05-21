@@ -111,7 +111,8 @@ BEGIN
 	UPDATE activos
 		SET
 			estado = "SEPARADO",
-            update_at = CURDATE()
+            update_at = CURDATE(),
+			idusuario = NEW.idusuario
 		WHERE 
 			idactivo = NEW.idactivo;
 END $$
@@ -126,13 +127,17 @@ BEGIN
 
 		UPDATE activos
 			SET 
-				estado = "SEPARADO"
+				estado = "SEPARADO",
+				update_at = CURDATE(),
+				idusuario = NEW.idusuario
 			WHERE 
 				idactivo = NEW.idactivo;
 
 		UPDATE activos
 			SET 
-				estado = "SIN VENDER"
+				estado = "SIN VENDER",
+				update_at = CURDATE(),
+				idusuario = NEW.idusuario
 			WHERE 
 				idactivo = OLD.idactivo;
 	END IF;
@@ -140,7 +145,9 @@ BEGIN
     IF NEW.inactive_at IS NOT NULL THEN
 		UPDATE activos
 			SET
-				estado = "SIN VENDER"
+				estado = "SIN VENDER",
+				update_at = NOW(),
+				idusuario = NEW.idusuario
 			WHERE 
 				idactivo = NEW.idactivo;
     END IF;
@@ -161,13 +168,16 @@ BEGIN
 
 	UPDATE activos
 		SET
-			estado = "SIN VENDER"
+			estado = "SIN VENDER",
+			update_at = CURDATE(),
+			idusuario = NEW.idusuario
 		WHERE
 			idactivo = _idactivo;
 
 	UPDATE separaciones
 		SET
-			inactive_at = CURDATE()
+			inactive_at = CURDATE(),
+			idusuario = NEW.idusuario
 		WHERE
 			idseparacion = NEW.idseparacion;
 
@@ -214,14 +224,16 @@ BEGIN
         UPDATE activos
 			SET
 				estado = "VENDIDO",
-                update_at = CURDATE()
+                update_at = CURDATE(),
+				idusuario = NEW.idusuario
 			WHERE 
 				idactivo = _idactivo;
 	ELSE
 		UPDATE activos
 			SET
 				estado = "VENDIDO",
-                update_at = CURDATE()
+                update_at = CURDATE(),
+				idusuario = NEW.idusuario
 			WHERE 
 				idactivo = NEW.idactivo;
 	END IF;

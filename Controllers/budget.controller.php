@@ -54,9 +54,13 @@ if (isset($_POST["action"])) {
 
         case "inactiveBudget":
 
-            $idpresupuesto = $_POST["idpresupuesto"];
+            $dataObtained = [
 
-            echo json_encode($budget->inactiveBudget($idpresupuesto));
+                "idpresupuesto"     =>  $_POST["idpresupuesto"],
+                "idusuario"         =>  1
+            ];
+
+            echo json_encode($budget->inactiveBudget($dataObtained));
             break;
 
         case "listBudgetsAsset":

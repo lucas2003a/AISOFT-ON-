@@ -2,15 +2,18 @@ USE AISOFT;
 
 -- DEPARTAMENTOS
 DELIMITER $$
+
 CREATE PROCEDURE spu_list_departaments()
 BEGIN
 	SELECT * FROM departamentos
     ORDER BY 2 ASC;
 END $$
-DELIMITER ;
+
+DELIMITER;
 
 -- PROVINCIAS
 DELIMITER $$
+
 CREATE PROCEDURE spu_list_provinces(IN _iddepartamento INT)
 BEGIN
 	SELECT * 
@@ -18,10 +21,12 @@ BEGIN
     WHERE iddepartamento = _iddepartamento
     ORDER BY 3 ASC;
 END $$
-DELIMITER ;
+
+DELIMITER;
 
 -- DISTRITOS
 DELIMITER $$
+
 CREATE PROCEDURE spu_list_districts(IN _idprovincia INT)
 BEGIN
 	SELECT * 
@@ -29,10 +34,12 @@ BEGIN
     WHERE idprovincia = _idprovincia
     ORDER BY 3 ASC;
 END $$
-DELIMITER ;
+
+DELIMITER;
 
 -- UBGEO
 DELIMITER $$
+
 CREATE PROCEDURE spu_get_ubigeo(IN _iddistrito INT)
 BEGIN
 	SELECT 
@@ -47,9 +54,11 @@ BEGIN
         INNER JOIN departamentos AS dept ON dept.iddepartamento = prov.iddepartamento
         WHERE dist.iddistrito = _iddistrito;
 END $$
+
 DELIMITER;
 
 DELIMITER $$
+
 CREATE PROCEDURE spu_get_fullUbigeo(
 	IN _distrito VARCHAR(45),
     IN _provincia VARCHAR(45),
@@ -71,19 +80,23 @@ BEGIN
             AND prov.provincia = _provincia
             AND dept.departamento = _departamento;
 END $$
-DELIMITER ;
+
+DELIMITER;
 
 -- constructora
 DELIMITER $$
+
 CREATE PROCEDURE spu_list_companies()
 BEGIN
 	SELECT * FROM vws_list_companies
     ORDER BY 2;
 END $$
-DELIMITER ;
+
+DELIMITER;
 
 -- sedes
 DELIMITER $$
+
 CREATE PROCEDURE spu_list_addresses(IN _iddistrito INT)
 BEGIN
 	SELECT
@@ -103,9 +116,11 @@ BEGIN
         INNER JOIN departamentos AS dept ON dept.iddepartamento = prov.iddepartamento
         WHERE sed.iddistrito = _iddistrito;
 END $$
-DELIMITER ;
+
+DELIMITER;
 
 DELIMITER $$
+
 CREATE PROCEDURE spu_list_addresses_ruc(IN _ruc VARCHAR(11))
 BEGIN
 	DECLARE _idconstructora INT;
@@ -132,12 +147,14 @@ BEGIN
         INNER JOIN departamentos AS dept ON dept.iddepartamento = prov.iddepartamento
         WHERE sed.idconstructora = _idconstructora;
 END $$
-DELIMITER ;
+
+DELIMITER;
 
 use aisoft;
 
 -- representates
 DELIMITER $$
+
 CREATE PROCEDURE spu_get_represents(IN _idrepresentante INT)
 BEGIN
 	SELECT 
@@ -161,33 +178,41 @@ BEGIN
         WHERE rep.idrepresentante = _idrepresentante
         AND rep.inactive_at IS NULL;
 END $$
-DELIMITER ;
+
+DELIMITER;
 
 -- PROYECTOS
 DELIMITER $$
+
 CREATE PROCEDURE spu_list_projects()
 BEGIN
 	SELECT * FROM vws_list_projects;
 END $$
-DELIMITER ;
+
+DELIMITER;
 
 DELIMITER $$
+
 CREATE PROCEDURE spu_list_projects_id(IN _idproyecto INT)
 BEGIN
 	SELECT * FROM vws_list_projects
     WHERE idproyecto = _idproyecto;
 END $$
-DELIMITER ;
+
+DELIMITER;
 
 DELIMITER $$
+
 CREATE PROCEDURE spu_list_projects_by_code(IN _codigo VARCHAR(20)) -- POR CÓDIGO DEL PROYECTO
 BEGIN
 		SELECT * FROM vws_list_projects
         WHERE codigo LIKE CONCAT("%", _codigo,"%");
 END $$
-DELIMITER ;
+
+DELIMITER;
 
 DELIMITER $$
+
 CREATE PROCEDURE spu_add_projects
 (
 	IN _idsede 			INT,
@@ -207,9 +232,11 @@ BEGIN
                 
 	SELECT ROW_COUNT() AS filasAfect; -- FILAS AFECTADAS
 END $$
-DELIMITER ;
+
+DELIMITER;
 
 DELIMITER $$
+
 CREATE PROCEDURE spu_set_projects
 (
 	IN _idproyecto		INT,
@@ -241,25 +268,34 @@ BEGIN
             
 	SELECT ROW_COUNT() AS filasAfect; -- FILAS AFECTADAS
 END $$
-DELIMITER ;
+
+DELIMITER;
 
 DELIMITER $$
-CREATE PROCEDURE spu_inactive_projects(IN _idproyecto INT)
+
+CREATE PROCEDURE spu_inactive_projects
+(
+    IN _idproyecto INT,
+    IN _idusuario INT
+)
 BEGIN
 
 	UPDATE proyectos
 		SET
-			inactive_at = CURDATE()
+			inactive_at = CURDATE(),
+            idusuario = _idusuario
+
 		WHERE
 			idproyecto = _idproyecto;
     
     SELECT ROW_COUNT() AS filasAfect;
 END $$
-DELIMITER ;
 
+DELIMITER;
 
 -- LOTES
 DELIMITER $$
+
 CREATE PROCEDURE spu_list_assets_by_id(IN _idactivo INT)
 BEGIN
 		SELECT 
@@ -300,36 +336,44 @@ BEGIN
         WHERE act.idactivo = _idactivo
         AND act.inactive_at IS NULL;
 END $$
-DELIMITER ;
+
+DELIMITER;
 
 DELIMITER $$
+
 CREATE PROCEDURE spu_list_assets_idProject(IN _idproyecto INT)
 BEGIN
 	SELECT * FROM vws_list_assets_short
     WHERE idproyecto = _idproyecto;
 END $$
-DELIMITER ;
+
+DELIMITER;
 
 DELIMITER $$
+
 CREATE PROCEDURE spu_list_assets_short_idpr(IN _idproyecto INT, IN _propietario_lote VARCHAR(10))
 BEGIN
 	SELECT * FROM vws_list_assets_short
     WHERE idproyecto = _idproyecto
     AND propietario_lote = _propietario_lote;
 END $$
-DELIMITER ;
+
+DELIMITER;
 
 DELIMITER $$
-CREATE PROCEDURE spu_list_assets_by_sublote(IN _idproyecto INT, IN _sublote CHAR(5)) -- => POR CÓDIGO DE LOTE
+
+CREATE PROCEDURE spu_list_assets_by_sublote(IN _idproyecto INT, IN _sublote CHAR(5)) -- => POR SUBLOTE
 BEGIN
 	SELECT * 
 		FROM vws_list_assets_short
         WHERE sublote LIKE CONCAT(_sublote,"%")
         AND idproyecto = _idproyecto;
 END $$
-DELIMITER ;
+
+DELIMITER;
 
 DELIMITER $$
+
 CREATE PROCEDURE spu_add_assets
 (
     IN _idproyecto		INT,
@@ -399,9 +443,11 @@ BEGIN
                 
 	SELECT ROW_COUNT() as filasAfect;
 END $$
-DELIMITER ;
+
+DELIMITER;
 
 DELIMITER $$
+
 CREATE PROCEDURE spu_set_assets
 (
 	IN _idactivo  		INT,
@@ -454,9 +500,11 @@ BEGIN
             
 	SELECT ROW_COUNT() AS filasAfect;
 END$$
-DELIMITER ;
+
+DELIMITER;
 
 DELIMITER $$
+
 CREATE PROCEDURE spu_set_idpresupuesto
 (
 	IN _idactivo 		INT,
@@ -473,10 +521,17 @@ BEGIN
         
 	SELECT ROW_COUNT() AS filasAfect;
 END $$
-DELIMITER ;
+
+DELIMITER;
 
 DELIMITER $$
-CREATE PROCEDURE spu_set_det_build(IN _idactivo INT, IN _det_casa JSON)
+
+CREATE PROCEDURE spu_set_det_build
+(
+    IN _idactivo INT, 
+    IN _det_casa JSON,
+    IN _idusuario INT
+)
 BEGIN
 	DECLARE oldDetCasa JSON;
     
@@ -487,7 +542,8 @@ BEGIN
 	IF _det_casa != oldDetCasa THEN
 		UPDATE activos SET
 			det_casa = _det_casa,
-			update_at = CURDATE()
+			update_at = CURDATE(),
+            idusuario = _idusuario
 		WHERE 
 			idactivo = _idactivo;
         
@@ -496,10 +552,16 @@ BEGIN
 		(SELECT COUNT(*) -2 AS filasAfect FROM activos WHERE idactivo = _idactivo);
     END IF;
 END $$
-DELIMITER ;
+
+DELIMITER;
 
 DELIMITER $$
-CREATE PROCEDURE spu_inactive_assets(IN _idactivo INT)
+
+CREATE PROCEDURE spu_inactive_assets
+(
+    IN _idactivo INT,
+    IN _idusuario INT
+)
 BEGIN
 	DECLARE _estadoActivo VARCHAR(10);
     
@@ -513,7 +575,8 @@ BEGIN
 	IF _estadoActivo = "SIN VENDER" THEN
 		UPDATE activos
 			SET
-				inactive_at = CURDATE()
+				inactive_at = CURDATE(),
+                idusuario = _idusuario
 			WHERE idactivo = _idactivo;
 	ELSE
 		SIGNAL SQLSTATE "45000" SET MESSAGE_TEXT = "Error: el lote tiene un cliente";
@@ -521,9 +584,11 @@ BEGIN
     
     SELECT ROW_COUNT() AS filasAfect;
 END$$
-DELIMITER ;
+
+DELIMITER;
 
 DELIMITER $$
+
 CREATE PROCEDURE spu_list_lots_noBudgets()
 BEGIN
 	SELECT 	
@@ -538,9 +603,11 @@ BEGIN
 			WHERE pres.idpresupuesto IS NULL
 			AND act.inactive_at IS NULL;
 END $$
-DELIMITER ;
+
+DELIMITER;
 
 DELIMITER $$
+
 CREATE PROCEDURE spu_list_lots_withBudgets()
 BEGIN
 	SELECT 	
@@ -554,9 +621,11 @@ BEGIN
             INNER JOIN presupuestos pres ON pres.idpresupuesto = act.idpresupuesto
 			WHERE act.inactive_at IS NULL;
 END $$
-DELIMITER ;
+
+DELIMITER;
 
 DELIMITER $$
+
 CREATE PROCEDURE spu_list_lots_ByIdBudget(IN _idpresupuesto INT)
 BEGIN
 	SELECT 	
@@ -571,9 +640,11 @@ BEGIN
 			WHERE act.idpresupuesto = _idpresupuesto
             AND act.inactive_at IS NULL;
 END $$
-DELIMITER ;
+
+DELIMITER;
 
 DELIMITER $$
+
 CREATE PROCEDURE spu_list_lots_ForBudget(IN _idpresupuesto INT)
 BEGIN
 	SELECT 	
@@ -588,10 +659,12 @@ BEGIN
             WHERE act.inactive_at IS NULL
 				AND act.idpresupuesto = _idpresupuesto OR act.idpresupuesto IS NULL;
 END $$
-DELIMITER ;
-call spu_list_lots_ForBudget(23);
--- PERSONAS
+
+DELIMITER;
+
+-- PERSONAS    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 DELIMITER $$
+
 CREATE PROCEDURE spu_list_person()
 BEGIN
 	SELECT
@@ -612,9 +685,11 @@ BEGIN
         WHERE pers.inactive_at IS NULL
         ORDER BY pers.idpersona DESC;
 END $$
-DELIMTER ;
+
+DELIMTER;
 
 DELIMITER $$
+
 CREATE PROCEDURE spu_list_person_doc_nro(IN _documento_nro VARCHAR(12))
 BEGIN
 	SELECT
@@ -635,9 +710,11 @@ BEGIN
         WHERE pers.inactive_at IS NULL AND pers.documento_nro LIKE CONCAT(_documento_nro,'%')
         ORDER BY pers.idpersona DESC;
 END $$
-DELIMTER ;
+
+DELIMTER;
 
 DELIMITER $$
+
 CREATE PROCEDURE spu_add_person
 (
 	IN _nombres 		VARCHAR(40),
@@ -673,9 +750,11 @@ BEGIN
                     
 	SELECT ROW_COUNT() AS filasAfect;
 END $$
-DELIMTER ;
+
+DELIMTER;
 
 DELIMITER $$
+
 CREATE PROCEDURE spu_set_person
 (
 	IN _idpersona		INT,
@@ -704,9 +783,11 @@ BEGIN
 	
     SELECT ROW_COUNT() AS filasAfect;
 END $$
-DELIMITER ;
+
+DELIMITER;
 
 DELIMITER $$
+
 CREATE PROCEDURE spu_inactive_person(IN _idpersona INT)
 BEGIN 
 	UPDATE personas
@@ -715,10 +796,12 @@ BEGIN
     
     SELECT ROW_COUNT() AS filasAfect;
 END $$
-DELIMITER ;
+
+DELIMITER;
 
 -- CLIENTES ---------------------------------------------------------------------------------------------------------------------------------------
 DELIMITER $$
+
 CREATE PROCEDURE spu_list_clients_tpersona(IN _tipo_persona VARCHAR(10))
 BEGIN
 	IF _tipo_persona = "NATURAL" THEN
@@ -770,9 +853,11 @@ BEGIN
 			ORDER BY persj.documento_nro ASC;
     END IF;
 END$$
-DELIMITER ;
+
+DELIMITER;
 
 DELIMITER $$
+
 CREATE PROCEDURE spu_list_clients_by_id(IN _idcliente INT)
 BEGIN
 	DECLARE _tipoPersona VARCHAR(10);
@@ -838,9 +923,11 @@ BEGIN
         SELECT ROW_COUNT() AS filasAfect;
         
 END$$
-DELIMITER ;
+
+DELIMITER;
 
 DELIMITER $$
+
 CREATE PROCEDURE spu_list_clients_by_docNro(IN _tipo_persona VARCHAR(10), IN _documento_nro VARCHAR(12))
 BEGIN
 	IF _tipo_persona = "NATURAL" THEN
@@ -895,10 +982,12 @@ BEGIN
 			ORDER BY persj.documento_nro ASC;
 		END IF;
 END$$
-DELIMITER ;
 
--- PERSONA NATURAL
+DELIMITER;
+
+-- PERSONA NATURAL ///////////////////////////////////////////////////////////////////////////////////////////////////////
 DELIMITER $$
+
 CREATE PROCEDURE spu_add_clients_personN
 (
 	IN _tipo_persona	VARCHAR(10),
@@ -955,9 +1044,11 @@ BEGIN
 	
     SELECT ROW_COUNT() AS filasAfect;
 END $$
-DELIMITER ;
+
+DELIMITER;
 
 DELIMITER $$
+
 CREATE PROCEDURE spu_set_clientN
 (
 	IN _idcliente		INT,
@@ -1001,10 +1092,12 @@ BEGIN
             
 			SELECT ROW_COUNT() AS filasAfect;
 END $$
-DELIMITER ;
+
+DELIMITER;
 
 -- PERSONA JURÍDICA
 DELIMITER $$
+
 CREATE PROCEDURE spu_add_clients_personj
 (
 	IN _tipo_persona	VARCHAR(10),
@@ -1053,10 +1146,12 @@ BEGIN
                         _idusuario
                     );
 END $$
-DELIMITER ;
+
+DELIMITER;
 
 -- REPRESENTANTES
 DELIMITER $$
+
 CREATE PROCEDURE spu_list_represents_by_id_pj(IN _idpersona_juridica INT)
 BEGIN
 	SELECT 
@@ -1072,9 +1167,11 @@ BEGIN
         WHERE idpersona_juridica = _idpersona_juridica 
         AND inactive_at IS NULL;
 END $$
-DELIMITER ;
+
+DELIMITER;
 
 DELIMITER $$
+
 CREATE PROCEDURE spu_inactive_represents(IN _idrepresentante INT)
 BEGIN
 	UPDATE rep_legales_clientes
@@ -1084,9 +1181,11 @@ BEGIN
 	
     SELECT ROW_COUNT() AS filasAfect;
 END $$
+
 DELIMITER;
 
 DELIMITER $$
+
 CREATE PROCEDURE spu_set_represents
 (
 	IN _idrepresentante		INT,
@@ -1113,9 +1212,11 @@ BEGIN
         
 	SELECT ROW_COUNT() AS filasAfect;
 END $$
-DELIMITER ;
+
+DELIMITER;
 
 DELIMITER $$
+
 CREATE PROCEDURE spu_add_represents
 (
 	IN _idpersona_juridica 		INT,
@@ -1150,9 +1251,11 @@ BEGIN
                 
 		SELECT ROW_COUNT() AS filasAfect;
 END $$
-DELIMITER ;
+
+DELIMITER;
 
 DELIMITER $$
+
 CREATE PROCEDURE spu_set_clientJ
 (
 	IN _idcliente			INT,
@@ -1191,10 +1294,16 @@ BEGIN
 		SELECT ROW_COUNT() AS filasAfect;
 	
 END $$
-DELIMITER ;
+
+DELIMITER;
 
 DELIMITER $$
-CREATE PROCEDURE spu_inactive_clients(IN _idcliente INT)
+
+CREATE PROCEDURE spu_inactive_clients
+(
+    IN _idcliente INT,
+    IN _idusuario INT
+)
 BEGIN
 	DECLARE _clienContrato INT;
     DECLARE _clienSeparacion INT;
@@ -1219,7 +1328,8 @@ BEGIN
     IF _clienContrato  = 0 OR _clienSeparacion = 0 THEN
 		UPDATE clientes
 			SET
-				inactive_at = CURDATE()
+				inactive_at = CURDATE(),
+                idusuario = _idusuario
 			WHERE
 				idcliente = _idcliente;
 	
@@ -1227,10 +1337,12 @@ BEGIN
     
     SELECT ROW_COUNT() AS filasAfect;
 END $$
-DELIMITER ;
+
+DELIMITER;
 
 -- CATEGORíAS COSTOS /////////////////////////////////////////////////////////////////////////////////////////
 DELIMITER $$
+
 CREATE PROCEDURE spu_list_cost_category()
 BEGIN
 	SELECT
@@ -1238,10 +1350,12 @@ BEGIN
         categoria_costo
 		FROM categoria_costos;
 END $$
-DELIMITER ;
+
+DELIMITER;
 
 -- SUBCATEGORIAS COSTOS /////////////////////////////////////////////////////////////////////////////////////////
 DELIMITER $$
+
 CREATE PROCEDURE spu_list_cost_subcategory(IN  _idcategoria_costo INT)
 BEGIN
 	SELECT 
@@ -1255,10 +1369,12 @@ BEGIN
         WHERE subcat.idcategoria_costo = _idcategoria_costo 
         ORDER BY subcat.subcategoria_costo ASC;
 END $$
-DELIMITER ;
+
+DELIMITER;
 
 -- MARCAS /////////////////////////////////////////////////////////////////////////////////////////
 DELIMITER $$
+
 CREATE PROCEDURE spu_list_brands()
 BEGIN
 	SELECT
@@ -1267,19 +1383,23 @@ BEGIN
 		FROM marcas
         ORDER BY marca ASC;
 END $$
-DELIMITER ;
+
+DELIMITER;
 
 -- UNIDADES DE MEDIDA /////////////////////////////////////////////////////////////////////////////////////////
 DELIMITER $$
+
 CREATE PROCEDURE spu_list_units_measuraments()
 BEGIN
 	SELECT * FROM unidades_medida
     ORDER BY unidad_medida ASC;
 END $$
-DELIMITER ;
+
+DELIMITER;
 
 -- MATERIALES /////////////////////////////////////////////////////////////////////////////////////////
 DELIMITER $$
+
 CREATE PROCEDURE spu_list_materials(IN _idmarca INT)
 BEGIN
 	SELECT 
@@ -1295,11 +1415,13 @@ BEGIN
         WHERE marc.idmarca = _idmarca
         ORDER BY mat.material ASC;
 END $$
-DELIMITER ;
+
+DELIMITER;
 
 -- PRESUPUESTOS /////////////////////////////////////////////////////////////////////////////////////////
 
 DELIMITER $$
+
 CREATE PROCEDURE spu_list_budgets()
 BEGIN
 	DECLARE _valueDefault DECIMAL(8,2);
@@ -1324,9 +1446,11 @@ BEGIN
         GROUP BY pres.idpresupuesto
         ORDER BY pres.codigo ASC;
 END $$
-DELIMITER ;
+
+DELIMITER;
 
 DELIMITER $$
+
 CREATE PROCEDURE spu_search_budgets(IN _codigo VARCHAR(8))
 BEGIN
 	DECLARE _valueDefault DECIMAL(8,2);
@@ -1352,9 +1476,11 @@ BEGIN
         GROUP BY pres.idpresupuesto
         ORDER BY pres.codigo ASC;
 END $$
-DELIMITER ;
+
+DELIMITER;
 
 DELIMITER $$
+
 CREATE PROCEDURE spu_get_budget_by_id(IN _idpresupuesto INT)
 BEGIN
 	DECLARE _valueDefault DECIMAL(8,2);
@@ -1380,10 +1506,11 @@ BEGIN
         GROUP BY pres.idpresupuesto
         ORDER BY pres.codigo ASC;
 END $$
-DELIMITER ;
 
+DELIMITER;
 
 DELIMITER $$
+
 CREATE PROCEDURE spu_list_budgets_assets()
 BEGIN
 	SELECT
@@ -1401,9 +1528,11 @@ BEGIN
         GROUP BY pres.idpresupuesto
         ORDER BY pres.codigo ASC;
 END $$
-DELIMITER ;
-call spu_list_budgets_assets();
+
+DELIMITER;
+
 DELIMITER $$
+
 CREATE PROCEDURE spu_add_budget
 (
 	IN _codigo		CHAR(8),
@@ -1420,18 +1549,22 @@ BEGIN
             FROM presupuestos
             WHERE idpresupuesto = @@last_insert_id;
 END $$
-DELIMITER ;
+
+DELIMITER;
 
 DELIMITER $$
+
 CREATE PROCEDURE spu_count_budgets(IN _idpresuspuesto INT)
 BEGIN
 	SELECT COUNT(idpresupuesto)
 		FROM presupuestos
 		WHERE idpresupuesto = _idpresuspuesto;
 END $$
-DELIMTER ;
+
+DELIMTER;
 
 DELIMITER $$
+
 CREATE PROCEDURE spu_set_budget
 (
 	IN _idpresupuesto 		INT,
@@ -1456,29 +1589,39 @@ BEGIN
         FROM presupuestos
 		WHERE idpresupuesto = _idpresupuesto;
 END $$
-DELIMITER ;
+
+DELIMITER;
 
 DELIMITER $$
-CREATE PROCEDURE spu_inactive_budget(IN _idpresupuesto INT)
+
+CREATE PROCEDURE spu_inactive_budget
+(
+    IN _idpresupuesto INT,
+    IN _idusuario INT
+)
 BEGIN
 	UPDATE presupuestos
 		SET 
-			inactive_at = CURDATE()
+			inactive_at = CURDATE(),
+            idusuario = _idusuario
         WHERE idpresupuesto = _idpresupuesto;
         
 	SELECT ROW_COUNT() AS filasAfect;
 END $$
-DELIMITER ;
+
+DELIMITER;
 
 DELIMITER $$
+
 CREATE PROCEDURE spu_count_budget_idbudget(IN _idpresupuesto INT)
 BEGIN
     SELECT EXISTS(SELECT 1 FROM activos WHERE idpresupuesto = _idpresupuesto AND inactive_at IS NULL) AS cantidad;
 END
-DELIMITER ;
- 
+
+DELIMITER;
 -- DETALLE DE COSTOS /////////////////////////////////////////////////////////////////////////////////////////
 DELIMITER $$
+
 CREATE PROCEDURE spu_list_detail_cost(IN _idpresupuesto INT)
 BEGIN
 		SELECT
@@ -1512,9 +1655,11 @@ BEGIN
 			AND detcost.inactive_at IS NULL
 			ORDER BY cat.categoria_costo, subcat.subcategoria_costo ASC;
 END $$
-DELIMITER ;
+
+DELIMITER;
 
 DELIMITER $$
+
 CREATE PROCEDURE spu_add_detail_cost
 (
 	IN _idpresupuesto 			INT,
@@ -1547,9 +1692,11 @@ BEGIN
                             
 	SELECT ROW_COUNT() AS filasAfect;
 END $$
-DELIMITER ;
+
+DELIMITER;
 
 DELIMITER $$
+
 CREATE PROCEDURE spu_set_detail_cost
 (
 	IN _iddetalle_costo	 		INT,
@@ -1577,23 +1724,32 @@ BEGIN
             
 	SELECT ROW_COUNT() AS filasAfect;
 END $$
-DELIMITER ;
+
+DELIMITER;
 
 DELIMITER $$
-CREATE PROCEDURE spu_inactive_cost(IN _iddetalle_costo INT)
+
+CREATE PROCEDURE spu_inactive_cost
+(
+    IN _iddetalle_costo INT,
+    IN _idusuario INT
+)
 BEGIN
 	UPDATE detalle_costos
 		SET
-			inactive_at = CURDATE()
+			inactive_at = CURDATE(),
+            idusuario = _idusuario
         WHERE iddetalle_costo = _iddetalle_costo;
         
 	SELECT ROW_COUNT() AS filasAfect;
     
 END $$
-DELIMITER ;
+
+DELIMITER;
 
 -- RESUMEN DE PRESUPUESTO
 DELIMITER $$
+
 CREATE PROCEDURE spu_resume_budget_category(IN _idpresupuesto INT)
 BEGIN
 	SELECT 
@@ -1607,9 +1763,11 @@ BEGIN
         GROUP BY 
 			cat.idcategoria_costo;
 END $$
-DELIMITER ;
+
+DELIMITER;
 
 DELIMITER $$
+
 CREATE PROCEDURE spu_resume_budget_subcatgory(IN _idpresupuesto INT)
 BEGIN
 	SELECT 
@@ -1626,10 +1784,12 @@ BEGIN
 			cat.idcategoria_costo,
             subcat.idsubcategoria_costo;
 END $$
-DELIMITER ;
+
+DELIMITER;
 
 -- SEPARACIONES   ////////////////////////////////////////////////////////////////////////////////////////////
 DELIMITER $$
+
 CREATE PROCEDURE spu_list_separation_tPersona
 (
     IN _tipo_persona VARCHAR(10),
@@ -1652,9 +1812,11 @@ BEGIN
             AND create_at BETWEEN _fechaInicio AND _fechaFin;
     END IF;
 END $$
-DELIMITER ;
+
+DELIMITER;
 
 DELIMITER $$
+
 CREATE PROCEDURE spu_list_separation_ByIdAsset(IN _idactivo INT)
 BEGIN
     DECLARE _tpersona VARCHAR(10);
@@ -1677,9 +1839,11 @@ BEGIN
                 AND inactive_at IS NULL;
     END IF;
 END $$
-DELIMITER ;
+
+DELIMITER;
 
 DELIMITER $$
+
 CREATE PROCEDURE spu_list_separation_n_expediente
 (
     IN _tipo_persona VARCHAR(10),
@@ -1705,9 +1869,11 @@ BEGIN
            AND n_expediente LIKE CONCAT(_n_expediente,'%');
     END IF;
 END $$
-DELIMITER ;
+
+DELIMITER;
 
 DELIMITER $$
+
 CREATE PROCEDURE spu_add_separation
 (
     IN _n_expediente    VARCHAR(200),
@@ -1740,9 +1906,11 @@ BEGIN
 
     SELECT ROW_COUNT() AS filasAfect;
 END $$
-DELIMITER ;
+
+DELIMITER;
 
 DELIMITER $$
+
 CREATE PROCEDURE spu_set_separation
 (
     IN _idseparacion    INT,
@@ -1771,19 +1939,26 @@ BEGIN
 END $$
 
 DELIMITER $$
+
 CREATE PROCEDURE spu_inactive_separation
-(IN _idseparacion INT)
+(
+    IN _idseparacion INT,
+    IN _idusuario    INT
+)
 BEGIN
-    UPDATE activos
+    UPDATE separaciones
         SET
-            inactive_at = CURDATE()
+            inactive_at = CURDATE(),
+            idusuario   = _idusuario
         WHERE idseparacion = _idseparacion;
     
     SELECT ROW_COUNT() AS filasAfect;
 END $$
-DELIMITER ;
+
+DELIMITER;
 
 DELIMITER $$
+
 CREATE PROCEDURE spu_get_sepraration_ById
 (IN _idseparacion INT)
 BEGIN
@@ -1807,10 +1982,12 @@ BEGIN
                 AND inactive_at IS NULL;
     END IF;
 END $$
-DELIMITER ;
 
--- DEVLOUCIONES   //////////////////////////////////////
+DELIMITER;
+
+-- DEVLOUCIONES   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 DELIMITER $$
+
 CREATE PROCEDURE sup_list_refunds
 (
     IN _tipo_persona    VARCHAR(10),
@@ -1824,9 +2001,11 @@ BEGIN
             AND create_at BETWEEN _fechaInicio AND _fechaFin
             AND inactive_at IS NULL;
 END $$
-DELIMITER ;
+
+DELIMITER;
 
 DELIMITER $$
+
 CREATE PROCEDURE sup_list_refunds_n_expedientes
 (
     IN _tipo_persona    VARCHAR(10),
@@ -1842,9 +2021,11 @@ BEGIN
             AND inactive_at IS NULL
             AND n_expediente_dev LIKE CONCAT(_n_expediente,'%');
 END $$
-DELIMITER ;
+
+DELIMITER;
 
 DELIMITER $$
+
 CREATE PROCEDURE sup_list_refunds_ById
 (IN _iddevolucion INT)
 BEGIN
@@ -1852,9 +2033,11 @@ BEGIN
         FROM vws_list_refunds
         WHERE iddevolucion = _iddevolucion;
 END $$
-DELIMITER ;
+
+DELIMITER;
 
 DELIMITER $$
+
 CREATE PROCEDURE spu_add_refund
 (
     IN _n_expediente    VARCHAR(10),
@@ -1884,9 +2067,11 @@ BEGIN
 
     SELECT ROW_COUNT() AS filasAfect;
 END
-DELIMITER ;
+
+DELIMITER;
 
 DELIMITER $$
+
 CREATE PROCEDURE spu_set_refund
 (
     IN _iddevolucion    INT,
@@ -1912,23 +2097,31 @@ BEGIN
     
     SELECT ROW_COUNT() AS filasAfect;
 END $$
-DELIMITER ;
+
+DELIMITER;
 
 DELIMITER $$
+
 CREATE PROCEDURE spu_inactive_refund
-(IN _iddevolucion INT)
+(
+    IN _iddevolucion INT,
+    IN _idusuario    INT
+)
 BEGIN
     UPDATE devoluciones
         SET
-            inactive_at = CURDATE()
+            inactive_at = CURDATE(),
+            idusuario = _idusuario
         WHERE
             iddevolucion = _iddevolucion;
 
     SELECT ROW_COUNT() AS filasAfect;
 END $$
-DELIMITER ;
+
+DELIMITER;
 -- CONTRATOS  ////////////////////////////////////////////////////////////////////////////////////
 DELIMITER $$
+
 CREATE PROCEDURE spu_lits_contracts_full_by_id(IN _idcontrato INT)
 BEGIN
 	
@@ -1949,9 +2142,11 @@ BEGIN
 		WHERE idcontrato = _idcontrato;
 			
 END $$
-DELIMITER ;
+
+DELIMITER;
 
 DELIMITER $$
+
 CREATE PROCEDURE spu_add_contracts
 (
 	IN _tipo_contrato 		VARCHAR(40),
@@ -2002,9 +2197,11 @@ BEGIN
     SELECT @@LAST_INSERT_ID "idusuario";
 
 END $$
-DELIMITER ;
+
+DELIMITER;
 
 DELIMITER $$
+
 CREATE PROCEDURE spu_set_contracts
 (
 	IN _idcontrato 			INT,
@@ -2039,26 +2236,35 @@ BEGIN
         WHERE
 			idcontrato = _idcontrato;
 END $$
-DELIMITER ;
+
+DELIMITER;
 
 DELIMITER $$
-CREATE PROCEDURE spu_set_inactive_contracts(IN _idcontrato INT)
+
+CREATE PROCEDURE spu_inactive_contracts
+(
+    IN _idcontrato INT,
+    IN _idusuario INT
+)
 BEGIN
 
 	UPDATE contratos
 		SET
-			inactive_at = CURDATE()
+			inactive_at = CURDATE(),
+            idusuario = _idusuario
 		WHERE
 			idcontrato = _idcontrato;
             
   SELECT ROW_COUNT() AS filasAfect;
 END $$
-DELIMITER ;
+
+DELIMITER;
 
 -- PLANTILLA
 DELIMITER $$
+
 CREATE PROCEDURE ()
 BEGIN
 END $$
-DELIMITER ;
 
+DELIMITER;

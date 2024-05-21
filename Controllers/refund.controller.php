@@ -68,9 +68,13 @@ if(isset($_POST["action"])){
 
         case "inactiveRefound": 
 
-                $iddevolucion = $_POST["iddevolucion"];
+                $dataObtainded = [
 
-                echo json_encode($refund->inactiveRefund($iddevolucion));
+                    "iddevolucion"  =>  $_POST["iddevolucion"],
+                    "idusuario"     => 1
+                ];
+
+                echo json_encode($refund->inactiveRefund($dataObtainded));
             break;
     }
 }
