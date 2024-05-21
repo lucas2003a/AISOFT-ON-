@@ -326,21 +326,12 @@
         <nav aria-label="breadcrumb">
           <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
           <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="#">Dashboard</a></li>
-            <li class="breadcrumb-item text-sm text-dark active" aria-current="page">CLientes</li>
+            <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Separaciones</li>
           </ol>
-          <h6 class="font-weight-bolder mb-0" id="cabezera">CIENTES </h6>
+          <h6 class="font-weight-bolder mb-0" id="cabezera">SEPARACIONES </h6>
         </nav>
         <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
-          <div class="ms-md-auto pe-md-3 d-flex align-items-center">
-            <div class="input-group">
-              <span class="input-group-text text-body"><i class="fas fa-search" aria-hidden="true"></i></span>
-              <input type="text" class="form-control" placeholder="Escribe el Sublote..." id="in-sublote">
-            </div>
-          </div>
           <ul class="navbar-nav  justify-content-end">
-            <li class="nav-item d-flex align-items-center">
-              <a class="btn btn-outline-success btn-sm mb-0 me-3" target="_blank" href="./add_asset.php" id="add-asset">AGREGAR CLIENTE</a>
-            </li>
             <li class="nav-item d-flex align-items-center">
               <a href="javascript:;" class="nav-link text-body font-weight-bold px-0">
                 <i class="fa fa-user me-sm-1"></i>
@@ -376,20 +367,44 @@
 
                   <h6>Tabla - separaciones</h6>
                 </div>
-                <div class="col-md-6">
-                  <div class="text-end">
-                    <button type="button" class="btn btn-lg bg-gradient-success opacity-10" id="generate-excel"><i class="fa-solid fa-file-excel"></i></button>
-                    <button type="button" class="btn btn-lg bg-gradient-danger opacity-10" id="generate-pdf"><i class="bi bi-filetype-pdf"></i></button>
+                <div class="row d-flex" style="justify-content: space-between; align-items: end;">
+                <div class="col-md-5">
+                  <div class="btn-group text-start mt-2">
+                    <button type="button" class="mb-0 btn btn-sm bg-gradient-success opacity-10" id="generate-excel"><i class="fa-solid fa-file-excel"></i></button>
+                    <button type="button" class="mb-0 btn btn-sm bg-gradient-danger opacity-10" id="generate-pdf"><i class="bi bi-filetype-pdf"></i></button>
+                    <a type="button" class="mb-0  btn btn-sm btn-outline-success" target="_blank" href="./add_budget.php" id="add-asset">AGREGAR SEPARACIÓN</a>
                   </div>
+
+                </div>
+                <div class="col-md-6">
+                  <div class="row">
+                    <div class="col-md-4">
+                      <label for="fechaInicio" class="form-label">
+                        Fecha de inicio
+                      </label>
+                        <input type="date" name="fechaInicio" class="form-control" id="fechaInicio">
+                    </div>
+                    <div class="col-md-4">
+                      <label for="fechaFin" class="form-label">
+                        Fecha de fin
+                      </label>
+                        <input type="date" name="fechaFin" class="form-control" id="fechaFin">
+                    </div>
+                    <div class="col-md-4 d-flex" style="align-items: end;">
+
+                      <div class="ms-md-auto pe-md-3">
+                        <div class="input-group">
+                          <span class="input-group-text text-body"><i class="fas fa-search" aria-hidden="true"></i></span>
+                          <input type="text" class="form-control" placeholder="Escribe el código..." id="in-codigo">
+                        </div>
+                      </div>
+                    </div>
+
+                  </div>
+
                 </div>
               </div>
-              <!-- <div class="row">
-                <div class="col-md-3">
-                  <select name="tipo_persona" class="form-select" id="documento_tipo">
-                    <option value="NATURAL">Tipo de persona</option>
-                  </select>
-                </div>
-              </div> -->
+              </div>
             </div>
             <div class="card-body px-0 pt-0 pb-2">
               <div class="table-responsive text-center p-0">
@@ -511,10 +526,53 @@ document.addEventListener("DOMContentLoaded",()=>{
   const $ = id => global.$(id);
   const $All = id => global.$All(id);
 
-  $("#month").addEventListener("change",()=>{
+  let today
 
-    console.log($("#month").value);
-  });
+  function setDateStart(dayActual){
+
+    let currrentDate = new Date();
+
+    let defaultDate = new Date(dayActual);
+
+    if(currrentDate.getDate() < defaultDate.getDate()){
+
+      currrentDate = new Date(defaultDate.getFullYear(), defaultDate.getMonth(),0)
+    }
+    let dayStart = defaultDate.getDate().toString().padStart(2,'0');
+    let monthStart = defaultDate.getMonth().toString().padStart(2,'0');
+    let yearStart = defaultDate.getFullYear();
+
+    let dateStart = `${yearStart}-${monthStart}-${dayStart}`;
+    console.log(defaultDate)
+    $("#fechaInicio").value = dateStart
+  }
+
+  function getDates(){
+    const date = new Date();
+    const day = date.getDate().toString().padStart(2,'0');
+    console.log(day);
+    const month = (date.getMonth() + 1).toString().padStart(2,'0');
+    console.log(month);
+
+    const year = date.getFullYear().toString();
+    console.log(year);
+
+    today = `${year}-${month}-${day}`;
+
+    console.log(today);
+    $("#fechaFin").value = today;
+
+    setDateStart(today)
+  }
+
+
+
+  $("#fechaInicio").addEventListener("change",(e)=>{
+    console.log(e.target.value)
+  })
+
+
+  getDates()
 });
   </script>
   <script>

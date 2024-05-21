@@ -374,7 +374,7 @@
                   <h6>Tabla - Presupuestos</h6>
                 </div>
               </div>
-              <div class="row">
+              <div class="row d-flex" style="justify-content: space-between;">
                 <div class="col-md-5">
                   <div class="btn-group text-start">
                     <button type="button" class="btn btn-sm bg-gradient-success opacity-10" id="generate-excel"><i class="fa-solid fa-file-excel"></i></button>
@@ -383,7 +383,7 @@
                   </div>
 
                 </div>
-                <div class="col-md-7">
+                <div class="col-md-3">
                   <div class="ms-md-auto pe-md-3 d-flex align-items-center">
                     <div class="input-group">
                       <span class="input-group-text text-body"><i class="fas fa-search" aria-hidden="true"></i></span>

@@ -373,28 +373,35 @@
                   
                 </div>
               </div>
-              <div class="row">
-                <div class="col-md-3">
-                  
-                  <select name="tipo_persona" class="form-select" id="tipo_persona">
-                    <option value="NATURAL" selected>Tipo de persona</option>
-                    <option value="JURÍDICA">Jurídica</option>
-                    <option value="NATURAL">Natural</option>
-                  </select>
+              <div class="row d-flex" style="justify-content: space-between;">
+                
+                <div class="col-md-3 d-grid">
+                  <a class="btn btn-outline-success btn-sm mb-0 me-3" target="_blank" href="./add_client.php" id="add-asset">AGREGAR CLIENTE</a>
                 </div>
 
                 <div class="col-md-6">
-                  <div class="ms-md-auto pe-md-3 d-flex align-items-center">
-                    <div class="input-group">
-                      <span class="input-group-text text-body"><i class="fas fa-search" aria-hidden="true"></i></span>
-                      <input type="text" class="form-control" placeholder="Nº documento..." id="in-doumento-tipo">
+
+                  <div class="row">
+
+                    <div class="col-md-6">
+                      
+                      <select name="tipo_persona" class="form-select" id="tipo_persona">
+                        <option value="NATURAL" selected>Tipo de persona</option>
+                        <option value="JURÍDICA">Jurídica</option>
+                        <option value="NATURAL">Natural</option>
+                      </select>
+                    </div>
+    
+                    <div class="col-md-6">
+                      <div class="ms-md-auto pe-md-3 d-flex align-items-center">
+                        <div class="input-group">
+                          <span class="input-group-text text-body"><i class="fas fa-search" aria-hidden="true"></i></span>
+                          <input type="text" class="form-control" placeholder="Nº documento..." id="in-doumento-tipo">
+                        </div>
+                      </div>
                     </div>
                   </div>
-                  
-                </div>
 
-                <div class="col-md-3 d-flex justify-content-end">
-                  <a class="btn btn-outline-success btn-sm mb-0 me-3" target="_blank" href="./add_client.php" id="add-asset">AGREGAR CLIENTE</a>
                 </div>
 
               </div>
