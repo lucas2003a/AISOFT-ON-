@@ -337,5 +337,21 @@ class Asset extends Conection{
             die($e->getMessage());
         }
     }
+
+    /**
+     * Lista solo los LOTES en estado SIN VENDER
+     */
+    public function listOnlyLots(){
+        try{
+            
+            $query = $this->conection->prepare("CALL spu_list_onlyLots()");
+            $query->execute();
+
+            return $query->fetchAll(PDO::FETCH_ASSOC);
+        }
+        catch(Exception $e){
+            die($e->getMessage());
+        }
+    }
 }
 ?>

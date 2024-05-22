@@ -148,3 +148,4 @@ select * from activos where sublote = 10;
 
 UPDATE activos SET idpresupuesto = NULL;
 SELECT * FROM presupuestos;
+SELECT * FROM separaciones;

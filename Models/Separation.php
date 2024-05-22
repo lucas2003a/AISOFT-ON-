@@ -21,9 +21,9 @@ class Separation extends Conection{
             $query = $this->conection->prepare("CALL spu_list_separation_tPersona(?,?,?)");
             $query->execute(
                 array(
-                    $dataSep['tipoPersona'],
-                    $dataSep['fechaInicio'],
-                    $dataSep['fechaFin']
+                    $dataSep["tipoPersona"],
+                    $dataSep["fechaInicio"],
+                    $dataSep["fechaFin"]
                 )
             );
 
@@ -41,13 +41,13 @@ class Separation extends Conection{
 
         try{
 
-            $query = $this->conection->prepare("CALL spu_list_separation_n_expediente(?,?,?,?)");
+            $query = $this->conection->prepare("CALL spu_list_separation_n_expediente_docNro(?,?,?,?)");
             $query->execute(
                 array(
-                    $dataSep['tipoPersona'],
-                    $dataSep['fechaInicio'],
-                    $dataSep['fechaFin'],
-                    $dataSep['n_expediente']
+                    $dataSep["tipoPersona"],
+                    $dataSep["fechaInicio"],
+                    $dataSep["fechaFin"],
+                    $dataSep["campoCriterio"]
                 )
             );
 

@@ -11,24 +11,26 @@ if(isset($_POST["action"])){
         case "listSeparationsTPersona": 
 
                 $dataObtained = [
-                    "tipoPersona"   =>['tipoPersona'],
-                    "fechaInicio"   =>['fechaInicio'],
-                    "fechaFin"      =>['fechaFin']
+                    "tipoPersona"   => $_POST['tipoPersona'],
+                    "fechaInicio"   => $_POST['fechaInicio'],
+                    "fechaFin"      => $_POST['fechaFin']
                 ];
 
                 echo json_encode($separation->listSeparationsTPersona($dataObtained));
 
             break;
 
-        case "listSeparationsNExpediente":
+        case "listSeparationsCampoCriterio":
             $dataObtained = [
-                "tipoPersona"   =>['tipoPersona'],
-                "fechaInicio"   =>['fechaInicio'],
-                "fechaFin"      =>['fechaFin'],
-                "n_expediente"  =>['n_expediente']
+                "tipoPersona"   =>  $_POST['tipoPersona'],
+                "fechaInicio"   =>  $_POST['fechaInicio'],
+                "fechaFin"      =>  $_POST['fechaFin'],
+                "campoCriterio"  =>  $_POST['campoCriterio']
             ];
 
             echo json_encode($separation->listSeparationsNExpediente($dataObtained));
+            break;
+
         case "listSeparationsById": 
             
                 $idseparacion = $_POST["idseparacion"];

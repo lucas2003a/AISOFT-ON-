@@ -662,6 +662,28 @@ END $$
 
 DELIMITER;
 
+DELIMITER $$
+CREATE PROCEDURE spu_list_onlyLots
+(
+    IN _idproyecto INT
+)
+BEGIN
+    SELECT 
+        act.idactivo,
+        proy.idproyecto,
+        proy.denominacion,
+        act.sublote,
+        act.estado
+        FROM activos act
+        INNER JOIN proyectos proy ON proy.idproyecto = act.idproyecto
+        WHERE act.tipo_activo = "LOTE"
+        AND act.estado = "SIN VENDER"
+        AND act.inactive_at IS NULL
+        AND proy.idproyecto = 1
+        ORDER BY act.sublote;
+END $$
+DELIMITER ;
+
 -- PERSONAS    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 DELIMITER $$
 
@@ -801,7 +823,22 @@ DELIMITER;
 
 -- CLIENTES ---------------------------------------------------------------------------------------------------------------------------------------
 DELIMITER $$
-
+CREATE PROCEDURE spu_list_clients_onlyNperson()
+BEGIN
+    SELECT 
+        clien.idcliente,
+        pers.documento_tipo,
+        pers.documento_nro,
+        pers.apellidos,
+        pers.nombres
+        FROM clientes clien
+        INNER JOIN personas pers ON pers.idpersona = clien.idpersona
+        WHERE clien.inactive_at IS NULL
+        AND pers.inactive_at IS NULL
+        ORDER BY pers.documento_nro ASC;
+END $$
+DELIMITER ;
+DELIMITER $$
 CREATE PROCEDURE spu_list_clients_tpersona(IN _tipo_persona VARCHAR(10))
 BEGIN
 	IF _tipo_persona = "NATURAL" THEN
@@ -1800,13 +1837,13 @@ BEGIN
 
     IF _tipo_persona = "NATURAL" THEN
 
-        SELECT * FROM vws_list_speractions_tpersona_natural
+        SELECT * FROM vws_list_separations_tpersona_natural
 		WHERE inactive_at_sep IS NULL
             AND inactive_at_client IS NULL
             AND create_at BETWEEN _fechaInicio AND _fechaFin;
 
     ELSEIF _tipo_persona = "JURÍDICA" THEN
-        SELECT * FROM vws_list_separactions_tpersona_juridica
+        SELECT * FROM vws_list_separations_tpersona_juridica
         WHERE inactive_at_sep IS NULL
             AND inactive_at_client IS NULL
             AND create_at BETWEEN _fechaInicio AND _fechaFin;
@@ -1829,12 +1866,12 @@ BEGIN
     );
 
     IF _tpersona = "NATURAL" THEN
-        SELECT * FROM vws_list_speractions_tpersona_natural_full
+        SELECT * FROM vws_list_separations_tpersona_natural_full
             WHERE idactivo = _idactivo
                 AND inactive_at IS NULL;
 
     ELSEIF _tpersona = "JURÍDICA" THEN
-        SELECT * FROM vws_list_separactions_tpersona_juridica_full
+        SELECT * FROM vws_list_separations_tpersona_juridica_full
             WHERE idactivo = _idactivo
                 AND inactive_at IS NULL;
     END IF;
@@ -1844,29 +1881,31 @@ DELIMITER;
 
 DELIMITER $$
 
-CREATE PROCEDURE spu_list_separation_n_expediente
+CREATE PROCEDURE spu_list_separation_n_expediente_docNro
 (
     IN _tipo_persona VARCHAR(10),
     IN _fechaInicio DATE,
     IN _fechaFin DATE,
-    IN _n_expediente VARCHAR(10)
+    IN _campoCriterio VARCHAR(12)
 )
 BEGIN
 
     IF _tipo_persona = "NATURAL" THEN
 
-        SELECT * FROM vws_list_speractions_tpersona_natural
+        SELECT * FROM vws_list_separations_tpersona_natural
             WHERE inactive_at_sep IS NULL
                 AND inactive_at_client IS NULL
                 AND create_at BETWEEN _fechaInicio AND _fechaFin
-                AND n_expediente LIKE CONCAT(_n_expediente,'%');
+                AND n_expediente LIKE CONCAT(_campoCriterio,'%')
+                OR documento_nro LIKE CONCAT(_campoCriterio,'%');
 
     ELSEIF _tipo_persona = "JURÍDICA" THEN
-        SELECT * FROM vws_list_separactions_tpersona_juridica
+        SELECT * FROM vws_list_separations_tpersona_juridica
         WHERE inactive_at_sep IS NULL
             AND inactive_at_client IS NULL
             AND create_at BETWEEN _fechaInicio AND _fechaFin
-           AND n_expediente LIKE CONCAT(_n_expediente,'%');
+           AND n_expediente LIKE CONCAT(_campoCriterio,'%')
+           OR documento_nro LIKE CONCAT(_campoCriterio,'%');
     END IF;
 END $$
 

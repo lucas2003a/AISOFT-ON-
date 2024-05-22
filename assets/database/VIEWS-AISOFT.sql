@@ -170,7 +170,7 @@ DELIMITER ;
 
 -- SEPARACIONES
 DELIMITER $$
-CREATE VIEW vws_list_seperations_tpersona_natural AS
+CREATE VIEW vws_list_separations_tpersona_natural AS
     SELECT 
 		sep.idseparacion,
         sep.n_expediente,
@@ -185,7 +185,7 @@ CREATE VIEW vws_list_seperations_tpersona_natural AS
 		sep.separacion_monto,
         sep.inactive_at AS inactive_at_sep,
         usuPers.nombres AS usuario,
-        sep.create_at
+        sep.CREATE_at
 		FROM separaciones AS sep
 		INNER JOIN activos AS act ON act.idactivo = sep.idactivo
         INNER JOIN proyectos AS proy ON proy.idproyecto = act.idproyecto
@@ -197,7 +197,7 @@ CREATE VIEW vws_list_seperations_tpersona_natural AS
 DELIMITER ;
 
 DELIMITER $$
-CREATE VIEW vws_list_seperations_tpersona_juridica AS
+CREATE VIEW vws_list_separations_tpersona_juridica AS
     SELECT 
 		sep.idseparacion,
         sep.n_expediente,
@@ -210,7 +210,7 @@ CREATE VIEW vws_list_seperations_tpersona_juridica AS
         persj.documento_tipo,
         persj.documento_nro,
 		sep.separacion_monto,
-		sep.create_at,
+		sep.CREATE_at,
         sep.inactive_at AS inactive_at_sep,
         usuPers.nombres AS usuario
 		FROM separaciones AS sep
@@ -224,7 +224,7 @@ CREATE VIEW vws_list_seperations_tpersona_juridica AS
 DELIMITER ;
 
 DELIMITER $$
-CREATE VIEW vws_list_seperations_tpersona_natural_full AS
+CREATE VIEW vws_list_separations_tpersona_natural_full AS
 SELECT 
 		sep.idseparacion,
         act.sublote,
@@ -239,7 +239,7 @@ SELECT
         conyPers.documento_tipo AS conyPers_documento_tipo,
         conyPers.documento_nro As conyPers_documento_nro,
         sep.separacion_monto,
-        sep.create_at,
+        sep.CREATE_at,
 		sep.imagen,
         sep.inactive_at,
         usuPers.nombres AS usuario
@@ -261,7 +261,7 @@ SELECT
 DELIMITER ;
 
 DELIMITER $$
-CREATE VIEW vws_list_seperations_tpersona_juridica_full AS
+CREATE VIEW vws_list_separations_tpersona_juridica_full AS
         SELECT
             sep.idseparacion,
             act.sublote,
@@ -273,7 +273,7 @@ CREATE VIEW vws_list_seperations_tpersona_juridica_full AS
             persj.documento_tipo,
             persj.documento_nro,
             sep.separacion_monto,
-            sep.create_at,
+            sep.CREATE_at,
             sep.imagen,
             usuPers.nombres AS usuario
             FROM separaciones AS sep
@@ -305,13 +305,13 @@ CREATE VIEW vws_list_refunds AS
         COALESCE(persj.documento_tipo,persn.documento_tipo) AS documento_tipo,
         COALESCE(persj.documento_nro,persn.documento_nro) AS documento_nro,
         dev.imagen,
-        dev.create_at,
+        dev.CREATE_at,
         dev.inactive_at,
         usuPers.nombres
         FROM devoluciones dev
         INNER JOIN separaciones sep ON sep.idseparacion = dev.idseparacion
-        LEFT JOIN vws_list_seperations_tpersona_juridica AS persj ON persj.idseparacion = dev.idseparacion
-        LEFT JOIN vws_list_seperations_tpersona_natural AS persn ON persn.idseparacion = dev.idseparacion
+        LEFT JOIN vws_list_separations_tpersona_juridica AS persj ON persj.idseparacion = dev.idseparacion
+        LEFT JOIN vws_list_separations_tpersona_natural AS persn ON persn.idseparacion = dev.idseparacion
         INNER JOIN usuarios usu ON usu.idusuario = dev.idusuario
         INNER JOIN personas AS usuPers ON usuPers.idpersona = usu.idpersona
         ORDER BY dev.iddevolucion DESC;

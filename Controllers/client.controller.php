@@ -165,6 +165,11 @@ if(isset($_POST["action"])){
 
             break;
         
+        case "listClientsOnlyNperson":
+            
+                echo json_encode($client->listClientsOnlyNperson());
+            break;
+            
         case "inactiveClient": 
             
                 $dataObtained = [
