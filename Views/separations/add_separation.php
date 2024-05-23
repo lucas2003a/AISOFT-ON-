@@ -80,7 +80,7 @@
 
         <!-- PROYECTOS -->
         <li class="nav-item">
-          <a class="nav-link active" href="../projects/index.php">
+          <a class="nav-link" href="../projects/index.php">
             <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
               <svg width="12px" height="12px" viewBox="0 0 42 42" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <title>office</title>
@@ -102,7 +102,7 @@
 
         <!-- CLIENTES -->
         <li class="nav-item">
-          <a class="nav-link" href="../Clients/index.php">
+          <a class="nav-link active" href="../Clients/index.php">
             <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
               <svg width="12px" height="12px" viewBox="0 0 42 42" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <title>office</title>
@@ -326,11 +326,10 @@
         <nav aria-label="breadcrumb">
           <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
             <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="#">Dashboard</a></li>
-            <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="#">Proyectos</a></li>
-            <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="#">Lotes</a></li>
-            <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Agregar lotes</li>
+            <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="#">Separaciones</a></li>
+            <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Agregar separación</li>
           </ol>
-          <h6 class="font-weight-bolder mb-0" id="cabezera">AGREGAR LOTE - </h6>
+          <h6 class="font-weight-bolder mb-0" id="cabezera">AGREGAR SEPARACIÓN</h6>
         </nav>
         <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
 
@@ -366,307 +365,161 @@
           <div class="card">
             <div class="card-body" style="padding: 50px">
               <div class="row">
-                <div class="col-lg-12">
+                <div class="h-50" style="display: flex; justify-content: center;">
+
+                  <div class="position-relative d-flex align-items-center justify-content-center h-100">
+                    <img class="w-100 position-relative z-index-2 pt-4" style="width: 100%;" id="file-view" src="../../media/logos/NoImage.jpg" alt="">
+                  </div>
+                </div>
+
+                <div>
+
                   <div class="d-flex flex-column h-100">
-                    <form class="row needs-validation" id="form-assset-set" novalidate>
-                      <div class="tab">
-                        <div class="row">
-                          <div class="col-md-6">
+                    <form class="row needs-validation" id="form-add-separation" novalidate>
+                      <div class="row">
+                        <div class="col-md-6">
 
-                            <!-- DATOS GENERALES -->
+                          <!-- DATOS GENERALES -->
 
-                            <!-- UBIGEO -->
-                            <div>
-                              <label for="ubigeo" class="form-label">Ubigeo</label>
-                              <input type="text" class="form-control" id="ubigeo" readonly>
-
+                          <!-- NRO EXPEDIENTE -->
+                          <div class="mt-4">
+                            <label for="nro_expediente" class="form-label">Nº de expediente</label>
+                            <input type="text" class="form-control" id="nro_expediente" placeholder="Nº de expediente" required autofocus>
+                            <div class="invalid-feedback">
+                              Necesitas ingresar el nro de expediente.
                             </div>
-
-                            <!-- ESTADO -->
-                            <div class="mt-4">
-                              <label for="estado" class="form-label">Estado</label>
-                              <input type="text" class="form-control" id="estado" value="SIN VENDER" readonly>
-
-                            </div>
-
-                            <!-- TIPO ACTIVO -->
-                            <div class="mt-4">
-                              <label for="tipo_activo" class="form-label">Tipo de propiedad</label>
-                              <select name="tipo_activo" class="form-select" id="tipo_activo" required>
-                                <option value="" default>Tipo de propiedad</option>
-                                <option value="LOTE">Lote</option>
-                                <option value="CASA">Casa</option>
-                              </select>
-                              <div class="invalid-feedback">
-                                Necesitas ingresar el tipo (casa/lote).
-                              </div>
-                              <div class="valid-feedback">
-                                Casa/lote registrado correctamente.
-                              </div>
-                            </div>
-
-                            <!-- PROPIETARIO LOTE -->
-                            <div class="mt-4">
-                              <label for="propietario_lote" class="form-label">Propietarios</label>
-                              <select name="propietario_lote" class="form-select" id="propietario_lote">
-                                <option value="A.I.F">A.I.F</option>
-                                <option value="TERCEROS">Terceros</option>
-                              </select>
-                              <div class="invalid-feedback">
-                                Necesitas ingresar el propietario.
-                              </div>
-                              <div class="valid-feedback">
-                                Propietario registrado correctamente.
-                              </div>
-                            </div>
-
-                            <!-- SUBLOTE -->
-                            <div class="mt-4">
-                              <label for="sublote" class="form-label">Sublote</label>
-                              <input type="text" class="form-control" id="sublote" placeholder="Sublote" required>
-                              <div class="invalid-feedback">
-                                Necesitas ingresar el sublote.
-                              </div>
-                              <div class="valid-feedback">
-                                Sublote registrado correctamente.
-                              </div>
-                            </div>
-
-                            <!-- DIRECCIÓN -->
-                            <div class="mt-4">
-                              <label for="direccion" class="form-label">Dirección</label>
-                              <input type="text" class="form-control" id="direccion" placeholder="Dirección" required>
-                              <div class="invalid-feedback">
-                                Necesitas ingresar una dirección.
-                              </div>
-                              <div class="valid-feedback">
-                                Dirección ingresada correctamente.
-                              </div>
-                            </div>
-
-                            <!-- IMAGEN -->
-                            <div class="form-group">
-                              <label for="in-image" class="label-img">
-                                <i class="material-icons"></i>
-                                <span class="title d-flex justify-content-center">Agregar imagen</span>
-                                <input type="file" accept=".jpg" id="in-image">
-                              </label>
+                            <div class="valid-feedback">
+                              Nº de expediente registrado correctamente.
                             </div>
                           </div>
-                          <div class="col-md-6">
 
-                            <div class="col-lg-12 ms-auto text-center mt-5 mt-lg-0">
-                              <div class="h-100" style="display: flex; justify-content: center;">
-
-                                <div class="position-relative d-flex align-items-center justify-content-center h-100">
-                                  <img class="w-100 position-relative z-index-2 pt-4" id="file-view" style="min-height: max-content; padding: 2rem;" src="../../media/lotes/NoImage.jpg" alt="">
-                                </div>
-                              </div>
+                          <!-- PROYECTOS -->
+                          <div class="mt-4">
+                            <label for="idproyecto" class="form-label">Proyectos</label>
+                            <select class="form-select custom-select-scroll" id="idproyecto" required>
+                              <option selected disabled value="">Proyectos</option>
+                            </select>
+                            <div class="invalid-feedback">
+                              Necesitas escojer un proyecto.
+                            </div>
+                            <div class="valid-feedback">
+                              Proyecto escojido correctamente.
                             </div>
                           </div>
+
+                          <!-- LOTES -->
+                          <div class="mt-4">
+                            <label for="idlote" class="form-label">Lote</label>
+                            <select class="form-select custom-select-scroll" id="idlote" required>
+                              <option selected disabled value="">Lote</option>
+                            </select>
+                            <div class="invalid-feedback">
+                              Necesitas escojer una un lote.
+                            </div>
+                            <div class="valid-feedback">
+                              Lote escojido correctamente.
+                            </div>
+                          </div>
+
+                          <!-- TIPO DE PERSONA -->
+                          <div class="mt-4">
+                            <label for="tipo_persona" class="form-label">Tipo de persona</label>
+                            <select class="form-select custom-select-scroll" id="tipo_persona" required>
+                              <option selected disabled value="">Tipo de persona</option>
+                            </select>
+                            <div class="invalid-feedback">
+                              Necesitas escojer un tipo de persona.
+                            </div>
+                            <div class="valid-feedback">
+                              Tipo de persona escojida correctamente.
+                            </div>
+                          </div>
+
+                          <!-- IMAGEN -->
+                          <div class="form-group mt-4">
+                            <label for="in-image" class="label-img">
+                              <i class="material-icons"></i>
+                              <span class="title" style="display: flex; justify-content: center;">Agregar imagen de comprobante</span>
+                              <input type="file" accept=".jpg" id="in-image">
+                            </label>
+                          </div>
+                          <div class="d-grid p-3">
+
+                            <button class="btn btn-success" type="submit" id="guardar" disabled>Guardar</button>
+                          </div>
+
                         </div>
-                        <div class="d-flex justify-content-center">
-                          <div class="btn-group">
-                            <button type="button" class="btn btn-secondary prevBtn" disabled>Anterior</button>
-                            <button type="button" class="btn btn-success nextBtn">Siguiente</button>
-                          </div>
-                        </div>
-                      </div>
 
-                      <div class="tab">
-                        <div class="row">
-                          <div class="col-md-6">
-
-                            <!-- DESCRPCIÓN -->
-
-                            <!-- ÁREA -->
-                            <div>
-                              <label for="area" class="form-label">Área</label>
-                              <input type="number" class="form-control" id="area" min="1.0" value="000.00" placeholder="Àrea (m2)" required>
-                              <div class="invalid-feedback">
-                                Necesitas ingresar el área del lote.
-                              </div>
-                              <div class="valid-feedback">
-                                Área del lote registrado correctamente.
-                              </div>
+                        <div class="col-md-6">
+                          <!-- CLIENTE -->
+                          <div class="mt-4">
+                            <label for="idcliente" class="form-label">Cliente</label>
+                            <select class="form-select custom-select-scroll" id="idcliente" required>
+                              <option selected disabled value="">Cliente</option>
+                            </select>
+                            <div class="invalid-feedback">
+                              Necesitas escojer una cliente.
                             </div>
-
-                            <!-- ZONAS COMUNES -->
-                            <div class="mt-4">
-                              <label for="z-comunes" class="form-label">Zonas comunes</label>
-                              <input type="number" class="form-control" id="z-comunes" value="0" min="1.0" max="100" placeholder="Zonas comúnes (%)">
-
-                            </div>
-
-
-                            <!-- MONEDA VENTA -->
-                            <div class="mt-4">
-                              <label for="moneda-venta" class="form-label">Moneda de venta</label>
-                              <select class="form-select custom-select-scroll" id="moneda-venta" required>
-                                <option value="">Tipo moneda</option>
-                                <option value="USD">Dólares</option>
-                                <option value="SOL">Soles</option>
-                              </select>
-                              <div class="invalid-feedback">
-                                Necesitas ingresar la moneda de venta.
-                              </div>
-                              <div class="valid-feedback">
-                                Moneda de venta registrada correctamente.
-                              </div>
-                            </div>
-
-                            <!-- PRECIO LOTE -->
-                            <div class="mt-4">
-                              <label for="precio_lote" class="form-label">Precio del lote</label>
-                              <input type="number" class="form-control" id="precio_lote" placeholder="Precio de venta" maxlength="7" minlength="7" min="1.00" value="0.00" required autofocus>
-                              <div class="invalid-feedback">
-                                Necesitas ingresar el precio del lote.
-                              </div>
-                              <div class="valid-feedback">
-                                Precio del lote registrado correctamente.
-                              </div>
-                            </div>
-
-                            <!-- PRESUPUESTO -->
-                            <div class="mt-4">
-                              <label for="idpresupuesto" class="form-label">Presupuesto</label>
-                              <select class="form-select custom-select-scroll" id="idpresupuesto">
-                                <option value="">Presupuesto</option>
-                              </select>
-                              <div class="invalid-feedback">
-                                Necesitas ingresar el presupuesto.
-                              </div>
-                              <div class="valid-feedback">
-                                Presupuesto registrado correctamente.
-                              </div>
-                            </div>
-
-                            <!-- PRECIO CONSTRUCCION -->
-                            <div class="mt-4">
-                              <label for="precio_construccion" class="form-label">Precio de la construcción</label>
-                              <input type="number" class="form-control" id="precio_construccion" placeholder="Precio de construcción" maxlength="7" minlength="7" min="1.00" value="0.00">
-                              <div class="invalid-feedback">
-                                Necesitas ingresar el precio de construcción.
-                              </div>
-                              <div class="valid-feedback">
-                                Precio de construcción registrado correctamente.
-                              </div>
-                            </div>
-
-                            <!-- PRECIO VENTA -->
-                            <div class="mt-4">
-                              <label for="precio_venta" class="form-label">Precio de la venta</label>
-                              <input type="number" class="form-control" id="precio_venta" placeholder="Precio de venta" maxlength="8" minlength="8" min="1.00" value="0.00">
-                              <div class="invalid-feedback">
-                                Necesitas ingresar el precio de venta.
-                              </div>
-                              <div class="valid-feedback">
-                                Precio de venta registrado correctamente.
-                              </div>
-                            </div>
-
-                            <!-- PRTIDA ELECTRÓNICA -->
-                            <div class="mt-4">
-                              <label for="partida-elect" class="form-label">Partida electrónica</label>
-
-                              <textarea name="partida-elect" class="form-control" id="partida-elect" cols="38" rows="3" required></textarea>
-                              <div class="invalid-feedback">
-                                Necesitas ingresar la partida electrónica.
-                              </div>
-                              <div class="valid-feedback">
-                                Partida electrónica registrada correctamente.
-                              </div>
+                            <div class="valid-feedback">
+                              Cliente escojido correctament
                             </div>
                           </div>
 
-                          <div class="col-md-6">
-
-                            <!-- LATITUD -->
-                            <div>
-                              <label for="latitud" class="form-label">Latitud</label>
-
-                              <input type="text" name="partida-elect" class="form-control" id="latitud" placeholder="Latitud">
-                              <div class="invalid-feedback">
-                                Necesitas ingresar la latitud.
-                              </div>
-                              <div class="valid-feedback">
-                                Latitud registrada correctamente.
-                              </div>
+                          <!-- CONYUGUE -->
+                          <div class="mt-4">
+                            <label for="idconyugue" class="form-label">Conyugue</label>
+                            <select class="form-select custom-select-scroll" id="idconyugue">
+                              <option selected disabled value="">Conyugue</option>
+                            </select>
+                            <div class="invalid-feedback">
+                              Necesitas escojer una cliente.
                             </div>
-
-                            <!-- LONGITUD -->
-                            <div class="mt-4">
-                              <label for="longitud" class="form-label">Longitud</label>
-
-                              <input type="text" name="longitud" class="form-control" id="longitud" placeholder="Longitud">
-                              <div class="invalid-feedback">
-                                Necesitas ingresar la longitud.
-                              </div>
-                              <div class="valid-feedback">
-                                Longitud registrada correctamente.
-                              </div>
-                            </div>
-                            <!-- PERIMTETRO -->
-                            <label for="longitud" class="form-label">Perímetro</label>
-                            <div id="perim">
-                              <div id="patern">
-
-                                <div class="row">
-                                  <div class="col-md-11">
-
-                                    <div class="row">
-                                      <div class="col-md-6 mb-2">
-                                        <input type="text" class="form-control perim-key" name="clave" id="clave">
-                                      </div>
-                                      <div class="col-md-6">
-                                        <input type="text" class="form-control perim-value" name="valor" id="valor">
-                                      </div>
-                                    </div>
-                                  </div>
-                                  <div class="col-md-1">
-                                    <button type="button" class="btn btn-success pluss" id="add-textBox">+</button>
-                                  </div>
-                                </div>
-                              </div>
+                            <div class="valid-feedback">
+                              Cliente escojido correctament
                             </div>
                           </div>
-                        </div>
-                        <div class="d-flex justify-content-center">
 
-                          <div class="btn-group mt-4">
-                            <button type="button" class="btn btn-secondary prevBtn">Anterior</button>
-                            <button type="submit" class="btn btn-success submit" id="guardar">Guardar</button>
+                          <!-- MONTO DE SEPARACIÓN -->
+                          <div class="mt-4">
+                            <label for="monto_separacion" class="form-label">Monto de separación</label>
+                            <input type="number" class="form-control" id="monto_separacion" placeholder="Monto de separación" value="0.00" min="1.00" required>
+                            <div class="invalid-feedback">
+                              Necesitas ingresar el monto de separación.
+                            </div>
+                            <div class="valid-feedback">
+                              Monto de separación ingresado correctamente.
+                            </div>
                           </div>
                         </div>
                       </div>
                     </form>
-
                   </div>
                 </div>
+
               </div>
             </div>
           </div>
         </div>
       </div>
+    </div>
 
-      <!-- /FORMULARIO -->
 
-      <footer class="footer pt-3  ">
-        <div class="container-fluid">
-          <div class="row align-items-center justify-content-lg-between">
-            <div class="col-lg-6 mb-lg-0 mb-4">
-              <div class="copyright text-center text-sm text-muted text-lg-start">
-                © <script>
-                  document.write(new Date().getFullYear())
-                </script>,
-                auspiciado por
-                <a href="https://aifperu.com/" class="font-weight-bold" target="_blank">A.I.F Contratistas Generales S.A.C</a>
-                (sistema web).
-              </div>
+    <footer class="footer pt-3  ">
+      <div class="container-fluid">
+        <div class="row align-items-center justify-content-lg-between">
+          <div class="col-lg-6 mb-lg-0 mb-4">
+            <div class="copyright text-center text-sm text-muted text-lg-start">
+              © <script>
+                document.write(new Date().getFullYear())
+              </script>,
+              auspiciado por
+              <a href="https://www.creative-tim.com" class="font-weight-bold" target="_blank">A.I.F Contratistas Generales S.A.C</a>
+              (sistema web).
             </div>
           </div>
         </div>
-      </footer>
+      </div>
+    </footer>
     </div>
   </main>
   <div class="fixed-plugin">
@@ -742,8 +595,6 @@
   <script src="../../assets/js/globalFunctions.js"></script>
   <script src="../../assets/js/sweetAlert.js"></script>
   <script src="../../assets/js/formMultiSteps.js"></script>
-  <script src="../../assets/js/projects/interactionForms.js"></script>
-  <script src="../../assets/js/renderInputs.js"></script>
 
   <!-- <script src="../../assets/js/renderUbigeo.js"></script>  -->
 
@@ -761,298 +612,6 @@
     const $ = id => global.$(id);
     const $All = id => global.$All(id);
 
-    //OBTIENE EL ID DEL URL
-    const stringQuery = window.location.search;
-
-    const url = new URLSearchParams(stringQuery);
-
-    const code = url.get("idproy");
-    const codeName = url.get("name");
-
-    const idProyecto = atob(code);
-    const name = atob(codeName);
-
-    let oldImage;
-    let AllDataAssets;
-    let dataPoject;
-    let precioContstruccion = 0;
-
-    //Obtiene los presupuestos
-    async function getBudgets() {
-
-      try {
-        let url = "../../Controllers/budget.controller.php";
-
-        let params = new FormData();
-        params.append("action", "listBudgetsAsset");
-
-        let results = await global.sendAction(url, params);
-
-        if (results) {
-
-          results.forEach(option => {
-
-            let newTag = document.createElement("option");
-            newTag.value = option.idpresupuesto;
-            newTag.innerText = option.codigo;
-            newTag.dataset.monto = option.total;
-
-            $("#idpresupuesto").appendChild(newTag);
-          })
-        }
-      } catch (e) {
-        console.error(e)
-      }
-    }
-
-    async function getProjects(id) {
-
-      try {
-
-        let url = `../../Controllers/project.controller.php`;
-
-        let params = new FormData();
-
-        params.append("action", "listProjectId");
-        params.append("idproyecto", idProyecto);
-
-        let result = await global.sendAction(url, params);
-
-        if (result) {
-
-          dataPoject = result;
-
-          $("#cabezera").innerHTML += result.denominacion;
-
-          $("#ubigeo").value = `${result.distrito} - ${result.provincia} - ${result.departamento}`
-        }
-      } catch (e) {
-        console.error(e);
-      }
-    }
-
-    function renderInputs(key, value) {
-
-      /*INPUT KEY */
-      let inputKey = document.createElement("input");
-      inputKey.classList.add("form-control", "perim-key")
-      inputKey.value = key;
-
-      /* INPUT VALUE */
-      let inputValue = document.createElement("input");
-      inputValue.classList.add("form-control", "perim-value");
-      inputValue.value = value;
-
-      /* DIV KEY */
-      let divKey = document.createElement("div");
-      divKey.classList.add("col-md-6");
-
-      /* DIV VALUE */
-      let divValue = document.createElement("div");
-      divValue.classList.add("col-md-6");
-
-      divKey.appendChild(inputKey);
-      divValue.appendChild(inputValue);
-
-
-      let rowInputs = document.createElement("div");
-      rowInputs.classList.add("row", "mt.2");
-
-      rowInputs.appendChild(divKey);
-      rowInputs.appendChild(divValue);
-
-      let divInputs = document.createElement("div");
-      divInputs.classList.add("col-md-11");
-
-      divInputs.appendChild(rowInputs);
-
-      /* -------------------------------------------------- */
-
-      /* BOTÓN "-" */
-      let buttonLess = document.createElement("button");
-      buttonLess.classList.add("btn", "btn-danger", "less", "mt-2", "active");
-      buttonLess.setAttribute("id", "add-textBox");
-      buttonLess.setAttribute("type", "button");
-      buttonLess.innerText = "-";
-
-      let divButton = document.createElement("div");
-      divButton.classList.add("col-md-1");
-
-      divButton.appendChild(buttonLess);
-
-      /* -------------------------------------------------- */
-
-      let rowMaster = document.createElement("div");
-      rowMaster.classList.add("row");
-
-      rowMaster.appendChild(divInputs);
-      rowMaster.appendChild(divButton);
-
-      let firstRow = $("#perim").firstChild;
-      $("#perim").insertBefore(rowMaster, firstRow);
-    }
-
-    /**
-     * Funcion para obtener los lotes asociados a un idproyecto
-     */
-    async function getAssetsAll(id) {
-      try {
-        let url = "../../Controllers/asset.controller.php";
-        let params = new FormData();
-
-        params.append("action", "listAssetByIProyect");
-        params.append("idproyecto", id);
-
-        let results = await global.sendAction(url, params);
-
-        if (results) {
-
-          AllDataAssets = results;
-
-        }
-      } catch (e) {
-        console.error(e);
-      }
-    };
-
-    /**
-     * FUNCIÓN PARA COMPARA INFORMACIÓN
-     */
-    async function searchInfo(array, column, param) {
-
-      if (column == "sublote") {
-
-        return new Promise((resolve, reject) => {
-
-          for (let element of array) {
-
-            const found = array.find(element => element[column] == param);
-
-            if (found) {
-
-              sAlert.sweetWarning("Se ha encontrado coincidencias", `"${param}" ya existe, ingresa otro`);
-              $("#direccion").setAttribute("readonly", true);
-
-              reject();
-            } else {
-
-              $("#sublote").removeAttribute("autofocus");
-              $("#direccion").removeAttribute("readonly");
-              $("#direccion").focus();
-
-              resolve();
-            }
-          }
-        });
-      }
-    };
-
-    async function addAsset() {
-
-      try {
-
-        const keyClass = ".form-control.perim-key";
-        const keyValue = ".form-control.perim-value";
-
-        const json = await global.getJson(keyClass, keyValue)
-
-        let url = "../../Controllers/asset.controller.php";
-
-        let params = new FormData();
-
-        let img = $("#in-image").files[0] != null ? $("#in-image").files[0] : oldImage;
-
-        params.append("action", "addAsset");
-        params.append("idproyecto", idProyecto);
-        params.append("tipo_activo", $("#tipo_activo").value);
-        params.append("imagen", img);
-        params.append("estado", $("#estado").value);
-        params.append("sublote", $("#sublote").value);
-        params.append("direccion", $("#direccion").value);
-        params.append("moneda_venta", $("#moneda-venta").value);
-        params.append("area_terreno", $("#area").value);
-        params.append("zcomunes_porcent", $("#z-comunes").value);
-        params.append("partida_elect", $("#partida-elect").value);
-        params.append("latitud", $("#latitud").value);
-        params.append("longitud", $("#longitud").value);
-        params.append("perimetro", json);
-        params.append("idpresupuesto", $("#idpresupuesto").value);
-        params.append("propietario_lote", $("#propietario_lote").value);
-        params.append("precio_lote", $("#precio_lote").value);
-        params.append("precio_construccion", $("#precio_construccion").value);
-        params.append("precio_venta", $("#precio_venta").value);
-
-        let results = await global.sendAction(url, params);
-
-        if (results) {
-
-          console.log(results);
-
-          if (results.filasAfect > 0) {
-
-            let codeName = btoa(dataPoject.denominacion)
-            let codeid = btoa(idProyecto);
-            sAlert.sweetSuccess("Registro agregado", "El registro se ha agregado correctamente", () => {
-
-              window.location.href = `./index.php?id=${codeid}&name=${codeName}`;
-            });
-          } else {
-            sAlert.alertError("No se agregó el registro", "Vuelve a intentarlo");
-          }
-        }
-
-      } catch (e) {
-        console.error(e);
-      }
-    }
-
-    $("#sublote").addEventListener("blur", (e) => {
-
-      let sublote = $("#sublote").value;
-
-      if (sublote != "") {
-
-        searchInfo(AllDataAssets, "sublote", sublote);
-
-      } else {
-
-        $("#direccion").removeAttribute("readonly");
-        $("#direccion").focus();
-      }
-    });
-
-    $("#tipo_activo").addEventListener("change", (e) => {
-      let tipoActivo = $("#tipo_activo").value;
-
-      if (tipoActivo == "CASA") {
-        $("#precio_lote").disabled = true;
-      }else{
-        $("#precio_lote").disabled = false;
-      }
-    });
-
-    $("#precio_lote").addEventListener("input", (e) => {
-      let precioLote = Number.parseFloat(e.target.value || 0);
-
-      let precioConstruccion = Number.parseFloat($("#precio_construccion").value == false ? 0 : $("#precio_construccion").value);
-
-      $("#precio_venta").value = precioLote + precioConstruccion;
-
-    })
-
-    $("#idpresupuesto").addEventListener("change", () => {
-
-      let presupuesto = $("#idpresupuesto").options[$("#idpresupuesto").selectedIndex].dataset.monto;
-      let monto = Number.parseFloat(presupuesto);
-      let precioLote = Number.parseFloat($("#precio_lote").value || 0);
-
-      $("#precio_construccion").value = monto;
-      $("#precio_venta").value = monto + precioLote;
-    });
-
-    getBudgets();
-    getProjects(idProyecto);
-    getAssetsAll(idProyecto);
 
     /* --------------------------------- FUNCIÓN DE VALIDACIÓN --------------------------------------------------------- */
 

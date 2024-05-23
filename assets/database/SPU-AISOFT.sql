@@ -435,7 +435,7 @@ BEGIN
                 NULLIF(_perimetro,""),
                 NULLIF(_idpresupuesto,""),
                 _propietario_lote,
-                _precio_lote,
+                nullif(_precio_lote,""),
                 NULLIF(_precio_construccion, ""), 
                 _precio_venta,
                 _idusuario
@@ -489,7 +489,7 @@ BEGIN
             perimetro 		= NULLIF(_perimetro, ""),
             idpresupuesto	= NULLIF(_idpresupuesto, ""),
             propietario_lote = _propietario_lote,
-            precio_lote		= precio_lote,
+            precio_lote		= NULLIF(precio_lote,""),
             precio_construccion = NULLIF(_precio_construccion,""),
             precio_venta 	= _precio_venta,
             precio_venta	= _precio_venta,
@@ -679,11 +679,56 @@ BEGIN
         WHERE act.tipo_activo = "LOTE"
         AND act.estado = "SIN VENDER"
         AND act.inactive_at IS NULL
-        AND proy.idproyecto = 1
+        AND proy.idproyecto = _idproyecto
         ORDER BY act.sublote;
 END $$
 DELIMITER ;
 
+DELIMITER $$
+CREATE PROCEDURE spu_list_onlyHouses
+(
+    IN _idproyecto INT
+)
+BEGIN
+    SELECT 
+        act.idactivo,
+        proy.idproyecto,
+        proy.denominacion,
+        act.sublote,
+        act.estado
+        FROM activos act
+        INNER JOIN proyectos proy ON proy.idproyecto = act.idproyecto
+        WHERE act.tipo_activo = "CASA"
+        AND act.estado = "SIN VENDER"
+        AND act.inactive_at IS NULL
+        AND proy.idproyecto = _idproyecto
+        ORDER BY act.sublote;
+END $$
+DELIMITER ;
+
+DELIMITER $$
+CREATE PROCEDURE spu_list_LotsAndHouses
+(
+    IN _idproyecto INT
+)
+BEGIN
+    SELECT 
+        act.idactivo,
+        proy.idproyecto,
+        proy.denominacion,
+        act.sublote,
+        act.estado
+        FROM activos act
+        INNER JOIN proyectos proy ON proy.idproyecto = act.idproyecto
+        WHERE act.tipo_activo = "LOTE"
+        AND act.estado = "SIN VENDER"
+        AND act.inactive_at IS NULL
+        AND proy.idproyecto = _idproyecto
+        AND JSON_LENGTH(JSON_EXTRACT(act.det_casa,'$.clave')) > 0
+        AND JSON_LENGTH(JSON_EXTRACT(act.det_casa,'$.valor')) > 0
+        ORDER BY act.sublote;
+END $$
+DELIMITER ;
 -- PERSONAS    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 DELIMITER $$
 
@@ -1826,7 +1871,13 @@ DELIMITER;
 
 -- SEPARACIONES   ////////////////////////////////////////////////////////////////////////////////////////////
 DELIMITER $$
+CREATE PROCEDURE spu_list_separations()
+BEGIN
+    SELECT 
+END $$
+DELIMITER ;
 
+DELIMITER $$
 CREATE PROCEDURE spu_list_separation_tPersona
 (
     IN _tipo_persona VARCHAR(10),

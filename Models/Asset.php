@@ -2,7 +2,8 @@
 
 require_once "Conection.php";
 
-class Asset extends Conection{
+class Asset extends Conection
+{
 
     private $conection;
 
@@ -14,25 +15,26 @@ class Asset extends Conection{
     /**
      * Método para listar los lotes por el idproyecto
      */
-    public function listAssetByIdProyect($idproyecto = 0){
+    public function listAssetByIdProyect($idproyecto = 0)
+    {
 
-        try{
+        try {
 
             $query = $this->conection->prepare("CALL spu_list_assets_idProject(?)");
             $query->execute(array($idproyecto));
 
             return $query->fetchAll(PDO::FETCH_ASSOC);
-
-        }catch(Exception $e){
+        } catch (Exception $e) {
             die($e->getMessage());
         }
     }
     /**
      * Método para listar los lotes por el idproyecto y el tipo de persona
      */
-    public function listAssetProjectId($dataAsset = []){
+    public function listAssetProjectId($dataAsset = [])
+    {
 
-        try{
+        try {
 
             $query = $this->conection->prepare("CALL spu_list_assets_short_idpr(?,?)");
             $query->execute(array(
@@ -42,8 +44,7 @@ class Asset extends Conection{
             ));
 
             return $query->fetchAll(PDO::FETCH_ASSOC);
-
-        }catch(Exception $e){
+        } catch (Exception $e) {
             die($e->getMessage());
         }
     }
@@ -51,16 +52,16 @@ class Asset extends Conection{
     /**
      * Método para listar un lote por el idactivo
      */
-    public function listAssetId($idactivo = 0){
+    public function listAssetId($idactivo = 0)
+    {
 
-        try{
+        try {
 
             $query = $this->conection->prepare("CALL spu_list_assets_by_id(?)");
             $query->execute(array($idactivo));
 
             return $query->fetch(PDO::FETCH_ASSOC);
-
-        }catch(Exception $e){
+        } catch (Exception $e) {
             die($e->getMessage());
         }
     }
@@ -68,9 +69,10 @@ class Asset extends Conection{
     /**
      * Método para lista un lote por el idproyecto y el código del lote
      */
-    public function listAssetPASublote($dataAsset = []){
+    public function listAssetPASublote($dataAsset = [])
+    {
 
-        try{
+        try {
 
             $query = $this->conection->prepare("CALL spu_list_assets_by_sublote(?,?)");
             $query->execute(
@@ -81,8 +83,7 @@ class Asset extends Conection{
             );
 
             return $query->fetchAll(PDO::FETCH_ASSOC);
-
-        }catch(Exception $e){
+        } catch (Exception $e) {
             die($e->getMessage());
         }
     }
@@ -90,9 +91,10 @@ class Asset extends Conection{
     /**
      * Método para registrar un lote
      */
-    public function addAsset($dataAsset = []){
+    public function addAsset($dataAsset = [])
+    {
 
-        try{
+        try {
 
             $query = $this->conection->prepare("CALL spu_add_assets(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
             $query->execute(
@@ -120,8 +122,7 @@ class Asset extends Conection{
             );
 
             return $query->fetch(PDO::FETCH_ASSOC);
-
-        }catch(Exception $e){
+        } catch (Exception $e) {
             die($e->getMessage());
         }
     }
@@ -129,9 +130,10 @@ class Asset extends Conection{
     /**
      * Método para actualizar un lote
      */
-    public function setAsset($dataAsset = []){
-         
-        try{
+    public function setAsset($dataAsset = [])
+    {
+
+        try {
 
             $query = $this->conection->prepare("CALL spu_set_assets(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
             $query->execute(
@@ -160,8 +162,7 @@ class Asset extends Conection{
             );
 
             return $query->fetch(PDO::FETCH_ASSOC);
-
-        }catch(Exception $e){
+        } catch (Exception $e) {
             die($e->getMessage());
         }
     }
@@ -169,9 +170,10 @@ class Asset extends Conection{
     /**
      * Método para "inactivar" un lote
      */
-    public function inactiveAsset($dataAsset = []){
+    public function inactiveAsset($dataAsset = [])
+    {
 
-        try{
+        try {
 
             $query = $this->conection->prepare("CALL spu_inactive_assets(?,?)");
             $query->execute(
@@ -182,8 +184,7 @@ class Asset extends Conection{
             );
 
             return $query->fetch(PDO::FETCH_ASSOC);
-
-        }catch(Exception $e){
+        } catch (Exception $e) {
             die($e->getMessage());
         }
     }
@@ -191,16 +192,16 @@ class Asset extends Conection{
     /**
      * Método para recuperar un lote "inactivo"
      */
-    public function restoreAsset($idactivo = 0){
-         
-        try{
+    public function restoreAsset($idactivo = 0)
+    {
+
+        try {
 
             $query = $this->conection->prepare("CALL spu_restore_assets(?)");
             $query->execute(array($idactivo));
 
             return $query->fetch(PDO::FETCH_ASSOC);
-            
-        }catch(Exception $e){
+        } catch (Exception $e) {
             die($e->getMessage());
         }
     }
@@ -209,9 +210,10 @@ class Asset extends Conection{
      * Método para actualizar los detalles de la casa de un lote
      * 
      */
-    public function setDetAssetBuid($dataAsset = []){
+    public function setDetAssetBuid($dataAsset = [])
+    {
 
-        try{
+        try {
 
             $query =  $this->conection->prepare("CALL spu_set_det_build(?,?,?)");
             $query->execute(
@@ -224,25 +226,24 @@ class Asset extends Conection{
             );
 
             return $query->fetch(PDO::FETCH_ASSOC);
-        }
-        catch(Exception $e){
+        } catch (Exception $e) {
             die($e->getMessage());
         }
     }
-    
+
     /**
      * Método para listar los lotes para los reportes
      */
-    public function getLotsReports($idproyecto = 0){
+    public function getLotsReports($idproyecto = 0)
+    {
 
-        try{
-            
+        try {
+
             $query = $this->conection->prepare("CALL spu_get_lot_reports(?)");
             $query->execute(array($idproyecto));
 
             return $query->fetchAll(PDO::FETCH_ASSOC);
-
-        }catch(Exception $e){
+        } catch (Exception $e) {
             die($e->getMessage());
         }
     }
@@ -250,9 +251,10 @@ class Asset extends Conection{
     /**
      * Método para actualizar el idpresupuesto
      */
-    public function setIdBudget($dataAsset = []){
+    public function setIdBudget($dataAsset = [])
+    {
 
-        try{
+        try {
 
             $query = $this->conection->prepare("CALL spu_set_idpresupuesto(?,?,?)");
             $query->execute(
@@ -264,8 +266,7 @@ class Asset extends Conection{
             );
 
             return $query->fetch(PDO::FETCH_ASSOC);
-        }
-        catch(Exception $e){
+        } catch (Exception $e) {
             die($e->getMessage());
         }
     }
@@ -273,16 +274,16 @@ class Asset extends Conection{
     /**
      * Lista los lotes sin sin presupuesto
      */
-    public function listLotsNoBudgets(){
+    public function listLotsNoBudgets()
+    {
 
-        try{
+        try {
 
             $query = $this->conection->prepare("CALL spu_list_lots_noBudgets()");
             $query->execute();
 
             return $query->fetchAll(PDO::FETCH_ASSOC);
-        }
-        catch(Exception $e){
+        } catch (Exception $e) {
             die($e->getMessage());
         }
     }
@@ -290,16 +291,16 @@ class Asset extends Conection{
     /**
      * Lista los lotes con presupuesto 
      */
-    public function listLotsWithBudget(){
+    public function listLotsWithBudget()
+    {
 
-        try{
+        try {
 
             $query = $this->conection->prepare("CALL spu_list_lots_withBudgets()");
             $query->execute();
 
             return $query->fetchAll(PDO::FETCH_ASSOC);
-        }
-        catch(Exception $e){
+        } catch (Exception $e) {
             die($e->getMessage());
         }
     }
@@ -307,16 +308,16 @@ class Asset extends Conection{
     /**
      * Lista los lotes por el idpresupuesto
      */
-    public function listLotsByIdpresupuesto($idpresupuesto = 0){
+    public function listLotsByIdpresupuesto($idpresupuesto = 0)
+    {
 
-        try{
+        try {
 
             $query = $this->conection->prepare("CALL spu_list_lots_ByIdBudget(?)");
             $query->execute(array($idpresupuesto));
 
             return $query->fetchAll(PDO::FETCH_ASSOC);
-        }
-        catch(Exception $e){
+        } catch (Exception $e) {
             die($e->getMessage());
         }
     }
@@ -324,16 +325,16 @@ class Asset extends Conection{
     /**
      * Lista los lotes si contienen o no contien el idpresupuesto
      */
-    public function listLostForBudget($idpresupuesto = 0){
+    public function listLostForBudget($idpresupuesto = 0)
+    {
 
-        try{
+        try {
 
             $query = $this->conection->prepare("CALL spu_list_lots_ForBudget(?)");
             $query->execute(array($idpresupuesto));
 
             return $query->fetchAll(PDO::FETCH_ASSOC);
-        }
-        catch(Exception $e){
+        } catch (Exception $e) {
             die($e->getMessage());
         }
     }
@@ -341,17 +342,49 @@ class Asset extends Conection{
     /**
      * Lista solo los LOTES en estado SIN VENDER
      */
-    public function listOnlyLots(){
-        try{
-            
-            $query = $this->conection->prepare("CALL spu_list_onlyLots()");
-            $query->execute();
+    public function listOnlyLots($idproyecto = 0)
+    {
+        try {
+
+            $query = $this->conection->prepare("CALL spu_list_onlyLots(?)");
+            $query->execute(array($idproyecto));
 
             return $query->fetchAll(PDO::FETCH_ASSOC);
+        } catch (Exception $e) {
+            die($e->getMessage());
         }
-        catch(Exception $e){
+    }
+
+    /**
+     * Método para listar solo las CASAS con estado SIN VENDER
+     */
+    public function listOnlyHouses($idproyecto = 0)
+    {
+
+        try {
+
+            $query = $this->conection->prepare("CALL spu_list_onlyHouses(?)");
+            $query->execute(array($idproyecto));
+
+            return $query->fetchAll(PDO::FETCH_ASSOC);
+        } catch (Exception $e) {
+            die($e->getMessage());
+        }
+    }
+
+    /**
+     * Método para listar los lotes con detalle de construcción = VENTA DE LOTE Y CASA
+     */
+    public function listLotsAndHouses($idproyecto = 0)
+    {
+        try {
+
+            $query = $this->conection->prepare("CALL spu_list_LotsAndHouses(?)");
+            $query->execute(array($idproyecto));
+
+            return $query->fetchAll(PDO::FETCH_ASSOC);
+        } catch (Exception $e) {
             die($e->getMessage());
         }
     }
 }
-?>

@@ -273,11 +273,11 @@ CREATE TABLE activos(
     partida_elect 		VARCHAR(100) 		NOT NULL,
     latitud 			VARCHAR(20) 		NULL,
     longitud 			VARCHAR(20) 		NULL,
-    perimetro			JSON				NOT NULL DEFAULT '{"clave" :[""], "valor":[""]}',
-    det_casa 			JSON 				NOT NULL DEFAULT '{"clave" :[""], "valor":[""]}',
+    perimetro			JSON				NOT NULL DEFAULT '{"clave" :[], "valor":[]}',
+    det_casa 			JSON 				NOT NULL DEFAULT '{"clave" :[], "valor":[]}',
     idpresupuesto		INT					NULL,
     propietario_lote 	VARCHAR(70)			NOT NULL,
-    precio_lote 		DECIMAL(8,2)		NOT NULL,
+    precio_lote 		DECIMAL(8,2)		NULL,
     precio_construccion	DECIMAL(8,2)		NULL,
     precio_venta 		DECIMAL(8,2) 		NOT NULL,
 	create_at 			DATE 				NOT NULL	DEFAULT(CURDATE()),
@@ -343,30 +343,35 @@ CREATE TABLE clientes
 CREATE TABLE separaciones
 (
 	idseparacion  			INT PRIMARY KEY AUTO_INCREMENT,
-    n_expediente            VARCHAR(10) NOT NULL
+    n_expediente            VARCHAR(10) 	NOT NULL,
     idactivo				INT 			NOT NULL,
     idcliente 				INT  			NOT NULL,
     idconyugue 				INT 			NULL,
+    tipo_cambio 			DECIMAL(5,4) 	NOT NULL,
+    moneda_venta 			VARCHAR(10) 	NOT NULL,
     separacion_monto		DECIMAL(8,2) 	NOT NULL,
     fecha_pago				DATE 			NOT NULL,
     imagen					VARCHAR(100) 	NOT NULL,
-    detalle                 VARCHAR(200)    NOT NULL
+    detalle                 VARCHAR(200)    NOT NULL,
 	create_at 				DATE 			NOT NULL	DEFAULT (CURDATE()),
     update_at				DATE 			NULL,
     inactive_at				DATE 			NULL,
     idusuario 				INT 			NOT NULL,
-    CONSTRAINT chk_n_expediente_sep CHECK(n_expediente LIKE 'SEC-%')
+    CONSTRAINT chk_n_expediente_sep CHECK(n_expediente LIKE 'SEC-%'),
     CONSTRAINT fk_idactivo_sep FOREIGN KEY(idactivo) REFERENCES activos(idactivo),
     CONSTRAINT fk_idcliente_sep FOREIGN KEY(idcliente) REFERENCES clientes(idcliente),
     CONSTRAINT fk_idconyugue_sep FOREIGN KEY(idconyugue) REFERENCES clientes(idcliente),
     CONSTRAINT fk_idusuario_sep FOREIGN KEY(idusuario) REFERENCES usuarios(idusuario)
 )ENGINE = INNODB;
 
+ALTER TABLE separaciones ADD COLUMN ;
+ALTER TABLE separaciones ADD COLUMN ;
+
 -- deboluciones
 CREATE TABLE devoluciones
 (
 	iddevolucion 		INT PRIMARY KEY AUTO_INCREMENT,
-    n_expediente        VARCHAR(10)     NOT NULL
+    n_expediente        VARCHAR(10)     NOT NULL,
     idseparacion		INT 			NOT NULL,
     detalle             VARCHAR(200)    NOT NULL,
     monto_devolucion 	DECIMAL(8,2)	NOT NULL,
@@ -394,7 +399,7 @@ CREATE TABLE contratos
 	tipo_cambio 			DECIMAL(4,3) 	NOT NULL,
 	estado 					VARCHAR(10)		NOT NULL,
     fecha_contrato			DATE 			NOT NULL,
-    det_contrato			JSON 			NOT NULL DEFAULT '{"clave" :[""], "valor":[""]}', -- BONOS, FINACIAMIENTOS, PENALIDAD, PLAZO ENTREGA, CUOTA INICIAL ..    
+    det_contrato			JSON 			NOT NULL DEFAULT '{"clave" :[], "valor":[]}', -- BONOS, FINACIAMIENTOS, PENALIDAD, PLAZO ENTREGA, CUOTA INICIAL ..    
 	create_at 				DATE 			NOT NULL	DEFAULT (CURDATE()),
     update_at				DATE 			NULL,
     inactive_at				DATE 			NULL,

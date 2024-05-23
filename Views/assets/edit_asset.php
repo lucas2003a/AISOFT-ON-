@@ -391,7 +391,8 @@
                             <!-- TIPO ACTIVO -->
                             <div class="mt-4">
                               <label for="estado" class="form-label">Tipo de propiedad</label>
-                              <select name="tipo_activo" class="form-select" id="tipo_activo">
+                              <select name="tipo_activo" class="form-select" id="tipo_activo" required>
+                                <option value="" default>Tipo de propiedad</option>
                                 <option value="LOTE">Lote</option>
                                 <option value="CASA">Casa</option>
                               </select>
@@ -492,7 +493,7 @@
                             <!-- ZONAS COMUNES -->
                             <div class="mt-4">
                               <label for="z-comunes" class="form-label">Zonas comunes</label>
-                              <input type="number" class="form-control" id="z-comunes" min="1.0" max="100" placeholder="Zonas comúnes (%)">
+                              <input type="number" class="form-control" id="z-comunes" value="0" min="1.0" max="100" placeholder="Zonas comúnes (%)">
 
                             </div>
 
@@ -1085,35 +1086,31 @@
       }
     }
 
-    $("#sublote").addEventListener("keypress", (e) => {
+    $("#sublote").addEventListener("blur", (e) => {
 
-      if (e.keyCode == 13) {
+      let sublote = $("#sublote").value;
 
-        let sublote = $("#sublote").value;
+      if (sublote != "") {
 
-        if (sublote != "") {
-
-          searchInfo(AllDataAssets, "sublote", sublote);
-
-        } else {
-
-          $("#direccion").removeAttribute("readonly");
-          $("#direccion").focus();
-        }
-      }
-    });
-
-
-    $("#tipo_activo").addEventListener("change", (e) => {
-
-      if (e.target.value == "CASA") {
-        $("#propietario_lote").removeAttribute("disabled");
+        searchInfo(AllDataAssets, "sublote", sublote);
 
       } else {
 
-        bucleOptions($("#propietario_lote"), "A.I.F");
+        $("#direccion").removeAttribute("readonly");
+        $("#direccion").focus();
       }
     });
+
+    $("#tipo_activo").addEventListener("change", (e) => {
+      let tipoActivo = $("#tipo_activo").value;
+
+      if (tipoActivo == "CASA") {
+        $("#precio_lote").disabled = true;
+      }else{
+        $("#precio_lote").disabled = false;
+      }
+    });
+
 
     $("#precio_lote").addEventListener("input", (e) => {
       let precioLote = Number.parseFloat(e.target.value || 0);
