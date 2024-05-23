@@ -316,6 +316,6 @@ CREATE VIEW vws_list_refunds AS
         INNER JOIN personas AS usuPers ON usuPers.idpersona = usu.idpersona
         ORDER BY dev.iddevolucion DESC;
 DELIMITER ;
-
+select * from vws_list_refunds;
 
 

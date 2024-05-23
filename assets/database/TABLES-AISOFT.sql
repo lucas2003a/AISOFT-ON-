@@ -364,9 +364,6 @@ CREATE TABLE separaciones
     CONSTRAINT fk_idusuario_sep FOREIGN KEY(idusuario) REFERENCES usuarios(idusuario)
 )ENGINE = INNODB;
 
-ALTER TABLE separaciones ADD COLUMN ;
-ALTER TABLE separaciones ADD COLUMN ;
-
 -- deboluciones
 CREATE TABLE devoluciones
 (
