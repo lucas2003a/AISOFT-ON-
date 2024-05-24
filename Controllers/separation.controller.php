@@ -8,6 +8,10 @@ if(isset($_POST["action"])){
 
     switch($_POST["action"]){
 
+        case "listSeparations": 
+
+                echo json_encode($separation->listSeparations());
+            break;
         case "listSeparationsTPersona": 
 
                 $dataObtained = [

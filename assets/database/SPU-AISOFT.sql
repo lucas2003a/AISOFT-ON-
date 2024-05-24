@@ -673,13 +673,16 @@ BEGIN
         proy.idproyecto,
         proy.denominacion,
         act.sublote,
-        act.estado
+        act.estado,
+        act.moneda_venta
         FROM activos act
         INNER JOIN proyectos proy ON proy.idproyecto = act.idproyecto
         WHERE act.tipo_activo = "LOTE"
         AND act.estado = "SIN VENDER"
         AND act.inactive_at IS NULL
         AND proy.idproyecto = _idproyecto
+        AND JSON_ARRAY(JSON_EXTRACT(det_casa,'$.clave')) = 0
+        AND JSON_ARRAY(JSON_EXTRACT(det_casa,'$.valor')) = 0
         ORDER BY act.sublote;
 END $$
 DELIMITER ;
@@ -695,7 +698,8 @@ BEGIN
         proy.idproyecto,
         proy.denominacion,
         act.sublote,
-        act.estado
+        act.estado,
+        act.moneda_venta
         FROM activos act
         INNER JOIN proyectos proy ON proy.idproyecto = act.idproyecto
         WHERE act.tipo_activo = "CASA"
@@ -717,7 +721,8 @@ BEGIN
         proy.idproyecto,
         proy.denominacion,
         act.sublote,
-        act.estado
+        act.estado,
+        act.moneda_venta
         FROM activos act
         INNER JOIN proyectos proy ON proy.idproyecto = act.idproyecto
         WHERE act.tipo_activo = "LOTE"
@@ -1874,6 +1879,16 @@ DELIMITER $$
 CREATE PROCEDURE spu_list_separations()
 BEGIN
     SELECT 
+        idseparacion,
+        n_expediente,
+        idactivo,
+        idcliente,
+        idconyugue,
+        separacion_monto
+        FROM separaciones
+        WHERE inactive_at IS NULL
+        ORDER BY n_expediente ASC;
+
 END $$
 DELIMITER ;
 
@@ -2049,7 +2064,7 @@ DELIMITER;
 
 DELIMITER $$
 
-CREATE PROCEDURE spu_get_sepraration_ById
+CREATE PROCEDURE spu_get_separation_ById
 (IN _idseparacion INT)
 BEGIN
     DECLARE _tpersona VARCHAR(10);

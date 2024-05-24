@@ -102,7 +102,7 @@
 
         <!-- CLIENTES -->
         <li class="nav-item">
-          <a class="nav-link active" href="../Clients/index.php">
+          <a class="nav-link" href="../Clients/index.php">
             <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
               <svg width="12px" height="12px" viewBox="0 0 42 42" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <title>office</title>
@@ -150,7 +150,7 @@
 
         <!-- SEPARACIONES -->
         <li class="nav-item">
-          <a class="nav-link" href="../separations/index.php">
+          <a class="nav-link active" href="../separations/index.php">
             <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
               <svg width="12px" height="12px" viewBox="0 0 42 42" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <title>office</title>
@@ -383,8 +383,8 @@
 
                           <!-- NRO EXPEDIENTE -->
                           <div class="mt-4">
-                            <label for="nro_expediente" class="form-label">Nº de expediente</label>
-                            <input type="text" class="form-control" id="nro_expediente" placeholder="Nº de expediente" required autofocus>
+                            <label for="n_expediente" class="form-label">Nº de expediente</label>
+                            <input type="text" class="form-control" id="n_expediente" placeholder="Nº de expediente" maxlength="10" required autofocus>
                             <div class="invalid-feedback">
                               Necesitas ingresar el nro de expediente.
                             </div>
@@ -393,45 +393,60 @@
                             </div>
                           </div>
 
-                          <!-- PROYECTOS -->
-                          <div class="mt-4">
-                            <label for="idproyecto" class="form-label">Proyectos</label>
-                            <select class="form-select custom-select-scroll" id="idproyecto" required>
-                              <option selected disabled value="">Proyectos</option>
-                            </select>
-                            <div class="invalid-feedback">
-                              Necesitas escojer un proyecto.
-                            </div>
-                            <div class="valid-feedback">
-                              Proyecto escojido correctamente.
-                            </div>
-                          </div>
-
-                          <!-- LOTES -->
-                          <div class="mt-4">
-                            <label for="idlote" class="form-label">Lote</label>
-                            <select class="form-select custom-select-scroll" id="idlote" required>
-                              <option selected disabled value="">Lote</option>
-                            </select>
-                            <div class="invalid-feedback">
-                              Necesitas escojer una un lote.
-                            </div>
-                            <div class="valid-feedback">
-                              Lote escojido correctamente.
-                            </div>
-                          </div>
-
                           <!-- TIPO DE PERSONA -->
                           <div class="mt-4">
                             <label for="tipo_persona" class="form-label">Tipo de persona</label>
                             <select class="form-select custom-select-scroll" id="tipo_persona" required>
-                              <option selected disabled value="">Tipo de persona</option>
+                              <option selected value="">Tipo de persona</option>
+                              <option value="NATURAL">Natural</option>
+                              <option value="JURÍDICA">Jurídica</option>
                             </select>
                             <div class="invalid-feedback">
                               Necesitas escojer un tipo de persona.
                             </div>
                             <div class="valid-feedback">
                               Tipo de persona escojida correctamente.
+                            </div>
+                          </div>
+
+                          <!-- CLIENTE -->
+                          <div class="mt-4">
+                            <label for="idcliente" class="form-label">Cliente</label>
+                            <select class="form-select custom-select-scroll" id="idcliente" required>
+                              <option selected disabled value="">Seleccione un cliente</option>
+                            </select>
+                            <div class="invalid-feedback">
+                              Necesitas escojer una cliente.
+                            </div>
+                            <div class="valid-feedback">
+                              Cliente escojido correctament
+                            </div>
+                          </div>
+
+                          <!-- CONYUGUE -->
+                          <div class="mt-4">
+                            <label for="idconyugue" class="form-label">Conyugue</label>
+                            <select class="form-select custom-select-scroll" id="idconyugue" disabled>
+                              <option selected disabled value="">Conyugue</option>
+                            </select>
+                            <div class="invalid-feedback">
+                              Necesitas escojer una cliente.
+                            </div>
+                            <div class="valid-feedback">
+                              Cliente escojido correctament
+                            </div>
+                          </div>
+
+
+                          <!-- TIPO DE CAMBIO -->
+                          <div class="mt-4">
+                            <label for="tipo_cambio" class="form-label">Tipo de cambio</label>
+                            <input type="number" class="form-control" id="tipo_cambio" readonly>
+                            <div class="invalid-feedback">
+
+                            </div>
+                            <div class="valid-feedback">
+
                             </div>
                           </div>
 
@@ -445,37 +460,49 @@
                           </div>
                           <div class="d-grid p-3">
 
-                            <button class="btn btn-success" type="submit" id="guardar" disabled>Guardar</button>
+                            <button class="btn btn-success" type="submit" id="guardar">Guardar</button>
                           </div>
 
                         </div>
 
                         <div class="col-md-6">
-                          <!-- CLIENTE -->
+
+
+                          <!-- PROYECTOS -->
                           <div class="mt-4">
-                            <label for="idcliente" class="form-label">Cliente</label>
-                            <select class="form-select custom-select-scroll" id="idcliente" required>
-                              <option selected disabled value="">Cliente</option>
+                            <label for="idproyecto" class="form-label">Proyectos</label>
+                            <select class="form-select custom-select-scroll" id="idproyecto" disabled>
+                              <option selected disabled value="">Seleccione un proyecto</option>
                             </select>
                             <div class="invalid-feedback">
-                              Necesitas escojer una cliente.
+                              Necesitas escojer un proyecto.
                             </div>
                             <div class="valid-feedback">
-                              Cliente escojido correctament
+                              Proyecto escojido correctamente.
                             </div>
                           </div>
 
-                          <!-- CONYUGUE -->
+                          <!-- LOTES -->
                           <div class="mt-4">
-                            <label for="idconyugue" class="form-label">Conyugue</label>
-                            <select class="form-select custom-select-scroll" id="idconyugue">
-                              <option selected disabled value="">Conyugue</option>
+                            <label for="idlote" class="form-label">Lote</label>
+                            <select class="form-select custom-select-scroll" id="idlote" required>
+                              <option selected disabled value="">Seleccione un lote</option>
                             </select>
                             <div class="invalid-feedback">
-                              Necesitas escojer una cliente.
+                              Necesitas escojer una un lote.
                             </div>
                             <div class="valid-feedback">
-                              Cliente escojido correctament
+                              Lote escojido correctamente.
+                            </div>
+                          </div>
+
+                          <!-- MONEDA VENTA -->
+                          <div class="mt-4">
+                            <label for="moneda_venta" class="form-label">Moneda de venta</label>
+                            <input type="text" class="form-control" id="moneda_venta" readonly>
+                            <div class="invalid-feedback">
+                            </div>
+                            <div class="valid-feedback">
                             </div>
                           </div>
 
@@ -594,7 +621,6 @@
   <script src="../../assets/js/plugins/chartjs.min.js"></script>
   <script src="../../assets/js/globalFunctions.js"></script>
   <script src="../../assets/js/sweetAlert.js"></script>
-  <script src="../../assets/js/formMultiSteps.js"></script>
 
   <!-- <script src="../../assets/js/renderUbigeo.js"></script>  -->
 
@@ -605,14 +631,253 @@
     const global = new FunGlobal();
     const sAlert = new Alert();
 
-    //formulario
-    const idform = "#form-assset-set"
-    const formMS = new multiStepsForm(idform);
+    let dataSeparations;
+    let lastCode = false;
 
     const $ = id => global.$(id);
     const $All = id => global.$All(id);
 
+    //Obtiene los datos des las separaciones
+    async function getSeparations() {
 
+      try {
+
+        let url = "../../Controllers/separation.controller.php";
+
+        let params = new FormData();
+        params.append("action", "listSeparations");
+
+        let results = await global.sendAction(url, params);
+
+        if (results.length > 0) {
+          dataSeparations = results;
+          console.log(dataSeparations);
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
+    //Valida los datos(inptu n_expediente y idlote)
+    function validateDate(campo, value, array) {
+
+      return new Promise((resolve, reject) => {
+
+        let isFound = array.find(element => element[campo] == value)
+
+        if (isFound) {
+          sAlert.sweetWarning("Se ha encontrado coincidencias", `"${value}" ya existe, ingresa otro`);
+          reject();
+          console.log("dato encontrado");
+        } else {
+          resolve();
+          console.log("data no encontrado");
+        }
+      });
+
+    }
+
+    //Obtiene los proyectos 
+    async function getProjects() {
+
+      try {
+
+        let url = "../../Controllers/project.controller.php";
+
+        let params = new FormData();
+        params.append("action", "listProject");
+
+        let results = await global.sendAction(url, params);
+
+        if (results.length > 0) {
+
+          $("#idproyecto").innerHTML = "";
+
+          let defaultTag = document.createElement("option");
+          defaultTag.text = "Seleccione un proyecto";
+          defaultTag.value = "";
+          $("#idproyecto").appendChild(defaultTag);
+
+          results.forEach(result => {
+
+            let newTag = document.createElement("option");
+            newTag.innerText = result.denominacion;
+            newTag.value = result.idproyecto;
+
+            $("#idproyecto").appendChild(newTag);
+
+          });
+        }
+      } catch (e) {
+        console.log(e);
+      }
+    }
+
+    //Obtiene los datos de los lotes
+    async function getLots(idproyecto) {
+
+      try {
+        let url = "../../Controllers/asset.controller.php";
+        let params = new FormData();
+
+        params.append("action", "listOnlyLots");
+        params.append("idproyecto", idproyecto);
+        let results = await global.sendAction(url, params);
+
+        if (results.length > 0) {
+
+          $("#idlote").innerHTML = "";
+
+          let defaultValue = document.createElement("option");
+          defaultValue.innerText = "Seleccione un lote";
+          defaultValue.value = "";
+
+          $("#idlote").appendChild(defaultValue);
+
+          results.forEach(result => {
+            let newOption = document.createElement("option");
+            newOption.text = "LT - " + result.sublote;
+            newOption.value = result.idactivo;
+            newOption.dataset.moneda_venta = result.moneda_venta;
+
+            $("#idlote").appendChild(newOption);
+          });
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
+    function readFile(event){
+      let file = event.target.files[0];
+      let reader = new FileReader();
+
+      reader.onload = (event)=>{
+        $("#file-view").setAttribute("src",(event.target.result));
+        $("#file-view").style.width = "100%";
+        $("#file-view").style.height = "20rem";
+      }
+
+      reader.readAsDataURL(file);
+    }
+    //Obtiene los datos de los clientes pro el tipo de persona
+    async function getCustomers(tpersona){
+
+      try{
+
+        let url = "../../Controllers/client.controller.php";
+        let params = new FormData();
+
+        params.append("action", "listClienTperson");
+        params.append("tipo_persona", tpersona);
+
+        let results = await global.sendAction(url, params);
+
+        if(results.length > 0){
+
+          $("#idcliente").innerHTML ="";
+
+          let defaultTag = document.createElement("option");
+          defaultTag.innerText = "Seleccione un cliente";
+          defaultTag.value = "";
+
+          $("#idcliente").appendChild(defaultTag);
+
+          results.forEach(result => {
+
+            let name = result.tipo_persona == "NATURAL" ? result.apellidos.toUpperCase() + ", " + result.nombres.toLowerCase() : result.razon_social.toUpperCase();
+
+            let newOption = document.createElement("option");
+            newOption.text = result.documento_nro + " - " + name;
+            newOption.value = result.idcliente;
+
+            $("#idcliente").appendChild(newOption);
+          });
+
+        }
+      }
+      catch(e){
+        console.erro(e);
+      }
+    }
+
+    $("#n_expediente").addEventListener("blur", (e) => {
+
+      let valueInput = e.target.value;
+
+      if (!lastCode) {
+        let newValue = "SEC-" + valueInput.padStart(6, '0');
+        $("#n_expediente").value = newValue;
+
+        lastCode = true;
+
+        validateDate("n_expediente", e.target.value, dataSeparations)
+          .then(() => {
+            console.log("no existe");
+          }).catch(()=>{
+            $("#n_expediente").focus();
+          })
+      }
+    });
+
+    $("#n_expediente").addEventListener("input", (e) => {
+
+      let valueInput = e.target.value;
+
+      if (!valueInput) {
+        lastCode = false;
+      }
+    });
+
+    $("#idproyecto").addEventListener("change", (e) => {
+
+      let valueInput = e.target.value;
+
+      getLots(valueInput)
+
+    });
+
+    $("#idlote").addEventListener("change", (e) => {
+
+      let moneda_venta = e.target.options[e.target.selectedIndex].dataset.moneda_venta;
+      console.log(moneda_venta)
+
+      $("#moneda_venta").value = moneda_venta;
+
+    });
+
+    $("#tipo_persona").addEventListener("change",(e)=>{
+      let tipo_persona = e.target.options[e.target.selectedIndex].value;
+
+      getCustomers(tipo_persona);
+
+      if(tipo_persona == "NATURAL"){
+        $("#idconyugue").disabled = false;
+      }else{
+        $("#idconyugue").disabled = true;
+      }
+
+    })
+    
+    $("#idcliente").addEventListener("change",(e)=>{
+      let idcliente = e.target.value;
+
+      if(idcliente){
+        $("#idproyecto").disabled = false;
+      }else{
+        $("#idproyecto").disabled = true;
+      }
+    });
+
+    $("#in-image").addEventListener("change",(e)=>{
+
+      if(e.target.files.length > 0){
+        readFile(e);
+      }
+    });
+
+    getProjects();
+    getSeparations();
     /* --------------------------------- FUNCIÓN DE VALIDACIÓN --------------------------------------------------------- */
 
     (() => {
