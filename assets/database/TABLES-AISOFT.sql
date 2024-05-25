@@ -187,8 +187,6 @@ CREATE TABLE subcategoria_costos
     CONSTRAINT fk_subactegoria_costo_subcat_costo UNIQUE(subactegoria_costo)
 )ENGINE = INNODB;
 
-ALTER TABLE subcategoria_costos CHANGE requiere_material requiere_material  CHAR(2) NOT NULL; 
-select * from subcategoria_costos;
 -- MARCAS
 CREATE TABLE marcas
 (
@@ -358,11 +356,13 @@ CREATE TABLE separaciones
     inactive_at				DATE 			NULL,
     idusuario 				INT 			NOT NULL,
     CONSTRAINT chk_n_expediente_sep CHECK(n_expediente LIKE 'SEC-%'),
+    CONSTRAINT uk_n_expediente UNIQUE(n_expediente),
     CONSTRAINT fk_idactivo_sep FOREIGN KEY(idactivo) REFERENCES activos(idactivo),
     CONSTRAINT fk_idcliente_sep FOREIGN KEY(idcliente) REFERENCES clientes(idcliente),
     CONSTRAINT fk_idconyugue_sep FOREIGN KEY(idconyugue) REFERENCES clientes(idcliente),
     CONSTRAINT fk_idusuario_sep FOREIGN KEY(idusuario) REFERENCES usuarios(idusuario)
 )ENGINE = INNODB;
+SELECT * FROM separaciones;
 
 -- deboluciones
 CREATE TABLE devoluciones

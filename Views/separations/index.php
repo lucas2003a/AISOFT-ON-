@@ -537,6 +537,7 @@
       let date = new Date();
       let minDate = new Date('2024-1-1'); //La fecha se agrega sin 0 a la izquierda
       let defaultDate = new Date();
+      console.log(date.get)
 
       let fechaInicioValue = "";
       let fechaFinValue = "";
@@ -585,6 +586,7 @@
               results.forEach(result => {
                 let newRow = "";
                 let code = btoa(result.idseparacion);
+                let expedient = btoa(result.n_expediente);
                 newRow = `
                   <tr>
                     <td>${numberRow}</td>
@@ -594,8 +596,8 @@
                     <td>${result.documento_nro}</td> 
                     <td>${result.separacion_monto}</td>
                     <td>
-                        <a type="button" href="./delete_separation.php?${code}" class="btn btn-link text-danger text-gradient px-3 mb-0 delete"><i class="bi bi-trash-fill delete"></i></a>
-                        <a type="button" href="./edit_budget.php?id=${code}" class="btn btn-link text-dark px-3 mb-0"><i class="bi bi-pencil-fill"></i></a>
+                        <a type="button" href="./delete_separation.php?id=${code}&expedient=${expedient}" class="btn btn-link text-danger text-gradient px-3 mb-0 delete"><i class="bi bi-trash-fill delete"></i></a>
+                        <a type="button" href="./edit_separation.php?id=${code}&expedient=${expedient}" class="btn btn-link text-dark px-3 mb-0 edit"><i class="bi bi-pencil-fill edit"></i></a>
                         <a type="button" href="#" class="btn btn-link text-success px-3 mb-0 open-modal"><i class="bi bi-arrow-right-square open-modal"></i></a>
                     </td>
                   </tr>

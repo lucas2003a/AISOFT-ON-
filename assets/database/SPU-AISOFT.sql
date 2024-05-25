@@ -1915,7 +1915,7 @@ BEGIN
             AND create_at BETWEEN _fechaInicio AND _fechaFin;
     END IF;
 END $$
-
+SELECT * FROM presupuestos WHERE CODIGO = "PRES-030";
 DELIMITER;
 
 DELIMITER $$
@@ -1981,7 +1981,7 @@ DELIMITER $$
 
 CREATE PROCEDURE spu_add_separation
 (
-    IN _n_expediente    VARCHAR(200),
+    IN _n_expediente    VARCHAR(10),
     IN _idactivo        INT,
     IN _idcliente       INT,
     IN _idconyugue      INT,
@@ -1990,7 +1990,7 @@ CREATE PROCEDURE spu_add_separation
     IN _idusuario       INT
 )
 BEGIN
-    INSERT INTO activos (
+    INSERT INTO separaciones (
             n_expediente,
             idactivo,
             idcliente,
@@ -2019,7 +2019,7 @@ DELIMITER $$
 CREATE PROCEDURE spu_set_separation
 (
     IN _idseparacion    INT,
-    IN _n_expediente    VARCHAR(200),
+    IN _n_expediente    VARCHAR(10),
     IN _idactivo        INT,
     IN _idcliente       INT,
     IN _idconyugue      INT,
@@ -2028,7 +2028,7 @@ CREATE PROCEDURE spu_set_separation
     IN _idusuario       INT
 )
 BEGIN
-    UPDATE activos 
+    UPDATE separaciones 
         SET
             n_expediente   = _n_expediente,
             idactivo       = _idactivo,
@@ -2063,7 +2063,6 @@ END $$
 DELIMITER;
 
 DELIMITER $$
-
 CREATE PROCEDURE spu_get_separation_ById
 (IN _idseparacion INT)
 BEGIN
@@ -2073,16 +2072,16 @@ BEGIN
         SELECT tipo_persona
         FROM clientes cli 
         INNER JOIN separaciones sep on sep.idcliente = cli.idcliente
-        WHERE sep.idactivo = _idactivo
+        WHERE sep.idseparacion = _idseparacion
     );
 
     IF _tpersona = "NATURAL" THEN
-        SELECT * FROM vws_list_speractions_tpersona_natural_full
+        SELECT * FROM vws_list_separations_tpersona_natural_full
             WHERE idseparacion = _idseparacion
                 AND inactive_at IS NULL;
 
     ELSEIF _tpersona = "JURÍDICA" THEN
-        SELECT * FROM vws_list_separactions_tpersona_juridica_full
+        SELECT * FROM vws_list_separations_tpersona_juridica_full
             WHERE idseparacion = _idseparacion
                 AND inactive_at IS NULL;
     END IF;

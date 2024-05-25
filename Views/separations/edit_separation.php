@@ -327,9 +327,9 @@
           <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
             <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="#">Dashboard</a></li>
             <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="#">Separaciones</a></li>
-            <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Agregar separación</li>
+            <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Editar separación</li>
           </ol>
-          <h6 class="font-weight-bolder mb-0" id="cabezera">AGREGAR SEPARACIÓN</h6>
+          <h6 class="font-weight-bolder mb-0" id="cabezera">AGREGAR SEPARACIÓN - </h6>
         </nav>
         <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
 
@@ -661,10 +661,98 @@
     const $ = id => global.$(id);
     const $All = id => global.$All(id);
 
+    //Otengo el los parámetros por URL
+    const params = new URLSearchParams(window.location.search);
+    const codeId = params.get("id");
+    const idseparacion = atob(codeId);
+
+    const codeExpedient = params.get("expedient");
+    const expedient = atob(codeExpedient);
+    console.log(idseparacion,expedient)
     let dataSeparations;
     let lastCode = false;
     let dataClients;
     let newValue;
+
+    //Obtiene los registros de una separacion por id
+    async function getSeparation(id){
+
+      try{
+        let url = "../../Controllers/separation.controller.php";
+        let params = new FormData();
+
+        params.append("action", "listSeparationById");
+        params.append("idseparacion", id);
+
+        let result = await global.sendAction(url,params);
+
+        if(result){
+          console.log(result)
+
+          //Valor el nro de expedient
+          let expedient = result.n_expediente;
+          let expedientSplit = expedient.split("-");
+          let expedientNumber = expedientSplit[1];
+          $("#n_expediente").value = expedientNumber;
+
+          //valor del tipo de persona
+          let tipo_persona = result.tipo_persona;
+          let tPersonaOptions = $("#tipo_persona");
+          let option = Array.from(tPersonaOptions.options).find(option => option.value == tipo_persona);
+
+          if(option){
+            option.selected = true;
+            option.value == "NATURAL" ? $("#idconyugue").disabled = false : $("#idconyugue").disabled = true;
+            await getCustomers(option.value);
+          }
+          //Valor del cliente
+          let idcliente = result.idcliente;
+          let clientOptions = $("#idcliente");
+          let clientOption = Array.from(clientOptions.options).find(option => option.value == idcliente)
+          if(clientOption){
+            clientOption.selected = true;
+            $("#idproyecto").disabled = false;
+            await getSpouses(clientOption.value);
+          }
+
+          //Valor del conyugue (si existe)
+          if(result.idconyugue){
+            let idconyugue = result.idconyugue;
+            let conyOptions = $("#idconyugue");
+
+            let conyOption = Array.from(conyOptions.options).find(option => option.value == idconyugue)
+            if(conyOption){
+              conyOption.selected = true;
+            }
+          }
+
+          //Valor del tipo de cambio
+          let tipo_cambio = result.tipo_cambio;
+          $("#tipo_cambio").value = tipo_cambio;
+          
+          //Valor de idproyecto
+          let idproyecto = result.idproyecto;
+          let projectOptions = $("#idproyecto");
+          let projectOption = Array.from(projectOptions.options).find(option => option.value == idproyecto)
+          if(projectOption){
+            projectOption.selected = true;
+            await getLots(projectOption.value);
+          }
+          
+          // Valor del idactivo
+          let idactivo = result.idactivo;
+          let assetOptions = $("#idactivo");
+          let assetOption = Array.from(assetOptions.options).find(option => option.value == idactivo)
+
+          if(assetOption){
+            assetOption.selected = true;
+          }
+        }
+      }
+      catch(e){
+        console.error(e);
+      }
+    }
 
     //Obtiene la fecha actual
     async function getToday() {
@@ -872,7 +960,7 @@
     }
 
     //Obtiene los datos de los conyugues, exeptuando al cliente
-    async function getSpouses(idcliente) {
+    async function getSpouses(idcliente){
 
       console.log(idcliente)
       let parseIdcliente = Number.parseInt(idcliente);
@@ -1033,7 +1121,8 @@
       $("#show-modal").click()
     })
 
-    getTC();
+    // getTC();
+    getSeparation(idseparacion);
     getProjects();
     getSeparations();
     /* --------------------------------- FUNCIÓN DE VALIDACIÓN --------------------------------------------------------- */

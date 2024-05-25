@@ -81,10 +81,10 @@ class Separation extends Conection{
 
         try{
 
-            $query = $this->conection->prepare("CALL spu_get_sepraration_ById(?)");
+            $query = $this->conection->prepare("CALL spu_get_separation_ById(?)");
             $query->execute(array($idseparacion));
 
-            return $query->fetchAll(PDO::FETCH_ASSOC);
+            return $query->fetch(PDO::FETCH_ASSOC);
 
         }catch(Exception $e){
             die($e->getMessage());

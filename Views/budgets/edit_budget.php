@@ -383,7 +383,10 @@
                       <div class="col-md-5">
                         <div class="m-2">
                           <label for="codigo" class="form-label">Código</label>
-                          <input class="form-control" type="text" name="codigo" id="codigo" value="" minlength="1" maxlength="8" placeholder="Código" required autofocus>
+                          <div class="input-group">
+                            <span class="input-group-text">PRES - </span>                          
+                            <input class="form-control" type="number" name="codigo" id="codigo" value="000" min="001" maxlength="3" sped="001" placeholder="Código" required autofocus>
+                          </div>
                           <div class="invalid-feedback">
                             Necesitas ingresar el código del presupuesto.
                           </div>
@@ -500,7 +503,7 @@
 
                       <div class="col-md-3">
                         <label for="precio_unitario" class="form-label">Precio Unitario</label>
-                        <input type="number" name="precio_unitario" id="precio_unitario" class="form-control" min="1.0" step="0.001" required>
+                        <input type="number" name="precio_unitario" id="precio_unitario" class="form-control" value="0.00" min="1.0" step="0.01" required>
                         <div class="invalid-feedback">
                           Necesitas ingresar el precio unitario.
                         </div>
@@ -719,12 +722,15 @@
     let rowDelete = [];
     let rowEdit = [];
     let lastCode = true;
+    let finalCode;
+    let lastModel = true;
     let allDataBudget;
     let dataGetBudget;
     let index = 0;
     let isAddForm = true;
     let iddetalleCosto;
     let indexDelete = []
+    let codeVelue;
 
     // Elimina un detalle del presupuesto
     async function deleteDetBudget(iddet) {
@@ -876,7 +882,7 @@
         let params = new FormData();
         params.append("action", "setBudget");
         params.append("idpresupuesto", idpresupuestoOBT);
-        params.append("codigo", $("#codigo").value);
+        params.append("codigo", finalCode);
         params.append("modelo", $("#modelo").value);
 
         let result = await global.sendAction(url, params);
@@ -885,14 +891,16 @@
 
           if (result.filasAfect > 0) {
 
-
+            let codeDBT = result.codigo
+            let splitCode = codeDBT.split("-");
+            let newCode = splitCode[1].trim();
             let data = {
               idpresupuesto: result.idpresupuesto,
-              codigo: result.codigo,
+              codigo: newCode,
               modelo: result.modelo
             };
 
-            $("#codigo").value = result.codigo;
+            $("#codigo").value = newCode;
             $("#modelo").value = result.modelo;
 
             sAlert.sweetSuccess("Éxito", "Presupuesto actualizado correctamente", () => {
@@ -1004,8 +1012,13 @@
 
           dataGetBudget = results;
 
-          $("#codigo").value = results.codigo;
+          let codeOBT = results.codigo;
+          let splitCode = codeOBT.split("-");
+          let newCode = splitCode[1].trim();
+
+          $("#codigo").value = newCode;
           $("#modelo").value = results.modelo;
+          finalCode = "PRES-" + newCode;
 
         }
       } catch (e) {
@@ -1303,12 +1316,12 @@
           let idproyectoChecked = Number.parseInt(element.dataset.idproyecto);
           let checkProyects = document.querySelectorAll(".form-check-input.check-proyects");
 
-          Array.from(checkProyects).forEach(checkProyect =>{
+          Array.from(checkProyects).forEach(checkProyect => {
 
             let buttonProyectChecked = checkProyect.dataset.idproyecto;
-  
+
             if (buttonProyectChecked == idproyectoChecked) {
-  
+
               checkProyect.checked = true
             }
           })
@@ -1408,19 +1421,19 @@
 
     async function setSubcategryValue(obj) {
 
-      return new Promise((resolve, reject)=>{
+      return new Promise((resolve, reject) => {
 
-        setTimeout(()=>{
-          
+        setTimeout(() => {
+
           Array.from($("#subcategoria_costo").options).forEach(option => {
             console.log(option)
             console.log("dentro delforeach")
-            if(obj.idsubcategoria_costo == option.value){
+            if (obj.idsubcategoria_costo == option.value) {
               option.selected = true;
             }
           })
           resolve();
-        },1000);
+        }, 1000);
       })
     }
 
@@ -1488,7 +1501,7 @@
         let dataObt = dataStorage.find(data => data.iddetalle_costo == iddetalleCosto)
         console.log(dataObt)
         if (dataObt) {
-          
+
           console.log("filtrando")
           $("#add").innerHTML = `<i class="bi bi-pencil-fill edit"></i>Actualizar`;
           $("#categoria_costo").value = dataObt.idcategoria_costo
@@ -1501,11 +1514,11 @@
           $("#cantidad").value = dataObt.cantidad;
           $("#precio_unitario").value = dataObt.precio_unitario;
 
-          if(!dataObt.idmarca){
+          if (!dataObt.idmarca) {
             $("#inputs_materials").classList.add("d-none");
             $("#marca").required = false;
             $("#material").required = false;
-          }else{
+          } else {
             $("#marca").required = true;
             $("#material").required = true;
             $("#inputs_materials").classList.remove("d-none");
@@ -1518,23 +1531,23 @@
         let iddetalle = e.target.dataset.index
         console.log(iddetalle)
 
-        
+
         if (dataStorage.length > 1) {
           $("#save_lots").disabled = false;
-            sAlert.sweetConfirm("¿Deseas eliminar el registro?", "", async function() {
-              console.log(dataStorage)
-              let iddetalle = parseInt(e.target.dataset.index);
+          sAlert.sweetConfirm("¿Deseas eliminar el registro?", "", async function() {
+            console.log(dataStorage)
+            let iddetalle = parseInt(e.target.dataset.index);
 
-              await deleteDetBudget(iddetalle);
-            })
-        }else if(dataStorage.length == 1){
-          
-        sAlert.sweetError("No puede elimnar este registro","Necesitas al menos un registro");
+            await deleteDetBudget(iddetalle);
+          })
+        } else if (dataStorage.length == 1) {
 
-        }else if(dataStorage.length < 1){
+          sAlert.sweetError("No puede elimnar este registro", "Necesitas al menos un registro");
+
+        } else if (dataStorage.length < 1) {
 
           $("#save_lots").disabled = true;
-          
+
         }
 
       }
@@ -1543,32 +1556,40 @@
     $("#codigo").addEventListener("blur", (e) => {
 
       e.preventDefault();
+      let inputValue = e.target.value;
 
       if (!lastCode) {
-
-        currentCode = "PRES-" + $("#codigo").value.toString().padStart(3, "0");
-        $("#codigo").value = currentCode;
+        let sliceValue = inputValue.slice(0,3);
+        let codeFormat = sliceValue.padStart(3, "0");
+        let codeValue = "PRES-" + codeFormat;
+        finalCode = codeValue
+        $("#codigo").value = codeFormat;
         lastCode = true;
+
+        if(inputValue !== dataGetBudget.codigo){
+          
+          validateData(codeValue, "codigo", allDataBudget)
+            .then(() => {
+              $("#modelo").focus();
+            })
+            .catch(e => {
+              $("#codigo").focus();
+              lastCode = false;
+            })
+        }
       }
-
-      if ($("#codigo").value !== "" && $("#codigo").value !== dataGetBudget.codigo) {
-
-        validateData($("#codigo").value, "codigo", allDataBudget)
-          .then(() => {
-            $("#modelo").focus();
-          })
-          .catch(e => {
-            console.error(e);
-            $("#codigo").focus();
-          })
-      }
-
     })
 
     $("#codigo").addEventListener("input", (e) => {
-      if ($("#codigo").value == "") {
+
+      e.preventDefault();
+      let valueInput = e.target.value;
+
+      if (e.target.dataset.prevValue !== valueInput) {
         lastCode = false;
       }
+
+      e.target.dataset.prevValue = valueInput;
     });
 
     $("#save_lots").addEventListener("click", async function() {
@@ -1646,7 +1667,6 @@
             input.readOnly = true;
           });
 
-          $("#form-budget button").disabled = true;
         })
         .catch(e => {
           console.error(e);
@@ -1662,20 +1682,36 @@
     $("#modelo").addEventListener("blur", (e) => {
       e.preventDefault();
 
-      if ($("#modelo").value !== "" && $("#modelo").value !== dataGetBudget.modelo) {
+      let valueInput = e.target.value;
 
-        validateData($("#modelo").value, "modelo", allDataBudget)
-          .then(() => {
-            $("#save_budget").disabled = false;
-          })
-          .catch(e => {
-            console.error(e);
-            $("#modelo").focus();
-            $("#save_budget").disabled = true;
-          })
+      if (valueInput !== dataGetBudget.modelo) {
+
+        if(!lastModel){
+
+          validateData($("#modelo").value, "modelo", allDataBudget)
+            .then(() => {
+              $("#save_budget").disabled = false;
+            })
+            .catch(e => {
+              console.error(e);
+              $("#modelo").focus();
+              $("#save_budget").disabled = true;
+            })
+        }
       }
     });
-    
+
+    $("#modelo").addEventListener("input",(e)=>{
+
+      let valueInput = e.target.value;
+
+      if(e.target.dataset.prevValue !== valueInput){
+        lastModel = false;
+      }
+
+      e.target.dataset.prevValue = valueInput;
+    });
+
     getBrands();
     getCategoriesCosts();
     getFilteredLots();
@@ -1684,7 +1720,7 @@
     getBudgetsById(idpresupuestoOBT);
     getDetCostByIdBudget(idpresupuestoOBT);
 
-    window.addEventListener("beforeunload",(e)=>{
+    window.addEventListener("beforeunload", (e) => {
 
       e.preventDefault();
       e.returnValue = "¿Estás seguro de que quieres salir?";

@@ -1,6 +1,6 @@
 <?php
 // 'Fecha de búsqueda (formato yyyy-mm-dd)'
-$fecha = "2024-05-23";
+$fecha = "2024-05-24";
 $token = "7e172115e78fb88fd9dd583208f04b1628ba0caeb441c47b3f58fc7e275f9069";
 
 $params = json_encode(['fecha' => $fecha]);
@@ -14,8 +14,7 @@ curl_setopt_array($curl, [
     CURLOPT_HTTPHEADER => [
         'Accept: application/json',
         'Content-Type: application/json',
-        'Authorization: Bearer 
-        '.$token
+        'Authorization: Bearer '.$token
     ],
 ]);
 $response = curl_exec($curl);

@@ -35,7 +35,7 @@ if(isset($_POST["action"])){
             echo json_encode($separation->listSeparationsNExpediente($dataObtained));
             break;
 
-        case "listSeparationsById": 
+        case "listSeparationById": 
             
                 $idseparacion = $_POST["idseparacion"];
 
@@ -50,15 +50,33 @@ if(isset($_POST["action"])){
 
             break;
         case "addSeparation": 
+                $today = date("dhmYhis");
+                $nom_img = null;
+
                 $dataObtained = [
-                    "n_expediente"  =>["n_expediente"],
-                    "idactivo"      =>["idactivo"],
-                    "idcliente"     =>["idcliente"],
-                    "idconyugue"    =>["idconyugue"],
-                    "separacion_monto" =>["separacion_monto"],
-                    "imagen"        =>["imagen"],
-                    "idusuario"     =>["idusuario"]
+                    "n_expediente"  => $_POST["n_expediente"],
+                    "idactivo"      => $_POST["idactivo"],
+                    "idcliente"     => $_POST["idcliente"],
+                    "idconyugue"    => $_POST["idconyugue"],
+                    "separacion_monto" => $_POST["separacion_monto"],
+                    "imagen"        => $nom_img,
+                    "idusuario"     => 1
+                    // "idusuario"     => $_POST["idusuario"]
                 ];
+
+                if(isset($_FILES["imagen"]) && $_FILES["imagen"]["size"] > 0){
+
+                    $nom_img = sha1($today) . "jpg";
+                    $url = "../media/constancias_sep".$nom_img;
+
+                    if(move_uploaded_file($_FILES["imagen"]["tmp_name"],$url)){
+                        $dataObtained["imagen"] = $nom_img;
+                    }
+
+                }else{
+
+                    $dataObtained["imagen"] = $nom_img;
+                }
 
                 echo json_encode($separation->addSeparation($dataObtained));
                 
@@ -66,14 +84,15 @@ if(isset($_POST["action"])){
 
         case "setSeparation": 
                 $dataObtained = [
-                    "idseparacion"  =>["idseparacion"],
-                    "n_expediente"  =>["n_expediente"],
-                    "idactivo"      =>["idactivo"],
-                    "idcliente"     =>["idcliente"],
-                    "idconyugue"    =>["idconyugue"],
-                    "separacion_monto" =>["separacion_monto"],
-                    "imagen"        =>["imagen"],
-                    "idusuario"     =>["idusuario"]
+                    "idseparacion"  => $_POST["idseparacion"],
+                    "n_expediente"  => $_POST["n_expediente"],
+                    "idactivo"      => $_POST["idactivo"],
+                    "idcliente"     => $_POST["idcliente"],
+                    "idconyugue"    => $_POST["idconyugue"],
+                    "separacion_monto" => $_POST["separacion_monto"],
+                    "imagen"        => $_POST["imagen"],
+                    "idusuario"     => 1
+                    // "idusuario"     => $_POST["idusuario"]
                 ];
 
                 echo json_encode($separation->setSeparation($dataObtained));

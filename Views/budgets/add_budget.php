@@ -383,7 +383,10 @@
                       <div class="col-md-5">
                         <div class="m-2">
                           <label for="codigo" class="form-label">Código</label>
-                          <input class="form-control" type="text" name="codigo" id="codigo" value="" minlength="1" maxlength="8" placeholder="Código" required autofocus>
+                          <div class="input-group">
+                            <span class="input-group-text">PRES -</span>
+                            <input class="form-control" type="number" name="codigo" id="codigo" value="000" min="001" maxlength="3" step="001" placeholder="Código" required autofocus>
+                          </div>
                           <div class="invalid-feedback">
                             Necesitas ingresar el código del presupuesto.
                           </div>
@@ -500,7 +503,7 @@
 
                       <div class="col-md-3">
                         <label for="precio_unitario" class="form-label">Precio Unitario</label>
-                        <input type="number" name="precio_unitario" id="precio_unitario" class="form-control" min="1.0" s required>
+                        <input type="number" name="precio_unitario" id="precio_unitario" class="form-control" value="0.00" min="1.00" step="0.01" required>
                         <div class="invalid-feedback">
                           Necesitas ingresar el precio unitario.
                         </div>
@@ -730,7 +733,10 @@
       let rowDelete = [];
       let rowEdit = [];
       let lastCode = false;
+      let lastModel = false;
       let allDataBudget;
+      let codeValue;
+      let modelValue;
 
       // Valida los datos de la cabezera del presupuesto
       function validateData(value, column, array) {
@@ -770,7 +776,7 @@
           if (results) {
 
             allDataBudget = results;
-
+            console.log(allDataBudget);
           }
         } catch (e) {
           console.error(e);
@@ -837,8 +843,8 @@
 
           let params = new FormData();
           params.append("action", "addBudget");
-          params.append("codigo", $("#codigo").value);
-          params.append("modelo", $("#modelo").value);
+          params.append("codigo", codeValue);
+          params.append("modelo", modelValue);
 
           let result = await global.sendAction(url, params);
 
@@ -847,13 +853,20 @@
             isRecovering = true;
             idpresupuesto = result.idpresupuesto
 
+            let codeObt = result.codigo;
+            let splitCode = codeObt.split("-");
+            let newCode = splitCode[1].trim();
+
             let data = {
               idpresupuesto: result.idpresupuesto,
-              codigo: result.codigo,
+              codigo: newCode,
               modelo: result.modelo
             };
 
-            $("#codigo").value = result.codigo;
+            console.log(data);
+
+            console.log(data)
+            $("#codigo").value = newCode;
             $("#modelo").value = result.modelo;
 
             sessionStorage.setItem("dataBudget", JSON.stringify(data));
@@ -1481,30 +1494,39 @@
 
         e.preventDefault();
 
+        let valueInput = e.target.value;
+
         if (!lastCode) {
 
-          currentCode = "PRES-" + $("#codigo").value.toString().padStart(3, "0");
-          $("#codigo").value = currentCode;
           lastCode = true;
-        }
+          let sliceValue = valueInput.slice(0,3);
+          let valueFormat = sliceValue.padEnd(3, "0");
+          let newValue = "PRES-" + valueFormat;
+          codeValue = newValue;
+          $("#codigo").value = valueFormat;
 
-        if ($("#codigo").value !== "") {
-
-          validateData($("#codigo").value, "codigo", allDataBudget)
+          validateData(newValue, "codigo", allDataBudget)
             .then(() => {
               $("#modelo").focus();
             })
             .catch(e => {
-              console.error(e);
               $("#codigo").focus();
+              lastCode = false;
             });
         }
       })
 
       $("#codigo").addEventListener("input", (e) => {
-        if ($("#codigo").value == "") {
+
+        e.preventDefault();
+        let valueInput = e.target.value;
+
+        if(e.target.dataset.prevValue !== valueInput) {
           lastCode = false;
+
         }
+        e.target.dataset.prevValue = valueInput
+
       });
 
       $("#save_lots").addEventListener("click", async function() {
@@ -1608,9 +1630,13 @@
       $("#modelo").addEventListener("blur", (e) => {
         e.preventDefault();
 
-        if ($("#modelo").value !== "") {
+        let modelInput = e.target.value;
+
+        if (!lastModel) {
           console.log(allDataBudget)
-          validateData($("#modelo").value, "modelo", allDataBudget)
+          modelValue = modelInput
+
+          validateData(modelInput, "modelo", allDataBudget)
             .then(() => {
 
               $("#save_budget").disabled = false;
@@ -1620,6 +1646,19 @@
               $("#modelo").focus();
             });
         }
+      });
+
+      $("#modelo").addEventListener("blur",(e)=>{
+        e.preventDefault();
+
+        let modelInput = e.target.value
+        console.log(modelInput)
+        console.log(e.target.dataset.modelo)
+        if(e.target.dataset.modelo !== modelInput){
+          lastModel = false;
+
+        }
+        e.target.dataset.modelo = modelInput;
       });
 
       getBrands();

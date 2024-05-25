@@ -735,7 +735,7 @@
         <div class="modal-content p-0">
           <div class="modal-header bg-secondary">
             <h5 class="modal-title text-white" id="modalTitleId">
-              Los datos no tienen relacion !!
+              Confirma el precio de venta !!
             </h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
@@ -744,7 +744,7 @@
             <!-- PRECIO LOTE -->
             <div class="mt-4">
               <label for="precio_lote" class="form-label">Precio del lote</label>
-              <input type="number" class="form-control" id="precio_lote_modal" placeholder="Precio de venta" maxlength="7" minlength="7" min="1.00" value="0.00" required autofocus>
+              <input type="number" class="form-control" id="precio_lote_modal" placeholder="Precio de venta" maxlength="7" minlength="7" min="1.00" value="0.00" step="0.01" required autofocus>
               <div class="invalid-feedback">
                 Necesitas ingresar el precio del lote.
               </div>
@@ -770,7 +770,7 @@
             <!-- PRECIO CONSTRUCCION -->
             <div class="mt-4">
               <label for="precio_construccion" class="form-label">Precio de la construcción</label>
-              <input type="number" class="form-control" id="precio_construccion_modal" placeholder="Precio de construcción" maxlength="7" minlength="7" min="1.00" value="0.00">
+              <input type="number" class="form-control" id="precio_construccion_modal" placeholder="Precio de construcción" maxlength="7" minlength="7" min="1.00" value="0.00" step="0.01">
               <div class="invalid-feedback">
                 Necesitas ingresar el precio de construcción.
               </div>
@@ -782,7 +782,7 @@
             <!-- PRECIO VENTA -->
             <div class="mt-4">
               <label for="precio_venta" class="form-label">Precio de la venta</label>
-              <input type="number" class="form-control" id="precio_venta_modal" placeholder="Precio de venta" maxlength="8" minlength="8" min="1.00" value="0.00">
+              <input type="number" class="form-control" id="precio_venta_modal" placeholder="Precio de venta" maxlength="8" minlength="8" min="1.00" value="0.00" step="0.01">
               <div class="invalid-feedback">
                 Necesitas ingresar el precio de venta.
               </div>
@@ -961,6 +961,11 @@
               }, 1000);
 
               $("#precio_construccion_modal").value = results.total;
+
+              let precio_lote = Number.parseFloat($("#precio_lote_modal").value);
+              let precio_construccion = Number.parseFloat($("#precio_construccion_modal").value);
+              let suma = (precio_lote + precio_construccion).toFixed(2);
+              $("#precio_venta_modal").value = suma;
             }
             console.log(results)
           }
