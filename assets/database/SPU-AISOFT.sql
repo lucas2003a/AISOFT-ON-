@@ -2108,27 +2108,26 @@ END $$
 DELIMITER ;
 
 DELIMITER $$
-CREATE PROCEDURE sup_list_refunds
+CREATE PROCEDURE sup_list_refunds_tRefund
 (
-    IN _tipo_persona    VARCHAR(10),
+    IN _tipo_devolucion    VARCHAR(20),
     IN _fechaInicio     DATE,
     IN _fechaFin        DATE
 )
 BEGIN
     SELECT * 
         FROM vws_list_refunds
-        WHERE tipo_persona = _tipo_persona
+        WHERE tipo_devolucion = _tipo_devolucion
             AND create_at BETWEEN _fechaInicio AND _fechaFin
             AND inactive_at IS NULL;
 END $$
-
 DELIMITER;
 
 DELIMITER $$
 
 CREATE PROCEDURE sup_list_refunds_n_expedientes
 (
-    IN _tipo_persona    VARCHAR(10),
+    IN _tipo_devolucion    VARCHAR(20),
     IN _fechaInicio     DATE,
     IN _fechaFin        DATE,
     IN _n_expediente    VARCHAR(10)
@@ -2136,7 +2135,7 @@ CREATE PROCEDURE sup_list_refunds_n_expedientes
 BEGIN
     SELECT * 
         FROM vws_list_refunds
-        WHERE tipo_persona = _tipo_persona
+        WHERE tipo_devolucion = _tipo_devolucion
             AND create_at BETWEEN _fechaInicio AND _fechaFin
             AND inactive_at IS NULL
             AND n_expediente_dev LIKE CONCAT(_n_expediente,'%');
@@ -2162,9 +2161,9 @@ CREATE PROCEDURE spu_add_refund
 (
     IN _n_expediente    VARCHAR(10),
     IN _idseparacion    INT,
-    IN _tipo_separacion VARCHAR(20),
+    IN _tipo_devolucion VARCHAR(20),
     IN _detalle         VARCHAR(200),
-    IN _procentaje_penalidad  TINYINT,
+    IN _porcentaje_penalidad  TINYINT,
     IN _monto_devolucion DECIMAL(8,2),
     IN _imagen          VARCHAR(100),
     IN _idusuario       INT
@@ -2173,7 +2172,7 @@ BEGIN
     INSERT INTO devoluciones(
                     n_expediente,
                     idseparacion,
-                    tipo_separacion,
+                    tipo_devolucion,
                     detalle,
                     porcentaje_penalidad,
                     monto_devolucion,
@@ -2183,9 +2182,9 @@ BEGIN
                 VALUES(
                     _n_expediente,
                     _idseparacion,
-                    _tipo_separacion,
+                    _tipo_devolucion,
                     _detalle,
-                    _procentaje_penalidad,
+                    _porcentaje_penalidad,
                     _monto_devolucion,
                     _imagen,
                     _idusuario
@@ -2203,9 +2202,9 @@ CREATE PROCEDURE spu_set_refund
     IN _iddevolucion    INT,
     IN _n_expediente    VARCHAR(10),
     IN _idseparacion    INT,
-    IN _tipo_separacion VARCHAR(20),
+    IN _tipo_devolucion VARCHAR(20),
     IN _detalle         VARCHAR(200),
-    IN _procentaje_penalidad  TINYINT,
+    IN _porcentaje_penalidad  TINYINT,
     IN _monto_devolucion DECIMAL(8,2),
     IN _imagen          VARCHAR(100),
     IN _idusuario       INT
@@ -2215,9 +2214,9 @@ BEGIN
         SET
             n_expediente   = _n_expediente,
             idseparacion   = _idseparacion,
-            tipo_separacion = _tipo_separacion,
+            tipo_devolucion = _tipo_devolucion,
             detalle        = _detalle,
-            porcentaje_penalidad = _procentaje_penalidad,
+            porcentaje_penalidad = _porcentaje_penalidad,
             monto_devolucion = _monto_devolucion,
             imagen         = _imagen,
             update_at      = CURDATE(),
@@ -2250,6 +2249,19 @@ END $$
 
 DELIMITER;
 -- CONTRATOS  ////////////////////////////////////////////////////////////////////////////////////
+
+DELIMITER $$
+CREATE PROCEDURE spu_existContract_idseparacion
+(
+    IN _idseparacion INT
+)
+BEGIN
+    SELECT EXISTS(SELECT 1 FROM contratos
+    WHERE idseparacion = _idseparacion
+    AND inactive_at IS NULL) AS existContract;
+END $$
+DELIMITER ;
+
 DELIMITER $$
 
 CREATE PROCEDURE spu_lits_contracts_full_by_id(IN _idcontrato INT)

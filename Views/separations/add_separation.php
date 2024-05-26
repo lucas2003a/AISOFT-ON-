@@ -467,7 +467,7 @@
                           <!-- TIPO DE CAMBIO -->
                           <div class="mt-4">
                             <label for="tipo_cambio" class="form-label">Tipo de cambio</label>
-                            <input type="number" class="form-control" id="tipo_cambio" readonly>
+                            <input type="number" class="form-control" id="tipo_cambio" required min="1.00" value="0.00" step="0.01">
                             <div class="invalid-feedback">
 
                             </div>
@@ -693,7 +693,7 @@
     async function getToday() {
       let date = new Date();
 
-      let day = date.getDay().toString().padStart(2, '0');
+      let day = date.getDate().toString().padStart(2, '0');
       let month = (date.getMonth() + 1).toString().padStart(2, '0');
       let year = date.getFullYear().toString().padStart(2, '0');
 
@@ -709,6 +709,7 @@
         let params = new URLSearchParams();
         let today = await getToday();
 
+        console.log(today)
         params.append("action", "searchTC");
         params.append("fecha", today);
 
@@ -717,12 +718,17 @@
         let results = await global.sendActionGET(url);
 
         if (results) {
-          let precio_venta = results.data.data.venta;
-          let number_format = precio_venta.toFixed(2);
-          let pVenta_format = Number.parseFloat(number_format);
 
+          console.log(results)
+          if(results.data.data){
+            let precio_venta = results.data.data.venta;
+            let number_format = precio_venta.toFixed(2);
+            let pVenta_format = Number.parseFloat(number_format);
+            $("#tipo_cambio").value = pVenta_format;
 
-          $("#tipo_cambio").value = pVenta_format;
+          }else{
+            sAlert.sweetWarning("No se ha conseguido el tipo de cambio","No se ha podido conseguir el tipo de cambio <br> Intentalo más tarde.")
+          }
         }
       } catch (e) {
         console.error(e)

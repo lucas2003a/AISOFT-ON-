@@ -168,7 +168,7 @@ BEGIN
 	);
 
 	SET _existContract = (
-		SELECT EXISTS(SELECT idactivo FROM contratos
+		SELECT EXISTS(SELECT 1 FROM contratos
 		WHERE idactivo = _idactivo
 		AND inactive_at IS NULL)
 	);

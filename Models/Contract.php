@@ -12,6 +12,22 @@ class Contract extends Conection{
     }
 
     /**
+     * Método para verficar si existe un contratodo por el idseparacion
+     */
+    public function existContrat($idseparacion = 0){
+        try{
+
+            $query = $this->conection->prepare("CALL spu_existContract_idseparacion(?)");
+            $query->execute(array($idseparacion));
+
+            return $query->fetch(PDO::FETCH_ASSOC);
+        }
+        catch(Exception $e){
+            die($e->getMessage());
+        }
+    }
+
+    /**
      * Método para listar el constrato completo por el idcontrato
      */
     public function listContractId($idcontrato = 0){

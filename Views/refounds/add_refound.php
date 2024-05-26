@@ -681,7 +681,7 @@
       console.log(porcentaje)
       let result = montoSep * (porcentaje / 100);
 
-      $("#monto_devolucion").value = result;
+      $("#monto_devolucion").value = result.toFixed(2);
     }
 
     //Obtiene la fecha actual
@@ -790,6 +790,7 @@
         params.append("idseparacion", idsep);
         params.append("tipo_devolucion", $("#tipo_devolucion").value);
         params.append("detalle", $("#detalle").value);
+        params.append("porcentaje_penalidad", $("#porcentaje_penalidad").value);
         params.append("monto_devolucion", $("#monto_devolucion").value);
         params.append("imagen", $("#in-image").files[0]);
 
@@ -797,7 +798,7 @@
 
         if (result.filasAfect > 0) {
           console.log(result);
-          sAlert.sweetsuccess("El registro fué exstisoso",()=>{
+          sAlert.sweetSuccess("El registro fué exstisoso","La devolución fué correctamente registrada",()=>{
             history.back(); //Regresa a la pagina anterior, history.go(-2) seria dos paginas atras
           })
         }
@@ -896,7 +897,7 @@
             event.preventDefault();
             sAlert.sweetConfirm("Datos nuevos", "¿Deseas actualizar el registro?", () => {
 
-              addRefund(); //Ejecuta la función
+              addRefund(idseparacion); //Ejecuta la función
             });
           }
 

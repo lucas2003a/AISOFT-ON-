@@ -361,7 +361,7 @@ CREATE VIEW vws_list_refunds AS
             persn.documento_nro
         ) AS documento_nro,
         dev.imagen,
-        dev.CREATE_at,
+        dev.create_at,
         dev.inactive_at,
         usuPers.nombres
     FROM
@@ -374,4 +374,5 @@ CREATE VIEW vws_list_refunds AS
     ORDER BY dev.iddevolucion DESC;
 
 DELIMITER;
+SELECT * from vws_list_refunds;
 

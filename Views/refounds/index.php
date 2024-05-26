@@ -150,7 +150,7 @@
 
         <!-- SEPARACIONES -->
         <li class="nav-item">
-          <a class="nav-link active" href="../separations/index.php">
+          <a class="nav-link" href="../separations/index.php">
             <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
               <svg width="12px" height="12px" viewBox="0 0 42 42" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <title>office</title>
@@ -174,7 +174,7 @@
 
         <!-- DEVOLUCIONES -->
         <li class="nav-item">
-          <a class="nav-link " href="../refounds/index.php">
+          <a class="nav-link active" href="../refounds/index.php">
             <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
               <svg width="12px" height="12px" viewBox="0 0 42 42" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <title>office</title>
@@ -349,9 +349,9 @@
         <nav aria-label="breadcrumb">
           <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
             <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="#">Dashboard</a></li>
-            <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Separaciones</li>
+            <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Devoluciones</li>
           </ol>
-          <h6 class="font-weight-bolder mb-0" id="cabezera">SEPARACIONES </h6>
+          <h6 class="font-weight-bolder mb-0" id="cabezera">DEVOLUCIONES </h6>
         </nav>
         <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
           <ul class="navbar-nav  justify-content-end">
@@ -393,11 +393,11 @@
                 <div class="row d-flex" style="align-items: end;">
 
                   <div class="col-md-3 mt-2">
-                    <label for="tipo_persona">Tipo de persona</label>
-                    <select name="tipo_persona" class="form-select" id="tipo_persona">
-                      <option value="">Tipo de persona</option>
-                      <option value="NATURAL" selected>Natural</option>
-                      <option value="JURÍDICA">Juridica</option>
+                    <label for="tipo_devolucion">Tipo de devolución</label>
+                    <select name="tipo_devolucion" class="form-select" id="tipo_devolucion">
+                      <option value="">Tipo de devolución</option>
+                      <option value="POR SEPARACIÓN" selected>Por separación</option>
+                      <option value="POR CONTRATO">Por contrato</option>
                     </select>
                   </div>
 
@@ -415,10 +415,10 @@
                   </div>
 
                   <div class="col-md-3 d-grid mt-2">
-                    <label for="campoCriterio">Nº de expediente o documento de identidad</label>
+                    <label for="campoCriterio">Nº de expediente </label>
                     <div class="input-group">
                       <span class="input-group-text text-body"><i class="fas fa-search" aria-hidden="true"></i></span>
-                      <input type="text" class="form-control" placeholder="Nº de expediente o documento de identidad..." id="n_expediente">
+                      <input type="text" class="form-control" placeholder="Nº de expediente ..." id="n_expediente">
                     </div>
                   </div>
 
@@ -426,7 +426,6 @@
                 <div class="row d-flex" style="justify-content: space-between; align-items: start;">
                   <div class="col-md-3 m-2">
                     <div class="btn-group text-start mt-2">
-                      <a type="button" class="mb-0  btn btn-sm btn-outline-success" href="./add_separation.php">AGREGAR SEPARACIÓN</a>
                     </div>
 
                   </div>
@@ -436,7 +435,7 @@
             <hr>
             <div class="card-body px-0 pt-0 pb-2">
               <div class="table-responsive text-center p-0">
-                <table class="table align-items-center mb-0" id="table-separations">
+                <table class="table align-items-center mb-0" id="table-founds">
                   <thead>
                     <tr>
                       <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">#</th>
@@ -444,7 +443,7 @@
                       <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Cliente</th>
                       <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Tipo de documento</th>
                       <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Nº de documento</th>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Monto de separación</th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Monto de devolución</th>
                       <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Operaciones</th>
                     </tr>
                   </thead>
@@ -619,26 +618,6 @@
 
       let timmer;
 
-      //Cuenta si existe un contrato por el idsepracion
-      async function countContrato(id) {
-
-        try {
-          let url = "../../Controllers/contract.controller.php";
-        
-          let params = new FormData();
-          params.append("action", "existContract");
-          params.append("idseparacion", id);
-
-          let result = await global.sendAction(url, params);
-
-          if (result) {
-            return result.existContract;
-          }
-        } catch (e) {
-          console.error(e)
-        }
-      }
-
       //Obtiene los registros de una separacion por id
       async function getSeparation(id) {
 
@@ -691,27 +670,27 @@
         }
       }
       //Obtiene los datos de las separciones en base a 4 criterios
-      async function getSeparations(tpersona, dateStart, dateEnd, campoCriterio) {
+      async function getRefunds(tdevolucion, dateStart, dateEnd, nExpedient) {
 
         try {
 
-          let url = "../../Controllers/separation.controller.php";
+          let url = "../../Controllers/refund.controller.php";
 
           let params = new FormData();
 
 
-          if (!campoCriterio) {
+          if (!nExpedient) {
 
-            params.append("action", "listSeparationsTPersona");
-            params.append("tipoPersona", tpersona);
+            params.append("action", "listRefundsTrefund");
+            params.append("tipo_devolucion", tdevolucion);
             params.append("fechaInicio", dateStart);
             params.append("fechaFin", dateEnd);
           } else {
-            params.append("action", "listSeparationsCampoCriterio");
-            params.append("tipoPersona", tpersona);
+            params.append("action", "listRefundsNExpedientes");
+            params.append("tipo_devolucion", tdevolucion);
             params.append("fechaInicio", dateStart);
             params.append("fechaFin", dateEnd);
-            params.append("campoCriterio", campoCriterio)
+            params.append("n_expediente", nExpedient)
 
           }
 
@@ -720,8 +699,9 @@
 
           if (results) {
 
+            console.log(results)
             $("#render-alert").innerHTML = "";
-            $("#table-separations tbody").innerHTML = "";
+            $("#table-founds tbody").innerHTML = "";
 
             if (results.length > 0) {
               console.log(results);
@@ -735,20 +715,18 @@
                 newRow = `
                   <tr>
                     <td>${numberRow}</td>
-                    <td>${result.n_expediente}</td>
+                    <td>${result.n_expediente_dev}</td>
                     <td>${result.cliente}</td> 
                     <td>${result.documento_tipo}</td> 
                     <td>${result.documento_nro}</td> 
-                    <td>${result.separacion_monto}</td>
+                    <td>${result.monto_devolucion}</td>
                     <td>
                         <a type="button" href="#" data-id="${result.idseparacion}" class="btn btn-link text-info px-3 mb-0 open-modal" data-bs-toggle="modal" data-bs-target="#modal_det_sep" ><i class="fa-solid fa-eye open-modal" data-id="${result.idseparacion}"></i></a>
-                        <a type="button" data-id="${result.idseparacion}" data-expedient="${result.n_expediente}" class="btn btn-link text-danger text-gradient px-3 mb-0 delete"><i class="bi bi-trash-fill delete" data-id="${result.idseparacion}" data-expedient="${result.n_expediente}"></i></a>
                         <a type="button" href="./edit_separation.php?id=${code}&expedient=${expedient}" class="btn btn-link text-dark px-3 mb-0 edit"><i class="bi bi-pencil-fill edit"></i></a>
-                        <a type="button" data-id="${result.idseparacion}" class="btn btn-link text-secondary px-3 mb-0 return"><i class="fa-solid fa-right-left return" data-id="${result.idseparacion}"></i></a>
                     </td>
                   </tr>
                   `;
-                $("#table-separations tbody").innerHTML += newRow;
+                $("#table-founds tbody").innerHTML += newRow;
                 ++numberRow;
               });
             } else {
@@ -807,11 +785,6 @@
       function setToday() {
         //FECHA ACTUAL
 
-        /*getDate() => numero del día entre 1 y 31 (o 30 dependiendo del mes)
-          getMonth() => numero del mes entre 0 y 11 (0 = enero, 1 = febrero, etc)
-          getFullYear() => año en formato 4 dígitos
-          getDate(0) => Devuelve el ultimo día del mes anterior
-         */
         const day = date.getDate().toString().padStart(2, '0');
         const month = (date.getMonth() + 1).toString().padStart(2, '0');
         const year = date.getFullYear().toString();
@@ -848,8 +821,8 @@
         $("#fechaFin").min = dateBefore;
         fechaFinValue = $("#fechaFin").value
 
-        let tPersona = $("#tipo_persona").options[$("#tipo_persona").selectedIndex].value;
-        await getSeparations(tPersona, dateDefault, today, false);
+        let tDevolucion = $("#tipo_devolucion").options[$("#tipo_devolucion").selectedIndex].value;
+        await getRefunds(tDevolucion, dateDefault, today, false);
       }
 
       //Valida las fechas de los inputs date
@@ -883,10 +856,10 @@
         fechaInicioValue = e.target.value;
         validateDates()
           .then(() => {
-            let tipoPersona = $("#tipo_persona").options[$("#tipo_persona").selectedIndex].value;
+            let tipoPersona = $("#tipo_devolucion").options[$("#tipo_devolucion").selectedIndex].value;
             let n_expedient = $("#n_expediente").value ? $("#n_expediente").value : false;
 
-            getSeparations(tipoPersona, fechaInicioValue, fechaFinValue, n_expedient);
+            getRefunds(tipoPersona, fechaInicioValue, fechaFinValue, n_expedient);
           })
       })
 
@@ -895,21 +868,21 @@
         fechaFinValue = e.target.value;
         validateDates()
           .then(() => {
-            let tipoPersona = $("#tipo_persona").options[$("#tipo_persona").selectedIndex].value;
+            let tipoPersona = $("#tipo_devolucion").options[$("#tipo_devolucion").selectedIndex].value;
             let n_expedient = $("#n_expediente").value ? $("#n_expediente").value : false;
 
-            getSeparations(tipoPersona, fechaInicioValue, fechaFinValue, n_expedient);
+            getRefunds(tipoPersona, fechaInicioValue, fechaFinValue, n_expedient);
           })
       });
 
-      $("#tipo_persona").addEventListener("change", (e) => {
+      $("#tipo_devolucion").addEventListener("change", (e) => {
 
         let option = e.target.options[e.target.selectedIndex].value;
         console.log(option)
         if (option) {
           let n_expedient = $("#n_expediente").value ? $("#n_expediente").value : false;
 
-          getSeparations(option, fechaInicioValue, fechaFinValue, n_expedient);
+          getRefunds(option, fechaInicioValue, fechaFinValue, n_expedient);
         }
       })
 
@@ -922,59 +895,26 @@
           clearTimeout(timmer);
 
           timmer = setTimeout(() => {
-            let tpersona = $("#tipo_persona").options[$("#tipo_persona").selectedIndex].value
-            getSeparations(tpersona, fechaInicioValue, fechaFinValue, input);
+            let tpersona = $("#tipo_devolucion").options[$("#tipo_devolucion").selectedIndex].value
+            getRefunds(tpersona, fechaInicioValue, fechaFinValue, input);
           }, 1000);
         }
       });
 
-      $("#table-separations tbody").addEventListener("click", async function(e) {
+      $("#table-founds tbody").addEventListener("click", async function(e) {
 
         e.preventDefault();
 
-        
         if (e.target.classList.contains("open-modal")) {
 
           let idSeparacion = e.target.dataset.id;
           getSeparation(idSeparacion);
 
-        } else if (e.target.classList.contains("delete")) {
-          let idSeparacion = e.target.dataset.id;
-          let expedientGet = e.target.dataset.expedient;
-
-          let code = btoa(idSeparacion);
-          let expedient = btoa(expedientGet);
-
-          let exist = await countContrato(idSeparacion)
-
-          if (exist) {
-            sAlert.sweetWarning("No se puede actualizar el registro", "Este registro cuenta con un contrato, intentalo más tarde.")
-          } else {
-
-            window.location.href= `./delete_separation.php?id=${code}&expedient=${expedient}`;
-          }
-
-        } else if (e.target.classList.contains("return")) {
-
-          let idSeparacion = e.target.dataset.id;
-
-          let code = btoa(idSeparacion);
-
-          console.log(await countContrato(idSeparacion)); 
-          let exist = await countContrato(idSeparacion)
-
-          if (exist) {
-            sAlert.sweetWarning("No se puede actualizar el registro", "Este registro cuenta con un contrato, intentalo más tarde.")
-          } else {
-
-            window.location.href = `../refounds/add_refound.php?id=${code}`;
-          }
         }
       });
 
       getDates()
 
-      console.log($("#fechaInicio").value)
     });
   </script>
   <script>
