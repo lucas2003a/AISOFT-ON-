@@ -453,7 +453,7 @@
                   <div class="row">
                     <div class="table-responsive table-responsive-lg">
                       <table class="table align-items-center mb-0" id="table-clients">
-                        <thead>
+                        <thead class="text-center">
                           <tr>
                             <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">#</th>
                             <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Cliente</th>
@@ -461,7 +461,7 @@
                             <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Nº de documento</th>
                           </tr>
                         </thead>
-                        <tbody>
+                        <tbody class="text-center">
 
                           <!-- RENDER NUEVOS CLIENTES  -->
 
@@ -1379,28 +1379,44 @@
         let numRow = 1;
         data.forEach(element =>{
 
+          let newRow = "";
           newRow = `
-          <tr>
+          <tr class="table-active">
             <td>
-              <p class="text-xs font-weight-bold mb-0">${data.apellidos}</p>
-            </td>
-            <td>
-              <p class="text-xs font-weight-bold mb-0">${data.nombres}</p>
+              <p class="text-xs font-weight-bold mb-0">${numRow}</p>
             </td>
             <td>
-              <p class="text-xs font-weight-bold mb-0">${data.documento_tipo}</p>
+              <p class="text-xs font-weight-bold mb-0">${element.cliente}</p>
             </td>
             <td>
-              <p class="text-xs font-weight-bold mb-0">${data.documento_nro}</p>
+              <p class="text-xs font-weight-bold mb-0">${element.documento_tipo}</p>
             </td>
-            <td class="align-middle">
-              <div class="btn-group">
-                <a type="button" href="#" class="btn btn-success btn-sm"><i class="bi bi-arrow-right-square"></i> Ver más</a>
-              </div>
+            <td>
+              <p class="text-xs font-weight-bold mb-0">${element.documento_nro}</p>
             </td>
-          </tr>           
+          </tr>  
+          `;
+          ++numRow;
+
+          if(element.conyugue){
+            newRow += `
+            <tr>
+              <td>
+                <p class="text-xs font-weight-bold mb-0">${numRow}</p>
+              </td>
+              <td>
+                <p class="text-xs font-weight-bold mb-0">${element.conyugue}</p>
+              </td>
+              <td>
+                <p class="text-xs font-weight-bold mb-0">${element.conyPers_documento_tipo}</p>
+              </td>
+              <td>
+                <p class="text-xs font-weight-bold mb-0">${element.conyPers_documento_nro}</p>
+              </td>
+            </tr>  
             `;
-  
+          }
+          
           $(idtable).innerHTML += newRow;
         });
       }

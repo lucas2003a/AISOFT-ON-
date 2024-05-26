@@ -150,7 +150,7 @@
 
         <!-- SEPARACIONES -->
         <li class="nav-item">
-          <a class="nav-link  active" href="../separations/index.php">
+          <a class="nav-link active" href="../separations/index.php">
             <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
               <svg width="12px" height="12px" viewBox="0 0 42 42" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <title>office</title>
@@ -169,6 +169,29 @@
               </svg>
             </div>
             <span class="nav-link-text ms-1">Separaciones</span>
+          </a>
+        </li>
+
+        <!-- DEVOLUCIONES -->
+        <li class="nav-item">
+          <a class="nav-link " href="../refounds/index.php">
+            <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
+              <svg width="12px" height="12px" viewBox="0 0 42 42" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                <title>office</title>
+                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                  <g transform="translate(-1869.000000, -293.000000)" fill="#FFFFFF" fill-rule="nonzero">
+                    <g transform="translate(1716.000000, 291.000000)">
+                      <g id="office" transform="translate(153.000000, 2.000000)">
+                      <svg class="color-background" xmlns="http://www.w3.org/2000/svg"  width="50" height="50" fill="currentColor" class="bi bi-backspace-fill" viewBox="0 0 16 16">
+                          <path d="M15.683 3a2 2 0 0 0-2-2h-7.08a2 2 0 0 0-1.519.698L.241 7.35a1 1 0 0 0 0 1.302l4.843 5.65A2 2 0 0 0 6.603 15h7.08a2 2 0 0 0 2-2zM5.829 5.854a.5.5 0 1 1 .707-.708l2.147 2.147 2.146-2.147a.5.5 0 1 1 .707.708L9.39 8l2.146 2.146a.5.5 0 0 1-.707.708L8.683 8.707l-2.147 2.147a.5.5 0 0 1-.707-.708L7.976 8z" />
+                        </svg>
+                      </g>
+                    </g>
+                  </g>
+                </g>
+              </svg>
+            </div>
+            <span class="nav-link-text ms-1">Devoluciones</span>
           </a>
         </li>
 
@@ -377,7 +400,7 @@
                       <option value="JURÍDICA">Juridica</option>
                     </select>
                   </div>
-                  
+
                   <div class="col-md-3 mt-2">
                     <label for="fechaInicio" class="form-label">
                       Fecha de inicio
@@ -390,7 +413,7 @@
                     </label>
                     <input type="date" name="fechaFin" class="form-control" id="fechaFin">
                   </div>
-                  
+
                   <div class="col-md-3 d-grid mt-2">
                     <label for="campoCriterio">Nº de expediente o documento de identidad</label>
                     <div class="input-group">
@@ -398,7 +421,7 @@
                       <input type="text" class="form-control" placeholder="Nº de expediente o documento de identidad..." id="n_expediente">
                     </div>
                   </div>
-                  
+
                 </div>
                 <div class="row d-flex" style="justify-content: space-between; align-items: start;">
                   <div class="col-md-3 m-2">
@@ -513,6 +536,57 @@
       </div>
     </div>
   </div>
+
+  <!-- MODAL -->
+  <!-- Button trigger modal -->
+  <!-- Modal -->
+  <div class="modal fade" id="modal_det_sep" tabindex="-1" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-lg modal-fullscreen-sm-down" role="document">
+      <div class="modal-content">
+        <div class="modal-header bg-secondary">
+          <h5 class="modal-title text-white" id="modalTitle">
+            --
+          </h5>
+          <button type="button" class="btn-close text-dark" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div style="margin: 5% 10% 5% 10%;">
+            <div class="d-flex" style="justify-content: space-between;">
+              <div>
+
+                <h6><strong>Cliente :</strong></h6>
+                <h6><strong>Documento tipo :</strong></h6>
+                <h6><strong>Documento número :</strong></h6>
+                <h6><strong>Proyecto :</strong></h6>
+                <h6><strong>Sublote :</strong></h6>
+                <h6><strong>Monto de separación :</strong></h6>
+                <div id="labels">
+
+                </div>
+              </div>
+              <div>
+                <h6 id="cliente"></h6>
+                <h6 id="documento_tipo"></h6>
+                <h6 id="documento_nro"></h6>
+                <h6 id="proyecto"></h6>
+                <h6 id="sublote"></h6>
+                <h6 id="monto_separación"></h6>
+                <div id="content">
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" data-bs-dismiss="modal">
+            Cerrar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- SWEET ALERT -->
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
@@ -529,7 +603,7 @@
 
       /* INSTANCIAS */
       const global = new FunGlobal();
-      const sAlett = new Alert();
+      const sAlert = new Alert();
 
       const $ = id => global.$(id);
       const $All = id => global.$All(id);
@@ -545,6 +619,57 @@
 
       let timmer;
 
+      //Obtiene los registros de una separacion por id
+      async function getSeparation(id) {
+
+        try {
+          let url = "../../Controllers/separation.controller.php";
+          let params = new FormData();
+
+          params.append("action", "listSeparationById");
+          params.append("idseparacion", id);
+
+          let result = await global.sendAction(url, params);
+
+          if (result) {
+            console.log(result)
+
+            $("#labels").innerHTML = "";
+            $("#content").innerHTML = "";
+
+            $("#modalTitle").innerHTML = result.n_expediente;
+
+            $("#cliente").innerHTML = result.cliente;
+            $("#documento_tipo").innerHTML = result.documento_tipo;
+            $("#documento_nro").innerHTML = result.documento_nro;
+            $("#proyecto").innerHTML = result.denominacion;
+            $("#sublote").innerHTML = result.sublote;
+            $("#monto_separación").innerHTML = result.separacion_monto;
+
+            if (result.conyugue) {
+
+              const labels = ["Conyugue", "Tipo de documento", "Nro de documento"];
+              const contents = [result.conyugue, result.conyPers_documento_tipo, result.conyPers_documento_nro];
+              console.log(contents)
+
+              $("#labels").innerHTML += "<hr>";
+              $("#content").innerHTML += "<hr>";
+
+              labels.forEach((label, index) => {
+
+                let tagLabel = `<h6><strong>${label} :</strong></h6>`;
+                $("#labels").innerHTML += tagLabel;
+
+                let tagContent = `<h6>${contents[index]}</h6>`;
+                $("#content").innerHTML += tagContent;
+              });
+            }
+
+          }
+        } catch (e) {
+          console.error(e);
+        }
+      }
       //Obtiene los datos de las separciones en base a 4 criterios
       async function getSeparations(tpersona, dateStart, dateEnd, campoCriterio) {
 
@@ -580,9 +705,9 @@
 
             if (results.length > 0) {
               console.log(results);
-  
+
               let numberRow = 1;
-              
+
               results.forEach(result => {
                 let newRow = "";
                 let code = btoa(result.idseparacion);
@@ -596,9 +721,10 @@
                     <td>${result.documento_nro}</td> 
                     <td>${result.separacion_monto}</td>
                     <td>
+                        <a type="button" href="#" data-id="${result.idseparacion}" class="btn btn-link text-info px-3 mb-0 open-modal" data-bs-toggle="modal" data-bs-target="#modal_det_sep" ><i class="fa-solid fa-eye open-modal" data-id="${result.idseparacion}"></i></a>
                         <a type="button" href="./delete_separation.php?id=${code}&expedient=${expedient}" class="btn btn-link text-danger text-gradient px-3 mb-0 delete"><i class="bi bi-trash-fill delete"></i></a>
                         <a type="button" href="./edit_separation.php?id=${code}&expedient=${expedient}" class="btn btn-link text-dark px-3 mb-0 edit"><i class="bi bi-pencil-fill edit"></i></a>
-                        <a type="button" href="#" class="btn btn-link text-success px-3 mb-0 open-modal"><i class="bi bi-arrow-right-square open-modal"></i></a>
+                        <a type="button" href="../refounds/add_refound.php?id="${code}" class="btn btn-link text-secondary px-3 mb-0 return"><i class="fa-solid fa-right-left return" data-id="${result.idseparacion}"></i></a>
                     </td>
                   </tr>
                   `;
@@ -606,7 +732,7 @@
                 ++numberRow;
               });
             } else {
-  
+
               let newAlert = "";
               newAlert = `
                   <div class="alert alert-danger text-white" role="alert">
@@ -615,20 +741,20 @@
                       <p class="mb-0">Asegurate de ingresar los datos correctos</p>
                     </div>
               `;
-  
+
               $("#render-alert").innerHTML = newAlert;
             }
-          }else{
+          } else {
             let newAlert = "";
-              newAlert = `
+            newAlert = `
                   <div class="alert alert-danger text-white" role="alert">
                       <h4 class="alert-heading">No hay registros</h4>
                       <hr />
                       <p class="mb-0">Asegurate de ingresar los datos correctos</p>
                     </div>
               `;
-  
-              $("#render-alert").innerHTML = newAlert;
+
+            $("#render-alert").innerHTML = newAlert;
           }
         } catch (e) {
           console.error(e);
@@ -756,25 +882,25 @@
           })
       });
 
-      $("#tipo_persona").addEventListener("change",(e)=>{
+      $("#tipo_persona").addEventListener("change", (e) => {
 
         let option = e.target.options[e.target.selectedIndex].value;
         console.log(option)
-        if(option){
-            let n_expedient = $("#n_expediente").value ? $("#n_expediente").value : false;
+        if (option) {
+          let n_expedient = $("#n_expediente").value ? $("#n_expediente").value : false;
 
-            getSeparations(option, fechaInicioValue, fechaFinValue, n_expedient);
+          getSeparations(option, fechaInicioValue, fechaFinValue, n_expedient);
         }
       })
 
-      $("#n_expediente").addEventListener("input",(e)=>{
+      $("#n_expediente").addEventListener("input", (e) => {
 
-       let  input = e.target.value;
+        let input = e.target.value;
 
-        if(input){
+        if (input) {
 
           clearTimeout(timmer);
-          
+
           timmer = setTimeout(() => {
             let tpersona = $("#tipo_persona").options[$("#tipo_persona").selectedIndex].value
             getSeparations(tpersona, fechaInicioValue, fechaFinValue, input);
@@ -782,6 +908,17 @@
         }
       });
 
+      $("#table-separations tbody").addEventListener("click", (e) => {
+
+        if (e.target.classList.contains("open-modal")) {
+          let idseparacion = e.target.dataset.id;
+
+          getSeparation(idseparacion);
+
+        } else if (e.target.classList.contains("return")) {
+
+        }
+      });
       getDates()
 
       console.log($("#fechaInicio").value)

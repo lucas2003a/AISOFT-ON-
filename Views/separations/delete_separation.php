@@ -56,7 +56,7 @@
     <div class="collapse navbar-collapse  w-auto " id="sidenav-collapse-main">
       <ul class="navbar-nav">
 
-      <!-- DASHBOARD -->
+        <!-- DASCHBOARD -->
         <li class="nav-item">
           <a class="nav-link" href="../../Views/dashboard.html">
             <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
@@ -102,7 +102,7 @@
 
         <!-- CLIENTES -->
         <li class="nav-item">
-          <a class="nav-link" href="../clients/index.php">
+          <a class="nav-link" href="../Clients/index.php">
             <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
               <svg width="12px" height="12px" viewBox="0 0 42 42" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <title>office</title>
@@ -149,7 +149,7 @@
         </li>
         <!-- SEPARACIONES -->
         <li class="nav-item">
-          <a class="nav-link " href="../separations/index.php">
+          <a class="nav-link active" href="../separations/index.php">
             <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
               <svg width="12px" height="12px" viewBox="0 0 42 42" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <title>office</title>
@@ -158,8 +158,8 @@
                     <g transform="translate(1716.000000, 291.000000)">
                       <g id="office" transform="translate(153.000000, 2.000000)">
                         <svg class="color-background" xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-list-stars" viewBox="0 0 16 16">
-                          <path fill-rule="evenodd" d="M5 11.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5" />
-                          <path d="M2.242 2.194a.27.27 0 0 1 .516 0l.162.53c.035.115.14.194.258.194h.551c.259 0 .37.333.164.493l-.468.363a.28.28 0 0 0-.094.3l.173.569c.078.256-.213.462-.423.3l-.417-.324a.27.27 0 0 0-.328 0l-.417.323c-.21.163-.5-.043-.423-.299l.173-.57a.28.28 0 0 0-.094-.299l-.468-.363c-.206-.16-.095-.493.164-.493h.55a.27.27 0 0 0 .259-.194zm0 4a.27.27 0 0 1 .516 0l.162.53c.035.115.14.194.258.194h.551c.259 0 .37.333.164.493l-.468.363a.28.28 0 0 0-.094.3l.173.569c.078.255-.213.462-.423.3l-.417-.324a.27.27 0 0 0-.328 0l-.417.323c-.21.163-.5-.043-.423-.299l.173-.57a.28.28 0 0 0-.094-.299l-.468-.363c-.206-.16-.095-.493.164-.493h.55a.27.27 0 0 0 .259-.194zm0 4a.27.27 0 0 1 .516 0l.162.53c.035.115.14.194.258.194h.551c.259 0 .37.333.164.493l-.468.363a.28.28 0 0 0-.094.3l.173.569c.078.255-.213.462-.423.3l-.417-.324a.27.27 0 0 0-.328 0l-.417.323c-.21.163-.5-.043-.423-.299l.173-.57a.28.28 0 0 0-.094-.299l-.468-.363c-.206-.16-.095-.493.164-.493h.55a.27.27 0 0 0 .259-.194z" />
+                          <path fill-rule="evenodd" d="M5 11.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5"/>
+                          <path d="M2.242 2.194a.27.27 0 0 1 .516 0l.162.53c.035.115.14.194.258.194h.551c.259 0 .37.333.164.493l-.468.363a.28.28 0 0 0-.094.3l.173.569c.078.256-.213.462-.423.3l-.417-.324a.27.27 0 0 0-.328 0l-.417.323c-.21.163-.5-.043-.423-.299l.173-.57a.28.28 0 0 0-.094-.299l-.468-.363c-.206-.16-.095-.493.164-.493h.55a.27.27 0 0 0 .259-.194zm0 4a.27.27 0 0 1 .516 0l.162.53c.035.115.14.194.258.194h.551c.259 0 .37.333.164.493l-.468.363a.28.28 0 0 0-.094.3l.173.569c.078.255-.213.462-.423.3l-.417-.324a.27.27 0 0 0-.328 0l-.417.323c-.21.163-.5-.043-.423-.299l.173-.57a.28.28 0 0 0-.094-.299l-.468-.363c-.206-.16-.095-.493.164-.493h.55a.27.27 0 0 0 .259-.194zm0 4a.27.27 0 0 1 .516 0l.162.53c.035.115.14.194.258.194h.551c.259 0 .37.333.164.493l-.468.363a.28.28 0 0 0-.094.3l.173.569c.078.255-.213.462-.423.3l-.417-.324a.27.27 0 0 0-.328 0l-.417.323c-.21.163-.5-.043-.423-.299l.173-.57a.28.28 0 0 0-.094-.299l-.468-.363c-.206-.16-.095-.493.164-.493h.55a.27.27 0 0 0 .259-.194z"/>
                         </svg>
                       </g>
                     </g>
@@ -196,7 +196,7 @@
 
         <!-- CUOTAS -->
         <li class="nav-item">
-          <a class="nav-link active" href="../quotas/index.php">
+          <a class="nav-link" href="../quotas/index.php">
             <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
               <svg width="12px" height="12px" viewBox="0 0 42 42" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <title>office</title>
@@ -295,7 +295,7 @@
 
         <!-- PERFIL -->
         <li class="nav-item">
-          <a class="nav-link" href="../Views/profile.html">
+          <a class="nav-link  " href="../Views/profile.html">
             <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
               <svg width="12px" height="12px" viewBox="0 0 46 42" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <title>customer-support</title>
@@ -348,27 +348,19 @@
         <nav aria-label="breadcrumb">
           <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
           <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="#">Dashboard</a></li>
-            <li class="breadcrumb-item text-sm text-dark active" aria-current="page">CLientes</li>
+            <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="#">Separaciones</a></li>
+            <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Eliminar separación</li>
           </ol>
-          <h6 class="font-weight-bolder mb-0" id="cabezera">CIENTES </h6>
+          <h6 class="font-weight-bolder mb-0">ELIMINAR SEPARACIÓN</h6>
         </nav>
         <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
-          <div class="ms-md-auto pe-md-3 d-flex align-items-center">
-            <div class="input-group">
-              <span class="input-group-text text-body"><i class="fas fa-search" aria-hidden="true"></i></span>
-              <input type="text" class="form-control" placeholder="Escribe el Sublote..." id="in-sublote">
-            </div>
-          </div>
+          
           <ul class="navbar-nav  justify-content-end">
-            <li class="nav-item d-flex align-items-center">
-              <a class="btn btn-outline-success btn-sm mb-0 me-3" target="_blank" href="./add_asset.php" id="add-asset">AGREGAR CLIENTE</a>
-            </li>
-
-            <!-- DATOS DEL USUARIO -->
+            
             <li class="nav-item d-flex align-items-center">
               <a href="javascript:;" class="nav-link text-body font-weight-bold px-0">
                 <i class="fa fa-user me-sm-1"></i>
-                <span class="d-sm-inline d-none">DATOS DEL USUARIO</span>
+                <span class="d-sm-inline d-none">Sign In</span>
               </a>
             </li>
             <li class="nav-item d-xl-none ps-3 d-flex align-items-center">
@@ -381,7 +373,6 @@
               </a>
             </li>
             
-
           </ul>
         </div>
       </div>
@@ -390,60 +381,83 @@
     <!-- End Navbar -->
     <div class="container py-4">
 
-    <!-- CONTENIDO -->
+      <!-- FORMULARIO -->
+      <div>
+        <div class="col-lg-12 mb-lg-0 mb-4 mt-4">
+            <div class="card">
+              <div class="card-body" style="padding: 50px">
+                <div class="row">
+                  <div class="col-lg-12">
+                    <div class="d-flex flex-column h-100">
+                      <form class="row needs-validation" id="form-add-project" novalidate>
+                        <div class="row">
+                          <div class="col-md-12">
 
-    <div class="row">
-        <div class="col-12">
-          <div class="card mb-4">
-            <div class="card-header pb-0">
-              <div class="row">
-                <div class="col-md-6">
+                            <!-- REGISTRO -->
+                              <div  class="card-title m-4"><h2 style="text-align: center; text-transform: uppercase;"><strong  id="card-title"></strong></h2></div>
+                              <hr>
+                              <div class="row">
+                                  <div class="col-md-6">
+                                    <h3><strong>Cliente :</strong></h3>
+                                  </div>
+                                  <div class="col-md-6">
+                                    <h4 id="cliente"> ---- </h4>
+                                  </div>
+                              </div>
+                              
+                              <div class="row mt-4">
+                                  <div class="col-md-6">
+                                    <h3><strong>Proyecto: </strong></h3>
+                                  </div>
+                                  <div class="col-md-6">
+                                    <h4 id="proyecto"> --- </h4>
+                                  </div>                                    
+                              </div>
 
-                  <h6>Tabla - clientes</h6>
-                </div>
-                <div class="col-md-6">
-                  <div class="text-end">
-                    <button type="button" class="btn btn-lg bg-gradient-success opacity-10" id="generate-excel"><i class="fa-solid fa-file-excel"></i></button>
-                    <button type="button" class="btn btn-lg bg-gradient-danger opacity-10" id="generate-pdf"><i class="bi bi-filetype-pdf"></i></button>
+                              <div class="row mt-4">
+                                  <div class="col-md-6">
+                                    <h3><strong>Sublote: </strong></h3>
+                                  </div>
+                                  <div class="col-md-6">
+                                    <h4 id="sublote"> --- </h4>
+                                  </div>                                    
+                              </div>
+
+                            
+                              <div class="row">
+                                <div class="col-md-6">
+                                    <h3><strong>Monto de separación :</strong></h3>
+                                </div>
+                                <div class="col-md-6">
+                                    <h4 id="separacion_monto"> ---- </h4>
+                                </div>
+                              </div>
+
+                              <div class="m-4" style="display:flex; justify-content: center;">
+                                <h4 class="ask-footer text-danger">¿Deseas eliminarlo?</h4>
+                              </div>
+                              <div style ="display: flex; justify-content: center;">
+                                <div>
+                                  <div class="btn-group">                                    
+                                      <button type="button" class="btn btn-danger" id="eliminar">Eliminar</button>
+                                      <button type="button" class="btn btn-success" id="cancelar">Cancelar</button>
+                                  </div>
+                                </div>
+                                
+                              </div>
+                          </div>                                    
+                        </div>
+                      </form>
+                    </div>
                   </div>
                 </div>
               </div>
-              <div class="row">
-                <div class="col-md-3">
-                  
-                  <select name="tipo_persona" class="form-select" id="documento_tipo">
-                    <option value="NATURAL">Tipo de persona</option>
-                  </select>
-                </div>
-              </div>
             </div>
-            <div class="card-body px-0 pt-0 pb-2">
-              <div class="table-responsive text-center p-0">
-                  <table class="table align-items-center mb-0" id="table-assets">
-                    <thead>
-                    <tr>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">#</th>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Denominación</th>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Estado</th>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Sublote</th>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Direccion</th>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Operaciones</th>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10"></th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    
-                  <!-- RENDER -->
-
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
         </div>
-      </div>
+      </div>       
 
-    <footer class="footer pt-3  ">
+
+      <footer class="footer pt-3  ">
         <div class="container-fluid">
           <div class="row align-items-center justify-content-lg-between">
             <div class="col-lg-6 mb-lg-0 mb-4">
@@ -516,6 +530,7 @@
         </div>
       </div>
     </div>
+
   </div>
   <!-- SWEET ALERT -->
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -529,201 +544,106 @@
   <script src="../../assets/js/globalFunctions.js"></script>
   <script src="../../assets/js/sweetAlert.js"></script>
   <script>
-document.addEventListener("DOMContentLoaded",()=>{
 
-  /* INSTANCIAS */
   const global = new FunGlobal();
+  const sAlert = new Alert();
 
   const $ = id => global.$(id);
   const $All = id => global.$All(id);
 
-  /* VALOR EN LA URL */
+  //OBTIENE EL ID DEL URL
   const stringQuery = window.location.search;
+
   const url = new URLSearchParams(stringQuery);
+
   const code = url.get("id");
-  const codeName = url.get("name");
+  const cedeEx = url.get("expedient");
 
-  const idProyecto = atob(code); //DECOFICA EL VALOR
-  const name = atob(codeName);
+  const idseparacion = atob(code);
+  const expedient = atob(cedeEx);
 
-  let timer;
+  let Patern = $("#patern");
 
-  function renderAssets(results){
+  let oldImage;
+  let dataProject;
+  let AllProjects;
 
-    let numberRow = 1;
-
-    $("#table-assets tbody").innerHTML = "";
-
-    let newRow = ``;
-
-    if(results.length > 0){
-      
-      results.forEach(asset =>{
-        
-        let code = btoa(asset.idactivo) //CODIFICACIÓN
-  
-        let IconStatus = asset.estado == "SIN VENDER" ?  `<span class="badge badge-sm bg-gradient-danger">${asset.estado}</span>` : 
-                                        asset.estado = "VENDIDO" ? `<span class="badge badge-sm bg-gradient-success">${asset.estado}</span>`: 
-                                                                  `<span class="badge badge-sm bg-gradient-secondary">${asset.estado}</span>` ;
-  
-        newRow = `
-                <tr>
-                  <td>
-                    <div class="d-flex px-2 py-1">
-                      <div class="d-flex flex-column justify-content-center">
-                        <h6 class="mb-0 text-sm">${numberRow}</h6>
-                      </div>
-                    </div>
-                  </td>
-                  <td>
-                    <p class="text-xs font-weight-bold mb-0">${asset.denominacion}</p>
-                    </td>
-                    <td class="align-middle text-center text-sm">
-                      ${IconStatus}
-                    </td>
-                    <td>
-                      <p class="text-xs font-weight-bold mb-0">${asset.sublote}</p>
-                    </td>
-                  <td>
-                    <p class="text-xs font-weight-bold mb-0">${asset.direccion}</p>
-                  </td>
-                  <td class="align-middle">
-                    <div class="btn-group">
-                        <a type="button" href="./delete_asset.php?id=${code}" class="btn btn-danger btn-sm" id="btn-delete"><i class="bi bi-trash-fill"></i></a>
-                        <a type="button" href="./edit_asset.php?id=${code}" class="btn btn-primary btn-sm" id="btn-edit"><i class="bi bi-pencil-fill"></i></a>
-                        <a type="button" href="./detail_asset.php?id=${code}" class="btn btn-success btn-sm"><i class="bi bi-arrow-right-square"></i></a>
-                        </div>
-                    </td>
-                </tr>           
-        `;
-        numberRow ++;
-
-        $("#table-assets tbody").innerHTML += newRow;
-      });
-
-    }else{
-      newRow =`
-      <div class="alert alert-danger m-4 text-white" role="alert">
-          <strong class="text-white">No existe sublotes</strong> Asegurate de que existan los registros.
-      </div>
-      `;
-      $("#table-assets tbody").innerHTML += newRow;
-    }
-    
-
-  }
-
-
-  async function getAssets(id){
+  async function getData(id){
 
     try{
 
-      $("#add-asset").setAttribute("href",`./add_asset.php?idproy=${code}&name=${codeName}`);
-
-      let url ="../../../../Controllers/asset.controller.php";
+      let url = "../../Controllers/separation.controller.php";
+  
       let params = new FormData();
   
-      params.append("action","listAssetProjectId");
-      params.append("idproyecto",id);
+      params.append("action","listSeparationById");
+      params.append("idseparacion",id);
+  
+      let result = await global.sendAction(url, params)
 
-      results = await global.sendAction(url, params);
-
-      if(results){
-
-        $("#cabezera").innerText +=` ${name}`;
-        renderAssets(results);
-
+      if(result){
+        console.log(result);
+        $("#card-title").innerText = result.n_expediente;
+        $("#cliente").innerText = result.cliente;
+        $("#proyecto").innerText = result.denominacion;
+        $("#sublote").innerText = result.sublote;
+        $("#separacion_monto").innerText = result.separacion_monto;
       }
     }
     catch(e){
       console.error(e);
     }
-  }
+}
 
-  async function searchAsset(idproy,sublote){
-    try{
+/**
+ * FUNCIÓN PARA ELIMINAR UN PROYECTO
+ */
+async function deleteSeparation(){
 
-      let url = `../../../../Controllers/asset.controller.php`;
-      let params = new FormData();
+  try{
+    
+    let url = "../../Controllers/separation.controller.php";
+  
+    let params = new FormData();
+  
+    params.append("action","inactiveSeparation");
+    params.append("idseparacion",idseparacion);
 
-      params.append("action", "listAssetPAcode");
-      params.append("idproyecto",idproy);
-      params.append("sublote",sublote);
+    let result = await global.sendAction(url, params);
 
-      let results = await global.sendAction(url, params);
-
-      if(results){
-        console.log(results)
-        renderAssets(results);
+    if(result){
+      
+      if(result.filasAfect > 0){
+    
+          sAlert.sweetSuccess("Se elminó el registro","El registro se ha eliminado de forma exitosa",()=>{
+    
+              window.location.href = "./index.php";
+          });                    
+          
+      }else{
+    
+          sAlert.sweetError("No se eliminó el registro","Vuelve a intentarlo");
       }
     }
-    catch(e){
-      console.error(e);
-    }
   }
-
-  //Genera u archivo PDF
-  async function generatePdf(id){
-
-    let codeID = btoa(id);
-    let url = `../../../../reports/reports_pdf.php?action=reportLots&idproyecto=${codeID}`;
-
-    window.location.href = url;
+  catch(e){
+    console.error(e);
   }
+}
 
-  //Genera un archivo excel
-  async function generateExcel(id){
+$("#eliminar").addEventListener("click",()=>{
 
-    let codeID = btoa(id);
-    let url = `../../../../reports/reports_excel.php?idproyecto=${codeID}`;
-
-    window.location.href = url;
-  }
-
-  $("#in-sublote").addEventListener("input",()=>{
-
-      clearTimeout(timer);
-
-        timer = setTimeout(()=>{
-
-          let sublote = $("#in-sublote").value;
-
-          if(sublote != ""){
-
-            searchAsset(idProyecto,sublote);
-
-          }else{
-
-            getAssets(idProyecto);
-          }
-        },1500)
-    });
-
-    //Menù */*/*/
-    /* $("#goDashboard").addEventListener("click",()=>{
-    
-    window.location.href = `../../dashboard.php?id=${code}&name=${codeName}`;
-    
-  });
-
-  $("#goProjects").addEventListener("click",()=>{
-    
-    window.location.href = `../../projects/index.php?id=${code}&name=${codeName}`;
-    
-  }); */
-      
-  $("#generate-excel").addEventListener("click",()=>{
-
-    generateExcel(idProyecto);
-  });
-
-  $("#generate-pdf").addEventListener("click",()=>{
-
-    generatePdf(idProyecto);
-  });
-
-    /* getAssets(idProyecto); */
+    deleteSeparation();
 });
+
+$("#cancelar").addEventListener("click",()=>{
+
+    window.location.href = "./index.php";
+});
+    
+getData(idseparacion);
+
+
   </script>
   <script>
     var win = navigator.platform.indexOf('Win') > -1;

@@ -272,7 +272,7 @@ SELECT
     sep.idconyugue,
     CONCAT(
         UPPER(conyPers.apellidos),
-        " ,",
+        ", ",
         LOWER(conyPers.nombres)
     ) AS conyugue,
     conyPers.documento_tipo AS conyPers_documento_tipo,

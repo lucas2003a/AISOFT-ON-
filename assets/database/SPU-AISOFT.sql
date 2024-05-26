@@ -2099,7 +2099,15 @@ DELIMITER;
 
 -- DEVLOUCIONES   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 DELIMITER $$
+CREATE PROCEDURE spu_list_refunds_get()
+BEGIN
+    SELECT * 
+        FROM vws_list_refunds
+        WHERE inactive_at IS NULL;
+END $$
+DELIMITER ;
 
+DELIMITER $$
 CREATE PROCEDURE sup_list_refunds
 (
     IN _tipo_persona    VARCHAR(10),
@@ -2155,6 +2163,7 @@ CREATE PROCEDURE spu_add_refund
     IN _n_expediente    VARCHAR(10),
     IN _idseparacion    INT,
     IN _detalle         VARCHAR(200),
+    IN _procentaje_penalidad  TINYINT,
     IN _monto_devolucion DECIMAL(8,2),
     IN _imagen          VARCHAR(100),
     IN _idusuario       INT
@@ -2164,6 +2173,7 @@ BEGIN
                     n_expediente,
                     idseparacion,
                     detalle,
+                    porcentaje_penalidad,
                     monto_devolucion,
                     imagen,
                     idusuario
@@ -2172,6 +2182,7 @@ BEGIN
                     _n_expediente,
                     _idseparacion,
                     _detalle,
+                    _procentaje_penalidad,
                     _monto_devolucion,
                     _imagen,
                     _idusuario
@@ -2190,6 +2201,7 @@ CREATE PROCEDURE spu_set_refund
     IN _n_expediente    VARCHAR(10),
     IN _idseparacion    INT,
     IN _detalle         VARCHAR(200),
+    IN _procentaje_penalidad  TINYINT,
     IN _monto_devolucion DECIMAL(8,2),
     IN _imagen          VARCHAR(100),
     IN _idusuario       INT
@@ -2200,6 +2212,7 @@ BEGIN
             n_expediente   = _n_expediente,
             idseparacion   = _idseparacion,
             detalle        = _detalle,
+            porcentaje_penalidad = _procentaje_penalidad,
             monto_devolucion = _monto_devolucion,
             imagen         = _imagen,
             update_at      = CURDATE(),

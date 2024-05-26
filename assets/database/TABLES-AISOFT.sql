@@ -370,6 +370,7 @@ CREATE TABLE devoluciones
     n_expediente        VARCHAR(10)     NOT NULL,
     idseparacion		INT 			NOT NULL,
     detalle             VARCHAR(200)    NOT NULL,
+    porcentaje_penalidad TINYINT        NOT NULL,
     monto_devolucion 	DECIMAL(8,2)	NOT NULL,
     imagen                  VARCHAR(100) NOT NULL,
     create_at 				DATE 		NOT NULL	DEFAULT (CURDATE()),
@@ -380,7 +381,7 @@ CREATE TABLE devoluciones
     CONSTRAINT fk_idseparacion_dev FOREIGN KEY(idseparacion) REFERENCES separaciones(idseparacion),
     CONSTRAINT fk_idusuario_dev FOREIGN KEY(idusuario) REFERENCES usuarios(idusuario)
 )ENGINE= INNODB;
-ALTER TABLE devoluciones CHANGE monto_devolucion monto_devolucion 	DECIMAL(8,2)	NOT NULL;
+
 -- CONTRATOS
 CREATE TABLE contratos
 (

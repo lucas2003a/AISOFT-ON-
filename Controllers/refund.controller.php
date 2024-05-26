@@ -8,6 +8,10 @@ if(isset($_POST["action"])){
 
     switch($_POST["action"]){
 
+        case "listRefundsAll": 
+            
+                echo json_encode($refund->listRefundsAll());
+            break;
         case "listRefunds": 
             
                 $dataObtainded = [

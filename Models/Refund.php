@@ -12,9 +12,24 @@ class Refund extends Conection{
     }
 
     /**
+     * listado general de las devolusiones
+     */
+    public function listRefundsAll(){
+        
+        try {
+            $query = $this->conection->prepare("CALL spu_list_refunds_get()");
+            $query->execute();
+
+            return $query->fetchAll(PDO::FETCH_ASSOC);
+        } catch (Exception $e) {
+            die($e->getMessage());
+        }
+    }
+
+    /**
      * Método para listar las devoluciones en base a 3 criterios(tipo de persona, fechaInicio, fechaFin)
      */
-    public function listRefunds($dataDev){
+    public function listRefunds($dataDev = []){
         try{
 
             $query = $this->conection->prepare("CALL sup_list_refunds(?,?,?)");
@@ -136,5 +151,7 @@ class Refund extends Conection{
             die($e->getMessage());
         }
     }
+
+
 }
 ?>
