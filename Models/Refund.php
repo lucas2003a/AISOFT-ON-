@@ -90,11 +90,12 @@ class Refund extends Conection{
      */
     public function addRefund($dataDev = []){
         try{
-            $query = $this->conection->prepare("CALL sup_add_refund(?,?,?,?,?,?");
+            $query = $this->conection->prepare("CALL sup_add_refund(?,?,?,?,?,?,?)");
             $query->execute(
                 array(
                     $dataDev["n_expediente"],
                     $dataDev["idseparacion"],
+                    $dataDev["tipo_separacion"],
                     $dataDev["detalle"],
                     $dataDev["monto_devolucion"],
                     $dataDev["imagen"],
@@ -113,12 +114,13 @@ class Refund extends Conection{
      */
     public function setRefund($dataDev = []){
         try{
-            $query = $this->conection->prepare("CALL spu_set_refund(?,?,?,?,?,?,?");
+            $query = $this->conection->prepare("CALL spu_set_refund(?,?,?,?,?,?,?,?)");
             $query->execute(
                 array(
                     $dataDev["iddevolucion"],
                     $dataDev["n_expediente"],
                     $dataDev["idseparacion"],
+                    $dataDev["tipo_separacion"],
                     $dataDev["detalle"],
                     $dataDev["monto_devolucion"],
                     $dataDev["imagen"],

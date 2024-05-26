@@ -724,7 +724,7 @@
                         <a type="button" href="#" data-id="${result.idseparacion}" class="btn btn-link text-info px-3 mb-0 open-modal" data-bs-toggle="modal" data-bs-target="#modal_det_sep" ><i class="fa-solid fa-eye open-modal" data-id="${result.idseparacion}"></i></a>
                         <a type="button" href="./delete_separation.php?id=${code}&expedient=${expedient}" class="btn btn-link text-danger text-gradient px-3 mb-0 delete"><i class="bi bi-trash-fill delete"></i></a>
                         <a type="button" href="./edit_separation.php?id=${code}&expedient=${expedient}" class="btn btn-link text-dark px-3 mb-0 edit"><i class="bi bi-pencil-fill edit"></i></a>
-                        <a type="button" href="../refounds/add_refound.php?id="${code}" class="btn btn-link text-secondary px-3 mb-0 return"><i class="fa-solid fa-right-left return" data-id="${result.idseparacion}"></i></a>
+                        <a type="button" href="../refounds/add_refound.php?id=${code}" class="btn btn-link text-secondary px-3 mb-0 return"><i class="fa-solid fa-right-left return" data-id="${result.idseparacion}"></i></a>
                     </td>
                   </tr>
                   `;

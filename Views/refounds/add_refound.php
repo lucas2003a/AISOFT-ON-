@@ -414,12 +414,23 @@
                             </div>
                           </div>
 
+                          <div class="mt-4">
+                            <label for="tipo_devolucion" class="form-label">Tipo de devolución</label>
+                            <select name="tipo_devolucion" id="tipo_devolucion" class="form-select" required>
+                              <option value="">Selecciona un tipo de devolución</option>
+                              <option value="POR SEPARACIÓN">Por separación</option>
+                              <option value="POR CONTRATO">Por contrato</option>
+                            </select>
+                          </div>
+
                           <!-- DETALLE -->
                           <div class="mt-4">
                           
                             <label for="detalle" class="form-label">Detalle</label>
-                            <textarea name="detalle" class="form-control" id="detalle" cols="65" rows="3" required>
-                            </textarea>
+                            <div style="position:relative;">
+                              <span id="count-char" style="display: flex; justify-content:end; position:absolute;padding:2px; font-size: 15px;">000/200</span>
+                              <textarea name="detalle" class="form-control" style="padding-top: 25px;" id="detalle" cols="65" rows="3" maxlength="200" required></textarea>
+                            </div>
                             <div class="invalid-feedback">
                               Necesitas ingresar un detalle.
                             </div>
@@ -431,13 +442,22 @@
                           <!-- PORCENTAJE DE PENALIDAD -->
                           <div class="mt-4">
                             <label for="procentaje_penalidad" class="form-label">Procentaje de penalidad</label>
-                            <input type="number" class="form-control" id="porcentaje_penalidad" placeholder="Porcentaje de penaliad" min="1" max="100" value="0" required>
+                            <div class="input-group">
+                              <span class="input-group-text">%</span>
+                               <input type="number" class="form-control" id="porcentaje_penalidad" placeholder="Porcentaje de penaliad" min="1" max="100" value="0" required>
+                            </div>
                             <div class="invalid-feedback">
                                 Necesistas registrar el porcentaje de penalidad
                             </div>
                             <div class="valid-feedback">
                                 Porcentaje de penalidad registrado correctamente
                             </div>
+                          </div>
+                          
+                          <!-- MONTO SEPARACIÓN -->
+                          <div class="mt-4">
+                            <label for="monto_separacion" class="form-label">Monto de separación</label>
+                            <input type="text" name="monto_separacion" class="form-control" id="monto_separacion" readonly>
                           </div>
 
                           <!-- MONTO DE DEVOLUCIÓN -->
@@ -615,6 +635,12 @@
     const global = new FunGlobal();
     const sAlert = new Alert();
 
+    const stringQuery = window.location.search;
+    const params  = new URLSearchParams(stringQuery);
+    const code = params.get("id");
+    const idseparacion = atob(code);
+
+    console.log(idseparacion)
     const $ = id => global.$(id);
     const $All = id => global.$All(id);
 
@@ -622,6 +648,41 @@
     let lastCode = false;
     let dataClients;
     let newValue;
+
+    //Obtiene los registros de una separacion por id (para obtener el monot de la separación)
+    async function getSeparationAmount(id) {
+
+      try {
+        let url = "../../Controllers/separation.controller.php";
+        let params = new FormData();
+
+        params.append("action", "listSeparationById");
+        params.append("idseparacion", id);
+
+        let result = await global.sendAction(url, params);
+
+        if(result) {
+          
+          $("#monto_separacion").value = result.separacion_monto;
+          return result.separacion_monto;
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
+    //Calcula el nuevo monto de la devolución
+    async function calculateNewAmount(){
+      
+      let montoSep = Number.parseFloat(await getSeparationAmount(idseparacion));
+      let porcentaje = Number.parseFloat($("#porcentaje_penalidad").value || 0)
+
+      console.log(montoSep)
+      console.log(porcentaje)
+      let result = montoSep * (porcentaje / 100);
+
+      $("#monto_devolucion").value = result;
+    }
 
     //Obtiene la fecha actual
     async function getToday() {
@@ -664,7 +725,7 @@
     }
 
     //Obtiene los datos de las devoluciones
-    async function getRefudsAll() {
+    async function getRefudsAll(){
 
       try {
 
@@ -717,40 +778,46 @@
     }
 
     //Registra una separación
-    async function addSeparation() {
+    async function addRefund(idsep) {
 
       try {
 
-        let url = "../../Controllers/separation.controller.php";
+        let url = "../../Controllers/refund.controller.php";
         let params = new FormData()
 
-        params.append("action", "addSeparation");
+        params.append("action", "addRefund");
         params.append("n_expediente", newValue);
-        params.append("idactivo", $("#idactivo").value);
-        params.append("idcliente", $("#idcliente").value);
-        params.append("idconyugue", $("#idconyugue").value);
-        params.append("separacion_monto", $("#separacion_monto").value);
-        params.append("moneda_venta", $("#moneda_venta").value);
-        params.append("tipo_cambio", $("#tipo_cambio").value);
+        params.append("idseparacion", idsep);
+        params.append("tipo_devolucion", $("#tipo_devolucion").value);
+        params.append("detalle", $("#detalle").value);
+        params.append("monto_devolucion", $("#monto_devolucion").value);
         params.append("imagen", $("#in-image").files[0]);
 
         let result = await global.sendAction(url, params);
 
         if (result.filasAfect > 0) {
           console.log(result);
-          sAlert.sweetConfirmAdd("El registro fué exitoso", "¿Deseas volver a registrar?",
-            () => {
-              $("#form-add-separation").reset();
-              $("#form-add-separation").classList.remove("was-validated");
-
-            }, () => {
-              window.location.href = "./index.php";
-            })
+          sAlert.sweetsuccess("El registro fué exstisoso",()=>{
+            history.back(); //Regresa a la pagina anterior, history.go(-2) seria dos paginas atras
+          })
         }
       } catch (e) {
         console.error(e);
       }
     }
+
+    $("#detalle").addEventListener("input",(e)=>{
+
+      let inputValue = e.target.value;
+      let count = inputValue.length.toString().padStart(3,'0');
+
+      $("#count-char").innerHTML = `${count}/200`;
+    });
+
+    $("#porcentaje_penalidad").addEventListener("input",()=>{
+
+      calculateNewAmount();
+    });
 
     $("#n_expediente").addEventListener("blur", (e) => {
 
@@ -765,7 +832,7 @@
         newValue = "DEC-" + valueFormat;
         $("#n_expediente").value = valueFormat;
 
-        validateDate("n_expediente", newValue, dataRefounds)
+        validateDate("n_expediente_dev", newValue, dataRefounds)
           .then(() => {
             console.log("no existe");
           }).catch(() => {
@@ -804,6 +871,7 @@
     })
 
     // getTC();
+    getSeparationAmount(idseparacion);
     getRefudsAll();
     /* --------------------------------- FUNCIÓN DE VALIDACIÓN --------------------------------------------------------- */
 
@@ -828,7 +896,7 @@
             event.preventDefault();
             sAlert.sweetConfirm("Datos nuevos", "¿Deseas actualizar el registro?", () => {
 
-              addSeparation(); //Ejecuta la función
+              addRefund(); //Ejecuta la función
             });
           }
 

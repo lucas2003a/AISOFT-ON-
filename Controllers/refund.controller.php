@@ -15,9 +15,9 @@ if(isset($_POST["action"])){
         case "listRefunds": 
             
                 $dataObtainded = [
-                    "tipo_persona" =>   ["tipo_persona"], 
-                    "fechaInicio"   =>  ["fechaInicio"], 
-                    "fechaFin"      =>  ["fechaFin"]
+                    "tipo_persona" =>  $_POST ["tipo_persona"], 
+                    "fechaInicio"   =>  $_POST["fechaInicio"], 
+                    "fechaFin"      =>  $_POST["fechaFin"]
                 ];
                 echo json_encode($refund->listRefunds($dataObtainded));
             break;
@@ -25,10 +25,10 @@ if(isset($_POST["action"])){
         case "listRefundsNExpedientes": 
 
                 $dataObtainded = [
-                    "tipo_persona" =>   ["tipo_persona"], 
-                    "fechaInicio"   =>  ["fechaInicio"], 
-                    "fechaFin"      =>  ["fechaFin"],
-                    "n_expedientes" =>  ["n_expedientes"],
+                    "tipo_persona" =>  $_POST ["tipo_persona"], 
+                    "fechaInicio"   =>  $_POST["fechaInicio"], 
+                    "fechaFin"      =>  $_POST["fechaFin"],
+                    "n_expedientes" =>  $_POST["n_expedientes"],
                 ];
                 echo json_encode($refund->listRefunds($dataObtainded));
             
@@ -43,29 +43,59 @@ if(isset($_POST["action"])){
 
         case "addRefund": 
                 
+                $today = date("dmYhis");
+                $nom_img = "noImage.jpg";
+
                 $dataObtainded = [
-                        "n_expediente"  =>   ["n_expediente"],
-                        "idseparacion"  =>   ["idseparacion"],
-                        "detalle"       =>   ["detalle"],
-                        "monto_devolucion" =>   ["monto_devolucion"],
-                        "imagen"        =>  [ "imagen"],
-                        "idusuario"     =>  ["idusuario"]
+                        "n_expediente"  =>  $_POST["n_expediente"],
+                        "idseparacion"  =>  $_POST["idseparacion"],
+                        "tipo_separacion" =>  $_POST["tipo_separacion"],
+                        "detalle"       =>  $_POST["detalle"],
+                        "monto_devolucion" =>  $_POST ["monto_devolucion"],
+                        "imagen"        =>  $_POST[ "imagen"],
+                        "idusuario"     =>  1
+                        // "idusuario"     =>  $_POST["idusuario"]
                 ];
+
+                if(isset($_FILES["imgen"]) && $_FILE["imagen"]["size"] > 0){
+
+                    $nom_img = sha1($today) . ".jpg";
+                    $ruta = "../media/constancias_dev/". $nom_img;
+
+                    if(move_uploaded_file($_FILES["imagen"]["tmp_name"], $ruta)){
+                        $dataObtainded["imagen"] = $nom_img;
+                    }
+                }
 
                 echo json_encode($refund->addRefund($dataObtainded));
             break;
 
         case "setRefund": 
+
+                $today = date("dmYhis");
+                $nom_img = "noImage.jpg";
                 
                 $dataObtainded = [
-                        "iddevolucion"  =>   ["iddevolucion"],
-                        "n_expediente"  =>   ["n_expediente"],
-                        "idseparacion"  =>   ["idseparacion"],
-                        "detalle"       =>   ["detalle"],
-                        "monto_devolucion" =>   ["monto_devolucion"],
-                        "imagen"        =>  [ "imagen"],
-                        "idusuario"     =>  ["idusuario"]
+                        "iddevolucion"  =>  $_POST["iddevolucion"],
+                        "n_expediente"  =>  $_POST["n_expediente"],
+                        "idseparacion"  =>  $_POST["idseparacion"],
+                        "tipo_separacion" =>  $_POST["tipo_separacion"],
+                        "detalle"       =>  $_POST["detalle"],
+                        "monto_devolucion" =>  $_POST ["monto_devolucion"],
+                        "imagen"        =>  $_POST[ "imagen"],
+                        "idusuario"     =>  1
+                        // "idusuario"     =>  $_POST["idusuario"]
                 ];
+
+                if(isset($_FILES["imgen"]) && $_FILE["imagen"]["size"] > 0){
+
+                    $nom_img = sha1($today) . ".jpg";
+                    $ruta = "../media/constancias_dev/". $nom_img;
+
+                    if(move_uploaded_file($_FILES["imagen"]["tmp_name"], $ruta)){
+                        $dataObtainded["imagen"] = $nom_img;
+                    }
+                }
 
                 echo json_encode($refund->setRefund($dataObtainded));
             break;

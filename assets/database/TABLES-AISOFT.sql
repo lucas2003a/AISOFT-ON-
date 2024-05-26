@@ -368,6 +368,7 @@ CREATE TABLE devoluciones
 (
 	iddevolucion 		INT PRIMARY KEY AUTO_INCREMENT,
     n_expediente        VARCHAR(10)     NOT NULL,
+    tipo_devolucion     VARCHAR(20)     NOT NULL,
     idseparacion		INT 			NOT NULL,
     detalle             VARCHAR(200)    NOT NULL,
     porcentaje_penalidad TINYINT        NOT NULL,

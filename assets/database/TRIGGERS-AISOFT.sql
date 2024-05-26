@@ -160,10 +160,17 @@ CREATE TRIGGER trgr_asset_status_refund AFTER INSERT ON devoluciones
 FOR EACH ROW
 BEGIN
 	DECLARE _idactivo INT;
+	DECLARE _existContract TINYINT;
 
 	SET _idactivo = (
 		SELECT idactivo FROM separaciones
 		WHERE idseparacion = NEW.idseparacion
+	);
+
+	SET _existContract = (
+		SELECT EXISTS(SELECT idactivo FROM contratos
+		WHERE idactivo = _idactivo
+		AND inactive_at IS NULL)
 	);
 
 	UPDATE activos
@@ -181,6 +188,14 @@ BEGIN
 		WHERE
 			idseparacion = NEW.idseparacion;
 
+	IF _existContract = 1 THEN
+		UPDATE contratos
+			SET
+				inactive_at = CURDATE(),
+				idusuario = NEW.idusuario
+			WHERE
+				idactivo = _idactivo;
+	END IF;
 END $$
 DELIMITER ;
 

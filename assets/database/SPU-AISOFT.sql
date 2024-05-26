@@ -2162,6 +2162,7 @@ CREATE PROCEDURE spu_add_refund
 (
     IN _n_expediente    VARCHAR(10),
     IN _idseparacion    INT,
+    IN _tipo_separacion VARCHAR(20),
     IN _detalle         VARCHAR(200),
     IN _procentaje_penalidad  TINYINT,
     IN _monto_devolucion DECIMAL(8,2),
@@ -2172,6 +2173,7 @@ BEGIN
     INSERT INTO devoluciones(
                     n_expediente,
                     idseparacion,
+                    tipo_separacion,
                     detalle,
                     porcentaje_penalidad,
                     monto_devolucion,
@@ -2181,6 +2183,7 @@ BEGIN
                 VALUES(
                     _n_expediente,
                     _idseparacion,
+                    _tipo_separacion,
                     _detalle,
                     _procentaje_penalidad,
                     _monto_devolucion,
@@ -2200,6 +2203,7 @@ CREATE PROCEDURE spu_set_refund
     IN _iddevolucion    INT,
     IN _n_expediente    VARCHAR(10),
     IN _idseparacion    INT,
+    IN _tipo_separacion VARCHAR(20),
     IN _detalle         VARCHAR(200),
     IN _procentaje_penalidad  TINYINT,
     IN _monto_devolucion DECIMAL(8,2),
@@ -2211,6 +2215,7 @@ BEGIN
         SET
             n_expediente   = _n_expediente,
             idseparacion   = _idseparacion,
+            tipo_separacion = _tipo_separacion,
             detalle        = _detalle,
             porcentaje_penalidad = _procentaje_penalidad,
             monto_devolucion = _monto_devolucion,
