@@ -611,8 +611,8 @@
 
   <!-- Modal trigger button -->
   <button type="button" id="show-modal" class="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#modalId" style="position: absolute; left: -9999px; top: -9999px;">
-      Launch
-    </button>
+    Launch
+  </button>
 
   <!-- Modal Body -->
   <!-- if you want to close by clicking outside the modal, delete the last endpoint:data-bs-backdrop and data-bs-keyboard -->
@@ -668,88 +668,147 @@
 
     const codeExpedient = params.get("expedient");
     const expedient = atob(codeExpedient);
-    console.log(idseparacion,expedient)
+
     let dataSeparations;
     let lastCode = false;
     let dataClients;
     let newValue;
+    let dataSeparationId;
+    let dataLots;
+
+    //Obtiene los datos del lote por su id
+    async function getLotId(id) {
+
+      try {
+        let url = "../../Controllers/asset.controller.php";
+        let params = new FormData();
+
+        params.append("action", "listAssetId");
+        params.append("idactivo", id);
+        let results = await global.sendAction(url, params);
+
+        if (results) {
+
+          return results;
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
+    async function renderTpersona(tpersona) {
+
+
+      let tPersonaOptions = $("#tipo_persona");
+      let optionTpersona = Array.from(tPersonaOptions.options).find(option => option.value == tpersona);
+
+      if (optionTpersona) {
+        optionTpersona.selected = true;
+        optionTpersona.value == "NATURAL" ? $("#idconyugue").disabled = false : $("#idconyugue").disabled = true;
+        await getCustomers(optionTpersona.value);
+      }
+    }
+
+    async function renderCoustumers(id) {
+      let clientOptions = $("#idcliente");
+      let clientOption = Array.from(clientOptions.options).find(option => option.value == id)
+      if (clientOption) {
+        clientOption.selected = true;
+        $("#idproyecto").disabled = false;
+        await getSpouses(clientOption.value);
+      }
+    }
+
+    async function renderSpouse(id) {
+      let conyOptions = $("#idconyugue");
+
+      let conyOption = Array.from(conyOptions.options).find(option => option.value == id)
+      if (conyOption) {
+        conyOption.selected = true;
+      }
+    }
+
+    async function renderProjects(id, idactivo) {
+      let projectOptions = $("#idproyecto");
+      let projectOption = Array.from(projectOptions.options).find(option => option.value == id)
+      if (projectOption) {
+        projectOption.selected = true;
+        await getLots(projectOption.value, idactivo);
+      }
+    }
 
     //Obtiene los registros de una separacion por id
-    async function getSeparation(id){
+    async function getSeparation(id) {
 
-      try{
+      try {
         let url = "../../Controllers/separation.controller.php";
         let params = new FormData();
 
         params.append("action", "listSeparationById");
         params.append("idseparacion", id);
 
-        let result = await global.sendAction(url,params);
+        let result = await global.sendAction(url, params);
 
-        if(result){
+        if (result) {
           console.log(result)
+          dataSeparationId = result;
 
           //Valor el nro de expedient
           let expedient = result.n_expediente;
           let expedientSplit = expedient.split("-");
           let expedientNumber = expedientSplit[1];
+
+          // Imagen
+          $("#file-view").setAttribute("src", `../../media/constancias_sep/${result.imagen}`);
+          $("#in-image").setAttribute("src", `../../media/constancias_sep/${result.imagen}`);
+
+          //n_expediente
           $("#n_expediente").value = expedientNumber;
 
           //valor del tipo de persona
           let tipo_persona = result.tipo_persona;
-          let tPersonaOptions = $("#tipo_persona");
-          let option = Array.from(tPersonaOptions.options).find(option => option.value == tipo_persona);
+          await renderTpersona(tipo_persona);
 
-          if(option){
-            option.selected = true;
-            option.value == "NATURAL" ? $("#idconyugue").disabled = false : $("#idconyugue").disabled = true;
-            await getCustomers(option.value);
-          }
           //Valor del cliente
           let idcliente = result.idcliente;
-          let clientOptions = $("#idcliente");
-          let clientOption = Array.from(clientOptions.options).find(option => option.value == idcliente)
-          if(clientOption){
-            clientOption.selected = true;
-            $("#idproyecto").disabled = false;
-            await getSpouses(clientOption.value);
-          }
+          await renderCoustumers(idcliente);
 
           //Valor del conyugue (si existe)
-          if(result.idconyugue){
+          if (result.idconyugue) {
             let idconyugue = result.idconyugue;
-            let conyOptions = $("#idconyugue");
-
-            let conyOption = Array.from(conyOptions.options).find(option => option.value == idconyugue)
-            if(conyOption){
-              conyOption.selected = true;
-            }
+            await renderSpouse(idconyugue)
           }
 
           //Valor del tipo de cambio
           let tipo_cambio = result.tipo_cambio;
           $("#tipo_cambio").value = tipo_cambio;
-          
+
           //Valor de idproyecto
           let idproyecto = result.idproyecto;
-          let projectOptions = $("#idproyecto");
-          let projectOption = Array.from(projectOptions.options).find(option => option.value == idproyecto)
-          if(projectOption){
-            projectOption.selected = true;
-            await getLots(projectOption.value);
-          }
-          
+          await renderProjects(idproyecto, result.idactivo);
+
           // Valor del idactivo
           let idactivo = result.idactivo;
           let assetOptions = $("#idactivo");
           let assetOption = Array.from(assetOptions.options).find(option => option.value == idactivo)
 
-          if(assetOption){
+          console.log(assetOption)
+          if (assetOption) {
             assetOption.selected = true;
+
           }
+
+          //Moneda de venta
+          $("#moneda_venta").value = result.moneda_venta;
+
+          //Valor del monto de separación
+          $("#separacion_monto").value = result.separacion_monto;
+
+          //Valor del tipo de cambio
+          $("#tipo_cambio").value = result.tipo_cambio;
+
         }
-      }
-      catch(e){
+      } catch (e) {
         console.error(e);
       }
     }
@@ -871,7 +930,7 @@
     }
 
     //Obtiene los datos de los lotes
-    async function getLots(idproyecto) {
+    async function getLots(idproyecto, idlote) {
 
       try {
         let url = "../../Controllers/asset.controller.php";
@@ -883,6 +942,14 @@
 
         if (results.length > 0) {
 
+          dataLots = results;
+
+          if (idlote) {
+
+            let loteOBT = await getLotId(idlote);
+            dataLots.splice(0, 0, loteOBT);
+          }
+
           $("#idactivo").innerHTML = "";
 
           let defaultValue = document.createElement("option");
@@ -891,7 +958,7 @@
 
           $("#idactivo").appendChild(defaultValue);
 
-          results.forEach(result => {
+          dataLots.forEach(result => {
             let newOption = document.createElement("option");
             newOption.text = "LT - " + result.sublote;
             newOption.value = result.idactivo;
@@ -960,68 +1027,73 @@
     }
 
     //Obtiene los datos de los conyugues, exeptuando al cliente
-    async function getSpouses(idcliente){
+    async function getSpouses(idcliente) {
 
       console.log(idcliente)
       let parseIdcliente = Number.parseInt(idcliente);
-      if(dataClients.length > 0){
+      if (dataClients.length > 0) {
 
         console.log(dataClients);
         //Array que contiene los datos de los conyugues
-        let spouses = dataClients.filter(result => result.idcliente !==  parseIdcliente && result.tipo_persona == "NATURAL")
-  
+        let spouses = dataClients.filter(result => result.idcliente !== parseIdcliente && result.tipo_persona == "NATURAL")
+
         console.log(spouses);
         $("#idconyugue").innerHTML = "";
-  
+
         let defaultTag = document.createElement("option");
         defaultTag.innerText = "Seleccione una persona";
         defaultTag.value = "";
-  
+
         $("#idconyugue").appendChild(defaultTag);
-  
+
         spouses.forEach(spouse => {
-  
+
           let name = spouse.apellidos.toUpperCase() + ", " + spouse.nombres.toLowerCase();
-  
+
           let newOption = document.createElement("option");
           newOption.text = spouse.documento_nro + " - " + name;
           newOption.value = spouse.idcliente;
-  
+
           $("#idconyugue").appendChild(newOption);
         });
       }
     }
 
     //Registra una separación
-    async function addSeparation(){
+    async function setSeparation() {
 
-      try{
+      try {
 
         let url = "../../Controllers/separation.controller.php";
         let params = new FormData()
 
-        params.append("action", "addSeparation");
-        params.append("n_expediente", newValue);
+        let finalExpedient = "SEC-" + $("#n_expediente").value;
+
+        params.append("action", "setSeparation");
+        params.append("idseparacion", idseparacion);
+        params.append("n_expediente", finalExpedient);
         params.append("idactivo", $("#idactivo").value);
         params.append("idcliente", $("#idcliente").value);
         params.append("idconyugue", $("#idconyugue").value);
         params.append("separacion_monto", $("#separacion_monto").value);
+        params.append("moneda_venta", $("#moneda_venta").value);
+        params.append("tipo_cambio", $("#tipo_cambio").value);
         params.append("imagen", $("#in-image").files[0]);
 
-        let result = await global.sendAction(url,params);
+        let result = await global.sendAction(url, params);
 
-        if(result.filasAfect > 0){
+        if (result.filasAfect > 0) {
           console.log(result);
-          sAlert.sweetConfirmAdd("El registro fué exitoso","¿Deseas volver a registrar?",
-            ()=>{
-                $("#form-add-separation").reset();
-                $("#form-add-separation").classList.remove("was-validated");
-  
-            },()=>{
-                window.location.href = "./index.php";
+          sAlert.sweetConfirmAdd("El registro fué exitoso", "¿Deseas volver a registrar?",
+            () => {
+              $("#form-add-separation").reset();
+              $("#form-add-separation").classList.remove("was-validated");
+
+            }, () => {
+              window.location.href = "./index.php";
             })
         }
-      }catch(e){
+      } catch (e) {
         console.error(e);
       }
     }
@@ -1031,10 +1103,16 @@
       console.log(lastCode)
       e.preventDefault();
       let valueInput = e.target.value;
+      console.log(valueInput);
 
-      if (!lastCode) {
+      let getNExpediente = dataSeparationId.n_expediente;
+      let n_expedietenteSplit = getNExpediente.split("-");
+      let newNExpediente = n_expedietenteSplit[1];
+      console.log(newNExpediente)
+
+      if (!lastCode && valueInput !== newNExpediente) {
         lastCode = true;
-        let sliceValue = valueInput.slice(0,6); //Extrae l valores incluyendo el los del indice 0 y 6
+        let sliceValue = valueInput.slice(0, 6); //Extrae l valores incluyendo el los del indice 0 y 6
         let valueFormat = sliceValue.padEnd(6, '0')
         newValue = "SEC-" + valueFormat;
         $("#n_expediente").value = valueFormat;
@@ -1052,7 +1130,7 @@
     $("#n_expediente").addEventListener("input", (e) => {
 
       e.preventDefault();
-      
+
       let valueInput = e.target.value;
 
       if (e.target.dataset.prevVal !== valueInput) {
@@ -1112,7 +1190,7 @@
       }
     });
 
-    $("#file-view").addEventListener("click",(e)=>{
+    $("#file-view").addEventListener("click", (e) => {
 
       let img = e.target.src;
       console.log(img)
@@ -1148,7 +1226,7 @@
             event.preventDefault();
             sAlert.sweetConfirm("Datos nuevos", "¿Deseas actualizar el registro?", () => {
 
-              addSeparation(); //Ejecuta la función
+              setSeparation(); //Ejecuta la función
             });
           }
 

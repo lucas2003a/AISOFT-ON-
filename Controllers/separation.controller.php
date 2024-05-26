@@ -51,7 +51,7 @@ if(isset($_POST["action"])){
             break;
         case "addSeparation": 
                 $today = date("dhmYhis");
-                $nom_img = null;
+                $nom_img = "noImage.jpg";
 
                 $dataObtained = [
                     "n_expediente"  => $_POST["n_expediente"],
@@ -59,6 +59,8 @@ if(isset($_POST["action"])){
                     "idcliente"     => $_POST["idcliente"],
                     "idconyugue"    => $_POST["idconyugue"],
                     "separacion_monto" => $_POST["separacion_monto"],
+                    "moneda_venta"  => $_POST["moneda_venta"],
+                    "tipo_cambio"   => $_POST["tipo_cambio"],
                     "imagen"        => $nom_img,
                     "idusuario"     => 1
                     // "idusuario"     => $_POST["idusuario"]
@@ -66,8 +68,8 @@ if(isset($_POST["action"])){
 
                 if(isset($_FILES["imagen"]) && $_FILES["imagen"]["size"] > 0){
 
-                    $nom_img = sha1($today) . "jpg";
-                    $url = "../media/constancias_sep".$nom_img;
+                    $nom_img = sha1($today) . ".jpg";
+                    $url = "../media/constancias_sep/".$nom_img;
 
                     if(move_uploaded_file($_FILES["imagen"]["tmp_name"],$url)){
                         $dataObtained["imagen"] = $nom_img;
@@ -83,6 +85,9 @@ if(isset($_POST["action"])){
             break;
 
         case "setSeparation": 
+                $today = date("dmYhis");
+                $nom_img = "noImage.jpg";
+
                 $dataObtained = [
                     "idseparacion"  => $_POST["idseparacion"],
                     "n_expediente"  => $_POST["n_expediente"],
@@ -90,10 +95,21 @@ if(isset($_POST["action"])){
                     "idcliente"     => $_POST["idcliente"],
                     "idconyugue"    => $_POST["idconyugue"],
                     "separacion_monto" => $_POST["separacion_monto"],
-                    "imagen"        => $_POST["imagen"],
+                    "moneda_venta"  => $_POST["moneda_venta"],
+                    "tipo_cambio"   => $_POST["tipo_cambio"],
+                    "imagen"        => $nom_img,
                     "idusuario"     => 1
                     // "idusuario"     => $_POST["idusuario"]
                 ];
+
+                if(isset($_FILES["imagen"]) && $_FILES["imagen"]["size"] > 0){
+                    $nom_img = sha1($today). ".jpg";
+                    $url = "../media/constancias_sep/".$nom_img;
+
+                    if(move_uploaded_file($_FILES["imagen"]["tmp_name"],$url)){
+                        $dataObtained["imagen"] = $nom_img;
+                    }
+                }
 
                 echo json_encode($separation->setSeparation($dataObtained));
 

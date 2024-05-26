@@ -278,10 +278,11 @@ SELECT
     conyPers.documento_tipo AS conyPers_documento_tipo,
     conyPers.documento_nro As conyPers_documento_nro,
     sep.tipo_cambio,
+    sep.moneda_venta,
     sep.separacion_monto,
-    sep.CREATE_at,
-    sep.imagen,
+    sep.create_at,
     sep.inactive_at,
+    sep.imagen,
     usuPers.nombres AS usuario
 FROM
     separaciones AS sep
@@ -317,9 +318,11 @@ SELECT
     persj.razon_social AS cliente,
     persj.documento_tipo,
     persj.documento_nro,
+    sep.moneda_venta,
     sep.tipo_cambio,
     sep.separacion_monto,
-    sep.CREATE_at,
+    sep.create_at,
+    sep.inactive_at,
     sep.imagen,
     usuPers.nombres AS usuario
 FROM

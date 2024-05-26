@@ -1986,6 +1986,8 @@ CREATE PROCEDURE spu_add_separation
     IN _idcliente       INT,
     IN _idconyugue      INT,
     IN _separacion_monto DECIMAL(8,2),
+    IN _moneda_venta    VARCHAR(10),
+    IN _tipo_cambio     DECIMAL(5,4),
     IN _imagen          VARCHAR(200),
     IN _idusuario       INT
 )
@@ -1996,6 +1998,8 @@ BEGIN
             idcliente,
             idconyugue,
             separacion_monto,
+            moneda_venta,
+            tipo_cambio,
             imagen,
             idusuario
     ) 
@@ -2005,6 +2009,8 @@ BEGIN
             _idcliente,
             NULLIF(_idconyugue,''),
             _separacion_monto,
+            _moneda_venta,
+            _tipo_cambio,
             _imagen,
             _idusuario
         );
@@ -2024,6 +2030,8 @@ CREATE PROCEDURE spu_set_separation
     IN _idcliente       INT,
     IN _idconyugue      INT,
     IN _separacion_monto DECIMAL(8,2),
+    IN _moneda_venta    VARCHAR(10),
+    IN _tipo_cambio     DECIMAL(5,4),
     IN _imagen          VARCHAR(200),
     IN _idusuario       INT
 )
@@ -2035,6 +2043,8 @@ BEGIN
             idcliente      = _idcliente,
             idconyugue     = NULLIF(_idconyugue,''),
             separacion_monto = _separacion_monto,
+            moneda_venta     = _moneda_venta,
+            tipo_cambio     = _tipo_cambio,
             imagen         = _imagen,
             idusuario      = _idusuario,
             update_at      = CURDATE()
@@ -2077,13 +2087,11 @@ BEGIN
 
     IF _tpersona = "NATURAL" THEN
         SELECT * FROM vws_list_separations_tpersona_natural_full
-            WHERE idseparacion = _idseparacion
-                AND inactive_at IS NULL;
+            WHERE idseparacion = _idseparacion;
 
     ELSEIF _tpersona = "JURÍDICA" THEN
         SELECT * FROM vws_list_separations_tpersona_juridica_full
-            WHERE idseparacion = _idseparacion
-                AND inactive_at IS NULL;
+            WHERE idseparacion = _idseparacion;
     END IF;
 END $$
 

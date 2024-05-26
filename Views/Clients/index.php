@@ -376,7 +376,7 @@
               <div class="row d-flex" style="justify-content: space-between;">
                 
                 <div class="col-md-3 d-grid">
-                  <a class="btn btn-outline-success btn-sm mb-0 me-3" target="_blank" href="./add_client.php" id="add-asset">AGREGAR CLIENTE</a>
+                  <a class="btn btn-outline-success btn-sm mb-0 me-3" href="./add_client.php" id="add-asset">AGREGAR CLIENTE</a>
                 </div>
 
                 <div class="col-md-6">

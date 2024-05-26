@@ -379,7 +379,7 @@
                   <div class="btn-group text-start">
                     <button type="button" class="btn btn-sm bg-gradient-success opacity-10" id="generate-excel"><i class="fa-solid fa-file-excel"></i></button>
                     <button type="button" class="btn btn-sm bg-gradient-danger opacity-10" id="generate-pdf"><i class="bi bi-filetype-pdf"></i></button>
-                    <a type="button" class="btn btn-sm btn-outline-success" target="_blank" href="./add_budget.php" id="add-asset">AGREGAR PRESUPUESTO</a>
+                    <a type="button" class="btn btn-sm btn-outline-success" href="./add_budget.php" id="add-asset">AGREGAR PRESUPUESTO</a>
                   </div>
 
                 </div>

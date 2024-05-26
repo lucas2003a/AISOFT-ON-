@@ -403,7 +403,7 @@
                 <div class="row d-flex" style="justify-content: space-between; align-items: start;">
                   <div class="col-md-3 m-2">
                     <div class="btn-group text-start mt-2">
-                      <a type="button" class="mb-0  btn btn-sm btn-outline-success" target="_blank" href="./add_separation.php">AGREGAR SEPARACIÓN</a>
+                      <a type="button" class="mb-0  btn btn-sm btn-outline-success" href="./add_separation.php">AGREGAR SEPARACIÓN</a>
                     </div>
 
                   </div>

@@ -455,8 +455,8 @@
                       <table class="table align-items-center mb-0" id="table-clients">
                         <thead>
                           <tr>
-                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Apellidos</th>
-                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Nombres</th>
+                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">#</th>
+                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Cliente</th>
                             <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Tipo de documento</th>
                             <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Nº de documento</th>
                           </tr>
@@ -1376,29 +1376,33 @@
 
       function renderTable(idtable, data) {
 
-        newRow = `
-        <tr>
-          <td>
-            <p class="text-xs font-weight-bold mb-0">${data.apellidos}</p>
-          </td>
-          <td>
-            <p class="text-xs font-weight-bold mb-0">${data.nombres}</p>
-          </td>
-          <td>
-            <p class="text-xs font-weight-bold mb-0">${data.documento_tipo}</p>
-          </td>
-          <td>
-            <p class="text-xs font-weight-bold mb-0">${data.documento_nro}</p>
-          </td>
-          <td class="align-middle">
-            <div class="btn-group">
-              <a type="button" href="#" class="btn btn-success btn-sm"><i class="bi bi-arrow-right-square"></i> Ver más</a>
-            </div>
-          </td>
-        </tr>           
-          `;
+        let numRow = 1;
+        data.forEach(element =>{
 
-        $(idtable).innerHTML += newRow;
+          newRow = `
+          <tr>
+            <td>
+              <p class="text-xs font-weight-bold mb-0">${data.apellidos}</p>
+            </td>
+            <td>
+              <p class="text-xs font-weight-bold mb-0">${data.nombres}</p>
+            </td>
+            <td>
+              <p class="text-xs font-weight-bold mb-0">${data.documento_tipo}</p>
+            </td>
+            <td>
+              <p class="text-xs font-weight-bold mb-0">${data.documento_nro}</p>
+            </td>
+            <td class="align-middle">
+              <div class="btn-group">
+                <a type="button" href="#" class="btn btn-success btn-sm"><i class="bi bi-arrow-right-square"></i> Ver más</a>
+              </div>
+            </td>
+          </tr>           
+            `;
+  
+          $(idtable).innerHTML += newRow;
+        });
       }
 
       async function getClients(id) {
@@ -1415,7 +1419,7 @@
           let results = await global.sendAction(url, params);
 
           $("#table-clients tbody").innerHTML = "";
-          if (results) {
+          if (results.length > 0) {
 
             console.log(results);
             renderTable("#table-clients tbody", results);

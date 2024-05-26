@@ -362,8 +362,7 @@ CREATE TABLE separaciones
     CONSTRAINT fk_idconyugue_sep FOREIGN KEY(idconyugue) REFERENCES clientes(idcliente),
     CONSTRAINT fk_idusuario_sep FOREIGN KEY(idusuario) REFERENCES usuarios(idusuario)
 )ENGINE = INNODB;
-SELECT * FROM separaciones;
-
+SELECT * from separaciones;
 -- deboluciones
 CREATE TABLE devoluciones
 (

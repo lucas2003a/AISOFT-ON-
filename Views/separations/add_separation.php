@@ -918,6 +918,8 @@
         params.append("idcliente", $("#idcliente").value);
         params.append("idconyugue", $("#idconyugue").value);
         params.append("separacion_monto", $("#separacion_monto").value);
+        params.append("moneda_venta", $("#moneda_venta").value);
+        params.append("tipo_cambio", $("#tipo_cambio").value);
         params.append("imagen", $("#in-image").files[0]);
 
         let result = await global.sendAction(url,params);

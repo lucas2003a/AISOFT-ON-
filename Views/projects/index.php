@@ -337,7 +337,7 @@
           </div>
           <ul class="navbar-nav  justify-content-end">
             <li class="nav-item d-flex align-items-center">
-              <a class="btn btn-outline-success btn-sm mb-0 me-3" target="_blank" href="./add_project.php">AGREGAR PROYECTO</a>
+              <a class="btn btn-outline-success btn-sm mb-0 me-3" href="./add_project.php">AGREGAR PROYECTO</a>
             </li>
 
             <!-- DATOS DEL USUARIO -->
