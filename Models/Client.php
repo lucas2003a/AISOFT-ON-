@@ -316,4 +316,40 @@ class Client extends Conection
             die($e->getMessage());
         }
     }
+
+    //Clientes por venta realizada
+
+    /**
+     * Método que lista a los clientes con venta realizada(contrato directo o separación)
+     */
+    public function getClientsForSale(){
+
+        try {
+
+            $query = $this->conection->prepare("CALL spu_list_clients_contract()");
+            $query->execute();
+
+            return $query->fetchAll(PDO::FETCH_ASSOC);
+        }
+        catch(Exception $e){
+            die($e->getMessage());
+        }
+    }
+
+    /**
+     * Otiene elid del cliente en una venta realizada
+     */
+    public function getClientsForSaleId($idcliente = 0){
+
+        try{
+
+            $query = $this->conection->prepare("CALL spu_list_clients_contractID(?)");
+            $query->execute(array($idcliente));
+
+            return $query->fetch(PDO::FETCH_ASSOC);
+        }
+        catch(Exception $e){
+            die($e->getMessage());
+        }
+    }
 }

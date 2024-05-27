@@ -181,6 +181,20 @@ if(isset($_POST["action"])){
                 echo json_encode($client->inactiveClient($dataObtained));
 
             break;
+        
+        //CLIENTES EN VENTA REALIZADA
+        
+        case "listClientsForSale":
+            
+                echo json_encode($client->getClientsForSale());
+            break;
+        
+        case "getClientsForSaleId": 
+            
+                $idcliente = $_POST["idcliente"];
+
+                echo json_encode($client->getClientsForSaleId($idcliente));
+            break;
     }
 }
 ?>
