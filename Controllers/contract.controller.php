@@ -8,6 +8,13 @@ if(isset($_POST["action"])){
 
     switch($_POST["action"]){
 
+        case "existContract": 
+
+                $idseparacion = $_POST["idseparacion"];
+
+                echo json_encode($contract->existContrat($idseparacion));
+            break;
+
         case "listContractId": 
 
                 $idcontrato = $_POST["idcontrato"];

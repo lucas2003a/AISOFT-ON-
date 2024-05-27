@@ -12,15 +12,30 @@ class Refund extends Conection{
     }
 
     /**
+     * listado general de las devolusiones
+     */
+    public function listRefundsAll(){
+        
+        try {
+            $query = $this->conection->prepare("CALL spu_list_refunds_get()");
+            $query->execute();
+
+            return $query->fetchAll(PDO::FETCH_ASSOC);
+        } catch (Exception $e) {
+            die($e->getMessage());
+        }
+    }
+
+    /**
      * Método para listar las devoluciones en base a 3 criterios(tipo de persona, fechaInicio, fechaFin)
      */
-    public function listRefunds($dataDev){
+    public function listRefunds($dataDev = []){
         try{
 
-            $query = $this->conection->prepare("CALL sup_list_refunds(?,?,?)");
+            $query = $this->conection->prepare("CALL sup_list_refunds_tRefund(?,?,?)");
             $query->execute(
                 array(
-                    $dataDev["tipo_persona"], 
+                    $dataDev["tipo_devolucion"], 
                     $dataDev["fechaInicio"], 
                     $dataDev["fechaFin"]
                 )
@@ -41,10 +56,10 @@ class Refund extends Conection{
             $query = $this->conection->prepare("CALL sup_list_refunds_n_expedientes(?,?,?,?)");
             $query->execute(
                 array(
-                    $dataDev["tipo_persona"],
+                    $dataDev["tipo_devolucion"],
                     $dataDev["fechaInicio"],
                     $dataDev["fechaFin"],
-                    $dataDev["n_expedientes"]
+                    $dataDev["n_expediente"]
                     )
                 );
 
@@ -63,7 +78,7 @@ class Refund extends Conection{
             $query = $this->conection->prepare("CALL sup_list_refunds_ById(?)");
             $query->execute(array($iddevolucion));
 
-            return $query->fetchAll(PDO::FETCH_ASSOC);
+            return $query->fetch(PDO::FETCH_ASSOC);
         }
         catch(Exception $e){
             die($e->getMessage());
@@ -75,12 +90,14 @@ class Refund extends Conection{
      */
     public function addRefund($dataDev = []){
         try{
-            $query = $this->conection->prepare("CALL sup_add_refund(?,?,?,?,?,?");
+            $query = $this->conection->prepare("CALL spu_add_refund(?,?,?,?,?,?,?,?)");
             $query->execute(
                 array(
                     $dataDev["n_expediente"],
                     $dataDev["idseparacion"],
+                    $dataDev["tipo_devolucion"],
                     $dataDev["detalle"],
+                    $dataDev["porcentaje_penalidad"],
                     $dataDev["monto_devolucion"],
                     $dataDev["imagen"],
                     $dataDev["idusuario"]
@@ -98,13 +115,15 @@ class Refund extends Conection{
      */
     public function setRefund($dataDev = []){
         try{
-            $query = $this->conection->prepare("CALL spu_set_refund(?,?,?,?,?,?,?");
+            $query = $this->conection->prepare("CALL spu_set_refund(?,?,?,?,?,?,?,?,?)");
             $query->execute(
                 array(
                     $dataDev["iddevolucion"],
                     $dataDev["n_expediente"],
                     $dataDev["idseparacion"],
+                    $dataDev["tipo_devolucion"],
                     $dataDev["detalle"],
+                    $dataDev["porcentaje_penalidad"],
                     $dataDev["monto_devolucion"],
                     $dataDev["imagen"],
                     $dataDev["idusuario"]
@@ -136,5 +155,7 @@ class Refund extends Conection{
             die($e->getMessage());
         }
     }
+
+
 }
 ?>

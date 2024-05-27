@@ -56,7 +56,7 @@
     <div class="collapse navbar-collapse  w-auto " id="sidenav-collapse-main">
       <ul class="navbar-nav">
 
-        <!-- DASBOARD -->
+        <!-- DASHBOARD -->
         <li class="nav-item">
           <a class="nav-link" href="../../Views/dashboard.html">
             <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
@@ -80,7 +80,7 @@
 
         <!-- PROYECTOS -->
         <li class="nav-item">
-          <a class="nav-link active" href="../projects/index.php">
+          <a class="nav-link" href="../projects/index.php">
             <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
               <svg width="12px" height="12px" viewBox="0 0 42 42" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <title>office</title>
@@ -102,7 +102,7 @@
 
         <!-- CLIENTES -->
         <li class="nav-item">
-          <a class="nav-link" href="../Clients/index.php">
+          <a class="nav-link" href="../clients/index.php">
             <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
               <svg width="12px" height="12px" viewBox="0 0 42 42" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <title>office</title>
@@ -112,7 +112,7 @@
                       <g id="office" transform="translate(153.000000, 2.000000)">
                         <path class="color-background opacity-6" d="M12.25,17.5 L8.75,17.5 L8.75,1.75 C8.75,0.78225 9.53225,0 10.5,0 L31.5,0 C32.46775,0 33.25,0.78225 33.25,1.75 L33.25,12.25 L29.75,12.25 L29.75,3.5 L12.25,3.5 L12.25,17.5 Z"></path>
                         <svg class="color-background" xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-person-lines-fill" viewBox="0 0 16 16">
-                          <path  d="M6 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m-5 6s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zM11 3.5a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 0 1h-4a.5.5 0 0 1-.5-.5m.5 2.5a.5.5 0 0 0 0 1h4a.5.5 0 0 0 0-1zm2 3a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1zm0 3a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1z"/>
+                          <path d="M6 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m-5 6s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zM11 3.5a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 0 1h-4a.5.5 0 0 1-.5-.5m.5 2.5a.5.5 0 0 0 0 1h4a.5.5 0 0 0 0-1zm2 3a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1zm0 3a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1z" />
                         </svg>
                       </g>
                     </g>
@@ -134,9 +134,9 @@
                     <g transform="translate(1716.000000, 291.000000)">
                       <g id="office" transform="translate(153.000000, 2.000000)">
                         <path class="color-background opacity-6" d="M12.25,17.5 L8.75,17.5 L8.75,1.75 C8.75,0.78225 9.53225,0 10.5,0 L31.5,0 C32.46775,0 33.25,0.78225 33.25,1.75 L33.25,12.25 L29.75,12.25 L29.75,3.5 L12.25,3.5 L12.25,17.5 Z"></path>
-                        <svg  class="color-background" xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-calculator" viewBox="0 0 16 16">
-                          <path d="M12 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1zM4 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z"/>
-                          <path d="M4 2.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5h-7a.5.5 0 0 1-.5-.5zm0 4a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm0 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm0 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm3-6a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm0 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm0 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm3-6a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm0 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5z"/>
+                        <svg class="color-background" xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-calculator" viewBox="0 0 16 16">
+                          <path d="M12 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1zM4 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z" />
+                          <path d="M4 2.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5h-7a.5.5 0 0 1-.5-.5zm0 4a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm0 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm0 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm3-6a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm0 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm0 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm3-6a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm0 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5z" />
                         </svg>
                       </g>
                     </g>
@@ -147,9 +147,10 @@
             <span class="nav-link-text ms-1">Presupuestos</span>
           </a>
         </li>
+
         <!-- SEPARACIONES -->
         <li class="nav-item">
-          <a class="nav-link " href="../separations/index.php">
+          <a class="nav-link" href="../separations/index.php">
             <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
               <svg width="12px" height="12px" viewBox="0 0 42 42" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <title>office</title>
@@ -173,7 +174,7 @@
 
         <!-- DEVOLUCIONES -->
         <li class="nav-item">
-          <a class="nav-link " href="../refunds/index.php">
+          <a class="nav-link active" href="../refunds/index.php">
             <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
               <svg width="12px" height="12px" viewBox="0 0 42 42" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <title>office</title>
@@ -181,7 +182,7 @@
                   <g transform="translate(-1869.000000, -293.000000)" fill="#FFFFFF" fill-rule="nonzero">
                     <g transform="translate(1716.000000, 291.000000)">
                       <g id="office" transform="translate(153.000000, 2.000000)">
-                      <svg class="color-background" xmlns="http://www.w3.org/2000/svg"  width="50" height="50" fill="currentColor" class="bi bi-backspace-fill" viewBox="0 0 16 16">
+                        <svg class="color-background" xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-backspace-fill" viewBox="0 0 16 16">
                           <path d="M15.683 3a2 2 0 0 0-2-2h-7.08a2 2 0 0 0-1.519.698L.241 7.35a1 1 0 0 0 0 1.302l4.843 5.65A2 2 0 0 0 6.603 15h7.08a2 2 0 0 0 2-2zM5.829 5.854a.5.5 0 1 1 .707-.708l2.147 2.147 2.146-2.147a.5.5 0 1 1 .707.708L9.39 8l2.146 2.146a.5.5 0 0 1-.707.708L8.683 8.707l-2.147 2.147a.5.5 0 0 1-.707-.708L7.976 8z" />
                         </svg>
                       </g>
@@ -205,8 +206,8 @@
                     <g transform="translate(1716.000000, 291.000000)">
                       <g id="office" transform="translate(153.000000, 2.000000)">
                         <svg class="color-background" xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-credit-card" viewBox="0 0 16 16">
-                          <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v1h14V4a1 1 0 0 0-1-1zm13 4H1v5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1z"/>
-                          <path d="M2 10a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1z"/>
+                          <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v1h14V4a1 1 0 0 0-1-1zm13 4H1v5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1z" />
+                          <path d="M2 10a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1z" />
                         </svg>
                       </g>
                     </g>
@@ -229,7 +230,7 @@
                     <g transform="translate(1716.000000, 291.000000)">
                       <g id="office" transform="translate(153.000000, 2.000000)">
                         <svg class="color-background" xmlns="http://www.w3.org/2000/svg" width="40" height="50" fill="currentColor" class="bi bi-people-fill" viewBox="0 0 16 16">
-                          <path d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6m-5.784 6A2.24 2.24 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.3 6.3 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1zM4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5"/>
+                          <path d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6m-5.784 6A2.24 2.24 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.3 6.3 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1zM4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5" />
                         </svg>
                       </g>
                     </g>
@@ -252,8 +253,8 @@
                     <g transform="translate(1716.000000, 291.000000)">
                       <g id="office" transform="translate(153.000000, 2.000000)">
                         <svg class="color-background" xmlns="http://www.w3.org/2000/svg" width="50" height="43" fill="currentColor" class="bi bi-file-earmark-font" viewBox="0 0 16 16">
-                          <path d="M10.943 6H5.057L5 8h.5c.18-1.096.356-1.192 1.694-1.235l.293-.01v5.09c0 .47-.1.582-.898.655v.5H9.41v-.5c-.803-.073-.903-.184-.903-.654V6.755l.298.01c1.338.043 1.514.14 1.694 1.235h.5l-.057-2z"/>
-                          <path d="M14 4.5V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h5.5zm-3 0A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V4.5z"/>
+                          <path d="M10.943 6H5.057L5 8h.5c.18-1.096.356-1.192 1.694-1.235l.293-.01v5.09c0 .47-.1.582-.898.655v.5H9.41v-.5c-.803-.073-.903-.184-.903-.654V6.755l.298.01c1.338.043 1.514.14 1.694 1.235h.5l-.057-2z" />
+                          <path d="M14 4.5V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h5.5zm-3 0A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V4.5z" />
                         </svg>
                       </g>
                     </g>
@@ -276,8 +277,8 @@
                     <g transform="translate(1716.000000, 291.000000)">
                       <g id="office" transform="translate(153.000000, 2.000000)">
                         <svg class="color-background" xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-eye" viewBox="0 0 16 16">
-                          <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8M1.173 8a13 13 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5s3.879 1.168 5.168 2.457A13 13 0 0 1 14.828 8q-.086.13-.195.288c-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5s-3.879-1.168-5.168-2.457A13 13 0 0 1 1.172 8z"/>
-                          <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5M4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0"/>
+                          <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8M1.173 8a13 13 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5s3.879 1.168 5.168 2.457A13 13 0 0 1 14.828 8q-.086.13-.195.288c-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5s-3.879-1.168-5.168-2.457A13 13 0 0 1 1.172 8z" />
+                          <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5M4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0" />
                         </svg>
                       </g>
                     </g>
@@ -288,7 +289,7 @@
             <span class="nav-link-text ms-1">Monitoreo</span>
           </a>
         </li>
-        
+
         <li class="nav-item mt-3">
           <h6 class="ps-4 ms-2 text-uppercase text-xs font-weight-bolder opacity-6">Panel de usuario</h6>
         </li>
@@ -337,6 +338,7 @@
             <span class="nav-link-text ms-1">Cerrar sesión</span>
           </a>
         </li>
+
       </ul>
     </div>
   </aside>
@@ -346,16 +348,13 @@
       <div class="container-fluid py-1 px-3">
         <nav aria-label="breadcrumb">
           <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
-            <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark">Inicio</a></li>
-            <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark">Proyectos</a></li>
-            <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Agregar proyecto</li>
+            <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="#">Dashboard</a></li>
+            <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Devoluciones</li>
           </ol>
-          <h6 class="font-weight-bolder mb-0">AGREGAR PROYECTO</h6>
+          <h6 class="font-weight-bolder mb-0" id="cabezera">DEVOLUCIONES </h6>
         </nav>
         <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
-          
           <ul class="navbar-nav  justify-content-end">
-            
             <li class="nav-item d-flex align-items-center">
               <a href="javascript:;" class="nav-link text-body font-weight-bold px-0">
                 <i class="fa fa-user me-sm-1"></i>
@@ -371,7 +370,7 @@
                 </div>
               </a>
             </li>
-            
+
           </ul>
         </div>
       </div>
@@ -380,171 +379,90 @@
     <!-- End Navbar -->
     <div class="container py-4">
 
-      <!-- FORMULARIO -->
-      <div>
-        <div class="col-lg-12 mb-lg-0 mb-4 mt-4">
-            <div class="card">
-              <div class="card-body" style="padding: 50px">
-                <div class="row">
-                <div class="h-50" style="display: flex; justify-content: center;">
-                      
-                      <div class="position-relative d-flex align-items-center justify-content-center h-100">
-                        <img class="w-100 position-relative z-index-2 pt-4" style="width: 100%;" id="file-view" src="../../media/logos/NoImage.jpg" alt="">
-                      </div>
-                    </div>
+      <!-- CONTENIDO -->
 
-                  <div>
-                    
-                    <div class="d-flex flex-column h-100">
-                      <form class="row needs-validation" id="form-add-project" novalidate>
-                            <div class="row">
-                                <div class="col-md-6">
+      <div class="row">
+        <div class="col-12">
+          <div class="card mb-4">
+            <div class="card-header pb-0">
+              <div class="row">
+                <div class="col-md-3">
 
-                                    <!-- DATOS GENERALES -->
-                                    
-                                    <!-- DEPARTEMENTO -->
-                                    <div class="mt-4">
-                                      <label for="iddepartamento" class="form-label">Departamento</label>
-                                        <select class="form-select custom-select-scroll" id="iddepartamento" required>
-                                            <option selected disabled value="">Departamento</option>
-                                        </select>
-                                        <div class="invalid-feedback">
-                                            Necesitas escojer un departamento.
-                                        </div>
-                                        <div class="valid-feedback">
-                                            Departamento escojido correctamente.
-                                        </div>
-                                    </div>
-    
-                                    <!-- PROVINCIA -->
-                                    <div class="mt-4">
-                                        <label for="idprovincia" class="form-label">Provincia</label>
-                                        <select class="form-select custom-select-scroll" id="idprovincia" required>
-                                            <option selected disabled value="">Provincia</option>
-                                        </select>
-                                        <div class="invalid-feedback">
-                                            Necesitas escojer una provincia.
-                                        </div>
-                                        <div class="valid-feedback">
-                                            Provincia escojida correctamente.
-                                        </div>
-                                    </div>
-    
-                                    <!-- DISTRITO -->
-                                    <div class="mt-4">
-                                        <label for="iddistrito" class="form-label">Distrito</label>
-                                        <select class="form-select custom-select-scroll" id="iddistrito" required>
-                                            <option selected disabled value="">Distrito</option>
-                                        </select>
-                                        <div class="invalid-feedback">
-                                            Necesitas escojer un distrito.
-                                        </div>
-                                        <div class="valid-feedback">
-                                            Distrito escojido correctamente.
-                                        </div>
-                                    </div>
+                  <h6>Tabla - separaciones</h6>
+                </div>
+                <div class="row d-flex" style="align-items: end;">
 
-                                    <!-- IDDIRECCIÓN -->
-                                    <div class="mt-4">
-                                        <label for="idsede" class="form-label">Sede</label>
-                                        <select class="form-select custom-select-scroll" id="idsede" required>
-                                            <option selected disabled value="">Sede</option>                                            
-                                        </select>
-                                        <div class="invalid-feedback">
-                                            Necesitas escojer una sede.
-                                        </div>
-                                        <div class="valid-feedback">
-                                            Sede escojida correctament
-                                        </div>
-                                    </div>
+                  <div class="col-md-3 mt-2">
+                    <label for="tipo_devolucion">Tipo de devolución</label>
+                    <select name="tipo_devolucion" class="form-select" id="tipo_devolucion">
+                      <option value="">Tipo de devolución</option>
+                      <option value="POR SEPARACIÓN" selected>Por separación</option>
+                      <option value="POR CONTRATO">Por contrato</option>
+                    </select>
+                  </div>
 
-                                    <!-- CODIGO -->
-                                    <div class="mt-4">
-                                        <label for="codigo" class="form-label">Código</label>
-                                        <input type="text" class="form-control" id="codigo" placeholder="Código" required autofocus>
-                                        <div class="invalid-feedback">
-                                            Necesitas ingresar un código.
-                                        </div>
-                                        <div class="valid-feedback">
-                                            Código registrado correctamente.
-                                        </div>
-                                    </div>
-    
-                                    <!-- DENOMINACÓN -->
-                                    <div class="mt-4">
-                                        <label for="denominacion" class="form-label">Denominación</label>
-                                        <input type="text" class="form-control" id="denominacion" placeholder="Denominación" readonly required>
-                                        <div class="invalid-feedback">
-                                            Necesitas ingresar una denominación.
-                                        </div>
-                                        <div class="valid-feedback">
-                                            Denominación ingresada correctamente.
-                                        </div>
-                                    </div>
-    
-                                    
-    
-    
-                                    
-                                </div>
-    
-                                <div class="col-md-6">
-                                  <!-- DIRECCIÓN -->
-                                    <div class="mt-4">
-                                        <label for="direccion" class="form-label">Dirección</label>
-                                        <input type="text" class="form-control" id="direccion" placeholder="Dirección" readonly required>
-                                        <div class="invalid-feedback">
-                                            Necesitas ingresar una dirección.
-                                        </div>
-                                        <div class="valid-feedback">
-                                            Dirección ingresada correctamente.
-                                        </div>
-                                    </div>
-                                    <!-- UBICACIÓN Y MEDIDAS-->
-    
-                                    <!-- LATITUD -->
-                                    <div class="mt-4">
-                                        <label for="latitud" class="form-label">Latitud</label>                                  
-                                        <input type="text" class="form-control" id="latitud">
-                                        <div class="valid-feedback">
-                                            <!-- -- -->
-                                        </div>
-                                    </div>
-        
-                                    <!-- LONGITUD -->
-                                    <div class="mt-4  ">
-                                        <label for="longitud" class="form-label">Longitud</label>
-                                        <input type="text" class="form-control" id="longitud">
-                                        <div class="valid-feedback">
-                                            <!-- -- -->
-                                        </div>
-                                    </div>
-                                    
-                                    <!-- IMAGEN -->
-                                    <div class="form-group" style="margin-top: 70px;">
-                                        <label for="in-image" class="label-img">
-                                            <i class="material-icons"></i>
-                                            <span class="title" style="display: flex; justify-content: center;">Agregar imagen</span>
-                                            <input type="file" accept=".jpg" id="in-image">
-                                        </label>
-                                    </div>
-                                    <div class="d-grid p-3">
+                  <div class="col-md-3 mt-2">
+                    <label for="fechaInicio" class="form-label">
+                      Fecha de inicio
+                    </label>
+                    <input type="date" name="fechaInicio" class="form-control" id="fechaInicio">
+                  </div>
+                  <div class="col-md-3 mt-2">
+                    <label for="fechaFin" class="form-label">
+                      Fecha de fin
+                    </label>
+                    <input type="date" name="fechaFin" class="form-control" id="fechaFin">
+                  </div>
 
-                                        <button class="btn btn-success" type="submit" id="guardar" disabled>Guardar</button>
-                                    </div>
-                                </div>                                    
-                            </div>
-                        </form>
+                  <div class="col-md-3 d-grid mt-2">
+                    <label for="campoCriterio">Nº de expediente </label>
+                    <div class="input-group">
+                      <span class="input-group-text text-body"><i class="fas fa-search" aria-hidden="true"></i></span>
+                      <input type="text" class="form-control" placeholder="Nº de expediente ..." id="n_expediente">
                     </div>
                   </div>
-                  
+
                 </div>
+                <div class="row d-flex" style="justify-content: space-between; align-items: start;">
+                  <div class="col-md-3 m-2">
+                    <div class="btn-group text-start mt-2">
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+            <hr>
+            <div class="card-body px-0 pt-0 pb-2">
+              <div class="table-responsive text-center m-0">
+                <table class="table align-items-center mb-0 table-hover" id="table-founds">
+                  <thead>
+                    <tr>
+                      <th class="text-uppercase text-secondary text-truncate text-xxs font-weight-bolder opacity-10">#</th>
+                      <th class="text-uppercase text-secondary text-truncate text-xxs font-weight-bolder opacity-10">Nº de expediente</th>
+                      <th class="text-uppercase text-secondary text-truncate text-xxs font-weight-bolder opacity-10">Cliente</th>
+                      <th class="text-uppercase text-secondary text-truncate text-xxs font-weight-bolder opacity-10">Tipo de documento</th>
+                      <th class="text-uppercase text-secondary text-truncate text-xxs font-weight-bolder opacity-10">Nº de documento</th>
+                      <th class="text-uppercase text-secondary text-truncate text-xxs font-weight-bolder opacity-10">Monto de devolución</th>
+                      <th class="text-uppercase text-secondary text-truncate text-xxs font-weight-bolder opacity-10">Fecha de registro</th>
+                      <th class="text-uppercase text-secondary text-truncate text-xxs font-weight-bolder opacity-10">Operaciones</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+
+                    <!-- RENDER -->
+
+                  </tbody>
+                </table>
+                <div id="render-alert">
+
+
                 </div>
               </div>
             </div>
           </div>
-      </div>     
-
+        </div>
+      </div>
 
       <footer class="footer pt-3  ">
         <div class="container-fluid">
@@ -618,6 +536,57 @@
       </div>
     </div>
   </div>
+
+  <!-- MODAL -->
+  <!-- Button trigger modal -->
+  <!-- Modal -->
+  <div class="modal fade" id="modal_det_sep" tabindex="-1" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-lg modal-fullscreen-sm-down" role="document">
+      <div class="modal-content">
+        <div class="modal-header bg-secondary">
+          <h5 class="modal-title text-white" id="modalTitle">
+            --
+          </h5>
+          <button type="button" class="btn-close text-dark" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div style="margin: 5% 10% 5% 10%;">
+            <div class="d-flex" style="justify-content: space-between;">
+              <div>
+
+                <h6><strong>Cliente :</strong></h6>
+                <h6><strong>Documento tipo :</strong></h6>
+                <h6><strong>Documento número :</strong></h6>
+                <h6><strong>Proyecto :</strong></h6>
+                <h6><strong>Sublote :</strong></h6>
+                <h6><strong>Monto de separación :</strong></h6>
+                <div id="labels">
+
+                </div>
+              </div>
+              <div>
+                <h6 id="cliente"></h6>
+                <h6 id="documento_tipo"></h6>
+                <h6 id="documento_nro"></h6>
+                <h6 id="proyecto"></h6>
+                <h6 id="sublote"></h6>
+                <h6 id="monto_separación"></h6>
+                <div id="content">
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" data-bs-dismiss="modal">
+            Cerrar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- SWEET ALERT -->
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
@@ -629,214 +598,334 @@
   <script src="../../assets/js/plugins/chartjs.min.js"></script>
   <script src="../../assets/js/globalFunctions.js"></script>
   <script src="../../assets/js/sweetAlert.js"></script>
-  <script src="../../assets/js/projects/interactionForms.js"></script>
-  <script src="../../assets/js/renderUbigeo.js"></script>
   <script>
+    document.addEventListener("DOMContentLoaded", () => {
 
-    const global = new FunGlobal();
-    const sAlert = new Alert();
+      /* INSTANCIAS */
+      const global = new FunGlobal();
+      const sAlert = new Alert();
 
-    const $ = id => global.$(id);
-    const $All = id => global.$All(id);
+      const $ = id => global.$(id);
+      const $All = id => global.$All(id);
 
-    const cardProject = $("#card-project");
-    const inCodigo = $("#in-codigo");
+      let date = new Date();
+      let minDate = new Date('2024-1-1'); //La fecha se agrega sin 0 a la izquierda
+      let defaultDate = new Date();
 
-    let dataProject;            //VARIABLE QUE ALMACENA LOS DATOS OBTENIDOS DE LA CONSULTA
-    
-    let timer;
-    
-    /**
-     * FUNCIÓN PARA OBETENR LOS DATOS DEL PROYECTO
-     */
-    async function getData(){
-    
-      try{
+      let fechaInicioValue = "";
+      let fechaFinValue = "";
+      let dateReset = "";
 
-        let url = `../../Controllers/project.controller.php`;
-        
-        let params = new FormData();
-        params.append("action","listProject");
+      let timmer;
 
-        let results = await global.sendAction(url, params);
-        
-        if(results){
+      //Obtiene los registros de una separacion por id
+      async function getSeparation(id) {
 
-          dataProject = results;
+        try {
+          let url = "../../Controllers/separation.controller.php";
+          let params = new FormData();
+
+          params.append("action", "listSeparationById");
+          params.append("idseparacion", id);
+
+          let result = await global.sendAction(url, params);
+
+          if (result) {
+            console.log(result)
+
+            $("#labels").innerHTML = "";
+            $("#content").innerHTML = "";
+
+            $("#modalTitle").innerHTML = result.n_expediente;
+
+            $("#cliente").innerHTML = result.cliente;
+            $("#documento_tipo").innerHTML = result.documento_tipo;
+            $("#documento_nro").innerHTML = result.documento_nro;
+            $("#proyecto").innerHTML = result.denominacion;
+            $("#sublote").innerHTML = result.sublote;
+            $("#monto_separación").innerHTML = result.separacion_monto;
+
+            if (result.conyugue) {
+
+              const labels = ["Conyugue", "Tipo de documento", "Nro de documento"];
+              const contents = [result.conyugue, result.conyPers_documento_tipo, result.conyPers_documento_nro];
+              console.log(contents)
+
+              $("#labels").innerHTML += "<hr>";
+              $("#content").innerHTML += "<hr>";
+
+              labels.forEach((label, index) => {
+
+                let tagLabel = `<h6><strong>${label} :</strong></h6>`;
+                $("#labels").innerHTML += tagLabel;
+
+                let tagContent = `<h6>${contents[index]}</h6>`;
+                $("#content").innerHTML += tagContent;
+              });
+            }
+
+          }
+        } catch (e) {
+          console.error(e);
+        }
+      }
+      //Obtiene los datos de las separciones en base a 4 criterios
+      async function getRefunds(tdevolucion, dateStart, dateEnd, nExpedient) {
+
+        try {
+
+          let url = "../../Controllers/refund.controller.php";
+
+          let params = new FormData();
+
+
+          if (!nExpedient) {
+
+            params.append("action", "listRefundsTrefund");
+            params.append("tipo_devolucion", tdevolucion);
+            params.append("fechaInicio", dateStart);
+            params.append("fechaFin", dateEnd);
+          } else {
+            params.append("action", "listRefundsNExpedientes");
+            params.append("tipo_devolucion", tdevolucion);
+            params.append("fechaInicio", dateStart);
+            params.append("fechaFin", dateEnd);
+            params.append("n_expediente", nExpedient)
+
+          }
+
+
+          let results = await global.sendAction(url, params);
+
+          if (results) {
+
+            console.log(results)
+            $("#render-alert").innerHTML = "";
+            $("#table-founds tbody").innerHTML = "";
+
+            if (results.length > 0) {
+              console.log(results);
+
+              let numberRow = 1;
+
+              results.forEach(result => {
+                let newRow = "";
+                let code = btoa(result.iddevolucion);
+                let expedient = btoa(result.n_expediente_dev);
+                newRow = `
+                  <tr>
+                    <td class="text-xs text-truncate">${numberRow}</td>
+                    <td class="text-xs text-truncate">${result.n_expediente_dev}</td>
+                    <td class="text-xs text-truncate">${result.cliente}</td> 
+                    <td class="text-xs text-truncate">${result.documento_tipo}</td> 
+                    <td class="text-xs text-truncate">${result.documento_nro}</td> 
+                    <td class="text-xs text-truncate">${result.monto_devolucion}</td> 
+                    <td class="text-xs text-truncate">${result.create_at}</td>
+                    <td>
+                        <a type="button" href="#" data-id="${result.iddevolucion}" class="btn btn-link text-info px-3 mb-0 open-modal" data-bs-toggle="modal" data-bs-target="#modal_det_sep" ><i class="fa-solid fa-eye open-modal" data-id="${result.iddevolucion}"></i></a>
+                        <a type="button" data-id="${result.iddevolucion}" data-expedient="${result.n_expediente_dev}" class="btn btn-link text-dark px-3 mb-0 edit"><i class="bi bi-pencil-fill edit" data-id="${result.iddevolucion}" data-expedient="${result.n_expediente_dev}"></i></a>
+                    </td>
+                  </tr>
+                  `;
+                $("#table-founds tbody").innerHTML += newRow;
+                ++numberRow;
+              });
+            } else {
+
+              let newAlert = "";
+              newAlert = `
+                  <div class="alert alert-danger text-white" role="alert">
+                      <h4 class="alert-heading">No hay registros</h4>
+                      <hr />
+                      <p class="mb-0">Asegurate de ingresar los datos correctos</p>
+                    </div>
+              `;
+
+              $("#render-alert").innerHTML = newAlert;
+            }
+          } else {
+            let newAlert = "";
+            newAlert = `
+                  <div class="alert alert-danger text-white" role="alert">
+                      <h4 class="alert-heading">No hay registros</h4>
+                      <hr />
+                      <p class="mb-0">Asegurate de ingresar los datos correctos</p>
+                    </div>
+              `;
+
+            $("#render-alert").innerHTML = newAlert;
+          }
+        } catch (e) {
+          console.error(e);
+        }
+      }
+
+      //Cambia la fecha actual hacia 1 mes atrás (fecha por defecto de inicio) 
+      function setDefaultDate() {
+
+        //FECHA POR DEFECTO (1 MES ATRÁS)
+
+        defaultDate.setMonth(defaultDate.getMonth() - 1);
+
+        if (defaultDate.getDate() !== date.getDate()) {
+          defaultDate.getDate(0)
         }
 
+        const defaultDay = defaultDate.getDate().toString().padStart(2, '0');
+        const defaultMonth = (defaultDate.getMonth() + 1).toString().padStart(2, '0');
+        const defaultYear = defaultDate.getFullYear().toString();
+
+        let defDate = `${defaultYear}-${defaultMonth}-${defaultDay}`;
+
+        dateReset = defDate; //variable que guardará la fecha por defecto
+
+        return defDate;
       }
-      catch(e){
 
-        console.error(e);
+      //Actuazliza la fecha, a la fecha actual
+      function setToday() {
+        //FECHA ACTUAL
+
+        const day = date.getDate().toString().padStart(2, '0');
+        const month = (date.getMonth() + 1).toString().padStart(2, '0');
+        const year = date.getFullYear().toString();
+
+        let defToday = `${year}-${month}-${day}`;
+        return defToday;
       }
-    };
-    
-    /**
-     * FUCIÓN PARA COMPARAR LA INFORMACIÓN DE LOS INPUTS
-     * @param {array} array 
-     * @param {string} column 
-     * @param {object} param 
-     */
-    async function searchInfo(array, column, param){
-      
-      return new Promise((resolve, reject) => {
-        
-        if(column == "codigo"){
 
-          const found = array.find(element => element[column] == param)
+      // Configura los valores por defecto de los inputs date
+      async function getDates() {
 
-          if(found){
-            
-            sAlert.sweetWarning("Se ha encontrado coincidencias", `"${param}" ya existe, ingresa otro`);
-            $("#denominacion").setAttribute("readonly",true);
+        //FECHA ACTUAL
 
-            reject();
+        let today = setToday();
 
-          }else{
-            
-            $("#codigo").removeAttribute("autofocus");
-            $("#denominacion").removeAttribute("readonly");
-            $("#denominacion").focus();
+        //FECHA MÍNIMA
+        const minDay = minDate.getDate().toString().padStart(2, '0');
+        const minMonth = (minDate.getMonth() + 1).toString().padStart(2, '0');
+        const minYear = minDate.getFullYear().toString();
+
+        let dateBefore = `${minYear}-${minMonth}-${minDay}`;
+
+        //FECHA POR DEFECTO (1 MES ATRÁS)
+
+        let dateDefault = setDefaultDate();
+
+        $("#fechaInicio").min = dateBefore;
+        $("#fechaInicio").value = dateDefault;
+        $("#fechaInicio").max = today;
+        fechaInicioValue = $("#fechaInicio").value;
+
+        $("#fechaFin").value = today;
+        $("#fechaFin").max = today;
+        $("#fechaFin").min = dateBefore;
+        fechaFinValue = $("#fechaFin").value
+
+        let tDevolucion = $("#tipo_devolucion").options[$("#tipo_devolucion").selectedIndex].value;
+        await getRefunds(tDevolucion, dateDefault, today, false);
+      }
+
+      //Valida las fechas de los inputs date
+      function validateDates() {
+
+        return new Promise((resolve, reject) => {
+
+          console.log("incio filtro")
+          console.log(fechaInicioValue)
+          console.log(fechaFinValue)
+
+          let fechaInicioDate = new Date(fechaInicioValue);
+          let fechaFinDate = new Date(fechaFinValue);
+
+          if (fechaInicioDate > fechaFinDate) {
+
+            $("#fechaInicio").value = dateReset;
+            $("#fechaFin").value = setToday();
+            reject()
+          } else {
+
             resolve()
           }
-      
-        }else if(column = "denominacion"){
+          console.log("fin filtro")
+        })
+      }
 
-          const found = array.find(element => element[column] == param);
 
-          if(found){
+      $("#fechaInicio").addEventListener("change", (e) => {
+        console.log(e.target.value);
+        fechaInicioValue = e.target.value;
+        validateDates()
+          .then(() => {
+            let tipoPersona = $("#tipo_devolucion").options[$("#tipo_devolucion").selectedIndex].value;
+            let n_expedient = $("#n_expediente").value ? $("#n_expediente").value : false;
 
-            sAlert.sweetWarning("Se ha encontrado coincidencias", `"${param}" ya existe, ingresa otro`);
-            reject();
+            getRefunds(tipoPersona, fechaInicioValue, fechaFinValue, n_expedient);
+          })
+      })
 
-          }else{
+      $("#fechaFin").addEventListener("change", (e) => {
+        console.log(e.target.value);
+        fechaFinValue = e.target.value;
+        validateDates()
+          .then(() => {
+            let tipoPersona = $("#tipo_devolucion").options[$("#tipo_devolucion").selectedIndex].value;
+            let n_expedient = $("#n_expediente").value ? $("#n_expediente").value : false;
 
-            $("#denominacion").removeAttribute("autofocus");
-            $("#direccion").removeAttribute("readonly");
-            $("#direccion").focus();
-            resolve();
-          }
+            getRefunds(tipoPersona, fechaInicioValue, fechaFinValue, n_expedient);
+          })
+      });
+
+      $("#tipo_devolucion").addEventListener("change", (e) => {
+
+        let option = e.target.options[e.target.selectedIndex].value;
+        console.log(option)
+        if (option) {
+          let n_expedient = $("#n_expediente").value ? $("#n_expediente").value : false;
+
+          getRefunds(option, fechaInicioValue, fechaFinValue, n_expedient);
         }
       })
-    };
-    
-    /**
-    * FUNCIÓN PARA ENVIAR DATOS 
-    */
-    async function sendData(){
 
-      try{
+      $("#n_expediente").addEventListener("input", (e) => {
 
-        //Realizo la operación
-        let params = new FormData()
-        let url = `../../Controllers/project.controller.php`;
-  
-        params.append("action","addProject");
-        params.append("imagen",$("#in-image").files[0]);
-        params.append("idsede",$("#idsede").value);
-        params.append("codigo",$("#codigo").value);
-        params.append("denominacion",$("#denominacion").value);
-        params.append("latitud",$("#latitud").value);
-        params.append("longitud",$("#longitud").value);
-        params.append("iddistrito",$("#iddistrito").value);
-        params.append("direccion",$("#direccion").value);
+        let input = e.target.value;
 
-        let result = await global.sendAction(url, params);
+        if (input) {
 
-        if(result.filasAfect > 0){
-            sAlert.sweetConfirmAdd("El registro fué exitoso","¿Deseas volver a registrar?",
-            ()=>{
-                $("#form-add-project").reset();
-                $("#form-add-project").classList.remove("was-validated");
-  
-            },()=>{
-                window.location.href = "./index.php";
-            })
-        }else{
-            sweetAlert.alertError("No se termiado el registro","Vuelve a intentarlo");
+          clearTimeout(timmer);
+
+          timmer = setTimeout(() => {
+            let tpersona = $("#tipo_devolucion").options[$("#tipo_devolucion").selectedIndex].value
+            getRefunds(tpersona, fechaInicioValue, fechaFinValue, input);
+          }, 1000);
         }
-      }
-      catch(e){
+      });
 
-        console.error(e);
-      }
-    }
-    
-    $("#direccion").addEventListener("input",(e)=>{
-        
-        clearTimeout(timer);
+      $("#table-founds tbody").addEventListener("click", async function(e) {
 
-        timer = setTimeout(() => {
-          
-          if(e !== ""){ //TECLA ENTER
-  
-              $("#guardar").removeAttribute("disabled");
-          }
-        }, 1500);
-    });
-    
-    $("#denominacion").addEventListener("keypress",(e)=>{
+        e.preventDefault();
 
-        if(e.keyCode == 13){
+        if (e.target.classList.contains("open-modal")) {
 
-            let denominacion = $("#denominacion").value;
-    
-            if(denominacion != ""){
-    
-                searchInfo(dataProject,"denominacion",denominacion);
-            }
+          let idSeparacion = e.target.dataset.id;
+          getSeparation(idSeparacion);
+
+        }else if(e.target.classList.contains("edit")){
+          let idSeparacion = e.target.dataset.id;
+          let expedientE = e.target.dataset.expedient;
+
+          let code = btoa(idSeparacion);
+          let expedient = btoa(expedientE);
+
+          window.location.href=`./edit_refund.php?id=${code}&expedient=${expedient}`;
+
         }
-    });
-    
-    $("#codigo").addEventListener("keypress",(e)=>{
-    
-        if(e.keyCode == 13){
+      });
 
-            let code = $("#codigo").value;
-            
-            if(code != ""){
-    
-                searchInfo(dataProject,"codigo",code);
-            }
-        } 
+      getDates()
 
     });
-
-    
-    // FUNCIÓN DE BOOTSTRAP PARA LAVALIDACIÓN
-
-    //ESTA EESTRUCTUARA INDICA AL NAVEGADOR QUE CUANDO LEA ESTA FUNCION, LA EJECUTE INMEDIATAMENTE
-    (() => {
-        'use strict' //=> USO ESTRICTO POR POLITICAS DE SEGURIDAD EN EL FORMULARIO
-
-         //SELECCIONA TODOS LOS ELEMENTOS DEL FORMULARIO QUE TIENE LA CLASE "needs-validation
-        const forms = document.querySelectorAll('.needs-validation')
-
-        // TOMA EL ELEMENTO "FORMS" Y LO CONVIERTE A UN ARRAY
-        // SE INCLUYE EN UN FOREAH PARA ITERAR SOBRE SUS ELEMENTOS
-
-        Array.from(forms).forEach(form => {
-            form.addEventListener('submit', event => {
-
-                //SI LA VALIDACIÓN DEL FORMULARIO ES FALSE
-                if (!form.checkValidity()) {
-                event.preventDefault()      //=> FRENA EL ENVÍO DEL FORMULARIO
-                event.stopPropagation()     //=> FRENA LA PROPAGACIÓN DE DATOS EN EL FORMULARIO
-            }else{
-                event.preventDefault();
-                sAlert.sweetConfirm("Datos nuevos","¿Desea crear el nuevo registro?",()=>{
-
-                    sendData();
-                })
-            }
-
-            form.classList.add('was-validated') //=> AGREGA ESTA CLASE A LOS ELEMENTOS DEL FORMULARIO(MUESTRA LOS COMENTARIOS)
-            }, false) //=> ESTE TERCER ARGUMENTO INDICA QUE EL EVENTO NO SE ESTA CAPTURANDO EN LA ""FASE DE CAPTURA" SINO EN "PROPAGACIÓN NORMAL"
-        })  
-    })()
-    
-    getData();
   </script>
   <script>
     var win = navigator.platform.indexOf('Win') > -1;

@@ -172,6 +172,29 @@
           </a>
         </li>
 
+        <!-- DEVOLUCIONES -->
+        <li class="nav-item">
+          <a class="nav-link active" href="../refunds/index.php">
+            <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
+              <svg width="12px" height="12px" viewBox="0 0 42 42" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                <title>office</title>
+                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                  <g transform="translate(-1869.000000, -293.000000)" fill="#FFFFFF" fill-rule="nonzero">
+                    <g transform="translate(1716.000000, 291.000000)">
+                      <g id="office" transform="translate(153.000000, 2.000000)">
+                      <svg class="color-background" xmlns="http://www.w3.org/2000/svg"  width="50" height="50" fill="currentColor" class="bi bi-backspace-fill" viewBox="0 0 16 16">
+                          <path d="M15.683 3a2 2 0 0 0-2-2h-7.08a2 2 0 0 0-1.519.698L.241 7.35a1 1 0 0 0 0 1.302l4.843 5.65A2 2 0 0 0 6.603 15h7.08a2 2 0 0 0 2-2zM5.829 5.854a.5.5 0 1 1 .707-.708l2.147 2.147 2.146-2.147a.5.5 0 1 1 .707.708L9.39 8l2.146 2.146a.5.5 0 0 1-.707.708L8.683 8.707l-2.147 2.147a.5.5 0 0 1-.707-.708L7.976 8z" />
+                        </svg>
+                      </g>
+                    </g>
+                  </g>
+                </g>
+              </svg>
+            </div>
+            <span class="nav-link-text ms-1">Devoluciones</span>
+          </a>
+        </li>
+
         <!-- CUOTAS -->
         <li class="nav-item">
           <a class="nav-link" href="../quotas/index.php">
@@ -444,7 +467,7 @@
                           <!-- TIPO DE CAMBIO -->
                           <div class="mt-4">
                             <label for="tipo_cambio" class="form-label">Tipo de cambio</label>
-                            <input type="number" class="form-control" id="tipo_cambio" readonly>
+                            <input type="number" class="form-control" id="tipo_cambio" required min="1.00" value="0.00" step="0.01">
                             <div class="invalid-feedback">
 
                             </div>
@@ -670,7 +693,7 @@
     async function getToday() {
       let date = new Date();
 
-      let day = date.getDay().toString().padStart(2, '0');
+      let day = date.getDate().toString().padStart(2, '0');
       let month = (date.getMonth() + 1).toString().padStart(2, '0');
       let year = date.getFullYear().toString().padStart(2, '0');
 
@@ -686,6 +709,7 @@
         let params = new URLSearchParams();
         let today = await getToday();
 
+        console.log(today)
         params.append("action", "searchTC");
         params.append("fecha", today);
 
@@ -694,12 +718,17 @@
         let results = await global.sendActionGET(url);
 
         if (results) {
-          let precio_venta = results.data.data.venta;
-          let number_format = precio_venta.toFixed(2);
-          let pVenta_format = Number.parseFloat(number_format);
 
+          console.log(results)
+          if(results.data.data){
+            let precio_venta = results.data.data.venta;
+            let number_format = precio_venta.toFixed(2);
+            let pVenta_format = Number.parseFloat(number_format);
+            $("#tipo_cambio").value = pVenta_format;
 
-          $("#tipo_cambio").value = pVenta_format;
+          }else{
+            sAlert.sweetWarning("No se ha conseguido el tipo de cambio","No se ha podido conseguir el tipo de cambio <br> Intentalo más tarde.")
+          }
         }
       } catch (e) {
         console.error(e)
@@ -918,6 +947,8 @@
         params.append("idcliente", $("#idcliente").value);
         params.append("idconyugue", $("#idconyugue").value);
         params.append("separacion_monto", $("#separacion_monto").value);
+        params.append("moneda_venta", $("#moneda_venta").value);
+        params.append("tipo_cambio", $("#tipo_cambio").value);
         params.append("imagen", $("#in-image").files[0]);
 
         let result = await global.sendAction(url,params);

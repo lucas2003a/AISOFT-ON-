@@ -173,6 +173,29 @@
           </a>
         </li>
 
+        <!-- DEVOLUCIONES -->
+        <li class="nav-item">
+          <a class="nav-link " href="../refunds/index.php">
+            <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
+              <svg width="12px" height="12px" viewBox="0 0 42 42" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                <title>office</title>
+                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                  <g transform="translate(-1869.000000, -293.000000)" fill="#FFFFFF" fill-rule="nonzero">
+                    <g transform="translate(1716.000000, 291.000000)">
+                      <g id="office" transform="translate(153.000000, 2.000000)">
+                      <svg class="color-background" xmlns="http://www.w3.org/2000/svg"  width="50" height="50" fill="currentColor" class="bi bi-backspace-fill" viewBox="0 0 16 16">
+                          <path d="M15.683 3a2 2 0 0 0-2-2h-7.08a2 2 0 0 0-1.519.698L.241 7.35a1 1 0 0 0 0 1.302l4.843 5.65A2 2 0 0 0 6.603 15h7.08a2 2 0 0 0 2-2zM5.829 5.854a.5.5 0 1 1 .707-.708l2.147 2.147 2.146-2.147a.5.5 0 1 1 .707.708L9.39 8l2.146 2.146a.5.5 0 0 1-.707.708L8.683 8.707l-2.147 2.147a.5.5 0 0 1-.707-.708L7.976 8z" />
+                        </svg>
+                      </g>
+                    </g>
+                  </g>
+                </g>
+              </svg>
+            </div>
+            <span class="nav-link-text ms-1">Devoluciones</span>
+          </a>
+        </li>
+
         <!-- CUOTAS -->
         <li class="nav-item">
           <a class="nav-link" href="../quotas/index.php">
@@ -536,7 +559,7 @@
                 <div class="card-body p-3">
                   <div class="row">
                     <div class="table-responsive table-responsive-lg">
-                      <table class="table align-items-center mb-0" id="table-det-budgets" style="table-layout: fixed;">
+                      <table class="table align-items-center mb-0 table-hover" id="table-det-budgets" style="table-layout: fixed;">
                         <colgroup>
                           <col width="5%">
                           <col width="25%">

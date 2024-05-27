@@ -101,7 +101,7 @@ class Separation extends Conection{
             $query = $this->conection->prepare("CALL spu_list_separation_ByIdAsset(?)");
             $query->execute(array($idactivo));
 
-            return $query->fetch(PDO::FETCH_ASSOC);
+            return $query->fetchAll(PDO::FETCH_ASSOC);
             
         }
         catch(Exception $e){
@@ -115,7 +115,7 @@ class Separation extends Conection{
     public function addSeparation($dataSep = []){
 
         try{
-            $query = $this->conection->prepare("CALL spu_add_separation(?,?,?,?,?,?,?)");
+            $query = $this->conection->prepare("CALL spu_add_separation(?,?,?,?,?,?,?,?,?)");
             $query->execute(
                 array(
                     $dataSep["n_expediente"],
@@ -123,6 +123,8 @@ class Separation extends Conection{
                     $dataSep["idcliente"],
                     $dataSep["idconyugue"],
                     $dataSep["separacion_monto"],
+                    $dataSep["moneda_venta"],
+                    $dataSep["tipo_cambio"],
                     $dataSep["imagen"],
                     $dataSep["idusuario"]
                 )
@@ -141,7 +143,7 @@ class Separation extends Conection{
     public function setSeparation($dataSep = []){
 
         try{
-            $query = $this->conection->prepare("CALL spu_set_separation(?,?,?,?,?,?,?,?)");
+            $query = $this->conection->prepare("CALL spu_set_separation(?,?,?,?,?,?,?,?,?,?)");
             $query->execute(
                 array(
                     $dataSep["idseparacion"],
@@ -150,6 +152,8 @@ class Separation extends Conection{
                     $dataSep["idcliente"],
                     $dataSep["idconyugue"],
                     $dataSep["separacion_monto"],
+                    $dataSep["moneda_venta"],
+                    $dataSep["tipo_cambio"],
                     $dataSep["imagen"],
                     $dataSep["idusuario"]
                 )

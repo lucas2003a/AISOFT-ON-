@@ -56,7 +56,7 @@
     <div class="collapse navbar-collapse  w-auto " id="sidenav-collapse-main">
       <ul class="navbar-nav">
 
-        <!-- DASBOARD -->
+        <!-- DASHBOARD -->
         <li class="nav-item">
           <a class="nav-link" href="../../Views/dashboard.html">
             <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
@@ -80,7 +80,7 @@
 
         <!-- PROYECTOS -->
         <li class="nav-item">
-          <a class="nav-link active" href="../projects/index.php">
+          <a class="nav-link" href="../projects/index.php">
             <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
               <svg width="12px" height="12px" viewBox="0 0 42 42" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <title>office</title>
@@ -112,7 +112,7 @@
                       <g id="office" transform="translate(153.000000, 2.000000)">
                         <path class="color-background opacity-6" d="M12.25,17.5 L8.75,17.5 L8.75,1.75 C8.75,0.78225 9.53225,0 10.5,0 L31.5,0 C32.46775,0 33.25,0.78225 33.25,1.75 L33.25,12.25 L29.75,12.25 L29.75,3.5 L12.25,3.5 L12.25,17.5 Z"></path>
                         <svg class="color-background" xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-person-lines-fill" viewBox="0 0 16 16">
-                          <path  d="M6 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m-5 6s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zM11 3.5a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 0 1h-4a.5.5 0 0 1-.5-.5m.5 2.5a.5.5 0 0 0 0 1h4a.5.5 0 0 0 0-1zm2 3a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1zm0 3a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1z"/>
+                          <path d="M6 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m-5 6s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zM11 3.5a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 0 1h-4a.5.5 0 0 1-.5-.5m.5 2.5a.5.5 0 0 0 0 1h4a.5.5 0 0 0 0-1zm2 3a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1zm0 3a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1z" />
                         </svg>
                       </g>
                     </g>
@@ -134,9 +134,9 @@
                     <g transform="translate(1716.000000, 291.000000)">
                       <g id="office" transform="translate(153.000000, 2.000000)">
                         <path class="color-background opacity-6" d="M12.25,17.5 L8.75,17.5 L8.75,1.75 C8.75,0.78225 9.53225,0 10.5,0 L31.5,0 C32.46775,0 33.25,0.78225 33.25,1.75 L33.25,12.25 L29.75,12.25 L29.75,3.5 L12.25,3.5 L12.25,17.5 Z"></path>
-                        <svg  class="color-background" xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-calculator" viewBox="0 0 16 16">
-                          <path d="M12 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1zM4 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z"/>
-                          <path d="M4 2.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5h-7a.5.5 0 0 1-.5-.5zm0 4a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm0 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm0 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm3-6a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm0 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm0 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm3-6a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm0 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5z"/>
+                        <svg class="color-background" xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-calculator" viewBox="0 0 16 16">
+                          <path d="M12 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1zM4 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z" />
+                          <path d="M4 2.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5h-7a.5.5 0 0 1-.5-.5zm0 4a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm0 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm0 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm3-6a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm0 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm0 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm3-6a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm0 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5z" />
                         </svg>
                       </g>
                     </g>
@@ -147,9 +147,10 @@
             <span class="nav-link-text ms-1">Presupuestos</span>
           </a>
         </li>
+
         <!-- SEPARACIONES -->
         <li class="nav-item">
-          <a class="nav-link " href="../separations/index.php">
+          <a class="nav-link" href="../separations/index.php">
             <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
               <svg width="12px" height="12px" viewBox="0 0 42 42" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <title>office</title>
@@ -173,7 +174,7 @@
 
         <!-- DEVOLUCIONES -->
         <li class="nav-item">
-          <a class="nav-link " href="../refunds/index.php">
+          <a class="nav-link active" href="../refunds/index.php">
             <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
               <svg width="12px" height="12px" viewBox="0 0 42 42" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <title>office</title>
@@ -181,7 +182,7 @@
                   <g transform="translate(-1869.000000, -293.000000)" fill="#FFFFFF" fill-rule="nonzero">
                     <g transform="translate(1716.000000, 291.000000)">
                       <g id="office" transform="translate(153.000000, 2.000000)">
-                      <svg class="color-background" xmlns="http://www.w3.org/2000/svg"  width="50" height="50" fill="currentColor" class="bi bi-backspace-fill" viewBox="0 0 16 16">
+                        <svg class="color-background" xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-backspace-fill" viewBox="0 0 16 16">
                           <path d="M15.683 3a2 2 0 0 0-2-2h-7.08a2 2 0 0 0-1.519.698L.241 7.35a1 1 0 0 0 0 1.302l4.843 5.65A2 2 0 0 0 6.603 15h7.08a2 2 0 0 0 2-2zM5.829 5.854a.5.5 0 1 1 .707-.708l2.147 2.147 2.146-2.147a.5.5 0 1 1 .707.708L9.39 8l2.146 2.146a.5.5 0 0 1-.707.708L8.683 8.707l-2.147 2.147a.5.5 0 0 1-.707-.708L7.976 8z" />
                         </svg>
                       </g>
@@ -205,8 +206,8 @@
                     <g transform="translate(1716.000000, 291.000000)">
                       <g id="office" transform="translate(153.000000, 2.000000)">
                         <svg class="color-background" xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-credit-card" viewBox="0 0 16 16">
-                          <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v1h14V4a1 1 0 0 0-1-1zm13 4H1v5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1z"/>
-                          <path d="M2 10a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1z"/>
+                          <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v1h14V4a1 1 0 0 0-1-1zm13 4H1v5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1z" />
+                          <path d="M2 10a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1z" />
                         </svg>
                       </g>
                     </g>
@@ -229,7 +230,7 @@
                     <g transform="translate(1716.000000, 291.000000)">
                       <g id="office" transform="translate(153.000000, 2.000000)">
                         <svg class="color-background" xmlns="http://www.w3.org/2000/svg" width="40" height="50" fill="currentColor" class="bi bi-people-fill" viewBox="0 0 16 16">
-                          <path d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6m-5.784 6A2.24 2.24 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.3 6.3 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1zM4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5"/>
+                          <path d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6m-5.784 6A2.24 2.24 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.3 6.3 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1zM4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5" />
                         </svg>
                       </g>
                     </g>
@@ -252,8 +253,8 @@
                     <g transform="translate(1716.000000, 291.000000)">
                       <g id="office" transform="translate(153.000000, 2.000000)">
                         <svg class="color-background" xmlns="http://www.w3.org/2000/svg" width="50" height="43" fill="currentColor" class="bi bi-file-earmark-font" viewBox="0 0 16 16">
-                          <path d="M10.943 6H5.057L5 8h.5c.18-1.096.356-1.192 1.694-1.235l.293-.01v5.09c0 .47-.1.582-.898.655v.5H9.41v-.5c-.803-.073-.903-.184-.903-.654V6.755l.298.01c1.338.043 1.514.14 1.694 1.235h.5l-.057-2z"/>
-                          <path d="M14 4.5V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h5.5zm-3 0A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V4.5z"/>
+                          <path d="M10.943 6H5.057L5 8h.5c.18-1.096.356-1.192 1.694-1.235l.293-.01v5.09c0 .47-.1.582-.898.655v.5H9.41v-.5c-.803-.073-.903-.184-.903-.654V6.755l.298.01c1.338.043 1.514.14 1.694 1.235h.5l-.057-2z" />
+                          <path d="M14 4.5V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h5.5zm-3 0A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V4.5z" />
                         </svg>
                       </g>
                     </g>
@@ -276,8 +277,8 @@
                     <g transform="translate(1716.000000, 291.000000)">
                       <g id="office" transform="translate(153.000000, 2.000000)">
                         <svg class="color-background" xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-eye" viewBox="0 0 16 16">
-                          <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8M1.173 8a13 13 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5s3.879 1.168 5.168 2.457A13 13 0 0 1 14.828 8q-.086.13-.195.288c-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5s-3.879-1.168-5.168-2.457A13 13 0 0 1 1.172 8z"/>
-                          <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5M4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0"/>
+                          <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8M1.173 8a13 13 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5s3.879 1.168 5.168 2.457A13 13 0 0 1 14.828 8q-.086.13-.195.288c-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5s-3.879-1.168-5.168-2.457A13 13 0 0 1 1.172 8z" />
+                          <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5M4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0" />
                         </svg>
                       </g>
                     </g>
@@ -288,7 +289,7 @@
             <span class="nav-link-text ms-1">Monitoreo</span>
           </a>
         </li>
-        
+
         <li class="nav-item mt-3">
           <h6 class="ps-4 ms-2 text-uppercase text-xs font-weight-bolder opacity-6">Panel de usuario</h6>
         </li>
@@ -337,6 +338,7 @@
             <span class="nav-link-text ms-1">Cerrar sesión</span>
           </a>
         </li>
+
       </ul>
     </div>
   </aside>
@@ -346,16 +348,16 @@
       <div class="container-fluid py-1 px-3">
         <nav aria-label="breadcrumb">
           <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
-            <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark">Inicio</a></li>
-            <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark">Proyectos</a></li>
-            <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Agregar proyecto</li>
+            <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="#">Dashboard</a></li>
+            <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="#">Devoluciones</a></li>
+            <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Agregar devolución</li>
           </ol>
-          <h6 class="font-weight-bolder mb-0">AGREGAR PROYECTO</h6>
+          <h6 class="font-weight-bolder mb-0" id="cabezera">AGREGAR DEVOLUCIÓN</h6>
         </nav>
         <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
-          
+
           <ul class="navbar-nav  justify-content-end">
-            
+
             <li class="nav-item d-flex align-items-center">
               <a href="javascript:;" class="nav-link text-body font-weight-bold px-0">
                 <i class="fa fa-user me-sm-1"></i>
@@ -371,7 +373,7 @@
                 </div>
               </a>
             </li>
-            
+
           </ul>
         </div>
       </div>
@@ -383,196 +385,161 @@
       <!-- FORMULARIO -->
       <div>
         <div class="col-lg-12 mb-lg-0 mb-4 mt-4">
-            <div class="card">
-              <div class="card-body" style="padding: 50px">
-                <div class="row">
-                <div class="h-50" style="display: flex; justify-content: center;">
-                      
-                      <div class="position-relative d-flex align-items-center justify-content-center h-100">
-                        <img class="w-100 position-relative z-index-2 pt-4" style="width: 100%;" id="file-view" src="../../media/logos/NoImage.jpg" alt="">
-                      </div>
-                    </div>
+          <div class="card">
+            <div class="card-body" style="padding: 50px">
+              <div class="row">
 
-                  <div>
-                    
-                    <div class="d-flex flex-column h-100">
-                      <form class="row needs-validation" id="form-add-project" novalidate>
-                            <div class="row">
-                                <div class="col-md-6">
 
-                                    <!-- DATOS GENERALES -->
-                                    
-                                    <!-- DEPARTEMENTO -->
-                                    <div class="mt-4">
-                                      <label for="iddepartamento" class="form-label">Departamento</label>
-                                        <select class="form-select custom-select-scroll" id="iddepartamento" required>
-                                            <option selected disabled value="">Departamento</option>
-                                        </select>
-                                        <div class="invalid-feedback">
-                                            Necesitas escojer un departamento.
-                                        </div>
-                                        <div class="valid-feedback">
-                                            Departamento escojido correctamente.
-                                        </div>
-                                    </div>
-    
-                                    <!-- PROVINCIA -->
-                                    <div class="mt-4">
-                                        <label for="idprovincia" class="form-label">Provincia</label>
-                                        <select class="form-select custom-select-scroll" id="idprovincia" required>
-                                            <option selected disabled value="">Provincia</option>
-                                        </select>
-                                        <div class="invalid-feedback">
-                                            Necesitas escojer una provincia.
-                                        </div>
-                                        <div class="valid-feedback">
-                                            Provincia escojida correctamente.
-                                        </div>
-                                    </div>
-    
-                                    <!-- DISTRITO -->
-                                    <div class="mt-4">
-                                        <label for="iddistrito" class="form-label">Distrito</label>
-                                        <select class="form-select custom-select-scroll" id="iddistrito" required>
-                                            <option selected disabled value="">Distrito</option>
-                                        </select>
-                                        <div class="invalid-feedback">
-                                            Necesitas escojer un distrito.
-                                        </div>
-                                        <div class="valid-feedback">
-                                            Distrito escojido correctamente.
-                                        </div>
-                                    </div>
+                <div>
 
-                                    <!-- IDDIRECCIÓN -->
-                                    <div class="mt-4">
-                                        <label for="idsede" class="form-label">Sede</label>
-                                        <select class="form-select custom-select-scroll" id="idsede" required>
-                                            <option selected disabled value="">Sede</option>                                            
-                                        </select>
-                                        <div class="invalid-feedback">
-                                            Necesitas escojer una sede.
-                                        </div>
-                                        <div class="valid-feedback">
-                                            Sede escojida correctament
-                                        </div>
-                                    </div>
+                  <div class="d-flex flex-column h-100">
+                    <form class="row needs-validation" id="form-add-separation" novalidate>
+                      <div class="row">
+                        <div class="col-md-6">
 
-                                    <!-- CODIGO -->
-                                    <div class="mt-4">
-                                        <label for="codigo" class="form-label">Código</label>
-                                        <input type="text" class="form-control" id="codigo" placeholder="Código" required autofocus>
-                                        <div class="invalid-feedback">
-                                            Necesitas ingresar un código.
-                                        </div>
-                                        <div class="valid-feedback">
-                                            Código registrado correctamente.
-                                        </div>
-                                    </div>
-    
-                                    <!-- DENOMINACÓN -->
-                                    <div class="mt-4">
-                                        <label for="denominacion" class="form-label">Denominación</label>
-                                        <input type="text" class="form-control" id="denominacion" placeholder="Denominación" readonly required>
-                                        <div class="invalid-feedback">
-                                            Necesitas ingresar una denominación.
-                                        </div>
-                                        <div class="valid-feedback">
-                                            Denominación ingresada correctamente.
-                                        </div>
-                                    </div>
-    
-                                    
-    
-    
-                                    
-                                </div>
-    
-                                <div class="col-md-6">
-                                  <!-- DIRECCIÓN -->
-                                    <div class="mt-4">
-                                        <label for="direccion" class="form-label">Dirección</label>
-                                        <input type="text" class="form-control" id="direccion" placeholder="Dirección" readonly required>
-                                        <div class="invalid-feedback">
-                                            Necesitas ingresar una dirección.
-                                        </div>
-                                        <div class="valid-feedback">
-                                            Dirección ingresada correctamente.
-                                        </div>
-                                    </div>
-                                    <!-- UBICACIÓN Y MEDIDAS-->
-    
-                                    <!-- LATITUD -->
-                                    <div class="mt-4">
-                                        <label for="latitud" class="form-label">Latitud</label>                                  
-                                        <input type="text" class="form-control" id="latitud">
-                                        <div class="valid-feedback">
-                                            <!-- -- -->
-                                        </div>
-                                    </div>
-        
-                                    <!-- LONGITUD -->
-                                    <div class="mt-4  ">
-                                        <label for="longitud" class="form-label">Longitud</label>
-                                        <input type="text" class="form-control" id="longitud">
-                                        <div class="valid-feedback">
-                                            <!-- -- -->
-                                        </div>
-                                    </div>
-                                    
-                                    <!-- IMAGEN -->
-                                    <div class="form-group" style="margin-top: 70px;">
-                                        <label for="in-image" class="label-img">
-                                            <i class="material-icons"></i>
-                                            <span class="title" style="display: flex; justify-content: center;">Agregar imagen</span>
-                                            <input type="file" accept=".jpg" id="in-image">
-                                        </label>
-                                    </div>
-                                    <div class="d-grid p-3">
+                          <!-- DATOS GENERALES -->
 
-                                        <button class="btn btn-success" type="submit" id="guardar" disabled>Guardar</button>
-                                    </div>
-                                </div>                                    
+                          <!-- NRO EXPEDIENTE -->
+                          <div class="mt-4">
+                            <label for="n_expediente" class="form-label">Nº de expediente</label>
+                            <div class="input-group">
+                              <span class="input-group-text">DEC-</span>
+                              <input type="number" class="form-control" id="n_expediente" placeholder="Nº de expediente" value="000000" min="000001" step="1" autofocus required>
                             </div>
-                        </form>
-                    </div>
+                            <div class="invalid-feedback">
+                              Necesitas ingresar el nro de expediente.
+                            </div>
+                            <div class="valid-feedback">
+                              Nº de expediente registrado correctamente.
+                            </div>
+                          </div>
+
+                          <div class="mt-4">
+                            <label for="tipo_devolucion" class="form-label">Tipo de devolución</label>
+                            <select name="tipo_devolucion" id="tipo_devolucion" class="form-select" required>
+                              <option value="">Selecciona un tipo de devolución</option>
+                              <option value="POR SEPARACIÓN">Por separación</option>
+                              <option value="POR CONTRATO">Por contrato</option>
+                            </select>
+                          </div>
+
+                          <!-- DETALLE -->
+                          <div class="mt-4">
+                          
+                            <label for="detalle" class="form-label">Detalle</label>
+                            <div style="position:relative;">
+                              <span id="count-char" style="display: flex; justify-content:end; position:absolute;padding:2px; font-size: 15px;">000/200</span>
+                              <textarea name="detalle" class="form-control" style="padding-top: 25px;" id="detalle" cols="65" rows="3" maxlength="200" required></textarea>
+                            </div>
+                            <div class="invalid-feedback">
+                              Necesitas ingresar un detalle.
+                            </div>
+                            <div class="valid-feedback">
+                              Detalle registrado correctamente.
+                            </div>
+                          </div>
+
+                          <!-- PORCENTAJE DE PENALIDAD -->
+                          <div class="mt-4">
+                            <label for="procentaje_penalidad" class="form-label">Procentaje de penalidad</label>
+                            <div class="input-group">
+                              <span class="input-group-text">%</span>
+                               <input type="number" class="form-control" id="porcentaje_penalidad" placeholder="Porcentaje de penaliad" min="1" max="100" value="0" required>
+                            </div>
+                            <div class="invalid-feedback">
+                                Necesistas registrar el porcentaje de penalidad
+                            </div>
+                            <div class="valid-feedback">
+                                Porcentaje de penalidad registrado correctamente
+                            </div>
+                          </div>
+                          
+                          <!-- MONTO SEPARACIÓN -->
+                          <div class="mt-4">
+                            <label for="monto_separacion" class="form-label">Monto de separación</label>
+                            <input type="text" name="monto_separacion" class="form-control" id="monto_separacion" readonly>
+                          </div>
+
+                          <!-- MONTO DE DEVOLUCIÓN -->
+                          <div class="mt-4">
+                            <label for="monto_devolucion" class="form-label">Monto de devolución</label>
+                            <input type="number" class="form-control" id="monto_devolucion" placeholder="Monto de devolución" value="0.00" min="100.00" step="0.01" required>
+                            <div class="invalid-feedback">
+                              Necesitas ingresar el monto de devolución.
+                            </div>
+                            <div class="valid-feedback">
+                              Monto de devolución ingresado correctamente.
+                            </div>
+                          </div>
+
+                          <!-- IMAGEN -->
+                          <div class="form-group mt-4">
+                            <label for="in-image" class="label-img">
+                              <i class="material-icons"></i>
+                              <span class="title" style="display: flex; justify-content: center;">Agregar imagen de comprobante</span>
+                              <input type="file" accept=".jpg" id="in-image" required>
+                            </label>
+                          </div>
+
+
+                          <div class="d-grid p-3">
+
+                            <button class="btn btn-success" type="submit" id="guardar">Guardar</button>
+                          </div>
+
+                        </div>
+
+                        <div class="col-md-6">
+                          <div class="h-50" style="display: flex; justify-content: center;">
+
+                            <div class="position-relative d-flex align-items-center justify-content-center h-100">
+                              <img class="w-100 position-relative z-index-2 pt-4" style="width: 100%;" id="file-view" src="../../media/constancias_sep/NoImage.jpg" alt="">
+                            </div>
+                          </div>
+
+                        </div>
+                      </div>
+                    </form>
                   </div>
-                  
                 </div>
-                </div>
-              </div>
-            </div>
-          </div>
-      </div>     
 
-
-      <footer class="footer pt-3  ">
-        <div class="container-fluid">
-          <div class="row align-items-center justify-content-lg-between">
-            <div class="col-lg-6 mb-lg-0 mb-4">
-              <div class="copyright text-center text-sm text-muted text-lg-start">
-                © <script>
-                  document.write(new Date().getFullYear())
-                </script>,
-                auspiciado por
-                <a href="https://www.creative-tim.com" class="font-weight-bold" target="_blank">A.I.F Contratistas Generales S.A.C</a>
-                (sistema web).
               </div>
             </div>
           </div>
         </div>
-      </footer>
+      </div>
+    </div>
+
+    <footer class="footer pt-3  ">
+      <div class="container-fluid">
+        <div class="row align-items-center justify-content-lg-between">
+          <div class="col-lg-6 mb-lg-0 mb-4">
+            <div class="copyright text-center text-sm text-muted text-lg-start">
+              © <script>
+                document.write(new Date().getFullYear())
+              </script>,
+              auspiciado por
+              <a href="https://www.creative-tim.com" class="font-weight-bold" target="_blank">A.I.F Contratistas Generales S.A.C</a>
+              (sistema web).
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
     </div>
   </main>
   <div class="fixed-plugin">
     <a class="fixed-plugin-button text-dark position-fixed px-3 py-2">
       <i class="fa fa-cog py-2"> </i>
     </a>
+
+
+    <!-- CONFIGURACIONES DEL PANEL -->
     <div class="card shadow-lg ">
       <div class="card-header pb-0 pt-3 ">
         <div class="float-start">
-          <h5 class="mt-3 mb-0">Soft UI Configurator</h5>
-          <p>See our dashboard options.</p>
+          <h5 class="mt-3 mb-0">Configurar tu interfáz</h5>
+          <p>Mira las opciones de configuración</p>
         </div>
         <div class="float-end mt-4">
           <button class="btn btn-link text-dark p-0 fixed-plugin-close-button">
@@ -603,8 +570,8 @@
           <p class="text-sm">Puedes escojer entre dos tipos de sidebar.</p>
         </div>
         <div class="d-flex">
-          <button class="btn bg-gradient-primary w-100 px-3 mb-2 active" data-class="bg-transparent" onclick="sidebarType(this)">Transparent</button>
-          <button class="btn bg-gradient-primary w-100 px-3 mb-2 ms-2" data-class="bg-white" onclick="sidebarType(this)">White</button>
+          <button class="btn bg-gradient-primary w-100 px-3 mb-2 active" data-class="bg-transparent" onclick="sidebarType(this)">Transparente</button>
+          <button class="btn bg-gradient-primary w-100 px-3 mb-2 ms-2" data-class="bg-white" onclick="sidebarType(this)">Blanco</button>
         </div>
         <p class="text-sm d-xl-none d-block mt-2">Solo puedes cambiar la transparecia del seidebar en la vista de escritorio.</p>
 
@@ -618,225 +585,326 @@
       </div>
     </div>
   </div>
+
+  <!-- Modal trigger button -->
+  <button type="button" id="show-modal" class="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#modalId" style="position: absolute; left: -9999px; top: -9999px;">
+    Launch
+  </button>
+
+  <!-- Modal Body -->
+  <!-- if you want to close by clicking outside the modal, delete the last endpoint:data-bs-backdrop and data-bs-keyboard -->
+  <div class="modal fade" id="modalId" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+      <div class="modal-content bg-transparent" style="border: none;">
+        <div class="modal-header" style="border-bottom: none;">
+
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body d-lg-flex justify-content-center">
+          <img id="viewer" src="" alt="" style="height: 500px; width: 500px;">
+        </div>
+        <div class="modal-footer d-flex justify-content-center" style="border-top: none;">
+          <h4 class="text-white bold" id="name_image">CONSTANCIA</h4>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
   <!-- SWEET ALERT -->
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
   <!--   Core JS Files   -->
   <script src="../../assets/js/core/popper.min.js"></script>
   <script src="../../assets/js/core/bootstrap.min.js"></script>
+  <script src="../../assets/js/core/bootstrap.bundle.min.js"></script>
   <script src="../../assets/js/plugins/perfect-scrollbar.min.js"></script>
   <script src="../../assets/js/plugins/smooth-scrollbar.min.js"></script>
   <script src="../../assets/js/plugins/chartjs.min.js"></script>
   <script src="../../assets/js/globalFunctions.js"></script>
   <script src="../../assets/js/sweetAlert.js"></script>
-  <script src="../../assets/js/projects/interactionForms.js"></script>
-  <script src="../../assets/js/renderUbigeo.js"></script>
-  <script>
 
+  <!-- <script src="../../assets/js/renderUbigeo.js"></script>  -->
+
+  <!-- SELECT2 - JQUERY -->
+  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+  <script>
     const global = new FunGlobal();
     const sAlert = new Alert();
 
+    const stringQuery = window.location.search;
+    const params  = new URLSearchParams(stringQuery);
+    const code = params.get("id");
+    const idseparacion = atob(code);
+
+    console.log(idseparacion)
     const $ = id => global.$(id);
     const $All = id => global.$All(id);
 
-    const cardProject = $("#card-project");
-    const inCodigo = $("#in-codigo");
+    let datarefunds;
+    let lastCode = false;
+    let dataClients;
+    let newValue;
 
-    let dataProject;            //VARIABLE QUE ALMACENA LOS DATOS OBTENIDOS DE LA CONSULTA
-    
-    let timer;
-    
-    /**
-     * FUNCIÓN PARA OBETENR LOS DATOS DEL PROYECTO
-     */
-    async function getData(){
-    
-      try{
+    //Obtiene los registros de una separacion por id (para obtener el monot de la separación)
+    async function getSeparationAmount(id) {
 
-        let url = `../../Controllers/project.controller.php`;
-        
+      try {
+        let url = "../../Controllers/separation.controller.php";
         let params = new FormData();
-        params.append("action","listProject");
 
-        let results = await global.sendAction(url, params);
-        
-        if(results){
-
-          dataProject = results;
-        }
-
-      }
-      catch(e){
-
-        console.error(e);
-      }
-    };
-    
-    /**
-     * FUCIÓN PARA COMPARAR LA INFORMACIÓN DE LOS INPUTS
-     * @param {array} array 
-     * @param {string} column 
-     * @param {object} param 
-     */
-    async function searchInfo(array, column, param){
-      
-      return new Promise((resolve, reject) => {
-        
-        if(column == "codigo"){
-
-          const found = array.find(element => element[column] == param)
-
-          if(found){
-            
-            sAlert.sweetWarning("Se ha encontrado coincidencias", `"${param}" ya existe, ingresa otro`);
-            $("#denominacion").setAttribute("readonly",true);
-
-            reject();
-
-          }else{
-            
-            $("#codigo").removeAttribute("autofocus");
-            $("#denominacion").removeAttribute("readonly");
-            $("#denominacion").focus();
-            resolve()
-          }
-      
-        }else if(column = "denominacion"){
-
-          const found = array.find(element => element[column] == param);
-
-          if(found){
-
-            sAlert.sweetWarning("Se ha encontrado coincidencias", `"${param}" ya existe, ingresa otro`);
-            reject();
-
-          }else{
-
-            $("#denominacion").removeAttribute("autofocus");
-            $("#direccion").removeAttribute("readonly");
-            $("#direccion").focus();
-            resolve();
-          }
-        }
-      })
-    };
-    
-    /**
-    * FUNCIÓN PARA ENVIAR DATOS 
-    */
-    async function sendData(){
-
-      try{
-
-        //Realizo la operación
-        let params = new FormData()
-        let url = `../../Controllers/project.controller.php`;
-  
-        params.append("action","addProject");
-        params.append("imagen",$("#in-image").files[0]);
-        params.append("idsede",$("#idsede").value);
-        params.append("codigo",$("#codigo").value);
-        params.append("denominacion",$("#denominacion").value);
-        params.append("latitud",$("#latitud").value);
-        params.append("longitud",$("#longitud").value);
-        params.append("iddistrito",$("#iddistrito").value);
-        params.append("direccion",$("#direccion").value);
+        params.append("action", "listSeparationById");
+        params.append("idseparacion", id);
 
         let result = await global.sendAction(url, params);
 
-        if(result.filasAfect > 0){
-            sAlert.sweetConfirmAdd("El registro fué exitoso","¿Deseas volver a registrar?",
-            ()=>{
-                $("#form-add-project").reset();
-                $("#form-add-project").classList.remove("was-validated");
-  
-            },()=>{
-                window.location.href = "./index.php";
-            })
-        }else{
-            sweetAlert.alertError("No se termiado el registro","Vuelve a intentarlo");
+        if(result) {
+          
+          $("#monto_separacion").value = result.separacion_monto;
+          return result.separacion_monto;
         }
-      }
-      catch(e){
-
+      } catch (e) {
         console.error(e);
       }
     }
-    
-    $("#direccion").addEventListener("input",(e)=>{
-        
-        clearTimeout(timer);
 
-        timer = setTimeout(() => {
-          
-          if(e !== ""){ //TECLA ENTER
-  
-              $("#guardar").removeAttribute("disabled");
-          }
-        }, 1500);
-    });
-    
-    $("#denominacion").addEventListener("keypress",(e)=>{
+    //Calcula el nuevo monto de la devolución
+    async function calculateNewAmount(){
+      
+      let montoSep = Number.parseFloat(await getSeparationAmount(idseparacion));
+      let porcentaje = Number.parseFloat($("#porcentaje_penalidad").value || 0)
 
-        if(e.keyCode == 13){
+      console.log(montoSep)
+      console.log(porcentaje)
+      let result = montoSep * (porcentaje / 100);
 
-            let denominacion = $("#denominacion").value;
-    
-            if(denominacion != ""){
-    
-                searchInfo(dataProject,"denominacion",denominacion);
-            }
+      $("#monto_devolucion").value = result.toFixed(2);
+    }
+
+    //Obtiene la fecha actual
+    async function getToday() {
+      let date = new Date();
+
+      let day = date.getDay().toString().padStart(2, '0');
+      let month = (date.getMonth() + 1).toString().padStart(2, '0');
+      let year = date.getFullYear().toString().padStart(2, '0');
+
+      let today = `${year}-${month}-${day}`;
+      return today;
+    }
+
+    //Obtiene el tipo de cambio
+    async function getTC() {
+
+      try {
+
+        let params = new URLSearchParams();
+        let today = await getToday();
+
+        params.append("action", "searchTC");
+        params.append("fecha", today);
+
+        let url = `../../Controllers/searchDocument.php?${params}`;
+
+        let results = await global.sendActionGET(url);
+
+        if (results) {
+          let precio_venta = results.data.data.venta;
+          let number_format = precio_venta.toFixed(2);
+          let pVenta_format = Number.parseFloat(number_format);
+
+
+          $("#tipo_cambio").value = pVenta_format;
         }
+      } catch (e) {
+        console.error(e)
+      }
+    }
+
+    //Obtiene los datos de las devoluciones
+    async function getRefudsAll(){
+
+      try {
+
+        let url = "../../Controllers/refund.controller.php";
+
+        let params = new FormData();
+        params.append("action", "listRefundsAll");
+
+        let results = await global.sendAction(url, params);
+
+        if (results.length > 0) {
+          datarefunds = results;
+          console.log(datarefunds);
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
+    //Valida los datos(inptu n_expediente y idactivo)
+    function validateDate(campo, value, array) {
+
+      return new Promise((resolve, reject) => {
+
+        let isFound = array.find(element => element[campo] == value)
+
+        if (isFound) {
+          sAlert.sweetWarning("Se ha encontrado coincidencias", `"${value}" ya existe, ingresa otro`);
+          reject();
+          console.log("dato encontrado");
+        } else {
+          resolve();
+          console.log("data no encontrado");
+        }
+      });
+
+    }
+
+    function readFile(event) {
+      let file = event.target.files[0];
+      let reader = new FileReader();
+
+      reader.onload = (event) => {
+        $("#file-view").setAttribute("src", (event.target.result));
+        $("#file-view").style.width = "100%";
+        $("#file-view").style.height = "20rem";
+      }
+
+      reader.readAsDataURL(file);
+    }
+
+    //Registra una separación
+    async function addRefund(idsep) {
+
+      try {
+
+        let url = "../../Controllers/refund.controller.php";
+        let params = new FormData()
+
+        params.append("action", "addRefund");
+        params.append("n_expediente", newValue);
+        params.append("idseparacion", idsep);
+        params.append("tipo_devolucion", $("#tipo_devolucion").value);
+        params.append("detalle", $("#detalle").value);
+        params.append("porcentaje_penalidad", $("#porcentaje_penalidad").value);
+        params.append("monto_devolucion", $("#monto_devolucion").value);
+        params.append("imagen", $("#in-image").files[0]);
+
+        let result = await global.sendAction(url, params);
+
+        if (result.filasAfect > 0) {
+          console.log(result);
+          sAlert.sweetSuccess("El registro fué exstisoso","La devolución fué correctamente registrada",()=>{
+            history.back(); //Regresa a la pagina anterior, history.go(-2) seria dos paginas atras
+          })
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
+    $("#detalle").addEventListener("input",(e)=>{
+
+      let inputValue = e.target.value;
+      let count = inputValue.length.toString().padStart(3,'0');
+
+      $("#count-char").innerHTML = `${count}/200`;
     });
-    
-    $("#codigo").addEventListener("keypress",(e)=>{
-    
-        if(e.keyCode == 13){
 
-            let code = $("#codigo").value;
-            
-            if(code != ""){
-    
-                searchInfo(dataProject,"codigo",code);
-            }
-        } 
+    $("#porcentaje_penalidad").addEventListener("input",()=>{
 
+      calculateNewAmount();
     });
 
-    
-    // FUNCIÓN DE BOOTSTRAP PARA LAVALIDACIÓN
+    $("#n_expediente").addEventListener("blur", (e) => {
 
-    //ESTA EESTRUCTUARA INDICA AL NAVEGADOR QUE CUANDO LEA ESTA FUNCION, LA EJECUTE INMEDIATAMENTE
+      console.log(lastCode)
+      e.preventDefault();
+      let valueInput = e.target.value;
+
+      if (!lastCode) {
+        lastCode = true;
+        let sliceValue = valueInput.slice(0, 6); //Extrae l valores incluyendo el los del indice 0 y 6
+        let valueFormat = sliceValue.padEnd(6, '0')
+        newValue = "DEC-" + valueFormat;
+        $("#n_expediente").value = valueFormat;
+
+        validateDate("n_expediente_dev", newValue, datarefunds)
+          .then(() => {
+            console.log("no existe");
+          }).catch(() => {
+            $("#n_expediente").focus();
+            lastCode = false;
+          })
+      }
+    });
+
+    $("#n_expediente").addEventListener("input", (e) => {
+
+      e.preventDefault();
+
+      let valueInput = e.target.value;
+
+      if (e.target.dataset.prevVal !== valueInput) {
+        lastCode = false;
+      }
+      e.target.dataset.prevVal = valueInput;
+    });
+
+    $("#in-image").addEventListener("change", (e) => {
+
+      if (e.target.files.length > 0) {
+        readFile(e);
+      }
+    });
+
+    $("#file-view").addEventListener("click", (e) => {
+
+      let img = e.target.src;
+      console.log(img)
+      $("#viewer").src = img;
+      $("#viewer").alt = img;
+      $("#show-modal").click()
+    })
+
+    // getTC();
+    getSeparationAmount(idseparacion);
+    getRefudsAll();
+    /* --------------------------------- FUNCIÓN DE VALIDACIÓN --------------------------------------------------------- */
+
     (() => {
-        'use strict' //=> USO ESTRICTO POR POLITICAS DE SEGURIDAD EN EL FORMULARIO
+      'use strict' //=> USO ESTRICTO POR POLITICAS DE SEGURIDAD EN EL FORMULARIO
 
-         //SELECCIONA TODOS LOS ELEMENTOS DEL FORMULARIO QUE TIENE LA CLASE "needs-validation
-        const forms = document.querySelectorAll('.needs-validation')
+      //SELECCIONA TODOS LOS ELEMENTOS DEL FORMULARIO QUE TIENE LA CLASE "needs-validation
+      const forms = document.querySelectorAll('.needs-validation')
 
-        // TOMA EL ELEMENTO "FORMS" Y LO CONVIERTE A UN ARRAY
-        // SE INCLUYE EN UN FOREAH PARA ITERAR SOBRE SUS ELEMENTOS
+      // TOMA EL ELEMENTO "FORMS" Y LO CONVIERTE A UN ARRAY
+      // SE INCLUYE EN UN FOREAH PARA ITERAR SOBRE SUS ELEMENTOS
 
-        Array.from(forms).forEach(form => {
-            form.addEventListener('submit', event => {
+      Array.from(forms).forEach(form => {
+        form.addEventListener('submit', event => {
 
-                //SI LA VALIDACIÓN DEL FORMULARIO ES FALSE
-                if (!form.checkValidity()) {
-                event.preventDefault()      //=> FRENA EL ENVÍO DEL FORMULARIO
-                event.stopPropagation()     //=> FRENA LA PROPAGACIÓN DE DATOS EN EL FORMULARIO
-            }else{
-                event.preventDefault();
-                sAlert.sweetConfirm("Datos nuevos","¿Desea crear el nuevo registro?",()=>{
+          //SI LA VALIDACIÓN DEL FORMULARIO ES FALSE
+          if (!form.checkValidity()) {
+            event.preventDefault() //=> FRENA EL ENVÍO DEL FORMULARIO
+            event.stopPropagation() //=> FRENA LA PROPAGACIÓN DE DATOS EN EL FORMULARIO
+            form.reportValidity();
+          } else {
+            event.preventDefault();
+            sAlert.sweetConfirm("Datos nuevos", "¿Deseas actualizar el registro?", () => {
 
-                    sendData();
-                })
-            }
+              addRefund(idseparacion); //Ejecuta la función
+            });
+          }
 
-            form.classList.add('was-validated') //=> AGREGA ESTA CLASE A LOS ELEMENTOS DEL FORMULARIO(MUESTRA LOS COMENTARIOS)
-            }, false) //=> ESTE TERCER ARGUMENTO INDICA QUE EL EVENTO NO SE ESTA CAPTURANDO EN LA ""FASE DE CAPTURA" SINO EN "PROPAGACIÓN NORMAL"
-        })  
-    })()
-    
-    getData();
+          form.classList.add('was-validated') //=> AGREGA ESTA CLASE A LOS ELEMENTOS DEL FORMULARIO(MUESTRA LOS COMENTARIOS)
+        }, false) //=> ESTE TERCER ARGUMENTO INDICA QUE EL EVENTO NO SE ESTA CAPTURANDO EN LA ""FASE DE CAPTURA" SINO EN "PROPAGACIÓN NORMAL"
+      })
+    })();
   </script>
   <script>
     var win = navigator.platform.indexOf('Win') > -1;

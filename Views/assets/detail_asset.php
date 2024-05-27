@@ -452,16 +452,16 @@
                 <div class="card-body p-3">
                   <div class="row">
                     <div class="table-responsive table-responsive-lg">
-                      <table class="table align-items-center mb-0" id="table-clients">
-                        <thead>
+                      <table class="table align-items-center mb-0 table-hover" id="table-clients">
+                        <thead class="text-center">
                           <tr>
-                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Apellidos</th>
-                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Nombres</th>
+                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">#</th>
+                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Cliente</th>
                             <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Tipo de documento</th>
                             <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Nº de documento</th>
                           </tr>
                         </thead>
-                        <tbody>
+                        <tbody class="text-center">
 
                           <!-- RENDER NUEVOS CLIENTES  -->
 
@@ -1376,29 +1376,49 @@
 
       function renderTable(idtable, data) {
 
-        newRow = `
-        <tr>
-          <td>
-            <p class="text-xs font-weight-bold mb-0">${data.apellidos}</p>
-          </td>
-          <td>
-            <p class="text-xs font-weight-bold mb-0">${data.nombres}</p>
-          </td>
-          <td>
-            <p class="text-xs font-weight-bold mb-0">${data.documento_tipo}</p>
-          </td>
-          <td>
-            <p class="text-xs font-weight-bold mb-0">${data.documento_nro}</p>
-          </td>
-          <td class="align-middle">
-            <div class="btn-group">
-              <a type="button" href="#" class="btn btn-success btn-sm"><i class="bi bi-arrow-right-square"></i> Ver más</a>
-            </div>
-          </td>
-        </tr>           
-          `;
+        let numRow = 1;
+        data.forEach(element =>{
 
-        $(idtable).innerHTML += newRow;
+          let newRow = "";
+          newRow = `
+          <tr class="table-active">
+            <td>
+              <p class="text-xs font-weight-bold mb-0">${numRow}</p>
+            </td>
+            <td>
+              <p class="text-xs font-weight-bold mb-0">${element.cliente}</p>
+            </td>
+            <td>
+              <p class="text-xs font-weight-bold mb-0">${element.documento_tipo}</p>
+            </td>
+            <td>
+              <p class="text-xs font-weight-bold mb-0">${element.documento_nro}</p>
+            </td>
+          </tr>  
+          `;
+          ++numRow;
+
+          if(element.conyugue){
+            newRow += `
+            <tr>
+              <td>
+                <p class="text-xs font-weight-bold mb-0">${numRow}</p>
+              </td>
+              <td>
+                <p class="text-xs font-weight-bold mb-0">${element.conyugue}</p>
+              </td>
+              <td>
+                <p class="text-xs font-weight-bold mb-0">${element.conyPers_documento_tipo}</p>
+              </td>
+              <td>
+                <p class="text-xs font-weight-bold mb-0">${element.conyPers_documento_nro}</p>
+              </td>
+            </tr>  
+            `;
+          }
+          
+          $(idtable).innerHTML += newRow;
+        });
       }
 
       async function getClients(id) {
@@ -1415,7 +1435,7 @@
           let results = await global.sendAction(url, params);
 
           $("#table-clients tbody").innerHTML = "";
-          if (results) {
+          if (results.length > 0) {
 
             console.log(results);
             renderTable("#table-clients tbody", results);

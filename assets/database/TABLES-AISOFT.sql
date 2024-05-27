@@ -362,15 +362,16 @@ CREATE TABLE separaciones
     CONSTRAINT fk_idconyugue_sep FOREIGN KEY(idconyugue) REFERENCES clientes(idcliente),
     CONSTRAINT fk_idusuario_sep FOREIGN KEY(idusuario) REFERENCES usuarios(idusuario)
 )ENGINE = INNODB;
-SELECT * FROM separaciones;
-
+SELECT * from separaciones;
 -- deboluciones
 CREATE TABLE devoluciones
 (
 	iddevolucion 		INT PRIMARY KEY AUTO_INCREMENT,
     n_expediente        VARCHAR(10)     NOT NULL,
+    tipo_devolucion     VARCHAR(20)     NOT NULL,
     idseparacion		INT 			NOT NULL,
     detalle             VARCHAR(200)    NOT NULL,
+    porcentaje_penalidad TINYINT        NOT NULL,
     monto_devolucion 	DECIMAL(8,2)	NOT NULL,
     imagen                  VARCHAR(100) NOT NULL,
     create_at 				DATE 		NOT NULL	DEFAULT (CURDATE()),
@@ -381,7 +382,7 @@ CREATE TABLE devoluciones
     CONSTRAINT fk_idseparacion_dev FOREIGN KEY(idseparacion) REFERENCES separaciones(idseparacion),
     CONSTRAINT fk_idusuario_dev FOREIGN KEY(idusuario) REFERENCES usuarios(idusuario)
 )ENGINE= INNODB;
-ALTER TABLE devoluciones CHANGE monto_devolucion monto_devolucion 	DECIMAL(8,2)	NOT NULL;
+
 -- CONTRATOS
 CREATE TABLE contratos
 (
