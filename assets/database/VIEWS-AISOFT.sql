@@ -347,7 +347,10 @@ CREATE VIEW vws_list_refunds AS
         sep.n_expediente AS n_expediente_sep,
         dev.detalle,
         dev.monto_devolucion,
+        dev.porcentaje_penalidad,
         sep.separacion_monto,
+        act.sublote,
+        proy.denominacion,
         COALESCE(
             persj.tipo_persona,
             persn.tipo_persona
@@ -371,9 +374,51 @@ CREATE VIEW vws_list_refunds AS
         LEFT JOIN vws_list_separations_tpersona_juridica AS persj ON persj.idseparacion = dev.idseparacion
         LEFT JOIN vws_list_separations_tpersona_natural AS persn ON persn.idseparacion = dev.idseparacion
         INNER JOIN usuarios usu ON usu.idusuario = dev.idusuario
+        INNER JOIN activos act ON act.idactivo = sep.idactivo
+        INNER JOIN proyectos proy ON proy.idproyecto = act.idproyecto
         INNER JOIN personas AS usuPers ON usuPers.idpersona = usu.idpersona
     ORDER BY dev.iddevolucion DESC;
 
 DELIMITER;
 SELECT * from vws_list_refunds;
+
+
+DELIMITER $$
+CREATE VIEW vws_clients_natural
+    AS
+        SELECT 
+            cli.idcliente,
+            cli.tipo_persona,
+            pers.documento_tipo,
+            pers.documento_nro,
+            CONCAT(
+                pers.apellidos,", ",
+                pers.nombres
+            ) AS cliente
+            FROM clientes cli
+            INNER JOIN personas AS pers ON pers.idpersona = cli.idpersona
+            WHERE cli.inactive_at IS NULL;
+DELIMITER;
+
+DELIMITER $$
+
+CREATE VIEW vws_clientes_legal
+    AS
+        SELECT
+            cli.idcliente,
+            cli.tipo_persona,
+            persj.documento_tipo,
+            persj.documento_nro,
+            persj.razon_social AS cliente
+            FROM clientes cli
+            INNER JOIN personas_juridicas persj ON persj.idpersona_juridica = cli.idcliente
+            INNER JOIN rep_legales_clientes rep ON rep.idpersona_juridica = persj.idpersona_juridica  
+            WHERE cli.inactive_at IS NULL;            
+DELIMITER ;
+
+SELECT * from rep_legales_clientes;
+DELIMITER $$
+
+
+
 

@@ -84,12 +84,12 @@ if(isset($_POST["action"])){
                         "detalle"       =>  $_POST["detalle"],
                         "porcentaje_penalidad" =>  $_POST["porcentaje_penalidad"],
                         "monto_devolucion" =>  $_POST ["monto_devolucion"],
-                        "imagen"        =>  $_POST[ "imagen"],
+                        "imagen"        =>  $nom_img,
                         "idusuario"     =>  1
                         // "idusuario"     =>  $_POST["idusuario"]
                 ];
 
-                if(isset($_FILES["imagen"]) && $_FILE["imagen"]["size"] > 0){
+                if(isset($_FILES["imagen"]) && $_FILES["imagen"]["size"] > 0){
 
                     $nom_img = sha1($today) . ".jpg";
                     $ruta = "../media/constancias_dev/". $nom_img;

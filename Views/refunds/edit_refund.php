@@ -666,6 +666,7 @@
 
         if(result){
 
+          console.log(result);
           dataDev = result
           idseparacion = dataDev.idseparacion;
 
@@ -673,8 +674,31 @@
           let expSplit = exp.split("-");
           let expEx = expSplit[1];
 
+          $("#file-view").setAttribute("src",`../../media/constancias_dev/${result.imagen}`);
+
+          //Valor del número de exepdiente
           $("#n_expediente").value = expEx; 
 
+          //Valor del tipo de devolución
+          let selectTdev = $("#tipo_devolucion");
+          let TOption = Array.from(selectTdev.options).find(option => option.value == result.tipo_devolucion);
+
+          if(TOption){
+            TOption.selected = true;
+          }
+
+          //Valor de la detalle
+          $("#detalle").value = result.detalle
+          $("#detalle").dispatchEvent(new Event("input"))
+
+          //Valor de la porcentaje de penalidad
+          $("#porcentaje_penalidad").value = result.porcentaje_penalidad;
+
+          //valor de la del monyo de separación
+          $("#monto_separacion").value = result.separacion_monto;
+
+          //Valor de la monto de devolución
+          $("#monto_devolucion").value = result.monto_devolucion;
           
         }
       }
@@ -812,16 +836,17 @@
     }
 
     //Registra una separación
-    async function addRefund(idsep) {
+    async function setRefund(iddev) {
 
       try {
 
         let url = "../../Controllers/refund.controller.php";
         let params = new FormData()
 
-        params.append("action", "addRefund");
+        params.append("action", "setRefund");
+        params.append("iddevolucion", iddev);
         params.append("n_expediente", newValue);
-        params.append("idseparacion", idsep);
+        params.append("idseparacion", idseparacion);
         params.append("tipo_devolucion", $("#tipo_devolucion").value);
         params.append("detalle", $("#detalle").value);
         params.append("porcentaje_penalidad", $("#porcentaje_penalidad").value);
@@ -865,15 +890,19 @@
         let sliceValue = valueInput.slice(0, 6); //Extrae l valores incluyendo el los del indice 0 y 6
         let valueFormat = sliceValue.padEnd(6, '0')
         newValue = "DEC-" + valueFormat;
-        $("#n_expediente").value = valueFormat;
 
-        validateDate("n_expediente_dev", newValue, datarefunds)
-          .then(() => {
-            console.log("no existe");
-          }).catch(() => {
-            $("#n_expediente").focus();
-            lastCode = false;
-          })
+        if(newValue !== dataDev.n_expediente_dev){
+
+          $("#n_expediente").value = valueFormat;
+          validateDate("n_expediente_dev", newValue, datarefunds)
+            .then(() => {
+              console.log("no existe");
+            }).catch(() => {
+              $("#n_expediente").focus();
+              lastCode = false;
+            })
+        }
+
       }
     });
 
@@ -932,7 +961,7 @@
             event.preventDefault();
             sAlert.sweetConfirm("Datos nuevos", "¿Deseas actualizar el registro?", () => {
 
-              addRefund(idseparacion); //Ejecuta la función
+              setRefund(iddevolucion); //Ejecuta la función
             });
           }
 

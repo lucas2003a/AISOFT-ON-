@@ -550,29 +550,102 @@
           <button type="button" class="btn-close text-dark" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <div style="margin: 5% 10% 5% 10%;">
-            <div class="d-flex" style="justify-content: space-between;">
-              <div>
-
-                <h6><strong>Cliente :</strong></h6>
-                <h6><strong>Documento tipo :</strong></h6>
-                <h6><strong>Documento número :</strong></h6>
-                <h6><strong>Proyecto :</strong></h6>
-                <h6><strong>Sublote :</strong></h6>
-                <h6><strong>Monto de separación :</strong></h6>
-                <div id="labels">
-
+          <div>
+            <div class="m-4">
+              <div class="row">
+                <div class="col-md-6">
+                  <h6><strong>Cliente :</strong></h6>
+                </div>
+                <div class="col-md-6">
+                  <h6 id="cliente"></h6>
                 </div>
               </div>
-              <div>
-                <h6 id="cliente"></h6>
-                <h6 id="documento_tipo"></h6>
-                <h6 id="documento_nro"></h6>
-                <h6 id="proyecto"></h6>
-                <h6 id="sublote"></h6>
-                <h6 id="monto_separación"></h6>
-                <div id="content">
 
+              <div class="row">
+                <div class="col-md-6">
+                  <h6><strong>Documento tipo :</strong></h6>
+                </div>
+                <div class="col-md-6">
+                  <h6 id="documento_tipo"></h6>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-6">
+
+                  <h6><strong>Documento número :</strong></h6>
+                </div>
+                <div class="col-md-6">
+
+                  <h6 id="documento_nro"></h6>
+                </div>
+              </div>
+
+              <div>
+                <div class="row">
+                  <div class="col-md-6">
+                    <h6><strong>Proyecto :</strong></h6>
+
+                  </div>
+                  <div class="col-md-6">
+
+                    <h6 id="proyecto"></h6>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-6">
+                    <h6><strong>Sublote :</strong></h6>
+                  </div>
+                  <div class="col-md-6">
+                    <h6 id="sublote"></h6>
+
+                  </div>
+                </div>
+
+                
+                <hr>
+                <div class="row">
+                  <div class="col-md-6">
+                    
+                    <h6><strong>Expediente de separación o contrato :</strong></h6>
+                  </div>
+                  <div class="col-md-6">
+                    
+                    <h6 id="before_n_expediente"></h6>
+                  </div>
+                </div>
+                
+                <div class="row">
+                  <div class="col-md-6">
+
+                    <h6><strong>Monto de separación :</strong></h6>
+                  </div>
+                  <div class="col-md-6">
+
+                    <h6 id="monto_separacion"></h6>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-6">
+
+                    <h6><strong>Procentaje de penalidad :</strong></h6>
+                  </div>
+                  <div class="col-md-6">
+
+                    <h6 id="porcentaje_penalidad"></h6>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-6">
+
+                    <h6><strong>Monto de devolución :</strong></h6>
+                  </div>
+                  <div class="col-md-6">
+
+                    <h6 id="monto_devolucion"></h6>
+                  </div>
                 </div>
               </div>
             </div>
@@ -622,47 +695,52 @@
       async function getSeparation(id) {
 
         try {
-          let url = "../../Controllers/separation.controller.php";
+          let url = "../../Controllers/refund.controller.php";
           let params = new FormData();
 
-          params.append("action", "listSeparationById");
-          params.append("idseparacion", id);
+          params.append("action", "listRefundsById");
+          params.append("iddevolucion", id);
 
           let result = await global.sendAction(url, params);
 
           if (result) {
             console.log(result)
 
-            $("#labels").innerHTML = "";
-            $("#content").innerHTML = "";
 
-            $("#modalTitle").innerHTML = result.n_expediente;
+            // $("#labels").innerHTML = "";
+            // $("#content").innerHTML = "";
+
+            $("#modalTitle").innerHTML = result.n_expediente_dev;
+
+            $("#before_n_expediente").innerHTML = result.n_expediente_dev ? result.n_expediente_dev : result.n_expediene_contract;
 
             $("#cliente").innerHTML = result.cliente;
             $("#documento_tipo").innerHTML = result.documento_tipo;
             $("#documento_nro").innerHTML = result.documento_nro;
             $("#proyecto").innerHTML = result.denominacion;
             $("#sublote").innerHTML = result.sublote;
-            $("#monto_separación").innerHTML = result.separacion_monto;
+            $("#monto_separacion").innerHTML = result.separacion_monto;
+            $("#porcentaje_penalidad").innerHTML = result.porcentaje_penalidad;
+            $("#monto_devolucion").innerHTML = result.monto_devolucion;
 
-            if (result.conyugue) {
+            // if (result.conyugue) {
 
-              const labels = ["Conyugue", "Tipo de documento", "Nro de documento"];
-              const contents = [result.conyugue, result.conyPers_documento_tipo, result.conyPers_documento_nro];
-              console.log(contents)
+            //   const labels = ["Conyugue", "Tipo de documento", "Nro de documento"];
+            //   const contents = [result.conyugue, result.conyPers_documento_tipo, result.conyPers_documento_nro];
+            //   console.log(contents)
 
-              $("#labels").innerHTML += "<hr>";
-              $("#content").innerHTML += "<hr>";
+            //   $("#labels").innerHTML += "<hr>";
+            //   $("#content").innerHTML += "<hr>";
 
-              labels.forEach((label, index) => {
+            //   labels.forEach((label, index) => {
 
-                let tagLabel = `<h6><strong>${label} :</strong></h6>`;
-                $("#labels").innerHTML += tagLabel;
+            //     let tagLabel = `<h6><strong>${label} :</strong></h6>`;
+            //     $("#labels").innerHTML += tagLabel;
 
-                let tagContent = `<h6>${contents[index]}</h6>`;
-                $("#content").innerHTML += tagContent;
-              });
-            }
+            //     let tagContent = `<h6>${contents[index]}</h6>`;
+            //     $("#content").innerHTML += tagContent;
+            //   });
+            // }
 
           }
         } catch (e) {
@@ -908,17 +986,17 @@
 
         if (e.target.classList.contains("open-modal")) {
 
-          let idSeparacion = e.target.dataset.id;
-          getSeparation(idSeparacion);
+          let iddevolucion = e.target.dataset.id;
+          getSeparation(iddevolucion);
 
-        }else if(e.target.classList.contains("edit")){
-          let idSeparacion = e.target.dataset.id;
+        } else if (e.target.classList.contains("edit")) {
+          let iddevolucion = e.target.dataset.id;
           let expedientE = e.target.dataset.expedient;
 
-          let code = btoa(idSeparacion);
+          let code = btoa(iddevolucion);
           let expedient = btoa(expedientE);
 
-          window.location.href=`./edit_refund.php?id=${code}&expedient=${expedient}`;
+          window.location.href = `./edit_refund.php?id=${code}&expedient=${expedient}`;
 
         }
       });

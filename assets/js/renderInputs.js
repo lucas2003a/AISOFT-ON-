@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded",()=>{
     const $All = id => global.$(id);
     
     let Patern = $("#patern");
-
+    
     /**
      * Función que verifica los campos vacíos
      */

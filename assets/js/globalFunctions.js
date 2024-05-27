@@ -1,3 +1,9 @@
+/**
+ * Description placeholder
+ *
+ * @class FunGlobal
+ * @typedef {FunGlobal}
+ */
 class FunGlobal{
 
     $ = id => document.querySelector(id);

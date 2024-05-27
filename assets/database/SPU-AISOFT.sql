@@ -663,6 +663,7 @@ END $$
 DELIMITER;
 
 DELIMITER $$
+
 CREATE PROCEDURE spu_list_onlyLots
 (
     IN _idproyecto INT
@@ -685,9 +686,11 @@ BEGIN
         AND JSON_ARRAY(JSON_EXTRACT(det_casa,'$.valor')) = 0
         ORDER BY act.sublote;
 END $$
-DELIMITER ;
+
+DELIMITER;
 
 DELIMITER $$
+
 CREATE PROCEDURE spu_list_onlyHouses
 (
     IN _idproyecto INT
@@ -708,9 +711,11 @@ BEGIN
         AND proy.idproyecto = _idproyecto
         ORDER BY act.sublote;
 END $$
-DELIMITER ;
+
+DELIMITER;
 
 DELIMITER $$
+
 CREATE PROCEDURE spu_list_LotsAndHouses
 (
     IN _idproyecto INT
@@ -733,7 +738,8 @@ BEGIN
         AND JSON_LENGTH(JSON_EXTRACT(act.det_casa,'$.valor')) > 0
         ORDER BY act.sublote;
 END $$
-DELIMITER ;
+
+DELIMITER;
 -- PERSONAS    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 DELIMITER $$
 
@@ -872,7 +878,70 @@ END $$
 DELIMITER;
 
 -- CLIENTES ---------------------------------------------------------------------------------------------------------------------------------------
+
 DELIMITER $$
+
+CREATE PROCEDURE spu_list_clients_contract()
+BEGIN
+    SELECT 
+        COALESCE(cl.idcliente, cn.idcliente) AS idcliente,
+        COALESCE(cl.cliente, cn.cliente) AS cliente,
+        COALESCE(cl.documento_tipo, cn.documento_tipo) AS documento_tipo,
+        COALESCE(cl.documento_nro, cn.documento_nro) AS documento_nro
+        FROM contratos cont
+        INNER JOIN clientes clien ON clien.idcliente = cont.idcliente
+        LEFT JOIN vws_clientes_legal cl ON cl.idcliente = clien.idcliente
+        LEFT JOIN vws_clients_natural cn ON cn.idcliente = clien.idcliente
+    UNION 
+    SELECT DISTINCT 
+        COALESCE(cl.idcliente, cn.idcliente) AS idcliente,
+        COALESCE(cl.cliente, cn.cliente) AS cliente,
+        COALESCE(cl.documento_tipo, cn.documento_tipo) AS documento_tipo,
+        COALESCE(cl.documento_nro, cn.documento_nro) AS documento_nro
+        FROM contratos cont
+        INNER JOIN separaciones sep ON sep.idseparacion = cont.idseparacion
+        LEFT JOIN vws_clientes_legal cl ON cl.idcliente = sep.idcliente
+        LEFT JOIN vws_clients_natural cn ON cn.idcliente = sep.idcliente;
+    
+END $$
+
+DELIMITER;
+
+DELIMITER $$
+
+CREATE PROCEDURE spu_list_clients_contractID(IN _idcliente INT)
+BEGIN
+    SELECT 
+        cont.idcontrato,
+        COALESCE(cl.idcliente, cn.idcliente) AS idcliente,
+        COALESCE(cl.cliente, cn.cliente) AS cliente,
+        COALESCE(cl.documento_tipo, cn.documento_tipo) AS documento_tipo,
+        COALESCE(cl.documento_nro, cn.documento_nro) AS documento_nro
+        FROM contratos cont
+        INNER JOIN clientes clien ON clien.idcliente = cont.idcliente
+        LEFT JOIN vws_clientes_legal cl ON cl.idcliente = clien.idcliente
+        LEFT JOIN vws_clients_natural cn ON cn.idcliente = clien.idcliente
+    UNION 
+    SELECT  
+        cont.idcontrato,
+        COALESCE(cl.idcliente, cn.idcliente) AS idcliente,
+        COALESCE(cl.cliente, cn.cliente) AS cliente,
+        COALESCE(cl.documento_tipo, cn.documento_tipo) AS documento_tipo,
+        COALESCE(cl.documento_nro, cn.documento_nro) AS documento_nro
+        FROM contratos cont
+        INNER JOIN separaciones sep ON sep.idseparacion = cont.idseparacion
+        LEFT JOIN vws_clientes_legal cl ON cl.idcliente = sep.idcliente
+        LEFT JOIN vws_clients_natural cn ON cn.idcliente = sep.idcliente
+        WHERE cont.idcliente = _idcliente;
+END $$
+
+DELIMITER;
+
+
+call spu_list_clients_contractID(5);
+
+DELIMITER $$
+
 CREATE PROCEDURE spu_list_clients_onlyNperson()
 BEGIN
     SELECT 
@@ -887,8 +956,11 @@ BEGIN
         AND pers.inactive_at IS NULL
         ORDER BY pers.documento_nro ASC;
 END $$
-DELIMITER ;
+
+DELIMITER;
+
 DELIMITER $$
+
 CREATE PROCEDURE spu_list_clients_tpersona(IN _tipo_persona VARCHAR(10))
 BEGIN
 	IF _tipo_persona = "NATURAL" THEN
@@ -1876,6 +1948,7 @@ DELIMITER;
 
 -- SEPARACIONES   ////////////////////////////////////////////////////////////////////////////////////////////
 DELIMITER $$
+
 CREATE PROCEDURE spu_list_separations()
 BEGIN
     SELECT 
@@ -1890,9 +1963,11 @@ BEGIN
         ORDER BY n_expediente ASC;
 
 END $$
-DELIMITER ;
+
+DELIMITER;
 
 DELIMITER $$
+
 CREATE PROCEDURE spu_list_separation_tPersona
 (
     IN _tipo_persona VARCHAR(10),
@@ -1915,7 +1990,9 @@ BEGIN
             AND create_at BETWEEN _fechaInicio AND _fechaFin;
     END IF;
 END $$
+
 SELECT * FROM presupuestos WHERE CODIGO = "PRES-030";
+
 DELIMITER;
 
 DELIMITER $$
@@ -2073,6 +2150,7 @@ END $$
 DELIMITER;
 
 DELIMITER $$
+
 CREATE PROCEDURE spu_get_separation_ById
 (IN _idseparacion INT)
 BEGIN
@@ -2099,15 +2177,18 @@ DELIMITER;
 
 -- DEVLOUCIONES   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 DELIMITER $$
+
 CREATE PROCEDURE spu_list_refunds_get()
 BEGIN
     SELECT * 
         FROM vws_list_refunds
         WHERE inactive_at IS NULL;
 END $$
-DELIMITER ;
+
+DELIMITER;
 
 DELIMITER $$
+
 CREATE PROCEDURE sup_list_refunds_tRefund
 (
     IN _tipo_devolucion    VARCHAR(20),
@@ -2121,6 +2202,7 @@ BEGIN
             AND create_at BETWEEN _fechaInicio AND _fechaFin
             AND inactive_at IS NULL;
 END $$
+
 DELIMITER;
 
 DELIMITER $$
@@ -2153,7 +2235,7 @@ BEGIN
         WHERE iddevolucion = _iddevolucion;
 END $$
 
-CALL sup_list_refunds_ById(12);
+CALL sup_list_refunds_ById (12);
 
 DELIMITER;
 
@@ -2253,6 +2335,7 @@ DELIMITER;
 -- CONTRATOS  ////////////////////////////////////////////////////////////////////////////////////
 
 DELIMITER $$
+
 CREATE PROCEDURE spu_existContract_idseparacion
 (
     IN _idseparacion INT
@@ -2262,7 +2345,8 @@ BEGIN
     WHERE idseparacion = _idseparacion
     AND inactive_at IS NULL) AS existContract;
 END $$
-DELIMITER ;
+
+DELIMITER;
 
 DELIMITER $$
 

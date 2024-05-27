@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 27-05-2024 a las 01:17:20
+-- Tiempo de generación: 28-05-2024 a las 00:27:36
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -971,6 +971,54 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_clients_by_id` (IN `_idcli
         
         SELECT ROW_COUNT() AS filasAfect;
         
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_clients_contract` ()   BEGIN
+    SELECT 
+        COALESCE(cl.idcliente, cn.idcliente) AS idcliente,
+        COALESCE(cl.cliente, cn.cliente) AS cliente,
+        COALESCE(cl.documento_tipo, cn.documento_tipo) AS documento_tipo,
+        COALESCE(cl.documento_nro, cn.documento_nro) AS documento_nro
+        FROM contratos cont
+        INNER JOIN clientes clien ON clien.idcliente = cont.idcliente
+        LEFT JOIN vws_clientes_legal cl ON cl.idcliente = clien.idcliente
+        LEFT JOIN vws_clients_natural cn ON cn.idcliente = clien.idcliente
+    UNION 
+    SELECT DISTINCT 
+        COALESCE(cl.idcliente, cn.idcliente) AS idcliente,
+        COALESCE(cl.cliente, cn.cliente) AS cliente,
+        COALESCE(cl.documento_tipo, cn.documento_tipo) AS documento_tipo,
+        COALESCE(cl.documento_nro, cn.documento_nro) AS documento_nro
+        FROM contratos cont
+        INNER JOIN separaciones sep ON sep.idseparacion = cont.idseparacion
+        LEFT JOIN vws_clientes_legal cl ON cl.idcliente = sep.idcliente
+        LEFT JOIN vws_clients_natural cn ON cn.idcliente = sep.idcliente;
+    
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_clients_contractID` (IN `_idcliente` INT)   BEGIN
+    SELECT 
+        cont.idcontrato,
+        COALESCE(cl.idcliente, cn.idcliente) AS idcliente,
+        COALESCE(cl.cliente, cn.cliente) AS cliente,
+        COALESCE(cl.documento_tipo, cn.documento_tipo) AS documento_tipo,
+        COALESCE(cl.documento_nro, cn.documento_nro) AS documento_nro
+        FROM contratos cont
+        INNER JOIN clientes clien ON clien.idcliente = cont.idcliente
+        LEFT JOIN vws_clientes_legal cl ON cl.idcliente = clien.idcliente
+        LEFT JOIN vws_clients_natural cn ON cn.idcliente = clien.idcliente
+    UNION 
+    SELECT  
+        cont.idcontrato,
+        COALESCE(cl.idcliente, cn.idcliente) AS idcliente,
+        COALESCE(cl.cliente, cn.cliente) AS cliente,
+        COALESCE(cl.documento_tipo, cn.documento_tipo) AS documento_tipo,
+        COALESCE(cl.documento_nro, cn.documento_nro) AS documento_nro
+        FROM contratos cont
+        INNER JOIN separaciones sep ON sep.idseparacion = cont.idseparacion
+        LEFT JOIN vws_clientes_legal cl ON cl.idcliente = sep.idcliente
+        LEFT JOIN vws_clients_natural cn ON cn.idcliente = sep.idcliente
+        WHERE cont.idcliente = _idcliente;
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_clients_onlyNperson` ()   BEGIN
@@ -2088,7 +2136,7 @@ INSERT INTO `contratos` (`idcontrato`, `tipo_contrato`, `idseparacion`, `idrepre
 (2, 'VENTA DE LOTE', 2, 1, NULL, NULL, NULL, NULL, 3.500, 'VIGENTE', '2024-03-11', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '2024-04-19', NULL, NULL, 2),
 (3, 'VENTA DE LOTE', 3, 1, NULL, NULL, NULL, NULL, 3.500, 'VIGENTE', '2024-03-12', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '2024-04-19', NULL, NULL, 3),
 (5, 'VENTA DE LOTE', 2, 1, NULL, NULL, NULL, NULL, 3.500, 'VIGENTE', '2024-03-12', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '2024-04-19', NULL, NULL, 3),
-(6, 'VENTA DE LOTE', NULL, 1, NULL, NULL, NULL, 10, 3.500, 'VIGENTE', '2024-03-12', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '2024-04-19', NULL, NULL, 3);
+(6, 'VENTA DE LOTE', NULL, 1, NULL, 5, NULL, 10, 3.500, 'VIGENTE', '2024-03-12', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '2024-04-19', NULL, NULL, 3);
 
 --
 -- Disparadores `contratos`
@@ -2303,7 +2351,7 @@ CREATE TABLE `devoluciones` (
   `imagen` varchar(100) NOT NULL,
   `porcentaje_penalidad` tinyint(4) NOT NULL,
   `tipo_devolucion` varchar(20) NOT NULL
-) ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `devoluciones`
@@ -2316,7 +2364,7 @@ INSERT INTO `devoluciones` (`iddevolucion`, `idseparacion`, `monto_devolucion`, 
 (6, 9, 250.00, '2024-05-26', NULL, NULL, 1, 'No cuenta con los papeles en regla', 'DEC-000100', 'noImage.jpg', 50, 'POR SEPARACIÓN'),
 (7, 10, 250.00, '2024-05-26', NULL, NULL, 1, 'Documentos irregulares', 'DEC-300000', 'noImage.jpg', 50, 'POR SEPARACIÓN'),
 (8, 12, 195.06, '2024-05-26', NULL, NULL, 1, 'No fué aprobado por el banco', 'DEC-000060', 'f716ad45a0bd1f829498c1b51f1e0c036348f2af.jpg', 30, 'POR SEPARACIÓN'),
-(9, 16, 320.00, '2024-05-26', NULL, NULL, 1, 'No tiene el dinero', 'DEC-000013', 'dbba4fd82219b32873cc6e9a0607e7e6f9c078f7.jpg', 50, 'POR SEPARACIÓN');
+(9, 16, 320.00, '2024-05-26', '2024-05-27', NULL, 1, 'No tiene el dinero', 'DEC-000013', '2363f7f736cdf3967cc62cbd0a2c8c2868936a00.jpg', 50, 'POR SEPARACIÓN');
 
 --
 -- Disparadores `devoluciones`
@@ -4589,7 +4637,7 @@ CREATE TABLE `presupuestos` (
   `inactive_at` date DEFAULT NULL,
   `idusuario` int(11) NOT NULL,
   `codigo` char(8) NOT NULL
-) ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `presupuestos`
@@ -4967,7 +5015,8 @@ INSERT INTO `rep_legales_clientes` (`idrepresentante`, `idpersona_juridica`, `re
 (138, 42, 'SANCHEZ APONTE MANUEL MARTIN', '1212121', '20494441', 'ADMINISTRADOR', 'sdf', 'HABILITADO', '2024-05-05', '2024-05-05', NULL),
 (139, 41, 'ZAVALA POLANCO CARLOS ALBERTO', 'DNI', '10599632', 'JEFE', 'partida nro 3', 'HABILITADO', '2024-05-05', '2024-05-05', NULL),
 (140, 41, 'AAAAAA', 'DNI', '20494411', 'ADMINISTRADOR', 'PARTIDA Nº3', 'HABILITADO', '2024-05-05', NULL, '2024-05-05'),
-(141, 41, 'CONCORI COAQUIRA EDGAR ROGELIO', 'DNI', '20408412', 'GERENTE', 'PARTIDA Nº2', 'HABILITADO', '2024-05-05', NULL, '2024-05-05');
+(141, 41, 'CONCORI COAQUIRA EDGAR ROGELIO', 'DNI', '20408412', 'GERENTE', 'PARTIDA Nº2', 'HABILITADO', '2024-05-05', NULL, '2024-05-05'),
+(142, 1, 'juan perez moran', 'DNI', '70173537', 'director', 'nro 3', 'HABILITADO', '2024-05-27', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -5046,7 +5095,7 @@ CREATE TABLE `separaciones` (
   `detalle` varchar(200) NOT NULL,
   `moneda_venta` varchar(10) NOT NULL,
   `tipo_cambio` decimal(5,4) NOT NULL
-) ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `separaciones`
@@ -5266,6 +5315,34 @@ INSERT INTO `usuarios` (`idusuario`, `imagen`, `idpersona`, `correo`, `contrase�
 -- --------------------------------------------------------
 
 --
+-- Estructura Stand-in para la vista `vws_clientes_legal`
+-- (Véase abajo para la vista actual)
+--
+CREATE TABLE `vws_clientes_legal` (
+`idcliente` int(11)
+,`tipo_persona` varchar(10)
+,`documento_tipo` varchar(20)
+,`documento_nro` varchar(12)
+,`cliente` varchar(60)
+);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura Stand-in para la vista `vws_clients_natural`
+-- (Véase abajo para la vista actual)
+--
+CREATE TABLE `vws_clients_natural` (
+`idcliente` int(11)
+,`tipo_persona` varchar(10)
+,`documento_tipo` varchar(20)
+,`documento_nro` varchar(12)
+,`cliente` varchar(82)
+);
+
+-- --------------------------------------------------------
+
+--
 -- Estructura Stand-in para la vista `vws_list_assets_short`
 -- (Véase abajo para la vista actual)
 --
@@ -5325,6 +5402,10 @@ CREATE TABLE `vws_list_refunds` (
 ,`n_expediente_sep` varchar(10)
 ,`detalle` varchar(200)
 ,`monto_devolucion` decimal(8,2)
+,`porcentaje_penalidad` tinyint(4)
+,`separacion_monto` decimal(8,2)
+,`sublote` varchar(6)
+,`denominacion` varchar(30)
 ,`tipo_persona` varchar(10)
 ,`cliente` varchar(82)
 ,`documento_tipo` varchar(20)
@@ -5461,6 +5542,24 @@ CREATE TABLE `vws_ubigeo` (
 -- --------------------------------------------------------
 
 --
+-- Estructura para la vista `vws_clientes_legal`
+--
+DROP TABLE IF EXISTS `vws_clientes_legal`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vws_clientes_legal`  AS SELECT `cli`.`idcliente` AS `idcliente`, `cli`.`tipo_persona` AS `tipo_persona`, `persj`.`documento_tipo` AS `documento_tipo`, `persj`.`documento_nro` AS `documento_nro`, `persj`.`razon_social` AS `cliente` FROM ((`clientes` `cli` join `personas_juridicas` `persj` on(`persj`.`idpersona_juridica` = `cli`.`idcliente`)) join `rep_legales_clientes` `rep` on(`rep`.`idpersona_juridica` = `persj`.`idpersona_juridica`)) WHERE `cli`.`inactive_at` is null ;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura para la vista `vws_clients_natural`
+--
+DROP TABLE IF EXISTS `vws_clients_natural`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vws_clients_natural`  AS SELECT `cli`.`idcliente` AS `idcliente`, `cli`.`tipo_persona` AS `tipo_persona`, `pers`.`documento_tipo` AS `documento_tipo`, `pers`.`documento_nro` AS `documento_nro`, concat(`pers`.`apellidos`,', ',`pers`.`nombres`) AS `cliente` FROM (`clientes` `cli` join `personas` `pers` on(`pers`.`idpersona` = `cli`.`idpersona`)) WHERE `cli`.`inactive_at` is null ;
+
+-- --------------------------------------------------------
+
+--
 -- Estructura para la vista `vws_list_assets_short`
 --
 DROP TABLE IF EXISTS `vws_list_assets_short`;
@@ -5483,7 +5582,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 DROP TABLE IF EXISTS `vws_list_refunds`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vws_list_refunds`  AS SELECT `dev`.`iddevolucion` AS `iddevolucion`, `dev`.`tipo_devolucion` AS `tipo_devolucion`, `dev`.`n_expediente` AS `n_expediente_dev`, `sep`.`idseparacion` AS `idseparacion`, `sep`.`n_expediente` AS `n_expediente_sep`, `dev`.`detalle` AS `detalle`, `dev`.`monto_devolucion` AS `monto_devolucion`, coalesce(`persj`.`tipo_persona`,`persn`.`tipo_persona`) AS `tipo_persona`, coalesce(`persj`.`cliente`,`persn`.`cliente`) AS `cliente`, coalesce(`persj`.`documento_tipo`,`persn`.`documento_tipo`) AS `documento_tipo`, coalesce(`persj`.`documento_nro`,`persn`.`documento_nro`) AS `documento_nro`, `dev`.`imagen` AS `imagen`, `dev`.`create_at` AS `create_at`, `dev`.`inactive_at` AS `inactive_at`, `usupers`.`nombres` AS `nombres` FROM (((((`devoluciones` `dev` join `separaciones` `sep` on(`sep`.`idseparacion` = `dev`.`idseparacion`)) left join `vws_list_separations_tpersona_juridica` `persj` on(`persj`.`idseparacion` = `dev`.`idseparacion`)) left join `vws_list_separations_tpersona_natural` `persn` on(`persn`.`idseparacion` = `dev`.`idseparacion`)) join `usuarios` `usu` on(`usu`.`idusuario` = `dev`.`idusuario`)) join `personas` `usupers` on(`usupers`.`idpersona` = `usu`.`idpersona`)) ORDER BY `dev`.`iddevolucion` DESC ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vws_list_refunds`  AS SELECT `dev`.`iddevolucion` AS `iddevolucion`, `dev`.`tipo_devolucion` AS `tipo_devolucion`, `dev`.`n_expediente` AS `n_expediente_dev`, `sep`.`idseparacion` AS `idseparacion`, `sep`.`n_expediente` AS `n_expediente_sep`, `dev`.`detalle` AS `detalle`, `dev`.`monto_devolucion` AS `monto_devolucion`, `dev`.`porcentaje_penalidad` AS `porcentaje_penalidad`, `sep`.`separacion_monto` AS `separacion_monto`, `act`.`sublote` AS `sublote`, `proy`.`denominacion` AS `denominacion`, coalesce(`persj`.`tipo_persona`,`persn`.`tipo_persona`) AS `tipo_persona`, coalesce(`persj`.`cliente`,`persn`.`cliente`) AS `cliente`, coalesce(`persj`.`documento_tipo`,`persn`.`documento_tipo`) AS `documento_tipo`, coalesce(`persj`.`documento_nro`,`persn`.`documento_nro`) AS `documento_nro`, `dev`.`imagen` AS `imagen`, `dev`.`create_at` AS `create_at`, `dev`.`inactive_at` AS `inactive_at`, `usupers`.`nombres` AS `nombres` FROM (((((((`devoluciones` `dev` join `separaciones` `sep` on(`sep`.`idseparacion` = `dev`.`idseparacion`)) left join `vws_list_separations_tpersona_juridica` `persj` on(`persj`.`idseparacion` = `dev`.`idseparacion`)) left join `vws_list_separations_tpersona_natural` `persn` on(`persn`.`idseparacion` = `dev`.`idseparacion`)) join `usuarios` `usu` on(`usu`.`idusuario` = `dev`.`idusuario`)) join `activos` `act` on(`act`.`idactivo` = `sep`.`idactivo`)) join `proyectos` `proy` on(`proy`.`idproyecto` = `act`.`idproyecto`)) join `personas` `usupers` on(`usupers`.`idpersona` = `usu`.`idpersona`)) ORDER BY `dev`.`iddevolucion` DESC ;
 
 -- --------------------------------------------------------
 
@@ -5857,7 +5956,7 @@ ALTER TABLE `detalle_costos`
 -- AUTO_INCREMENT de la tabla `devoluciones`
 --
 ALTER TABLE `devoluciones`
-  MODIFY `iddevolucion` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `iddevolucion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT de la tabla `distritos`
@@ -5911,7 +6010,7 @@ ALTER TABLE `personas_juridicas`
 -- AUTO_INCREMENT de la tabla `presupuestos`
 --
 ALTER TABLE `presupuestos`
-  MODIFY `idpresupuesto` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `idpresupuesto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
 
 --
 -- AUTO_INCREMENT de la tabla `provincias`
@@ -5935,7 +6034,7 @@ ALTER TABLE `representantes`
 -- AUTO_INCREMENT de la tabla `rep_legales_clientes`
 --
 ALTER TABLE `rep_legales_clientes`
-  MODIFY `idrepresentante` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=142;
+  MODIFY `idrepresentante` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=143;
 
 --
 -- AUTO_INCREMENT de la tabla `roles`
@@ -5953,7 +6052,7 @@ ALTER TABLE `sedes`
 -- AUTO_INCREMENT de la tabla `separaciones`
 --
 ALTER TABLE `separaciones`
-  MODIFY `idseparacion` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `idseparacion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT de la tabla `subcategoria_costos`
