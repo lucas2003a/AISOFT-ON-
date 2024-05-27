@@ -174,7 +174,7 @@
 
         <!-- DEVOLUCIONES -->
         <li class="nav-item">
-          <a class="nav-link " href="../refounds/index.php">
+          <a class="nav-link " href="../refunds/index.php">
             <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
               <svg width="12px" height="12px" viewBox="0 0 42 42" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <title>office</title>
@@ -436,7 +436,7 @@
             <hr>
             <div class="card-body px-0 pt-0 pb-2">
               <div class="table-responsive text-center p-0">
-                <table class="table align-items-center mb-0" id="table-separations">
+                <table class="table align-items-center mb-0 table-hover" id="table-separations">
                   <thead>
                     <tr>
                       <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">#</th>
@@ -445,6 +445,7 @@
                       <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Tipo de documento</th>
                       <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Nº de documento</th>
                       <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Monto de separación</th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Fecha de registro</th>
                       <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Operaciones</th>
                     </tr>
                   </thead>
@@ -732,18 +733,20 @@
                 let newRow = "";
                 let code = btoa(result.idseparacion);
                 let expedient = btoa(result.n_expediente);
+                
                 newRow = `
                   <tr>
-                    <td>${numberRow}</td>
-                    <td>${result.n_expediente}</td>
-                    <td>${result.cliente}</td> 
-                    <td>${result.documento_tipo}</td> 
-                    <td>${result.documento_nro}</td> 
-                    <td>${result.separacion_monto}</td>
+                    <td class="text-xs">${numberRow}</td>
+                    <td class="text-xs">${result.n_expediente}</td>
+                    <td class="text-xs">${result.cliente}</td> 
+                    <td class="text-xs">${result.documento_tipo}</td> 
+                    <td class="text-xs">${result.documento_nro}</td> 
+                    <td class="text-xs">${result.separacion_monto}</td>
+                    <td class="text-xs">${result.create_at}</td>
                     <td>
                         <a type="button" href="#" data-id="${result.idseparacion}" class="btn btn-link text-info px-3 mb-0 open-modal" data-bs-toggle="modal" data-bs-target="#modal_det_sep" ><i class="fa-solid fa-eye open-modal" data-id="${result.idseparacion}"></i></a>
                         <a type="button" data-id="${result.idseparacion}" data-expedient="${result.n_expediente}" class="btn btn-link text-danger text-gradient px-3 mb-0 delete"><i class="bi bi-trash-fill delete" data-id="${result.idseparacion}" data-expedient="${result.n_expediente}"></i></a>
-                        <a type="button" href="./edit_separation.php?id=${code}&expedient=${expedient}" class="btn btn-link text-dark px-3 mb-0 edit"><i class="bi bi-pencil-fill edit"></i></a>
+                        <a type="button" data-expedient="${result.n_expediente}" data-id="${result.idseparacion}" class="btn btn-link text-dark px-3 mb-0 edit"><i data-id="${result.idseparacion}" data-expedient="${result.n_expediente}" class="bi bi-pencil-fill edit" data-id="${result.idseparacion}"></i></a>
                         <a type="button" data-id="${result.idseparacion}" class="btn btn-link text-secondary px-3 mb-0 return"><i class="fa-solid fa-right-left return" data-id="${result.idseparacion}"></i></a>
                     </td>
                   </tr>
@@ -967,8 +970,17 @@
             sAlert.sweetWarning("No se puede actualizar el registro", "Este registro cuenta con un contrato, intentalo más tarde.")
           } else {
 
-            window.location.href = `../refounds/add_refound.php?id=${code}`;
+            window.location.href = `../refunds/add_refund.php?id=${code}`;
           }
+        }else if(e.target.classList.contains("edit")){
+
+          let idSeparacion = e.target.dataset.id;
+          let expedientE = e.target.dataset.expedient;
+
+          let code = btoa(idSeparacion);
+          let expedient = btoa(expedientE);
+
+          window.location.href=`./edit_separation.php?id=${code}&expedient=${expedient}`;
         }
       });
 

@@ -78,7 +78,7 @@ class Refund extends Conection{
             $query = $this->conection->prepare("CALL sup_list_refunds_ById(?)");
             $query->execute(array($iddevolucion));
 
-            return $query->fetchAll(PDO::FETCH_ASSOC);
+            return $query->fetch(PDO::FETCH_ASSOC);
         }
         catch(Exception $e){
             die($e->getMessage());

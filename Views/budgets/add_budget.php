@@ -175,7 +175,7 @@
 
         <!-- DEVOLUCIONES -->
         <li class="nav-item">
-          <a class="nav-link " href="../refounds/index.php">
+          <a class="nav-link " href="../refunds/index.php">
             <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
               <svg width="12px" height="12px" viewBox="0 0 42 42" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <title>office</title>
@@ -559,7 +559,7 @@
                 <div class="card-body p-3">
                   <div class="row">
                     <div class="table-responsive table-responsive-lg">
-                      <table class="table align-items-center mb-0" id="table-det-budgets" style="table-layout: fixed;">
+                      <table class="table align-items-center mb-0 table-hover" id="table-det-budgets" style="table-layout: fixed;">
                         <colgroup>
                           <col width="5%">
                           <col width="25%">

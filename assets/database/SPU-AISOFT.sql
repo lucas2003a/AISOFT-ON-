@@ -2153,6 +2153,8 @@ BEGIN
         WHERE iddevolucion = _iddevolucion;
 END $$
 
+CALL sup_list_refunds_ById(12);
+
 DELIMITER;
 
 DELIMITER $$

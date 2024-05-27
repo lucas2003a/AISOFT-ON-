@@ -200,7 +200,7 @@ CREATE VIEW vws_list_separations_tpersona_natural AS
         sep.separacion_monto,
         sep.inactive_at AS inactive_at_sep,
         usuPers.nombres AS usuario,
-        sep.CREATE_at
+        sep.create_at
     FROM
         separaciones AS sep
         INNER JOIN activos AS act ON act.idactivo = sep.idactivo
@@ -228,7 +228,7 @@ SELECT
     persj.documento_tipo,
     persj.documento_nro,
     sep.separacion_monto,
-    sep.CREATE_at,
+    sep.create_at,
     sep.inactive_at AS inactive_at_sep,
     usuPers.nombres AS usuario
 FROM
@@ -347,6 +347,7 @@ CREATE VIEW vws_list_refunds AS
         sep.n_expediente AS n_expediente_sep,
         dev.detalle,
         dev.monto_devolucion,
+        sep.separacion_monto,
         COALESCE(
             persj.tipo_persona,
             persn.tipo_persona

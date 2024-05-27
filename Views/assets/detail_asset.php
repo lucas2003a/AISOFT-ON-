@@ -452,7 +452,7 @@
                 <div class="card-body p-3">
                   <div class="row">
                     <div class="table-responsive table-responsive-lg">
-                      <table class="table align-items-center mb-0" id="table-clients">
+                      <table class="table align-items-center mb-0 table-hover" id="table-clients">
                         <thead class="text-center">
                           <tr>
                             <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">#</th>
