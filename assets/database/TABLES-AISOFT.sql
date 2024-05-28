@@ -387,6 +387,7 @@ CREATE TABLE devoluciones
 CREATE TABLE contratos
 (
 	idcontrato 				INT PRIMARY KEY AUTO_INCREMENT,
+    n_expediente            VARCHAR(10) NOT NULL
     tipo_contrato 			VARCHAR(40)		NOT NULL,
     idseparacion 					INT 	NULL,
     idrepresentante_primario 		INT 	NOT NULL,	-- REPRESENTANTE DEL VENDEDOR
@@ -402,6 +403,7 @@ CREATE TABLE contratos
     update_at				DATE 			NULL,
     inactive_at				DATE 			NULL,
     idusuario 				INT 			NOT NULL,
+    CONSTRAINT chk_n_epediente_cont CHECK(n_expediente LIKE 'CONT-%'),
     CONSTRAINT fk_idseparacion_cont FOREIGN KEY(idseparacion) REFERENCES separaciones(idseparacion),
     CONSTRAINT fk_idrepresentante_cont FOREIGN KEY(idrepresentante_primario) REFERENCES representantes(idrepresentante),
     CONSTRAINT fk_idrepresentante2_cont FOREIGN KEY(idrepresentante_secundario) REFERENCES representantes(idrepresentante),
@@ -410,6 +412,7 @@ CREATE TABLE contratos
     CONSTRAINT fk_idusuario_cont FOREIGN KEY(idusuario) REFERENCES usuarios(idusuario)
 )ENGINE = INNODB;
 
+ALTER TABLE contratos ADD ;
 -- DETALLE DE CONTRATOS
 CREATE TABLE detalles_contratos
 (
@@ -454,13 +457,15 @@ CREATE TABLE desembolsos(
 -- CUOTAS
 CREATE TABLE cuotas(
 	idcuota 				INT PRIMARY KEY AUTO_INCREMENT,
-    idcontrato		INT  			NOT NULL,
+    idcontrato		        INT  			NOT NULL,
     monto_cuota 			DECIMAL(8,2) 	NOT NULL,
     fecha_vencimiento 		DATE 			NOT NULL,
     fecha_pago 				DATE 			NULL,
     detalles  	 			VARCHAR(100) 	NULL,
-    tipo_pago 				VARCHAR(20) 	NOT NULL,
-    entidad_bancaria 		VARCHAR(20) 	NOT NULL,
+    tipo_pago 				VARCHAR(20) 	NULL,
+    entidad_bancaria 		VARCHAR(20) 	NULL,
+    imagen                  VARCHAR(100)    NULL,
+    estado                  VARCHAR(20) NOT NULL DEFAULT "POR CANCELAR"
 	create_at 				DATE 			NOT NULL	DEFAULT (CURDATE()),
     update_at				DATE 			NULL,
     inactive_at				DATE 			NULL,
@@ -469,18 +474,9 @@ CREATE TABLE cuotas(
     CONSTRAINT fk_idusuario_cuotas FOREIGN KEY(idusuario) REFERENCES usuarios(idusuario)
 )ENGINE = INNODB;
 
--- SUSTENTOS CUOTAS
-CREATE TABLE sustentos_cuotas(
-	idsustento_cuota 		INT PRIMARY KEY AUTO_INCREMENT,
-    idcuota					INT 			NOT NULL,
-    ruta 					VARCHAR(100) 	NOT NULL,
-	create_at 				DATE 			NOT NULL	DEFAULT (CURDATE()),
-    update_at				DATE 			NULL,
-    inactive_at				DATE 			NULL,
-    idusuario 				INT 			NOT NULL,
-    CONSTRAINT fk_idcuota_sust_cuo FOREIGN KEY(idcuota) REFERENCES cuotas(idcuota),
-    CONSTRAINT fk_idusuario_sust_cuo FOREIGN KEY(idusuario) REFERENCES usuarios(idusuario)
-)ENGINE = INNODB;
-
+select *from cuotas;
+SELECT * FROM contratos;
+select * from separaciones;
+select * from activos where idactivo in (10,13);
 
 -- DROP TABLE sustentos_cuotas, cuotas, detalle_gastos, presupuestos, desembolsos, sustentos_sep, separaciones, contratos, viviendas, lotes;

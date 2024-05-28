@@ -913,6 +913,8 @@ CREATE PROCEDURE spu_list_clients_contractID(IN _idcliente INT)
 BEGIN
     SELECT 
         cont.idcontrato,
+        cont.n_expediente,
+        cont.tipo_contrato,
         COALESCE(cl.idcliente, cn.idcliente) AS idcliente,
         COALESCE(cl.cliente, cn.cliente) AS cliente,
         COALESCE(cl.documento_tipo, cn.documento_tipo) AS documento_tipo,
@@ -921,9 +923,12 @@ BEGIN
         INNER JOIN clientes clien ON clien.idcliente = cont.idcliente
         LEFT JOIN vws_clientes_legal cl ON cl.idcliente = clien.idcliente
         LEFT JOIN vws_clients_natural cn ON cn.idcliente = clien.idcliente
+        WHERE cont.idcliente = _idcliente
     UNION 
     SELECT  
         cont.idcontrato,
+        cont.n_expediente,
+        cont.tipo_contrato,
         COALESCE(cl.idcliente, cn.idcliente) AS idcliente,
         COALESCE(cl.cliente, cn.cliente) AS cliente,
         COALESCE(cl.documento_tipo, cn.documento_tipo) AS documento_tipo,
@@ -932,13 +937,15 @@ BEGIN
         INNER JOIN separaciones sep ON sep.idseparacion = cont.idseparacion
         LEFT JOIN vws_clientes_legal cl ON cl.idcliente = sep.idcliente
         LEFT JOIN vws_clients_natural cn ON cn.idcliente = sep.idcliente
-        WHERE cont.idcliente = _idcliente;
+        WHERE sep.idcliente = _idcliente;
 END $$
 
 DELIMITER;
 
 
 call spu_list_clients_contractID(5);
+SELECT * FROM contratos;
+SELECT * FROM separaciones;
 
 DELIMITER $$
 
@@ -2174,7 +2181,8 @@ BEGIN
 END $$
 
 DELIMITER;
-
+SELECT * from activos WHERE estado = "SIN VENDER" AND inactive_at IS NULL;
+SELECT * FROM contratos;
 -- DEVLOUCIONES   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 DELIMITER $$
 
@@ -2487,6 +2495,38 @@ BEGIN
 END $$
 
 DELIMITER;
+
+DELIMITER $$
+
+CREATE PROCEDURE spu_existContract
+(
+    IN _idcontrato INT
+)
+BEGIN
+    SELECT EXISTS(SELECT 1 FROM contratos 
+                WHERE idcontrato = _idcontrato AND inactive_at IS NULL
+                );
+END $$
+
+DELIMITER;
+-- CUOTAS /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+DELIMITER $$
+
+CREATE PROCEDURE spu_list_quotas_idcontrato
+(
+    IN _idcontrato INT
+)
+BEGIN
+    SELECT *
+        FROM cuotas
+        WHERE idcontrato = _idcontrato
+        AND inactive_at IS NULL;
+END $$
+
+CALL spu_list_quotas_idcontrato(1);
+DELIMITER;
+
 
 -- PLANTILLA
 DELIMITER $$

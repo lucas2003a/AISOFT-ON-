@@ -411,90 +411,51 @@
       </div>
 
       <div style="height: 600px;overflow-y: auto;overflow-x:hidden;" id="cards-render">
-        <div class="row">
-          <div class="col-12">
-            <div class="card pb-4" style="box-shadow: 20px 20px 27px 20px rgba(0, 0, 0, 0.05); margin:10px 80px 50px 80px;">
-              <div class="card-header pb-0">
-                <div class="row">
-                  <div class="col-md-6">
 
-                    <h6><strong>ATUNCAR VALERIO, </strong>Lucas Alfredo</h6>
-                    <hr>
-                    <p>DNI - 77068570</p>
-                  </div>
-                  <div class="col-md-6">
-                    <div class="text-end">
-                      <button type="button" class="btn btn-lg bg-gradient-info opacity-10" id="generate-pdf"><i class="bi bi-filetype-pdf"></i><br>Ver cuotas</button>
+        <!-- PLNATILA DE CARD -->
+        <template id="card-template">
+
+          <div class="row">
+            <div class="col-12">
+              <div class="card pb-4" style="box-shadow: 20px 20px 27px 20px rgba(0, 0, 0, 0.05); margin:10px 80px 50px 80px;">
+                <div class="card-header pb-0">
+                  <div class="row">
+                    <div class="col-md-6">
+
+                      <h6><strong class="text-apellidos"></strong></h6>
+                      <h6 class="text-nombres"></h6>
+                      <hr>
+                      <p class="text-documento"></p>
+                    </div>
+                    <div class="col-md-6 d-flex" style="justify-content: flex-end; align-items:center;">
+                      <div class="text-end">
+                        <button id="buttonEvent" type="button" class="btn btn-sm open-list bg-gradient-info opacity-10" data-bs-toggle="collapse" data-bs-target="#lista1" aria-expanded="true" aria-controls="lista1"><br>Abrir</button>
+                      </div>
+                    </div>
+                    <div id="lista1" class="mt-2 accordion-collapse collapse contentAcordion" data-bs-parent="#accordion" aria-labelledby="buttonEvent" style="border-radius: 5px;background-color:rgba(0, 0, 0, 0.05)">
+
+                      <ul class="ulhover" style="list-style: none;">
+
+                        <!-- SEGUNDA PLATILLA(RENDERIZA LA LISTA) -->
+                        <template class="clone-list">
+                          <li class="m-2 li-tag go">
+                            <p class="text-tag go"><strong class="text-expediente"></strong><span class="text-tipocontrato"></span></p>
+                            <hr>
+                          </li>
+                        </template>
+                        <!-- FIN DE LA SEGUNDA PLANTILLA -->
+
+                      </ul>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-        <div class="row">
-          <div class="col-12">
-            <div class="card pb-4" style="box-shadow: 20px 20px 27px 20px rgba(0, 0, 0, 0.05); margin:10px 80px 50px 80px;">
-              <div class="card-header pb-0">
-                <div class="row">
-                  <div class="col-md-6">
+        </template>
 
-                    <h6><strong>ATUNCAR VALERIO, </strong>Lucas Alfredo</h6>
-                    <hr>
-                    <p>DNI - 77068570</p>
-                  </div>
-                  <div class="col-md-6">
-                    <div class="text-end">
-                      <button type="button" class="btn btn-lg bg-gradient-info opacity-10" id="generate-pdf"><i class="bi bi-filetype-pdf"></i><br>Ver cuotas</button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-12">
-            <div class="card pb-4" style="box-shadow: 20px 20px 27px 20px rgba(0, 0, 0, 0.05); margin:10px 80px 50px 80px;">
-              <div class="card-header pb-0">
-                <div class="row">
-                  <div class="col-md-6">
+        <!-- FIN DE CARTILLA DE CARD -->
 
-                    <h6><strong>ATUNCAR VALERIO, </strong>Lucas Alfredo</h6>
-                    <hr>
-                    <p>DNI - 77068570</p>
-                  </div>
-                  <div class="col-md-6">
-                    <div class="text-end">
-                      <button type="button" class="btn btn-lg bg-gradient-info opacity-10" id="generate-pdf"><i class="bi bi-filetype-pdf"></i><br>Ver cuotas</button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-12">
-            <div class="card pb-4" style="box-shadow: 20px 20px 27px 20px rgba(0, 0, 0, 0.05); margin:10px 80px 50px 80px;">
-            <div class="card-header pb-0">
-                <div class="row">
-                  <div class="col-md-6">
-
-                    <h6><strong>ATUNCAR VALERIO, </strong>Lucas Alfredo</h6>
-                    <hr>
-                    <p>DNI - 77068570</p>
-                  </div>
-                  <div class="col-md-6">
-                    <div class="text-end">
-                      <button type="button" class="btn btn-lg bg-gradient-info opacity-10" id="generate-pdf"><i class="bi bi-filetype-pdf"></i><br>Ver cuotas</button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
       </div>
 
       <footer class="footer pt-3">
@@ -583,7 +544,7 @@
   <script src="../../assets/js/globalFunctions.js"></script>
   <script src="../../assets/js/sweetAlert.js"></script>
   <script>
-    document.addEventListener("DOMContentLoaded", () => {
+    document.addEventListener("DOMContentLoaded", async function(){
 
       /* INSTANCIAS */
       const global = new FunGlobal();
@@ -591,9 +552,34 @@
       const $ = id => global.$(id);
       const $All = id => global.$All(id);
 
-      async function getClientesForSale(){
+      const uls = $All(".ulhover");
 
-        try{
+      //Obtiene los contratos por cliente
+      async function getContractsClients(id) {
+
+        try {
+          let url = "../../Controllers/client.controller.php";
+
+          let params = new FormData();
+
+          params.append("action", "getClientsForSaleId");
+          params.append("idcliente", id);
+
+          let results = await global.sendAction(url, params);
+
+          if (results.length > 0) {
+            
+            return results;
+          }
+        } catch (e) {
+          console.error(e)
+        }
+      }
+
+      // Obtiene los clientes que cuentan con alguna venta
+      async function getClientesForSale() {
+
+        try {
 
           let url = "../../Controllers/client.controller.php";
 
@@ -603,16 +589,93 @@
 
           let results = await global.sendAction(url, params);
 
-          if(results.length > 0){
+          if (results.length > 0) {
+
+            let cardTemplate = $("#card-template");
+            let cardsRender = $("#cards-render");
+
             console.log(results)
+
+            for(result of results){
+
+              //variable que contiene el template primario
+              let cardClone = cardTemplate.content.cloneNode(true);
+
+              //variable que contiene los datos de los contratos
+              let contents = await getContractsClients(result.idcliente);
+              console.log(contents)
+              
+              //Recorrido por cada contrato
+              contents.forEach(content => {
+
+                //Clona la lista de aceurdo a los contratos
+                let liClone = cardClone.querySelector(".clone-list").content.cloneNode(true);
+                liClone.querySelector(".text-expediente").innerText = content.n_expediente;
+                liClone.querySelector(".text-tipocontrato").innerText = ` - ${content.tipo_contrato}`;
+
+                //Configuro los dataser para guardar el id del contrato
+                let liTag = liClone.querySelector(".li-tag");
+                let texTag = liClone.querySelector(".text-tag");
+
+                console.log(liTag)
+                liTag.setAttribute("data-id", content.idcontrato);
+                texTag.setAttribute("data-id", content.idcontrato);
+
+                //Agrega el clone a la lista de contratos
+                cardClone.querySelector(".ulhover").appendChild(liClone);
+              });
+
+              //Modifca los atrbutos id y data de los botones tipo acordeon
+              let buttonOpen = cardClone.querySelector(".open-list");
+              buttonOpen.setAttribute("id", `buttonEvent-${result.idcliente}`);
+              buttonOpen.setAttribute("data-bs-target", `#lista-${result.idcliente}`);
+              buttonOpen.setAttribute("aria-controles", `lista-${result.idcliente}`);
+
+              let contentAcordion = cardClone.querySelector(".contentAcordion");
+              contentAcordion.setAttribute("id", `lista-${result.idcliente}`)
+              contentAcordion.setAttribute("aria-labelledby", `buttonEvent-${result.idcliente}`);
+
+              //Verfica si clientes cotinene una coma que sirve como referencia para saber si es persona natural o juridica
+              if (result.cliente.includes(",")) {
+
+                //Recorrido por cada cliente y se agrega el clone a la lista de clientes
+                let response = result.cliente;
+                let responseString = response.toString().split(",");
+                let nombres = responseString[1];
+                let apellidos = responseString[0];
+
+                cardClone.querySelector(".text-apellidos").innerText = apellidos;
+                cardClone.querySelector(".text-nombres").innerText = nombres;
+              } else {
+                cardClone.querySelector(".text-apellidos").innerText = result.cliente;
+                cardClone.querySelector(".text-nombres").innerText = "";
+              }
+
+              let documento = `${result.documento_tipo} - ${result.documento_nro}`;
+              cardClone.querySelector(".text-documento").innerText = documento;
+
+              //Agrega el card clonado a la plantilla principal
+              cardsRender.appendChild(cardClone);
+            }
           }
-        }
-        catch(e){
+        } catch (e) {
           console.error(e);
         }
       }
+      
+      await getClientesForSale();
 
-      getClientesForSale();
+      console.log(Array.from(uls))
+      $("#cards-render").addEventListener("click",(e)=>{
+
+        if(e.target.classList.contains("go")){
+
+          let idcontrato = e.target.dataset.id
+
+          console.log(idcontrato)
+        }
+      });
+
     });
   </script>
   <script>

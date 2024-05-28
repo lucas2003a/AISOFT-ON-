@@ -115,6 +115,11 @@ if(isset($_POST["action"])){
                 echo json_encode($contract->inactiveDetCont($iddetalle_contrato));
 
             break;
+
+        case "existsContractIdContract": 
+            $idcontrato = $_POST["idcontrato"];
+
+            echo json_encode($contract->existsContractIdContract($idcontrato));
     }
 }
 ?>

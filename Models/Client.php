@@ -346,7 +346,7 @@ class Client extends Conection
             $query = $this->conection->prepare("CALL spu_list_clients_contractID(?)");
             $query->execute(array($idcliente));
 
-            return $query->fetch(PDO::FETCH_ASSOC);
+            return $query->fetchAll(PDO::FETCH_ASSOC);
         }
         catch(Exception $e){
             die($e->getMessage());

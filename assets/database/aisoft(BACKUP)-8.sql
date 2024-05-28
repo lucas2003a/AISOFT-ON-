@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 28-05-2024 a las 00:27:01
+-- Tiempo de generación: 28-05-2024 a las 10:56:14
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -343,6 +343,12 @@ END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_count_budget_idbudget` (IN `_idpresupuesto` INT)   BEGIN
     SELECT EXISTS(SELECT 1 FROM activos WHERE idpresupuesto = _idpresupuesto AND inactive_at IS NULL) AS cantidad;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_existContract` (IN `_idcontrato` INT)   BEGIN
+    SELECT EXISTS(SELECT 1 FROM contratos 
+                WHERE idcontrato = _idcontrato AND inactive_at IS NULL
+                );
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_existContract_idseparacion` (IN `_idseparacion` INT)   BEGIN
@@ -999,6 +1005,8 @@ END$$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_clients_contractID` (IN `_idcliente` INT)   BEGIN
     SELECT 
         cont.idcontrato,
+        cont.n_expediente,
+        cont.tipo_contrato,
         COALESCE(cl.idcliente, cn.idcliente) AS idcliente,
         COALESCE(cl.cliente, cn.cliente) AS cliente,
         COALESCE(cl.documento_tipo, cn.documento_tipo) AS documento_tipo,
@@ -1007,9 +1015,12 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_clients_contractID` (IN `_
         INNER JOIN clientes clien ON clien.idcliente = cont.idcliente
         LEFT JOIN vws_clientes_legal cl ON cl.idcliente = clien.idcliente
         LEFT JOIN vws_clients_natural cn ON cn.idcliente = clien.idcliente
+        WHERE cont.idcliente = _idcliente
     UNION 
     SELECT  
         cont.idcontrato,
+        cont.n_expediente,
+        cont.tipo_contrato,
         COALESCE(cl.idcliente, cn.idcliente) AS idcliente,
         COALESCE(cl.cliente, cn.cliente) AS cliente,
         COALESCE(cl.documento_tipo, cn.documento_tipo) AS documento_tipo,
@@ -1018,7 +1029,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_clients_contractID` (IN `_
         INNER JOIN separaciones sep ON sep.idseparacion = cont.idseparacion
         LEFT JOIN vws_clientes_legal cl ON cl.idcliente = sep.idcliente
         LEFT JOIN vws_clients_natural cn ON cn.idcliente = sep.idcliente
-        WHERE cont.idcliente = _idcliente;
+        WHERE sep.idcliente = _idcliente;
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_clients_onlyNperson` ()   BEGIN
@@ -1340,6 +1351,13 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_provinces` (IN `_iddeparta
     FROM provincias 
     WHERE iddepartamento = _iddepartamento
     ORDER BY 3 ASC;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_quotas_idcontrato` (IN `_idcontrato` INT)   BEGIN
+    SELECT *
+        FROM cuotas
+        WHERE idcontrato = _idcontrato
+        AND inactive_at IS NULL;
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_refunds_get` ()   BEGIN
@@ -1838,11 +1856,11 @@ CREATE TABLE `activos` (
 --
 
 INSERT INTO `activos` (`idactivo`, `idproyecto`, `tipo_activo`, `imagen`, `estado`, `sublote`, `direccion`, `moneda_venta`, `area_terreno`, `zcomunes_porcent`, `partida_elect`, `latitud`, `longitud`, `perimetro`, `det_casa`, `idpresupuesto`, `propietario_lote`, `precio_lote`, `precio_construccion`, `create_at`, `update_at`, `inactive_at`, `idusuario`, `precio_venta`) VALUES
-(1, 1, 'LOTE', '4e867593bfa060bb4b701bc9bb387d7ad78c4acf.jpg', 'SEPARADO', '1', 'Urbanización Alpha', 'USD', 300.00, 2, 'Partida 001', 'null', 'null', '{\"clave\" :[], \"valor\":[]}', '{\"clave\" :[], \"valor\":[]}', 19, 'TERCEROS', 80000.00, 2228.20, '2024-04-19', '2024-05-25', NULL, 1, 82228.20),
+(1, 1, 'LOTE', '4e867593bfa060bb4b701bc9bb387d7ad78c4acf.jpg', 'VENDIDO', '1', 'Urbanización Alpha', 'USD', 300.00, 2, 'Partida 001', 'null', 'null', '{\"clave\" :[], \"valor\":[]}', '{\"clave\" :[], \"valor\":[]}', 19, 'TERCEROS', 80000.00, 2228.20, '2024-04-19', '2024-05-25', NULL, 1, 82228.20),
 (2, 2, 'LOTE', NULL, 'SIN VENDER', '1', 'Urbanización Gamma', 'USD', 250.00, 0, 'Partida 003', NULL, NULL, '{\"clave\" :[], \"valor\":[]}', '{\"clave\" :[], \"valor\":[]}', 12, 'A.I.F', 100000.00, 1160.00, '2024-04-19', '2024-05-19', NULL, 1, 101160.00),
 (3, 1, 'LOTE', 'dc52c8c0f2e8111674786ae5e5e6eb5a48f2c678.jpg', 'SIN VENDER', '3', 'Urbanización Epsilon', 'USD', 350.00, 0, 'Partida 005', NULL, NULL, '{\"clave\" :[], \"valor\":[]}', '{\"clave\" :[], \"valor\":[]}', 19, 'A.I.F', 90000.00, 0.00, '2024-04-19', '2024-05-24', NULL, 1, 0.00),
 (4, 3, 'LOTE', NULL, 'SIN VENDER', '2', 'Urbanización Eta', 'USD', 400.00, 0, 'Partida 007', NULL, NULL, '{\"clave\" :[], \"valor\":[]}', '{\"clave\" :[], \"valor\":[]}', 15, 'A.I.F', 120000.00, 710.00, '2024-04-19', '2024-05-25', NULL, 1, 120710.00),
-(5, 2, 'LOTE', NULL, 'SEPARADO', '3', 'Urbanización Iota', 'USD', 280.00, 0, 'Partida 009', NULL, NULL, '{\"clave\" :[], \"valor\":[]}', '{\"clave\" :[], \"valor\":[]}', 12, 'A.I.F', 110000.00, 1160.00, '2024-04-19', '2024-05-19', NULL, 1, 111160.00),
+(5, 2, 'LOTE', NULL, 'VENDIDO', '3', 'Urbanización Iota', 'USD', 280.00, 0, 'Partida 009', NULL, NULL, '{\"clave\" :[], \"valor\":[]}', '{\"clave\" :[], \"valor\":[]}', 12, 'A.I.F', 110000.00, 1160.00, '2024-04-19', '2024-05-19', NULL, 1, 111160.00),
 (6, 3, 'LOTE', NULL, 'SIN VENDER', '5', 'Urbanización Lambda', 'USD', 320.00, 0, 'Partida 011', 'null', 'null', '{\"clave\" :[], \"valor\":[]}', '{\"clave\" :[], \"valor\":[]}', 30, 'A.I.F', 95000.00, 360.00, '2024-04-19', '2024-05-25', NULL, 1, 95360.00),
 (7, 4, 'LOTE', NULL, 'SEPARADO', '1', 'Urbanización Nu', 'USD', 300.00, NULL, 'Partida 013', NULL, NULL, '{\"clave\" :[], \"valor\":[]}', '{\"clave\" :[], \"valor\":[]}', 37, 'A.I.F', 85000.00, 0.00, '2024-04-19', '2024-05-24', NULL, 1, 0.00),
 (8, 4, 'LOTE', NULL, 'SIN VENDER', '3', 'Urbanización Omicron', 'USD', 380.00, 0, 'Partida 015', 'null', 'null', '{\"clave\" :[], \"valor\":[]}', '{\"clave\" :[], \"valor\":[]}', 37, 'A.I.F', 110000.00, 2832.00, '2024-04-19', '2024-05-24', NULL, 1, 112832.00),
@@ -1850,8 +1868,8 @@ INSERT INTO `activos` (`idactivo`, `idproyecto`, `tipo_activo`, `imagen`, `estad
 (10, 2, 'LOTE', NULL, 'VENDIDO', '9', 'Urbanización Tau', 'USD', 450.00, 0, 'Partida 019', NULL, NULL, '{\"clave\" :[], \"valor\":[]}', '{\"clave\" :[], \"valor\":[]}', 12, 'A.I.F', 115000.00, 1160.00, '2024-04-19', '2024-05-19', NULL, 1, 116160.00),
 (11, 3, 'LOTE', NULL, 'SIN VENDER', '11', 'Urbanización Phi', 'USD', 480.00, NULL, 'Partida 021', NULL, NULL, '{\"clave\" :[], \"valor\":[]}', '{\"clave\" :[], \"valor\":[]}', NULL, 'A.I.F', 100000.00, 0.00, '2024-04-19', '2024-05-25', NULL, 1, 0.00),
 (12, 4, 'LOTE', NULL, 'SIN VENDER', '13', 'Urbanización Psi', 'USD', 500.00, 0, 'Partida 023', 'null', 'null', '{\"clave\" :[], \"valor\":[]}', '{\"clave\" :[], \"valor\":[]}', 37, 'A.I.F', 120000.00, 2832.00, '2024-04-19', '2024-05-24', NULL, 1, 122832.00),
-(13, 1, 'LOTE', NULL, 'SIN VENDER', '15', 'Urbanización Beta', 'USD', 300.00, NULL, 'Partida 025', NULL, NULL, '{\"clave\" :[], \"valor\":[]}', '{\"clave\" :[], \"valor\":[]}', 19, 'A.I.F', 90000.00, 0.00, '2024-04-19', '2024-05-24', NULL, 1, 0.00),
-(14, 1, 'LOTE', '72047f2210fa4a9b0b971e9bbf430156d7ef48af.jpg', 'SIN VENDER', '2', 'Urbanización Zeta', 'USD', 280.00, 0, 'Partida 027', NULL, NULL, '{\"clave\":[\"tercera clave\",\"segunda clave\",\"primera clave\",\"\"],\"valor\":[\"tercer valor\",\"segundo valor\",\"primer valor\",\"\"]}', '{\"clave\":[],\"valor\":[]}', 19, 'A.I.F', 95000.00, 0.00, '2024-04-19', '2024-05-24', NULL, 1, 0.00),
+(13, 1, 'LOTE', NULL, 'VENDIDO', '15', 'Urbanización Beta', 'USD', 300.00, NULL, 'Partida 025', NULL, NULL, '{\"clave\" :[], \"valor\":[]}', '{\"clave\" :[], \"valor\":[]}', 19, 'A.I.F', 90000.00, 0.00, '2024-04-19', '2024-05-24', NULL, 1, 0.00),
+(14, 1, 'LOTE', '72047f2210fa4a9b0b971e9bbf430156d7ef48af.jpg', 'VENDIDO', '2', 'Urbanización Zeta', 'USD', 280.00, 0, 'Partida 027', NULL, NULL, '{\"clave\":[\"tercera clave\",\"segunda clave\",\"primera clave\",\"\"],\"valor\":[\"tercer valor\",\"segundo valor\",\"primer valor\",\"\"]}', '{\"clave\":[],\"valor\":[]}', 19, 'A.I.F', 95000.00, 0.00, '2024-04-19', '2024-05-27', NULL, 3, 0.00),
 (15, 1, 'LOTE', NULL, 'SIN VENDER', '4', 'Urbanización Kappa', 'USD', 320.00, NULL, 'Partida 029', NULL, NULL, '{\"clave\" :[], \"valor\":[]}', '{\"clave\" :[], \"valor\":[]}', 19, 'A.I.F', 110000.00, 0.00, '2024-04-19', '2024-05-24', NULL, 1, 0.00),
 (16, 1, 'LOTE', NULL, 'SIN VENDER', '6', 'Urbanización Sigma', 'USD', 300.00, NULL, 'Partida 031', NULL, NULL, '{\"clave\" :[], \"valor\":[]}', '{\"clave\" :[], \"valor\":[]}', 19, 'A.I.F', 85000.00, 0.00, '2024-04-19', '2024-05-24', NULL, 1, 0.00),
 (17, 1, 'LOTE', NULL, 'SIN VENDER', '8', 'Urbanización Upsilon', 'USD', 380.00, NULL, 'Partida 033', NULL, NULL, '{\"clave\" :[], \"valor\":[]}', '{\"clave\" :[], \"valor\":[]}', 19, 'A.I.F', 120000.00, 0.00, '2024-04-19', '2024-05-24', NULL, 1, 0.00),
@@ -2124,19 +2142,21 @@ CREATE TABLE `contratos` (
   `create_at` date NOT NULL DEFAULT curdate(),
   `update_at` date DEFAULT NULL,
   `inactive_at` date DEFAULT NULL,
-  `idusuario` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `idusuario` int(11) NOT NULL,
+  `n_expediente` varchar(10) NOT NULL
+) ;
 
 --
 -- Volcado de datos para la tabla `contratos`
 --
 
-INSERT INTO `contratos` (`idcontrato`, `tipo_contrato`, `idseparacion`, `idrepresentante_primario`, `idrepresentante_secundario`, `idcliente`, `idconyugue`, `idactivo`, `tipo_cambio`, `estado`, `fecha_contrato`, `det_contrato`, `create_at`, `update_at`, `inactive_at`, `idusuario`) VALUES
-(1, 'VENTA DE LOTE', 1, 1, NULL, NULL, NULL, NULL, 3.500, 'VIGENTE', '2024-03-10', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '2024-04-19', NULL, NULL, 1),
-(2, 'VENTA DE LOTE', 2, 1, NULL, NULL, NULL, NULL, 3.500, 'VIGENTE', '2024-03-11', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '2024-04-19', NULL, NULL, 2),
-(3, 'VENTA DE LOTE', 3, 1, NULL, NULL, NULL, NULL, 3.500, 'VIGENTE', '2024-03-12', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '2024-04-19', NULL, NULL, 3),
-(5, 'VENTA DE LOTE', 2, 1, NULL, NULL, NULL, NULL, 3.500, 'VIGENTE', '2024-03-12', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '2024-04-19', NULL, NULL, 3),
-(6, 'VENTA DE LOTE', NULL, 1, NULL, 5, NULL, 10, 3.500, 'VIGENTE', '2024-03-12', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '2024-04-19', NULL, NULL, 3);
+INSERT INTO `contratos` (`idcontrato`, `tipo_contrato`, `idseparacion`, `idrepresentante_primario`, `idrepresentante_secundario`, `idcliente`, `idconyugue`, `idactivo`, `tipo_cambio`, `estado`, `fecha_contrato`, `det_contrato`, `create_at`, `update_at`, `inactive_at`, `idusuario`, `n_expediente`) VALUES
+(1, 'VENTA DE LOTE', 1, 1, NULL, NULL, NULL, NULL, 3.500, 'VIGENTE', '2024-03-10', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '2024-04-19', NULL, NULL, 1, 'CONT-00001'),
+(2, 'VENTA DE LOTE', 2, 1, NULL, NULL, NULL, NULL, 3.500, 'VIGENTE', '2024-03-11', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '2024-04-19', NULL, NULL, 2, 'CONT-00002'),
+(3, 'VENTA DE LOTE', 3, 1, NULL, NULL, NULL, NULL, 3.500, 'VIGENTE', '2024-03-12', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '2024-04-19', NULL, NULL, 3, 'CONT-00003'),
+(5, 'VENTA DE LOTE', 2, 1, NULL, NULL, NULL, NULL, 3.500, 'VIGENTE', '2024-03-12', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '2024-04-19', NULL, NULL, 3, 'CONT-00004'),
+(6, 'VENTA DE LOTE', NULL, 1, NULL, 5, NULL, 10, 3.500, 'VIGENTE', '2024-03-12', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '2024-04-19', NULL, NULL, 3, 'CONT-00005'),
+(7, 'VENTA DE LOTE', NULL, 1, NULL, 5, NULL, 13, 3.500, 'VIGENTE', '2024-03-12', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '2024-04-19', NULL, NULL, 3, 'CONT-00006');
 
 --
 -- Disparadores `contratos`
@@ -2185,23 +2205,25 @@ CREATE TABLE `cuotas` (
   `fecha_vencimiento` date NOT NULL,
   `fecha_pago` date DEFAULT NULL,
   `detalles` varchar(100) DEFAULT NULL,
-  `tipo_pago` varchar(20) NOT NULL,
-  `entidad_bancaria` varchar(20) NOT NULL,
+  `tipo_pago` varchar(20) DEFAULT NULL,
+  `entidad_bancaria` varchar(20) DEFAULT NULL,
   `create_at` date NOT NULL DEFAULT curdate(),
   `update_at` date DEFAULT NULL,
   `inactive_at` date DEFAULT NULL,
-  `idusuario` int(11) NOT NULL
+  `idusuario` int(11) NOT NULL,
+  `imagen` varchar(100) DEFAULT NULL,
+  `estado` varchar(20) NOT NULL DEFAULT 'POR CANCELAR'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `cuotas`
 --
 
-INSERT INTO `cuotas` (`idcuota`, `idcontrato`, `monto_cuota`, `fecha_vencimiento`, `fecha_pago`, `detalles`, `tipo_pago`, `entidad_bancaria`, `create_at`, `update_at`, `inactive_at`, `idusuario`) VALUES
-(1, 1, 500.00, '2024-03-10', NULL, NULL, 'TRANSFERENCIA', 'BCP', '2024-04-19', NULL, NULL, 7),
-(2, 1, 500.00, '2024-04-10', NULL, NULL, 'TRANSFERENCIA', 'BCP', '2024-04-19', NULL, NULL, 7),
-(3, 2, 500.00, '2024-03-18', NULL, NULL, 'TRANSFERENCIA', 'BCP', '2024-04-19', NULL, NULL, 6),
-(4, 2, 500.00, '2024-04-13', NULL, NULL, 'TRANSFERENCIA', 'BCP', '2024-04-19', NULL, NULL, 6);
+INSERT INTO `cuotas` (`idcuota`, `idcontrato`, `monto_cuota`, `fecha_vencimiento`, `fecha_pago`, `detalles`, `tipo_pago`, `entidad_bancaria`, `create_at`, `update_at`, `inactive_at`, `idusuario`, `imagen`, `estado`) VALUES
+(1, 1, 500.00, '2024-03-10', NULL, NULL, 'TRANSFERENCIA', 'BCP', '2024-04-19', NULL, NULL, 7, NULL, 'POR CANCELAR'),
+(2, 1, 500.00, '2024-04-10', NULL, NULL, 'TRANSFERENCIA', 'BCP', '2024-04-19', NULL, NULL, 7, NULL, 'POR CANCELAR'),
+(3, 2, 500.00, '2024-03-18', NULL, NULL, 'TRANSFERENCIA', 'BCP', '2024-04-19', NULL, NULL, 6, NULL, 'POR CANCELAR'),
+(4, 2, 500.00, '2024-04-13', NULL, NULL, 'TRANSFERENCIA', 'BCP', '2024-04-19', NULL, NULL, 6, NULL, 'POR CANCELAR');
 
 -- --------------------------------------------------------
 
@@ -4470,8 +4492,8 @@ CREATE TABLE `metricas` (
 --
 
 INSERT INTO `metricas` (`idmetrica`, `idproyecto`, `l_vendidos`, `l_noVendidos`, `l_separados`, `update_at`) VALUES
-(1, 1, 0, 57, 2, '2024-05-26 16:45:56'),
-(2, 2, 1, 5, 1, '2024-05-19 04:21:01'),
+(1, 1, 3, 55, 1, '2024-05-28 02:46:37'),
+(2, 2, 2, 5, 0, '2024-05-28 02:45:06'),
 (3, 3, 0, 6, 0, '2024-05-25 22:41:49'),
 (4, 4, 0, 5, 1, '2024-05-20 01:44:34'),
 (5, 5, 0, 0, 0, '2024-04-19 17:21:35'),
@@ -5206,36 +5228,6 @@ INSERT INTO `subcategoria_costos` (`idsubcategoria_costo`, `idcategoria_costo`, 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `sustentos_cuotas`
---
-
-CREATE TABLE `sustentos_cuotas` (
-  `idsustento_cuota` int(11) NOT NULL,
-  `idcuota` int(11) NOT NULL,
-  `ruta` varchar(100) NOT NULL,
-  `create_at` date NOT NULL DEFAULT curdate(),
-  `update_at` date DEFAULT NULL,
-  `inactive_at` date DEFAULT NULL,
-  `idusuario` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Volcado de datos para la tabla `sustentos_cuotas`
---
-
-INSERT INTO `sustentos_cuotas` (`idsustento_cuota`, `idcuota`, `ruta`, `create_at`, `update_at`, `inactive_at`, `idusuario`) VALUES
-(1, 1, '/ruta/imagen1.jpg', '2024-04-19', NULL, NULL, 1),
-(2, 1, '/ruta/imagen2.jpg', '2024-04-19', NULL, NULL, 1),
-(3, 1, '/ruta/imagen1.jpg', '2024-04-19', NULL, NULL, 1),
-(4, 1, '/ruta/imagen2.jpg', '2024-04-19', NULL, NULL, 1),
-(5, 2, '/ruta/imagen1.jpg', '2024-04-19', NULL, NULL, 2),
-(6, 2, '/ruta/imagen2.jpg', '2024-04-19', NULL, NULL, 2),
-(7, 2, '/ruta/imagen1.jpg', '2024-04-19', NULL, NULL, 2),
-(8, 2, '/ruta/imagen2.jpg', '2024-04-19', NULL, NULL, 2);
-
--- --------------------------------------------------------
-
---
 -- Estructura de tabla para la tabla `unidades_medida`
 --
 
@@ -5864,14 +5856,6 @@ ALTER TABLE `subcategoria_costos`
   ADD KEY `fk_idcategoria_costo_subcat_costo` (`idcategoria_costo`);
 
 --
--- Indices de la tabla `sustentos_cuotas`
---
-ALTER TABLE `sustentos_cuotas`
-  ADD PRIMARY KEY (`idsustento_cuota`),
-  ADD KEY `fk_idcuota_sust_cuo` (`idcuota`),
-  ADD KEY `fk_idusuario_sust_cuo` (`idusuario`);
-
---
 -- Indices de la tabla `unidades_medida`
 --
 ALTER TABLE `unidades_medida`
@@ -5920,7 +5904,7 @@ ALTER TABLE `constructora`
 -- AUTO_INCREMENT de la tabla `contratos`
 --
 ALTER TABLE `contratos`
-  MODIFY `idcontrato` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `idcontrato` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `cuotas`
@@ -6059,12 +6043,6 @@ ALTER TABLE `separaciones`
 --
 ALTER TABLE `subcategoria_costos`
   MODIFY `idsubcategoria_costo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
-
---
--- AUTO_INCREMENT de la tabla `sustentos_cuotas`
---
-ALTER TABLE `sustentos_cuotas`
-  MODIFY `idsustento_cuota` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT de la tabla `unidades_medida`
@@ -6238,13 +6216,6 @@ ALTER TABLE `separaciones`
 --
 ALTER TABLE `subcategoria_costos`
   ADD CONSTRAINT `fk_idcategoria_costo_subcat_costo` FOREIGN KEY (`idcategoria_costo`) REFERENCES `categoria_costos` (`idcategoria_costo`);
-
---
--- Filtros para la tabla `sustentos_cuotas`
---
-ALTER TABLE `sustentos_cuotas`
-  ADD CONSTRAINT `fk_idcuota_sust_cuo` FOREIGN KEY (`idcuota`) REFERENCES `cuotas` (`idcuota`),
-  ADD CONSTRAINT `fk_idusuario_sust_cuo` FOREIGN KEY (`idusuario`) REFERENCES `usuarios` (`idusuario`);
 
 --
 -- Filtros para la tabla `usuarios`

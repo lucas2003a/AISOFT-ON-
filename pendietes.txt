@@ -1,0 +1,8 @@
+-crear triger : al registrar un contrato cambiar el estado del activo a veniddo
+-crear trigger para la devolucio o modificaion de un registro en la tabla contratos
+-modiicar la tabla de devoluciones para que pueda registrar una devolucion dpor separacion o por contrato
+-modificar el triger de la tabla de devoluciones de acuerdo a la tarea anterior
+-redimenzionar imagenes
+-control de usuarios
+- reportes
+- consulta para el dashboard
