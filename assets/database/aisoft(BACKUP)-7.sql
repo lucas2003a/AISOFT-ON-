@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 28-05-2024 a las 10:57:15
+-- Tiempo de generación: 29-05-2024 a las 12:14:21
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -989,6 +989,8 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_clients_contract` ()   BEG
         INNER JOIN clientes clien ON clien.idcliente = cont.idcliente
         LEFT JOIN vws_clientes_legal cl ON cl.idcliente = clien.idcliente
         LEFT JOIN vws_clients_natural cn ON cn.idcliente = clien.idcliente
+        WHERE cont.estado = 'VIGENTE'
+        AND cont.inactive_at IS NULL
     UNION 
     SELECT DISTINCT 
         COALESCE(cl.idcliente, cn.idcliente) AS idcliente,
@@ -998,15 +1000,14 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_clients_contract` ()   BEG
         FROM contratos cont
         INNER JOIN separaciones sep ON sep.idseparacion = cont.idseparacion
         LEFT JOIN vws_clientes_legal cl ON cl.idcliente = sep.idcliente
-        LEFT JOIN vws_clients_natural cn ON cn.idcliente = sep.idcliente;
+        LEFT JOIN vws_clients_natural cn ON cn.idcliente = sep.idcliente
+        WHERE cont.estado = 'VIGENTE'
+        AND cont.inactive_at IS NULL;
     
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_clients_contractID` (IN `_idcliente` INT)   BEGIN
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_clients_contractDN` (IN `_documento_nro` VARCHAR(20))   BEGIN
     SELECT 
-        cont.idcontrato,
-        cont.n_expediente,
-        cont.tipo_contrato,
         COALESCE(cl.idcliente, cn.idcliente) AS idcliente,
         COALESCE(cl.cliente, cn.cliente) AS cliente,
         COALESCE(cl.documento_tipo, cn.documento_tipo) AS documento_tipo,
@@ -1015,12 +1016,11 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_clients_contractID` (IN `_
         INNER JOIN clientes clien ON clien.idcliente = cont.idcliente
         LEFT JOIN vws_clientes_legal cl ON cl.idcliente = clien.idcliente
         LEFT JOIN vws_clients_natural cn ON cn.idcliente = clien.idcliente
-        WHERE cont.idcliente = _idcliente
+        WHERE cont.estado = 'VIGENTE'
+        AND (cl.documento_nro LIKE CONCAT(_documento_nro,'%') OR cn.documento_nro LIKE CONCAT(_documento_nro,'%'))
+        AND cont.inactive_at IS NULL
     UNION 
-    SELECT  
-        cont.idcontrato,
-        cont.n_expediente,
-        cont.tipo_contrato,
+    SELECT DISTINCT 
         COALESCE(cl.idcliente, cn.idcliente) AS idcliente,
         COALESCE(cl.cliente, cn.cliente) AS cliente,
         COALESCE(cl.documento_tipo, cn.documento_tipo) AS documento_tipo,
@@ -1029,7 +1029,34 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_clients_contractID` (IN `_
         INNER JOIN separaciones sep ON sep.idseparacion = cont.idseparacion
         LEFT JOIN vws_clientes_legal cl ON cl.idcliente = sep.idcliente
         LEFT JOIN vws_clients_natural cn ON cn.idcliente = sep.idcliente
-        WHERE sep.idcliente = _idcliente;
+        WHERE cont.estado = 'VIGENTE'
+        AND (cl.documento_nro LIKE CONCAT(_documento_nro,'%') OR cn.documento_nro LIKE CONCAT(_documento_nro,'%'))
+        AND cont.inactive_at IS NULL;
+    
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_clients_contractID` (IN `_idcliente` INT)   BEGIN
+    SELECT 
+        cont.idcontrato,
+        cont.n_expediente,
+        cont.tipo_contrato
+        FROM contratos cont
+        INNER JOIN clientes clien ON clien.idcliente = cont.idcliente
+        LEFT JOIN vws_clientes_legal cl ON cl.idcliente = clien.idcliente
+        LEFT JOIN vws_clients_natural cn ON cn.idcliente = clien.idcliente
+        WHERE cont.idcliente = _idcliente
+        AND cont.estado = 'VIGENTE'
+    UNION 
+    SELECT  
+        cont.idcontrato,
+        cont.n_expediente,
+        cont.tipo_contrato
+        FROM contratos cont
+        INNER JOIN separaciones sep ON sep.idseparacion = cont.idseparacion
+        LEFT JOIN vws_clientes_legal cl ON cl.idcliente = sep.idcliente
+        LEFT JOIN vws_clients_natural cn ON cn.idcliente = sep.idcliente
+        WHERE sep.idcliente = _idcliente
+        AND cont.estado = "VIGENTE";
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_clients_onlyNperson` ()   BEGIN
@@ -1353,9 +1380,63 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_provinces` (IN `_iddeparta
     ORDER BY 3 ASC;
 END$$
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_quotas_ById` (IN `_idcuota` INT)   BEGIN
+    SELECT  qt.idcuota,
+            ct.idcontrato,
+            ct.n_expediente,
+            qt.monto_cuota,
+            qt.fecha_vencimiento,
+            qt.fecha_pago,
+            qt.detalles,
+            qt.tipo_pago,
+            qt.entidad_bancaria,
+            qt.imagen,
+            qt.estado,
+            pers.nombres AS usuario
+        FROM cuotas qt
+        INNER JOIN contratos ct ON ct.idcontrato = qt.idcontrato
+        INNER JOIN usuarios usu ON usu.idusuario = qt.idusuario
+        INNER JOIN personas pers ON pers.idpersona = usu.idpersona
+        WHERE ct.idcontrato = _idcuota
+        AND qt.inactive_at IS NULL;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_quotas_estado` (IN `_idcontrato` INT, IN `_estado` VARCHAR(20))   BEGIN
+
+    IF _estado = "0" THEN 
+        SELECT *
+            FROM vws_list_quotas
+            WHERE idcontrato = _idcontrato
+            AND inactive_at IS NULL;
+    ELSE
+        SELECT *
+            FROM vws_list_quotas
+            WHERE idcontrato = _idcontrato
+            AND estado = _estado
+            AND inactive_at IS NULL;
+    END IF;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_quotas_estado_fven` (IN `_idcontrato` INT, IN `_estado` VARCHAR(20), IN `_fech_vencimiento` DATE)   BEGIN
+
+    IF _estado = "0" THEN 
+        SELECT *
+            FROM vws_list_quotas
+            WHERE idcontrato = _idcontrato
+            AND inactive_at IS NULL;
+    ELSE
+        SELECT *
+            FROM vws_list_quotas
+            WHERE idcontrato = _idcontrato
+            AND estado = _estado
+            AND fecha_vencimiento = _fecha_vencimiento
+            AND inactive_at IS NULL;
+    END IF;
+END$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_quotas_idcontrato` (IN `_idcontrato` INT)   BEGIN
     SELECT *
-        FROM cuotas
+        FROM vws_list_quotas
         WHERE idcontrato = _idcontrato
         AND inactive_at IS NULL;
 END$$
@@ -2143,20 +2224,21 @@ CREATE TABLE `contratos` (
   `update_at` date DEFAULT NULL,
   `inactive_at` date DEFAULT NULL,
   `idusuario` int(11) NOT NULL,
-  `n_expediente` varchar(10) NOT NULL
+  `n_expediente` varchar(10) NOT NULL,
+  `precio_venta` decimal(8,2) NOT NULL
 ) ;
 
 --
 -- Volcado de datos para la tabla `contratos`
 --
 
-INSERT INTO `contratos` (`idcontrato`, `tipo_contrato`, `idseparacion`, `idrepresentante_primario`, `idrepresentante_secundario`, `idcliente`, `idconyugue`, `idactivo`, `tipo_cambio`, `estado`, `fecha_contrato`, `det_contrato`, `create_at`, `update_at`, `inactive_at`, `idusuario`, `n_expediente`) VALUES
-(1, 'VENTA DE LOTE', 1, 1, NULL, NULL, NULL, NULL, 3.500, 'VIGENTE', '2024-03-10', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '2024-04-19', NULL, NULL, 1, 'CONT-00001'),
-(2, 'VENTA DE LOTE', 2, 1, NULL, NULL, NULL, NULL, 3.500, 'VIGENTE', '2024-03-11', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '2024-04-19', NULL, NULL, 2, 'CONT-00002'),
-(3, 'VENTA DE LOTE', 3, 1, NULL, NULL, NULL, NULL, 3.500, 'VIGENTE', '2024-03-12', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '2024-04-19', NULL, NULL, 3, 'CONT-00003'),
-(5, 'VENTA DE LOTE', 2, 1, NULL, NULL, NULL, NULL, 3.500, 'VIGENTE', '2024-03-12', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '2024-04-19', NULL, NULL, 3, 'CONT-00004'),
-(6, 'VENTA DE LOTE', NULL, 1, NULL, 5, NULL, 10, 3.500, 'VIGENTE', '2024-03-12', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '2024-04-19', NULL, NULL, 3, 'CONT-00005'),
-(7, 'VENTA DE LOTE', NULL, 1, NULL, 5, NULL, 13, 3.500, 'VIGENTE', '2024-03-12', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '2024-04-19', NULL, NULL, 3, 'CONT-00006');
+INSERT INTO `contratos` (`idcontrato`, `tipo_contrato`, `idseparacion`, `idrepresentante_primario`, `idrepresentante_secundario`, `idcliente`, `idconyugue`, `idactivo`, `tipo_cambio`, `estado`, `fecha_contrato`, `det_contrato`, `create_at`, `update_at`, `inactive_at`, `idusuario`, `n_expediente`, `precio_venta`) VALUES
+(1, 'VENTA DE LOTE', 1, 1, NULL, NULL, NULL, NULL, 3.500, 'VIGENTE', '2024-03-10', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '2024-04-19', NULL, NULL, 1, 'CONT-00001', 0.00),
+(2, 'VENTA DE LOTE', 2, 1, NULL, NULL, NULL, NULL, 3.500, 'VIGENTE', '2024-03-11', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '2024-04-19', NULL, NULL, 2, 'CONT-00002', 0.00),
+(3, 'VENTA DE LOTE', 3, 1, NULL, NULL, NULL, NULL, 3.500, 'VIGENTE', '2024-03-12', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '2024-04-19', NULL, NULL, 3, 'CONT-00003', 0.00),
+(5, 'VENTA DE LOTE', 2, 1, NULL, NULL, NULL, NULL, 3.500, 'VIGENTE', '2024-03-12', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '2024-04-19', NULL, NULL, 3, 'CONT-00004', 0.00),
+(6, 'VENTA DE LOTE', NULL, 1, NULL, 5, NULL, 10, 3.500, 'VIGENTE', '2024-03-12', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '2024-04-19', NULL, NULL, 3, 'CONT-00005', 0.00),
+(7, 'VENTA DE LOTE', NULL, 1, NULL, 5, NULL, 13, 3.500, 'VIGENTE', '2024-03-12', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '2024-04-19', NULL, NULL, 3, 'CONT-00006', 0.00);
 
 --
 -- Disparadores `contratos`
@@ -2223,7 +2305,8 @@ INSERT INTO `cuotas` (`idcuota`, `idcontrato`, `monto_cuota`, `fecha_vencimiento
 (1, 1, 500.00, '2024-03-10', NULL, NULL, 'TRANSFERENCIA', 'BCP', '2024-04-19', NULL, NULL, 7, NULL, 'POR CANCELAR'),
 (2, 1, 500.00, '2024-04-10', NULL, NULL, 'TRANSFERENCIA', 'BCP', '2024-04-19', NULL, NULL, 7, NULL, 'POR CANCELAR'),
 (3, 2, 500.00, '2024-03-18', NULL, NULL, 'TRANSFERENCIA', 'BCP', '2024-04-19', NULL, NULL, 6, NULL, 'POR CANCELAR'),
-(4, 2, 500.00, '2024-04-13', NULL, NULL, 'TRANSFERENCIA', 'BCP', '2024-04-19', NULL, NULL, 6, NULL, 'POR CANCELAR');
+(4, 2, 500.00, '2024-04-13', NULL, NULL, 'TRANSFERENCIA', 'BCP', '2024-04-19', NULL, NULL, 6, NULL, 'POR CANCELAR'),
+(5, 6, 500.00, '2024-04-13', NULL, NULL, 'TRANSFERENCIA', 'BCP', '2024-04-19', NULL, NULL, 6, NULL, 'POR CANCELAR');
 
 -- --------------------------------------------------------
 
@@ -5383,6 +5466,24 @@ CREATE TABLE `vws_list_projects` (
 -- --------------------------------------------------------
 
 --
+-- Estructura Stand-in para la vista `vws_list_quotas`
+-- (Véase abajo para la vista actual)
+--
+CREATE TABLE `vws_list_quotas` (
+`idcuota` int(11)
+,`idcontrato` int(11)
+,`n_expediente` varchar(10)
+,`monto_cuota` decimal(8,2)
+,`fecha_vencimiento` date
+,`fecha_pago` date
+,`estado` varchar(20)
+,`usuario` varchar(40)
+,`inactive_at` date
+);
+
+-- --------------------------------------------------------
+
+--
 -- Estructura Stand-in para la vista `vws_list_refunds`
 -- (Véase abajo para la vista actual)
 --
@@ -5566,6 +5667,15 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 DROP TABLE IF EXISTS `vws_list_projects`;
 
 CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vws_list_projects`  AS SELECT `proy`.`idproyecto` AS `idproyecto`, `proy`.`imagen` AS `imagen`, `proy`.`idsede` AS `idsede`, `sed`.`direccion` AS `sede`, `proy`.`codigo` AS `codigo`, `proy`.`denominacion` AS `denominacion`, `proy`.`latitud` AS `latitud`, `proy`.`longitud` AS `longitud`, `dist`.`iddistrito` AS `iddistrito`, `dist`.`distrito` AS `distrito`, `prov`.`idprovincia` AS `idprovincia`, `prov`.`provincia` AS `provincia`, `dept`.`iddepartamento` AS `iddepartamento`, `dept`.`departamento` AS `departamento`, `proy`.`direccion` AS `direccion`, `met`.`l_vendidos` AS `l_vendidos`, `met`.`l_noVendidos` AS `l_noVendidos`, `met`.`l_separados` AS `l_separados`, `met`.`l_vendidos`+ `met`.`l_noVendidos` + `met`.`l_separados` AS `l_total`, `pers`.`nombres` AS `usuario` FROM (((((((`proyectos` `proy` join `distritos` `dist` on(`dist`.`iddistrito` = `proy`.`iddistrito`)) join `provincias` `prov` on(`prov`.`idprovincia` = `dist`.`idprovincia`)) join `departamentos` `dept` on(`dept`.`iddepartamento` = `prov`.`iddepartamento`)) join `sedes` `sed` on(`sed`.`idsede` = `proy`.`idsede`)) join `usuarios` `usu` on(`usu`.`idusuario` = `proy`.`idusuario`)) join `personas` `pers` on(`pers`.`idpersona` = `usu`.`idpersona`)) join `metricas` `met` on(`met`.`idproyecto` = `proy`.`idproyecto`)) WHERE `proy`.`inactive_at` is null ORDER BY `proy`.`codigo` ASC ;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura para la vista `vws_list_quotas`
+--
+DROP TABLE IF EXISTS `vws_list_quotas`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vws_list_quotas`  AS SELECT `qt`.`idcuota` AS `idcuota`, `ct`.`idcontrato` AS `idcontrato`, `ct`.`n_expediente` AS `n_expediente`, `qt`.`monto_cuota` AS `monto_cuota`, `qt`.`fecha_vencimiento` AS `fecha_vencimiento`, `qt`.`fecha_pago` AS `fecha_pago`, `qt`.`estado` AS `estado`, `pers`.`nombres` AS `usuario`, `qt`.`inactive_at` AS `inactive_at` FROM (((`cuotas` `qt` join `contratos` `ct` on(`ct`.`idcontrato` = `qt`.`idcontrato`)) join `usuarios` `usu` on(`usu`.`idusuario` = `qt`.`idusuario`)) join `personas` `pers` on(`pers`.`idpersona` = `usu`.`idpersona`)) ;
 
 -- --------------------------------------------------------
 
@@ -5910,7 +6020,7 @@ ALTER TABLE `contratos`
 -- AUTO_INCREMENT de la tabla `cuotas`
 --
 ALTER TABLE `cuotas`
-  MODIFY `idcuota` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `idcuota` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT de la tabla `departamentos`

@@ -189,6 +189,13 @@ if(isset($_POST["action"])){
                 echo json_encode($client->getClientsForSale());
             break;
         
+        case "listClientsForSaleDN": 
+            
+                $documento_nro = $_POST["documento_nro"];
+
+                echo json_encode($client->getClientsForSaleDN($documento_nro));
+                
+            break;
         case "getClientsForSaleId": 
             
                 $idcliente = $_POST["idcliente"];

@@ -419,6 +419,23 @@ DELIMITER ;
 SELECT * from rep_legales_clientes;
 DELIMITER $$
 
+DELIMITER $$
+CREATE VIEW vws_list_quotas
+    AS
+        SELECT  qt.idcuota,
+            ct.idcontrato,
+            ct.n_expediente,
+            qt.monto_cuota,
+            qt.fecha_vencimiento,
+            qt.fecha_pago,
+            qt.estado,
+            pers.nombres AS usuario,
+            qt.inactive_at
+        FROM cuotas qt
+        INNER JOIN contratos ct ON ct.idcontrato = qt.idcontrato
+        INNER JOIN usuarios usu ON usu.idusuario = qt.idusuario
+        INNER JOIN personas pers ON pers.idpersona = usu.idpersona
+DELIMITER ;
 
 
 

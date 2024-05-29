@@ -412,6 +412,7 @@ CREATE TABLE contratos
     CONSTRAINT fk_idusuario_cont FOREIGN KEY(idusuario) REFERENCES usuarios(idusuario)
 )ENGINE = INNODB;
 
+ALTER TABLE contratos ADD COLUMN precio_venta DECIMAL(8,2) NOT NULL;
 ALTER TABLE contratos ADD ;
 -- DETALLE DE CONTRATOS
 CREATE TABLE detalles_contratos
@@ -425,6 +426,8 @@ CREATE TABLE detalles_contratos
     CONSTRAINT fk_idrepresentante_dtc FOREIGN KEY(idrepresentante) REFERENCES rep_legales_clientes(idrepresentante),
     CONSTRAINT fk_idcontrato_dtc FOREIGN KEY(idcontrato) REFERENCES contratos(idcontrato)
 )ENGINE = INNODB;
+
+
 
 -- FINANCIERAS
 CREATE TABLE financieras(
