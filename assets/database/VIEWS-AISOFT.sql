@@ -426,6 +426,7 @@ CREATE VIEW vws_list_quotas
             ct.idcontrato,
             ct.n_expediente,
             qt.monto_cuota,
+            (qt.monto_cuota - qt.monto_pago) as deuda,
             qt.fecha_vencimiento,
             qt.fecha_pago,
             qt.estado,
@@ -437,5 +438,6 @@ CREATE VIEW vws_list_quotas
         INNER JOIN personas pers ON pers.idpersona = usu.idpersona
 DELIMITER ;
 
+select * from cuotas;
 
 

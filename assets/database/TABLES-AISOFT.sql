@@ -462,6 +462,7 @@ CREATE TABLE cuotas(
 	idcuota 				INT PRIMARY KEY AUTO_INCREMENT,
     idcontrato		        INT  			NOT NULL,
     monto_cuota 			DECIMAL(8,2) 	NOT NULL,
+    monto_pago 			    DECIMAL(8,2) 	NOT NULL,
     fecha_vencimiento 		DATE 			NOT NULL,
     fecha_pago 				DATE 			NULL,
     detalles  	 			VARCHAR(100) 	NULL,
@@ -476,7 +477,6 @@ CREATE TABLE cuotas(
     CONSTRAINT fk_idcontrato_cuotas FOREIGN KEY(idcontrato) REFERENCES contratos(idcontrato),
     CONSTRAINT fk_idusuario_cuotas FOREIGN KEY(idusuario) REFERENCES usuarios(idusuario)
 )ENGINE = INNODB;
-
 select *from cuotas;
 SELECT * FROM contratos;
 select * from separaciones;

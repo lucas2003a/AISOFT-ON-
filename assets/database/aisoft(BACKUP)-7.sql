@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 29-05-2024 a las 12:14:21
+-- Tiempo de generación: 30-05-2024 a las 13:05:52
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -259,6 +259,13 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_add_projects` (IN `_idsede` INT
 	SELECT ROW_COUNT() AS filasAfect; -- FILAS AFECTADAS
 END$$
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_add_quota` (IN `_idcontrato` INT, IN `_monto_cuota` DECIMAL(8,2), IN `_fecha_vencimiento` DATE, IN `_idusuario` INT)   BEGIN
+    INSERT INTO cuotas(idcontrato, monto_cuota, fecha_vencimiento, idusuario)
+                VALUES(_idcontrato, _monto_cuota, _fecha_vencimiento, idusuario);
+                
+    SELECT ROW_COUNT() AS filasAfect;
+END$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_add_refund` (IN `_n_expediente` VARCHAR(10), IN `_idseparacion` INT, IN `_tipo_devolucion` VARCHAR(20), IN `_detalle` VARCHAR(200), IN `_porcentaje_penalidad` TINYINT, IN `_monto_devolucion` DECIMAL(8,2), IN `_imagen` VARCHAR(100), IN `_idusuario` INT)   BEGIN
     INSERT INTO devoluciones(
                     n_expediente,
@@ -331,6 +338,22 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_add_separation` (IN `_n_expedie
             _imagen,
             _idusuario
         );
+
+    SELECT ROW_COUNT() AS filasAfect;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_cancel_quota` (IN `_idcuota` INT, IN `_idusuario` INT)   BEGIN
+    UPDATE cuotas
+        SET
+        fecha_pago = NULL,
+        monto_pago = NULL,
+        detalles = NULL,
+        tipo_pago = NULL,
+        entidad_bancaria = NULL,
+        imagen = NULL,
+        idusuario = _idusuario,
+        update_at = CURDATE()
+        WHERE idcuota = _idcuota;
 
     SELECT ROW_COUNT() AS filasAfect;
 END$$
@@ -642,6 +665,16 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_inactive_projects` (IN `_idproy
 		WHERE
 			idproyecto = _idproyecto;
     
+    SELECT ROW_COUNT() AS filasAfect;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_inactive_quota` (IN `_idcuota` INT, IN `_idusuario` INT)   BEGIN
+    UPDATE cuotas
+        SET
+        inactive_at = CURDATE(),
+        idusuario = _idusuario
+        WHERE idcuota = _idcuota;
+
     SELECT ROW_COUNT() AS filasAfect;
 END$$
 
@@ -1380,11 +1413,21 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_provinces` (IN `_iddeparta
     ORDER BY 3 ASC;
 END$$
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_quotas_all` ()   BEGIN
+    SELECT *
+        FROM vws_list_quotas
+        WHERE inactive_at IS NULL
+        AND estado = "POR CANCELAR"
+        ORDER BY fecha_vencimiento;
+END$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_quotas_ById` (IN `_idcuota` INT)   BEGIN
     SELECT  qt.idcuota,
             ct.idcontrato,
             ct.n_expediente,
             qt.monto_cuota,
+            qt.monto_pago,
+            (qt.monto_cuota - qt.monto_pago) as deuda,
             qt.fecha_vencimiento,
             qt.fecha_pago,
             qt.detalles,
@@ -1397,7 +1440,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_quotas_ById` (IN `_idcuota
         INNER JOIN contratos ct ON ct.idcontrato = qt.idcontrato
         INNER JOIN usuarios usu ON usu.idusuario = qt.idusuario
         INNER JOIN personas pers ON pers.idpersona = usu.idpersona
-        WHERE ct.idcontrato = _idcuota
+        WHERE qt.idcuota = _idcuota
         AND qt.inactive_at IS NULL;
 END$$
 
@@ -1407,13 +1450,15 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_quotas_estado` (IN `_idcon
         SELECT *
             FROM vws_list_quotas
             WHERE idcontrato = _idcontrato
-            AND inactive_at IS NULL;
+            AND inactive_at IS NULL
+            ORDER BY fecha_vencimiento;
     ELSE
         SELECT *
             FROM vws_list_quotas
             WHERE idcontrato = _idcontrato
             AND estado = _estado
-            AND inactive_at IS NULL;
+            AND inactive_at IS NULL
+            ORDER BY fecha_vencimiento;
     END IF;
 END$$
 
@@ -1423,14 +1468,16 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_quotas_estado_fven` (IN `_
         SELECT *
             FROM vws_list_quotas
             WHERE idcontrato = _idcontrato
-            AND inactive_at IS NULL;
+            AND inactive_at IS NULL
+            ORDER BY fecha_vencimiento;
     ELSE
         SELECT *
             FROM vws_list_quotas
             WHERE idcontrato = _idcontrato
             AND estado = _estado
             AND fecha_vencimiento = _fecha_vencimiento
-            AND inactive_at IS NULL;
+            AND inactive_at IS NULL
+            ORDER BY fecha_vencimiento;
     END IF;
 END$$
 
@@ -1438,7 +1485,8 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_quotas_idcontrato` (IN `_i
     SELECT *
         FROM vws_list_quotas
         WHERE idcontrato = _idcontrato
-        AND inactive_at IS NULL;
+        AND inactive_at IS NULL
+        ORDER BY fecha_vencimiento;
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_refunds_get` ()   BEGIN
@@ -1823,6 +1871,22 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_set_projects` (IN `_idproyecto`
 	SELECT ROW_COUNT() AS filasAfect; -- FILAS AFECTADAS
 END$$
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_set_quota` (IN `_idcuota` INT, IN `_fecha_pago` DATE, IN `_monto_pago` DECIMAL(8,2), IN `_detalles` VARCHAR(100), IN `_tipo_pago` VARCHAR(20), IN `_entida_bancaria` VARCHAR(20), IN `_imagen` VARCHAR(100), IN `_idusuario` INT)   BEGIN
+    UPDATE cuotas
+        SET
+        fecha_pago = _fecha_pago,
+        monto_pago = _monto_pago,
+        detalles = _detalles,
+        tipo_pago = _tipo_pago,
+        entidad_bancaria = _entida_bancaria,
+        imagen = _imagen,
+        idusuario = _idusuario,
+        update_at = CURDATE()
+        WHERE idcuota = _idcuota;
+
+    SELECT ROW_COUNT() AS filasAfect;
+END$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_set_refund` (IN `_iddevolucion` INT, IN `_n_expediente` VARCHAR(10), IN `_idseparacion` INT, IN `_tipo_devolucion` VARCHAR(20), IN `_detalle` VARCHAR(200), IN `_porcentaje_penalidad` TINYINT, IN `_monto_devolucion` DECIMAL(8,2), IN `_imagen` VARCHAR(100), IN `_idusuario` INT)   BEGIN
     UPDATE devoluciones
         SET
@@ -1870,6 +1934,16 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_set_separation` (IN `_idseparac
             idusuario      = _idusuario,
             update_at      = CURDATE()
         WHERE idseparacion = _idseparacion;
+    
+    SELECT ROW_COUNT() AS filasAfect;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_set_statusQuota_automaticly` (IN `_idcuota` INT, IN `_estado` VARCHAR(20))   BEGIN
+    UPDATE cuotas
+        SET
+            estado = _estado
+        WHERE
+        idcuota = _idcuota;
     
     SELECT ROW_COUNT() AS filasAfect;
 END$$
@@ -2294,19 +2368,50 @@ CREATE TABLE `cuotas` (
   `inactive_at` date DEFAULT NULL,
   `idusuario` int(11) NOT NULL,
   `imagen` varchar(100) DEFAULT NULL,
-  `estado` varchar(20) NOT NULL DEFAULT 'POR CANCELAR'
+  `estado` varchar(20) NOT NULL DEFAULT 'POR CANCELAR',
+  `monto_pago` decimal(8,2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `cuotas`
 --
 
-INSERT INTO `cuotas` (`idcuota`, `idcontrato`, `monto_cuota`, `fecha_vencimiento`, `fecha_pago`, `detalles`, `tipo_pago`, `entidad_bancaria`, `create_at`, `update_at`, `inactive_at`, `idusuario`, `imagen`, `estado`) VALUES
-(1, 1, 500.00, '2024-03-10', NULL, NULL, 'TRANSFERENCIA', 'BCP', '2024-04-19', NULL, NULL, 7, NULL, 'POR CANCELAR'),
-(2, 1, 500.00, '2024-04-10', NULL, NULL, 'TRANSFERENCIA', 'BCP', '2024-04-19', NULL, NULL, 7, NULL, 'POR CANCELAR'),
-(3, 2, 500.00, '2024-03-18', NULL, NULL, 'TRANSFERENCIA', 'BCP', '2024-04-19', NULL, NULL, 6, NULL, 'POR CANCELAR'),
-(4, 2, 500.00, '2024-04-13', NULL, NULL, 'TRANSFERENCIA', 'BCP', '2024-04-19', NULL, NULL, 6, NULL, 'POR CANCELAR'),
-(5, 6, 500.00, '2024-04-13', NULL, NULL, 'TRANSFERENCIA', 'BCP', '2024-04-19', NULL, NULL, 6, NULL, 'POR CANCELAR');
+INSERT INTO `cuotas` (`idcuota`, `idcontrato`, `monto_cuota`, `fecha_vencimiento`, `fecha_pago`, `detalles`, `tipo_pago`, `entidad_bancaria`, `create_at`, `update_at`, `inactive_at`, `idusuario`, `imagen`, `estado`, `monto_pago`) VALUES
+(1, 1, 500.00, '2024-03-10', NULL, NULL, 'TRANSFERENCIA', 'BCP', '2024-04-19', NULL, NULL, 7, NULL, 'VENCIDO', 0.00),
+(2, 1, 500.00, '2024-04-10', NULL, NULL, 'TRANSFERENCIA', 'BCP', '2024-04-19', NULL, NULL, 7, NULL, 'VENCIDO', 0.00),
+(3, 2, 500.00, '2024-03-18', NULL, NULL, 'TRANSFERENCIA', 'BCP', '2024-04-19', NULL, NULL, 6, NULL, 'POR CANCELAR', 0.00),
+(4, 2, 500.00, '2024-04-13', NULL, NULL, 'TRANSFERENCIA', 'BCP', '2024-04-19', NULL, NULL, 6, NULL, 'POR CANCELAR', 0.00),
+(5, 6, 500.00, '2024-04-13', NULL, NULL, 'TRANSFERENCIA', 'BCP', '2024-04-19', NULL, NULL, 6, NULL, 'POR CANCELAR', 0.00),
+(6, 1, 500.00, '2024-04-29', NULL, NULL, NULL, NULL, '2024-05-29', NULL, NULL, 1, NULL, 'VENCIDO', 0.00),
+(7, 1, 500.00, '2024-03-30', NULL, NULL, NULL, NULL, '2024-05-29', NULL, NULL, 1, NULL, 'VENCIDO', 0.00),
+(8, 1, 500.00, '2024-02-29', NULL, NULL, NULL, NULL, '2024-05-29', NULL, NULL, 1, NULL, 'VENCIDO', 0.00),
+(9, 1, 500.00, '2024-01-30', NULL, NULL, NULL, NULL, '2024-05-29', NULL, NULL, 1, NULL, 'VENCIDO', 0.00),
+(10, 1, 500.00, '2023-12-31', NULL, NULL, NULL, NULL, '2024-05-29', NULL, NULL, 1, NULL, 'VENCIDO', 0.00),
+(11, 1, 500.00, '2023-12-01', NULL, NULL, NULL, NULL, '2024-05-29', NULL, NULL, 1, NULL, 'VENCIDO', 0.00),
+(12, 1, 500.00, '2023-11-01', NULL, NULL, NULL, NULL, '2024-05-29', NULL, NULL, 1, NULL, 'VENCIDO', 0.00),
+(13, 1, 500.00, '2023-10-02', NULL, NULL, NULL, NULL, '2024-05-29', NULL, NULL, 1, NULL, 'VENCIDO', 0.00),
+(14, 1, 500.00, '2023-09-02', NULL, NULL, NULL, NULL, '2024-05-29', NULL, NULL, 1, NULL, 'VENCIDO', 0.00),
+(15, 1, 500.00, '2023-08-03', NULL, NULL, NULL, NULL, '2024-05-29', NULL, NULL, 1, NULL, 'VENCIDO', 0.00),
+(16, 1, 500.00, '2023-07-04', NULL, NULL, NULL, NULL, '2024-05-29', NULL, NULL, 1, NULL, 'VENCIDO', 0.00),
+(17, 1, 500.00, '2023-06-04', NULL, NULL, NULL, NULL, '2024-05-29', NULL, NULL, 1, NULL, 'VENCIDO', 0.00),
+(18, 1, 500.00, '2023-05-05', NULL, NULL, NULL, NULL, '2024-05-29', NULL, NULL, 1, NULL, 'VENCIDO', 0.00),
+(19, 1, 500.00, '2023-04-05', NULL, NULL, NULL, NULL, '2024-05-29', NULL, NULL, 1, NULL, 'VENCIDO', 0.00),
+(20, 1, 500.00, '2023-03-06', NULL, NULL, NULL, NULL, '2024-05-29', NULL, NULL, 1, NULL, 'VENCIDO', 0.00),
+(21, 1, 500.00, '2024-06-28', NULL, NULL, NULL, NULL, '2024-05-29', NULL, NULL, 1, NULL, 'POR CANCELAR', 0.00),
+(22, 1, 500.00, '2024-07-28', NULL, NULL, NULL, NULL, '2024-05-29', NULL, NULL, 1, NULL, 'POR CANCELAR', 0.00),
+(23, 1, 500.00, '2024-08-27', NULL, NULL, NULL, NULL, '2024-05-29', NULL, NULL, 1, NULL, 'POR CANCELAR', 0.00),
+(24, 1, 500.00, '2024-09-26', NULL, NULL, NULL, NULL, '2024-05-29', NULL, NULL, 1, NULL, 'POR CANCELAR', 0.00),
+(25, 1, 500.00, '2024-10-26', NULL, NULL, NULL, NULL, '2024-05-29', NULL, NULL, 1, NULL, 'POR CANCELAR', 0.00),
+(26, 1, 500.00, '2024-11-25', NULL, NULL, NULL, NULL, '2024-05-29', NULL, NULL, 1, NULL, 'POR CANCELAR', 0.00),
+(27, 1, 500.00, '2024-12-25', NULL, NULL, NULL, NULL, '2024-05-29', NULL, NULL, 1, NULL, 'POR CANCELAR', 0.00),
+(28, 1, 500.00, '2025-01-24', NULL, NULL, NULL, NULL, '2024-05-29', NULL, NULL, 1, NULL, 'POR CANCELAR', 0.00),
+(29, 1, 500.00, '2025-02-23', NULL, NULL, NULL, NULL, '2024-05-29', NULL, NULL, 1, NULL, 'POR CANCELAR', 0.00),
+(30, 1, 500.00, '2025-03-25', NULL, NULL, NULL, NULL, '2024-05-29', NULL, NULL, 1, NULL, 'POR CANCELAR', 0.00),
+(31, 1, 500.00, '2025-04-24', NULL, NULL, NULL, NULL, '2024-05-29', NULL, NULL, 1, NULL, 'POR CANCELAR', 0.00),
+(32, 1, 500.00, '2025-05-24', NULL, NULL, NULL, NULL, '2024-05-29', NULL, NULL, 1, NULL, 'POR CANCELAR', 0.00),
+(33, 1, 500.00, '2025-06-23', NULL, NULL, NULL, NULL, '2024-05-29', NULL, NULL, 1, NULL, 'POR CANCELAR', 0.00),
+(34, 1, 500.00, '2025-07-23', NULL, NULL, NULL, NULL, '2024-05-29', NULL, NULL, 1, NULL, 'POR CANCELAR', 0.00),
+(35, 1, 500.00, '2025-08-22', NULL, NULL, NULL, NULL, '2024-05-29', NULL, NULL, 1, NULL, 'POR CANCELAR', 0.00);
 
 -- --------------------------------------------------------
 
@@ -5474,6 +5579,7 @@ CREATE TABLE `vws_list_quotas` (
 ,`idcontrato` int(11)
 ,`n_expediente` varchar(10)
 ,`monto_cuota` decimal(8,2)
+,`deuda` decimal(9,2)
 ,`fecha_vencimiento` date
 ,`fecha_pago` date
 ,`estado` varchar(20)
@@ -5527,7 +5633,7 @@ CREATE TABLE `vws_list_separations_tpersona_juridica` (
 ,`documento_tipo` varchar(20)
 ,`documento_nro` varchar(12)
 ,`separacion_monto` decimal(8,2)
-,`CREATE_at` date
+,`create_at` date
 ,`inactive_at_sep` date
 ,`usuario` varchar(40)
 );
@@ -5582,7 +5688,7 @@ CREATE TABLE `vws_list_separations_tpersona_natural` (
 ,`separacion_monto` decimal(8,2)
 ,`inactive_at_sep` date
 ,`usuario` varchar(40)
-,`CREATE_at` date
+,`create_at` date
 );
 
 -- --------------------------------------------------------
@@ -5675,7 +5781,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 DROP TABLE IF EXISTS `vws_list_quotas`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vws_list_quotas`  AS SELECT `qt`.`idcuota` AS `idcuota`, `ct`.`idcontrato` AS `idcontrato`, `ct`.`n_expediente` AS `n_expediente`, `qt`.`monto_cuota` AS `monto_cuota`, `qt`.`fecha_vencimiento` AS `fecha_vencimiento`, `qt`.`fecha_pago` AS `fecha_pago`, `qt`.`estado` AS `estado`, `pers`.`nombres` AS `usuario`, `qt`.`inactive_at` AS `inactive_at` FROM (((`cuotas` `qt` join `contratos` `ct` on(`ct`.`idcontrato` = `qt`.`idcontrato`)) join `usuarios` `usu` on(`usu`.`idusuario` = `qt`.`idusuario`)) join `personas` `pers` on(`pers`.`idpersona` = `usu`.`idpersona`)) ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vws_list_quotas`  AS SELECT `qt`.`idcuota` AS `idcuota`, `ct`.`idcontrato` AS `idcontrato`, `ct`.`n_expediente` AS `n_expediente`, `qt`.`monto_cuota` AS `monto_cuota`, `qt`.`monto_cuota`- `qt`.`monto_pago` AS `deuda`, `qt`.`fecha_vencimiento` AS `fecha_vencimiento`, `qt`.`fecha_pago` AS `fecha_pago`, `qt`.`estado` AS `estado`, `pers`.`nombres` AS `usuario`, `qt`.`inactive_at` AS `inactive_at` FROM (((`cuotas` `qt` join `contratos` `ct` on(`ct`.`idcontrato` = `qt`.`idcontrato`)) join `usuarios` `usu` on(`usu`.`idusuario` = `qt`.`idusuario`)) join `personas` `pers` on(`pers`.`idpersona` = `usu`.`idpersona`)) ;
 
 -- --------------------------------------------------------
 
@@ -5693,7 +5799,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 DROP TABLE IF EXISTS `vws_list_separations_tpersona_juridica`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vws_list_separations_tpersona_juridica`  AS SELECT `sep`.`idseparacion` AS `idseparacion`, `sep`.`n_expediente` AS `n_expediente`, `act`.`idactivo` AS `idactivo`, `act`.`sublote` AS `sublote`, `proy`.`denominacion` AS `denominacion`, `persj`.`razon_social` AS `cliente`, `clien`.`tipo_persona` AS `tipo_persona`, `clien`.`inactive_at` AS `inactive_at_client`, `persj`.`documento_tipo` AS `documento_tipo`, `persj`.`documento_nro` AS `documento_nro`, `sep`.`separacion_monto` AS `separacion_monto`, `sep`.`create_at` AS `CREATE_at`, `sep`.`inactive_at` AS `inactive_at_sep`, `usupers`.`nombres` AS `usuario` FROM ((((((`separaciones` `sep` join `activos` `act` on(`act`.`idactivo` = `sep`.`idactivo`)) join `proyectos` `proy` on(`proy`.`idproyecto` = `act`.`idproyecto`)) join `clientes` `clien` on(`clien`.`idcliente` = `sep`.`idcliente`)) join `personas_juridicas` `persj` on(`persj`.`idpersona_juridica` = `clien`.`idpersona_juridica`)) join `usuarios` `usu` on(`usu`.`idusuario` = `sep`.`idusuario`)) join `personas` `usupers` on(`usupers`.`idpersona` = `usu`.`idpersona`)) ORDER BY `sep`.`idseparacion` DESC ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vws_list_separations_tpersona_juridica`  AS SELECT `sep`.`idseparacion` AS `idseparacion`, `sep`.`n_expediente` AS `n_expediente`, `act`.`idactivo` AS `idactivo`, `act`.`sublote` AS `sublote`, `proy`.`denominacion` AS `denominacion`, `persj`.`razon_social` AS `cliente`, `clien`.`tipo_persona` AS `tipo_persona`, `clien`.`inactive_at` AS `inactive_at_client`, `persj`.`documento_tipo` AS `documento_tipo`, `persj`.`documento_nro` AS `documento_nro`, `sep`.`separacion_monto` AS `separacion_monto`, `sep`.`create_at` AS `create_at`, `sep`.`inactive_at` AS `inactive_at_sep`, `usupers`.`nombres` AS `usuario` FROM ((((((`separaciones` `sep` join `activos` `act` on(`act`.`idactivo` = `sep`.`idactivo`)) join `proyectos` `proy` on(`proy`.`idproyecto` = `act`.`idproyecto`)) join `clientes` `clien` on(`clien`.`idcliente` = `sep`.`idcliente`)) join `personas_juridicas` `persj` on(`persj`.`idpersona_juridica` = `clien`.`idpersona_juridica`)) join `usuarios` `usu` on(`usu`.`idusuario` = `sep`.`idusuario`)) join `personas` `usupers` on(`usupers`.`idpersona` = `usu`.`idpersona`)) ORDER BY `sep`.`idseparacion` DESC ;
 
 -- --------------------------------------------------------
 
@@ -5711,7 +5817,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 DROP TABLE IF EXISTS `vws_list_separations_tpersona_natural`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vws_list_separations_tpersona_natural`  AS SELECT `sep`.`idseparacion` AS `idseparacion`, `sep`.`n_expediente` AS `n_expediente`, `act`.`idactivo` AS `idactivo`, `act`.`sublote` AS `sublote`, `proy`.`denominacion` AS `denominacion`, concat(ucase(`pers`.`apellidos`),', ',lcase(`pers`.`nombres`)) AS `cliente`, `clien`.`tipo_persona` AS `tipo_persona`, `clien`.`inactive_at` AS `inactive_at_client`, `pers`.`documento_tipo` AS `documento_tipo`, `pers`.`documento_nro` AS `documento_nro`, `sep`.`separacion_monto` AS `separacion_monto`, `sep`.`inactive_at` AS `inactive_at_sep`, `usupers`.`nombres` AS `usuario`, `sep`.`create_at` AS `CREATE_at` FROM ((((((`separaciones` `sep` join `activos` `act` on(`act`.`idactivo` = `sep`.`idactivo`)) join `proyectos` `proy` on(`proy`.`idproyecto` = `act`.`idproyecto`)) join `clientes` `clien` on(`clien`.`idcliente` = `sep`.`idcliente`)) join `personas` `pers` on(`pers`.`idpersona` = `clien`.`idpersona`)) join `usuarios` `usu` on(`usu`.`idusuario` = `sep`.`idusuario`)) join `personas` `usupers` on(`usupers`.`idpersona` = `usu`.`idpersona`)) ORDER BY `sep`.`idseparacion` DESC ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vws_list_separations_tpersona_natural`  AS SELECT `sep`.`idseparacion` AS `idseparacion`, `sep`.`n_expediente` AS `n_expediente`, `act`.`idactivo` AS `idactivo`, `act`.`sublote` AS `sublote`, `proy`.`denominacion` AS `denominacion`, concat(ucase(`pers`.`apellidos`),', ',lcase(`pers`.`nombres`)) AS `cliente`, `clien`.`tipo_persona` AS `tipo_persona`, `clien`.`inactive_at` AS `inactive_at_client`, `pers`.`documento_tipo` AS `documento_tipo`, `pers`.`documento_nro` AS `documento_nro`, `sep`.`separacion_monto` AS `separacion_monto`, `sep`.`inactive_at` AS `inactive_at_sep`, `usupers`.`nombres` AS `usuario`, `sep`.`create_at` AS `create_at` FROM ((((((`separaciones` `sep` join `activos` `act` on(`act`.`idactivo` = `sep`.`idactivo`)) join `proyectos` `proy` on(`proy`.`idproyecto` = `act`.`idproyecto`)) join `clientes` `clien` on(`clien`.`idcliente` = `sep`.`idcliente`)) join `personas` `pers` on(`pers`.`idpersona` = `clien`.`idpersona`)) join `usuarios` `usu` on(`usu`.`idusuario` = `sep`.`idusuario`)) join `personas` `usupers` on(`usupers`.`idpersona` = `usu`.`idpersona`)) ORDER BY `sep`.`idseparacion` DESC ;
 
 -- --------------------------------------------------------
 
@@ -6020,7 +6126,7 @@ ALTER TABLE `contratos`
 -- AUTO_INCREMENT de la tabla `cuotas`
 --
 ALTER TABLE `cuotas`
-  MODIFY `idcuota` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `idcuota` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
 
 --
 -- AUTO_INCREMENT de la tabla `departamentos`

@@ -102,7 +102,7 @@
 
         <!-- CLIENTES -->
         <li class="nav-item">
-          <a class="nav-link" href="../clients/index.php">
+          <a class="nav-link" href="../Clients/index.php">
             <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
               <svg width="12px" height="12px" viewBox="0 0 42 42" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <title>office</title>
@@ -147,9 +147,10 @@
             <span class="nav-link-text ms-1">Presupuestos</span>
           </a>
         </li>
+
         <!-- SEPARACIONES -->
         <li class="nav-item">
-          <a class="nav-link " href="../separations/index.php">
+          <a class="nav-link" href="../separations/index.php">
             <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
               <svg width="12px" height="12px" viewBox="0 0 42 42" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <title>office</title>
@@ -173,7 +174,7 @@
 
         <!-- DEVOLUCIONES -->
         <li class="nav-item">
-          <a class="nav-link " href="../refunds/index.php">
+          <a class="nav-link" href="../refunds/index.php">
             <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
               <svg width="12px" height="12px" viewBox="0 0 42 42" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <title>office</title>
@@ -295,7 +296,7 @@
 
         <!-- PERFIL -->
         <li class="nav-item">
-          <a class="nav-link" href="../Views/profile.html">
+          <a class="nav-link  " href="../Views/profile.html">
             <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
               <svg width="12px" height="12px" viewBox="0 0 46 42" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <title>customer-support</title>
@@ -348,19 +349,19 @@
         <nav aria-label="breadcrumb">
           <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
             <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="#">Dashboard</a></li>
-            <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Cuotas</li>
+            <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="#">Cuotas</a></li>
+            <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Registro de pago</li>
           </ol>
-          <h6 class="font-weight-bolder mb-0" id="cabezera">CUOTAS </h6>
+          <h6 class="font-weight-bolder mb-0" id="cabezera">REGISTRO DE PAGO</h6>
         </nav>
         <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
 
           <ul class="navbar-nav  justify-content-end">
 
-            <!-- DATOS DEL USUARIO -->
             <li class="nav-item d-flex align-items-center">
               <a href="javascript:;" class="nav-link text-body font-weight-bold px-0">
                 <i class="fa fa-user me-sm-1"></i>
-                <span class="d-sm-inline d-none">DATOS DEL USUARIO</span>
+                <span class="d-sm-inline d-none">Sign In</span>
               </a>
             </li>
             <li class="nav-item d-xl-none ps-3 d-flex align-items-center">
@@ -373,7 +374,6 @@
               </a>
             </li>
 
-
           </ul>
         </div>
       </div>
@@ -382,118 +382,131 @@
     <!-- End Navbar -->
     <div class="container py-4">
 
-      <!-- CONTENIDO -->
-
-      <div class="row">
-        <div class="col-12">
-          <div class="card mb-4">
-            <div class="card-header pb-4">
+      <!-- FORMULARIO -->
+      <div>
+        <div class="col-lg-12 mb-lg-0 mb-4 mt-4">
+          <div class="card">
+            <div class="card-body" style="padding: 50px">
               <div class="row">
-                <div class="col-md-6 mb-4">
 
-                  <h6 id="n_serie_contrato">CONT-00001</h6>
-                </div>
-                <div class="row d-flex space-between">
-                  <div class="col-md-6">
 
-                  </div>
-
-                </div>
-              </div>
-            </div>
-            <div class="card-body">
-              <div class="d-flex justify-content-center">
                 <div>
 
-                  <div class="text-center">
+                  <div class="d-flex flex-column h-100">
+                    <form class="row needs-validation" id="form-add-separation" novalidate>
+                      <div class="row">
+                        <div class="col-md-6">
 
-                    <h2 class="text-danger">S/5000</h2>
-                  </div>
-                  <div class="text-center">
+                          <!-- DATOS GENERALES -->
 
-                    <h6>22/20/2024</h6>
-                  </div>
-                </div>
-              </div>
-              <hr>
-              <div class="card-body px-0 pt-0 pb-2">
-                <div class="row mt-4 mb-4">
-                  <div class="col-md-6 d-flex align-items-end">
-                    <a class="btn btn-outline-success btn-sm mb-0 me-3" href="./add_asset.php" id="generate-report">Generar-reporte</a>
-                    <a class="btn btn-outline-info btn-sm mb-0 me-3" href="./add_asset.php" id="generate-report">Reprogramar</a>
-                  </div>
-                  <div class="col-md-6">
-                    <div class="row">
-                      <div class="col-md-6">
-                        <div>
-                          <label for="estado">Estado</label>
-                          <select id="estado" class="form-select" id="estado" name="estado">
-                            <option value="0">Selecciona un estado</option>
-                            <option value="POR CANCELAR">Por cancelar</option>
-                            <option value="CANCELADO">Cancelados</option>
-                            <option value="VENCIDO">Vencidos</option>
-                          </select>
+                          <!-- FECHA PAGO -->
+                          <div class="mt-2">
+                            <label class="form-label" name="fecha_pago">Fecha de pago</label>
+                              <input type="date" class="form-control" id="fecha_pago" required>
+                          </div>
+
+                          <!-- DEUDA -->
+                          <div class="mt-2">
+                            <label class="form-label" name="deuda">Deuda</label>
+                              <input type="number" class="form-control" id="deuda" readonly>
+                          </div>
+
+                          <!-- MONTO DE PAGO -->
+
+                          <div class="mt-2">
+                            <label for="monto_pago">Monto de pago</label>
+                            <input type="number" name="monto_pago" id="monto_pago" value="0.00" min="1.00" step="0.01" class="form-control" required>
+                          </div>
+
+                          <!-- DETALLES -->
+                          <div class="mt-2">
+                            <label for="detalles" class="form-label">Detalles</label>
+                            <textarea name="detalles" id="detalles" cols="30" rows="5" class="form-control" required></textarea>
+                          </div>
+
+                          <!-- TIPO DE PAGO -->
+                          <div class="mt-2">
+                            <label for="tipo_pago" class="form-label">Tipo de pago</label>
+                            <select name="tipo_pago" id="tipo_pago" class="form-select" required>
+                              <option value="">Seleccione un tipo de pago</option>
+                              <option value="TRANFERENCIA">Transferencia</option>
+                              <option value="EFECTIVO">Efectivo</option>
+                            </select>
+                          </div>
+
+                          <!-- ENTIDAD BANCARIA -->
+                          <div class="mt-2">
+                            <label for="entidad_bancaria">Entidad bancaria</label>
+                            <select name="entidad_bancaria" id="entidad_bancaria" class="form-select" required>
+                              <option value="">Selecciona una entidad bancaria</option>
+                              <option value="BCP">BCP</option>
+                              <option value="INTERBANCK">INTERBANCK</option>
+                              <option value="BBVA">BBVA</option>
+                              <option value="SCOTIABANK">SCOTIABANK</option>
+                            </select>
+                          </div>
+
+                          <!-- IMAGEN -->
+                          <div class="form-group mt-4">
+                            <label for="in-image" class="label-img">
+                              <i class="material-icons"></i>
+                              <span class="title" style="display: flex; justify-content: center;">Agregar imagen de comprobante</span>
+                              <input type="file" accept=".jpg" id="in-image" required>
+                            </label>
+                          </div>
+
+
+                          <div class="d-grid p-3">
+
+                            <button class="btn btn-success" type="submit" id="guardar">Guardar</button>
+                          </div>
+
+                        </div>
+
+                        <div class="col-md-6">
+                          <div class="h-50" style="display: flex; justify-content: center;">
+
+                            <div class="position-relative d-flex align-items-center justify-content-center h-100">
+                              <img class="w-100 position-relative z-index-2 pt-4" style="width: 100%;" id="file-view" src="../../media/pagos/NoImage.jpg" alt="">
+                            </div>
+                          </div>
+
                         </div>
                       </div>
-                      <div class="col-md-6">
-                        <div>
-                          <label for="fecha_vencimiento">Fecha de vencimiento</label>
-                          <input type="date" name="fecha_vencimiento" id="fecha_vencimiento" class="form-control">
-                        </div>
-                      </div>
-                    </div>
+                    </form>
                   </div>
                 </div>
-                <div class="table-responsive text-center p-0 table-xs">
-                  <table class="table align-items-center mb-0 table-hover" id="table-quotas">
-                    <thead>
-                      <tr>
-                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">#</th>
-                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Monto</th>
-                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Deuda</th>
-                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">F. vencimiento</th>
-                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">F. pago</th>
-                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Estado</th>
-                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Operaciones</th>
-                      </tr>
-                    </thead>
-                    <tbody>
 
-                      <!-- RENDER -->
-
-                    </tbody>
-                  </table>
-                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
+    </div>
 
-      <!-- FIN DE CARTILLA DE CARD -->
-
-      <footer class="footer pt-3">
-        <div class="container-fluid">
-          <div class="row align-items-center justify-content-lg-between">
-            <div class="col-lg-6 mb-lg-0 mb-4">
-              <div class="copyright text-center text-sm text-muted text-lg-start">
-                © <script>
-                  document.write(new Date().getFullYear())
-                </script>,
-                auspiciado por
-                <a href="https://aifperu.com/" class="font-weight-bold" target="_blank">A.I.F Contratistas Generales S.A.C</a>
-                (sistema web).
-              </div>
+    <footer class="footer pt-3  ">
+      <div class="container-fluid">
+        <div class="row align-items-center justify-content-lg-between">
+          <div class="col-lg-6 mb-lg-0 mb-4">
+            <div class="copyright text-center text-sm text-muted text-lg-start">
+              © <script>
+                document.write(new Date().getFullYear())
+              </script>,
+              auspiciado por
+              <a href="https://www.creative-tim.com" class="font-weight-bold" target="_blank">A.I.F Contratistas Generales S.A.C</a>
+              (sistema web).
             </div>
           </div>
         </div>
-      </footer>
+      </div>
+    </footer>
     </div>
   </main>
   <div class="fixed-plugin">
     <a class="fixed-plugin-button text-dark position-fixed px-3 py-2">
       <i class="fa fa-cog py-2"> </i>
     </a>
+
 
     <!-- CONFIGURACIONES DEL PANEL -->
     <div class="card shadow-lg ">
@@ -547,6 +560,32 @@
     </div>
   </div>
 
+  <!-- Modal trigger button -->
+  <button type="button" id="show-modal" class="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#modalId" style="position: absolute; left: -9999px; top: -9999px;">
+    Launch
+  </button>
+
+  <!-- Modal Body -->
+  <!-- if you want to close by clicking outside the modal, delete the last endpoint:data-bs-backdrop and data-bs-keyboard -->
+  <div class="modal fade" id="modalId" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+      <div class="modal-content bg-transparent" style="border: none;">
+        <div class="modal-header" style="border-bottom: none;">
+
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body d-lg-flex justify-content-center">
+          <img id="viewer" src="" alt="" style="height: 500px; width: 500px;">
+        </div>
+        <div class="modal-footer d-flex justify-content-center" style="border-top: none;">
+          <h4 class="text-white bold" id="name_image">CONSTANCIA</h4>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
   <!-- SWEET ALERT -->
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -554,84 +593,178 @@
   <!--   Core JS Files   -->
   <script src="../../assets/js/core/popper.min.js"></script>
   <script src="../../assets/js/core/bootstrap.min.js"></script>
+  <script src="../../assets/js/core/bootstrap.bundle.min.js"></script>
   <script src="../../assets/js/plugins/perfect-scrollbar.min.js"></script>
   <script src="../../assets/js/plugins/smooth-scrollbar.min.js"></script>
   <script src="../../assets/js/plugins/chartjs.min.js"></script>
   <script src="../../assets/js/globalFunctions.js"></script>
   <script src="../../assets/js/sweetAlert.js"></script>
+
+  <!-- <script src="../../assets/js/renderUbigeo.js"></script>  -->
+
+  <!-- SELECT2 - JQUERY -->
+  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
   <script>
-    document.addEventListener("DOMContentLoaded", async function() {
+    document.addEventListener("DOMContentLoaded", async function(){
 
-      /* INSTANCIAS */
       const global = new FunGlobal();
-
+      const sAlert = new Alert();
+  
       const $ = id => global.$(id);
       const $All = id => global.$All(id);
-
+  
       const stringQuery = window.location.search;
-      const urlParams = new URLSearchParams(stringQuery);
-      const code = urlParams.get("id");
-      const idcontrato = atob(code);
+      const params  = new URLSearchParams(stringQuery);
+      const code = params.get("id");
+      const idcuota = atob(code);
+      console.log(idcuota)
 
-      function renderTable(array) {
-
-        $("#table-quotas tbody").innerHTML = "";
-
-        let numRow = 1;
-
-        array.forEach(element => {
-
-          let fechaPago = element.fecha_pago ? element.fecha_pago : "0000-00-00"
-          let trEstado = element.estado == "POR CANCELAR" ? `<td class="text-primary"><strong>${element.estado}</strong></td>` :
-            element.estado == "CANCELADO" ? `<td class="text-success"><strong>${element.estado}</strong></td>` :
-            `<td class="text-danger"><strong>${element.estado}</strong></td>`;
-
-          let payDisabled = element.fecha_pago == false ? "disabled" : "";
-          let cancelDisabled = element.fecha_pago !== false ? "disabled" : "";
-
-          let code = btoa(element.idcuota);
-          let row = `
-          <tr>
-            <td>${numRow}</td>
-            <td>${element.monto_cuota}</td>
-            <td>${element.deuda}</td>
-            <td>${element.fecha_vencimiento}</td>
-            <td>${fechaPago}</td>
-            ${trEstado}
-            <td>
-              <a href="./pay_quota.php?id=${code}" type="button" class="btn bg-gradient-info open-modal" ${payDisabled} data-id="${element.idcuota}"><i class="fas fa-wallet open-modal" data-id="${element.idcuota}"></i> Pagar</a>
-              <button type="button" class="btn bg-gradient-danger cancel" ${cancelDisabled} data-id="${element.idcuota}"><i class="fas fa-times-circle cancel" data-id="${element.idcuota}"></i> Anular</button>
-            </td>
-          </tr>`;
-          numRow++
-          $("#table-quotas tbody").innerHTML += row;
-        });
-
-      };
-
-      async function getQuotas(id) {
-
-        try {
+      let idcontrato;
+  
+      //Actualiza la cuota
+      async function setQuota(id){
+        try{
 
           let url = "../../Controllers/quota.controller.php";
+          let parans = new FormData();
 
-          let params = new FormData();
-          params.append("action", "listQuotasIdcontrato");
-          params.append("idcontrato", id);
+          parans.append("action", "setQuota");
+          parans.append("idcuota", id);
+          parans.append("fecha_pago", $("#fecha_pago").value);
+          parans.append("monto_pago", $("#monto_pago").value);
+          parans.append("detalles", $("#detalles").value);
+          parans.append("tipo_pago", $("#tipo_pago").value);
+          parans.append("entidad_bancaria", $("#entidad_bancaria").value);
+          parans.append("imagen", $("#in-image").files[0]);
 
-          let results = await global.sendAction(url, params);
+          let result = await global.sendAction(url, params);
 
-          if (results.length > 0) {
-            console.log(results)
-            renderTable(results)
+          if(result){
+            console.log(result)
+            if(result.filasAfect > 0){
+              sAlert.sweetSuccess("Éxito", "El registro fué actualizado", ()=>{
+                let code = btoa(idcontrato);
+
+                window.location.href = `./index.php?id=${code}`;
+              });
+            }
           }
-        } catch (e) {
+
+        }
+        catch(e){
           console.error(e);
         }
       }
 
-      getQuotas(idcontrato);
+      //Obtiene los datos de la cuota
+      async function getDataQuota(id){
+  
+        try{
+            let url = "../../Controllers/quota.controller.php";
+            let params = new FormData();
+            params.append("action", "getQuotaId");
+            params.append("idcuota", id);
+  
+            let result = await global.sendAction(url, params);
+  
+            if(result){
+              $("#deuda").value = Number.parseFloat(result.deuda).toFixed(2)
+              $("#monto_pago").max = $("#deuda").value;
+              idcontrato = result.idcontrato;
+            }
+  
+        }catch(e){
+          console.error(e);
+        }
+      }
+  
+      //Obtiene la fecha actual
+      function getToday(){
+  
+        let today = new Date();
+  
+        let day = today.getDay().toString().padStart(2,'0');
+        let month = (today.getMonth()+1).toString().padStart(2,'0');
+        let year = today.getFullYear();
+  
+        let actual = `${year}-${month}-${day}`;
+  
+        return actual;
+      }
+  
+      //Establece límites para la fecha de pago
+      function setDateLimits(date){
+  
+        $("#fecha_pago").value = date;
+        $("#fecha_pago").max = date;
+      }
 
+
+      function readFile(event) {
+        let file = event.target.files[0];
+        let reader = new FileReader();
+  
+        reader.onload = (event) => {
+          $("#file-view").setAttribute("src", (event.target.result));
+          $("#file-view").style.width = "100%";
+          $("#file-view").style.height = "20rem";
+        }
+  
+        reader.readAsDataURL(file);
+      }
+  
+      
+      $("#in-image").addEventListener("change", (e) => {
+  
+        if (e.target.files.length > 0) {
+          readFile(e);
+        }
+      });
+  
+      $("#file-view").addEventListener("click", (e) => {
+  
+        let img = e.target.src;
+        console.log(img)
+        $("#viewer").src = img;
+        $("#viewer").alt = img;
+        $("#show-modal").click()
+      });
+  
+      getDataQuota(idcuota);
+      setDateLimits(getToday());
+  
+      /* --------------------------------- FUNCIÓN DE VALIDACIÓN --------------------------------------------------------- */
+  
+      (() => {
+        'use strict' //=> USO ESTRICTO POR POLITICAS DE SEGURIDAD EN EL FORMULARIO
+  
+        //SELECCIONA TODOS LOS ELEMENTOS DEL FORMULARIO QUE TIENE LA CLASE "needs-validation
+        const forms = document.querySelectorAll('.needs-validation')
+  
+        // TOMA EL ELEMENTO "FORMS" Y LO CONVIERTE A UN ARRAY
+        // SE INCLUYE EN UN FOREAH PARA ITERAR SOBRE SUS ELEMENTOS
+  
+        Array.from(forms).forEach(form => {
+          form.addEventListener('submit', event => {
+  
+            //SI LA VALIDACIÓN DEL FORMULARIO ES FALSE
+            if (!form.checkValidity()) {
+              event.preventDefault() //=> FRENA EL ENVÍO DEL FORMULARIO
+              event.stopPropagation() //=> FRENA LA PROPAGACIÓN DE DATOS EN EL FORMULARIO
+              form.reportValidity();
+            } else {
+              event.preventDefault();
+              sAlert.sweetConfirm("Datos nuevos", "¿Deseas actualizar el registro?", () => {
+  
+                setQuota(idcuota); //Ejecuta la función
+              });
+            }
+  
+            form.classList.add('was-validated') //=> AGREGA ESTA CLASE A LOS ELEMENTOS DEL FORMULARIO(MUESTRA LOS COMENTARIOS)
+          }, false) //=> ESTE TERCER ARGUMENTO INDICA QUE EL EVENTO NO SE ESTA CAPTURANDO EN LA ""FASE DE CAPTURA" SINO EN "PROPAGACIÓN NORMAL"
+        })
+      })();
     });
   </script>
   <script>

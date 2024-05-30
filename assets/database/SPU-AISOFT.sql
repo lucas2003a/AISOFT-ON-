@@ -2024,10 +2024,8 @@ BEGIN
     END IF;
 END $$
 
-SELECT * FROM presupuestos WHERE CODIGO = "PRES-030";
-
 DELIMITER;
-
+select * from cuotas;
 DELIMITER $$
 
 CREATE PROCEDURE spu_list_separation_ByIdAsset(IN _idactivo INT)
@@ -2539,6 +2537,17 @@ DELIMITER;
 
 DELIMITER $$
 
+CREATE PROCEDURE spu_list_quotas_all()
+BEGIN
+    SELECT *
+        FROM vws_list_quotas
+        WHERE inactive_at IS NULL
+        AND estado = "POR CANCELAR"
+        ORDER BY fecha_vencimiento;
+END $$
+DELIMITER ;
+DELIMITER $$
+
 CREATE PROCEDURE spu_list_quotas_idcontrato
 (
     IN _idcontrato INT
@@ -2547,7 +2556,8 @@ BEGIN
     SELECT *
         FROM vws_list_quotas
         WHERE idcontrato = _idcontrato
-        AND inactive_at IS NULL;
+        AND inactive_at IS NULL
+        ORDER BY fecha_vencimiento;
 END $$
 
 DELIMITER;
@@ -2564,6 +2574,8 @@ BEGIN
             ct.idcontrato,
             ct.n_expediente,
             qt.monto_cuota,
+            qt.monto_pago,
+            (qt.monto_cuota - qt.monto_pago) as deuda,
             qt.fecha_vencimiento,
             qt.fecha_pago,
             qt.detalles,
@@ -2576,7 +2588,7 @@ BEGIN
         INNER JOIN contratos ct ON ct.idcontrato = qt.idcontrato
         INNER JOIN usuarios usu ON usu.idusuario = qt.idusuario
         INNER JOIN personas pers ON pers.idpersona = usu.idpersona
-        WHERE ct.idcontrato = _idcuota
+        WHERE qt.idcuota = _idcuota
         AND qt.inactive_at IS NULL;
 END $$
 
@@ -2596,13 +2608,15 @@ BEGIN
         SELECT *
             FROM vws_list_quotas
             WHERE idcontrato = _idcontrato
-            AND inactive_at IS NULL;
+            AND inactive_at IS NULL
+            ORDER BY fecha_vencimiento;
     ELSE
         SELECT *
             FROM vws_list_quotas
             WHERE idcontrato = _idcontrato
             AND estado = _estado
-            AND inactive_at IS NULL;
+            AND inactive_at IS NULL
+            ORDER BY fecha_vencimiento;
     END IF;
 END $$
 
@@ -2618,21 +2632,130 @@ BEGIN
         SELECT *
             FROM vws_list_quotas
             WHERE idcontrato = _idcontrato
-            AND inactive_at IS NULL;
+            AND inactive_at IS NULL
+            ORDER BY fecha_vencimiento;
     ELSE
         SELECT *
             FROM vws_list_quotas
             WHERE idcontrato = _idcontrato
             AND estado = _estado
             AND fecha_vencimiento = _fecha_vencimiento
-            AND inactive_at IS NULL;
+            AND inactive_at IS NULL
+            ORDER BY fecha_vencimiento;
     END IF;
 END $$
 
 DELIMITER;
+select * from cuotas;
 
-CALL spu_list_quotas_estado(1,0);
+DELIMITER $$
+
+CREATE PROCEDURE spu_set_statusQuota_automaticly
+(
+    IN _idcuota INT,
+    IN _estado VARCHAR(20)
+)
+BEGIN
+    UPDATE cuotas
+        SET
+            estado = _estado
+        WHERE
+        idcuota = _idcuota;
+    
+    SELECT ROW_COUNT() AS filasAfect;
+END $$
+
+DELIMITER;
+
 -- PLANTILLA
+DELIMITER $$
+
+CREATE PROCEDURE spu_add_quota
+(
+    IN _idcontrato INT,
+    IN _monto_cuota DECIMAL(8,2),
+    IN _fecha_vencimiento DATE,
+    IN _idusuario INT
+)
+BEGIN
+    INSERT INTO cuotas(idcontrato, monto_cuota, fecha_vencimiento, idusuario)
+                VALUES(_idcontrato, _monto_cuota, _fecha_vencimiento, idusuario);
+                
+    SELECT ROW_COUNT() AS filasAfect;
+END $$
+
+DELIMITER;
+-- PLANTILLA
+DELIMITER $$
+
+CREATE PROCEDURE spu_set_quota
+(
+    IN _idcuota         INT,
+    IN _fecha_pago      DATE,
+    IN _monto_pago      DECIMAL(8,2),
+    IN _detalles        VARCHAR(100),
+    IN _tipo_pago       VARCHAR(20),
+    IN _entida_bancaria VARCHAR(20),
+    IN _imagen          VARCHAR(100),
+    IN _idusuario       INT
+)
+BEGIN
+    UPDATE cuotas
+        SET
+        fecha_pago = _fecha_pago,
+        monto_pago = _monto_pago,
+        detalles = _detalles,
+        tipo_pago = _tipo_pago,
+        entidad_bancaria = _entida_bancaria,
+        imagen = _imagen,
+        idusuario = _idusuario,
+        update_at = CURDATE()
+        WHERE idcuota = _idcuota;
+
+    SELECT ROW_COUNT() AS filasAfect;
+END $$
+
+DELIMITER;
+
+DELIMITER $$
+
+CREATE PROCEDURE spu_cancel_quota
+(
+    IN _idcuota         INT,
+    IN _idusuario         INT
+)
+BEGIN
+    UPDATE cuotas
+        SET
+        fecha_pago = NULL,
+        monto_pago = NULL,
+        detalles = NULL,
+        tipo_pago = NULL,
+        entidad_bancaria = NULL,
+        imagen = NULL,
+        idusuario = _idusuario,
+        update_at = CURDATE()
+        WHERE idcuota = _idcuota;
+
+    SELECT ROW_COUNT() AS filasAfect;
+END $$
+
+CREATE PROCEDURE spu_inactive_quota
+(
+    IN _idcuota         INT,
+    IN _idusuario         INT
+)
+BEGIN
+    UPDATE cuotas
+        SET
+        inactive_at = CURDATE(),
+        idusuario = _idusuario
+        WHERE idcuota = _idcuota;
+
+    SELECT ROW_COUNT() AS filasAfect;
+END $$
+
+DELIMITER;
 DELIMITER $$
 
 CREATE PROCEDURE ()
@@ -2640,3 +2763,4 @@ BEGIN
 END $$
 
 DELIMITER;
+
