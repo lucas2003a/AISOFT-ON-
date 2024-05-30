@@ -2562,7 +2562,7 @@ END $$
 
 DELIMITER;
 select * from cuotas;
-call spu_list_quotas_idcontrato(6)
+call spu_list_quotas_idcontrato(1)
 DELIMITER $$
 
 CREATE PROCEDURE spu_list_quotas_ById
@@ -2570,25 +2570,33 @@ CREATE PROCEDURE spu_list_quotas_ById
     IN _idcuota INT
 )
 BEGIN
-    SELECT  qt.idcuota,
+    SELECT  
+            detc.iddetalle_cuota,
+            qt.idcuota,
             ct.idcontrato,
             ct.n_expediente,
             qt.monto_cuota,
-            qt.monto_pago,
-            (qt.monto_cuota - qt.monto_pago) as deuda,
+            (SUM(detc.monto_pago)) as cancelado,
+            (qt.monto_cuota - (COALESCE(SUM(detc.monto_pago),0.00))) as deuda,
             qt.fecha_vencimiento,
-            qt.fecha_pago,
-            qt.detalles,
-            qt.tipo_pago,
-            qt.entidad_bancaria,
-            qt.imagen,
+            (SELECT fecha_pago 
+            FROM detalle_cuotas 
+            WHERE idcuota = qt.idcuota
+            ORDER BY iddetalle_cuota DESC LIMIT 1) AS fecha_pago,
             qt.estado,
-            pers.nombres AS usuario
+            detc.entidad_bancaria,
+            detc.tipo_pago,
+            detc.detalles,
+            detc.imagen,
+            pers.nombres AS usuario,
+            qt.inactive_at
         FROM cuotas qt
+        LEFT JOIN detalle_cuotas detc ON detc.idcuota = qt.idcuota
         INNER JOIN contratos ct ON ct.idcontrato = qt.idcontrato
         INNER JOIN usuarios usu ON usu.idusuario = qt.idusuario
         INNER JOIN personas pers ON pers.idpersona = usu.idpersona
-        WHERE qt.idcuota = _idcuota
+        WHERE detc.inactive_at IS NULL
+        AND qt.idcuota = _idcuota
         AND qt.inactive_at IS NULL;
 END $$
 
@@ -2688,26 +2696,40 @@ DELIMITER;
 -- PLANTILLA
 DELIMITER $$
 
-CREATE PROCEDURE spu_set_quota
+CREATE PROCEDURE spu_set_det_quota
 (
     IN _idcuota         INT,
     IN _fecha_pago      DATE,
     IN _monto_pago      DECIMAL(8,2),
     IN _detalles        VARCHAR(100),
     IN _tipo_pago       VARCHAR(20),
-    IN _entida_bancaria VARCHAR(20),
+    IN _entidad_bancaria VARCHAR(20),
     IN _imagen          VARCHAR(100),
     IN _idusuario       INT
 )
 BEGIN
+    INSERT INTO detalle_cuotas(
+        idcuota,
+        fecha_pago,
+        monto_pago,
+        detalles,
+        tipo_pago,
+        entidad_bancaria,
+        imagen
+    )
+    VALUES (
+        _idcuota,
+        _fecha_pago,
+        _monto_pago,
+        _detalles,
+        _tipo_pago,
+        _entidad_bancaria,
+        _imagen
+    );
+
     UPDATE cuotas
         SET
-        fecha_pago = _fecha_pago,
-        monto_pago = _monto_pago,
-        detalles = _detalles,
-        tipo_pago = _tipo_pago,
-        entidad_bancaria = _entida_bancaria,
-        imagen = _imagen,
+        estado = "CANCELADO",
         idusuario = _idusuario,
         update_at = CURDATE()
         WHERE idcuota = _idcuota;
@@ -2733,6 +2755,12 @@ BEGIN
         tipo_pago = NULL,
         entidad_bancaria = NULL,
         imagen = NULL,
+        estado= CASE 
+                    WHEN fecha_vencimiento < CURDATE() THEN
+                        "VENCIDO"
+                    ELSE  
+                        "POR CANCELAR"
+                END,
         idusuario = _idusuario,
         update_at = CURDATE()
         WHERE idcuota = _idcuota;

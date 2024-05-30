@@ -586,20 +586,21 @@
             element.estado == "CANCELADO" ? `<td class="text-success"><strong>${element.estado}</strong></td>` :
             `<td class="text-danger"><strong>${element.estado}</strong></td>`;
 
-          let payDisabled = element.fecha_pago == false ? "disabled" : "";
-          let cancelDisabled = element.fecha_pago !== false ? "disabled" : "";
+          let deuda = element.deuda ? element.deuda : "0.00";
+          let payDisabled = element.cancelado < element.monto_cuota ? "" : "disabled";
+          let cancelDisabled = element.deuda ? "" : "disabled";
 
           let code = btoa(element.idcuota);
           let row = `
           <tr>
             <td>${numRow}</td>
             <td>${element.monto_cuota}</td>
-            <td>${element.deuda}</td>
+            <td>${deuda}</td>
             <td>${element.fecha_vencimiento}</td>
             <td>${fechaPago}</td>
             ${trEstado}
             <td>
-              <a href="./pay_quota.php?id=${code}" type="button" class="btn bg-gradient-info open-modal" ${payDisabled} data-id="${element.idcuota}"><i class="fas fa-wallet open-modal" data-id="${element.idcuota}"></i> Pagar</a>
+              <a href="./pay_quota.php?id=${code}" type="button" class="btn bg-gradient-info open-modal ${payDisabled}" data-id="${element.idcuota}"><i class="fas fa-wallet open-modal" data-id="${element.idcuota}"></i> Pagar</a>
               <button type="button" class="btn bg-gradient-danger cancel" ${cancelDisabled} data-id="${element.idcuota}"><i class="fas fa-times-circle cancel" data-id="${element.idcuota}"></i> Anular</button>
             </td>
           </tr>`;

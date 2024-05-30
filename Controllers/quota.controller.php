@@ -18,7 +18,7 @@ if(isset($_POST["action"])){
                 $data = $quota->listQuotasIdcontract($idcontrato);
 
                 foreach($data as $result){
-                    if($result["fecha_vencimiento"] < $today){
+                    if($result["fecha_vencimiento"] < $today && is_null($result["fecha_pago"])){
                         $dataSend = [
                             "idcuota" => $result["idcuota"],
                             "estado" =>"VENCIDO"
@@ -72,7 +72,7 @@ if(isset($_POST["action"])){
         case "setQuota": 
 
             $today = date("dmY");
-            $nom_img = sha1($today) . "jpg.";
+            $nom_img = sha1($today) . ".jpg";
             $url = "../media/pagos/" . $nom_img;
 
             $dataObtained = [

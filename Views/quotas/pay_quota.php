@@ -627,16 +627,16 @@
         try{
 
           let url = "../../Controllers/quota.controller.php";
-          let parans = new FormData();
+          let params = new FormData();
 
-          parans.append("action", "setQuota");
-          parans.append("idcuota", id);
-          parans.append("fecha_pago", $("#fecha_pago").value);
-          parans.append("monto_pago", $("#monto_pago").value);
-          parans.append("detalles", $("#detalles").value);
-          parans.append("tipo_pago", $("#tipo_pago").value);
-          parans.append("entidad_bancaria", $("#entidad_bancaria").value);
-          parans.append("imagen", $("#in-image").files[0]);
+          params.append("action", "setQuota");
+          params.append("idcuota", id);
+          params.append("fecha_pago", $("#fecha_pago").value);
+          params.append("monto_pago", $("#monto_pago").value);
+          params.append("detalles", $("#detalles").value);
+          params.append("tipo_pago", $("#tipo_pago").value);
+          params.append("entidad_bancaria", $("#entidad_bancaria").value);
+          params.append("imagen", $("#in-image").files[0]);
 
           let result = await global.sendAction(url, params);
 
@@ -644,9 +644,9 @@
             console.log(result)
             if(result.filasAfect > 0){
               sAlert.sweetSuccess("Éxito", "El registro fué actualizado", ()=>{
-                let code = btoa(idcontrato);
+                let codeContract = btoa(idcontrato);
 
-                window.location.href = `./index.php?id=${code}`;
+                window.location.href = `./detail_quotas.php?id=${codeContract}`;
               });
             }
           }
@@ -669,6 +669,7 @@
             let result = await global.sendAction(url, params);
   
             if(result){
+              console.log(result)
               $("#deuda").value = Number.parseFloat(result.deuda).toFixed(2)
               $("#monto_pago").max = $("#deuda").value;
               idcontrato = result.idcontrato;

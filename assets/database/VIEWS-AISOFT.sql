@@ -426,18 +426,25 @@ CREATE VIEW vws_list_quotas
             ct.idcontrato,
             ct.n_expediente,
             qt.monto_cuota,
-            (qt.monto_cuota - qt.monto_pago) as deuda,
+            (SUM(detc.monto_pago)) as cancelado,
+            (qt.monto_cuota - (COALESCE(SUM(detc.monto_pago),0.00))) as deuda,
             qt.fecha_vencimiento,
-            qt.fecha_pago,
+            (SELECT fecha_pago 
+            FROM detalle_cuotas 
+            WHERE idcuota = qt.idcuota
+            ORDER BY iddetalle_cuota DESC LIMIT 1) AS fecha_pago,
             qt.estado,
             pers.nombres AS usuario,
             qt.inactive_at
         FROM cuotas qt
+        LEFT JOIN detalle_cuotas detc ON detc.idcuota = qt.idcuota
         INNER JOIN contratos ct ON ct.idcontrato = qt.idcontrato
         INNER JOIN usuarios usu ON usu.idusuario = qt.idusuario
         INNER JOIN personas pers ON pers.idpersona = usu.idpersona
+        WHERE detc.inactive_at IS NULL
+        GROUP BY qt.idcuota
 DELIMITER ;
 
-select * from cuotas;
+select * from vws_list_quotas;
 
 

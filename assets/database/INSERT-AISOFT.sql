@@ -714,3 +714,9 @@ VALUES (1, 500, DATE_ADD(CURDATE(), INTERVAL 30 DAY), 1),
        (1, 500, DATE_ADD(CURDATE(), INTERVAL 450 DAY), 1);
             
 SELECT * from cuotas where idcontrato = 1;
+
+INSERT INTO detalle_cuotas(idcuota, monto_pago,detalles, tipo_pago, entidad_bancaria,imagen)
+			VALUES(1,300,"pago 1","transeferencia","bcp","imagen1"),
+					(1,100,"pago 1","transeferencia","bcp","imagen1"),
+					(1,50,"pago 1","transeferencia","bcp","imagen1");
+SELECT * from detalle_cuotas;

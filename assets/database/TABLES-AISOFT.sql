@@ -462,14 +462,8 @@ CREATE TABLE cuotas(
 	idcuota 				INT PRIMARY KEY AUTO_INCREMENT,
     idcontrato		        INT  			NOT NULL,
     monto_cuota 			DECIMAL(8,2) 	NOT NULL,
-    monto_pago 			    DECIMAL(8,2) 	NOT NULL,
     fecha_vencimiento 		DATE 			NOT NULL,
-    fecha_pago 				DATE 			NULL,
-    detalles  	 			VARCHAR(100) 	NULL,
-    tipo_pago 				VARCHAR(20) 	NULL,
-    entidad_bancaria 		VARCHAR(20) 	NULL,
-    imagen                  VARCHAR(100)    NULL,
-    estado                  VARCHAR(20) NOT NULL DEFAULT "POR CANCELAR"
+    estado                  VARCHAR(20) NOT NULL DEFAULT "POR CANCELAR",
 	create_at 				DATE 			NOT NULL	DEFAULT (CURDATE()),
     update_at				DATE 			NULL,
     inactive_at				DATE 			NULL,
@@ -477,6 +471,23 @@ CREATE TABLE cuotas(
     CONSTRAINT fk_idcontrato_cuotas FOREIGN KEY(idcontrato) REFERENCES contratos(idcontrato),
     CONSTRAINT fk_idusuario_cuotas FOREIGN KEY(idusuario) REFERENCES usuarios(idusuario)
 )ENGINE = INNODB;
+
+CREATE TABLE detalle_cuotas
+(
+    iddetalle_cuota         INT PRIMARY KEY AUTO_INCREMENT,
+    idcuota                 INT             NOT NULL,
+    monto_pago 			    DECIMAL(8,2) 	NOT NULL,
+    fecha_pago 				DATE 			NULL,
+    detalles  	 			VARCHAR(100) 	NULL,
+    tipo_pago 				VARCHAR(20) 	NULL,
+    entidad_bancaria 		VARCHAR(20) 	NULL,
+    imagen                  VARCHAR(100)    NULL,
+    create_at               DATE NOT NULL DEFAULT(CURDATE()),
+    update_at				DATE 			NULL,
+    inactive_at				DATE 			NULL,
+    CONSTRAINT fk_idcuota_detalle_cuotas FOREIGN KEY(idcuota) REFERENCES cuotas(idcuota)
+)ENGINE = INNODB;
+ALTER TABLE detalle_cuotas add COLUMN ;
 select *from cuotas;
 SELECT * FROM contratos;
 select * from separaciones;

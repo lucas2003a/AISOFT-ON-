@@ -148,7 +148,7 @@ class Quota extends Conection{
     public function setQuota($dataQuotas = []){
         try{
             
-            $query = $this->conection->prepare("CALL spu_set_quota(?,?,?,?,?,?,?,?)");
+            $query = $this->conection->prepare("CALL spu_set_det_quota(?,?,?,?,?,?,?,?)");
             $query->execute(
                 array(
                     $dataQuotas['idcuota'],
