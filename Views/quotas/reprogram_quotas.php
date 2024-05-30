@@ -102,7 +102,7 @@
 
         <!-- CLIENTES -->
         <li class="nav-item">
-          <a class="nav-link" href="../clients/index.php">
+          <a class="nav-link" href="../Clients/index.php">
             <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
               <svg width="12px" height="12px" viewBox="0 0 42 42" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <title>office</title>
@@ -147,9 +147,10 @@
             <span class="nav-link-text ms-1">Presupuestos</span>
           </a>
         </li>
+
         <!-- SEPARACIONES -->
         <li class="nav-item">
-          <a class="nav-link " href="../separations/index.php">
+          <a class="nav-link" href="../separations/index.php">
             <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
               <svg width="12px" height="12px" viewBox="0 0 42 42" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <title>office</title>
@@ -173,7 +174,7 @@
 
         <!-- DEVOLUCIONES -->
         <li class="nav-item">
-          <a class="nav-link " href="../refunds/index.php">
+          <a class="nav-link" href="../refunds/index.php">
             <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
               <svg width="12px" height="12px" viewBox="0 0 42 42" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <title>office</title>
@@ -295,7 +296,7 @@
 
         <!-- PERFIL -->
         <li class="nav-item">
-          <a class="nav-link" href="../Views/profile.html">
+          <a class="nav-link  " href="../Views/profile.html">
             <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
               <svg width="12px" height="12px" viewBox="0 0 46 42" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <title>customer-support</title>
@@ -348,19 +349,19 @@
         <nav aria-label="breadcrumb">
           <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
             <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="#">Dashboard</a></li>
-            <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Cuotas</li>
+            <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="#">Cuotas</a></li>
+            <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Reprogramar</li>
           </ol>
-          <h6 class="font-weight-bolder mb-0" id="cabezera">CUOTAS </h6>
+          <h6 class="font-weight-bolder mb-0" id="cabezera">REPROGRAMAR CUOTAS</h6>
         </nav>
         <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
 
           <ul class="navbar-nav  justify-content-end">
 
-            <!-- DATOS DEL USUARIO -->
             <li class="nav-item d-flex align-items-center">
               <a href="javascript:;" class="nav-link text-body font-weight-bold px-0">
                 <i class="fa fa-user me-sm-1"></i>
-                <span class="d-sm-inline d-none">DATOS DEL USUARIO</span>
+                <span class="d-sm-inline d-none">Sign In</span>
               </a>
             </li>
             <li class="nav-item d-xl-none ps-3 d-flex align-items-center">
@@ -373,7 +374,6 @@
               </a>
             </li>
 
-
           </ul>
         </div>
       </div>
@@ -382,123 +382,78 @@
     <!-- End Navbar -->
     <div class="container py-4">
 
-      <!-- CONTENIDO -->
-
-      <div class="row">
-        <div class="col-12">
-          <div class="card mb-4">
-            <div class="card-header pb-4">
+      <!-- FORMULARIO -->
+      <div>
+        <div class="col-lg-12 mb-lg-0 mb-4 mt-4">
+          <div class="card">
+            <div class="card-body" style="padding: 50px">
               <div class="row">
-                <div class="col-md-6 mb-4">
 
-                  <h6 id="n_serie_contrato">CONT-00001</h6>
-                </div>
-                <div class="row d-flex space-between">
-                  <div class="col-md-6">
 
-                  </div>
-
-                </div>
-              </div>
-            </div>
-            <div class="card-body">
-              <div class="d-flex justify-content-center">
                 <div>
 
-                  <div class="text-center">
-
-                    <h2 class="text-danger" id="text-deuda">--</h2>
-                  </div>
-                  <div class="text-center">
-
-                    <h6 id="text-fecha">--</h6>
-                  </div>
-
-                  <div class="mt-2 text-center">
-
-                    <h6><strong>DEUDA PRÓXIMA</strong></h6>
-                  </div>
-                </div>
-              </div>
-              <hr>
-              <div class="card-body px-0 pt-0 pb-2">
-                <div class="row mt-4 mb-4">
-                  <div class="col-md-6 d-flex align-items-end">
-                    <a class="btn btn-outline-success btn-sm mb-0 me-3" href="./add_asset.php" id="generate-report">Generar-reporte</a>
-                    <a class="btn btn-outline-info btn-sm mb-0 me-3" href="./reprogram_quotas.php" id="generate-report">Reprogramar</a>
-                  </div>
-                  <div class="col-md-6">
+                  <div class="d-flex flex-column h-100">
                     <div class="row">
                       <div class="col-md-6">
-                        <div>
-                          <label for="estado">Estado</label>
-                          <select id="estado" class="form-select" id="estado" name="estado">
-                            <option value="0">Selecciona un estado</option>
-                            <option value="POR CANCELAR">Por cancelar</option>
-                            <option value="CANCELADO">Cancelados</option>
-                            <option value="VENCIDO">Vencidos</option>
-                          </select>
-                        </div>
+                        <form class="row needs-validation" id="form-add-separation" novalidate>
+
+                          <!-- SALDO -->
+                          <div class="mt-2">
+                            <label for="monto_contrato">Monto según el contrato</label>
+                            <input type="text" class="form-control" id="monto_contrato" readonly>
+                          </div>
+
+                          <div class="mt-2">
+                            
+                          </div>
+
+                          <div class="d-grid p-3">
+
+                            <button class="btn btn-success" type="submit" id="guardar">Guardar</button>
+                          </div>
+                        </form>
+
                       </div>
+
                       <div class="col-md-6">
-                        <div>
-                          <label for="fecha_vencimiento">Fecha de vencimiento</label>
-                          <input type="date" name="fecha_vencimiento" id="fecha_vencimiento" class="form-control">
-                        </div>
+
+                        <!-- RENDERIZAR LA TABLA CON LAS NUEVAS CUOTAS -->
                       </div>
+
                     </div>
                   </div>
                 </div>
-                <div class="table-responsive text-center p-0 table-xs">
-                  <table class="table align-items-center mb-0 table-hover" id="table-quotas">
-                    <thead>
-                      <tr>
-                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">#</th>
-                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Monto</th>
-                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Deuda</th>
-                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">F. vencimiento</th>
-                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">F. pago</th>
-                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Estado</th>
-                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Operaciones</th>
-                      </tr>
-                    </thead>
-                    <tbody>
 
-                      <!-- RENDER -->
-
-                    </tbody>
-                  </table>
-                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
+    </div>
 
-      <!-- FIN DE CARTILLA DE CARD -->
-
-      <footer class="footer pt-3">
-        <div class="container-fluid">
-          <div class="row align-items-center justify-content-lg-between">
-            <div class="col-lg-6 mb-lg-0 mb-4">
-              <div class="copyright text-center text-sm text-muted text-lg-start">
-                © <script>
-                  document.write(new Date().getFullYear())
-                </script>,
-                auspiciado por
-                <a href="https://aifperu.com/" class="font-weight-bold" target="_blank">A.I.F Contratistas Generales S.A.C</a>
-                (sistema web).
-              </div>
+    <footer class="footer pt-3  ">
+      <div class="container-fluid">
+        <div class="row align-items-center justify-content-lg-between">
+          <div class="col-lg-6 mb-lg-0 mb-4">
+            <div class="copyright text-center text-sm text-muted text-lg-start">
+              © <script>
+                document.write(new Date().getFullYear())
+              </script>,
+              auspiciado por
+              <a href="https://www.creative-tim.com" class="font-weight-bold" target="_blank">A.I.F Contratistas Generales S.A.C</a>
+              (sistema web).
             </div>
           </div>
         </div>
-      </footer>
+      </div>
+    </footer>
     </div>
   </main>
   <div class="fixed-plugin">
     <a class="fixed-plugin-button text-dark position-fixed px-3 py-2">
       <i class="fa fa-cog py-2"> </i>
     </a>
+
 
     <!-- CONFIGURACIONES DEL PANEL -->
     <div class="card shadow-lg ">
@@ -552,6 +507,32 @@
     </div>
   </div>
 
+  <!-- Modal trigger button -->
+  <button type="button" id="show-modal" class="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#modalId" style="position: absolute; left: -9999px; top: -9999px;">
+    Launch
+  </button>
+
+  <!-- Modal Body -->
+  <!-- if you want to close by clicking outside the modal, delete the last endpoint:data-bs-backdrop and data-bs-keyboard -->
+  <div class="modal fade" id="modalId" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+      <div class="modal-content bg-transparent" style="border: none;">
+        <div class="modal-header" style="border-bottom: none;">
+
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body d-lg-flex justify-content-center">
+          <img id="viewer" src="" alt="" style="height: 500px; width: 500px;">
+        </div>
+        <div class="modal-footer d-flex justify-content-center" style="border-top: none;">
+          <h4 class="text-white bold" id="name_image">CONSTANCIA</h4>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
   <!-- SWEET ALERT -->
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -559,196 +540,53 @@
   <!--   Core JS Files   -->
   <script src="../../assets/js/core/popper.min.js"></script>
   <script src="../../assets/js/core/bootstrap.min.js"></script>
+  <script src="../../assets/js/core/bootstrap.bundle.min.js"></script>
   <script src="../../assets/js/plugins/perfect-scrollbar.min.js"></script>
   <script src="../../assets/js/plugins/smooth-scrollbar.min.js"></script>
   <script src="../../assets/js/plugins/chartjs.min.js"></script>
   <script src="../../assets/js/globalFunctions.js"></script>
   <script src="../../assets/js/sweetAlert.js"></script>
+
+  <!-- <script src="../../assets/js/renderUbigeo.js"></script>  -->
+
+  <!-- SELECT2 - JQUERY -->
+  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
   <script>
     document.addEventListener("DOMContentLoaded", async function() {
 
-      /* INSTANCIAS */
-      const global = new FunGlobal();
-      const sAlert = new Alert();
 
-      const $ = id => global.$(id);
-      const $All = id => global.$All(id);
+      /* --------------------------------- FUNCIÓN DE VALIDACIÓN --------------------------------------------------------- */
 
-      const stringQuery = window.location.search;
-      const urlParams = new URLSearchParams(stringQuery);
-      const code = urlParams.get("id");
-      const idcontrato = atob(code);
+      (() => {
+        'use strict' //=> USO ESTRICTO POR POLITICAS DE SEGURIDAD EN EL FORMULARIO
 
-      let fechaMax;
-      let fechaMin;
+        //SELECCIONA TODOS LOS ELEMENTOS DEL FORMULARIO QUE TIENE LA CLASE "needs-validation
+        const forms = document.querySelectorAll('.needs-validation')
 
-      //Obtiene las cuotas en base al estado y a la fecha de vencimiento
-      async function getQuotasStateDate(){
+        // TOMA EL ELEMENTO "FORMS" Y LO CONVIERTE A UN ARRAY
+        // SE INCLUYE EN UN FOREAH PARA ITERAR SOBRE SUS ELEMENTOS
 
-        try{
-          let url = "../../Controllers/quota.controller.php";
-          let params = new FormData();
+        Array.from(forms).forEach(form => {
+          form.addEventListener('submit', event => {
 
-          params.append("action","getQuotasStateDate");
-          params.append("idcontrato",idcontrato);
-          params.append("estado",$("#estado").value);
-          params.append("fecha_vencimiento",$("#fecha_vencimiento").value);
+            //SI LA VALIDACIÓN DEL FORMULARIO ES FALSE
+            if (!form.checkValidity()) {
+              event.preventDefault() //=> FRENA EL ENVÍO DEL FORMULARIO
+              event.stopPropagation() //=> FRENA LA PROPAGACIÓN DE DATOS EN EL FORMULARIO
+              form.reportValidity();
+            } else {
+              event.preventDefault();
+              sAlert.sweetConfirm("Datos nuevos", "¿Deseas actualizar el registro?", () => {
 
-          let results = await global.sendAction(url, params);
+                setDetailQuota(idcuota); //Ejecuta la función
+              });
+            }
 
-          if(results.length > 0){
-            renderTable(results);
-          }
-
-        }
-        catch(e){
-          console.error(e);
-        }
-      }
-      
-      //Obtiene las cuotas en base al estado
-      async function getQuotasState(){
-
-        try{
-          let url = "../../Controllers/quota.controller.php";
-          let params = new FormData();
-
-          params.append("action","getQuotasState");
-          params.append("idcontrato",idcontrato);
-          params.append("estado",$("#estado").value);
-
-          let results = await global.sendAction(url, params);
-
-          if(results.length > 0){
-            renderTable(results);
-          }
-
-        }
-        catch(e){
-          console.error(e);
-        }
-      }
-      
-      //Anula la el pago de una cuota
-      async function cancelDetailQuota(id){
-
-        try{
-          let url = "../../Controllers/quota.controller.php";
-
-          let params = new FormData();
-          params.append("action","cancelDetailQuota");
-          params.append("idcuota",id);
-
-          let results = await global.sendAction(url, params);
-
-          if (results) {
-            sAlert.sweetSuccess("Pago anulado correctamente","",()=>{
-              getQuotas(idcontrato);
-            });
-          }
-        }
-        catch(e){
-          console.error(e);
-        }
-      }
-
-      //Renderiza datos en la tabla
-      function renderTable(array) {
-
-        $("#table-quotas tbody").innerHTML = "";
-
-        let numRow = 1;
-
-        array.forEach(element => {
-
-          let fechaPago = element.fecha_pago ? element.fecha_pago : "0000-00-00"
-          let trEstado = element.estado == "POR CANCELAR" ? `<td class="text-primary"><strong>${element.estado}</strong></td>` :
-            element.estado == "CANCELADO" ? `<td class="text-success"><strong>${element.estado}</strong></td>` :
-            `<td class="text-danger"><strong>${element.estado}</strong></td>`;
-
-          let deuda = element.deuda ? `<strong>${element.deuda}</strong>` : "0.00";
-          let payDisabled = element.cancelado < element.monto_cuota ? "" : "disabled";
-          let cancelDisabled = element.cancelado ? "" :"disabled";
-
-          let code = btoa(element.idcuota);
-          let row = `
-          <tr>
-            <td>${numRow}</td>
-            <td>${element.monto_cuota}</td>
-            <td>${deuda}</td>
-            <td>${element.fecha_vencimiento}</td>
-            <td>${fechaPago}</td>
-            ${trEstado}
-            <td>
-              <a href="./pay_quota.php?id=${code}" type="button" class="btn bg-gradient-info open-modal ${payDisabled}"><i class="fas fa-wallet open-modal"></i></a>
-              <button type="button" class="btn bg-gradient-danger cancel" ${cancelDisabled} data-id="${element.idcuota}"><i class="fas fa-times-circle cancel" data-id="${element.idcuota}"></i></button>
-            </td>
-          </tr>`;
-          numRow++
-          $("#table-quotas tbody").innerHTML += row;
-        });
-
-      };
-
-      //Obiene datos de las cuotas
-      async function getQuotas(id){
-
-        try {
-
-          let url = "../../Controllers/quota.controller.php";
-
-          let params = new FormData();
-          params.append("action", "listQuotasIdcontrato");
-          params.append("idcontrato", id);
-
-          let results = await global.sendAction(url, params);
-
-          if (results.data.length > 0) {
-            console.log(results)
-            let dataRender = results.data
-            renderTable(dataRender)
-
-            //reduce trabaja con 2, con lo que realiza el filtro especificado
-            fechaMax = results.data.reduce((value1, value2) => value1.fecha_vencimiento > value2.fecha_vencimiento ? value1 : value2);
-
-            fechaMin = results.data.reduce((value1, value2) => value1.fecha_vencimiento < value2.fecha_vencimiento ? value1 : value2);
-
-            fechaAprox = dataRender.find(data => data.deuda > 0);
-            $("#text-deuda").innerText = fechaAprox.monto_cuota;
-            $("#text-fecha").innerText = fechaAprox.fecha_vencimiento;
-            $("#fecha_vencimiento").min = fechaMin.fecha_vencimiento;
-            $("#fecha_vencimiento").max = fechaMax.fecha_vencimiento;
-
-          }
-        } catch (e) {
-          console.error(e);
-        }
-      }
-
-      $("#fecha_vencimiento").addEventListener("change",(e)=>{
-        console.log(e.target.value)
-        getQuotasStateDate();
-      });
-
-      $("#estado").addEventListener("change",()=>{
-        getQuotasState();
-      });
-
-      $("#table-quotas tbody").addEventListener("click",async function(e){
-
-        if(e.target.classList.contains("cancel")){
-          let idcuota = e.target.dataset.id;
-
-          sAlert.sweetConfirm("¿Deseas anular el pago?", "", async function() {
-             
-             await cancelDetailQuota(idcuota);
-           })
-
-        }
-      });
-
-      getQuotas(idcontrato);
-
+            form.classList.add('was-validated') //=> AGREGA ESTA CLASE A LOS ELEMENTOS DEL FORMULARIO(MUESTRA LOS COMENTARIOS)
+          }, false) //=> ESTE TERCER ARGUMENTO INDICA QUE EL EVENTO NO SE ESTA CAPTURANDO EN LA ""FASE DE CAPTURA" SINO EN "PROPAGACIÓN NORMAL"
+        })
+      })();
     });
   </script>
   <script>

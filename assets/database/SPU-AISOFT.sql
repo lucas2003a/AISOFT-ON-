@@ -2536,15 +2536,36 @@ DELIMITER;
 -- CUOTAS /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 DELIMITER $$
+CREATE PROCEDURE spu_list_quotas_reprogram
+(
+    IN _idcontrato INT
+)
+BEGIN
+    SELECT 
+        ct.idcontrato,
+        ct.precio_venta,
+        (SUM(lq.cancelado)) as monto_cancelado,
+        (ct.precio_venta - (SUM(lq.cancelado))) as saldo
+        FROM vws_list_quotas lq
+        INNER JOIN contratos ct ON ct.idcontrato = lq.idcontrato
+        WHERE ct.idcontrato = _idcontrato;
+END $$
+DELIMITER ;
+DELIMITER $$
 
-CREATE PROCEDURE spu_list_quotas_all()
+CREATE PROCEDURE spu_list_quotas_allNoPay
+(
+    IN _idcontrato INT
+)
 BEGIN
     SELECT *
         FROM vws_list_quotas
         WHERE inactive_at IS NULL
-        AND estado = "POR CANCELAR"
+        AND estado != "CANCELADO"
+        AND idcontrato = _idcontrato
         ORDER BY fecha_vencimiento;
 END $$
+select * from contratos;
 DELIMITER ;
 DELIMITER $$
 
@@ -2632,7 +2653,7 @@ CREATE PROCEDURE spu_list_quotas_estado_fven
 (
     IN _idcontrato INT,
     IN _estado VARCHAR(20),
-    IN _fech_vencimiento DATE
+    IN _fecha_vencimiento DATE
 )
 BEGIN
 
@@ -2640,6 +2661,7 @@ BEGIN
         SELECT *
             FROM vws_list_quotas
             WHERE idcontrato = _idcontrato
+            AND fecha_vencimiento <= _fecha_vencimiento
             AND inactive_at IS NULL
             ORDER BY fecha_vencimiento;
     ELSE
@@ -2647,7 +2669,7 @@ BEGIN
             FROM vws_list_quotas
             WHERE idcontrato = _idcontrato
             AND estado = _estado
-            AND fecha_vencimiento = _fecha_vencimiento
+            AND fecha_vencimiento <= _fecha_vencimiento
             AND inactive_at IS NULL
             ORDER BY fecha_vencimiento;
     END IF;
@@ -2708,6 +2730,9 @@ CREATE PROCEDURE spu_set_det_quota
     IN _idusuario       INT
 )
 BEGIN
+    DECLARE _countInsert INT;
+    DECLARE _countUpdate INT;
+
     INSERT INTO detalle_cuotas(
         idcuota,
         fecha_pago,
@@ -2727,6 +2752,8 @@ BEGIN
         _imagen
     );
 
+    SET _countInsert =  (SELECT ROW_COUNT());
+
     UPDATE cuotas
         SET
         estado = "CANCELADO",
@@ -2734,36 +2761,40 @@ BEGIN
         update_at = CURDATE()
         WHERE idcuota = _idcuota;
 
-    SELECT ROW_COUNT() AS filasAfect;
+    SET _countUpdate = (SELECT ROW_COUNT());
+
+    CASE 
+        WHEN _countUpdate = 0 THEN
+            SELECT (_countInsert) AS filasAfect;
+        
+        ELSE
+            SELECT (_countUpdate) AS filasAfect;
+    END CASE;
 END $$
 
 DELIMITER;
 
 DELIMITER $$
 
-CREATE PROCEDURE spu_cancel_quota
+CREATE PROCEDURE spu_cancel_det_quota
 (
     IN _idcuota         INT,
     IN _idusuario         INT
 )
 BEGIN
+    UPDATE detalle_cuotas
+        SET
+            inactive_at = CURDATE()
+        WHERE idcuota = _idcuota
+        AND inactive_at IS NULL;
+
     UPDATE cuotas
         SET
-        fecha_pago = NULL,
-        monto_pago = NULL,
-        detalles = NULL,
-        tipo_pago = NULL,
-        entidad_bancaria = NULL,
-        imagen = NULL,
-        estado= CASE 
-                    WHEN fecha_vencimiento < CURDATE() THEN
-                        "VENCIDO"
-                    ELSE  
-                        "POR CANCELAR"
-                END,
-        idusuario = _idusuario,
-        update_at = CURDATE()
+            estado = "POR CANCELAR",
+            idusuario = _idusuario,
+            update_at = CURDATE()
         WHERE idcuota = _idcuota;
+
 
     SELECT ROW_COUNT() AS filasAfect;
 END $$

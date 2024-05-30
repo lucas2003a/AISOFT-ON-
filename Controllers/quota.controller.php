@@ -9,6 +9,11 @@ if(isset($_POST["action"])){
 
     switch($_POST["action"]){
 
+        case "listQuotasAllNoPay": 
+                $idcontrato = $_POST["idcontrato"];
+
+                echo json_encode($quota->listQuotasAllNoPay($idcontrato));
+            break;
         case "listQuotasIdcontrato": 
             
                 $today = date("Y-m-d");
@@ -27,8 +32,9 @@ if(isset($_POST["action"])){
                         $quota->updateQuotasState($dataSend);
                     }
                 }
+                
+                echo json_encode(["data" => $quota->listQuotasIdcontract($idcontrato),"today" => $today]);
 
-                echo json_encode($quota->listQuotasIdcontract($idcontrato));
             break;
         
         case "getQuotaId": 
@@ -69,7 +75,7 @@ if(isset($_POST["action"])){
                 echo json_encode($quota->addQuota($dataObtained));
             break;
 
-        case "setQuota": 
+        case "setDetailQuota": 
 
             $today = date("dmY");
             $nom_img = sha1($today) . ".jpg";
@@ -91,17 +97,17 @@ if(isset($_POST["action"])){
                 $dataObtained["imagen"] = $nom_img;
             }
 
-            echo json_encode($quota->setQuota($dataObtained));
+            echo json_encode($quota->setDetailQuota($dataObtained));
             break;
 
-        case "cancelQuota":
+        case "cancelDetailQuota":
             $dataObtained = [
                 "idcuota" => $_POST["idcuota"],
                 "idusuario" => 1
                 // "idusuario" => $_POST["idusuario"]
             ];
 
-            echo json_encode($quota->cancelQuota($dataObtained));   
+            echo json_encode($quota->cancelDetailQuota($dataObtained));   
             break;
 
         case "inactiveQuota":
@@ -113,5 +119,10 @@ if(isset($_POST["action"])){
 
             echo json_encode($quota->inactiveQuota($dataObtained));
             break;
+
+        case "getQuotasContractReprogram":
+            $idcontrato = $_POST["idcontrato"];
+
+            echo json_encode($quota->getQuotasContractReprogram($idcontrato));
     }
 }

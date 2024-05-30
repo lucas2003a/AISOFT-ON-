@@ -623,13 +623,13 @@
       let idcontrato;
   
       //Actualiza la cuota
-      async function setQuota(id){
+      async function setDetailQuota(id){
         try{
 
           let url = "../../Controllers/quota.controller.php";
           let params = new FormData();
 
-          params.append("action", "setQuota");
+          params.append("action", "setDetailQuota");
           params.append("idcuota", id);
           params.append("fecha_pago", $("#fecha_pago").value);
           params.append("monto_pago", $("#monto_pago").value);
@@ -685,7 +685,7 @@
   
         let today = new Date();
   
-        let day = today.getDay().toString().padStart(2,'0');
+        let day = today.getDate().toString().padStart(2,'0');
         let month = (today.getMonth()+1).toString().padStart(2,'0');
         let year = today.getFullYear();
   
@@ -758,7 +758,7 @@
               event.preventDefault();
               sAlert.sweetConfirm("Datos nuevos", "¿Deseas actualizar el registro?", () => {
   
-                setQuota(idcuota); //Ejecuta la función
+                setDetailQuota(idcuota); //Ejecuta la función
               });
             }
   

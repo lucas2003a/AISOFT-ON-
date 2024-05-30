@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 30-05-2024 a las 20:42:43
+-- Tiempo de generación: 31-05-2024 a las 01:42:23
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -342,24 +342,20 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_add_separation` (IN `_n_expedie
     SELECT ROW_COUNT() AS filasAfect;
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_cancel_quota` (IN `_idcuota` INT, IN `_idusuario` INT)   BEGIN
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_cancel_det_quota` (IN `_idcuota` INT, IN `_idusuario` INT)   BEGIN
+    UPDATE detalle_cuotas
+        SET
+            inactive_at = CURDATE()
+        WHERE idcuota = _idcuota
+        AND inactive_at IS NULL;
+
     UPDATE cuotas
         SET
-        fecha_pago = NULL,
-        monto_pago = NULL,
-        detalles = NULL,
-        tipo_pago = NULL,
-        entidad_bancaria = NULL,
-        imagen = NULL,
-        estado= CASE 
-                    WHEN fecha_vencimiento < CURDATE() THEN
-                        "VENCIDO"
-                    ELSE  
-                        "POR CANCELAR"
-                END,
-        idusuario = _idusuario,
-        update_at = CURDATE()
+            estado = "POR CANCELAR",
+            idusuario = _idusuario,
+            update_at = CURDATE()
         WHERE idcuota = _idcuota;
+
 
     SELECT ROW_COUNT() AS filasAfect;
 END$$
@@ -1419,11 +1415,12 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_provinces` (IN `_iddeparta
     ORDER BY 3 ASC;
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_quotas_all` ()   BEGIN
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_quotas_allNoPay` (IN `_idcontrato` INT)   BEGIN
     SELECT *
         FROM vws_list_quotas
         WHERE inactive_at IS NULL
-        AND estado = "POR CANCELAR"
+        AND estado != "CANCELADO"
+        AND idcontrato = _idcontrato
         ORDER BY fecha_vencimiento;
 END$$
 
@@ -1476,12 +1473,13 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_quotas_estado` (IN `_idcon
     END IF;
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_quotas_estado_fven` (IN `_idcontrato` INT, IN `_estado` VARCHAR(20), IN `_fech_vencimiento` DATE)   BEGIN
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_quotas_estado_fven` (IN `_idcontrato` INT, IN `_estado` VARCHAR(20), IN `_fecha_vencimiento` DATE)   BEGIN
 
     IF _estado = "0" THEN 
         SELECT *
             FROM vws_list_quotas
             WHERE idcontrato = _idcontrato
+            AND fecha_vencimiento <= _fecha_vencimiento
             AND inactive_at IS NULL
             ORDER BY fecha_vencimiento;
     ELSE
@@ -1489,7 +1487,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_quotas_estado_fven` (IN `_
             FROM vws_list_quotas
             WHERE idcontrato = _idcontrato
             AND estado = _estado
-            AND fecha_vencimiento = _fecha_vencimiento
+            AND fecha_vencimiento <= _fecha_vencimiento
             AND inactive_at IS NULL
             ORDER BY fecha_vencimiento;
     END IF;
@@ -1501,6 +1499,17 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_quotas_idcontrato` (IN `_i
         WHERE idcontrato = _idcontrato
         AND inactive_at IS NULL
         ORDER BY fecha_vencimiento;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_quotas_reprogram` (IN `_idcontrato` INT)   BEGIN
+    SELECT 
+        ct.idcontrato,
+        ct.precio_venta,
+        (SUM(lq.cancelado)) as monto_cancelado,
+        (ct.precio_venta - (SUM(lq.cancelado))) as saldo
+        FROM vws_list_quotas lq
+        INNER JOIN contratos ct ON ct.idcontrato = lq.idcontrato
+        WHERE ct.idcontrato = _idcontrato;
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_refunds_get` ()   BEGIN
@@ -1839,6 +1848,9 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_set_det_build` (IN `_idactivo` 
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_set_det_quota` (IN `_idcuota` INT, IN `_fecha_pago` DATE, IN `_monto_pago` DECIMAL(8,2), IN `_detalles` VARCHAR(100), IN `_tipo_pago` VARCHAR(20), IN `_entidad_bancaria` VARCHAR(20), IN `_imagen` VARCHAR(100), IN `_idusuario` INT)   BEGIN
+    DECLARE _countInsert INT;
+    DECLARE _countUpdate INT;
+
     INSERT INTO detalle_cuotas(
         idcuota,
         fecha_pago,
@@ -1857,13 +1869,25 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_set_det_quota` (IN `_idcuota` I
         _entidad_bancaria,
         _imagen
     );
+
+    SET _countInsert =  (SELECT ROW_COUNT());
+
     UPDATE cuotas
         SET
         estado = "CANCELADO",
         idusuario = _idusuario,
         update_at = CURDATE()
         WHERE idcuota = _idcuota;
-    SELECT ROW_COUNT() AS filasAfect;
+
+    SET _countUpdate = (SELECT ROW_COUNT());
+
+    CASE 
+        WHEN _countUpdate = 0 THEN
+            SELECT (_countInsert) AS filasAfect;
+        
+        ELSE
+            SELECT (_countUpdate) AS filasAfect;
+    END CASE;
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_set_idpresupuesto` (IN `_idactivo` INT, IN `_idpresupuesto` INT, IN `_idusuario` INT)   BEGIN
@@ -2326,14 +2350,14 @@ CREATE TABLE `contratos` (
   `idusuario` int(11) NOT NULL,
   `n_expediente` varchar(10) NOT NULL,
   `precio_venta` decimal(8,2) NOT NULL
-) ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `contratos`
 --
 
 INSERT INTO `contratos` (`idcontrato`, `tipo_contrato`, `idseparacion`, `idrepresentante_primario`, `idrepresentante_secundario`, `idcliente`, `idconyugue`, `idactivo`, `tipo_cambio`, `estado`, `fecha_contrato`, `det_contrato`, `create_at`, `update_at`, `inactive_at`, `idusuario`, `n_expediente`, `precio_venta`) VALUES
-(1, 'VENTA DE LOTE', 1, 1, NULL, NULL, NULL, NULL, 3.500, 'VIGENTE', '2024-03-10', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '2024-04-19', NULL, NULL, 1, 'CONT-00001', 0.00),
+(1, 'VENTA DE LOTE', 1, 1, NULL, NULL, NULL, NULL, 3.500, 'VIGENTE', '2024-03-10', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '2024-04-19', NULL, NULL, 1, 'CONT-00001', 12000.00),
 (2, 'VENTA DE LOTE', 2, 1, NULL, NULL, NULL, NULL, 3.500, 'VIGENTE', '2024-03-11', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '2024-04-19', NULL, NULL, 2, 'CONT-00002', 0.00),
 (3, 'VENTA DE LOTE', 3, 1, NULL, NULL, NULL, NULL, 3.500, 'VIGENTE', '2024-03-12', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '2024-04-19', NULL, NULL, 3, 'CONT-00003', 0.00),
 (5, 'VENTA DE LOTE', 2, 1, NULL, NULL, NULL, NULL, 3.500, 'VIGENTE', '2024-03-12', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '2024-04-19', NULL, NULL, 3, 'CONT-00004', 0.00),
@@ -2397,7 +2421,7 @@ CREATE TABLE `cuotas` (
 --
 
 INSERT INTO `cuotas` (`idcuota`, `idcontrato`, `monto_cuota`, `fecha_vencimiento`, `estado`, `create_at`, `update_at`, `inactive_at`, `idusuario`) VALUES
-(1, 1, 500.00, '2024-04-30', 'CANCELADO', '2024-05-30', '2024-05-30', NULL, 1),
+(1, 1, 500.00, '2024-04-30', 'POR CANCELAR', '2024-05-30', '2024-05-30', NULL, 1),
 (2, 1, 500.00, '2024-03-31', 'VENCIDO', '2024-05-30', NULL, NULL, 1),
 (3, 1, 500.00, '2024-03-01', 'VENCIDO', '2024-05-30', NULL, NULL, 1),
 (4, 1, 500.00, '2024-01-31', 'VENCIDO', '2024-05-30', NULL, NULL, 1),
@@ -2405,13 +2429,13 @@ INSERT INTO `cuotas` (`idcuota`, `idcontrato`, `monto_cuota`, `fecha_vencimiento
 (6, 1, 500.00, '2023-12-02', 'VENCIDO', '2024-05-30', NULL, NULL, 1),
 (7, 1, 500.00, '2023-11-02', 'VENCIDO', '2024-05-30', NULL, NULL, 1),
 (8, 1, 500.00, '2023-10-03', 'VENCIDO', '2024-05-30', NULL, NULL, 1),
-(9, 1, 500.00, '2023-09-03', 'VENCIDO', '2024-05-30', NULL, NULL, 1),
-(10, 1, 500.00, '2023-08-04', 'VENCIDO', '2024-05-30', NULL, NULL, 1),
-(11, 1, 500.00, '2023-07-05', 'VENCIDO', '2024-05-30', NULL, NULL, 1),
-(12, 1, 500.00, '2023-06-05', 'VENCIDO', '2024-05-30', NULL, NULL, 1),
-(13, 1, 500.00, '2023-05-06', 'VENCIDO', '2024-05-30', NULL, NULL, 1),
-(14, 1, 500.00, '2023-04-06', 'VENCIDO', '2024-05-30', NULL, NULL, 1),
-(15, 1, 500.00, '2023-03-07', 'CANCELADO', '2024-05-30', '2024-05-30', NULL, 1),
+(9, 1, 500.00, '2023-09-03', 'CANCELADO', '2024-05-30', '2024-05-30', NULL, 1),
+(10, 1, 500.00, '2023-08-04', 'CANCELADO', '2024-05-30', '2024-05-30', NULL, 1),
+(11, 1, 500.00, '2023-07-05', 'POR CANCELAR', '2024-05-30', '2024-05-30', NULL, 1),
+(12, 1, 500.00, '2023-06-05', 'POR CANCELAR', '2024-05-30', '2024-05-30', NULL, 1),
+(13, 1, 500.00, '2023-05-06', 'POR CANCELAR', '2024-05-30', '2024-05-30', NULL, 1),
+(14, 1, 500.00, '2023-04-06', 'POR CANCELAR', '2024-05-30', '2024-05-30', NULL, 1),
+(15, 1, 500.00, '2023-03-07', 'POR CANCELAR', '2024-05-30', '2024-05-30', NULL, 1),
 (16, 1, 500.00, '2024-06-29', 'POR CANCELAR', '2024-05-30', NULL, NULL, 1),
 (17, 1, 500.00, '2024-07-29', 'POR CANCELAR', '2024-05-30', NULL, NULL, 1),
 (18, 1, 500.00, '2024-08-28', 'POR CANCELAR', '2024-05-30', NULL, NULL, 1),
@@ -2582,12 +2606,27 @@ CREATE TABLE `detalle_cuotas` (
 --
 
 INSERT INTO `detalle_cuotas` (`iddetalle_cuota`, `idcuota`, `monto_pago`, `fecha_pago`, `detalles`, `tipo_pago`, `entidad_bancaria`, `imagen`, `update_at`, `inactive_at`, `create_at`) VALUES
-(1, 1, 300.00, '2023-11-01', 'pago 1', 'transeferencia', 'bcp', 'imagen1', NULL, NULL, '2024-05-30'),
-(2, 1, 100.00, '2023-12-02', 'pago 1', 'transeferencia', 'bcp', 'imagen1', NULL, NULL, '2024-05-30'),
-(3, 1, 50.00, '2024-01-01', 'pago 1', 'transeferencia', 'bcp', 'imagen1', NULL, NULL, '2024-05-30'),
-(4, 1, 10.00, '2024-05-04', 'PAGO POR LA 5 CUOTA', 'TRANFERENCIA', 'BCP', '3092b43a19fcb5f65f92cc1256cb6bef591dae94.jpg', NULL, NULL, '2024-05-30'),
-(5, 1, 40.00, '2024-05-04', 'PAGO POR LA ULTIMA CUOTA', 'TRANFERENCIA', 'BBVA', '3092b43a19fcb5f65f92cc1256cb6bef591dae94.jpg', NULL, NULL, '2024-05-30'),
-(6, 15, 100.00, '2024-05-04', 'pago 1', 'TRANFERENCIA', 'BCP', '3092b43a19fcb5f65f92cc1256cb6bef591dae94.jpg', NULL, NULL, '2024-05-30');
+(1, 1, 300.00, '2023-11-01', 'pago 1', 'transeferencia', 'bcp', 'imagen1', NULL, '2024-05-30', '2024-05-30'),
+(2, 1, 100.00, '2023-12-02', 'pago 1', 'transeferencia', 'bcp', 'imagen1', NULL, '2024-05-30', '2024-05-30'),
+(3, 1, 50.00, '2024-01-01', 'pago 1', 'transeferencia', 'bcp', 'imagen1', NULL, '2024-05-30', '2024-05-30'),
+(4, 1, 10.00, '2024-05-04', 'PAGO POR LA 5 CUOTA', 'TRANFERENCIA', 'BCP', '3092b43a19fcb5f65f92cc1256cb6bef591dae94.jpg', NULL, '2024-05-30', '2024-05-30'),
+(5, 1, 40.00, '2024-05-04', 'PAGO POR LA ULTIMA CUOTA', 'TRANFERENCIA', 'BBVA', '3092b43a19fcb5f65f92cc1256cb6bef591dae94.jpg', NULL, '2024-05-30', '2024-05-30'),
+(6, 15, 100.00, '2024-05-04', 'pago 1', 'TRANFERENCIA', 'BCP', '3092b43a19fcb5f65f92cc1256cb6bef591dae94.jpg', NULL, '2024-05-30', '2024-05-30'),
+(7, 14, 300.00, '2024-05-04', 'por cuota 1', 'EFECTIVO', 'BCP', '3092b43a19fcb5f65f92cc1256cb6bef591dae94.jpg', NULL, '2024-05-30', '2024-05-30'),
+(8, 14, 200.00, '2024-05-04', 'pago', 'TRANFERENCIA', 'INTERBANCK', '3092b43a19fcb5f65f92cc1256cb6bef591dae94.jpg', NULL, '2024-05-30', '2024-05-30'),
+(9, 13, 300.00, '2024-05-04', 'primer pago', 'TRANFERENCIA', 'INTERBANCK', '3092b43a19fcb5f65f92cc1256cb6bef591dae94.jpg', NULL, '2024-05-30', '2024-05-30'),
+(10, 13, 100.00, '2024-05-04', 'pago 2', 'EFECTIVO', 'INTERBANCK', '3092b43a19fcb5f65f92cc1256cb6bef591dae94.jpg', NULL, '2024-05-30', '2024-05-30'),
+(11, 13, 50.00, '2024-05-04', 'pago 3', 'EFECTIVO', 'INTERBANCK', '3092b43a19fcb5f65f92cc1256cb6bef591dae94.jpg', NULL, '2024-05-30', '2024-05-30'),
+(12, 13, 50.00, '2024-05-04', 'pago 3', 'EFECTIVO', 'INTERBANCK', '3092b43a19fcb5f65f92cc1256cb6bef591dae94.jpg', NULL, '2024-05-30', '2024-05-30'),
+(13, 12, 400.00, '2024-05-04', 'pago', 'TRANFERENCIA', 'BCP', '3092b43a19fcb5f65f92cc1256cb6bef591dae94.jpg', NULL, '2024-05-30', '2024-05-30'),
+(14, 12, 100.00, '2024-05-04', 'pago 2', 'TRANFERENCIA', 'INTERBANCK', '3092b43a19fcb5f65f92cc1256cb6bef591dae94.jpg', NULL, '2024-05-30', '2024-05-30'),
+(15, 11, 300.00, '2024-05-04', 'pago 1', 'TRANFERENCIA', 'BCP', '3092b43a19fcb5f65f92cc1256cb6bef591dae94.jpg', NULL, '2024-05-30', '2024-05-30'),
+(16, 11, 100.00, '2024-05-04', 'pago 3', 'TRANFERENCIA', 'BBVA', '3092b43a19fcb5f65f92cc1256cb6bef591dae94.jpg', NULL, '2024-05-30', '2024-05-30'),
+(17, 11, 100.00, '2024-05-04', 'PAGO 3', 'TRANFERENCIA', 'BBVA', '3092b43a19fcb5f65f92cc1256cb6bef591dae94.jpg', NULL, '2024-05-30', '2024-05-30'),
+(18, 10, 300.00, '2024-05-04', 'PAGO 1', 'TRANFERENCIA', 'BCP', '3092b43a19fcb5f65f92cc1256cb6bef591dae94.jpg', NULL, NULL, '2024-05-30'),
+(19, 10, 100.00, '2024-05-04', 'PAGO 3', 'TRANFERENCIA', 'BBVA', '3092b43a19fcb5f65f92cc1256cb6bef591dae94.jpg', NULL, NULL, '2024-05-30'),
+(20, 10, 50.00, '2024-05-30', 'pago 4', 'EFECTIVO', 'INTERBANCK', '3092b43a19fcb5f65f92cc1256cb6bef591dae94.jpg', NULL, NULL, '2024-05-30'),
+(21, 9, 500.00, '2024-05-30', 'pago 3', 'EFECTIVO', 'INTERBANCK', '3092b43a19fcb5f65f92cc1256cb6bef591dae94.jpg', NULL, NULL, '2024-05-30');
 
 -- --------------------------------------------------------
 
@@ -6175,7 +6214,7 @@ ALTER TABLE `constructora`
 -- AUTO_INCREMENT de la tabla `contratos`
 --
 ALTER TABLE `contratos`
-  MODIFY `idcontrato` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `idcontrato` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT de la tabla `cuotas`
@@ -6211,7 +6250,7 @@ ALTER TABLE `detalle_costos`
 -- AUTO_INCREMENT de la tabla `detalle_cuotas`
 --
 ALTER TABLE `detalle_cuotas`
-  MODIFY `iddetalle_cuota` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `iddetalle_cuota` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- AUTO_INCREMENT de la tabla `devoluciones`

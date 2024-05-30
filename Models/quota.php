@@ -14,10 +14,10 @@ class Quota extends Conection{
     /**
      * Método que obtiene todas las cuentas,sn excepción
      */
-    public function listQuotasAll(){
+    public function listQuotasAllNoPay($idcontrato = 0){
         try {
-            $query  = $this->conection->prepare("CALL spu_list_quotas_all()");
-            $query->execute();
+            $query  = $this->conection->prepare("CALL spu_list_quotas_allNoPay(?)");
+            $query->execute(array($idcontrato));
 
             return $query->fetchAll(PDO::FETCH_ASSOC);
 
@@ -145,7 +145,7 @@ class Quota extends Conection{
     /**
      * Método para actualizar un pago
      */
-    public function setQuota($dataQuotas = []){
+    public function setDetailQuota($dataQuotas = []){
         try{
             
             $query = $this->conection->prepare("CALL spu_set_det_quota(?,?,?,?,?,?,?,?)");
@@ -172,10 +172,10 @@ class Quota extends Conection{
     /**
      * Método para anular una cuota
      */
-    public function cancelQuota($idcuota = []){
+    public function cancelDetailQuota($idcuota = []){
         try{
                 
-            $query = $this->conection->prepare("CALL spu_cancel_quota(?,?)");
+            $query = $this->conection->prepare("CALL spu_cancel_det_quota(?,?)");
             $query->execute(
                 array(
                     $idcuota["idcuota"],
@@ -205,5 +205,19 @@ class Quota extends Conection{
         }
     }
 
+    /**
+     * Método que obtiene los datos calculados de la cuotas no pargadas paa calcular(el contrato, monto pagado y el saldo)
+     */
+    public function getQuotasContractReprogram($idcontrato = 0){
+        try{
+            $query = $this->conection->prepare("CALL spu_list_quotas_reprogram(?)");
+            $query->execute(array($idcontrato));
+
+            return $query->fetch(PDO::FETCH_ASSOC);
+        }
+        catch(Exception $e){
+
+        }
+    }
 }
 ?>
