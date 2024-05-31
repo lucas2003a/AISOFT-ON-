@@ -566,7 +566,7 @@
                             <!-- PRECIO CONSTRUCCION -->
                             <div class="mt-4">
                               <label for="precio_construccion" class="form-label">Precio de la construcción</label>
-                              <input type="number" class="form-control" id="precio_construccion" placeholder="Precio de construcción" maxlength="7" minlength="7" min="1.00" value="0.00">
+                              <input type="number" class="form-control" id="precio_construccion" placeholder="Precio de construcción" maxlength="7" minlength="7" min="1.00">
                               <div class="invalid-feedback">
                                 Necesitas ingresar el preecio de construcción.
                               </div>

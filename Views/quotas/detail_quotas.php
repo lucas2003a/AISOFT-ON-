@@ -425,7 +425,7 @@
                 <div class="row mt-4 mb-4">
                   <div class="col-md-6 d-flex align-items-end">
                     <a class="btn btn-outline-success btn-sm mb-0 me-3" href="./add_asset.php" id="generate-report">Generar-reporte</a>
-                    <a class="btn btn-outline-info btn-sm mb-0 me-3" href="./reprogram_quotas.php" id="generate-report">Reprogramar</a>
+                    <a class="btn btn-outline-info btn-sm mb-0 me-3" href="" id="go-reprogram">Reprogramar</a>
                   </div>
                   <div class="col-md-6">
                     <div class="row">
@@ -581,6 +581,8 @@
 
       let fechaMax;
       let fechaMin;
+
+      $("#go-reprogram").href = `./reprogram_quotas.php?id=${code}`;
 
       //Obtiene las cuotas en base al estado y a la fecha de vencimiento
       async function getQuotasStateDate(){

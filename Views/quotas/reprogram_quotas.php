@@ -390,6 +390,7 @@
               <div class="row">
 
 
+
                 <div>
 
                   <div class="d-flex flex-column h-100">
@@ -399,14 +400,28 @@
 
                           <!-- SALDO -->
                           <div class="mt-2">
-                            <label for="monto_contrato">Monto según el contrato</label>
-                            <input type="text" class="form-control" id="monto_contrato" readonly>
+                            <label for="saldo_contrato">Monto restante según el contrato</label>
+                            <input type="text" class="form-control" id="saldo_contrato" readonly>
                           </div>
+
+                          <!-- NÚMERO DE CUOTAS -->
+                          <div class="mt-2">
+                            <label for="numero_cuotas">Número de cuotas</label>
+                            <input placeholder="Número de cuotas" type="number" name="numero_cuotas" id="numero_cuotas" class="form-control" value="0" min="1" step="1" required>
+                          </div>
+
+                          <!-- MONOT DE LA CUOTA -->
+                          <div class="mt-2">
+                            <label for="monto_cuota">Monto de cuota</label>
+                            <input type="number" placeholder="Monto de cuota" name="monto_cuota" id="monto_cuota" class="form-control" value="0" min="1" step="1" readonly>
+                          </div>
+
+                          <!-- FECHA DE VENCIMIENTO -->
 
                           <div class="mt-2">
-                            
+                            <label for="fecha_vencimiento">Fecha de vencimiento</label>
+                            <input type="date" placeholder="Fecha de vencimiento" name="fecha_vencimiento" id="fecha_vencimiento" class="form-control" required>
                           </div>
-
                           <div class="d-grid p-3">
 
                             <button class="btn btn-success" type="submit" id="guardar">Guardar</button>
@@ -418,6 +433,27 @@
                       <div class="col-md-6">
 
                         <!-- RENDERIZAR LA TABLA CON LAS NUEVAS CUOTAS -->
+                        <div class="table-responsive text-center p-0 table-xs">
+                          <table class="table align-items-center mb-0 table-hover" id="table-quotas">
+                            <thead>
+                              <tr>
+                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">#</th>
+                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Monto</th>
+                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">F. vencimiento</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+
+                              <!-- RENDER -->
+                              <tr>
+                                <td>1</td>
+                                <td>500</td>
+                                <td>2024/20/22</td>
+                              </tr>
+
+                            </tbody>
+                          </table>
+                        </div>
                       </div>
 
                     </div>
@@ -554,8 +590,112 @@
   <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
   <script>
     document.addEventListener("DOMContentLoaded", async function() {
+      /* INSTANCIAS */
+      const global = new FunGlobal();
+      const sAlert = new Alert();
 
+      const $ = id => global.$(id);
+      const $All = id => global.$All(id);
 
+      const stringQuery = window.location.search;
+      const urlParams = new URLSearchParams(stringQuery);
+      const code = urlParams.get("id");
+      const idcontrato = atob(code);
+      
+      let dataRender = [];
+      let timmer;
+
+      async function renderTable(){
+
+        console.log(dataRender)
+        $("#table-quotas tbody").innerHTML = "";
+
+        let numRow = 1;
+
+        dataRender.forEach(data => {
+
+          let newRow = `
+            <tr>
+              <td>${numRow}</td>
+              <td>${data.monto_cuota}</td>
+              <td>${data.fecha_vencimiento}</td>
+            </tr>
+          `;
+          numRow++
+          $("#table-quotas tbody").innerHTML += newRow;
+        })
+      }
+      
+      async function pushData(ncuotas){
+
+        dataRender = [];
+
+        let contratoId = Number.parseInt(idcontrato);
+        let numero_cuotas = Number.parseInt($("#numero_cuotas").value);
+        let monto_cuota = Number.parseFloat($("#monto_cuota").value);
+        let fecha_vencimiento =$("#fecha_vencimiento").value
+        
+        let cuotasTotal = numero_cuotas * monto_cuota;
+        let saldo_contrato = Number.parseFloat($("#saldo_contrato").value);
+
+        let monto_ajuste = saldo_contrato > cuotasTotal ? saldo_contrato - cuotasTotal : 0;
+
+        for(i = 0; i < ncuotas; i++){
+
+          let monto = saldo_contrato > cuotasTotal ? monto_cuota + (i == 0 ? monto_ajuste : 0) : monto_cuota;
+          let object = {idcontrato: contratoId, monto_cuota: monto.toFixed(2), fecha_vencimiento:fecha_vencimiento};
+          dataRender.push(object);
+        }
+        await renderTable()
+      }
+
+      //Obtiene los montos a repogramar
+      async function getQuotasContractReprogram(id){
+        try{
+          let url = "../../Controllers/quota.controller.php";
+
+          let params = new FormData();
+          params.append("action","getQuotasContractReprogram");
+          params.append("idcontrato",id);
+
+          let result = await global.sendAction(url, params);
+
+          if(result){
+            console.log(result)
+            $("#saldo_contrato").value = result.saldo;
+          }
+        }
+        catch(e){
+
+        }
+      }
+
+      $("#numero_cuotas").addEventListener("input",(e)=>{
+
+        let valueInput = Number.parseInt(e.target.value);
+        if(valueInput){
+          let saldo_contrato = Number.parseFloat($("#saldo_contrato").value);
+
+          let division = saldo_contrato /  valueInput;
+          
+          $("#monto_cuota").value = division.toFixed(2);
+        }
+      });
+
+      $("#monto_cuota").addEventListener("input",(e)=>{
+
+        let valueInput = Number.parseFloat(e.target.value);
+
+        // if(valueInput){
+        //   let saldo_contrato = Number.parseFloat($("#saldo_contrato").value);
+
+        //   let division = saldo_contrato / valueInput;
+
+        //   $("#numero_cuotas").value = Math.round(division);
+        // }
+      });
+
+      getQuotasContractReprogram(idcontrato);
       /* --------------------------------- FUNCIÓN DE VALIDACIÓN --------------------------------------------------------- */
 
       (() => {
@@ -577,10 +717,13 @@
               form.reportValidity();
             } else {
               event.preventDefault();
-              sAlert.sweetConfirm("Datos nuevos", "¿Deseas actualizar el registro?", () => {
 
-                setDetailQuota(idcuota); //Ejecuta la función
-              });
+              let nCuotas = $("#numero_cuotas").value;
+              pushData(nCuotas)
+              // sAlert.sweetConfirm("Datos nuevos", "¿Deseas actualizar el registro?", () => {
+
+              //   setDetailQuota(idcuota); //Ejecuta la función
+              // });
             }
 
             form.classList.add('was-validated') //=> AGREGA ESTA CLASE A LOS ELEMENTOS DEL FORMULARIO(MUESTRA LOS COMENTARIOS)

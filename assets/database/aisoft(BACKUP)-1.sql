@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 31-05-2024 a las 01:42:32
+-- Tiempo de generación: 31-05-2024 a las 11:27:16
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -2078,7 +2078,7 @@ INSERT INTO `activos` (`idactivo`, `idproyecto`, `tipo_activo`, `imagen`, `estad
 (15, 1, 'LOTE', NULL, 'SIN VENDER', '4', 'Urbanización Kappa', 'USD', 320.00, NULL, 'Partida 029', NULL, NULL, '{\"clave\" :[], \"valor\":[]}', '{\"clave\" :[], \"valor\":[]}', 19, 'A.I.F', 110000.00, 0.00, '2024-04-19', '2024-05-24', NULL, 1, 0.00),
 (16, 1, 'LOTE', NULL, 'SIN VENDER', '6', 'Urbanización Sigma', 'USD', 300.00, NULL, 'Partida 031', NULL, NULL, '{\"clave\" :[], \"valor\":[]}', '{\"clave\" :[], \"valor\":[]}', 19, 'A.I.F', 85000.00, 0.00, '2024-04-19', '2024-05-24', NULL, 1, 0.00),
 (17, 1, 'LOTE', NULL, 'SIN VENDER', '8', 'Urbanización Upsilon', 'USD', 380.00, NULL, 'Partida 033', NULL, NULL, '{\"clave\" :[], \"valor\":[]}', '{\"clave\" :[], \"valor\":[]}', 19, 'A.I.F', 120000.00, 0.00, '2024-04-19', '2024-05-24', NULL, 1, 0.00),
-(18, 1, 'LOTE', NULL, 'SEPARADO', '10', 'Urbanización Omega', 'USD', 420.00, 0, 'Partida 035', 'null', 'null', '{\"clave\" :[], \"valor\":[]}', '{\"clave\":[],\"valor\":[]}', 19, 'A.I.F', 105000.00, 2228.20, '2024-04-19', '2024-05-26', NULL, 1, 107228.20),
+(18, 1, 'LOTE', NULL, 'SIN VENDER', '10', 'Urbanización Omega', 'USD', 420.00, 0, 'Partida 035', 'null', 'null', '{\"clave\" :[], \"valor\":[]}', '{\"clave\":[],\"valor\":[]}', 19, 'A.I.F', 105000.00, 2228.20, '2024-04-19', '2024-05-31', NULL, 1, 107228.20),
 (19, 1, 'LOTE', NULL, 'SIN VENDER', '12', 'Urbanización Delta', 'USD', 450.00, 0, 'Partida 037', 'null', 'null', '{\"clave\" :[], \"valor\":[]}', '{\"clave\" :[], \"valor\":[]}', 19, 'A.I.F', 115000.00, 2228.20, '2024-04-19', '2024-05-26', NULL, 1, 117228.20),
 (20, 1, 'LOTE', NULL, 'SIN VENDER', '14', 'Urbanización Gamma', 'USD', 480.00, 0, 'Partida 039', 'null', 'null', '{\"clave\" :[], \"valor\":[]}', '{\"clave\" :[], \"valor\":[]}', 19, 'A.I.F', 100000.00, 2228.20, '2024-04-19', '2024-05-26', NULL, 1, 102228.20),
 (21, 1, 'LOTE', NULL, 'SIN VENDER', '16', 'Urbanización Epsilon', 'USD', 500.00, NULL, 'Partida 041', NULL, NULL, '{\"clave\" :[], \"valor\":[]}', '{\"clave\" :[], \"valor\":[]}', 19, 'A.I.F', 120000.00, 0.00, '2024-04-19', '2024-05-24', NULL, 1, 0.00),
@@ -2123,10 +2123,11 @@ INSERT INTO `activos` (`idactivo`, `idproyecto`, `tipo_activo`, `imagen`, `estad
 (60, 1, 'LOTE', NULL, 'SIN VENDER', '94', 'Urbanización Upsilon', 'USD', 280.00, NULL, 'Partida 119', NULL, NULL, '{\"clave\" :[], \"valor\":[]}', '{\"clave\" :[], \"valor\":[]}', 19, 'TERCEROS', 110000.00, 0.00, '2024-04-19', '2024-05-24', NULL, 1, 0.00),
 (61, 1, 'LOTE', NULL, 'SIN VENDER', '96', 'Urbanización Phi', 'USD', 320.00, NULL, 'Partida 121', NULL, NULL, '{\"clave\" :[], \"valor\":[]}', '{\"clave\" :[], \"valor\":[]}', 19, 'TERCEROS', 85000.00, 0.00, '2024-04-19', '2024-05-24', NULL, 1, 0.00),
 (62, 1, 'LOTE', NULL, 'SIN VENDER', '98', 'Urbanización Chi', 'USD', 380.00, NULL, 'Partida 123', NULL, NULL, '{\"clave\" :[], \"valor\":[]}', '{\"clave\" :[], \"valor\":[]}', 19, 'TERCEROS', 120000.00, 0.00, '2024-04-19', '2024-05-24', NULL, 1, 0.00),
-(63, 1, 'LOTE', NULL, 'SIN VENDER', '100', 'Urbanización Psi', 'USD', 420.00, 0, 'Partida 125', 'null', 'null', '{\"clave\" :[], \"valor\":[]}', '{\"clave\" :[], \"valor\":[]}', 19, 'TERCEROS', 105000.00, 2228.20, '2024-04-19', '2024-05-25', NULL, 1, 107228.20),
+(63, 1, 'LOTE', NULL, 'SIN VENDER', '100', 'Urbanización Psi', 'USD', 420.00, 0, 'Partida 125', 'null', 'null', '{\"clave\" :[], \"valor\":[]}', '{\"clave\" :[], \"valor\":[]}', 19, 'TERCEROS', 105000.00, 2228.20, '2024-04-19', '2024-05-31', NULL, 1, 107228.20),
 (76, 1, 'LOTE', '933e9c5ac6fd6724d4b36d32152cc973f14dc579jpg', 'SIN VENDER', '59', 'av santa rosa#541', 'SOL', 0.00, 2, 'PARTIDA 3', NULL, NULL, '{\"clave\" :[], \"valor\":[]}', '{\"clave\" :[], \"valor\":[]}', 19, 'A.I.F', 0.00, NULL, '2024-04-21', '2024-05-24', NULL, 1, 0.00),
 (77, 1, 'LOTE', '1dbd8540b6eb7b40e376c46b6bc7b5b10ba23c2djpg', 'SIN VENDER', 'A-13', 'av los angeles 358', 'USD', 12.00, 1, 'partida nro 3', NULL, NULL, '{\"clave\":[\"\"],\"valor\":[\"\"]}', '{\"clave\":[],\"valor\":[]}', 19, 'A.I.F', 10000.00, 360.00, '2024-05-17', '2024-05-24', NULL, 1, 20360.00),
-(79, 2, 'CASA', '798ce61c45ef1b78ac640b4b962c2a891bdd769bjpg', 'SIN VENDER', '2', 'av las magnolias', 'USD', 1.00, 1, 'partida nro 3', NULL, NULL, '{\"clave\":[\"\"],\"valor\":[\"\"]}', '{\"clave\":[],\"valor\":[]}', 30, 'A.I.F', 500000.00, 360.00, '2024-05-19', '2024-05-19', NULL, 1, 500360.00);
+(79, 2, 'CASA', '798ce61c45ef1b78ac640b4b962c2a891bdd769bjpg', 'SIN VENDER', '2', 'av las magnolias', 'USD', 1.00, 1, 'partida nro 3', NULL, NULL, '{\"clave\":[\"\"],\"valor\":[\"\"]}', '{\"clave\":[],\"valor\":[]}', 30, 'A.I.F', 500000.00, 360.00, '2024-05-19', '2024-05-19', NULL, 1, 500360.00),
+(80, 1, 'LOTE', '8d399badda50d7d559cf40b8f80dd3a73c0e5165jpg', 'SIN VENDER', '43', 'los angeles', 'USD', 1.00, 1, 'partida nro 3', 'null', 'null', '{\"clave\":[\"\"],\"valor\":[\"\"]}', '{\"clave\":[\"PISO PULIDO\",\"CONSTRUCCION DE VEREDAS\"],\"valor\":[\"PISO PULIDO DE 45 M2\",\"VEREDAS DE 1 METRO\"]}', 43, 'TERCEROS', 500.00, 1810.00, '2024-05-31', '2024-05-31', NULL, 1, 2310.00);
 
 --
 -- Disparadores `activos`
@@ -2296,7 +2297,8 @@ INSERT INTO `clientes` (`idcliente`, `tipo_persona`, `idpersona`, `idpersona_jur
 (30, 'JURÍDICA', NULL, 46, '2024-05-03', NULL, NULL, 1),
 (31, 'JURÍDICA', NULL, 48, '2024-05-03', NULL, NULL, 1),
 (32, 'JURÍDICA', NULL, 49, '2024-05-03', NULL, NULL, 1),
-(33, 'JURÍDICA', NULL, 51, '2024-05-03', NULL, NULL, 1);
+(33, 'JURÍDICA', NULL, 51, '2024-05-03', NULL, NULL, 1),
+(34, 'JURÍDICA', NULL, 52, '2024-05-31', NULL, NULL, 1);
 
 -- --------------------------------------------------------
 
@@ -2427,10 +2429,10 @@ INSERT INTO `cuotas` (`idcuota`, `idcontrato`, `monto_cuota`, `fecha_vencimiento
 (4, 1, 500.00, '2024-01-31', 'VENCIDO', '2024-05-30', NULL, NULL, 1),
 (5, 1, 500.00, '2024-01-01', 'VENCIDO', '2024-05-30', NULL, NULL, 1),
 (6, 1, 500.00, '2023-12-02', 'VENCIDO', '2024-05-30', NULL, NULL, 1),
-(7, 1, 500.00, '2023-11-02', 'VENCIDO', '2024-05-30', NULL, NULL, 1),
-(8, 1, 500.00, '2023-10-03', 'VENCIDO', '2024-05-30', NULL, NULL, 1),
-(9, 1, 500.00, '2023-09-03', 'CANCELADO', '2024-05-30', '2024-05-30', NULL, 1),
-(10, 1, 500.00, '2023-08-04', 'CANCELADO', '2024-05-30', '2024-05-30', NULL, 1),
+(7, 1, 500.00, '2023-11-02', 'CANCELADO', '2024-05-30', '2024-05-31', NULL, 1),
+(8, 1, 500.00, '2023-10-03', 'CANCELADO', '2024-05-30', '2024-05-31', NULL, 1),
+(9, 1, 500.00, '2023-09-03', 'POR CANCELAR', '2024-05-30', '2024-05-31', NULL, 1),
+(10, 1, 500.00, '2023-08-04', 'POR CANCELAR', '2024-05-30', '2024-05-31', NULL, 1),
 (11, 1, 500.00, '2023-07-05', 'POR CANCELAR', '2024-05-30', '2024-05-30', NULL, 1),
 (12, 1, 500.00, '2023-06-05', 'POR CANCELAR', '2024-05-30', '2024-05-30', NULL, 1),
 (13, 1, 500.00, '2023-05-06', 'POR CANCELAR', '2024-05-30', '2024-05-30', NULL, 1),
@@ -2579,7 +2581,9 @@ INSERT INTO `detalle_costos` (`iddetalle_costo`, `idpresupuesto`, `idsubcategori
 (16, 19, 10, NULL, 'TARRAJEO', 1, 380.00, '2024-05-24', NULL, NULL, 1),
 (17, 19, 19, NULL, 'habilitación de terreno', 1, 600.00, '2024-05-24', NULL, NULL, 1),
 (18, 19, 6, 61, 'FV // Bolsa de Fragua para cerámica // paquete', 20, 9.60, '2024-05-24', NULL, NULL, 1),
-(19, 19, 6, 46, 'Majestad // Gallón de Pintura Látex // ml', 10, 65.00, '2024-05-24', NULL, NULL, 1);
+(19, 19, 6, 46, 'Majestad // Gallón de Pintura Látex // ml', 10, 65.00, '2024-05-24', NULL, NULL, 1),
+(20, 43, 3, NULL, 'LADRILLOS PANDERETA', 30, 60.00, '2024-05-31', NULL, NULL, 1),
+(21, 43, 2, 70, 'Tigre // Caja eléctrica octogonal // tonelada métrica', 5, 2.00, '2024-05-31', NULL, NULL, 1);
 
 -- --------------------------------------------------------
 
@@ -2623,10 +2627,14 @@ INSERT INTO `detalle_cuotas` (`iddetalle_cuota`, `idcuota`, `monto_pago`, `fecha
 (15, 11, 300.00, '2024-05-04', 'pago 1', 'TRANFERENCIA', 'BCP', '3092b43a19fcb5f65f92cc1256cb6bef591dae94.jpg', NULL, '2024-05-30', '2024-05-30'),
 (16, 11, 100.00, '2024-05-04', 'pago 3', 'TRANFERENCIA', 'BBVA', '3092b43a19fcb5f65f92cc1256cb6bef591dae94.jpg', NULL, '2024-05-30', '2024-05-30'),
 (17, 11, 100.00, '2024-05-04', 'PAGO 3', 'TRANFERENCIA', 'BBVA', '3092b43a19fcb5f65f92cc1256cb6bef591dae94.jpg', NULL, '2024-05-30', '2024-05-30'),
-(18, 10, 300.00, '2024-05-04', 'PAGO 1', 'TRANFERENCIA', 'BCP', '3092b43a19fcb5f65f92cc1256cb6bef591dae94.jpg', NULL, NULL, '2024-05-30'),
-(19, 10, 100.00, '2024-05-04', 'PAGO 3', 'TRANFERENCIA', 'BBVA', '3092b43a19fcb5f65f92cc1256cb6bef591dae94.jpg', NULL, NULL, '2024-05-30'),
-(20, 10, 50.00, '2024-05-30', 'pago 4', 'EFECTIVO', 'INTERBANCK', '3092b43a19fcb5f65f92cc1256cb6bef591dae94.jpg', NULL, NULL, '2024-05-30'),
-(21, 9, 500.00, '2024-05-30', 'pago 3', 'EFECTIVO', 'INTERBANCK', '3092b43a19fcb5f65f92cc1256cb6bef591dae94.jpg', NULL, NULL, '2024-05-30');
+(18, 10, 300.00, '2024-05-04', 'PAGO 1', 'TRANFERENCIA', 'BCP', '3092b43a19fcb5f65f92cc1256cb6bef591dae94.jpg', NULL, '2024-05-31', '2024-05-30'),
+(19, 10, 100.00, '2024-05-04', 'PAGO 3', 'TRANFERENCIA', 'BBVA', '3092b43a19fcb5f65f92cc1256cb6bef591dae94.jpg', NULL, '2024-05-31', '2024-05-30'),
+(20, 10, 50.00, '2024-05-30', 'pago 4', 'EFECTIVO', 'INTERBANCK', '3092b43a19fcb5f65f92cc1256cb6bef591dae94.jpg', NULL, '2024-05-31', '2024-05-30'),
+(21, 9, 500.00, '2024-05-30', 'pago 3', 'EFECTIVO', 'INTERBANCK', '3092b43a19fcb5f65f92cc1256cb6bef591dae94.jpg', NULL, '2024-05-31', '2024-05-30'),
+(22, 8, 400.00, '2024-05-31', 'PAGO POR LA PRIMERA CUOTA', 'EFECTIVO', 'INTERBANCK', 'a951edac9e3b22f318b6687a5213394034b9597f.jpg', NULL, NULL, '2024-05-31'),
+(23, 8, 100.00, '2024-05-31', 'PAGO POR LA SEGUNDA CUOTA', 'TRANFERENCIA', 'BBVA', 'a951edac9e3b22f318b6687a5213394034b9597f.jpg', NULL, NULL, '2024-05-31'),
+(24, 7, 499.00, '2024-05-31', 'PAGO POR 4 CUOTA', 'TRANFERENCIA', 'INTERBANCK', 'a951edac9e3b22f318b6687a5213394034b9597f.jpg', NULL, NULL, '2024-05-31'),
+(25, 7, 1.00, '2024-05-31', 'PAGO POR LA 5 CUOTA', 'TRANFERENCIA', 'INTERBANCK', 'a951edac9e3b22f318b6687a5213394034b9597f.jpg', NULL, NULL, '2024-05-31');
 
 -- --------------------------------------------------------
 
@@ -2660,7 +2668,8 @@ INSERT INTO `devoluciones` (`iddevolucion`, `idseparacion`, `monto_devolucion`, 
 (6, 9, 250.00, '2024-05-26', NULL, NULL, 1, 'No cuenta con los papeles en regla', 'DEC-000100', 'noImage.jpg', 50, 'POR SEPARACIÓN'),
 (7, 10, 250.00, '2024-05-26', NULL, NULL, 1, 'Documentos irregulares', 'DEC-300000', 'noImage.jpg', 50, 'POR SEPARACIÓN'),
 (8, 12, 195.06, '2024-05-26', NULL, NULL, 1, 'No fué aprobado por el banco', 'DEC-000060', 'f716ad45a0bd1f829498c1b51f1e0c036348f2af.jpg', 30, 'POR SEPARACIÓN'),
-(9, 16, 320.00, '2024-05-26', '2024-05-27', NULL, 1, 'No tiene el dinero', 'DEC-000013', '2363f7f736cdf3967cc62cbd0a2c8c2868936a00.jpg', 50, 'POR SEPARACIÓN');
+(9, 16, 320.00, '2024-05-26', '2024-05-27', NULL, 1, 'No tiene el dinero', 'DEC-000013', '2363f7f736cdf3967cc62cbd0a2c8c2868936a00.jpg', 50, 'POR SEPARACIÓN'),
+(10, 19, 250.00, '2024-05-31', NULL, NULL, 1, 'EL CLIENTE DESISTIO', 'DEC-560000', 'bd9e51fbea2cf1f70ed1fba5929e5c9c29ccaeb8.jpg', 50, 'POR SEPARACIÓN');
 
 --
 -- Disparadores `devoluciones`
@@ -4766,7 +4775,7 @@ CREATE TABLE `metricas` (
 --
 
 INSERT INTO `metricas` (`idmetrica`, `idproyecto`, `l_vendidos`, `l_noVendidos`, `l_separados`, `update_at`) VALUES
-(1, 1, 3, 55, 1, '2024-05-28 02:46:37'),
+(1, 1, 3, 57, 0, '2024-05-31 03:58:06'),
 (2, 2, 2, 5, 0, '2024-05-28 02:45:06'),
 (3, 3, 0, 6, 0, '2024-05-25 22:41:49'),
 (4, 4, 0, 5, 1, '2024-05-20 01:44:34'),
@@ -4917,7 +4926,8 @@ INSERT INTO `personas_juridicas` (`idpersona_juridica`, `razon_social`, `documen
 (46, 'ATENCION INTEGRAL SALUD UTES OXAPAMPA', 'RUC', '20191045671', 1557, 'JR. ENRIQUE BOTTGER NRO. S/N  OXAPAMPA, PASCO - OXAPAMPA - OXAPAMPA', '2024-05-04', NULL, NULL),
 (48, 'CONSEJO NACIONAL CAMELIDOS SUDAMERICANOS', 'RUC', '20174198030', 1630, 'AV. LAYKAKOTA NRO. 339, PUNO - PUNO - PUNO', '2024-05-04', NULL, NULL),
 (49, 'GERENCIA REGIONAL DE TRABAJO Y PROMOCION DEL EMPLEO DEL GOBI', 'RUC', '20171312141', 335, 'CAL. UNIVERSIDAD NRO. 117 URB. VICTORIA, AREQUIPA - AREQUIPA - AREQUIP', '2024-05-04', NULL, NULL),
-(51, 'REGION TACNA HOSPITAL DE APOYO H.UNANUE', 'RUC', '20453223788', 1817, 'CAL. BLONDELL NRO. S/N, TACNA - TACNA - TACNA', '2024-05-04', NULL, NULL);
+(51, 'REGION TACNA HOSPITAL DE APOYO H.UNANUE', 'RUC', '20453223788', 1817, 'CAL. BLONDELL NRO. S/N, TACNA - TACNA - TACNA', '2024-05-04', NULL, NULL),
+(52, 'ATUNCAR VALERIO LUCAS ALFREDO', 'RUC', '10770685708', 1007, 'av san juan', '2024-05-31', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -4976,7 +4986,8 @@ INSERT INTO `presupuestos` (`idpresupuesto`, `modelo`, `create_at`, `update_at`,
 (39, 'modelo 34', '2024-05-24', NULL, '2024-05-25', 1, 'PRES-007'),
 (40, 'modelo 35', '2024-05-24', NULL, '2024-05-25', 1, 'PRES-008'),
 (41, 'modeo 50', '2024-05-24', NULL, '2024-05-25', 1, 'PRES-009'),
-(42, 'modelo 51', '2024-05-24', NULL, '2024-05-25', 1, 'PRES-010');
+(42, 'modelo 51', '2024-05-24', NULL, '2024-05-25', 1, 'PRES-010'),
+(43, 'CASA UNICA', '2024-05-31', NULL, NULL, 1, 'PRES-500');
 
 -- --------------------------------------------------------
 
@@ -5312,7 +5323,8 @@ INSERT INTO `rep_legales_clientes` (`idrepresentante`, `idpersona_juridica`, `re
 (139, 41, 'ZAVALA POLANCO CARLOS ALBERTO', 'DNI', '10599632', 'JEFE', 'partida nro 3', 'HABILITADO', '2024-05-05', '2024-05-05', NULL),
 (140, 41, 'AAAAAA', 'DNI', '20494411', 'ADMINISTRADOR', 'PARTIDA Nº3', 'HABILITADO', '2024-05-05', NULL, '2024-05-05'),
 (141, 41, 'CONCORI COAQUIRA EDGAR ROGELIO', 'DNI', '20408412', 'GERENTE', 'PARTIDA Nº2', 'HABILITADO', '2024-05-05', NULL, '2024-05-05'),
-(142, 1, 'juan perez moran', 'DNI', '70173537', 'director', 'nro 3', 'HABILITADO', '2024-05-27', NULL, NULL);
+(142, 1, 'juan perez moran', 'DNI', '70173537', 'director', 'nro 3', 'HABILITADO', '2024-05-27', NULL, NULL),
+(143, 52, 'CARLOS ALBERTO', 'DNI', '10770685', 'DIRECTOR', 'NRO 3', 'HABILITADO', '2024-05-31', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -5411,7 +5423,8 @@ INSERT INTO `separaciones` (`idseparacion`, `idactivo`, `idcliente`, `idconyugue
 (11, 4, 33, NULL, 500.00, '5b2e5489dbc8add08d32e0625c4a8d3bc18afc49.jpg', '2024-05-25', '2024-05-25', '2024-05-25', 1, 'SEC-100000', '', 'USD', 3.7500),
 (12, 18, 4, NULL, 650.20, '3626e805d5a57a2ed3a592194ec2ee9e82016384.jpg', '2024-05-26', NULL, '2024-05-26', 1, 'SEC-000030', '', 'USD', 3.4000),
 (16, 19, 4, NULL, 640.00, '4ad119cbba70bbddb57672a8bb28fd16d0d0afb7.jpg', '2024-05-26', NULL, '2024-05-26', 1, 'SEC-000100', '', 'USD', 3.7500),
-(18, 18, 4, 7, 600.00, '11ef89ef230c6117523ad5875c46dd07499e4fc3.jpg', '2024-05-26', NULL, NULL, 1, 'SEC-000500', '', 'USD', 3.5000);
+(18, 18, 4, 7, 600.00, '11ef89ef230c6117523ad5875c46dd07499e4fc3.jpg', '2024-05-26', NULL, '2024-05-31', 1, 'SEC-000500', '', 'USD', 3.5000),
+(19, 63, 27, NULL, 500.00, '32eeaf0b3e12f48dc51462526736eac056c4cc83.jpg', '2024-05-31', NULL, '2024-05-31', 1, 'SEC-300000', '', 'USD', 3.7500);
 
 --
 -- Disparadores `separaciones`
@@ -6190,7 +6203,7 @@ ALTER TABLE `usuarios`
 -- AUTO_INCREMENT de la tabla `activos`
 --
 ALTER TABLE `activos`
-  MODIFY `idactivo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=80;
+  MODIFY `idactivo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=81;
 
 --
 -- AUTO_INCREMENT de la tabla `categoria_costos`
@@ -6202,7 +6215,7 @@ ALTER TABLE `categoria_costos`
 -- AUTO_INCREMENT de la tabla `clientes`
 --
 ALTER TABLE `clientes`
-  MODIFY `idcliente` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
+  MODIFY `idcliente` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
 
 --
 -- AUTO_INCREMENT de la tabla `constructora`
@@ -6244,19 +6257,19 @@ ALTER TABLE `detalles_contratos`
 -- AUTO_INCREMENT de la tabla `detalle_costos`
 --
 ALTER TABLE `detalle_costos`
-  MODIFY `iddetalle_costo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `iddetalle_costo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- AUTO_INCREMENT de la tabla `detalle_cuotas`
 --
 ALTER TABLE `detalle_cuotas`
-  MODIFY `iddetalle_cuota` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `iddetalle_cuota` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 
 --
 -- AUTO_INCREMENT de la tabla `devoluciones`
 --
 ALTER TABLE `devoluciones`
-  MODIFY `iddevolucion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `iddevolucion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT de la tabla `distritos`
@@ -6304,13 +6317,13 @@ ALTER TABLE `personas`
 -- AUTO_INCREMENT de la tabla `personas_juridicas`
 --
 ALTER TABLE `personas_juridicas`
-  MODIFY `idpersona_juridica` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=52;
+  MODIFY `idpersona_juridica` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=53;
 
 --
 -- AUTO_INCREMENT de la tabla `presupuestos`
 --
 ALTER TABLE `presupuestos`
-  MODIFY `idpresupuesto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
+  MODIFY `idpresupuesto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=44;
 
 --
 -- AUTO_INCREMENT de la tabla `provincias`
@@ -6334,7 +6347,7 @@ ALTER TABLE `representantes`
 -- AUTO_INCREMENT de la tabla `rep_legales_clientes`
 --
 ALTER TABLE `rep_legales_clientes`
-  MODIFY `idrepresentante` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=143;
+  MODIFY `idrepresentante` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=144;
 
 --
 -- AUTO_INCREMENT de la tabla `roles`
@@ -6352,7 +6365,7 @@ ALTER TABLE `sedes`
 -- AUTO_INCREMENT de la tabla `separaciones`
 --
 ALTER TABLE `separaciones`
-  MODIFY `idseparacion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `idseparacion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- AUTO_INCREMENT de la tabla `subcategoria_costos`

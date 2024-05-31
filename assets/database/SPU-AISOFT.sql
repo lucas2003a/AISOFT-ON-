@@ -2542,6 +2542,7 @@ CREATE PROCEDURE spu_list_quotas_reprogram
 )
 BEGIN
     SELECT 
+        lq.idcontrato,
         ct.idcontrato,
         ct.precio_venta,
         (SUM(lq.cancelado)) as monto_cancelado,
