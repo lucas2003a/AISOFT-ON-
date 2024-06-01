@@ -931,8 +931,8 @@
               <td>${numRow}</td>
               <td class="edit-row select text-truncate" data-subcategoria="subcategoria"data-idcategoria_costo="${element.idcategoria_costo}">${element.subcategoria_costo}</td>
               <td class="edit-row text text-truncate" data-detalle="detalle">${element.detalle}</td>
-              <td class="edit-row number" data-cantidad="cantidad">${element.cantidad}</td>
-              <td class="edit-row number" data-precio="precio_unitario">${precioUnitarioFormat}</td>
+              <td class="edit-row number cantidad" data-cantidad="cantidad">${element.cantidad}</td>
+              <td class="edit-row number precio" data-precio="precio_unitario">${precioUnitarioFormat}</td>
               <td>${numberFormat}</td>
               <td>
                 <button type="button" data-index="${element.indice}" class="btn btn-link text-dark px-3 mb-0 save"><i data-index="${element.indice}" class="fa-solid fa-floppy-disk save"></i></button>
@@ -990,7 +990,7 @@
             idmaterial: Number.parseInt($("#material").value),
             detalle: marca + " // " + material + " // " + unidad_medida,
             cantidad: Number.parseInt($("#cantidad").value),
-            precio_unitario: Number.parseInt($("#precio_unitario").value)
+            precio_unitario: Number.parseFloat($("#precio_unitario").value)
           }
         }
 
@@ -1297,6 +1297,7 @@
       //Convierte los inputs a textos <td>
       function convertText(tr, indexElement) {
 
+        console.log(dataStorage)
         let tds = tr.querySelectorAll("td");
 
         Array.from(tds).forEach(td => {
@@ -1319,13 +1320,25 @@
 
           } else if (td.querySelector("input")) {
             let input = td.querySelector("input");
+
+            let cantidad = Number.parseInt(tr.querySelector(".edit-row.number.cantidad").textContent || tr.querySelector("input[name=cantidad]").value);
+            let precio = Number.parseFloat(tr.querySelector(".edit-row.number.precio").textContent || tr.querySelector("input[name=precio_unitario]").value);
+            console.log(precio)
+            console.log(cantidad)
+
+            let total = cantidad * precio;
             console.log(input)
             dataStorage[indexObject][input.name] = input.value;
+            dataStorage[indexObject].cantidad = cantidad;
+            dataStorage[indexObject].precio_unitario = precio;
             td.textContent = input.value;
+
+            console.log(dataStorage)
 
           }
         })
 
+        renderDetbudgets(dataStorage)
         //Almacena en sessionStorage
         const dataEdit = JSON.stringify(dataStorage);
         sessionStorage.setItem("dataStoraged", dataEdit);

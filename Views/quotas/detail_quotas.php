@@ -716,10 +716,26 @@
             fechaMin = results.data.reduce((value1, value2) => value1.fecha_vencimiento < value2.fecha_vencimiento ? value1 : value2);
 
             fechaAprox = dataRender.find(data => data.deuda > 0);
-            $("#text-deuda").innerText = fechaAprox.monto_cuota;
-            $("#text-fecha").innerText = fechaAprox.fecha_vencimiento;
-            $("#fecha_vencimiento").min = fechaMin.fecha_vencimiento;
-            $("#fecha_vencimiento").max = fechaMax.fecha_vencimiento;
+
+            let isCount = results.data.reduce((total, cuota) =>total +  Number.parseFloat(cuota.deuda || 0) , 0);
+
+            console.log(isCount);
+
+            if(!isCount){
+
+              $("#go-reprogram").classList.add("disabled");
+            }else{
+
+              $("#go-reprogram").classList.remove("disabled");
+            }
+
+            if(fechaAprox){
+
+              $("#text-deuda").innerText = fechaAprox.monto_cuota;
+              $("#text-fecha").innerText = fechaAprox.fecha_vencimiento;
+              $("#fecha_vencimiento").min = fechaMin.fecha_vencimiento;
+              $("#fecha_vencimiento").max = fechaMax.fecha_vencimiento;
+            }
 
           }
         } catch (e) {

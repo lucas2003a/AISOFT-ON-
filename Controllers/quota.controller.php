@@ -9,10 +9,14 @@ if(isset($_POST["action"])){
 
     switch($_POST["action"]){
 
-        case "listQuotasAllNoPay": 
-                $idcontrato = $_POST["idcontrato"];
+        case "setQuotasAllNoPay": 
+                $dataObtained = [
+                    "idcontrato"    =>  $_POST["idcontrato"],
+                    "idusuario"     =>  1
+                    // "idusuario"     =>  $_POST["idusuario"]
+                ];
 
-                echo json_encode($quota->listQuotasAllNoPay($idcontrato));
+                echo json_encode($quota->setQuotasAllNoPay($dataObtained));
             break;
         case "listQuotasIdcontrato": 
             

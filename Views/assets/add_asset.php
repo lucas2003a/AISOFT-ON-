@@ -1035,7 +1035,11 @@
 
       if (sublote != "") {
 
-        searchInfo(AllDataAssets, "sublote", sublote);
+        searchInfo(AllDataAssets, "sublote", sublote)
+          .then(() => {})
+          .catch(()=>{
+            $("#sublote").focus();
+          })
 
       } else {
 

@@ -1113,9 +1113,13 @@
 
       let sublote = $("#sublote").value;
 
-      if (sublote != "") {
+      if (sublote != "" && sublote !== dataAsset.sublote) {
 
-        searchInfo(AllDataAssets, "sublote", sublote);
+        searchInfo(AllDataAssets, "sublote", sublote)
+          .then(() => {})
+          .catch(()=>{
+            $("#sublote").focus();
+          });
 
       } else {
 

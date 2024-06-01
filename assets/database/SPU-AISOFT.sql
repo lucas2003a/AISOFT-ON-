@@ -939,6 +939,7 @@ BEGIN
 END $$
 
 DELIMITER;
+
 DELIMITER $$
 
 CREATE PROCEDURE spu_list_clients_contractDN(IN _documento_nro VARCHAR(20))
@@ -1912,7 +1913,7 @@ BEGIN
             idusuario 				= _idusuario,
             update_at 				= CURDATE()
         WHERE
-			iddetalle_costos = _iddetalle_costo;
+			iddetalle_costo = _iddetalle_costo;
             
 	SELECT ROW_COUNT() AS filasAfect;
 END $$
@@ -2025,30 +2026,39 @@ BEGIN
 END $$
 
 DELIMITER;
+
 select * from cuotas;
+
 DELIMITER $$
 
-CREATE PROCEDURE spu_list_separation_ByIdAsset(IN _idactivo INT)
+CREATE PROCEDURE spu_list_separation_ByIdAsset (IN _idactivo INT)
 BEGIN
-    DECLARE _tpersona VARCHAR(10);
 
-    SET _tpersona = (
-        SELECT tipo_persona
-        FROM clientes cli 
-        INNER JOIN separaciones sep on sep.idcliente = cli.idcliente
-        WHERE sep.idactivo = _idactivo
-    );
-
-    IF _tpersona = "NATURAL" THEN
-        SELECT * FROM vws_list_separations_tpersona_natural_full
-            WHERE idactivo = _idactivo
-                AND inactive_at IS NULL;
-
-    ELSEIF _tpersona = "JURÍDICA" THEN
-        SELECT * FROM vws_list_separations_tpersona_juridica_full
-            WHERE idactivo = _idactivo
-                AND inactive_at IS NULL;
-    END IF;
+SELECT 
+    lcn.idseparacion,
+    lcn.idcliente,
+    lcn.cliente,
+    lcn.documento_nro,
+    lcn.tipo_persona
+FROM
+    vws_list_separations_tpersona_natural_full lcn
+    LEFT JOIN separaciones sep ON sep.idseparacion = lcn.idseparacion
+WHERE
+    sep.idactivo = 6
+    AND lcn.inactive_at IS NULL
+UNION
+SELECT 
+    lcj.idseparacion,
+    lcj.idcliente,
+    lcj.cliente,
+    lcj.documento_nro,
+    lcj.tipo_persona
+FROM
+    vws_list_separations_tpersona_juridica_full lcj
+    LEFT JOIN separaciones sep ON sep.idseparacion = lcj.idseparacion
+WHERE
+    sep.idactivo = 6
+    AND lcj.inactive_at IS NULL;
 END $$
 
 DELIMITER;
@@ -2205,8 +2215,7 @@ BEGIN
 END $$
 
 DELIMITER;
-SELECT * from activos WHERE estado = "SIN VENDER" AND inactive_at IS NULL;
-SELECT * FROM contratos;
+
 -- DEVLOUCIONES   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 DELIMITER $$
 
@@ -2536,6 +2545,7 @@ DELIMITER;
 -- CUOTAS /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 DELIMITER $$
+
 CREATE PROCEDURE spu_list_quotas_reprogram
 (
     IN _idcontrato INT
@@ -2551,23 +2561,34 @@ BEGIN
         INNER JOIN contratos ct ON ct.idcontrato = lq.idcontrato
         WHERE ct.idcontrato = _idcontrato;
 END $$
-DELIMITER ;
+
+DELIMITER;
+
 DELIMITER $$
 
-CREATE PROCEDURE spu_list_quotas_allNoPay
+CREATE PROCEDURE spu_set_quotas_allNoPay
 (
-    IN _idcontrato INT
+    IN _idcontrato INT,
+    IN _idusuario INT
 )
 BEGIN
-    SELECT *
-        FROM vws_list_quotas
+    UPDATE cuotas
+        SET
+            inactive_at = CURDATE(),
+            idusuario = _idusuario
         WHERE inactive_at IS NULL
         AND estado != "CANCELADO"
-        AND idcontrato = _idcontrato
-        ORDER BY fecha_vencimiento;
+        AND idcontrato = _idcontrato;
+
+    SELECT ROW_COUNT() AS filasAfect;
 END $$
+
+DELIMITER;
+
 select * from contratos;
-DELIMITER ;
+
+update cuotas set inactive_at = NULL;
+
 DELIMITER $$
 
 CREATE PROCEDURE spu_list_quotas_idcontrato
@@ -2583,8 +2604,11 @@ BEGIN
 END $$
 
 DELIMITER;
+
 select * from cuotas;
-call spu_list_quotas_idcontrato(1)
+
+call spu_list_quotas_idcontrato (1)
+
 DELIMITER $$
 
 CREATE PROCEDURE spu_list_quotas_ById
@@ -2623,7 +2647,8 @@ BEGIN
 END $$
 
 DELIMITER;
-call spu_list_quotas_ById(1)
+
+call spu_list_quotas_ById (1)
 
 DELIMITER $$
 
@@ -2677,6 +2702,7 @@ BEGIN
 END $$
 
 DELIMITER;
+
 select * from cuotas;
 
 DELIMITER $$
@@ -2710,7 +2736,7 @@ CREATE PROCEDURE spu_add_quota
 )
 BEGIN
     INSERT INTO cuotas(idcontrato, monto_cuota, fecha_vencimiento, idusuario)
-                VALUES(_idcontrato, _monto_cuota, _fecha_vencimiento, idusuario);
+                VALUES(_idcontrato, _monto_cuota, _fecha_vencimiento, _idusuario);
                 
     SELECT ROW_COUNT() AS filasAfect;
 END $$
@@ -2816,6 +2842,7 @@ BEGIN
 END $$
 
 DELIMITER;
+
 DELIMITER $$
 
 CREATE PROCEDURE ()
@@ -2823,4 +2850,3 @@ BEGIN
 END $$
 
 DELIMITER;
-

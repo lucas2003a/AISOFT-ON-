@@ -14,12 +14,17 @@ class Quota extends Conection{
     /**
      * Método que obtiene todas las cuentas,sn excepción
      */
-    public function listQuotasAllNoPay($idcontrato = 0){
+    public function setQuotasAllNoPay($dataQuotas = []){
         try {
-            $query  = $this->conection->prepare("CALL spu_list_quotas_allNoPay(?)");
-            $query->execute(array($idcontrato));
+            $query  = $this->conection->prepare("CALL spu_set_quotas_allNoPay(?,?)");
+            $query->execute(
+                array(
+                    $dataQuotas['idcontrato'],
+                    $dataQuotas['idusuario'],
+                )
+            );
 
-            return $query->fetchAll(PDO::FETCH_ASSOC);
+            return $query->fetch(PDO::FETCH_ASSOC);
 
         } catch (Exception $e) {
             die($e->getMessage());

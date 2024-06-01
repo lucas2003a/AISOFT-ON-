@@ -1349,27 +1349,33 @@
 
         let isValid = true;
 
-        Array.from(form).forEach(input => {
+        console.log(isValid);
+        // forEach => rcorre todos los elemmentos sin condición de frenar
+        // every => rcorre todos los elementos y se devuelve true si todos son true o false si alguno no cumple
+        // some => recorre todos los elementos y devuelve true si alguo coincide
+        isValid =  Array.from(form).every(input => {
 
           if (input.value == "") {
 
             input.classList.add('was-validated'), //MUESTRA LOS LABELS EN ROJO
-              isValid = false;
+            isValid = false;
 
             input.reportValidity();
 
             sAlert.sweetWarning("Cajas vacías", "Necesitas completar los campos");
+            return false;
           } else {
 
             input.classList.remove('was-validated');
             isValid = true;
 
+            return true;
           }
         });
-
+        
         if (isValid) {
-
           callback();
+
         }
 
       }

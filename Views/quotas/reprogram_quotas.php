@@ -388,15 +388,11 @@
           <div class="card">
             <div class="card-body" style="padding: 50px">
               <div class="row">
-
-
-
                 <div>
-
                   <div class="d-flex flex-column h-100">
                     <div class="row">
                       <div class="col-md-6">
-                        <form class="row needs-validation" id="form-add-separation" novalidate>
+                        <form class="row needs-validation" id="form-add-reprogram" novalidate>
 
                           <!-- SALDO -->
                           <div class="mt-2">
@@ -424,7 +420,8 @@
                           </div>
                           <div class="d-grid p-3">
 
-                            <button class="btn btn-success" type="submit" id="guardar">Guardar</button>
+                            <button class="btn btn-primary" type="submit" id="calcular">Calcular</button>
+                            <button class="btn btn-success" type="button" id="guardar" disabled>Guardar</button>
                           </div>
                         </form>
 
@@ -433,7 +430,7 @@
                       <div class="col-md-6">
 
                         <!-- RENDERIZAR LA TABLA CON LAS NUEVAS CUOTAS -->
-                        <div class="table-responsive text-center p-0 table-xs">
+                        <div class="table-responsive text-center p-0 table-xs" style="height: 650px; overflow-y: auto;">
                           <table class="table align-items-center mb-0 table-hover" id="table-quotas">
                             <thead>
                               <tr>
@@ -445,11 +442,6 @@
                             <tbody>
 
                               <!-- RENDER -->
-                              <tr>
-                                <td>1</td>
-                                <td>500</td>
-                                <td>2024/20/22</td>
-                              </tr>
 
                             </tbody>
                           </table>
@@ -543,29 +535,6 @@
     </div>
   </div>
 
-  <!-- Modal trigger button -->
-  <button type="button" id="show-modal" class="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#modalId" style="position: absolute; left: -9999px; top: -9999px;">
-    Launch
-  </button>
-
-  <!-- Modal Body -->
-  <!-- if you want to close by clicking outside the modal, delete the last endpoint:data-bs-backdrop and data-bs-keyboard -->
-  <div class="modal fade" id="modalId" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-      <div class="modal-content bg-transparent" style="border: none;">
-        <div class="modal-header" style="border-bottom: none;">
-
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body d-lg-flex justify-content-center">
-          <img id="viewer" src="" alt="" style="height: 500px; width: 500px;">
-        </div>
-        <div class="modal-footer d-flex justify-content-center" style="border-top: none;">
-          <h4 class="text-white bold" id="name_image">CONSTANCIA</h4>
-        </div>
-      </div>
-    </div>
-  </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
@@ -601,11 +570,84 @@
       const urlParams = new URLSearchParams(stringQuery);
       const code = urlParams.get("id");
       const idcontrato = atob(code);
-      
+
       let dataRender = [];
       let timmer;
 
-      async function renderTable(){
+      async function addQuotas(obj){
+
+        try{
+          let url = "../../Controllers/quota.controller.php";
+
+          let params = new FormData();
+          params.append("action", "addQuota");
+          params.append("idcontrato", obj.idcontrato);
+          params.append("monto_cuota", obj.monto_cuota);
+          params.append("fecha_vencimiento", obj.fecha_vencimiento);
+
+          let result = await global.sendAction(url, params);
+
+          if(result){
+
+            return result;
+          }
+
+        }
+        catch(e){
+          console.error(e);
+        }
+      }
+
+      //Elimina las cuotas sin pagar y registra las cuotas nuevas
+      async function upInsertNewQuotas() {
+
+        let dataDrop = await getQuotasNoPay(idcontrato);
+
+        console.log(dataDrop);
+        if(dataDrop){
+          let counter = 0;
+
+          for(element of dataRender){
+
+            counter += await addQuotas(element);
+
+          };
+
+          if(counter){
+            sAlert.sweetSuccess("Éxito","Cuotas registradas correctamente  :" + counter,()=>{
+              window.location.href = `./detail_quotas.php?id=${btoa(idcontrato)}`;
+            });
+          }else{
+            sweetAlert.alertError("No se se ha realizado los registros","Vuelve a intentarlo");
+          }
+        }
+      };
+
+      //Obtine las cuotas no pagadas
+      async function getQuotasNoPay(id) {
+
+        try {
+
+          let url = "../../Controllers/quota.controller.php";
+          let params = new FormData();
+
+          params.append("action", "setQuotasAllNoPay");
+          params.append("idcontrato", id);
+
+          let result = await global.sendAction(url, params);
+
+          if (result) {
+
+            return result
+          }
+
+        } catch (e) {
+          console.error(e);
+        }
+      }
+
+      //Renderiza los datos en la tabla
+      async function renderTable() {
 
         console.log(dataRender)
         $("#table-quotas tbody").innerHTML = "";
@@ -625,74 +667,86 @@
           $("#table-quotas tbody").innerHTML += newRow;
         })
       }
-      
-      async function pushData(ncuotas){
+
+      //Inserta los datos en el array dataRender
+      async function pushData(ncuotas) {
 
         dataRender = [];
 
         let contratoId = Number.parseInt(idcontrato);
         let numero_cuotas = Number.parseInt($("#numero_cuotas").value);
         let monto_cuota = Number.parseFloat($("#monto_cuota").value);
-        let fecha_vencimiento =$("#fecha_vencimiento").value
-        
+        let fecha_vencimiento = $("#fecha_vencimiento").value
+
         let cuotasTotal = numero_cuotas * monto_cuota;
         let saldo_contrato = Number.parseFloat($("#saldo_contrato").value);
 
+
         let monto_ajuste = saldo_contrato > cuotasTotal ? saldo_contrato - cuotasTotal : 0;
 
-        for(i = 0; i < ncuotas; i++){
+        let newDate = new Date(fecha_vencimiento);
+        let nMonth = 1;
+        for (i = 0; i < ncuotas; i++) {
+
+          newDate.setMonth(newDate.getMonth() + 1, newDate.getDate())
+
+          let dayV = newDate.getDate().toString().padStart(2, '0');
+          let monthV = (newDate.getMonth() + 1).toString().padStart(2, '0');
+          let yearV = newDate.getFullYear().toString();
+
+          let calFven = `${yearV}-${monthV}-${dayV}`;
 
           let monto = saldo_contrato > cuotasTotal ? monto_cuota + (i == 0 ? monto_ajuste : 0) : monto_cuota;
-          let object = {idcontrato: contratoId, monto_cuota: monto.toFixed(2), fecha_vencimiento:fecha_vencimiento};
+          let object = {
+            idcontrato: contratoId,
+            monto_cuota: monto.toFixed(2),
+            fecha_vencimiento: calFven
+          };
           dataRender.push(object);
+
+          nMonth++;
         }
         await renderTable()
       }
 
       //Obtiene los montos a repogramar
-      async function getQuotasContractReprogram(id){
-        try{
+      async function getQuotasContractReprogram(id) {
+        try {
           let url = "../../Controllers/quota.controller.php";
 
           let params = new FormData();
-          params.append("action","getQuotasContractReprogram");
-          params.append("idcontrato",id);
+          params.append("action", "getQuotasContractReprogram");
+          params.append("idcontrato", id);
 
           let result = await global.sendAction(url, params);
 
-          if(result){
+          if (result) {
             console.log(result)
             $("#saldo_contrato").value = result.saldo;
           }
-        }
-        catch(e){
+        } catch (e) {
 
         }
       }
 
-      $("#numero_cuotas").addEventListener("input",(e)=>{
+      $("#numero_cuotas").addEventListener("input", (e) => {
 
         let valueInput = Number.parseInt(e.target.value);
-        if(valueInput){
+        if (valueInput) {
           let saldo_contrato = Number.parseFloat($("#saldo_contrato").value);
 
-          let division = saldo_contrato /  valueInput;
-          
+          let division = saldo_contrato / valueInput;
+
           $("#monto_cuota").value = division.toFixed(2);
         }
       });
+      
+      $("#guardar").addEventListener("click", () => {
 
-      $("#monto_cuota").addEventListener("input",(e)=>{
+        sAlert.sweetConfirm("Datos nuevos", "¿Deseas registrar las nuevas cuotas?", () => {
 
-        let valueInput = Number.parseFloat(e.target.value);
-
-        // if(valueInput){
-        //   let saldo_contrato = Number.parseFloat($("#saldo_contrato").value);
-
-        //   let division = saldo_contrato / valueInput;
-
-        //   $("#numero_cuotas").value = Math.round(division);
-        // }
+          upInsertNewQuotas();
+        });
       });
 
       getQuotasContractReprogram(idcontrato);
@@ -720,10 +774,13 @@
 
               let nCuotas = $("#numero_cuotas").value;
               pushData(nCuotas)
-              // sAlert.sweetConfirm("Datos nuevos", "¿Deseas actualizar el registro?", () => {
 
-              //   setDetailQuota(idcuota); //Ejecuta la función
-              // });
+              if (dataRender.length > 0) {
+                $("#guardar").disabled = false;
+              } else {
+                $("#guardar").disabled = true;
+              }
+
             }
 
             form.classList.add('was-validated') //=> AGREGA ESTA CLASE A LOS ELEMENTOS DEL FORMULARIO(MUESTRA LOS COMENTARIOS)
