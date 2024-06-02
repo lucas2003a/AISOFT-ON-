@@ -454,10 +454,10 @@
                             </div>
                           </div>
                           
-                          <!-- MONTO SEPARACIÓN -->
+                          <!-- MONTO TOTAL -->
                           <div class="mt-4">
-                            <label for="monto_separacion" class="form-label">Monto de separación</label>
-                            <input type="text" name="monto_separacion" class="form-control" id="monto_separacion" readonly>
+                            <label for="monto_total" class="form-label">Monto total</label>
+                            <input type="text" name="monto_total" class="form-control" id="monto_total" readonly>
                           </div>
 
                           <!-- MONTO DE DEVOLUCIÓN -->
@@ -638,9 +638,11 @@
     const stringQuery = window.location.search;
     const params  = new URLSearchParams(stringQuery);
     const code = params.get("id");
-    const idseparacion = atob(code);
+    const codeType = params.get("type");
+    const generalId = atob(code);
+    const type = atob(codeType);
 
-    console.log(idseparacion)
+    console.log(generalId)
     const $ = id => global.$(id);
     const $All = id => global.$All(id);
 
@@ -650,21 +652,33 @@
     let newValue;
 
     //Obtiene los registros de una separacion por id (para obtener el monot de la separación)
-    async function getSeparationAmount(id) {
+    async function getAmount(id) {
 
       try {
-        let url = "../../Controllers/separation.controller.php";
+
+        let url = "";
         let params = new FormData();
 
-        params.append("action", "listSeparationById");
-        params.append("idseparacion", id);
+        if(type == "sep"){
+
+          url = "../../Controllers/separation.controller.php";
+  
+          params.append("action", "listSeparationById");
+          params.append("idseparacion", id);
+        }else{
+          url = "../../Controllers/quota.controller.php";
+  
+          params.append("action", "getQuotasContractReprogram");
+          params.append("idcontrato", id);
+        }
 
         let result = await global.sendAction(url, params);
 
         if(result) {
           
-          $("#monto_separacion").value = result.separacion_monto;
-          return result.separacion_monto;
+          let total = result.separacion_monto || result.precio_venta;
+          $("#monto_total").value = total;
+          return total;
         }
       } catch (e) {
         console.error(e);
@@ -674,7 +688,7 @@
     //Calcula el nuevo monto de la devolución
     async function calculateNewAmount(){
       
-      let montoSep = Number.parseFloat(await getSeparationAmount(idseparacion));
+      let montoSep = Number.parseFloat(await getAmount(generalId));
       let porcentaje = Number.parseFloat($("#porcentaje_penalidad").value || 0)
 
       console.log(montoSep)
@@ -778,16 +792,25 @@
     }
 
     //Registra una separación
-    async function addRefund(idsep) {
+    async function addRefund(genID) {
 
       try {
 
         let url = "../../Controllers/refund.controller.php";
         let params = new FormData()
 
-        params.append("action", "addRefund");
-        params.append("n_expediente", newValue);
-        params.append("idseparacion", idsep);
+        if(type == "sep"){
+
+          params.append("action", "addRefund");
+          params.append("n_expediente", newValue);
+          params.append("idseparacion", genID);
+          params.append("idcontrato", "");
+        }else{
+          params.append("action", "addRefund");
+          params.append("n_expediente", newValue);
+          params.append("idseparacion", "");
+          params.append("idcontrato", genID);
+        }
         params.append("tipo_devolucion", $("#tipo_devolucion").value);
         params.append("detalle", $("#detalle").value);
         params.append("porcentaje_penalidad", $("#porcentaje_penalidad").value);
@@ -872,7 +895,7 @@
     })
 
     // getTC();
-    getSeparationAmount(idseparacion);
+    getAmount(generalId);
     getRefudsAll();
     /* --------------------------------- FUNCIÓN DE VALIDACIÓN --------------------------------------------------------- */
 
@@ -897,7 +920,7 @@
             event.preventDefault();
             sAlert.sweetConfirm("Datos nuevos", "¿Deseas actualizar el registro?", () => {
 
-              addRefund(idseparacion); //Ejecuta la función
+              addRefund(generalId); //Ejecuta la función
             });
           }
 

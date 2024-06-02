@@ -49,6 +49,7 @@ if(isset($_POST["action"])){
                 $dataObtained = [
                         "n_expediente"  =>  $_POST["n_expediente"],
                         "idseparacion"  =>  $_POST["idseparacion"],
+                        "idcontrato"  =>  $_POST["idcontrato"],
                         "tipo_devolucion" =>  $_POST["tipo_devolucion"],
                         "detalle"       =>  $_POST["detalle"],
                         "porcentaje_penalidad" =>  $_POST["porcentaje_penalidad"],
@@ -80,6 +81,7 @@ if(isset($_POST["action"])){
                         "iddevolucion"  =>  $_POST["iddevolucion"],
                         "n_expediente"  =>  $_POST["n_expediente"],
                         "idseparacion"  =>  $_POST["idseparacion"],
+                        "idcontrato"  =>  $_POST["idcontrato"],
                         "tipo_devolucion" =>  $_POST["tipo_devolucion"],
                         "detalle"       =>  $_POST["detalle"],
                         "porcentaje_penalidad" =>  $_POST["porcentaje_penalidad"],

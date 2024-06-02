@@ -756,6 +756,10 @@ progress {
 
 @media (min-width: 1400px) {
 
+  .card-client{
+    
+    
+  }
   .container,
   .container-sm,
   .container-md,
@@ -1067,6 +1071,7 @@ progress {
   .col-sm {
     flex: 1 0 0%;
   }
+
 
   .row-cols-sm-auto>* {
     flex: 0 0 auto;
@@ -2682,6 +2687,11 @@ progress {
 }
 
 @media (max-width: 575.98px) {
+  .card-client{
+    
+    margin:10px 15px 10px 15px;
+  }
+
   .table-responsive-sm {
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;

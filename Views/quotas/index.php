@@ -395,7 +395,7 @@
                 </div>
                 <div class="row d-flex space-between">
                   <div class="col-md-6">
-                    <a class="btn btn-outline-success btn-sm mb-0 me-3" href="./add_asset.php" id="add-asset">AGREGAR CUOTA</a>
+                    <a class="btn btn-outline-success btn-sm mb-0 me-3" href="./add_asset.php" id="add-asset">Generar reporte</a>
                   </div>
                   <div class="col-md-6">
                     <div class="input-group">
@@ -423,7 +423,7 @@
 
         <div class="row">
           <div class="col-12">
-            <div class="card pb-4" style="box-shadow: 20px 20px 27px 20px rgba(0, 0, 0, 0.05); margin:10px 80px 50px 80px;">
+            <div class="card pb-4 card-client" style="box-shadow: 20px 20px 27px 20px rgba(0, 0, 0, 0.05); margin:10px 40px 50px 40px;">
               <div class="card-header pb-0">
                 <div class="row">
                   <div class="col-md-6">

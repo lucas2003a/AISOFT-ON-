@@ -12,6 +12,36 @@ class Contract extends Conection{
     }
 
     /**
+     * Lista los contratos por el tipo de contrato
+     */
+    public function listContractByType($typeContract = ""){
+        try{
+            $query = $this->conection->prepare("CALL spu_list_contracts_types(?)");
+            $query->execute(array($typeContract));
+
+            return $query->fetchAll(PDO::FETCH_ASSOC);
+        }
+        catch(Exception $e){
+            die($e->getMessage());
+        }
+    }
+
+    /**
+     * Lista los contatos por su tipo y por su fecha
+     */
+    public function listContractsByTypeDate($dataContract= []){
+        try{
+            $query = $this->conection->prepare("CALL spu_list_contracts_types_date");
+            $query->execute($dataContract);
+            
+            return $query->fetchAll(PDO::FETCH_ASSOC);
+        }
+        catch(Exception $e){
+            die($e->getMessage());
+        }
+    }
+
+    /**
      * Método para verificar si existe un contrato con el idcontrato
      */
     public function existsContractIdContract($idcontrato =0 ){
@@ -30,7 +60,7 @@ class Contract extends Conection{
     /**
      * Método para verficar si existe un contratodo por el idseparacion
      */
-    public function existContrat($idseparacion = 0){
+    public function existContract($idseparacion = 0){
         try{
 
             $query = $this->conection->prepare("CALL spu_existContract_idseparacion(?)");
@@ -67,17 +97,23 @@ class Contract extends Conection{
 
         try{
 
-            $query = $this->conection->prepare("CALL spu_add_contracts(?,?,?,?,?,?,?,?,?)");
+            $query = $this->conection->prepare("CALL spu_add_contracts(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
             $query->execute(
                 array(
-                    $dataContract["idcliente"],
-                    $dataContract["idconyugue"],
+                    $dataContract["n_expediente"],
+                    $dataContract["tipo_contrato"],
+                    $dataContract["idseparacion"],
                     $dataContract["idrepresentante_primario"],
                     $dataContract["idrepresentante_secundario"],
+                    $dataContract["idcliente"],
+                    $dataContract["idconyugue"],
+                    $dataContract["idactivo"],
                     $dataContract["tipo_cambio"],
                     $dataContract["estado"],
-                    $dataContract["detalles"],
                     $dataContract["fecha_contrato"],
+                    $dataContract["precio_venta"],
+                    $dataContract["det_contrato"],
+                    $dataContract["archivo"],
                     $dataContract["idusuario"]
                 )
             );
@@ -96,18 +132,24 @@ class Contract extends Conection{
 
         try{
 
-            $query = $this->conection->prepare("CALL spu_set_contracts(?,?,?,?,?,?,?,?,?,?)");
+            $query = $this->conection->prepare("CALL spu_set_contracts(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
             $query->execute(
                 array(
                     $dataContract["idcontrato"],
-                    $dataContract["idcliente"],
-                    $dataContract["idconyugue"],
+                    $dataContract["n_expediente"],
+                    $dataContract["tipo_contrato"],
+                    $dataContract["idseparacion"],
                     $dataContract["idrepresentante_primario"],
                     $dataContract["idrepresentante_secundario"],
+                    $dataContract["idcliente"],
+                    $dataContract["idconyugue"],
+                    $dataContract["idactivo"],
                     $dataContract["tipo_cambio"],
                     $dataContract["estado"],
-                    $dataContract["detalles"],
                     $dataContract["fecha_contrato"],
+                    $dataContract["precio_venta"],
+                    $dataContract["det_contrato"],
+                    $dataContract["archivo"],
                     $dataContract["idusuario"]
                 )
             );

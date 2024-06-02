@@ -369,7 +369,8 @@ CREATE TABLE devoluciones
 	iddevolucion 		INT PRIMARY KEY AUTO_INCREMENT,
     n_expediente        VARCHAR(10)     NOT NULL,
     tipo_devolucion     VARCHAR(20)     NOT NULL,
-    idseparacion		INT 			NOT NULL,
+    idseparacion		INT 			NULL,
+    idcontrato          INT             NULL,
     detalle             VARCHAR(200)    NOT NULL,
     porcentaje_penalidad TINYINT        NOT NULL,
     monto_devolucion 	DECIMAL(8,2)	NOT NULL,
@@ -380,6 +381,7 @@ CREATE TABLE devoluciones
     idusuario 				INT 		NOT NULL,
     CONSTRAINT chk_n_expediente_dev CHECK(n_expediente LIKE 'DEC-%'),
     CONSTRAINT fk_idseparacion_dev FOREIGN KEY(idseparacion) REFERENCES separaciones(idseparacion),
+    CONSTRAINT fk_idcontrato_dev FOREIGN KEY(idcontrato) REFERENCES contratos(idcontrato),
     CONSTRAINT fk_idusuario_dev FOREIGN KEY(idusuario) REFERENCES usuarios(idusuario)
 )ENGINE= INNODB;
 
@@ -398,7 +400,8 @@ CREATE TABLE contratos
 	tipo_cambio 			DECIMAL(4,3) 	NOT NULL,
 	estado 					VARCHAR(10)		NOT NULL,
     fecha_contrato			DATE 			NOT NULL,
-    det_contrato			JSON 			NOT NULL DEFAULT '{"clave" :[], "valor":[]}', -- BONOS, FINACIAMIENTOS, PENALIDAD, PLAZO ENTREGA, CUOTA INICIAL ..    
+    det_contrato			JSON 			NOT NULL DEFAULT '{"clave" :[], "valor":[]}', -- BONOS, FINACIAMIENTOS, PENALIDAD, PLAZO ENTREGA, CUOTA INICIAL ..   
+    archivo                 VARCHAR(100)    NULL,
 	create_at 				DATE 			NOT NULL	DEFAULT (CURDATE()),
     update_at				DATE 			NULL,
     inactive_at				DATE 			NULL,
@@ -412,8 +415,6 @@ CREATE TABLE contratos
     CONSTRAINT fk_idusuario_cont FOREIGN KEY(idusuario) REFERENCES usuarios(idusuario)
 )ENGINE = INNODB;
 
-ALTER TABLE contratos ADD COLUMN precio_venta DECIMAL(8,2) NOT NULL;
-ALTER TABLE contratos ADD ;
 -- DETALLE DE CONTRATOS
 CREATE TABLE detalles_contratos
 (
@@ -487,10 +488,6 @@ CREATE TABLE detalle_cuotas
     inactive_at				DATE 			NULL,
     CONSTRAINT fk_idcuota_detalle_cuotas FOREIGN KEY(idcuota) REFERENCES cuotas(idcuota)
 )ENGINE = INNODB;
-ALTER TABLE detalle_cuotas add COLUMN ;
-select *from cuotas;
-SELECT * FROM contratos;
-select * from separaciones;
-select * from activos where idactivo in (10,13);
 
 -- DROP TABLE sustentos_cuotas, cuotas, detalle_gastos, presupuestos, desembolsos, sustentos_sep, separaciones, contratos, viviendas, lotes;
+select * from devoluciones;

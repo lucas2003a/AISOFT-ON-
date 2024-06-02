@@ -574,6 +574,46 @@
       let dataRender = [];
       let timmer;
 
+      //Calcula la fecha actual y establece los límites maximo y mínimo
+      function calculateCalendar(){
+
+        const currentDate = new Date();
+        const futureDate = new Date();
+
+        
+        let currentDay = currentDate.getDate().toString().padStart(2,'0');
+        let currentMonth = (currentDate.getMonth()+ 1).toString().padStart(2,'0');
+        let currentYear = currentDate.getFullYear().toString();
+
+        //Manejo del desborde los días
+        // Solución 1
+
+          futureDate.setMonth(currentDate.getMonth() + 1);
+            if(futureDate.getDate() !== currentDate.getDate()){
+              futureDate.setDate(0)
+            } 
+          //Toma el día anterior al desvordamiento (toma el ultimo día del mes anterior y realiza el calculo)
+        
+            
+        // Solución 2
+        //futureDate.setMonth(futureDate.getMonth() + 1, futureDate.getDate());
+        //Toma el día depués del desvordamiento(toma el ultimo día del mes anterior y traslada la fecha al mes siguiente)
+
+        let futureDay = futureDate.getDate().toString().padStart(2,'0');
+        let futureMonth = (futureDate.getMonth() + 1).toString().padStart(2,'0');
+        let futureYear = futureDate.getFullYear().toString();
+        
+        
+        let future = `${futureYear}-${futureMonth}-${futureDay}`; 
+        let today = `${currentYear}-${currentMonth}-${currentDay}`;
+        
+        console.log(future);
+        console.log(today);
+        $("#fecha_vencimiento").value = today;
+        $("#fecha_vencimiento").min = today;
+        $("#fecha_vencimiento").max = future;
+      }
+
       async function addQuotas(obj){
 
         try{
@@ -589,7 +629,7 @@
 
           if(result){
 
-            return result;
+            return result.filasAfect;
           }
 
         }
@@ -615,6 +655,7 @@
 
           if(counter){
             sAlert.sweetSuccess("Éxito","Cuotas registradas correctamente  :" + counter,()=>{
+              console.log(counter)
               window.location.href = `./detail_quotas.php?id=${btoa(idcontrato)}`;
             });
           }else{
@@ -638,7 +679,7 @@
 
           if (result) {
 
-            return result
+            return result.filasAfect;
           }
 
         } catch (e) {
@@ -722,7 +763,7 @@
 
           if (result) {
             console.log(result)
-            $("#saldo_contrato").value = result.saldo;
+            $("#saldo_contrato").value = result.saldo || result.precio_venta;
           }
         } catch (e) {
 
@@ -750,6 +791,7 @@
       });
 
       getQuotasContractReprogram(idcontrato);
+      calculateCalendar();
       /* --------------------------------- FUNCIÓN DE VALIDACIÓN --------------------------------------------------------- */
 
       (() => {
