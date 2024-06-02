@@ -183,19 +183,36 @@ class Contract extends Conection{
         }
     }
 
+    /************************************************************  DETALLES DEL CONTRATO  **********************************************************/
+    
     /**
      * Método para listar los detalles de un contrato por el idactivo
      */
-    public function listDetContract($idactivo = 0){
+    public function listDetContract($idcontrato = 0){
 
         try{
 
-            $query = $this->conection->prepare("CALL CALL spu_list_det_contracts(?)");
-            $query->execute(array($idactivo));
+            $query = $this->conection->prepare("CALL spu_list_det_contracts(?)");
+            $query->execute(array($idcontrato));
 
             return $query->fetchAll(PDO::FETCH_ASSOC);
 
         }catch(Exception $e){
+            die($e->getMessage());
+        }
+    }
+
+    /**
+     * Método para listar los detalles del contrato por el id del detalle
+     */
+    public function listDetContractById($iddetalle_contrato = 0){
+        try{
+            $query = $this->conection->prepare("CALL spu_list_det_contract_ById(?)");
+            $query->execute(array($iddetalle_contrato));
+
+            return $query->fetch(PDO::FETCH_ASSOC);
+        }
+        catch(Exception $e){
             die($e->getMessage());
         }
     }
@@ -207,12 +224,11 @@ class Contract extends Conection{
 
         try{
 
-            $query = $this->conection->prepare("CALL spu_add_det_contracts(?,?,?)");
+            $query = $this->conection->prepare("CALL spu_add_det_contract(?,?)");
             $query->execute(
                 array(
-                    $dataDetCont["idactivo"],
-                    $dataDetCont["idcontrato"],
-                    $dataDetCont["idusuario"]
+                    $dataDetCont["idrepresentante"],
+                    $dataDetCont["idcontrato"]
                 )
             );
 
@@ -230,13 +246,12 @@ class Contract extends Conection{
 
         try{
 
-            $query = $this->conection->prepare("CALL spu_set_det_contracts(?,?,?,?)");
+            $query = $this->conection->prepare("CALL spu_set_det_contract(?,?,?,?)");
             $query->execute(
                 array(
                     $dataDetCont["iddetalle_contrato"],
-                    $dataDetCont["idactivo"],
-                    $dataDetCont["idcontrato"],
-                    $dataDetCont["idusuario"]
+                    $dataDetCont["idrepresentante"],
+                    $dataDetCont["idcontrato"]
                 )
             );
 
@@ -254,7 +269,7 @@ class Contract extends Conection{
 
         try{
 
-            $query = $this->conection->prepare("CALL spu_inactive_det_contracts(?)");
+            $query = $this->conection->prepare("CALL spu_inactive_det_contract(?)");
             $query->execute(array($iddetalle_contrato));
 
             return $query->fetch(PDO::FETCH_ASSOC);

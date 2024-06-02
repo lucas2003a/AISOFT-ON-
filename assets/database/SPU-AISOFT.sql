@@ -2436,6 +2436,8 @@ BEGIN
         ORDER BY idcontrato DESC;
 END $$
 
+SELECT * FROM contratos;
+
 DELIMITER;
 
 DELIMITER $$
@@ -2763,6 +2765,110 @@ BEGIN
 END $$
 
 DELIMITER;
+-- DETALLES DE CONTRATOS  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+DELIMITER $$
+CREATE PROCEDURE spu_list_det_contracts
+(
+    IN _idcontrato INT
+)
+BEGIN
+    SELECT 
+        dtc.iddetalle_contrato,
+        cnt.idcontrato,
+        cnt.n_expediente,
+        cnt.precio_venta,
+        cnt.fecha_contrato,
+        rp.representante_legal,
+        rp.documento_tipo,
+        rp.documento_nro,
+        rp.cargo,
+        rp.partida_elect
+        FROM detalles_contratos dtc
+        INNER JOIN contratos cnt ON cnt.idcontrato = dtc.idcontrato
+        INNER JOIN rep_legales_clientes rp ON rp.idrepresentante = dtc.idrepresentante
+        WHERE cnt.idcontrato = _idcontrato
+        AND dtc.inactive_at IS NULL
+        ORDER BY cnt.n_expediente;
+END $$
+DELIMITER;
+
+DELIMITER $$
+CREATE PROCEDURE spu_list_det_contract_ById
+(
+    IN _iddetalle_contrato INT
+)
+BEGIN
+    SELECT 
+        dtc.iddetalle_contrato,
+        cnt.idcontrato,
+        cnt.n_expediente,
+        cnt.precio_venta,
+        cnt.fecha_contrato,
+        rp.representante_legal,
+        rp.documento_tipo,
+        rp.documento_nro,
+        rp.cargo,
+        rp.partida_elect
+        FROM detalles_contratos dtc
+        INNER JOIN contratos cnt ON cnt.idcontrato = dtc.idcontrato
+        INNER JOIN rep_legales_clientes rp ON rp.idrepresentante = dtc.idrepresentante
+        WHERE dtc.iddetalle_contrato = _iddetalle_contrato
+        AND dtc.inactive_at IS NULL
+        ORDER BY cnt.n_expediente;
+END $$
+DELIMITER ;
+
+DELIMITER $$
+CREATE PROCEDURE spu_add_det_contract
+(
+    IN _idrepresentante INT,
+    IN _idcontrato INT
+)
+BEGIN
+    INSERT INTO detalles_contratos(idrepresentante, idcontrato)
+                        VALUES (_idrepresentante, _idcontrato);
+    
+    SELECT ROW_COUNT() AS filasAfect;
+END $$
+DELIMITER ;
+
+DELIMITER $$
+CREATE PROCEDURE spu_set_det_contract
+(
+    IN _iddetalle_contrato INT,
+    IN _idrepresentante INT,
+    IN _idcontrato INT
+)
+BEGIN
+    UPDATE detalles_contratos
+        SET 
+            idrepresentante = _idrepresentante, 
+            idcontrato = _idcontrato,
+            update_at = CURDATE()
+        WHERE
+            iddetalle_contrato = _iddetalle_contrato;
+    
+    SELECT ROW_COUNT() AS filasAfect;
+END $$
+DELIMITER ;
+
+DELIMITER $$
+CREATE PROCEDURE spu_inactive_det_contract
+(
+    IN _iddetalle_contrato INT
+)
+BEGIN
+    UPDATE detalles_contratos
+        SET
+            inactive_at = CURDATE()
+        WHERE
+            iddetalle_contrato = _iddetalle_contrato;
+    
+    SELECT ROW_COUNT() AS filasAfect;
+END $$
+DELIMITER ;
+
 -- CUOTAS /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 DELIMITER $$

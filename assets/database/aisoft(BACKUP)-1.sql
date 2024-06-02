@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 02-06-2024 a las 10:51:13
+-- Tiempo de generación: 03-06-2024 a las 01:22:03
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -229,6 +229,13 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_add_detail_cost` (IN `_idpresup
 							);
                             
 	SELECT ROW_COUNT() AS filasAfect;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_add_det_contract` (IN `_idrepresentante` INT, IN `_idcontrato` INT)   BEGIN
+    INSERT INTO detalles_contratos(idrepresentante, idcontrato)
+                        VALUES (_idrepresentante, _idcontrato);
+    
+    SELECT ROW_COUNT() AS filasAfect;
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_add_person` (IN `_nombres` VARCHAR(40), IN `_apellidos` VARCHAR(40), IN `_documento_tipo` VARCHAR(20), IN `_documento_nro` VARCHAR(12), IN `_estado_civil` VARCHAR(10), IN `_iddistrito` INT, IN `_direccion` VARCHAR(60), IN `_idusuario` INT)   BEGIN
@@ -654,6 +661,16 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_inactive_cost` (IN `_iddetalle_
         
 	SELECT ROW_COUNT() AS filasAfect;
     
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_inactive_det_contract` (IN `_iddetalle_contrato` INT)   BEGIN
+    UPDATE detalles_contratos
+        SET
+            inactive_at = CURDATE()
+        WHERE
+            iddetalle_contrato = _iddetalle_contrato;
+    
+    SELECT ROW_COUNT() AS filasAfect;
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_inactive_person` (IN `_idpersona` INT)   BEGIN 
@@ -1324,6 +1341,46 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_detail_cost` (IN `_idpresu
 			WHERE detcost.idpresupuesto = _idpresupuesto
 			AND detcost.inactive_at IS NULL
 			ORDER BY cat.categoria_costo, subcat.subcategoria_costo ASC;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_det_contracts` (IN `_idcontrato` INT)   BEGIN
+    SELECT 
+        dtc.iddetalle_contrato,
+        cnt.idcontrato,
+        cnt.n_expediente,
+        cnt.precio_venta,
+        cnt.fecha_contrato,
+        rp.representante_legal,
+        rp.documento_tipo,
+        rp.documento_nro,
+        rp.cargo,
+        rp.partida_elect
+        FROM detalles_contratos dtc
+        INNER JOIN contratos cnt ON cnt.idcontrato = dtc.idcontrato
+        INNER JOIN rep_legales_clientes rp ON rp.idrepresentante = dtc.idrepresentante
+        WHERE cnt.idcontrato = _idcontrato
+        AND dtc.inactive_at IS NULL
+        ORDER BY cnt.n_expediente;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_det_contract_ById` (IN `_iddetalle_contrato` INT)   BEGIN
+    SELECT 
+        dtc.iddetalle_contrato,
+        cnt.idcontrato,
+        cnt.n_expediente,
+        cnt.precio_venta,
+        cnt.fecha_contrato,
+        rp.representante_legal,
+        rp.documento_tipo,
+        rp.documento_nro,
+        rp.cargo,
+        rp.partida_elect
+        FROM detalles_contratos dtc
+        INNER JOIN contratos cnt ON cnt.idcontrato = dtc.idcontrato
+        INNER JOIN rep_legales_clientes rp ON rp.idrepresentante = dtc.idrepresentante
+        WHERE dtc.iddetalle_contrato = _iddetalle_contrato
+        AND dtc.inactive_at IS NULL
+        ORDER BY cnt.n_expediente;
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_districts` (IN `_idprovincia` INT)   BEGIN
@@ -2055,6 +2112,18 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_set_det_build` (IN `_idactivo` 
     END IF;
 END$$
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_set_det_contract` (IN `_iddetalle_contrato` INT, IN `_idrepresentante` INT, IN `_idcontrato` INT)   BEGIN
+    UPDATE detalles_contratos
+        SET 
+            idrepresentante = _idrepresentante, 
+            idcontrato = _idcontrato,
+            update_at = CURDATE()
+        WHERE
+            iddetalle_contrato = _iddetalle_contrato;
+    
+    SELECT ROW_COUNT() AS filasAfect;
+END$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_set_det_quota` (IN `_idcuota` INT, IN `_fecha_pago` DATE, IN `_monto_pago` DECIMAL(8,2), IN `_detalles` VARCHAR(100), IN `_tipo_pago` VARCHAR(20), IN `_entidad_bancaria` VARCHAR(20), IN `_imagen` VARCHAR(100), IN `_idusuario` INT)   BEGIN
     DECLARE _countInsert INT;
     DECLARE _countUpdate INT;
@@ -2294,7 +2363,7 @@ INSERT INTO `activos` (`idactivo`, `idproyecto`, `tipo_activo`, `imagen`, `estad
 (10, 2, 'LOTE', NULL, 'VENDIDO', '9', 'Urbanización Tau', 'USD', 450.00, 0, 'Partida 019', NULL, NULL, '{\"clave\" :[], \"valor\":[]}', '{\"clave\" :[], \"valor\":[]}', 12, 'A.I.F', 115000.00, 1160.00, '2024-04-19', '2024-05-19', NULL, 1, 116160.00),
 (11, 3, 'LOTE', NULL, 'SIN VENDER', '11', 'Urbanización Phi', 'USD', 480.00, NULL, 'Partida 021', NULL, NULL, '{\"clave\" :[], \"valor\":[]}', '{\"clave\" :[], \"valor\":[]}', NULL, 'A.I.F', 100000.00, 0.00, '2024-04-19', '2024-06-02', NULL, 1, 0.00),
 (12, 4, 'LOTE', NULL, 'SIN VENDER', '13', 'Urbanización Psi', 'USD', 500.00, 0, 'Partida 023', 'null', 'null', '{\"clave\" :[], \"valor\":[]}', '{\"clave\" :[], \"valor\":[]}', 37, 'A.I.F', 120000.00, 2832.00, '2024-04-19', '2024-05-24', NULL, 1, 122832.00),
-(13, 1, 'LOTE', NULL, 'VENDIDO', '15', 'Urbanización Beta', 'USD', 300.00, NULL, 'Partida 025', NULL, NULL, '{\"clave\" :[], \"valor\":[]}', '{\"clave\" :[], \"valor\":[]}', 19, 'A.I.F', 90000.00, 0.00, '2024-04-19', '2024-05-24', NULL, 1, 0.00),
+(13, 1, 'LOTE', NULL, 'VENDIDO', '15', 'Urbanización Beta', 'USD', 300.00, NULL, 'Partida 025', NULL, NULL, '{\"clave\" :[], \"valor\":[]}', '{\"clave\" :[], \"valor\":[]}', 19, 'A.I.F', 90000.00, 0.00, '2024-04-19', '2024-06-02', NULL, 3, 0.00),
 (14, 1, 'LOTE', '72047f2210fa4a9b0b971e9bbf430156d7ef48af.jpg', 'VENDIDO', '2', 'Urbanización Zeta', 'USD', 280.00, 0, 'Partida 027', NULL, NULL, '{\"clave\":[\"tercera clave\",\"segunda clave\",\"primera clave\",\"\"],\"valor\":[\"tercer valor\",\"segundo valor\",\"primer valor\",\"\"]}', '{\"clave\":[],\"valor\":[]}', 19, 'A.I.F', 95000.00, 0.00, '2024-04-19', '2024-05-27', NULL, 3, 0.00),
 (15, 1, 'LOTE', NULL, 'SIN VENDER', '4', 'Urbanización Kappa', 'USD', 320.00, NULL, 'Partida 029', NULL, NULL, '{\"clave\" :[], \"valor\":[]}', '{\"clave\" :[], \"valor\":[]}', 19, 'A.I.F', 110000.00, 0.00, '2024-04-19', '2024-05-24', NULL, 1, 0.00),
 (16, 1, 'LOTE', NULL, 'SIN VENDER', '6', 'Urbanización Sigma', 'USD', 300.00, NULL, 'Partida 031', NULL, NULL, '{\"clave\" :[], \"valor\":[]}', '{\"clave\" :[], \"valor\":[]}', 19, 'A.I.F', 85000.00, 0.00, '2024-04-19', '2024-05-24', NULL, 1, 0.00),
@@ -2586,7 +2655,8 @@ INSERT INTO `contratos` (`idcontrato`, `tipo_contrato`, `idseparacion`, `idrepre
 (3, 'VENTA DE LOTE', 3, 1, NULL, NULL, NULL, NULL, 3.500, 'VIGENTE', '2024-03-12', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '2024-04-19', NULL, NULL, 3, 'CONT-00003', 0.00, NULL),
 (5, 'VENTA DE LOTE', 2, 1, NULL, NULL, NULL, NULL, 3.500, 'VIGENTE', '2024-03-12', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '2024-04-19', NULL, NULL, 3, 'CONT-00004', 0.00, NULL),
 (6, 'VENTA DE LOTE', NULL, 1, NULL, 5, NULL, 10, 3.500, 'VIGENTE', '2024-03-12', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '2024-04-19', NULL, NULL, 3, 'CONT-00005', 0.00, NULL),
-(7, 'VENTA DE LOTE', NULL, 1, NULL, 5, NULL, 13, 3.500, 'VIGENTE', '2024-03-12', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '2024-04-19', NULL, NULL, 3, 'CONT-00006', 0.00, NULL);
+(7, 'VENTA DE LOTE', NULL, 1, NULL, 5, NULL, 13, 3.500, 'VIGENTE', '2024-03-12', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '2024-04-19', NULL, NULL, 3, 'CONT-00006', 0.00, NULL),
+(8, 'VENTA DE LOTE', NULL, 1, NULL, 26, NULL, 13, 3.500, 'VIGENTE', '2024-03-12', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '2024-04-19', NULL, NULL, 3, 'CONT-00006', 0.00, NULL);
 
 --
 -- Disparadores `contratos`
@@ -2617,6 +2687,95 @@ CREATE TRIGGER `trgr_contracts_add` AFTER INSERT ON `contratos` FOR EACH ROW BEG
 				idusuario = NEW.idusuario
 			WHERE 
 				idactivo = NEW.idactivo;
+	END IF;
+END
+$$
+DELIMITER ;
+DELIMITER $$
+CREATE TRIGGER `trgr_contracts_update` AFTER UPDATE ON `contratos` FOR EACH ROW BEGIN
+	DECLARE _oldIdactivo INT;
+	DECLARE _newIdactivo INT;
+
+	-- SI EL CAMPO INACTIVO ESTÁ VACÍO
+	IF NEW.inactive_at IS NULL THEN
+
+		IF NEW.idseparacion IS NOT NULL AND NEW.idseparacion != OLD.idseparacion THEN
+
+			SET _oldIdactivo = (
+				SELECT idactivo FROM separaciones
+				WHERE idseparacion = OLD.idseparacion
+			);
+
+			SET _newIdactivo = (
+				SELECT idactivo FROM separaciones
+				WHERE idseparacion = NEW.idseparacion
+			);
+
+			UPDATE activos
+				SET
+					estado = "VENDIDO",
+					update_at = CURDATE(),
+					idusuario = NEW.idusuario
+				WHERE
+					idactivo = _newIdactivo;
+
+			UPDATE activos
+				SET
+					estado = "SIN VENDER",
+					update_at = CURDATE(),
+					idusuario = NEW.idusuario
+				WHERE
+					idactivo = _oldIdactivo;
+
+		END IF;
+
+		IF NEW.idactivo IS NOT NULL AND NEW.idactivo != OLD.idactivo THEN
+
+			UPDATE activos
+				SET
+					estado = "VENDIDO",
+					update_at = CURDATE(),
+					idusuario = NEW.idusuario
+				WHERE
+					idactivo = NEW.idactivo;
+
+			UPDATE activos
+				SET
+					estado = "SIN VENDER",
+					update_at = CURDATE(),
+					idusuario = NEW.idusuario
+				WHERE
+					idactivo = OLD.idactivo;
+		END IF;
+	-- SI EL CAMPO INACTIVO NO ESTÁ VACÍO
+	ELSE
+
+		IF NEW.idseparacion IS NOT NULL THEN
+
+			SET _newIdactivo = (
+				SELECT idactivo FROM separaciones
+				WHERE idseparacion = NEW.idseparacion
+			);
+			
+			UPDATE activos
+				SET
+					estado = "SIN VENDER",
+					update_at = CURDATE(),
+					idusuario = NEW.idusuario
+				WHERE
+					idactivo = _newIdactivo;
+		END IF;
+
+		IF NEW.idactivo IS NOT NULL THEN
+			
+			UPDATE activos
+				SET
+					estado = "SIN VENDER",
+					update_at = CURDATE(),
+					idusuario = NEW.idusuario
+				WHERE
+					idactivo = NEW.idactivo;
+		END IF;
 	END IF;
 END
 $$
@@ -2968,6 +3127,14 @@ CREATE TABLE `detalles_contratos` (
   `inactive_at` date DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Volcado de datos para la tabla `detalles_contratos`
+--
+
+INSERT INTO `detalles_contratos` (`iddetalle_contrato`, `idrepresentante`, `idcontrato`, `create_at`, `update_at`, `inactive_at`) VALUES
+(1, 114, 8, '2024-06-02', NULL, NULL),
+(2, 115, 8, '2024-06-02', NULL, NULL);
+
 -- --------------------------------------------------------
 
 --
@@ -3102,8 +3269,8 @@ INSERT INTO `devoluciones` (`iddevolucion`, `idseparacion`, `monto_devolucion`, 
 (8, 12, 195.06, '2024-05-26', NULL, NULL, 1, 'No fué aprobado por el banco', 'DEC-000060', 'f716ad45a0bd1f829498c1b51f1e0c036348f2af.jpg', 30, 'POR SEPARACIÓN', NULL),
 (9, 16, 320.00, '2024-05-26', '2024-05-27', NULL, 1, 'No tiene el dinero', 'DEC-000013', '2363f7f736cdf3967cc62cbd0a2c8c2868936a00.jpg', 50, 'POR SEPARACIÓN', NULL),
 (10, 19, 250.00, '2024-05-31', NULL, NULL, 1, 'EL CLIENTE DESISTIO', 'DEC-560000', 'bd9e51fbea2cf1f70ed1fba5929e5c9c29ccaeb8.jpg', 50, 'POR SEPARACIÓN', NULL),
-(11, 24, 350.00, '2024-06-02', '2024-06-02', NULL, 1, 'por devolucion', 'DEC-000090', 'baf7181bd0c26b81980210fbea06e9991515e645.jpg', 70, 'POR SEPARACIÓN', NULL),
-(12, 25, 448.00, '2024-06-02', NULL, NULL, 1, 'no quiso seguir', 'DEC-000510', 'c0d25e9fa7e589a83b3c53d0c0890f55b7cdc9ce.jpg', 80, 'POR SEPARACIÓN', NULL);
+(11, 24, 500.00, '2024-06-02', '2024-06-02', NULL, 1, 'por devolucion', 'DEC-000090', '7793dd26d7ef8e29834b44c3b0d0d79350828553.jpg', 100, 'POR SEPARACIÓN', NULL),
+(12, 25, 448.00, '2024-06-02', '2024-06-02', NULL, 1, 'no quiso seguir', 'DEC-000510', '1c51e6e594d2971e28abed4aefc72472a39ab3d8.jpg', 80, 'POR SEPARACIÓN', NULL);
 
 --
 -- Disparadores `devoluciones`
@@ -3111,36 +3278,78 @@ INSERT INTO `devoluciones` (`iddevolucion`, `idseparacion`, `monto_devolucion`, 
 DELIMITER $$
 CREATE TRIGGER `trgr_asset_status_refund` AFTER INSERT ON `devoluciones` FOR EACH ROW BEGIN
 	DECLARE _idactivo INT;
-	DECLARE _existContract TINYINT;
-	SET _idactivo = (
-		SELECT idactivo FROM separaciones
-		WHERE idseparacion = NEW.idseparacion
-	);
-	SET _existContract = (
-		SELECT EXISTS(SELECT 1 FROM contratos
-		WHERE idactivo = _idactivo
-		AND inactive_at IS NULL)
-	);
-	UPDATE activos
-		SET
-			estado = "SIN VENDER",
-			update_at = CURDATE(),
-			idusuario = NEW.idusuario
-		WHERE
-			idactivo = _idactivo;
-	UPDATE separaciones
-		SET
-			inactive_at = CURDATE(),
-			idusuario = NEW.idusuario
-		WHERE
-			idseparacion = NEW.idseparacion;
-	IF _existContract = 1 THEN
-		UPDATE contratos
+	DECLARE _idseparacion_contrato INT;
+
+	-- SI EL ID SEPARACIÓN NO ESTÁ VACÍO
+	IF NEW.idseparacion IS NOT NULL THEN
+		SET _idactivo = (
+			SELECT idactivo FROM separaciones
+			WHERE idseparacion = NEW.idseparacion
+		);
+
+		UPDATE activos
+			SET
+				estado = "SIN VENDER",
+				update_at = CURDATE(),
+				idusuario = NEW.idusuario
+			WHERE
+				idactivo = _idactivo;
+
+		UPDATE separaciones
 			SET
 				inactive_at = CURDATE(),
 				idusuario = NEW.idusuario
 			WHERE
-				idactivo = _idactivo;
+				idseparacion = NEW.idseparacion;
+
+	-- SI EL ID CONTRATO NO ESTÁ VACÍO
+	ELSEIF NEW.idcontrato IS NOT NULL THEN
+
+
+		SET _idseparacion_contrato = (
+			SELECT idseparacion FROM contratos
+			WHERE idcontrato = NEW.idcontrato
+		);
+
+		-- SI EL IDSEPARACIÒN DEL CONTRATO NO ESTÁ VACÍO
+		IF _idseparacion_contrato IS NOT NULL THEN
+
+			SET _idactivo = (
+				SELECT idactivo FROM separaciones
+				WHERE idseparacion = _idseparacion_contrato
+			);
+
+			UPDATE activos
+				SET
+					estado = "SIN VENDER",
+					update_at = CURDATE(),
+					idusuario = NEW.idusuario
+				WHERE 
+					idactivo = _idactivo;
+		ELSE
+
+			SET _idactivo = (
+				SELECT idactivo FROM contratos
+				WHERE idcontrato = NEW.idcontrato
+			);
+
+			UPDATE activos
+				SET
+					estado = "SIN VENDER",
+					update_at = CURDATE(),
+					idusuario = NEW.idusuario
+				WHERE
+					idactivo = _idactivo;
+		END IF;
+
+		-- ACTUALIZA EL CONTRATO
+		UPDATE contratos
+			SET
+				estado = "INACTIVO",
+				inactive_at = CURDATE(),
+				idusuario = NEW.idusuario
+			WHERE
+				idcontrato = NEW.idcontrato;
 	END IF;
 END
 $$
@@ -6669,7 +6878,7 @@ ALTER TABLE `constructora`
 -- AUTO_INCREMENT de la tabla `contratos`
 --
 ALTER TABLE `contratos`
-  MODIFY `idcontrato` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `idcontrato` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT de la tabla `cuotas`
@@ -6693,7 +6902,7 @@ ALTER TABLE `desembolsos`
 -- AUTO_INCREMENT de la tabla `detalles_contratos`
 --
 ALTER TABLE `detalles_contratos`
-  MODIFY `iddetalle_contrato` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `iddetalle_contrato` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `detalle_costos`

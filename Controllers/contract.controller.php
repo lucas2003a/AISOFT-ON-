@@ -102,24 +102,41 @@ if(isset($_POST["action"])){
                 ];
 
                 echo json_encode($contract->inactiveContract($idcontrato));
+                
+                break;
+                
+            case "existsContractIdContract": 
+                $idcontrato = $_POST["idcontrato"];
+        
+                echo json_encode($contract->existsContractIdContract($idcontrato));
 
-            break;
+                break;
+
+        /********************************************  DETALLES DE CONTRATO ************************************************************/
         
         case "listDetContract": 
             
-                $idactivo = $_POST["idactivo"];
+                $idcontrato = $_POST["idcontrato"];
 
-                echo json_encode($contract->listDetContract($idactivo));
+                echo json_encode($contract->listDetContract($idcontrato));
 
+            break;
+
+        case "listDetContractById": 
+
+                $iddetalle_contrato = $_POST["iddetalle_contrato"];
+
+                echo json_encode($contract->listDetContractById($iddetalle_contrato));
+
+                break;
             break;
 
         case "addDetContract": 
             
                 $dataObtained = [
 
-                    "idactivo"      => $_POST["idactivo"],
-                    "idcontrato"    => $_POST["idcontrato"],
-                    "idusuario"     => $_POST["idusuario"]
+                    "idrepresentante"      => $_POST["idrepresentante"],
+                    "idcontrato"     => $_POST["idcontrato"]
                 ];
 
                 echo json_encode($contract->addDetContract($dataObtained));
@@ -131,9 +148,8 @@ if(isset($_POST["action"])){
                 $dataObtained = [
 
                     "iddetalle_contrato"      => $_POST["iddetalle_contrato"],
-                    "idactivo"      => $_POST["idactivo"],
-                    "idcontrato"    => $_POST["idcontrato"],
-                    "idusuario"     => $_POST["idusuario"]
+                    "idrepresentante"      => $_POST["idrepresentante"],
+                    "idcontrato"     => $_POST["idcontrato"]
                 ];
 
                 echo json_encode($contract->setDetContract($dataObtained));
@@ -148,10 +164,6 @@ if(isset($_POST["action"])){
 
             break;
 
-        case "existsContractIdContract": 
-            $idcontrato = $_POST["idcontrato"];
-
-            echo json_encode($contract->existsContractIdContract($idcontrato));
     }
 }
 ?>

@@ -394,7 +394,13 @@
 
                   <div class="col-md-3 mt-2">
                     
-                    <a type="button" class="mb-0  btn btn-sm btn-outline-success" href="./add_contract.php">AGREGAR CONTRATO</a>
+                    <label for="tipo_contrato">Tipo de contrato</label>
+                    <select id="tipo_contrato" class="form-select" name="tipo_contrato">
+                      <option value="VENTA DE LOTE" selected>Elije un tipo de contrato</option>
+                      <option value="VENTA DE LOTE">Venta de lote</option>
+                      <option value="VENTA DE CASA">Venta de casa</option>
+                      <option value="VENTA DE LOTE Y CASA">Venta de de lote y casa</option>
+                    </select>
                   </div>
                   
                   <div class="col-md-3 mt-2">
@@ -418,6 +424,12 @@
                     </div>
                   </div>
 
+                </div>
+                <div class="row">
+                <div class="col-md-3 mt-2">
+                    
+                    <a type="button" class="mb-0  btn btn-sm btn-outline-success" href="./add_contract.php">AGREGAR CONTRATO</a>
+                  </div>
                 </div>
                 <div class="row d-flex" style="justify-content: space-between; align-items: start;">
                   <div class="col-md-3 m-2">
@@ -604,384 +616,28 @@
       const $ = id => global.$(id);
       const $All = id => global.$All(id);
 
-      let date = new Date();
-      let minDate = new Date('2024-1-1'); //La fecha se agrega sin 0 a la izquierda
-      let defaultDate = new Date();
-      console.log(date.get)
+      async function getContractsType(){
 
-      let fechaInicioValue = "";
-      let fechaFinValue = "";
-      let dateReset = "";
-
-      let timmer;
-
-      //Cuenta si existe un contrato por el idsepracion
-      async function countContrato(id) {
-
-        try {
+        try{
           let url = "../../Controllers/contract.controller.php";
-        
-          let params = new FormData();
-          params.append("action", "existContract");
-          params.append("idseparacion", id);
-
-          let result = await global.sendAction(url, params);
-
-          if (result) {
-            return result.existContract;
-          }
-        } catch (e) {
-          console.error(e)
-        }
-      }
-
-      //Obtiene los registros de una separacion por id
-      async function getSeparation(id) {
-
-        try {
-          let url = "../../Controllers/separation.controller.php";
-          let params = new FormData();
-
-          params.append("action", "listSeparationById");
-          params.append("idseparacion", id);
-
-          let result = await global.sendAction(url, params);
-
-          if (result) {
-            console.log(result)
-
-            $("#labels").innerHTML = "";
-            $("#content").innerHTML = "";
-
-            $("#modalTitle").innerHTML = result.n_expediente;
-
-            $("#cliente").innerHTML = result.cliente;
-            $("#documento_tipo").innerHTML = result.documento_tipo;
-            $("#documento_nro").innerHTML = result.documento_nro;
-            $("#proyecto").innerHTML = result.denominacion;
-            $("#sublote").innerHTML = result.sublote;
-            $("#monto_separación").innerHTML = result.separacion_monto;
-
-            if (result.conyugue) {
-
-              const labels = ["Conyugue", "Tipo de documento", "Nro de documento"];
-              const contents = [result.conyugue, result.conyPers_documento_tipo, result.conyPers_documento_nro];
-              console.log(contents)
-
-              $("#labels").innerHTML += "<hr>";
-              $("#content").innerHTML += "<hr>";
-
-              labels.forEach((label, index) => {
-
-                let tagLabel = `<h6><strong>${label} :</strong></h6>`;
-                $("#labels").innerHTML += tagLabel;
-
-                let tagContent = `<h6>${contents[index]}</h6>`;
-                $("#content").innerHTML += tagContent;
-              });
-            }
-
-          }
-        } catch (e) {
-          console.error(e);
-        }
-      }
-      //Obtiene los datos de las separciones en base a 4 criterios
-      async function getSeparations(tpersona, dateStart, dateEnd, campoCriterio) {
-
-        try {
-
-          let url = "../../Controllers/separation.controller.php";
 
           let params = new FormData();
 
-
-          if (!campoCriterio) {
-
-            params.append("action", "listSeparationsTPersona");
-            params.append("tipoPersona", tpersona);
-            params.append("fechaInicio", dateStart);
-            params.append("fechaFin", dateEnd);
-          } else {
-            params.append("action", "listSeparationsCampoCriterio");
-            params.append("tipoPersona", tpersona);
-            params.append("fechaInicio", dateStart);
-            params.append("fechaFin", dateEnd);
-            params.append("campoCriterio", campoCriterio)
-
-          }
-
+          params.append("action", "listContractByType");
+          params.append("tipo_contrato", $("#tipo_contrato").value);
 
           let results = await global.sendAction(url, params);
 
-          if (results) {
-
-            $("#render-alert").innerHTML = "";
-            $("#table-separations tbody").innerHTML = "";
-
-            if (results.length > 0) {
-              console.log(results);
-
-              let numberRow = 1;
-
-              results.forEach(result => {
-                let newRow = "";
-                let code = btoa(result.idseparacion);
-                let expedient = btoa(result.n_expediente);
-                
-                newRow = `
-                  <tr>
-                    <td class="text-xs">${numberRow}</td>
-                    <td class="text-xs">${result.n_expediente}</td>
-                    <td class="text-xs">${result.cliente}</td> 
-                    <td class="text-xs">${result.documento_tipo}</td> 
-                    <td class="text-xs">${result.documento_nro}</td> 
-                    <td class="text-xs">${result.separacion_monto}</td>
-                    <td class="text-xs">${result.create_at}</td>
-                    <td>
-                        <a type="button" href="#" data-id="${result.idseparacion}" class="btn btn-link text-info px-3 mb-0 open-modal" data-bs-toggle="modal" data-bs-target="#modal_det_sep" ><i class="fa-solid fa-eye open-modal" data-id="${result.idseparacion}"></i></a>
-                        <a type="button" data-id="${result.idseparacion}" data-expedient="${result.n_expediente}" class="btn btn-link text-danger text-gradient px-3 mb-0 delete"><i class="bi bi-trash-fill delete" data-id="${result.idseparacion}" data-expedient="${result.n_expediente}"></i></a>
-                        <a type="button" data-expedient="${result.n_expediente}" data-id="${result.idseparacion}" class="btn btn-link text-dark px-3 mb-0 edit"><i data-id="${result.idseparacion}" data-expedient="${result.n_expediente}" class="bi bi-pencil-fill edit" data-id="${result.idseparacion}"></i></a>
-                        <a type="button" data-id="${result.idseparacion}" class="btn btn-link text-secondary px-3 mb-0 return"><i class="fa-solid fa-right-left return" data-id="${result.idseparacion}"></i></a>
-                    </td>
-                  </tr>
-                  `;
-                $("#table-separations tbody").innerHTML += newRow;
-                ++numberRow;
-              });
-            } else {
-
-              let newAlert = "";
-              newAlert = `
-                  <div class="alert alert-danger text-white" role="alert">
-                      <h4 class="alert-heading">No hay registros</h4>
-                      <hr />
-                      <p class="mb-0">Asegurate de ingresar los datos correctos</p>
-                    </div>
-              `;
-
-              $("#render-alert").innerHTML = newAlert;
-            }
-          } else {
-            let newAlert = "";
-            newAlert = `
-                  <div class="alert alert-danger text-white" role="alert">
-                      <h4 class="alert-heading">No hay registros</h4>
-                      <hr />
-                      <p class="mb-0">Asegurate de ingresar los datos correctos</p>
-                    </div>
-              `;
-
-            $("#render-alert").innerHTML = newAlert;
+          if(results){
+            console.log(results);
           }
-        } catch (e) {
+        }
+        catch(e){
           console.error(e);
         }
       }
 
-      //Cambia la fecha actual hacia 1 mes atrás (fecha por defecto de inicio) 
-      function setDefaultDate() {
-
-        //FECHA POR DEFECTO (1 MES ATRÁS)
-
-        defaultDate.setMonth(defaultDate.getMonth() - 1);
-
-        if (defaultDate.getDate() !== date.getDate()) {
-          defaultDate.getDate(0)
-        }
-
-        const defaultDay = defaultDate.getDate().toString().padStart(2, '0');
-        const defaultMonth = (defaultDate.getMonth() + 1).toString().padStart(2, '0');
-        const defaultYear = defaultDate.getFullYear().toString();
-
-        let defDate = `${defaultYear}-${defaultMonth}-${defaultDay}`;
-
-        dateReset = defDate; //variable que guardará la fecha por defecto
-
-        return defDate;
-      }
-
-      //Actuazliza la fecha, a la fecha actual
-      function setToday() {
-        //FECHA ACTUAL
-
-        /*getDate() => numero del día entre 1 y 31 (o 30 dependiendo del mes)
-          getMonth() => numero del mes entre 0 y 11 (0 = enero, 1 = febrero, etc)
-          getFullYear() => año en formato 4 dígitos
-          getDate(0) => Devuelve el ultimo día del mes anterior
-         */
-        const day = date.getDate().toString().padStart(2, '0');
-        const month = (date.getMonth() + 1).toString().padStart(2, '0');
-        const year = date.getFullYear().toString();
-
-        let defToday = `${year}-${month}-${day}`;
-        return defToday;
-      }
-
-      // Configura los valores por defecto de los inputs date
-      async function getDates() {
-
-        //FECHA ACTUAL
-
-        let today = setToday();
-
-        //FECHA MÍNIMA
-        const minDay = minDate.getDate().toString().padStart(2, '0');
-        const minMonth = (minDate.getMonth() + 1).toString().padStart(2, '0');
-        const minYear = minDate.getFullYear().toString();
-
-        let dateBefore = `${minYear}-${minMonth}-${minDay}`;
-
-        //FECHA POR DEFECTO (1 MES ATRÁS)
-
-        let dateDefault = setDefaultDate();
-
-        $("#fechaInicio").min = dateBefore;
-        $("#fechaInicio").value = dateDefault;
-        $("#fechaInicio").max = today;
-        fechaInicioValue = $("#fechaInicio").value;
-
-        $("#fechaFin").value = today;
-        $("#fechaFin").max = today;
-        $("#fechaFin").min = dateBefore;
-        fechaFinValue = $("#fechaFin").value
-
-        let tPersona = $("#tipo_persona").options[$("#tipo_persona").selectedIndex].value;
-        await getSeparations(tPersona, dateDefault, today, false);
-      }
-
-      //Valida las fechas de los inputs date
-      function validateDates() {
-
-        return new Promise((resolve, reject) => {
-
-          console.log("incio filtro")
-          console.log(fechaInicioValue)
-          console.log(fechaFinValue)
-
-          let fechaInicioDate = new Date(fechaInicioValue);
-          let fechaFinDate = new Date(fechaFinValue);
-
-          if (fechaInicioDate > fechaFinDate) {
-
-            $("#fechaInicio").value = dateReset;
-            $("#fechaFin").value = setToday();
-            reject()
-          } else {
-
-            resolve()
-          }
-          console.log("fin filtro")
-        })
-      }
-
-
-      $("#fechaInicio").addEventListener("change", (e) => {
-        console.log(e.target.value);
-        fechaInicioValue = e.target.value;
-        validateDates()
-          .then(() => {
-            let tipoPersona = $("#tipo_persona").options[$("#tipo_persona").selectedIndex].value;
-            let n_expedient = $("#n_expediente").value ? $("#n_expediente").value : false;
-
-            getSeparations(tipoPersona, fechaInicioValue, fechaFinValue, n_expedient);
-          })
-      })
-
-      $("#fechaFin").addEventListener("change", (e) => {
-        console.log(e.target.value);
-        fechaFinValue = e.target.value;
-        validateDates()
-          .then(() => {
-            let tipoPersona = $("#tipo_persona").options[$("#tipo_persona").selectedIndex].value;
-            let n_expedient = $("#n_expediente").value ? $("#n_expediente").value : false;
-
-            getSeparations(tipoPersona, fechaInicioValue, fechaFinValue, n_expedient);
-          })
-      });
-
-      $("#tipo_persona").addEventListener("change", (e) => {
-
-        let option = e.target.options[e.target.selectedIndex].value;
-        console.log(option)
-        if (option) {
-          let n_expedient = $("#n_expediente").value ? $("#n_expediente").value : false;
-
-          getSeparations(option, fechaInicioValue, fechaFinValue, n_expedient);
-        }
-      })
-
-      $("#n_expediente").addEventListener("input", (e) => {
-
-        let input = e.target.value;
-
-        if (input) {
-
-          clearTimeout(timmer);
-
-          timmer = setTimeout(() => {
-            let tpersona = $("#tipo_persona").options[$("#tipo_persona").selectedIndex].value
-            getSeparations(tpersona, fechaInicioValue, fechaFinValue, input);
-          }, 1000);
-        }
-      });
-
-      $("#table-separations tbody").addEventListener("click", async function(e) {
-
-        e.preventDefault();
-
-        
-        if (e.target.classList.contains("open-modal")) {
-
-          let idSeparacion = e.target.dataset.id;
-          getSeparation(idSeparacion);
-
-        } else if (e.target.classList.contains("delete")) {
-          let idSeparacion = e.target.dataset.id;
-          let expedientGet = e.target.dataset.expedient;
-
-          let code = btoa(idSeparacion);
-          let expedient = btoa(expedientGet);
-
-          let exist = await countContrato(idSeparacion)
-
-          if (exist) {
-            sAlert.sweetWarning("No se puede actualizar el registro", "Este registro cuenta con un contrato, intentalo más tarde.")
-          } else {
-
-            window.location.href= `./delete_separation.php?id=${code}&expedient=${expedient}`;
-          }
-
-        } else if (e.target.classList.contains("return")) {
-
-          let idSeparacion = e.target.dataset.id;
-
-          let code = btoa(idSeparacion);
-
-          console.log(await countContrato(idSeparacion)); 
-          let exist = await countContrato(idSeparacion)
-
-          if (exist) {
-            sAlert.sweetWarning("No se puede actualizar el registro", "Este registro cuenta con un contrato, intentalo más tarde.")
-          } else {
-
-            window.location.href = `../refunds/add_refund.php?id=${code}`;
-          }
-        }else if(e.target.classList.contains("edit")){
-
-          let idSeparacion = e.target.dataset.id;
-          let expedientE = e.target.dataset.expedient;
-
-          let code = btoa(idSeparacion);
-          let expedient = btoa(expedientE);
-
-          window.location.href=`./edit_separation.php?id=${code}&expedient=${expedient}`;
-        }
-      });
-
-      getDates()
-
-      console.log($("#fechaInicio").value)
+      getContractsType();
     });
   </script>
   <script>
