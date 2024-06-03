@@ -21227,8 +21227,7 @@ fieldset:disabled .btn {
     content: "\f0d8";
     position: absolute;
     top: 0;
-    left: 28px;
-    right: auto;
+    right: 28px;
     font-size: 22px;
     color: #fff;
     transition: top 0.35s ease;
@@ -21311,8 +21310,7 @@ fieldset:disabled .btn {
     content: "\f0d8";
     position: absolute;
     top: 0;
-    left: 28px;
-    right: auto;
+    right: 28px;
     font-size: 22px;
     color: #fff;
     transition: top 0.35s ease;

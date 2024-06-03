@@ -31,8 +31,36 @@ class Contract extends Conection{
      */
     public function listContractsByTypeDate($dataContract= []){
         try{
-            $query = $this->conection->prepare("CALL spu_list_contracts_types_date");
-            $query->execute($dataContract);
+            $query = $this->conection->prepare("CALL spu_list_contracts_types_date(?,?,?)");
+            $query->execute(
+                array(
+                    $dataContract['tipo_contrato'],
+                    $dataContract['fecha_inicio'],
+                    $dataContract['fecha_fin']
+                )
+            );
+            
+            return $query->fetchAll(PDO::FETCH_ASSOC);
+        }
+        catch(Exception $e){
+            die($e->getMessage());
+        }
+    }
+
+    /**
+     * Lista los contatos por su tipo, por su fecha y su número de expedieente
+     */
+    public function listContractsByTypeDateNexpediente($dataContract= []){
+        try{
+            $query = $this->conection->prepare("CALL spu_list_contracts_types_date_n_expediente(?,?,?,?)");
+            $query->execute(
+                array(
+                    $dataContract['tipo_contrato'],
+                    $dataContract['fecha_inicio'],
+                    $dataContract['fecha_fin'],
+                    $dataContract['n_expediente']
+                )
+            );
             
             return $query->fetchAll(PDO::FETCH_ASSOC);
         }

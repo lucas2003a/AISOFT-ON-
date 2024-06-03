@@ -37,7 +37,7 @@
   <link href="../../assets/css/nucleo-svg.css" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <!-- CSS Files -->
-  <link id="Viewstyle" href="../../assets/css/soft-ui-dashboard.css?v=1.0.7" rel="stylesheet" />
+  <link id="Viewstyle" href="../../assets/css/soft-ui-dashboard_v2.css?v=1.0.7" rel="stylesheet" />
   <!-- Nepcha Analytics (nepcha.com) -->
   <!-- Nepcha is a easy-to-use web analytics. No cookies and fully compliant with GDPR, CCPA and PECR. -->
   <script defer data-site="YOUR_DOMAIN_HERE" src="https://api.nepcha.com/js/nepcha-analytics.js"></script>
@@ -443,16 +443,16 @@
             <hr>
             <div class="card-body px-0 pt-0 pb-2">
               <div class="table-responsive text-center p-0">
-                <table class="table align-items-center mb-0 table-hover" id="table-separations">
+                <table class="table align-items-center mb-0 table-hover" id="table-contracts">
                   <thead>
                     <tr>
                       <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">#</th>
                       <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Nº de expediente</th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Estado</th>
                       <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Cliente</th>
                       <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Tipo de documento</th>
                       <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Nº de documento</th>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Monto de separación</th>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Fecha de registro</th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Fecha del contrato</th>
                       <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Operaciones</th>
                     </tr>
                   </thead>
@@ -615,7 +615,118 @@
 
       const $ = id => global.$(id);
       const $All = id => global.$All(id);
+      
+      let timmer;
 
+      //valida el rango de fechas
+      function validateDates(){
+        const fecha_inicio = $("#fechaInicio").value;
+        const inicioDate = new Date(fecha_inicio);
+
+        const fecha_fin = $("#fechaFin").value;
+        const finDate = new Date(fecha_fin);
+
+        if(inicioDate > finDate){
+
+          getContractsType();
+        }else{
+          getContractsTypeDate();
+        }
+
+      }
+
+      //Obtiene el rango de fechas
+      function getDate(){
+
+        const date = new Date();
+
+        const futureDate = new Date();
+
+        const pastDate = new Date("2024-1-1");
+
+
+        let dateToday = date.getDate().toString().padStart(2,'0');
+        let monthToday = (date.getMonth() +  1).toString().padStart(2,'0');
+        let yearToday = date.getFullYear().toString();
+        let today = `${yearToday}-${monthToday}-${dateToday}`;
+
+        futureDate.setMonth(date.getMonth() + 1);
+
+        if(futureDate.getDate() !== date.getDate()){
+          futureDate.setDate(0);
+        }
+
+        let futureDay = futureDate.getDate().toString().padStart(2,'0');
+        let futureMonth = (futureDate.getMonth() + 1).toString().padStart(2,'0');
+        let futureYear = futureDate.getFullYear().toString();
+
+        let future = `${futureYear}-${futureMonth}-${futureDay}`;
+
+        let pastDay = pastDate.getDate().toString().padStart(2,'0');
+        let pastMonth = (pastDate.getMonth() + 1).toString().padStart(2,'0');
+        let pastYear = pastDate.getFullYear().toString();
+
+        let past = `${pastYear}-${pastMonth}-${pastDay}`;
+
+        $("#fechaInicio").value = today;
+        $("#fechaInicio").max = today;
+        $("#fechaInicio").min = past;
+
+        $("#fechaFin").value = today;
+        $("#fechaFin").min = today;
+        $("#fechaFin").max= future;
+
+      }
+
+      //Renderiza los datos en la tabla
+      function renderTable(array){
+
+        const tableBody = $("#table-contracts tbody");
+        tableBody.innerHTML = "";
+
+        let numRow = 1;
+        array.forEach(element => {
+          
+          let newRow = `
+          <tr>
+            <td class="text-sm">${numRow}</td>
+            <td class="text-sm">${element.n_expediente}</td>
+            <td class="text-sm">${element.estado}</td>
+            <td class="text-sm">${element.cliente}</td>
+            <td class="text-sm">${element.documento_tipo}</td>
+            <td class="text-sm">${element.documento_nro}</td>
+            <td class="text-sm">${element.fecha_contrato}</td>
+            <td>
+              <div class="row">
+              <div class="col-lg-6 col-5 my-auto text-end">
+                <div class="dropdown float-lg-end pe-4">
+                  <a class="cursor-pointer" id="dropdownTable" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="fa fa-ellipsis-v text-secondary"></i>
+                  </a>
+                  <ul class="dropdown-menu px-2 py-3 ms-sm-n4 ms-n5" aria-labelledby="dropdownTable">
+                    <li><a type="button" href="#" class="dropdown-item border-radius-md btn btn-link text-danger px-3 mb-0 open-modal"><i class="bi bi-arrow-down-square"></i> Descargar</a></li>
+                    <li><a type="button" href="#" class="dropdown-item border-radius-md btn btn-link text-secondary px-3 mb-0 return"><i class="fa-solid fa-right-left return"></i> Devolver</a></li>
+                    <li><a type="button" href="#" class="dropdown-item border-radius-md btn btn-link text-success px-3 mb-0"><i class="bi bi-arrow-right-square"></i> Ver más</a></li>
+                  </ul>
+                </div>
+              </div>
+              <div class="col-lg-6 col-5 my-auto">
+              
+              <a type="button" href="#" class="btn btn-link text-danger text-gradient px-3 mb-0 delete"><i class="bi bi-trash-fill delete"></i></a>
+              <a type="button" href="#" class="btn btn-link text-dark px-3 mb-0 edit"><i class="bi bi-pencil-fill edit"></i></a>
+              
+              </div>
+              </div>
+              
+            </td>
+          </tr>
+          `;
+          numRow++
+          tableBody.innerHTML += newRow;
+        });
+      }
+
+      //Obtiene los datos de los contratos según el tipo
       async function getContractsType(){
 
         try{
@@ -630,6 +741,7 @@
 
           if(results){
             console.log(results);
+            renderTable(results)
           }
         }
         catch(e){
@@ -637,6 +749,84 @@
         }
       }
 
+      //Obtiene los datos de los contratos según el tipo y la fecha
+      async function getContractsTypeDate(){
+
+        try{
+          let url = "../../Controllers/contract.controller.php";
+
+          let params = new FormData();
+
+          params.append("action", "listContractsByTypeDate");
+          params.append("tipo_contrato", $("#tipo_contrato").value);
+          params.append("fecha_inicio", $("#fechaInicio").value);
+          params.append("fecha_fin", $("#fechaFin").value);
+
+          let results = await global.sendAction(url, params);
+
+          if(results){
+            console.log(results);
+            renderTable(results)
+          }
+        }
+        catch(e){
+          console.error(e);
+        }
+      }
+
+      //Obtiene los datos de los contratos según el tipo, la fecha Y EL NUMERO DE EXPEDIENTE
+      async function getContractsTypeDateExpedient(){
+
+        try{
+          let url = "../../Controllers/contract.controller.php";
+
+          let params = new FormData();
+
+          params.append("action", "listContractsByTypeDateNexpediente");
+          params.append("tipo_contrato", $("#tipo_contrato").value);
+          params.append("fecha_inicio", $("#fechaInicio").value);
+          params.append("fecha_fin", $("#fechaFin").value);
+          params.append("n_expediente", $("#in-code").value);
+
+          let results = await global.sendAction(url, params);
+
+          if(results){
+            console.log(results);
+            renderTable(results)
+          }
+        }
+        catch(e){
+          console.error(e);
+        }
+      }
+
+      $("#in-code").addEventListener("input",(e)=>{
+
+        let valueInput = e.target.value;
+
+        if(valueInput){
+
+          clearTimeout(timmer);
+
+          timmer = setTimeout(()=>{
+            getContractsTypeDateExpedient();
+          },1500);
+        }
+      });
+
+      $("#fechaFin").addEventListener("change",()=>{
+        validateDates();
+      });
+
+      $("#fechaInicio").addEventListener("change",()=>{
+        validateDates();
+      });
+
+      $("#tipo_contrato").addEventListener("change",()=>{
+        getContractsType();
+      });
+      
+      getDate();
       getContractsType();
     });
   </script>

@@ -26,6 +26,19 @@ if(isset($_POST["action"])){
 
                 break;
 
+        case "listContractsByTypeDateNexpediente": 
+
+                $dataObtained = [
+                    "tipo_contrato" => $_POST["tipo_contrato"],
+                    "fecha_inicio" => $_POST["fecha_inicio"],
+                    "fecha_fin" => $_POST["fecha_fin"],
+                    "n_expediente" => $_POST["n_expediente"]
+                ];
+
+                echo json_encode($contract->listContractsByTypeDateNexpediente($dataObtained));
+
+                break;
+
         case "existContract": 
 
                 $idseparacion = $_POST["idseparacion"];

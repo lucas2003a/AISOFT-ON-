@@ -2469,6 +2469,7 @@ BEGIN
                 INNER JOIN usuarios usu ON usu.idusuario = cnt.idusuario
                 INNER JOIN personas per ON per.idpersona = usu.idpersona
                 WHERE cnt.tipo_contrato = _tipo_contrato
+                AND cnt.fecha_contrato BETWEEN _fecha_inicio AND _fecha_fin
                 AND cnt.inactive_at IS NULL
             UNION 
             SELECT
@@ -2490,7 +2491,69 @@ BEGIN
                 INNER JOIN usuarios usu ON usu.idusuario = cnt.idusuario
                 INNER JOIN personas per ON per.idpersona = usu.idpersona
                 WHERE cnt.tipo_contrato = _tipo_contrato
+                AND cnt.fecha_contrato BETWEEN _fecha_inicio AND _fecha_fin
                 AND cnt.inactive_at IS NULL
+        ) AS resultado
+        WHERE resultado.fecha_contrato BETWEEN _fecha_inicio AND _fecha_fin
+        ORDER BY idcontrato DESC;
+END $$
+DELIMITER ;
+DELIMITER $$
+CREATE PROCEDURE spu_list_contracts_types_date_n_expediente
+(
+    IN _tipo_contrato VARCHAR(40),
+    IN _fecha_inicio DATE,
+    IN _fecha_fin DATE,
+    IN _n_expediente VARCHAR(40)
+)
+BEGIN
+    SELECT *
+        FROM (
+            SELECT  
+                cnt.idcontrato,
+                cnt.n_expediente,
+                cnt.tipo_contrato,
+                cnt.estado,
+                COALESCE(persj.cliente,persn.cliente) as cliente,
+                COALESCE(persj.tipo_persona,persn.tipo_persona) as tipo_persona,
+                COALESCE(persj.documento_tipo,persn.documento_tipo) as documento_tipo,
+                COALESCE(persj.documento_nro,persn.documento_nro) as documento_nro,
+                cnt.fecha_contrato,
+                cnt.archivo,
+                per.nombres
+                FROM contratos cnt
+                INNER JOIN separaciones sp ON sp.idseparacion = cnt.idseparacion
+                LEFT JOIN vws_list_separations_tpersona_juridica persj ON persj.idseparacion = sp.idseparacion
+                LEFT JOIN vws_list_separations_tpersona_natural persn ON persn.idseparacion = sp.idseparacion
+                INNER JOIN usuarios usu ON usu.idusuario = cnt.idusuario
+                INNER JOIN personas per ON per.idpersona = usu.idpersona
+                WHERE cnt.tipo_contrato = _tipo_contrato
+                AND cnt.inactive_at IS NULL
+                AND cnt.fecha_contrato BETWEEN _fecha_inicio AND _fecha_fin
+                AND cnt.n_expediente LIKE CONCAT(_n_expediente,'%')
+            UNION 
+            SELECT
+                cnt.idcontrato,
+                cnt.n_expediente,
+                cnt.tipo_contrato,
+                cnt.estado,
+                COALESCE(CONCAT(pr.apellidos,', ',pr.nombres),pj.razon_social) AS cliente,
+                cl.tipo_persona,
+                COALESCE(pr.documento_tipo,pj.documento_tipo) AS documento_tipo,
+                COALESCE(pr.documento_nro,pj.documento_nro) AS documento_nro,
+                cnt.fecha_contrato,
+                cnt.archivo,
+                per.nombres
+                FROM contratos cnt
+                INNER JOIN clientes cl ON cl.idcliente = cnt.idcliente
+                LEFT JOIN personas pr ON pr.idpersona = cl.idpersona
+                LEFT JOIN personas_juridicas pj ON pj.idpersona_juridica = cl.idpersona_juridica
+                INNER JOIN usuarios usu ON usu.idusuario = cnt.idusuario
+                INNER JOIN personas per ON per.idpersona = usu.idpersona
+                WHERE cnt.tipo_contrato = _tipo_contrato
+                AND cnt.inactive_at IS NULL
+                AND cnt.fecha_contrato BETWEEN _fecha_inicio AND _fecha_fin
+                AND cnt.n_expediente LIKE CONCAT(_n_expediente,'%')
         ) AS resultado
         WHERE resultado.fecha_contrato BETWEEN _fecha_inicio AND _fecha_fin
         ORDER BY idcontrato DESC;
