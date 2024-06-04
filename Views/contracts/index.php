@@ -37,7 +37,7 @@
   <link href="../../assets/css/nucleo-svg.css" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <!-- CSS Files -->
-  <link id="Viewstyle" href="../../assets/css/soft-ui-dashboard.css?v=1.0.7" rel="stylesheet" />
+  <link id="Viewstyle" href="../../assets/css/soft-ui-dashboard_v2.css?v=1.0.7" rel="stylesheet" />
   <!-- Nepcha Analytics (nepcha.com) -->
   <!-- Nepcha is a easy-to-use web analytics. No cookies and fully compliant with GDPR, CCPA and PECR. -->
   <script defer data-site="YOUR_DOMAIN_HERE" src="https://api.nepcha.com/js/nepcha-analytics.js"></script>
@@ -56,7 +56,7 @@
     <div class="collapse navbar-collapse  w-auto " id="sidenav-collapse-main">
       <ul class="navbar-nav">
 
-      <!-- DASHBOARD -->
+        <!-- DASHBOARD -->
         <li class="nav-item">
           <a class="nav-link" href="../../Views/dashboard.html">
             <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
@@ -112,7 +112,7 @@
                       <g id="office" transform="translate(153.000000, 2.000000)">
                         <path class="color-background opacity-6" d="M12.25,17.5 L8.75,17.5 L8.75,1.75 C8.75,0.78225 9.53225,0 10.5,0 L31.5,0 C32.46775,0 33.25,0.78225 33.25,1.75 L33.25,12.25 L29.75,12.25 L29.75,3.5 L12.25,3.5 L12.25,17.5 Z"></path>
                         <svg class="color-background" xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-person-lines-fill" viewBox="0 0 16 16">
-                          <path  d="M6 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m-5 6s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zM11 3.5a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 0 1h-4a.5.5 0 0 1-.5-.5m.5 2.5a.5.5 0 0 0 0 1h4a.5.5 0 0 0 0-1zm2 3a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1zm0 3a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1z"/>
+                          <path d="M6 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m-5 6s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zM11 3.5a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 0 1h-4a.5.5 0 0 1-.5-.5m.5 2.5a.5.5 0 0 0 0 1h4a.5.5 0 0 0 0-1zm2 3a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1zm0 3a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1z" />
                         </svg>
                       </g>
                     </g>
@@ -134,9 +134,9 @@
                     <g transform="translate(1716.000000, 291.000000)">
                       <g id="office" transform="translate(153.000000, 2.000000)">
                         <path class="color-background opacity-6" d="M12.25,17.5 L8.75,17.5 L8.75,1.75 C8.75,0.78225 9.53225,0 10.5,0 L31.5,0 C32.46775,0 33.25,0.78225 33.25,1.75 L33.25,12.25 L29.75,12.25 L29.75,3.5 L12.25,3.5 L12.25,17.5 Z"></path>
-                        <svg  class="color-background" xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-calculator" viewBox="0 0 16 16">
-                          <path d="M12 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1zM4 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z"/>
-                          <path d="M4 2.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5h-7a.5.5 0 0 1-.5-.5zm0 4a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm0 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm0 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm3-6a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm0 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm0 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm3-6a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm0 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5z"/>
+                        <svg class="color-background" xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-calculator" viewBox="0 0 16 16">
+                          <path d="M12 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1zM4 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z" />
+                          <path d="M4 2.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5h-7a.5.5 0 0 1-.5-.5zm0 4a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm0 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm0 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm3-6a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm0 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm0 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm3-6a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm0 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5z" />
                         </svg>
                       </g>
                     </g>
@@ -147,9 +147,10 @@
             <span class="nav-link-text ms-1">Presupuestos</span>
           </a>
         </li>
+
         <!-- SEPARACIONES -->
         <li class="nav-item">
-          <a class="nav-link " href="../separations/index.php">
+          <a class="nav-link" href="../separations/index.php">
             <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
               <svg width="12px" height="12px" viewBox="0 0 42 42" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <title>office</title>
@@ -181,7 +182,7 @@
                   <g transform="translate(-1869.000000, -293.000000)" fill="#FFFFFF" fill-rule="nonzero">
                     <g transform="translate(1716.000000, 291.000000)">
                       <g id="office" transform="translate(153.000000, 2.000000)">
-                      <svg class="color-background" xmlns="http://www.w3.org/2000/svg"  width="50" height="50" fill="currentColor" class="bi bi-backspace-fill" viewBox="0 0 16 16">
+                        <svg class="color-background" xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-backspace-fill" viewBox="0 0 16 16">
                           <path d="M15.683 3a2 2 0 0 0-2-2h-7.08a2 2 0 0 0-1.519.698L.241 7.35a1 1 0 0 0 0 1.302l4.843 5.65A2 2 0 0 0 6.603 15h7.08a2 2 0 0 0 2-2zM5.829 5.854a.5.5 0 1 1 .707-.708l2.147 2.147 2.146-2.147a.5.5 0 1 1 .707.708L9.39 8l2.146 2.146a.5.5 0 0 1-.707.708L8.683 8.707l-2.147 2.147a.5.5 0 0 1-.707-.708L7.976 8z" />
                         </svg>
                       </g>
@@ -205,8 +206,8 @@
                     <g transform="translate(1716.000000, 291.000000)">
                       <g id="office" transform="translate(153.000000, 2.000000)">
                         <svg class="color-background" xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-credit-card" viewBox="0 0 16 16">
-                          <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v1h14V4a1 1 0 0 0-1-1zm13 4H1v5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1z"/>
-                          <path d="M2 10a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1z"/>
+                          <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v1h14V4a1 1 0 0 0-1-1zm13 4H1v5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1z" />
+                          <path d="M2 10a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1z" />
                         </svg>
                       </g>
                     </g>
@@ -229,7 +230,7 @@
                     <g transform="translate(1716.000000, 291.000000)">
                       <g id="office" transform="translate(153.000000, 2.000000)">
                         <svg class="color-background" xmlns="http://www.w3.org/2000/svg" width="40" height="50" fill="currentColor" class="bi bi-people-fill" viewBox="0 0 16 16">
-                          <path d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6m-5.784 6A2.24 2.24 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.3 6.3 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1zM4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5"/>
+                          <path d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6m-5.784 6A2.24 2.24 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.3 6.3 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1zM4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5" />
                         </svg>
                       </g>
                     </g>
@@ -252,8 +253,8 @@
                     <g transform="translate(1716.000000, 291.000000)">
                       <g id="office" transform="translate(153.000000, 2.000000)">
                         <svg class="color-background" xmlns="http://www.w3.org/2000/svg" width="50" height="43" fill="currentColor" class="bi bi-file-earmark-font" viewBox="0 0 16 16">
-                          <path d="M10.943 6H5.057L5 8h.5c.18-1.096.356-1.192 1.694-1.235l.293-.01v5.09c0 .47-.1.582-.898.655v.5H9.41v-.5c-.803-.073-.903-.184-.903-.654V6.755l.298.01c1.338.043 1.514.14 1.694 1.235h.5l-.057-2z"/>
-                          <path d="M14 4.5V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h5.5zm-3 0A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V4.5z"/>
+                          <path d="M10.943 6H5.057L5 8h.5c.18-1.096.356-1.192 1.694-1.235l.293-.01v5.09c0 .47-.1.582-.898.655v.5H9.41v-.5c-.803-.073-.903-.184-.903-.654V6.755l.298.01c1.338.043 1.514.14 1.694 1.235h.5l-.057-2z" />
+                          <path d="M14 4.5V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h5.5zm-3 0A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V4.5z" />
                         </svg>
                       </g>
                     </g>
@@ -267,7 +268,7 @@
 
         <!-- MONITOREO -->
         <li class="nav-item">
-          <a class="nav-link" href="../monitoring/index.php">
+          <a class="nav-link" href="../contracts/index.php">
             <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
               <svg width="12px" height="12px" viewBox="0 0 42 42" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <title>office</title>
@@ -276,8 +277,8 @@
                     <g transform="translate(1716.000000, 291.000000)">
                       <g id="office" transform="translate(153.000000, 2.000000)">
                         <svg class="color-background" xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-eye" viewBox="0 0 16 16">
-                          <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8M1.173 8a13 13 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5s3.879 1.168 5.168 2.457A13 13 0 0 1 14.828 8q-.086.13-.195.288c-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5s-3.879-1.168-5.168-2.457A13 13 0 0 1 1.172 8z"/>
-                          <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5M4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0"/>
+                          <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8M1.173 8a13 13 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5s3.879 1.168 5.168 2.457A13 13 0 0 1 14.828 8q-.086.13-.195.288c-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5s-3.879-1.168-5.168-2.457A13 13 0 0 1 1.172 8z" />
+                          <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5M4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0" />
                         </svg>
                       </g>
                     </g>
@@ -288,7 +289,7 @@
             <span class="nav-link-text ms-1">Monitoreo</span>
           </a>
         </li>
-        
+
         <li class="nav-item mt-3">
           <h6 class="ps-4 ms-2 text-uppercase text-xs font-weight-bolder opacity-6">Panel de usuario</h6>
         </li>
@@ -347,15 +348,13 @@
       <div class="container-fluid py-1 px-3">
         <nav aria-label="breadcrumb">
           <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
-          <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="#">Dashboard</a></li>
-            <li class="breadcrumb-item text-sm text-dark active" aria-current="page">CLientes</li>
+            <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="#">Dashboard</a></li>
+            <li class="breadcrumb-item text-sm text-dark active" aria-current="page">contratos</li>
           </ol>
-          <h6 class="font-weight-bolder mb-0" id="cabezera">CIENTES </h6>
+          <h6 class="font-weight-bolder mb-0" id="cabezera">CONTRATOS </h6>
         </nav>
         <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
-          
           <ul class="navbar-nav  justify-content-end">
-            
             <li class="nav-item d-flex align-items-center">
               <a href="javascript:;" class="nav-link text-body font-weight-bold px-0">
                 <i class="fa fa-user me-sm-1"></i>
@@ -371,7 +370,7 @@
                 </div>
               </a>
             </li>
-            
+
           </ul>
         </div>
       </div>
@@ -380,60 +379,101 @@
     <!-- End Navbar -->
     <div class="container py-4">
 
-    <!-- CONTENIDO -->
+      <!-- CONTENIDO -->
 
-    <div class="row">
+      <div class="row">
         <div class="col-12">
           <div class="card mb-4">
             <div class="card-header pb-0">
               <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-3">
 
-                  <h6>Tabla - clientes</h6>
+                  <h6>Tabla - contratos</h6>
                 </div>
-                <div class="col-md-6">
-                  <div class="text-end">
-                    <button type="button" class="btn btn-lg bg-gradient-success opacity-10" id="generate-excel"><i class="fa-solid fa-file-excel"></i></button>
-                    <button type="button" class="btn btn-lg bg-gradient-danger opacity-10" id="generate-pdf"><i class="bi bi-filetype-pdf"></i></button>
+                <div class="row d-flex" style="align-items: end;">
+
+                  <div class="col-md-3 mt-2">
+
+                    <label for="tipo_contrato">Tipo de contrato</label>
+                    <select id="tipo_contrato" class="form-select" name="tipo_contrato">
+                      <option value="VENTA DE LOTE" selected>Elije un tipo de contrato</option>
+                      <option value="VENTA DE LOTE">Venta de lote</option>
+                      <option value="VENTA DE CASA">Venta de casa</option>
+                      <option value="VENTA DE LOTE Y CASA">Venta de de lote y casa</option>
+                    </select>
+                  </div>
+
+                  <div class="col-md-3 mt-2">
+                    <label for="fechaInicio" class="form-label">
+                      Fecha de inicio
+                    </label>
+                    <input type="date" name="fechaInicio" class="form-control" id="fechaInicio">
+                  </div>
+                  <div class="col-md-3 mt-2">
+                    <label for="fechaFin" class="form-label">
+                      Fecha de fin
+                    </label>
+                    <input type="date" name="fechaFin" class="form-control" id="fechaFin">
+                  </div>
+
+                  <div class="col-md-3 d-grid mt-2">
+                    <label for="in-code">Nº de expediente</label>
+                    <div class="input-group">
+                      <span class="input-group-text text-body"><i class="fas fa-search" aria-hidden="true"></i></span>
+                      <input type="text" class="form-control" placeholder="Nº de expediente..." id="in-code" name="in-code">
+                    </div>
+                  </div>
+
+                </div>
+                <div class="row">
+                  <div class="col-md-3 mt-2">
+
+                    <a type="button" class="mb-0  btn btn-sm btn-outline-success" href="./add_contract.php">AGREGAR CONTRATO</a>
+                  </div>
+                </div>
+                <div class="row d-flex" style="justify-content: space-between; align-items: start;">
+                  <div class="col-md-3 m-2">
+                    <div class="btn-group text-start mt-2">
+                    </div>
+
                   </div>
                 </div>
               </div>
-              <div class="row">
-                <div class="col-md-3">
-                  
-                  <select name="tipo_persona" class="form-select" id="documento_tipo">
-                    <option value="NATURAL">Tipo de persona</option>
-                  </select>
-                </div>
-              </div>
             </div>
+            <hr>
             <div class="card-body px-0 pt-0 pb-2">
               <div class="table-responsive text-center p-0">
-                  <table class="table align-items-center mb-0 table-hover" id="table-assets">
-                    <thead>
+                <table class="table align-items-center mb-0 table-hover" id="table-contracts">
+                  <thead>
                     <tr>
                       <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">#</th>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Denominación</th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Nº de expediente</th>
                       <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Estado</th>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Sublote</th>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Direccion</th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Cliente</th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Tipo de documento</th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Nº de documento</th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Fecha del contrato</th>
                       <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Operaciones</th>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10"></th>
                     </tr>
                   </thead>
                   <tbody>
-                    
-                  <!-- RENDER -->
+
+                    <!-- RENDER -->
 
                   </tbody>
                 </table>
+                <div id="render-alert">
+                  
+
+
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
 
-    <footer class="footer pt-3  ">
+      <footer class="footer pt-3  ">
         <div class="container-fluid">
           <div class="row align-items-center justify-content-lg-between">
             <div class="col-lg-6 mb-lg-0 mb-4">
@@ -442,7 +482,7 @@
                   document.write(new Date().getFullYear())
                 </script>,
                 auspiciado por
-                <a href="https://aifperu.com/" class="font-weight-bold" target="_blank">A.I.F Contratistas Generales S.A.C</a>
+                <a href="https://www.creative-tim.com" class="font-weight-bold" target="_blank">A.I.F Contratistas Generales S.A.C</a>
                 (sistema web).
               </div>
             </div>
@@ -455,13 +495,11 @@
     <a class="fixed-plugin-button text-dark position-fixed px-3 py-2">
       <i class="fa fa-cog py-2"> </i>
     </a>
-
-    <!-- CONFIGURACIONES DEL PANEL -->
     <div class="card shadow-lg ">
       <div class="card-header pb-0 pt-3 ">
         <div class="float-start">
-          <h5 class="mt-3 mb-0">Configurar tu interfáz</h5>
-          <p>Mira las opciones de configuración</p>
+          <h5 class="mt-3 mb-0">Soft UI Configurator</h5>
+          <p>See our dashboard options.</p>
         </div>
         <div class="float-end mt-4">
           <button class="btn btn-link text-dark p-0 fixed-plugin-close-button">
@@ -492,8 +530,8 @@
           <p class="text-sm">Puedes escojer entre dos tipos de sidebar.</p>
         </div>
         <div class="d-flex">
-          <button class="btn bg-gradient-primary w-100 px-3 mb-2 active" data-class="bg-transparent" onclick="sidebarType(this)">Transparente</button>
-          <button class="btn bg-gradient-primary w-100 px-3 mb-2 ms-2" data-class="bg-white" onclick="sidebarType(this)">Blanco</button>
+          <button class="btn bg-gradient-primary w-100 px-3 mb-2 active" data-class="bg-transparent" onclick="sidebarType(this)">Transparent</button>
+          <button class="btn bg-gradient-primary w-100 px-3 mb-2 ms-2" data-class="bg-white" onclick="sidebarType(this)">White</button>
         </div>
         <p class="text-sm d-xl-none d-block mt-2">Solo puedes cambiar la transparecia del seidebar en la vista de escritorio.</p>
 
@@ -507,6 +545,57 @@
       </div>
     </div>
   </div>
+
+  <!-- MODAL -->
+  <!-- Button trigger modal -->
+  <!-- Modal -->
+  <div class="modal fade" id="modal_det_sep" tabindex="-1" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-lg modal-fullscreen-sm-down" role="document">
+      <div class="modal-content">
+        <div class="modal-header bg-secondary">
+          <h5 class="modal-title text-white" id="modalTitle">
+            --
+          </h5>
+          <button type="button" class="btn-close text-dark" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div style="margin: 5% 10% 5% 10%;">
+            <div class="d-flex" style="justify-content: space-between;">
+              <div>
+
+                <h6><strong>Cliente :</strong></h6>
+                <h6><strong>Documento tipo :</strong></h6>
+                <h6><strong>Documento número :</strong></h6>
+                <h6><strong>Proyecto :</strong></h6>
+                <h6><strong>Sublote :</strong></h6>
+                <h6><strong>Monto de separación :</strong></h6>
+                <div id="labels">
+
+                </div>
+              </div>
+              <div>
+                <h6 id="cliente"></h6>
+                <h6 id="documento_tipo"></h6>
+                <h6 id="documento_nro"></h6>
+                <h6 id="proyecto"></h6>
+                <h6 id="sublote"></h6>
+                <h6 id="monto_separación"></h6>
+                <div id="content">
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" data-bs-dismiss="modal">
+            Cerrar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- SWEET ALERT -->
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
@@ -519,201 +608,236 @@
   <script src="../../assets/js/globalFunctions.js"></script>
   <script src="../../assets/js/sweetAlert.js"></script>
   <script>
-document.addEventListener("DOMContentLoaded",()=>{
+    document.addEventListener("DOMContentLoaded", async function() {
 
-  /* INSTANCIAS */
-  const global = new FunGlobal();
+      /* INSTANCIAS */
+      const global = new FunGlobal();
+      const sAlert = new Alert();
 
-  const $ = id => global.$(id);
-  const $All = id => global.$All(id);
+      const $ = id => global.$(id);
+      const $All = id => global.$All(id);
 
-  /* VALOR EN LA URL */
-  const stringQuery = window.location.search;
-  const url = new URLSearchParams(stringQuery);
-  const code = url.get("id");
-  const codeName = url.get("name");
+      let timmer;
 
-  const idProyecto = atob(code); //DECOFICA EL VALOR
-  const name = atob(codeName);
+      //valida el rango de fechas
+      function validateDates() {
+        const fecha_inicio = $("#fechaInicio").value;
+        const inicioDate = new Date(fecha_inicio);
 
-  let timer;
+        const fecha_fin = $("#fechaFin").value;
+        const finDate = new Date(fecha_fin);
 
-  function renderAssets(results){
+        if (inicioDate > finDate) {
 
-    let numberRow = 1;
+          getContractsType();
+        } else {
+          getContractsTypeDate();
+        }
 
-    $("#table-assets tbody").innerHTML = "";
+      }
 
-    let newRow = ``;
+      //Obtiene el rango de fechas
+      function getDate() {
 
-    if(results.length > 0){
-      
-      results.forEach(asset =>{
+        const date = new Date();
+
+        const futureDate = new Date();
+
+        const pastDate = new Date("2024-1-1");
+
+
+        let dateToday = date.getDate().toString().padStart(2, '0');
+        let monthToday = (date.getMonth() + 1).toString().padStart(2, '0');
+        let yearToday = date.getFullYear().toString();
+        let today = `${yearToday}-${monthToday}-${dateToday}`;
+
+        futureDate.setMonth(date.getMonth() + 1);
+
+        if (futureDate.getDate() !== date.getDate()) {
+          futureDate.setDate(0);
+        }
+
+        let futureDay = futureDate.getDate().toString().padStart(2, '0');
+        let futureMonth = (futureDate.getMonth() + 1).toString().padStart(2, '0');
+        let futureYear = futureDate.getFullYear().toString();
+
+        let future = `${futureYear}-${futureMonth}-${futureDay}`;
+
+        let pastDay = pastDate.getDate().toString().padStart(2, '0');
+        let pastMonth = (pastDate.getMonth() + 1).toString().padStart(2, '0');
+        let pastYear = pastDate.getFullYear().toString();
+
+        let past = `${pastYear}-${pastMonth}-${pastDay}`;
+
+        $("#fechaInicio").value = today;
+        $("#fechaInicio").max = today;
+        $("#fechaInicio").min = past;
+
+        $("#fechaFin").value = today;
+        $("#fechaFin").min = today;
+        $("#fechaFin").max = future;
+
+      }
+
+      //Renderiza los datos en la tabla
+      function renderTable(array) {
+
         
-        let code = btoa(asset.idactivo) //CODIFICACIÓN
-  
-        let IconStatus = asset.estado == "SIN VENDER" ?  `<span class="badge badge-sm bg-gradient-danger">${asset.estado}</span>` : 
-                                        asset.estado = "VENDIDO" ? `<span class="badge badge-sm bg-gradient-success">${asset.estado}</span>`: 
-                                                                  `<span class="badge badge-sm bg-gradient-secondary">${asset.estado}</span>` ;
-  
-        newRow = `
-                <tr>
-                  <td>
-                    <div class="d-flex px-2 py-1">
-                      <div class="d-flex flex-column justify-content-center">
-                        <h6 class="mb-0 text-sm">${numberRow}</h6>
-                      </div>
-                    </div>
-                  </td>
-                  <td>
-                    <p class="text-xs font-weight-bold mb-0">${asset.denominacion}</p>
-                    </td>
-                    <td class="align-middle text-center text-sm">
-                      ${IconStatus}
-                    </td>
-                    <td>
-                      <p class="text-xs font-weight-bold mb-0">${asset.sublote}</p>
-                    </td>
-                  <td>
-                    <p class="text-xs font-weight-bold mb-0">${asset.direccion}</p>
-                  </td>
-                  <td class="align-middle">
-                    <div class="btn-group">
-                        <a type="button" href="./delete_asset.php?id=${code}" class="btn btn-danger btn-sm" id="btn-delete"><i class="bi bi-trash-fill"></i></a>
-                        <a type="button" href="./edit_asset.php?id=${code}" class="btn btn-primary btn-sm" id="btn-edit"><i class="bi bi-pencil-fill"></i></a>
-                        <a type="button" href="./detail_asset.php?id=${code}" class="btn btn-success btn-sm"><i class="bi bi-arrow-right-square"></i></a>
-                        </div>
-                    </td>
-                </tr>           
-        `;
-        numberRow ++;
+        const tableBody = $("#table-contracts tbody"); 
+        const renderAlert = $("#render-alert");
 
-        $("#table-assets tbody").innerHTML += newRow;
+        tableBody.innerHTML = "";
+        renderAlert.innerHTML = "";
+        
+        if(array.length > 0){
+
+  
+          let numRow = 1;
+          array.forEach(element => {
+  
+            let newRow = `
+            <tr>
+              <td class="text-sm">${numRow}</td>
+              <td class="text-sm">${element.n_expediente}</td>
+              <td class="text-sm">${element.estado}</td>
+              <td class="text-sm">${element.cliente}</td>
+              <td class="text-sm">${element.documento_tipo}</td>
+              <td class="text-sm">${element.documento_nro}</td>
+              <td class="text-sm">${element.fecha_contrato}</td>
+              <td>
+              <div class="">
+                <div class="dropdown">
+                  <a class="cursor-pointer" id="dropdownTable" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="fa fa-ellipsis-v text-secondary"></i>
+                  </a>
+                  <ul class="dropdown-menu" aria-labelledby="dropdownTable">
+                    <li><a href="#" class="dropdown-item border-radius-md"><i class="bi bi-arrow-down-square text-danger"></i>  Descargar</a></li>
+                    <li><a href="#" class="dropdown-item border-radius-md"><i class="fa-solid fa-right-left text-secondary"></i>  Devolver</a></li>
+                    <li><a href="#" class="dropdown-item border-radius-md"><i class="bi bi-arrow-right-square text-success"></i> Ver más</a></li>
+                    <li><a href="#" class="dropdown-item border-radius-md"><i class="bi bi-trash-fill text-danger"></i> Eliminar</a></li>
+                    <li><a href="#" class="dropdown-item border-radius-md"><i class="bi bi-pencil-fill text-primary"></i> Editar</a></li>
+                  </ul>
+                </div>
+              </div>
+              </td>
+            </tr>
+            `;
+            numRow++
+            tableBody.innerHTML += newRow;
+          });
+
+        }else{
+
+          let alert = `
+            <div class="alert alert-danger text-white" role="alert">
+              <strong>No se encontraron datos.</strong> Intentelo otra vez
+            </div>
+          `;
+
+          renderAlert.innerHTML = alert;
+        }
+      }
+
+      //Obtiene los datos de los contratos según el tipo
+      async function getContractsType() {
+
+        try {
+          let url = "../../Controllers/contract.controller.php";
+
+          let params = new FormData();
+
+          params.append("action", "listContractByType");
+          params.append("tipo_contrato", $("#tipo_contrato").value);
+
+          let results = await global.sendAction(url, params);
+
+          if (results) {
+            console.log(results);
+            renderTable(results)
+          }
+        } catch (e) {
+          console.error(e);
+        }
+      }
+
+      //Obtiene los datos de los contratos según el tipo y la fecha
+      async function getContractsTypeDate() {
+
+        try {
+          let url = "../../Controllers/contract.controller.php";
+
+          let params = new FormData();
+
+          params.append("action", "listContractsByTypeDate");
+          params.append("tipo_contrato", $("#tipo_contrato").value);
+          params.append("fecha_inicio", $("#fechaInicio").value);
+          params.append("fecha_fin", $("#fechaFin").value);
+
+          let results = await global.sendAction(url, params);
+
+          if (results) {
+            console.log(results);
+            renderTable(results)
+          }
+        } catch (e) {
+          console.error(e);
+        }
+      }
+
+      //Obtiene los datos de los contratos según el tipo, la fecha Y EL NUMERO DE EXPEDIENTE
+      async function getContractsTypeDateExpedient() {
+
+        try {
+          let url = "../../Controllers/contract.controller.php";
+
+          let params = new FormData();
+
+          params.append("action", "listContractsByTypeDateNexpediente");
+          params.append("tipo_contrato", $("#tipo_contrato").value);
+          params.append("fecha_inicio", $("#fechaInicio").value);
+          params.append("fecha_fin", $("#fechaFin").value);
+          params.append("n_expediente", $("#in-code").value);
+
+          let results = await global.sendAction(url, params);
+
+          if (results) {
+            console.log(results);
+            renderTable(results)
+          }
+        } catch (e) {
+          console.error(e);
+        }
+      }
+
+      $("#in-code").addEventListener("input", (e) => {
+
+        let valueInput = e.target.value;
+
+        if (valueInput) {
+
+          clearTimeout(timmer);
+
+          timmer = setTimeout(() => {
+            getContractsTypeDateExpedient();
+          }, 1500);
+        }
       });
 
-    }else{
-      newRow =`
-      <div class="alert alert-danger m-4 text-white" role="alert">
-          <strong class="text-white">No existe sublotes</strong> Asegurate de que existan los registros.
-      </div>
-      `;
-      $("#table-assets tbody").innerHTML += newRow;
-    }
-    
+      $("#fechaFin").addEventListener("change", () => {
+        validateDates();
+      });
 
-  }
+      $("#fechaInicio").addEventListener("change", () => {
+        validateDates();
+      });
 
+      $("#tipo_contrato").addEventListener("change", () => {
+        getContractsType();
+      });
 
-  async function getAssets(id){
-
-    try{
-
-      $("#add-asset").setAttribute("href",`./add_asset.php?idproy=${code}&name=${codeName}`);
-
-      let url ="../../../../Controllers/asset.controller.php";
-      let params = new FormData();
-  
-      params.append("action","listAssetProjectId");
-      params.append("idproyecto",id);
-
-      results = await global.sendAction(url, params);
-
-      if(results){
-
-        $("#cabezera").innerText +=` ${name}`;
-        renderAssets(results);
-
-      }
-    }
-    catch(e){
-      console.error(e);
-    }
-  }
-
-  async function searchAsset(idproy,sublote){
-    try{
-
-      let url = `../../../../Controllers/asset.controller.php`;
-      let params = new FormData();
-
-      params.append("action", "listAssetPAcode");
-      params.append("idproyecto",idproy);
-      params.append("sublote",sublote);
-
-      let results = await global.sendAction(url, params);
-
-      if(results){
-        console.log(results)
-        renderAssets(results);
-      }
-    }
-    catch(e){
-      console.error(e);
-    }
-  }
-
-  //Genera u archivo PDF
-  async function generatePdf(id){
-
-    let codeID = btoa(id);
-    let url = `../../../../reports/reports_pdf.php?action=reportLots&idproyecto=${codeID}`;
-
-    window.location.href = url;
-  }
-
-  //Genera un archivo excel
-  async function generateExcel(id){
-
-    let codeID = btoa(id);
-    let url = `../../../../reports/reports_excel.php?idproyecto=${codeID}`;
-
-    window.location.href = url;
-  }
-
-  $("#in-sublote").addEventListener("input",()=>{
-
-      clearTimeout(timer);
-
-        timer = setTimeout(()=>{
-
-          let sublote = $("#in-sublote").value;
-
-          if(sublote != ""){
-
-            searchAsset(idProyecto,sublote);
-
-          }else{
-
-            getAssets(idProyecto);
-          }
-        },1500)
+      await getDate();
+      await getContractsTypeDate();
     });
-
-    //Menù */*/*/
-    /* $("#goDashboard").addEventListener("click",()=>{
-    
-    window.location.href = `../../dashboard.php?id=${code}&name=${codeName}`;
-    
-  });
-
-  $("#goProjects").addEventListener("click",()=>{
-    
-    window.location.href = `../../projects/index.php?id=${code}&name=${codeName}`;
-    
-  }); */
-      
-  $("#generate-excel").addEventListener("click",()=>{
-
-    generateExcel(idProyecto);
-  });
-
-  $("#generate-pdf").addEventListener("click",()=>{
-
-    generatePdf(idProyecto);
-  });
-
-    /* getAssets(idProyecto); */
-});
   </script>
   <script>
     var win = navigator.platform.indexOf('Win') > -1;

@@ -677,22 +677,46 @@ INSERT INTO cuotas (idcontrato, monto_cuota, fecha_vencimiento, tipo_pago, entid
 				(6, 500.00, '2024-03-10', 'TRANSFERENCIA', 'BCP', 7),
 				(6, 500.00, '2024-04-10', 'TRANSFERENCIA', 'BCP', 7);
                 
-INSERT INTO cuotas (idcontrato, monto_cuota, fecha_vencimiento, tipo_pago, entidad_bancaria, idusuario)
-			VALUES 
-				(5, 500.00, '2024-03-18','TRANSFERENCIA', 'BCP', 6),
-				(5, 500.00, '2024-04-13','TRANSFERENCIA', 'BCP',  6);          
-SELECT * FROM cuotas;
+-- Insertando registros para fechas pasadas
+INSERT INTO cuotas (idcontrato, monto_cuota, fecha_vencimiento, idusuario)
+VALUES (1, 500, DATE_SUB(CURDATE(), INTERVAL 30 DAY), 1),
+       (1, 500, DATE_SUB(CURDATE(), INTERVAL 60 DAY), 1),
+       (1, 500, DATE_SUB(CURDATE(), INTERVAL 90 DAY), 1),
+       (1, 500, DATE_SUB(CURDATE(), INTERVAL 120 DAY), 1),
+       (1, 500, DATE_SUB(CURDATE(), INTERVAL 150 DAY), 1),
+       (1, 500, DATE_SUB(CURDATE(), INTERVAL 180 DAY), 1),
+       (1, 500, DATE_SUB(CURDATE(), INTERVAL 210 DAY), 1),
+       (1, 500, DATE_SUB(CURDATE(), INTERVAL 240 DAY), 1),
+       (1, 500, DATE_SUB(CURDATE(), INTERVAL 270 DAY), 1),
+       (1, 500, DATE_SUB(CURDATE(), INTERVAL 300 DAY), 1),
+       (1, 500, DATE_SUB(CURDATE(), INTERVAL 330 DAY), 1),
+       (1, 500, DATE_SUB(CURDATE(), INTERVAL 360 DAY), 1),
+       (1, 500, DATE_SUB(CURDATE(), INTERVAL 390 DAY), 1),
+       (1, 500, DATE_SUB(CURDATE(), INTERVAL 420 DAY), 1),
+       (1, 500, DATE_SUB(CURDATE(), INTERVAL 450 DAY), 1);
 
--- SUTENTOS CUOTAS
-INSERT INTO sustentos_cuotas (idcuota, ruta, idusuario)
-			VALUES 
-				(1, '/ruta/imagen1.jpg', 1),
-				(1, '/ruta/imagen2.jpg', 1),
-                (1, '/ruta/imagen1.jpg', 1),
-				(1, '/ruta/imagen2.jpg', 1),
-                (2, '/ruta/imagen1.jpg', 2),
-				(2, '/ruta/imagen2.jpg', 2),
-                (2, '/ruta/imagen1.jpg', 2),
-				(2, '/ruta/imagen2.jpg', 2);
-SELECT * FROM sustentos_cuotas;                
+-- Insertando registros para fechas futuras
+INSERT INTO cuotas (idcontrato, monto_cuota, fecha_vencimiento, idusuario)
+VALUES (1, 500, DATE_ADD(CURDATE(), INTERVAL 30 DAY), 1),
+       (1, 500, DATE_ADD(CURDATE(), INTERVAL 60 DAY), 1),
+       (1, 500, DATE_ADD(CURDATE(), INTERVAL 90 DAY), 1),
+       (1, 500, DATE_ADD(CURDATE(), INTERVAL 120 DAY), 1),
+       (1, 500, DATE_ADD(CURDATE(), INTERVAL 150 DAY), 1),
+       (1, 500, DATE_ADD(CURDATE(), INTERVAL 180 DAY), 1),
+       (1, 500, DATE_ADD(CURDATE(), INTERVAL 210 DAY), 1),
+       (1, 500, DATE_ADD(CURDATE(), INTERVAL 240 DAY), 1),
+       (1, 500, DATE_ADD(CURDATE(), INTERVAL 270 DAY), 1),
+       (1, 500, DATE_ADD(CURDATE(), INTERVAL 300 DAY), 1),
+       (1, 500, DATE_ADD(CURDATE(), INTERVAL 330 DAY), 1),
+       (1, 500, DATE_ADD(CURDATE(), INTERVAL 360 DAY), 1),
+       (1, 500, DATE_ADD(CURDATE(), INTERVAL 390 DAY), 1),
+       (1, 500, DATE_ADD(CURDATE(), INTERVAL 420 DAY), 1),
+       (1, 500, DATE_ADD(CURDATE(), INTERVAL 450 DAY), 1);
+            
+SELECT * from cuotas where idcontrato = 1;
 
+INSERT INTO detalle_cuotas(idcuota, monto_pago,detalles, tipo_pago, entidad_bancaria,imagen)
+			VALUES(1,300,"pago 1","transeferencia","bcp","imagen1"),
+					(1,100,"pago 1","transeferencia","bcp","imagen1"),
+					(1,50,"pago 1","transeferencia","bcp","imagen1");
+SELECT * from detalle_cuotas;

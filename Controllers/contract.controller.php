@@ -8,11 +8,46 @@ if(isset($_POST["action"])){
 
     switch($_POST["action"]){
 
+        case "listContractsAll": 
+            echo json_encode($contracts = $contract->listContracts());
+            break;
+            
+        case "listContractByType": 
+            $type = $_POST["tipo_contrato"];
+
+            echo json_encode($contract->listContractByType($type));
+            break;
+
+        case "listContractsByTypeDate": 
+
+                $dataObtained = [
+                    "tipo_contrato" => $_POST["tipo_contrato"],
+                    "fecha_inicio" => $_POST["fecha_inicio"],
+                    "fecha_fin" => $_POST["fecha_fin"]
+                ];
+
+                echo json_encode($contract->listContractsByTypeDate($dataObtained));
+
+                break;
+
+        case "listContractsByTypeDateNexpediente": 
+
+                $dataObtained = [
+                    "tipo_contrato" => $_POST["tipo_contrato"],
+                    "fecha_inicio" => $_POST["fecha_inicio"],
+                    "fecha_fin" => $_POST["fecha_fin"],
+                    "n_expediente" => $_POST["n_expediente"]
+                ];
+
+                echo json_encode($contract->listContractsByTypeDateNexpediente($dataObtained));
+
+                break;
+
         case "existContract": 
 
                 $idseparacion = $_POST["idseparacion"];
 
-                echo json_encode($contract->existContrat($idseparacion));
+                echo json_encode($contract->existContract($idseparacion));
             break;
 
         case "listContractId": 
@@ -27,15 +62,22 @@ if(isset($_POST["action"])){
             
                 $dataObtained = [
 
-                    "idcliente"                 => $_POST["idcliente"],
-                    "idconyugue"                => $_POST["idconyugue"],
-                    "idrepresentante_primario"  => $_POST["idrepresentante_primario"],
-                    "idrepresentante_secundario" => $_POST["idrepresentante_secundario"],
-                    "tipo_cambio"       => $_POST["tipo_cambio"],
-                    "estado"            => $_POST["estado"],
-                    "detalles"          => $_POST["detalles"],
+                    "n_expediente"                 => $_POST["n_expediente"],
+                    "tipo_contrato"                => $_POST["tipo_contrato"],
+                    "idseparacion"  => $_POST["idseparacion"],
+                    "idrepresentante_primario" => $_POST["idrepresentante_primario"],
+                    "idrepresentante_secundario"       => $_POST["idrepresentante_secundario"],
+                    "idcliente"            => $_POST["idcliente"],
+                    "idconyugue"          => $_POST["idconyugue"],
+                    "idactivo"    => $_POST["idactivo"],
+                    "tipo_cambio"    => $_POST["tipo_cambio"],
+                    "estado"    => $_POST["estado"],
                     "fecha_contrato"    => $_POST["fecha_contrato"],
-                    "idusuario"         => $_POST["idusuario"]
+                    "precio_venta"    => $_POST["precio_venta"],
+                    "det_contrato"    => $_POST["det_contrato"],
+                    "archivo"    => $_POST["archivo"],
+                    "idusuario"         => 1
+                    // "idusuario"         => $_POST["idusuario"]
                 ];
                 
                 echo json_encode($contract->addContract($dataObtained));
@@ -46,15 +88,22 @@ if(isset($_POST["action"])){
                 $dataObtained = [
 
                     "idcontrato"                => $_POST["idcontrato"],
-                    "idcliente"                 => $_POST["idcliente"],
-                    "idconyugue"                => $_POST["idconyugue"],
-                    "idrepresentante_primario"  => $_POST["idrepresentante_primario"],
-                    "idrepresentante_secundario" => $_POST["idrepresentante_secundario"],
-                    "tipo_cambio"       => $_POST["tipo_cambio"],
-                    "estado"            => $_POST["estado"],
-                    "detalles"          => $_POST["detalles"],
+                    "n_expediente"                 => $_POST["n_expediente"],
+                    "tipo_contrato"                => $_POST["tipo_contrato"],
+                    "idseparacion"  => $_POST["idseparacion"],
+                    "idrepresentante_primario" => $_POST["idrepresentante_primario"],
+                    "idrepresentante_secundario"       => $_POST["idrepresentante_secundario"],
+                    "idcliente"            => $_POST["idcliente"],
+                    "idconyugue"          => $_POST["idconyugue"],
+                    "idactivo"    => $_POST["idactivo"],
+                    "tipo_cambio"    => $_POST["tipo_cambio"],
+                    "estado"    => $_POST["estado"],
                     "fecha_contrato"    => $_POST["fecha_contrato"],
-                    "idusuario"         => $_POST["idusuario"]
+                    "precio_venta"    => $_POST["precio_venta"],
+                    "det_contrato"    => $_POST["det_contrato"],
+                    "archivo"    => $_POST["archivo"],
+                    "idusuario"         => 1
+                    // "idusuario"         => $_POST["idusuario"]
                 ];
 
                 echo json_encode($contract->setContract($dataObtained));
@@ -70,24 +119,41 @@ if(isset($_POST["action"])){
                 ];
 
                 echo json_encode($contract->inactiveContract($idcontrato));
+                
+                break;
+                
+            case "existsContractIdContract": 
+                $idcontrato = $_POST["idcontrato"];
+        
+                echo json_encode($contract->existsContractIdContract($idcontrato));
 
-            break;
+                break;
+
+        /********************************************  DETALLES DE CONTRATO ************************************************************/
         
         case "listDetContract": 
             
-                $idactivo = $_POST["idactivo"];
+                $idcontrato = $_POST["idcontrato"];
 
-                echo json_encode($contract->listDetContract($idactivo));
+                echo json_encode($contract->listDetContract($idcontrato));
 
+            break;
+
+        case "listDetContractById": 
+
+                $iddetalle_contrato = $_POST["iddetalle_contrato"];
+
+                echo json_encode($contract->listDetContractById($iddetalle_contrato));
+
+                break;
             break;
 
         case "addDetContract": 
             
                 $dataObtained = [
 
-                    "idactivo"      => $_POST["idactivo"],
-                    "idcontrato"    => $_POST["idcontrato"],
-                    "idusuario"     => $_POST["idusuario"]
+                    "idrepresentante"      => $_POST["idrepresentante"],
+                    "idcontrato"     => $_POST["idcontrato"]
                 ];
 
                 echo json_encode($contract->addDetContract($dataObtained));
@@ -99,9 +165,8 @@ if(isset($_POST["action"])){
                 $dataObtained = [
 
                     "iddetalle_contrato"      => $_POST["iddetalle_contrato"],
-                    "idactivo"      => $_POST["idactivo"],
-                    "idcontrato"    => $_POST["idcontrato"],
-                    "idusuario"     => $_POST["idusuario"]
+                    "idrepresentante"      => $_POST["idrepresentante"],
+                    "idcontrato"     => $_POST["idcontrato"]
                 ];
 
                 echo json_encode($contract->setDetContract($dataObtained));
@@ -116,10 +181,6 @@ if(isset($_POST["action"])){
 
             break;
 
-        case "existsContractIdContract": 
-            $idcontrato = $_POST["idcontrato"];
-
-            echo json_encode($contract->existsContractIdContract($idcontrato));
     }
 }
 ?>

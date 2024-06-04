@@ -83,7 +83,7 @@ END $$
 
 DELIMITER;
 
--- constructora
+-- constructora /////////////////////////////////////////////////////////////////////////////////////////
 DELIMITER $$
 
 CREATE PROCEDURE spu_list_companies()
@@ -94,7 +94,7 @@ END $$
 
 DELIMITER;
 
--- sedes
+-- sedes /////////////////////////////////////////////////////////////////////////////////////////////
 DELIMITER $$
 
 CREATE PROCEDURE spu_list_addresses(IN _iddistrito INT)
@@ -152,13 +152,13 @@ DELIMITER;
 
 use aisoft;
 
--- representates
+-- representates DE SEDE ////////////////////////////////////////////////////////////////////////////
 DELIMITER $$
 
 CREATE PROCEDURE spu_get_represents(IN _idrepresentante INT)
 BEGIN
 	SELECT 
-		rep.idrepresente,
+		rep.idrepresentante,
         pers.nombres,
         pers.apellidos,
         pers.documento_tipo,
@@ -169,7 +169,7 @@ BEGIN
         rep.cargo,
         rep.partida_elect,
         sed.direccion
-        FROM representates AS rep
+        FROM representantes AS rep
         INNER JOIN personas AS pers ON pers.idpersona = rep.idpersona
         INNER JOIN distritos AS dist ON dist.iddistrito = pers.iddistrito
         INNER JOIN provincias AS prov ON prov.idprovincia = dist.idprovincia
@@ -181,9 +181,104 @@ END $$
 
 DELIMITER;
 
--- PROYECTOS
 DELIMITER $$
 
+CREATE PROCEDURE spu_get_represents_idAdress(IN _idsede INT)
+BEGIN
+	SELECT 
+		rep.idrepresentante,
+        pers.nombres,
+        pers.apellidos,
+        pers.documento_tipo,
+        pers.documento_nro,
+        dist.distrito,
+        prov.provincia,
+		dept.departamento,
+        rep.cargo,
+        rep.partida_elect,
+        sed.direccion
+        FROM representantes AS rep
+        INNER JOIN personas AS pers ON pers.idpersona = rep.idpersona
+        INNER JOIN distritos AS dist ON dist.iddistrito = pers.iddistrito
+        INNER JOIN provincias AS prov ON prov.idprovincia = dist.idprovincia
+        INNER JOIN departamentos AS dept ON dept.iddepartamento = prov.iddepartamento
+        INNER JOIN sedes AS sed ON sed.idsede = rep.idsede
+        WHERE rep.idsede = _idsede
+        AND rep.inactive_at IS NULL;
+END $$
+
+DELIMITER;
+
+call spu_get_represents_idAdress(1);
+select * from representantes;
+
+-- PROYECTOS //////////////////////////////////////////////////////////////////////////////////
+
+DELIMITER $$
+CREATE PROCEDURE spu_list_projects_typeAct
+(
+    IN _tipo_activo VARCHAR(10)
+)
+BEGIN
+    DECLARE T_act varchar(10);
+
+    SET T_act = _tipo_activo;
+
+    IF T_act = "LOTE" THEN
+    SELECT 
+        py.idproyecto,
+        py.denominacion,
+        T_act as tipo
+        FROM proyectos py
+        INNER JOIN activos ac ON ac.idproyecto = py.idproyecto
+        WHERE py.inactive_at IS NULL
+            AND ac.inactive_at IS NULL
+            AND ac.tipo_activo = tipo_activo
+            AND JSON_LENGTH(JSON_EXTRACT(ac.det_casa,'$.clave')) = 0
+            AND JSON_LENGTH(JSON_EXTRACT(ac.det_casa,'$.valor')) = 0
+            AND ac.estado = "SEPARADO"
+            GROUP BY py.idproyecto
+            ORDER BY py.denominacion ASC;
+
+    ELSEIF _tipo_activo = "CASA" THEN 
+        SELECT 
+        py.idproyecto,
+        py.denominacion,
+        T_act as tipo
+        FROM proyectos py
+        INNER JOIN activos ac ON ac.idproyecto = py.idproyecto
+        WHERE py.inactive_at IS NULL
+            AND ac.inactive_at IS NULL
+            AND ac.tipo_activo = _tipo_activo
+            GROUP BY py.idproyecto
+            ORDER BY py.denominacion ASC;
+    END IF;
+END $$
+DELIMITER ;
+call spu_list_projects_typeAct("casa");
+DELIMITER $$
+CREATE PROCEDURE spu_list_projects_detConst()
+BEGIN
+    DECLARE T_act VARCHAR(10);
+    
+    SET T_act = 'DET-CONST';
+
+    SELECT 
+        py.idproyecto,
+        py.denominacion,
+        T_act as tipo
+        FROM proyectos py
+        INNER JOIN activos ac ON ac.idproyecto = py.idproyecto
+        WHERE py.inactive_at IS NULL
+            AND ac.inactive_at IS NULL
+            AND JSON_LENGTH(JSON_EXTRACT(ac.det_casa,'$.clave')) > 0
+            AND JSON_LENGTH(JSON_EXTRACT(ac.det_casa,'$.valor')) > 0
+            GROUP BY py.idproyecto
+            ORDER BY py.denominacion ASC;
+END $$
+DELIMITER ;
+
+DELIMITER $$
 CREATE PROCEDURE spu_list_projects()
 BEGIN
 	SELECT * FROM vws_list_projects;
@@ -688,6 +783,32 @@ BEGIN
 END $$
 
 DELIMITER;
+DELIMITER $$
+
+CREATE PROCEDURE spu_list_onlyLots_sep
+(
+    IN _idproyecto INT
+)
+BEGIN
+    SELECT 
+        act.idactivo,
+        proy.idproyecto,
+        proy.denominacion,
+        act.sublote,
+        act.estado,
+        act.moneda_venta
+        FROM activos act
+        INNER JOIN proyectos proy ON proy.idproyecto = act.idproyecto
+        WHERE act.tipo_activo = "LOTE"
+        AND act.estado = "SEPARADO"
+        AND act.inactive_at IS NULL
+        AND proy.idproyecto = _idproyecto
+        AND JSON_ARRAY(JSON_EXTRACT(det_casa,'$.clave')) = 0
+        AND JSON_ARRAY(JSON_EXTRACT(det_casa,'$.valor')) = 0
+        ORDER BY act.sublote;
+END $$
+
+DELIMITER;
 
 DELIMITER $$
 
@@ -892,6 +1013,8 @@ BEGIN
         INNER JOIN clientes clien ON clien.idcliente = cont.idcliente
         LEFT JOIN vws_clientes_legal cl ON cl.idcliente = clien.idcliente
         LEFT JOIN vws_clients_natural cn ON cn.idcliente = clien.idcliente
+        WHERE cont.estado = 'VIGENTE'
+        AND cont.inactive_at IS NULL
     UNION 
     SELECT DISTINCT 
         COALESCE(cl.idcliente, cn.idcliente) AS idcliente,
@@ -901,7 +1024,9 @@ BEGIN
         FROM contratos cont
         INNER JOIN separaciones sep ON sep.idseparacion = cont.idseparacion
         LEFT JOIN vws_clientes_legal cl ON cl.idcliente = sep.idcliente
-        LEFT JOIN vws_clients_natural cn ON cn.idcliente = sep.idcliente;
+        LEFT JOIN vws_clients_natural cn ON cn.idcliente = sep.idcliente
+        WHERE cont.estado = 'VIGENTE'
+        AND cont.inactive_at IS NULL;
     
 END $$
 
@@ -914,7 +1039,33 @@ BEGIN
     SELECT 
         cont.idcontrato,
         cont.n_expediente,
-        cont.tipo_contrato,
+        cont.tipo_contrato
+        FROM contratos cont
+        INNER JOIN clientes clien ON clien.idcliente = cont.idcliente
+        LEFT JOIN vws_clientes_legal cl ON cl.idcliente = clien.idcliente
+        LEFT JOIN vws_clients_natural cn ON cn.idcliente = clien.idcliente
+        WHERE cont.idcliente = _idcliente
+        AND cont.estado = 'VIGENTE'
+    UNION 
+    SELECT  
+        cont.idcontrato,
+        cont.n_expediente,
+        cont.tipo_contrato
+        FROM contratos cont
+        INNER JOIN separaciones sep ON sep.idseparacion = cont.idseparacion
+        LEFT JOIN vws_clientes_legal cl ON cl.idcliente = sep.idcliente
+        LEFT JOIN vws_clients_natural cn ON cn.idcliente = sep.idcliente
+        WHERE sep.idcliente = _idcliente
+        AND cont.estado = "VIGENTE";
+END $$
+
+DELIMITER;
+
+DELIMITER $$
+
+CREATE PROCEDURE spu_list_clients_contractDN(IN _documento_nro VARCHAR(20))
+BEGIN
+    SELECT 
         COALESCE(cl.idcliente, cn.idcliente) AS idcliente,
         COALESCE(cl.cliente, cn.cliente) AS cliente,
         COALESCE(cl.documento_tipo, cn.documento_tipo) AS documento_tipo,
@@ -923,12 +1074,11 @@ BEGIN
         INNER JOIN clientes clien ON clien.idcliente = cont.idcliente
         LEFT JOIN vws_clientes_legal cl ON cl.idcliente = clien.idcliente
         LEFT JOIN vws_clients_natural cn ON cn.idcliente = clien.idcliente
-        WHERE cont.idcliente = _idcliente
+        WHERE cont.estado = 'VIGENTE'
+        AND (cl.documento_nro LIKE CONCAT(_documento_nro,'%') OR cn.documento_nro LIKE CONCAT(_documento_nro,'%'))
+        AND cont.inactive_at IS NULL
     UNION 
-    SELECT  
-        cont.idcontrato,
-        cont.n_expediente,
-        cont.tipo_contrato,
+    SELECT DISTINCT 
         COALESCE(cl.idcliente, cn.idcliente) AS idcliente,
         COALESCE(cl.cliente, cn.cliente) AS cliente,
         COALESCE(cl.documento_tipo, cn.documento_tipo) AS documento_tipo,
@@ -937,15 +1087,13 @@ BEGIN
         INNER JOIN separaciones sep ON sep.idseparacion = cont.idseparacion
         LEFT JOIN vws_clientes_legal cl ON cl.idcliente = sep.idcliente
         LEFT JOIN vws_clients_natural cn ON cn.idcliente = sep.idcliente
-        WHERE sep.idcliente = _idcliente;
+        WHERE cont.estado = 'VIGENTE'
+        AND (cl.documento_nro LIKE CONCAT(_documento_nro,'%') OR cn.documento_nro LIKE CONCAT(_documento_nro,'%'))
+        AND cont.inactive_at IS NULL;
+    
 END $$
 
 DELIMITER;
-
-
-call spu_list_clients_contractID(5);
-SELECT * FROM contratos;
-SELECT * FROM separaciones;
 
 DELIMITER $$
 
@@ -997,6 +1145,7 @@ BEGIN
 		SELECT
 			clien.idcliente,
 			clien.tipo_persona,
+            persj.idpersona_juridica,
 			persj.documento_tipo,
 			persj.documento_nro,
 			persj.razon_social,
@@ -1335,7 +1484,7 @@ BEGIN
 END $$
 
 DELIMITER;
-
+SELECT * from rep_legales_clientes;
 DELIMITER $$
 
 CREATE PROCEDURE spu_inactive_represents(IN _idrepresentante INT)
@@ -1886,7 +2035,7 @@ BEGIN
             idusuario 				= _idusuario,
             update_at 				= CURDATE()
         WHERE
-			iddetalle_costos = _iddetalle_costo;
+			iddetalle_costo = _iddetalle_costo;
             
 	SELECT ROW_COUNT() AS filasAfect;
 END $$
@@ -1966,7 +2115,32 @@ BEGIN
         idconyugue,
         separacion_monto
         FROM separaciones
-        WHERE inactive_at IS NULL
+        ORDER BY n_expediente ASC;
+
+END $$
+
+DELIMITER;
+
+DELIMITER $$
+
+CREATE PROCEDURE spu_list_separations_all()
+BEGIN
+
+    SELECT 
+        idseparacion,
+        n_expediente,
+        idactivo,
+        idcliente,
+        idconyugue,
+        separacion_monto
+        FROM separaciones
+        WHERE idseparacion NOT IN (
+            SELECT idseparacion
+            FROM contratos WHERE inactive_at IS NULL
+            AND idseparacion IS NOT NULL
+            AND inactive_at IS NULL
+        )
+        AND inactive_at IS NULL
         ORDER BY n_expediente ASC;
 
 END $$
@@ -1998,33 +2172,43 @@ BEGIN
     END IF;
 END $$
 
-SELECT * FROM presupuestos WHERE CODIGO = "PRES-030";
-
 DELIMITER;
+
+select * from cuotas;
 
 DELIMITER $$
 
-CREATE PROCEDURE spu_list_separation_ByIdAsset(IN _idactivo INT)
+CREATE PROCEDURE spu_list_separation_ByIdAsset 
+(
+    IN _idactivo INT
+)
 BEGIN
-    DECLARE _tpersona VARCHAR(10);
 
-    SET _tpersona = (
-        SELECT tipo_persona
-        FROM clientes cli 
-        INNER JOIN separaciones sep on sep.idcliente = cli.idcliente
-        WHERE sep.idactivo = _idactivo
-    );
-
-    IF _tpersona = "NATURAL" THEN
-        SELECT * FROM vws_list_separations_tpersona_natural_full
-            WHERE idactivo = _idactivo
-                AND inactive_at IS NULL;
-
-    ELSEIF _tpersona = "JURÍDICA" THEN
-        SELECT * FROM vws_list_separations_tpersona_juridica_full
-            WHERE idactivo = _idactivo
-                AND inactive_at IS NULL;
-    END IF;
+    SELECT 
+        lcn.idseparacion,
+        lcn.idcliente,
+        lcn.cliente,
+        lcn.documento_nro,
+        lcn.tipo_persona
+    FROM
+        vws_list_separations_tpersona_natural_full lcn
+        LEFT JOIN separaciones sep ON sep.idseparacion = lcn.idseparacion
+    WHERE
+        sep.idactivo = 6
+        AND lcn.inactive_at IS NULL
+    UNION
+    SELECT 
+        lcj.idseparacion,
+        lcj.idcliente,
+        lcj.cliente,
+        lcj.documento_nro,
+        lcj.tipo_persona
+    FROM
+        vws_list_separations_tpersona_juridica_full lcj
+        LEFT JOIN separaciones sep ON sep.idseparacion = lcj.idseparacion
+    WHERE
+    sep.idactivo = 6
+    AND lcj.inactive_at IS NULL;
 END $$
 
 DELIMITER;
@@ -2181,8 +2365,7 @@ BEGIN
 END $$
 
 DELIMITER;
-SELECT * from activos WHERE estado = "SIN VENDER" AND inactive_at IS NULL;
-SELECT * FROM contratos;
+
 -- DEVLOUCIONES   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 DELIMITER $$
 
@@ -2253,6 +2436,7 @@ CREATE PROCEDURE spu_add_refund
 (
     IN _n_expediente    VARCHAR(10),
     IN _idseparacion    INT,
+    IN _idcontrato        INT,
     IN _tipo_devolucion VARCHAR(20),
     IN _detalle         VARCHAR(200),
     IN _porcentaje_penalidad  TINYINT,
@@ -2264,6 +2448,7 @@ BEGIN
     INSERT INTO devoluciones(
                     n_expediente,
                     idseparacion,
+                    idcontrato,
                     tipo_devolucion,
                     detalle,
                     porcentaje_penalidad,
@@ -2273,7 +2458,8 @@ BEGIN
                 )
                 VALUES(
                     _n_expediente,
-                    _idseparacion,
+                    NULLIF(_idseparacion,''),
+                    NULLIF(_idcontrato,''),
                     _tipo_devolucion,
                     _detalle,
                     _porcentaje_penalidad,
@@ -2294,6 +2480,7 @@ CREATE PROCEDURE spu_set_refund
     IN _iddevolucion    INT,
     IN _n_expediente    VARCHAR(10),
     IN _idseparacion    INT,
+    IN _idcontrato    INT,
     IN _tipo_devolucion VARCHAR(20),
     IN _detalle         VARCHAR(200),
     IN _porcentaje_penalidad  TINYINT,
@@ -2305,7 +2492,8 @@ BEGIN
     UPDATE devoluciones
         SET
             n_expediente   = _n_expediente,
-            idseparacion   = _idseparacion,
+            idseparacion   = NULLIF(_idseparacion,'0'),
+            idcontrato    = NULLIF(_idcontrato,'0'),
             tipo_devolucion = _tipo_devolucion,
             detalle        = _detalle,
             porcentaje_penalidad = _porcentaje_penalidad,
@@ -2343,6 +2531,194 @@ DELIMITER;
 -- CONTRATOS  ////////////////////////////////////////////////////////////////////////////////////
 
 DELIMITER $$
+CREATE PROCEDURE spu_list_contractsAll()
+BEGIN
+    SELECT 
+        idcontrato,
+        n_expediente
+        FROM contratos;
+
+END $$
+DELIMITER ;
+DELIMITER $$
+
+CREATE PROCEDURE spu_list_contracts_types
+(
+    IN _tipo_contrato VARCHAR(40)
+)
+BEGIN
+    SELECT *
+        FROM (
+            SELECT  
+                cnt.idcontrato,
+                cnt.n_expediente,
+                cnt.tipo_contrato,
+                cnt.estado,
+                COALESCE(persj.cliente,persn.cliente) as cliente,
+                COALESCE(persj.tipo_persona,persn.tipo_persona) as tipo_persona,
+                COALESCE(persj.documento_tipo,persn.documento_tipo) as documento_tipo,
+                COALESCE(persj.documento_nro,persn.documento_nro) as documento_nro,
+                cnt.fecha_contrato,
+                cnt.archivo,
+                per.nombres
+                FROM contratos cnt
+                INNER JOIN separaciones sp ON sp.idseparacion = cnt.idseparacion
+                LEFT JOIN vws_list_separations_tpersona_juridica persj ON persj.idseparacion = sp.idseparacion
+                LEFT JOIN vws_list_separations_tpersona_natural persn ON persn.idseparacion = sp.idseparacion
+                INNER JOIN usuarios usu ON usu.idusuario = cnt.idusuario
+                INNER JOIN personas per ON per.idpersona = usu.idpersona
+                WHERE cnt.tipo_contrato = _tipo_contrato
+                AND cnt.inactive_at IS NULL
+            UNION 
+            SELECT
+                cnt.idcontrato,
+                cnt.n_expediente,
+                cnt.tipo_contrato,
+                cnt.estado,
+                COALESCE(CONCAT(pr.apellidos,', ',pr.nombres),pj.razon_social) AS cliente,
+                cl.tipo_persona,
+                COALESCE(pr.documento_tipo,pj.documento_tipo) AS documento_tipo,
+                COALESCE(pr.documento_nro,pj.documento_nro) AS documento_nro,
+                cnt.fecha_contrato,
+                cnt.archivo,
+                per.nombres
+                FROM contratos cnt
+                INNER JOIN clientes cl ON cl.idcliente = cnt.idcliente
+                LEFT JOIN personas pr ON pr.idpersona = cl.idpersona
+                LEFT JOIN personas_juridicas pj ON pj.idpersona_juridica = cl.idpersona_juridica
+                INNER JOIN usuarios usu ON usu.idusuario = cnt.idusuario
+                INNER JOIN personas per ON per.idpersona = usu.idpersona
+                WHERE cnt.tipo_contrato = _tipo_contrato
+                AND cnt.inactive_at IS NULL
+        ) AS resultado
+        ORDER BY idcontrato DESC;
+END $$
+
+SELECT * FROM contratos;
+
+DELIMITER;
+
+DELIMITER $$
+CREATE PROCEDURE spu_list_contracts_types_date
+(
+    IN _tipo_contrato VARCHAR(40),
+    IN _fecha_inicio DATE,
+    IN _fecha_fin DATE
+)
+BEGIN
+    SELECT *
+        FROM (
+            SELECT  
+                cnt.idcontrato,
+                cnt.n_expediente,
+                cnt.tipo_contrato,
+                cnt.estado,
+                COALESCE(persj.cliente,persn.cliente) as cliente,
+                COALESCE(persj.tipo_persona,persn.tipo_persona) as tipo_persona,
+                COALESCE(persj.documento_tipo,persn.documento_tipo) as documento_tipo,
+                COALESCE(persj.documento_nro,persn.documento_nro) as documento_nro,
+                cnt.fecha_contrato,
+                cnt.archivo,
+                per.nombres
+                FROM contratos cnt
+                INNER JOIN separaciones sp ON sp.idseparacion = cnt.idseparacion
+                LEFT JOIN vws_list_separations_tpersona_juridica persj ON persj.idseparacion = sp.idseparacion
+                LEFT JOIN vws_list_separations_tpersona_natural persn ON persn.idseparacion = sp.idseparacion
+                INNER JOIN usuarios usu ON usu.idusuario = cnt.idusuario
+                INNER JOIN personas per ON per.idpersona = usu.idpersona
+                WHERE cnt.tipo_contrato = _tipo_contrato
+                AND cnt.fecha_contrato BETWEEN _fecha_inicio AND _fecha_fin
+                AND cnt.inactive_at IS NULL
+            UNION 
+            SELECT
+                cnt.idcontrato,
+                cnt.n_expediente,
+                cnt.tipo_contrato,
+                cnt.estado,
+                COALESCE(CONCAT(pr.apellidos,', ',pr.nombres),pj.razon_social) AS cliente,
+                cl.tipo_persona,
+                COALESCE(pr.documento_tipo,pj.documento_tipo) AS documento_tipo,
+                COALESCE(pr.documento_nro,pj.documento_nro) AS documento_nro,
+                cnt.fecha_contrato,
+                cnt.archivo,
+                per.nombres
+                FROM contratos cnt
+                INNER JOIN clientes cl ON cl.idcliente = cnt.idcliente
+                LEFT JOIN personas pr ON pr.idpersona = cl.idpersona
+                LEFT JOIN personas_juridicas pj ON pj.idpersona_juridica = cl.idpersona_juridica
+                INNER JOIN usuarios usu ON usu.idusuario = cnt.idusuario
+                INNER JOIN personas per ON per.idpersona = usu.idpersona
+                WHERE cnt.tipo_contrato = _tipo_contrato
+                AND cnt.fecha_contrato BETWEEN _fecha_inicio AND _fecha_fin
+                AND cnt.inactive_at IS NULL
+        ) AS resultado
+        WHERE resultado.fecha_contrato BETWEEN _fecha_inicio AND _fecha_fin
+        ORDER BY idcontrato DESC;
+END $$
+DELIMITER ;
+DELIMITER $$
+CREATE PROCEDURE spu_list_contracts_types_date_n_expediente
+(
+    IN _tipo_contrato VARCHAR(40),
+    IN _fecha_inicio DATE,
+    IN _fecha_fin DATE,
+    IN _n_expediente VARCHAR(40)
+)
+BEGIN
+    SELECT *
+        FROM (
+            SELECT  
+                cnt.idcontrato,
+                cnt.n_expediente,
+                cnt.tipo_contrato,
+                cnt.estado,
+                COALESCE(persj.cliente,persn.cliente) as cliente,
+                COALESCE(persj.tipo_persona,persn.tipo_persona) as tipo_persona,
+                COALESCE(persj.documento_tipo,persn.documento_tipo) as documento_tipo,
+                COALESCE(persj.documento_nro,persn.documento_nro) as documento_nro,
+                cnt.fecha_contrato,
+                cnt.archivo,
+                per.nombres
+                FROM contratos cnt
+                INNER JOIN separaciones sp ON sp.idseparacion = cnt.idseparacion
+                LEFT JOIN vws_list_separations_tpersona_juridica persj ON persj.idseparacion = sp.idseparacion
+                LEFT JOIN vws_list_separations_tpersona_natural persn ON persn.idseparacion = sp.idseparacion
+                INNER JOIN usuarios usu ON usu.idusuario = cnt.idusuario
+                INNER JOIN personas per ON per.idpersona = usu.idpersona
+                WHERE cnt.tipo_contrato = _tipo_contrato
+                AND cnt.inactive_at IS NULL
+                AND cnt.fecha_contrato BETWEEN _fecha_inicio AND _fecha_fin
+                AND cnt.n_expediente LIKE CONCAT(_n_expediente,'%')
+            UNION 
+            SELECT
+                cnt.idcontrato,
+                cnt.n_expediente,
+                cnt.tipo_contrato,
+                cnt.estado,
+                COALESCE(CONCAT(pr.apellidos,', ',pr.nombres),pj.razon_social) AS cliente,
+                cl.tipo_persona,
+                COALESCE(pr.documento_tipo,pj.documento_tipo) AS documento_tipo,
+                COALESCE(pr.documento_nro,pj.documento_nro) AS documento_nro,
+                cnt.fecha_contrato,
+                cnt.archivo,
+                per.nombres
+                FROM contratos cnt
+                INNER JOIN clientes cl ON cl.idcliente = cnt.idcliente
+                LEFT JOIN personas pr ON pr.idpersona = cl.idpersona
+                LEFT JOIN personas_juridicas pj ON pj.idpersona_juridica = cl.idpersona_juridica
+                INNER JOIN usuarios usu ON usu.idusuario = cnt.idusuario
+                INNER JOIN personas per ON per.idpersona = usu.idpersona
+                WHERE cnt.tipo_contrato = _tipo_contrato
+                AND cnt.inactive_at IS NULL
+                AND cnt.fecha_contrato BETWEEN _fecha_inicio AND _fecha_fin
+                AND cnt.n_expediente LIKE CONCAT(_n_expediente,'%')
+        ) AS resultado
+        WHERE resultado.fecha_contrato BETWEEN _fecha_inicio AND _fecha_fin
+        ORDER BY idcontrato DESC;
+END $$
+DELIMITER ;
+
+DELIMITER $$
 
 CREATE PROCEDURE spu_existContract_idseparacion
 (
@@ -2358,33 +2734,117 @@ DELIMITER;
 
 DELIMITER $$
 
-CREATE PROCEDURE spu_lits_contracts_full_by_id(IN _idcontrato INT)
+CREATE PROCEDURE spu_lits_contracts_full_by_id
+(
+    IN _idcontrato INT
+)
 BEGIN
 	
     SELECT 
-		idcontrato,
-        tipo_contato,
-        idseparacion,
-        idrepresentante_primario,
-        idrepresentante_secundario,
-        idcliente,
-        idconyugue,
-        idactivo,
-        tipo_cambio,
-        estado,
-        fecha_contrato,
-        det_contrato
-        FROM contatos
-		WHERE idcontrato = _idcontrato;
+        rs.idcontrato,
+        rs.n_expediente,
+        rs.tipo_contrato,
+        rs.idrepresentante_primario,
+        CONCAT(per.apellidos,', ',per.nombres) representante_primario,
+        per.documento_tipo AS rp_doc_type,
+        per.documento_nro AS rp_doc_nro,
+        rs.idrepresentante_secundario,
+        CONCAT(pers.apellidos,', ',pers.nombres) AS representante_secundario,
+        pers.documento_tipo AS rs_doc_type,
+        pers.documento_nro AS rs_doc_nro, 
+        rs.cliente,
+        rs.tipo_persona,
+        rs.documento_tipo,
+        rs.documento_nro,
+        CONCAT(pery.apellidos,', ',pery.nombres) AS conyugue,
+        pery.documento_tipo AS dc_type,
+        pery.documento_nro AS dc_nro, 
+        rs.sublote,
+        rs.denominacion,
+        rs.tipo_cambio,
+        rs.estado,
+        rs.fecha_contrato,
+        rs.det_contrato,
+        rs.precio_venta,
+        rs.archivo,
+        rs.nombres
+        FROM (
+            SELECT  
+                cnt.idcontrato,
+                cnt.n_expediente,
+                cnt.tipo_contrato,
+                cnt.idrepresentante_primario,
+                cnt.idrepresentante_secundario,
+                COALESCE(persj.cliente,persn.cliente) as cliente,
+                COALESCE(persj.tipo_persona,persn.tipo_persona) as tipo_persona,
+                COALESCE(persj.documento_tipo,persn.documento_tipo) as documento_tipo,
+                COALESCE(persj.documento_nro,persn.documento_nro) as documento_nro,
+                cnt.idconyugue,
+                ac.sublote,
+                py.denominacion,
+                cnt.tipo_cambio,
+                cnt.estado,
+                cnt.fecha_contrato,
+                cnt.det_contrato,
+                cnt.precio_venta,
+                cnt.archivo,
+                per.nombres
+                FROM contratos cnt
+                INNER JOIN separaciones sp ON sp.idseparacion = cnt.idseparacion
+                LEFT JOIN vws_list_separations_tpersona_juridica persj ON persj.idseparacion = sp.idseparacion
+                LEFT JOIN vws_list_separations_tpersona_natural persn ON persn.idseparacion = sp.idseparacion
+                INNER JOIN activos ac ON ac.idactivo = sp.idactivo
+                INNER JOIN proyectos py ON py.idproyecto = ac.idproyecto
+                INNER JOIN usuarios usu ON usu.idusuario = cnt.idusuario
+                INNER JOIN personas per ON per.idpersona = usu.idpersona
+                AND cnt.inactive_at IS NULL
+            UNION 
+            SELECT
+                cnt.idcontrato,
+                cnt.n_expediente,
+                cnt.tipo_contrato,
+                cnt.idrepresentante_primario,
+                cnt.idrepresentante_secundario,
+                COALESCE(CONCAT(pr.apellidos,', ',pr.nombres),pj.razon_social) AS cliente,
+                cl.tipo_persona,
+                COALESCE(pr.documento_tipo,pj.documento_tipo) AS documento_tipo,
+                COALESCE(pr.documento_nro,pj.documento_nro) AS documento_nro,
+                cnt.idconyugue,
+                ac.sublote,
+                py.denominacion,
+                cnt.tipo_cambio,
+                cnt.estado,
+                cnt.fecha_contrato,
+                cnt.det_contrato,
+                cnt.precio_venta,
+                cnt.archivo,
+                per.nombres
+                FROM contratos cnt
+                INNER JOIN clientes cl ON cl.idcliente = cnt.idcliente
+                LEFT JOIN personas pr ON pr.idpersona = cl.idpersona
+                LEFT JOIN personas_juridicas pj ON pj.idpersona_juridica = cl.idpersona_juridica
+                INNER JOIN activos ac ON ac.idactivo = cnt.idactivo
+                INNER JOIN proyectos py ON py.idproyecto = ac.idproyecto
+                INNER JOIN usuarios usu ON usu.idusuario = cnt.idusuario
+                INNER JOIN personas per ON per.idpersona = usu.idpersona
+                AND cnt.inactive_at IS NULL
+        ) AS rs
+        INNER JOIN representantes rp ON rp.idrepresentante = rs.idrepresentante_primario
+        INNER JOIN personas per ON per.idpersona = rp.idpersona
+        LEFT JOIN representantes rsec ON rsec.idrepresentante = rs.idrepresentante_secundario
+        LEFT JOIN personas pers ON pers.idpersona = rsec.idpersona
+        LEFT JOIN clientes cly ON cly.idcliente = rs.idconyugue
+        LEFT JOIN personas pery ON pery.idpersona = cly.idpersona
+        WHERE rs.idcontrato = _idcontrato;
 			
 END $$
 
 DELIMITER;
-
 DELIMITER $$
 
-CREATE PROCEDURE spu_add_contracts
+CREATE PROCEDURE spu_add_contract
 (
+    IN _n_expediente         VARCHAR(10),
 	IN _tipo_contrato 		VARCHAR(40),
     IN _idseparacion 		INT,
     IN _idrepresentante_primario 	INT,
@@ -2395,12 +2855,15 @@ CREATE PROCEDURE spu_add_contracts
     IN _tipo_cambio 		DECIMAL(4,3),
     IN _estado 				VARCHAR(10),
     IN _fecha_contrato 		DATE,
+    IN _precio_venta 		DECIMAL(8,2),
     IN _det_contrato		JSON,
+    IN _archivo             VARCHAR(100),
     IN _idusuario 			INT
 )
 BEGIN
 
 	INSERT INTO contratos(
+                n_expediente,
 				tipo_contrato, 
                 idseparacion, 
                 idrepresentante_primario, 
@@ -2411,10 +2874,13 @@ BEGIN
                 tipo_cambio, 
                 estado,
                 fecha_contrato,
+                precio_venta,
                 det_contrato,  
+                archivo,
                 idusuario
 				)
 			VALUES(
+                    n_expediente,
 					tipo_contrato,
                     NULLIF(_idseparacion, ''),
                     idrepresentante_primario,
@@ -2425,12 +2891,13 @@ BEGIN
 					_tipo_cambio, 
                     _estado, 
                     _fecha_contrato,
-                    NULLIF(det_contrato,""),  
+                    _precio_venta,
+                    NULLIF(det_contrato,""), 
+                    NULLIF(_archivo,""),
                     _idusuario
 				);
                 
-	-- RETORNA EL ULTIMO IDCONTRATO
-    SELECT @@LAST_INSERT_ID "idusuario";
+	SELECT ROW_COUNT() AS filasAfect;
 
 END $$
 
@@ -2438,9 +2905,10 @@ DELIMITER;
 
 DELIMITER $$
 
-CREATE PROCEDURE spu_set_contracts
+CREATE PROCEDURE spu_set_contract
 (
 	IN _idcontrato 			INT,
+	IN _n_expediente         VARCHAR(10),
 	IN _tipo_contrato 		VARCHAR(40),
     IN _idseparacion 		INT,
     IN _idrepresentante_primario 	INT,
@@ -2451,13 +2919,16 @@ CREATE PROCEDURE spu_set_contracts
     IN _tipo_cambio 		DECIMAL(4,3),
     IN _estado 				VARCHAR(10),
     IN _fecha_contrato 		DATE,
+    IN _precio_venta 		DECIMAL(8,2),
     IN _det_contrato		JSON,
+    IN _archivo             VARCHAR(100),
     IN _idusuario 			INT
 )
 BEGIN
 
 	UPDATE contratos
 		SET
+            n_expediente   = _n_expediente,
 			tipo_contrato 	= _tipo_contrato, 
 			idseparacion	= NULLIF(_idseparacion,''), 
             idrepresentante_primario	= idrepresentante_primario, 
@@ -2468,9 +2939,15 @@ BEGIN
 			tipo_cambio		= _tipo_cambio, 
 			estado			= _estado,
 			fecha_contrato 	= _fecha_contrato,
-			det_contrato	= NULLIF(_det_contrato, '')  
+            precio_venta		= _precio_venta,
+			det_contrato	= NULLIF(_det_contrato, ''),
+            archivo			= NULLIF(_archivo, ''),
+            idusuario		= _idusuario,
+            update_at		= CURDATE()
         WHERE
 			idcontrato = _idcontrato;
+
+    SELECT ROW_COUNT() AS filasAfect;
 END $$
 
 DELIMITER;
@@ -2509,7 +2986,156 @@ BEGIN
 END $$
 
 DELIMITER;
+-- DETALLES DE CONTRATOS  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+DELIMITER $$
+CREATE PROCEDURE spu_list_det_contracts
+(
+    IN _idcontrato INT
+)
+BEGIN
+    SELECT 
+        dtc.iddetalle_contrato,
+        cnt.idcontrato,
+        cnt.n_expediente,
+        cnt.precio_venta,
+        cnt.fecha_contrato,
+        rp.representante_legal,
+        rp.documento_tipo,
+        rp.documento_nro,
+        rp.cargo,
+        rp.partida_elect
+        FROM detalles_contratos dtc
+        INNER JOIN contratos cnt ON cnt.idcontrato = dtc.idcontrato
+        INNER JOIN rep_legales_clientes rp ON rp.idrepresentante = dtc.idrepresentante
+        WHERE cnt.idcontrato = _idcontrato
+        AND dtc.inactive_at IS NULL
+        ORDER BY cnt.n_expediente;
+END $$
+DELIMITER;
+
+DELIMITER $$
+CREATE PROCEDURE spu_list_det_contract_ById
+(
+    IN _iddetalle_contrato INT
+)
+BEGIN
+    SELECT 
+        dtc.iddetalle_contrato,
+        cnt.idcontrato,
+        cnt.n_expediente,
+        cnt.precio_venta,
+        cnt.fecha_contrato,
+        rp.representante_legal,
+        rp.documento_tipo,
+        rp.documento_nro,
+        rp.cargo,
+        rp.partida_elect
+        FROM detalles_contratos dtc
+        INNER JOIN contratos cnt ON cnt.idcontrato = dtc.idcontrato
+        INNER JOIN rep_legales_clientes rp ON rp.idrepresentante = dtc.idrepresentante
+        WHERE dtc.iddetalle_contrato = _iddetalle_contrato
+        AND dtc.inactive_at IS NULL
+        ORDER BY cnt.n_expediente;
+END $$
+DELIMITER ;
+
+DELIMITER $$
+CREATE PROCEDURE spu_add_det_contract
+(
+    IN _idrepresentante INT,
+    IN _idcontrato INT
+)
+BEGIN
+    INSERT INTO detalles_contratos(idrepresentante, idcontrato)
+                        VALUES (_idrepresentante, _idcontrato);
+    
+    SELECT ROW_COUNT() AS filasAfect;
+END $$
+DELIMITER ;
+
+DELIMITER $$
+CREATE PROCEDURE spu_set_det_contract
+(
+    IN _iddetalle_contrato INT,
+    IN _idrepresentante INT,
+    IN _idcontrato INT
+)
+BEGIN
+    UPDATE detalles_contratos
+        SET 
+            idrepresentante = _idrepresentante, 
+            idcontrato = _idcontrato,
+            update_at = CURDATE()
+        WHERE
+            iddetalle_contrato = _iddetalle_contrato;
+    
+    SELECT ROW_COUNT() AS filasAfect;
+END $$
+DELIMITER ;
+
+DELIMITER $$
+CREATE PROCEDURE spu_inactive_det_contract
+(
+    IN _iddetalle_contrato INT
+)
+BEGIN
+    UPDATE detalles_contratos
+        SET
+            inactive_at = CURDATE()
+        WHERE
+            iddetalle_contrato = _iddetalle_contrato;
+    
+    SELECT ROW_COUNT() AS filasAfect;
+END $$
+DELIMITER ;
+
 -- CUOTAS /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+DELIMITER $$
+
+CREATE PROCEDURE spu_list_quotas_reprogram
+(
+    IN _idcontrato INT
+)
+BEGIN
+    SELECT 
+        lq.idcontrato,
+        ct.idcontrato,
+        ct.precio_venta,
+        (SUM(lq.cancelado)) as monto_cancelado,
+        (ct.precio_venta - (SUM(lq.cancelado))) as saldo
+        FROM vws_list_quotas lq
+        INNER JOIN contratos ct ON ct.idcontrato = lq.idcontrato
+        WHERE ct.idcontrato = _idcontrato;
+END $$
+
+DELIMITER;
+call spu_list_quotas_reprogram(1);
+DELIMITER $$
+
+CREATE PROCEDURE spu_set_quotas_allNoPay
+(
+    IN _idcontrato INT,
+    IN _idusuario INT
+)
+BEGIN
+    UPDATE cuotas
+        SET
+            inactive_at = CURDATE(),
+            idusuario = _idusuario
+        WHERE inactive_at IS NULL
+        AND estado != "CANCELADO"
+        AND idcontrato = _idcontrato;
+
+    SELECT ROW_COUNT() AS filasAfect;
+END $$
+
+DELIMITER;
+
+select * from contratos;
+
+update cuotas set inactive_at = NULL;
 
 DELIMITER $$
 
@@ -2519,16 +3145,282 @@ CREATE PROCEDURE spu_list_quotas_idcontrato
 )
 BEGIN
     SELECT *
-        FROM cuotas
+        FROM vws_list_quotas
         WHERE idcontrato = _idcontrato
-        AND inactive_at IS NULL;
+        AND inactive_at IS NULL
+        ORDER BY fecha_vencimiento;
 END $$
 
-CALL spu_list_quotas_idcontrato(1);
 DELIMITER;
 
+select * from cuotas;
+
+call spu_list_quotas_idcontrato (1)
+
+DELIMITER $$
+
+CREATE PROCEDURE spu_list_quotas_ById
+(
+    IN _idcuota INT
+)
+BEGIN
+    SELECT  
+            detc.iddetalle_cuota,
+            qt.idcuota,
+            ct.idcontrato,
+            ct.n_expediente,
+            qt.monto_cuota,
+            (SUM(detc.monto_pago)) as cancelado,
+            (qt.monto_cuota - (COALESCE(SUM(detc.monto_pago),0.00))) as deuda,
+            qt.fecha_vencimiento,
+            (SELECT fecha_pago 
+            FROM detalle_cuotas 
+            WHERE idcuota = qt.idcuota
+            ORDER BY iddetalle_cuota DESC LIMIT 1) AS fecha_pago,
+            qt.estado,
+            detc.entidad_bancaria,
+            detc.tipo_pago,
+            detc.detalles,
+            detc.imagen,
+            pers.nombres AS usuario,
+            qt.inactive_at
+        FROM cuotas qt
+        LEFT JOIN detalle_cuotas detc ON detc.idcuota = qt.idcuota
+        INNER JOIN contratos ct ON ct.idcontrato = qt.idcontrato
+        INNER JOIN usuarios usu ON usu.idusuario = qt.idusuario
+        INNER JOIN personas pers ON pers.idpersona = usu.idpersona
+        WHERE detc.inactive_at IS NULL
+        AND qt.idcuota = _idcuota
+        AND qt.inactive_at IS NULL;
+END $$
+
+DELIMITER;
+
+call spu_list_quotas_ById (1)
+
+DELIMITER $$
+
+CREATE PROCEDURE spu_list_quotas_estado
+(
+    IN _idcontrato INT,
+    IN _estado VARCHAR(20)
+)
+BEGIN
+
+    IF _estado = "0" THEN 
+        SELECT *
+            FROM vws_list_quotas
+            WHERE idcontrato = _idcontrato
+            AND inactive_at IS NULL
+            ORDER BY fecha_vencimiento;
+    ELSE
+        SELECT *
+            FROM vws_list_quotas
+            WHERE idcontrato = _idcontrato
+            AND estado = _estado
+            AND inactive_at IS NULL
+            ORDER BY fecha_vencimiento;
+    END IF;
+END $$
+
+CREATE PROCEDURE spu_list_quotas_estado_fven
+(
+    IN _idcontrato INT,
+    IN _estado VARCHAR(20),
+    IN _fecha_vencimiento DATE
+)
+BEGIN
+
+    IF _estado = "0" THEN 
+        SELECT *
+            FROM vws_list_quotas
+            WHERE idcontrato = _idcontrato
+            AND fecha_vencimiento <= _fecha_vencimiento
+            AND inactive_at IS NULL
+            ORDER BY fecha_vencimiento;
+    ELSE
+        SELECT *
+            FROM vws_list_quotas
+            WHERE idcontrato = _idcontrato
+            AND estado = _estado
+            AND fecha_vencimiento <= _fecha_vencimiento
+            AND inactive_at IS NULL
+            ORDER BY fecha_vencimiento;
+    END IF;
+END $$
+
+DELIMITER;
+
+select * from cuotas;
+
+DELIMITER $$
+
+CREATE PROCEDURE spu_set_statusQuota_automaticly
+(
+    IN _idcuota INT,
+    IN _estado VARCHAR(20)
+)
+BEGIN
+    UPDATE cuotas
+        SET
+            estado = _estado
+        WHERE
+        idcuota = _idcuota;
+    
+    SELECT ROW_COUNT() AS filasAfect;
+END $$
+
+DELIMITER;
 
 -- PLANTILLA
+DELIMITER $$
+
+CREATE PROCEDURE spu_add_quota
+(
+    IN _idcontrato INT,
+    IN _monto_cuota DECIMAL(8,2),
+    IN _fecha_vencimiento DATE,
+    IN _idusuario INT
+)
+BEGIN
+    INSERT INTO cuotas(idcontrato, monto_cuota, fecha_vencimiento, idusuario)
+                VALUES(_idcontrato, _monto_cuota, _fecha_vencimiento, _idusuario);
+                
+    SELECT ROW_COUNT() AS filasAfect;
+END $$
+
+DELIMITER;
+-- PLANTILLA
+DELIMITER $$
+
+CREATE PROCEDURE spu_set_det_quota
+(
+    IN _idcuota         INT,
+    IN _fecha_pago      DATE,
+    IN _monto_pago      DECIMAL(8,2),
+    IN _detalles        VARCHAR(100),
+    IN _tipo_pago       VARCHAR(20),
+    IN _entidad_bancaria VARCHAR(20),
+    IN _imagen          VARCHAR(100),
+    IN _idusuario       INT
+)
+BEGIN
+    DECLARE _countInsert INT;
+    DECLARE _countUpdate INT;
+
+    INSERT INTO detalle_cuotas(
+        idcuota,
+        fecha_pago,
+        monto_pago,
+        detalles,
+        tipo_pago,
+        entidad_bancaria,
+        imagen
+    )
+    VALUES (
+        _idcuota,
+        _fecha_pago,
+        _monto_pago,
+        _detalles,
+        _tipo_pago,
+        _entidad_bancaria,
+        _imagen
+    );
+
+    SET _countInsert =  (SELECT ROW_COUNT());
+
+    UPDATE cuotas
+        SET
+        estado = "CANCELADO",
+        idusuario = _idusuario,
+        update_at = CURDATE()
+        WHERE idcuota = _idcuota;
+
+    SET _countUpdate = (SELECT ROW_COUNT());
+
+    CASE 
+        WHEN _countUpdate = 0 THEN
+            SELECT (_countInsert) AS filasAfect;
+        
+        ELSE
+            SELECT (_countUpdate) AS filasAfect;
+    END CASE;
+END $$
+
+DELIMITER;
+
+DELIMITER $$
+
+CREATE PROCEDURE spu_cancel_det_quota
+(
+    IN _idcuota         INT,
+    IN _idusuario         INT
+)
+BEGIN
+    UPDATE detalle_cuotas
+        SET
+            inactive_at = CURDATE()
+        WHERE idcuota = _idcuota
+        AND inactive_at IS NULL;
+
+    UPDATE cuotas
+        SET
+            estado = "POR CANCELAR",
+            idusuario = _idusuario,
+            update_at = CURDATE()
+        WHERE idcuota = _idcuota;
+
+
+    SELECT ROW_COUNT() AS filasAfect;
+END $$
+
+CREATE PROCEDURE spu_inactive_quota
+(
+    IN _idcuota         INT,
+    IN _idusuario         INT
+)
+BEGIN
+    UPDATE cuotas
+        SET
+        inactive_at = CURDATE(),
+        idusuario = _idusuario
+        WHERE idcuota = _idcuota;
+
+    SELECT ROW_COUNT() AS filasAfect;
+END $$
+
+DELIMITER;
+
+-- USUARIOS ///////////////////////////////////////////////////////////////////////////////////////////////////
+DELIMITER $$
+
+CREATE PROCEDURE spu_user_login
+(
+    IN _correo VARCHAR(60)
+)
+BEGIN
+    SELECT
+        usu.idusuario,
+        usu.imagen,
+        usu.correo,
+        usu.contrasenia,
+        pr.apellidos,
+        pr.nombres,
+        pr.documento_tipo,
+        pr.documento_nro,
+        rl.idrol,
+        rl.rol,
+        sd.direccion
+        FROM usuarios usu
+        INNER JOIN personas pr ON pr.idpersona = usu.idpersona
+        INNER JOIN roles rl ON rl.idrol = usu.idrol
+        INNER JOIN sedes sd ON sd.idsede = usu.idsede
+        WHERE usu.inactive_at IS NULL
+        AND usu.correo = _correo;
+END $$
+
+DELIMITER;
+
 DELIMITER $$
 
 CREATE PROCEDURE ()

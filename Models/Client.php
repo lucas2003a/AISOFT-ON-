@@ -337,7 +337,24 @@ class Client extends Conection
     }
 
     /**
-     * Otiene elid del cliente en una venta realizada
+     * Método para obetner los clientes relacionados a una venta, por su númer de documento
+     */
+    public function getClientsForSaleDN($documento_nro = ""){
+
+        try{
+
+            $query = $this->conection->prepare("CALL spu_list_clients_contractDN(?)");
+            $query->execute(array($documento_nro));
+
+            return $query->fetchAll(PDO::FETCH_ASSOC);
+        }
+        catch(Exception $e){
+            die($e->getMessage());
+        }
+    }
+
+    /**
+     * Otiene el id del cliente en una venta realizada
      */
     public function getClientsForSaleId($idcliente = 0){
 

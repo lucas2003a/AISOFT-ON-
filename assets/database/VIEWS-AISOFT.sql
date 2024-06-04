@@ -344,6 +344,8 @@ CREATE VIEW vws_list_refunds AS
         dev.tipo_devolucion,
         dev.n_expediente AS n_expediente_dev,
         sep.idseparacion,
+        cnt.idcontrato,
+        cnt.n_expediente AS n_expediente_cont,
         sep.n_expediente AS n_expediente_sep,
         dev.detalle,
         dev.monto_devolucion,
@@ -370,11 +372,12 @@ CREATE VIEW vws_list_refunds AS
         usuPers.nombres
     FROM
         devoluciones dev
-        INNER JOIN separaciones sep ON sep.idseparacion = dev.idseparacion
+        LEFT JOIN separaciones sep ON sep.idseparacion = dev.idseparacion
         LEFT JOIN vws_list_separations_tpersona_juridica AS persj ON persj.idseparacion = dev.idseparacion
         LEFT JOIN vws_list_separations_tpersona_natural AS persn ON persn.idseparacion = dev.idseparacion
         INNER JOIN usuarios usu ON usu.idusuario = dev.idusuario
         INNER JOIN activos act ON act.idactivo = sep.idactivo
+        LEFT JOIN contratos cnt ON cnt.idcontrato = dev.idcontrato
         INNER JOIN proyectos proy ON proy.idproyecto = act.idproyecto
         INNER JOIN personas AS usuPers ON usuPers.idpersona = usu.idpersona
     ORDER BY dev.iddevolucion DESC;
@@ -419,6 +422,32 @@ DELIMITER ;
 SELECT * from rep_legales_clientes;
 DELIMITER $$
 
+DELIMITER $$
+CREATE VIEW vws_list_quotas
+    AS
+        SELECT  qt.idcuota,
+            ct.idcontrato,
+            ct.n_expediente,
+            qt.monto_cuota,
+            (SUM(detc.monto_pago)) as cancelado,
+            (qt.monto_cuota - (COALESCE(SUM(detc.monto_pago),0.00))) as deuda,
+            qt.fecha_vencimiento,
+            (SELECT fecha_pago 
+            FROM detalle_cuotas 
+            WHERE idcuota = qt.idcuota
+            ORDER BY iddetalle_cuota DESC LIMIT 1) AS fecha_pago,
+            qt.estado,
+            pers.nombres AS usuario,
+            qt.inactive_at
+        FROM cuotas qt
+        LEFT JOIN detalle_cuotas detc ON detc.idcuota = qt.idcuota
+        INNER JOIN contratos ct ON ct.idcontrato = qt.idcontrato
+        INNER JOIN usuarios usu ON usu.idusuario = qt.idusuario
+        INNER JOIN personas pers ON pers.idpersona = usu.idpersona
+        WHERE detc.inactive_at IS NULL
+        GROUP BY qt.idcuota
+DELIMITER ;
 
+select * from vws_list_quotas;
 
 

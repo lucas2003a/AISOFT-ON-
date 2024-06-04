@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 22-05-2024 a las 12:05:11
+-- Tiempo de generación: 04-06-2024 a las 18:54:42
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -64,7 +64,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_add_assets` (IN `_idproyecto` I
                 NULLIF(_perimetro,""),
                 NULLIF(_idpresupuesto,""),
                 _propietario_lote,
-                _precio_lote,
+                nullif(_precio_lote,""),
                 NULLIF(_precio_construccion, ""), 
                 _precio_venta,
                 _idusuario
@@ -167,9 +167,10 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_add_clients_personN` (IN `_tipo
     SELECT ROW_COUNT() AS filasAfect;
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_add_contracts` (IN `_tipo_contrato` VARCHAR(40), IN `_idseparacion` INT, IN `_idrepresentante_primario` INT, IN `_idrepresentante_secundario` INT, IN `_idcliente` INT, IN `_idconyugue` INT, IN `_idactivo` INT, IN `_tipo_cambio` DECIMAL(4,3), IN `_estado` VARCHAR(10), IN `_fecha_contrato` DATE, IN `_det_contrato` JSON, IN `_idusuario` INT)   BEGIN
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_add_contract` (IN `_n_expediente` VARCHAR(10), IN `_tipo_contrato` VARCHAR(40), IN `_idseparacion` INT, IN `_idrepresentante_primario` INT, IN `_idrepresentante_secundario` INT, IN `_idcliente` INT, IN `_idconyugue` INT, IN `_idactivo` INT, IN `_tipo_cambio` DECIMAL(4,3), IN `_estado` VARCHAR(10), IN `_fecha_contrato` DATE, IN `_precio_venta` DECIMAL(8,2), IN `_det_contrato` JSON, IN `_archivo` VARCHAR(100), IN `_idusuario` INT)   BEGIN
 
 	INSERT INTO contratos(
+                n_expediente,
 				tipo_contrato, 
                 idseparacion, 
                 idrepresentante_primario, 
@@ -180,10 +181,13 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_add_contracts` (IN `_tipo_contr
                 tipo_cambio, 
                 estado,
                 fecha_contrato,
+                precio_venta,
                 det_contrato,  
+                archivo,
                 idusuario
 				)
 			VALUES(
+                    n_expediente,
 					tipo_contrato,
                     NULLIF(_idseparacion, ''),
                     idrepresentante_primario,
@@ -194,12 +198,13 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_add_contracts` (IN `_tipo_contr
 					_tipo_cambio, 
                     _estado, 
                     _fecha_contrato,
-                    NULLIF(det_contrato,""),  
+                    _precio_venta,
+                    NULLIF(det_contrato,""), 
+                    NULLIF(_archivo,""),
                     _idusuario
 				);
                 
-	-- RETORNA EL ULTIMO IDCONTRATO
-    SELECT @@LAST_INSERT_ID "idusuario";
+	SELECT ROW_COUNT() AS filasAfect;
 
 END$$
 
@@ -224,6 +229,13 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_add_detail_cost` (IN `_idpresup
 							);
                             
 	SELECT ROW_COUNT() AS filasAfect;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_add_det_contract` (IN `_idrepresentante` INT, IN `_idcontrato` INT)   BEGIN
+    INSERT INTO detalles_contratos(idrepresentante, idcontrato)
+                        VALUES (_idrepresentante, _idcontrato);
+    
+    SELECT ROW_COUNT() AS filasAfect;
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_add_person` (IN `_nombres` VARCHAR(40), IN `_apellidos` VARCHAR(40), IN `_documento_tipo` VARCHAR(20), IN `_documento_nro` VARCHAR(12), IN `_estado_civil` VARCHAR(10), IN `_iddistrito` INT, IN `_direccion` VARCHAR(60), IN `_idusuario` INT)   BEGIN
@@ -259,19 +271,32 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_add_projects` (IN `_idsede` INT
 	SELECT ROW_COUNT() AS filasAfect; -- FILAS AFECTADAS
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_add_refund` (IN `_n_expediente` VARCHAR(10), IN `_idseparacion` INT, IN `_detalle` VARCHAR(200), IN `_monto_devolucion` DECIMAL(8,2), IN `_imagen` VARCHAR(100), IN `_idusuario` INT)   BEGIN
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_add_quota` (IN `_idcontrato` INT, IN `_monto_cuota` DECIMAL(8,2), IN `_fecha_vencimiento` DATE, IN `_idusuario` INT)   BEGIN
+    INSERT INTO cuotas(idcontrato, monto_cuota, fecha_vencimiento, idusuario)
+                VALUES(_idcontrato, _monto_cuota, _fecha_vencimiento, _idusuario);
+                
+    SELECT ROW_COUNT() AS filasAfect;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_add_refund` (IN `_n_expediente` VARCHAR(10), IN `_idseparacion` INT, IN `_idcontrato` INT, IN `_tipo_devolucion` VARCHAR(20), IN `_detalle` VARCHAR(200), IN `_porcentaje_penalidad` TINYINT, IN `_monto_devolucion` DECIMAL(8,2), IN `_imagen` VARCHAR(100), IN `_idusuario` INT)   BEGIN
     INSERT INTO devoluciones(
                     n_expediente,
                     idseparacion,
+                    idcontrato,
+                    tipo_devolucion,
                     detalle,
+                    porcentaje_penalidad,
                     monto_devolucion,
                     imagen,
                     idusuario
                 )
                 VALUES(
                     _n_expediente,
-                    _idseparacion,
+                    NULLIF(_idseparacion,''),
+                    NULLIF(_idcontrato,''),
+                    _tipo_devolucion,
                     _detalle,
+                    _porcentaje_penalidad,
                     _monto_devolucion,
                     _imagen,
                     _idusuario
@@ -304,13 +329,15 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_add_represents` (IN `_idpersona
 		SELECT ROW_COUNT() AS filasAfect;
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_add_separation` (IN `_n_expediente` VARCHAR(200), IN `_idactivo` INT, IN `_idcliente` INT, IN `_idconyugue` INT, IN `_separacion_monto` DECIMAL(8,2), IN `_imagen` VARCHAR(200), IN `_idusuario` INT)   BEGIN
-    INSERT INTO activos (
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_add_separation` (IN `_n_expediente` VARCHAR(10), IN `_idactivo` INT, IN `_idcliente` INT, IN `_idconyugue` INT, IN `_separacion_monto` DECIMAL(8,2), IN `_moneda_venta` VARCHAR(10), IN `_tipo_cambio` DECIMAL(5,4), IN `_imagen` VARCHAR(200), IN `_idusuario` INT)   BEGIN
+    INSERT INTO separaciones (
             n_expediente,
             idactivo,
             idcliente,
             idconyugue,
             separacion_monto,
+            moneda_venta,
+            tipo_cambio,
             imagen,
             idusuario
     ) 
@@ -320,9 +347,30 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_add_separation` (IN `_n_expedie
             _idcliente,
             NULLIF(_idconyugue,''),
             _separacion_monto,
+            _moneda_venta,
+            _tipo_cambio,
             _imagen,
             _idusuario
         );
+
+    SELECT ROW_COUNT() AS filasAfect;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_cancel_det_quota` (IN `_idcuota` INT, IN `_idusuario` INT)   BEGIN
+    UPDATE detalle_cuotas
+        SET
+            inactive_at = CURDATE()
+        WHERE idcuota = _idcuota
+        AND inactive_at IS NULL;
+
+    UPDATE cuotas
+        SET
+            estado = "POR CANCELAR",
+            idusuario = _idusuario,
+            update_at = CURDATE()
+        WHERE idcuota = _idcuota;
+
+
     SELECT ROW_COUNT() AS filasAfect;
 END$$
 
@@ -334,6 +382,18 @@ END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_count_budget_idbudget` (IN `_idpresupuesto` INT)   BEGIN
     SELECT EXISTS(SELECT 1 FROM activos WHERE idpresupuesto = _idpresupuesto AND inactive_at IS NULL) AS cantidad;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_existContract` (IN `_idcontrato` INT)   BEGIN
+    SELECT EXISTS(SELECT 1 FROM contratos 
+                WHERE idcontrato = _idcontrato AND inactive_at IS NULL
+                );
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_existContract_idseparacion` (IN `_idseparacion` INT)   BEGIN
+    SELECT EXISTS(SELECT 1 FROM contratos
+    WHERE idseparacion = _idseparacion
+    AND inactive_at IS NULL) AS existContract;
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_get_budget_by_id` (IN `_idpresupuesto` INT)   BEGIN
@@ -447,7 +507,7 @@ END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_get_represents` (IN `_idrepresentante` INT)   BEGIN
 	SELECT 
-		rep.idrepresente,
+		rep.idrepresentante,
         pers.nombres,
         pers.apellidos,
         pers.documento_tipo,
@@ -458,7 +518,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_get_represents` (IN `_idreprese
         rep.cargo,
         rep.partida_elect,
         sed.direccion
-        FROM representates AS rep
+        FROM representantes AS rep
         INNER JOIN personas AS pers ON pers.idpersona = rep.idpersona
         INNER JOIN distritos AS dist ON dist.iddistrito = pers.iddistrito
         INNER JOIN provincias AS prov ON prov.idprovincia = dist.idprovincia
@@ -468,22 +528,46 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_get_represents` (IN `_idreprese
         AND rep.inactive_at IS NULL;
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_get_sepraration_ById` (IN `_idseparacion` INT)   BEGIN
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_get_represents_idAdress` (IN `_idsede` INT)   BEGIN
+	SELECT 
+		rep.idrepresentante,
+        pers.nombres,
+        pers.apellidos,
+        pers.documento_tipo,
+        pers.documento_nro,
+        dist.distrito,
+        prov.provincia,
+		dept.departamento,
+        rep.cargo,
+        rep.partida_elect,
+        sed.direccion
+        FROM representantes AS rep
+        INNER JOIN personas AS pers ON pers.idpersona = rep.idpersona
+        INNER JOIN distritos AS dist ON dist.iddistrito = pers.iddistrito
+        INNER JOIN provincias AS prov ON prov.idprovincia = dist.idprovincia
+        INNER JOIN departamentos AS dept ON dept.iddepartamento = prov.iddepartamento
+        INNER JOIN sedes AS sed ON sed.idsede = rep.idsede
+        WHERE rep.idsede = _idsede
+        AND rep.inactive_at IS NULL;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_get_separation_ById` (IN `_idseparacion` INT)   BEGIN
     DECLARE _tpersona VARCHAR(10);
+
     SET _tpersona = (
         SELECT tipo_persona
         FROM clientes cli 
         INNER JOIN separaciones sep on sep.idcliente = cli.idcliente
-        WHERE sep.idactivo = _idactivo
+        WHERE sep.idseparacion = _idseparacion
     );
+
     IF _tpersona = "NATURAL" THEN
-        SELECT * FROM vws_list_speractions_tpersona_natural_full
-            WHERE idseparacion = _idseparacion
-                AND inactive_at IS NULL;
+        SELECT * FROM vws_list_separations_tpersona_natural_full
+            WHERE idseparacion = _idseparacion;
+
     ELSEIF _tpersona = "JURÍDICA" THEN
-        SELECT * FROM vws_list_separactions_tpersona_juridica_full
-            WHERE idseparacion = _idseparacion
-                AND inactive_at IS NULL;
+        SELECT * FROM vws_list_separations_tpersona_juridica_full
+            WHERE idseparacion = _idseparacion;
     END IF;
 END$$
 
@@ -602,6 +686,16 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_inactive_cost` (IN `_iddetalle_
     
 END$$
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_inactive_det_contract` (IN `_iddetalle_contrato` INT)   BEGIN
+    UPDATE detalles_contratos
+        SET
+            inactive_at = CURDATE()
+        WHERE
+            iddetalle_contrato = _iddetalle_contrato;
+    
+    SELECT ROW_COUNT() AS filasAfect;
+END$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_inactive_person` (IN `_idpersona` INT)   BEGIN 
 	UPDATE personas
 		SET inactive_at = CURDATE()
@@ -620,6 +714,16 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_inactive_projects` (IN `_idproy
 		WHERE
 			idproyecto = _idproyecto;
     
+    SELECT ROW_COUNT() AS filasAfect;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_inactive_quota` (IN `_idcuota` INT, IN `_idusuario` INT)   BEGIN
+    UPDATE cuotas
+        SET
+        inactive_at = CURDATE(),
+        idusuario = _idusuario
+        WHERE idcuota = _idcuota;
+
     SELECT ROW_COUNT() AS filasAfect;
 END$$
 
@@ -957,6 +1061,86 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_clients_by_id` (IN `_idcli
         
 END$$
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_clients_contract` ()   BEGIN
+    SELECT 
+        COALESCE(cl.idcliente, cn.idcliente) AS idcliente,
+        COALESCE(cl.cliente, cn.cliente) AS cliente,
+        COALESCE(cl.documento_tipo, cn.documento_tipo) AS documento_tipo,
+        COALESCE(cl.documento_nro, cn.documento_nro) AS documento_nro
+        FROM contratos cont
+        INNER JOIN clientes clien ON clien.idcliente = cont.idcliente
+        LEFT JOIN vws_clientes_legal cl ON cl.idcliente = clien.idcliente
+        LEFT JOIN vws_clients_natural cn ON cn.idcliente = clien.idcliente
+        WHERE cont.estado = 'VIGENTE'
+        AND cont.inactive_at IS NULL
+    UNION 
+    SELECT DISTINCT 
+        COALESCE(cl.idcliente, cn.idcliente) AS idcliente,
+        COALESCE(cl.cliente, cn.cliente) AS cliente,
+        COALESCE(cl.documento_tipo, cn.documento_tipo) AS documento_tipo,
+        COALESCE(cl.documento_nro, cn.documento_nro) AS documento_nro
+        FROM contratos cont
+        INNER JOIN separaciones sep ON sep.idseparacion = cont.idseparacion
+        LEFT JOIN vws_clientes_legal cl ON cl.idcliente = sep.idcliente
+        LEFT JOIN vws_clients_natural cn ON cn.idcliente = sep.idcliente
+        WHERE cont.estado = 'VIGENTE'
+        AND cont.inactive_at IS NULL;
+    
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_clients_contractDN` (IN `_documento_nro` VARCHAR(20))   BEGIN
+    SELECT 
+        COALESCE(cl.idcliente, cn.idcliente) AS idcliente,
+        COALESCE(cl.cliente, cn.cliente) AS cliente,
+        COALESCE(cl.documento_tipo, cn.documento_tipo) AS documento_tipo,
+        COALESCE(cl.documento_nro, cn.documento_nro) AS documento_nro
+        FROM contratos cont
+        INNER JOIN clientes clien ON clien.idcliente = cont.idcliente
+        LEFT JOIN vws_clientes_legal cl ON cl.idcliente = clien.idcliente
+        LEFT JOIN vws_clients_natural cn ON cn.idcliente = clien.idcliente
+        WHERE cont.estado = 'VIGENTE'
+        AND (cl.documento_nro LIKE CONCAT(_documento_nro,'%') OR cn.documento_nro LIKE CONCAT(_documento_nro,'%'))
+        AND cont.inactive_at IS NULL
+    UNION 
+    SELECT DISTINCT 
+        COALESCE(cl.idcliente, cn.idcliente) AS idcliente,
+        COALESCE(cl.cliente, cn.cliente) AS cliente,
+        COALESCE(cl.documento_tipo, cn.documento_tipo) AS documento_tipo,
+        COALESCE(cl.documento_nro, cn.documento_nro) AS documento_nro
+        FROM contratos cont
+        INNER JOIN separaciones sep ON sep.idseparacion = cont.idseparacion
+        LEFT JOIN vws_clientes_legal cl ON cl.idcliente = sep.idcliente
+        LEFT JOIN vws_clients_natural cn ON cn.idcliente = sep.idcliente
+        WHERE cont.estado = 'VIGENTE'
+        AND (cl.documento_nro LIKE CONCAT(_documento_nro,'%') OR cn.documento_nro LIKE CONCAT(_documento_nro,'%'))
+        AND cont.inactive_at IS NULL;
+    
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_clients_contractID` (IN `_idcliente` INT)   BEGIN
+    SELECT 
+        cont.idcontrato,
+        cont.n_expediente,
+        cont.tipo_contrato
+        FROM contratos cont
+        INNER JOIN clientes clien ON clien.idcliente = cont.idcliente
+        LEFT JOIN vws_clientes_legal cl ON cl.idcliente = clien.idcliente
+        LEFT JOIN vws_clients_natural cn ON cn.idcliente = clien.idcliente
+        WHERE cont.idcliente = _idcliente
+        AND cont.estado = 'VIGENTE'
+    UNION 
+    SELECT  
+        cont.idcontrato,
+        cont.n_expediente,
+        cont.tipo_contrato
+        FROM contratos cont
+        INNER JOIN separaciones sep ON sep.idseparacion = cont.idseparacion
+        LEFT JOIN vws_clientes_legal cl ON cl.idcliente = sep.idcliente
+        LEFT JOIN vws_clients_natural cn ON cn.idcliente = sep.idcliente
+        WHERE sep.idcliente = _idcliente
+        AND cont.estado = "VIGENTE";
+END$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_clients_onlyNperson` ()   BEGIN
     SELECT 
         clien.idcliente,
@@ -999,6 +1183,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_clients_tpersona` (IN `_ti
 		SELECT
 			clien.idcliente,
 			clien.tipo_persona,
+            persj.idpersona_juridica,
 			persj.documento_tipo,
 			persj.documento_nro,
 			persj.razon_social,
@@ -1025,6 +1210,166 @@ END$$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_companies` ()   BEGIN
 	SELECT * FROM vws_list_companies
     ORDER BY 2;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_contractsAll` ()   BEGIN
+    SELECT 
+        idcontrato,
+        n_expediente
+        FROM contratos;
+
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_contracts_types` (IN `_tipo_contrato` VARCHAR(40))   BEGIN
+    SELECT *
+        FROM (
+            SELECT  
+                cnt.idcontrato,
+                cnt.n_expediente,
+                cnt.tipo_contrato,
+                cnt.estado,
+                COALESCE(persj.cliente,persn.cliente) as cliente,
+                COALESCE(persj.tipo_persona,persn.tipo_persona) as tipo_persona,
+                COALESCE(persj.documento_tipo,persn.documento_tipo) as documento_tipo,
+                COALESCE(persj.documento_nro,persn.documento_nro) as documento_nro,
+                cnt.fecha_contrato,
+                cnt.archivo,
+                per.nombres
+                FROM contratos cnt
+                INNER JOIN separaciones sp ON sp.idseparacion = cnt.idseparacion
+                LEFT JOIN vws_list_separations_tpersona_juridica persj ON persj.idseparacion = sp.idseparacion
+                LEFT JOIN vws_list_separations_tpersona_natural persn ON persn.idseparacion = sp.idseparacion
+                INNER JOIN usuarios usu ON usu.idusuario = cnt.idusuario
+                INNER JOIN personas per ON per.idpersona = usu.idpersona
+                WHERE cnt.tipo_contrato = _tipo_contrato
+                AND cnt.inactive_at IS NULL
+            UNION 
+            SELECT
+                cnt.idcontrato,
+                cnt.n_expediente,
+                cnt.tipo_contrato,
+                cnt.estado,
+                COALESCE(CONCAT(pr.apellidos,', ',pr.nombres),pj.razon_social) AS cliente,
+                cl.tipo_persona,
+                COALESCE(pr.documento_tipo,pj.documento_tipo) AS documento_tipo,
+                COALESCE(pr.documento_nro,pj.documento_nro) AS documento_nro,
+                cnt.fecha_contrato,
+                cnt.archivo,
+                per.nombres
+                FROM contratos cnt
+                INNER JOIN clientes cl ON cl.idcliente = cnt.idcliente
+                LEFT JOIN personas pr ON pr.idpersona = cl.idpersona
+                LEFT JOIN personas_juridicas pj ON pj.idpersona_juridica = cl.idpersona_juridica
+                INNER JOIN usuarios usu ON usu.idusuario = cnt.idusuario
+                INNER JOIN personas per ON per.idpersona = usu.idpersona
+                WHERE cnt.tipo_contrato = _tipo_contrato
+                AND cnt.inactive_at IS NULL
+        ) AS resultado
+        ORDER BY idcontrato DESC;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_contracts_types_date` (IN `_tipo_contrato` VARCHAR(40), IN `_fecha_inicio` DATE, IN `_fecha_fin` DATE)   BEGIN
+    SELECT *
+        FROM (
+            SELECT  
+                cnt.idcontrato,
+                cnt.n_expediente,
+                cnt.tipo_contrato,
+                cnt.estado,
+                COALESCE(persj.cliente,persn.cliente) as cliente,
+                COALESCE(persj.tipo_persona,persn.tipo_persona) as tipo_persona,
+                COALESCE(persj.documento_tipo,persn.documento_tipo) as documento_tipo,
+                COALESCE(persj.documento_nro,persn.documento_nro) as documento_nro,
+                cnt.fecha_contrato,
+                cnt.archivo,
+                per.nombres
+                FROM contratos cnt
+                INNER JOIN separaciones sp ON sp.idseparacion = cnt.idseparacion
+                LEFT JOIN vws_list_separations_tpersona_juridica persj ON persj.idseparacion = sp.idseparacion
+                LEFT JOIN vws_list_separations_tpersona_natural persn ON persn.idseparacion = sp.idseparacion
+                INNER JOIN usuarios usu ON usu.idusuario = cnt.idusuario
+                INNER JOIN personas per ON per.idpersona = usu.idpersona
+                WHERE cnt.tipo_contrato = _tipo_contrato
+                AND cnt.fecha_contrato BETWEEN _fecha_inicio AND _fecha_fin
+                AND cnt.inactive_at IS NULL
+            UNION 
+            SELECT
+                cnt.idcontrato,
+                cnt.n_expediente,
+                cnt.tipo_contrato,
+                cnt.estado,
+                COALESCE(CONCAT(pr.apellidos,', ',pr.nombres),pj.razon_social) AS cliente,
+                cl.tipo_persona,
+                COALESCE(pr.documento_tipo,pj.documento_tipo) AS documento_tipo,
+                COALESCE(pr.documento_nro,pj.documento_nro) AS documento_nro,
+                cnt.fecha_contrato,
+                cnt.archivo,
+                per.nombres
+                FROM contratos cnt
+                INNER JOIN clientes cl ON cl.idcliente = cnt.idcliente
+                LEFT JOIN personas pr ON pr.idpersona = cl.idpersona
+                LEFT JOIN personas_juridicas pj ON pj.idpersona_juridica = cl.idpersona_juridica
+                INNER JOIN usuarios usu ON usu.idusuario = cnt.idusuario
+                INNER JOIN personas per ON per.idpersona = usu.idpersona
+                WHERE cnt.tipo_contrato = _tipo_contrato
+                AND cnt.fecha_contrato BETWEEN _fecha_inicio AND _fecha_fin
+                AND cnt.inactive_at IS NULL
+        ) AS resultado
+        WHERE resultado.fecha_contrato BETWEEN _fecha_inicio AND _fecha_fin
+        ORDER BY idcontrato DESC;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_contracts_types_date_n_expediente` (IN `_tipo_contrato` VARCHAR(40), IN `_fecha_inicio` DATE, IN `_fecha_fin` DATE, IN `_n_expediente` VARCHAR(40))   BEGIN
+    SELECT *
+        FROM (
+            SELECT  
+                cnt.idcontrato,
+                cnt.n_expediente,
+                cnt.tipo_contrato,
+                cnt.estado,
+                COALESCE(persj.cliente,persn.cliente) as cliente,
+                COALESCE(persj.tipo_persona,persn.tipo_persona) as tipo_persona,
+                COALESCE(persj.documento_tipo,persn.documento_tipo) as documento_tipo,
+                COALESCE(persj.documento_nro,persn.documento_nro) as documento_nro,
+                cnt.fecha_contrato,
+                cnt.archivo,
+                per.nombres
+                FROM contratos cnt
+                INNER JOIN separaciones sp ON sp.idseparacion = cnt.idseparacion
+                LEFT JOIN vws_list_separations_tpersona_juridica persj ON persj.idseparacion = sp.idseparacion
+                LEFT JOIN vws_list_separations_tpersona_natural persn ON persn.idseparacion = sp.idseparacion
+                INNER JOIN usuarios usu ON usu.idusuario = cnt.idusuario
+                INNER JOIN personas per ON per.idpersona = usu.idpersona
+                WHERE cnt.tipo_contrato = _tipo_contrato
+                AND cnt.inactive_at IS NULL
+                AND cnt.fecha_contrato BETWEEN _fecha_inicio AND _fecha_fin
+                AND cnt.n_expediente LIKE CONCAT(_n_expediente,'%')
+            UNION 
+            SELECT
+                cnt.idcontrato,
+                cnt.n_expediente,
+                cnt.tipo_contrato,
+                cnt.estado,
+                COALESCE(CONCAT(pr.apellidos,', ',pr.nombres),pj.razon_social) AS cliente,
+                cl.tipo_persona,
+                COALESCE(pr.documento_tipo,pj.documento_tipo) AS documento_tipo,
+                COALESCE(pr.documento_nro,pj.documento_nro) AS documento_nro,
+                cnt.fecha_contrato,
+                cnt.archivo,
+                per.nombres
+                FROM contratos cnt
+                INNER JOIN clientes cl ON cl.idcliente = cnt.idcliente
+                LEFT JOIN personas pr ON pr.idpersona = cl.idpersona
+                LEFT JOIN personas_juridicas pj ON pj.idpersona_juridica = cl.idpersona_juridica
+                INNER JOIN usuarios usu ON usu.idusuario = cnt.idusuario
+                INNER JOIN personas per ON per.idpersona = usu.idpersona
+                WHERE cnt.tipo_contrato = _tipo_contrato
+                AND cnt.inactive_at IS NULL
+                AND cnt.fecha_contrato BETWEEN _fecha_inicio AND _fecha_fin
+                AND cnt.n_expediente LIKE CONCAT(_n_expediente,'%')
+        ) AS resultado
+        WHERE resultado.fecha_contrato BETWEEN _fecha_inicio AND _fecha_fin
+        ORDER BY idcontrato DESC;
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_cost_category` ()   BEGIN
@@ -1085,11 +1430,70 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_detail_cost` (IN `_idpresu
 			ORDER BY cat.categoria_costo, subcat.subcategoria_costo ASC;
 END$$
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_det_contracts` (IN `_idcontrato` INT)   BEGIN
+    SELECT 
+        dtc.iddetalle_contrato,
+        cnt.idcontrato,
+        cnt.n_expediente,
+        cnt.precio_venta,
+        cnt.fecha_contrato,
+        rp.representante_legal,
+        rp.documento_tipo,
+        rp.documento_nro,
+        rp.cargo,
+        rp.partida_elect
+        FROM detalles_contratos dtc
+        INNER JOIN contratos cnt ON cnt.idcontrato = dtc.idcontrato
+        INNER JOIN rep_legales_clientes rp ON rp.idrepresentante = dtc.idrepresentante
+        WHERE cnt.idcontrato = _idcontrato
+        AND dtc.inactive_at IS NULL
+        ORDER BY cnt.n_expediente;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_det_contract_ById` (IN `_iddetalle_contrato` INT)   BEGIN
+    SELECT 
+        dtc.iddetalle_contrato,
+        cnt.idcontrato,
+        cnt.n_expediente,
+        cnt.precio_venta,
+        cnt.fecha_contrato,
+        rp.representante_legal,
+        rp.documento_tipo,
+        rp.documento_nro,
+        rp.cargo,
+        rp.partida_elect
+        FROM detalles_contratos dtc
+        INNER JOIN contratos cnt ON cnt.idcontrato = dtc.idcontrato
+        INNER JOIN rep_legales_clientes rp ON rp.idrepresentante = dtc.idrepresentante
+        WHERE dtc.iddetalle_contrato = _iddetalle_contrato
+        AND dtc.inactive_at IS NULL
+        ORDER BY cnt.n_expediente;
+END$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_districts` (IN `_idprovincia` INT)   BEGIN
 	SELECT * 
     FROM distritos
     WHERE idprovincia = _idprovincia
     ORDER BY 3 ASC;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_LotsAndHouses` (IN `_idproyecto` INT)   BEGIN
+    SELECT 
+        act.idactivo,
+        proy.idproyecto,
+        proy.denominacion,
+        act.sublote,
+        act.estado,
+        act.moneda_venta
+        FROM activos act
+        INNER JOIN proyectos proy ON proy.idproyecto = act.idproyecto
+        WHERE act.tipo_activo = "LOTE"
+        AND act.estado = "SIN VENDER"
+        AND act.inactive_at IS NULL
+        AND proy.idproyecto = _idproyecto
+        AND JSON_LENGTH(JSON_EXTRACT(act.det_casa,'$.clave')) > 0
+        AND JSON_LENGTH(JSON_EXTRACT(act.det_casa,'$.valor')) > 0
+        ORDER BY act.sublote;
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_lots_ByIdBudget` (IN `_idpresupuesto` INT)   BEGIN
@@ -1162,19 +1566,58 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_materials` (IN `_idmarca` 
         ORDER BY mat.material ASC;
 END$$
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_onlyHouses` (IN `_idproyecto` INT)   BEGIN
+    SELECT 
+        act.idactivo,
+        proy.idproyecto,
+        proy.denominacion,
+        act.sublote,
+        act.estado,
+        act.moneda_venta
+        FROM activos act
+        INNER JOIN proyectos proy ON proy.idproyecto = act.idproyecto
+        WHERE act.tipo_activo = "CASA"
+        AND act.estado = "SIN VENDER"
+        AND act.inactive_at IS NULL
+        AND proy.idproyecto = _idproyecto
+        ORDER BY act.sublote;
+END$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_onlyLots` (IN `_idproyecto` INT)   BEGIN
     SELECT 
         act.idactivo,
         proy.idproyecto,
         proy.denominacion,
         act.sublote,
-        act.estado
+        act.estado,
+        act.moneda_venta
         FROM activos act
         INNER JOIN proyectos proy ON proy.idproyecto = act.idproyecto
         WHERE act.tipo_activo = "LOTE"
         AND act.estado = "SIN VENDER"
         AND act.inactive_at IS NULL
-        AND proy.idproyecto = 1
+        AND proy.idproyecto = _idproyecto
+        AND JSON_ARRAY(JSON_EXTRACT(det_casa,'$.clave')) = 0
+        AND JSON_ARRAY(JSON_EXTRACT(det_casa,'$.valor')) = 0
+        ORDER BY act.sublote;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_onlyLots_sep` (IN `_idproyecto` INT)   BEGIN
+    SELECT 
+        act.idactivo,
+        proy.idproyecto,
+        proy.denominacion,
+        act.sublote,
+        act.estado,
+        act.moneda_venta
+        FROM activos act
+        INNER JOIN proyectos proy ON proy.idproyecto = act.idproyecto
+        WHERE act.tipo_activo = "LOTE"
+        AND act.estado = "SEPARADO"
+        AND act.inactive_at IS NULL
+        AND proy.idproyecto = _idproyecto
+        AND JSON_ARRAY(JSON_EXTRACT(det_casa,'$.clave')) = 0
+        AND JSON_ARRAY(JSON_EXTRACT(det_casa,'$.valor')) = 0
         ORDER BY act.sublote;
 END$$
 
@@ -1227,9 +1670,64 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_projects_by_code` (IN `_co
         WHERE codigo LIKE CONCAT("%", _codigo,"%");
 END$$
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_projects_detConst` ()   BEGIN
+    DECLARE T_act VARCHAR(10);
+    
+    SET T_act = 'DET-CONST';
+
+    SELECT 
+        py.idproyecto,
+        py.denominacion,
+        T_act as tipo
+        FROM proyectos py
+        INNER JOIN activos ac ON ac.idproyecto = py.idproyecto
+        WHERE py.inactive_at IS NULL
+            AND ac.inactive_at IS NULL
+            AND JSON_LENGTH(JSON_EXTRACT(ac.det_casa,'$.clave')) > 0
+            AND JSON_LENGTH(JSON_EXTRACT(ac.det_casa,'$.valor')) > 0
+            GROUP BY py.idproyecto
+            ORDER BY py.denominacion ASC;
+END$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_projects_id` (IN `_idproyecto` INT)   BEGIN
 	SELECT * FROM vws_list_projects
     WHERE idproyecto = _idproyecto;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_projects_typeAct` (IN `_tipo_activo` VARCHAR(10))   BEGIN
+    DECLARE T_act varchar(10);
+
+    SET T_act = _tipo_activo;
+
+    IF T_act = "LOTE" THEN
+    SELECT 
+        py.idproyecto,
+        py.denominacion,
+        T_act as tipo
+        FROM proyectos py
+        INNER JOIN activos ac ON ac.idproyecto = py.idproyecto
+        WHERE py.inactive_at IS NULL
+            AND ac.inactive_at IS NULL
+            AND ac.tipo_activo = tipo_activo
+            AND JSON_LENGTH(JSON_EXTRACT(ac.det_casa,'$.clave')) = 0
+            AND JSON_LENGTH(JSON_EXTRACT(ac.det_casa,'$.valor')) = 0
+            AND ac.estado = "SEPARADO"
+            GROUP BY py.idproyecto
+            ORDER BY py.denominacion ASC;
+
+    ELSEIF _tipo_activo = "CASA" THEN 
+        SELECT 
+        py.idproyecto,
+        py.denominacion,
+        T_act as tipo
+        FROM proyectos py
+        INNER JOIN activos ac ON ac.idproyecto = py.idproyecto
+        WHERE py.inactive_at IS NULL
+            AND ac.inactive_at IS NULL
+            AND ac.tipo_activo = _tipo_activo
+            GROUP BY py.idproyecto
+            ORDER BY py.denominacion ASC;
+    END IF;
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_provinces` (IN `_iddepartamento` INT)   BEGIN
@@ -1237,6 +1735,100 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_provinces` (IN `_iddeparta
     FROM provincias 
     WHERE iddepartamento = _iddepartamento
     ORDER BY 3 ASC;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_quotas_ById` (IN `_idcuota` INT)   BEGIN
+    SELECT  
+            detc.iddetalle_cuota,
+            qt.idcuota,
+            ct.idcontrato,
+            ct.n_expediente,
+            qt.monto_cuota,
+            (SUM(detc.monto_pago)) as cancelado,
+            (qt.monto_cuota - (COALESCE(SUM(detc.monto_pago),0.00))) as deuda,
+            qt.fecha_vencimiento,
+            (SELECT fecha_pago 
+            FROM detalle_cuotas 
+            WHERE idcuota = qt.idcuota
+            ORDER BY iddetalle_cuota DESC LIMIT 1) AS fecha_pago,
+            qt.estado,
+            detc.entidad_bancaria,
+            detc.tipo_pago,
+            detc.detalles,
+            detc.imagen,
+            pers.nombres AS usuario,
+            qt.inactive_at
+        FROM cuotas qt
+        LEFT JOIN detalle_cuotas detc ON detc.idcuota = qt.idcuota
+        INNER JOIN contratos ct ON ct.idcontrato = qt.idcontrato
+        INNER JOIN usuarios usu ON usu.idusuario = qt.idusuario
+        INNER JOIN personas pers ON pers.idpersona = usu.idpersona
+        WHERE detc.inactive_at IS NULL
+        AND qt.idcuota = _idcuota
+        AND qt.inactive_at IS NULL;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_quotas_estado` (IN `_idcontrato` INT, IN `_estado` VARCHAR(20))   BEGIN
+
+    IF _estado = "0" THEN 
+        SELECT *
+            FROM vws_list_quotas
+            WHERE idcontrato = _idcontrato
+            AND inactive_at IS NULL
+            ORDER BY fecha_vencimiento;
+    ELSE
+        SELECT *
+            FROM vws_list_quotas
+            WHERE idcontrato = _idcontrato
+            AND estado = _estado
+            AND inactive_at IS NULL
+            ORDER BY fecha_vencimiento;
+    END IF;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_quotas_estado_fven` (IN `_idcontrato` INT, IN `_estado` VARCHAR(20), IN `_fecha_vencimiento` DATE)   BEGIN
+
+    IF _estado = "0" THEN 
+        SELECT *
+            FROM vws_list_quotas
+            WHERE idcontrato = _idcontrato
+            AND fecha_vencimiento <= _fecha_vencimiento
+            AND inactive_at IS NULL
+            ORDER BY fecha_vencimiento;
+    ELSE
+        SELECT *
+            FROM vws_list_quotas
+            WHERE idcontrato = _idcontrato
+            AND estado = _estado
+            AND fecha_vencimiento <= _fecha_vencimiento
+            AND inactive_at IS NULL
+            ORDER BY fecha_vencimiento;
+    END IF;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_quotas_idcontrato` (IN `_idcontrato` INT)   BEGIN
+    SELECT *
+        FROM vws_list_quotas
+        WHERE idcontrato = _idcontrato
+        AND inactive_at IS NULL
+        ORDER BY fecha_vencimiento;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_quotas_reprogram` (IN `_idcontrato` INT)   BEGIN
+    SELECT 
+        ct.idcontrato,
+        ct.precio_venta,
+        (SUM(lq.cancelado)) as monto_cancelado,
+        (ct.precio_venta - (SUM(lq.cancelado))) as saldo
+        FROM vws_list_quotas lq
+        INNER JOIN contratos ct ON ct.idcontrato = lq.idcontrato
+        WHERE ct.idcontrato = _idcontrato;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_refunds_get` ()   BEGIN
+    SELECT * 
+        FROM vws_list_refunds
+        WHERE inactive_at IS NULL;
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_represents_by_id_pj` (IN `_idpersona_juridica` INT)   BEGIN
@@ -1254,26 +1846,67 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_represents_by_id_pj` (IN `
         AND inactive_at IS NULL;
 END$$
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_separations` ()   BEGIN
+    SELECT 
+        idseparacion,
+        n_expediente,
+        idactivo,
+        idcliente,
+        idconyugue,
+        separacion_monto
+        FROM separaciones
+        ORDER BY n_expediente ASC;
+
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_separations_all` ()   BEGIN
+
+    SELECT 
+        idseparacion,
+        n_expediente,
+        idactivo,
+        idcliente,
+        idconyugue,
+        separacion_monto
+        FROM separaciones
+        WHERE idseparacion NOT IN (
+            SELECT idseparacion
+            FROM contratos WHERE inactive_at IS NULL
+            AND idseparacion IS NOT NULL
+            AND inactive_at IS NULL
+        )
+        AND inactive_at IS NULL
+        ORDER BY n_expediente ASC;
+
+END$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_separation_ByIdAsset` (IN `_idactivo` INT)   BEGIN
-    DECLARE _tpersona VARCHAR(10);
 
-    SET _tpersona = (
-        SELECT tipo_persona
-        FROM clientes cli 
-        INNER JOIN separaciones sep on sep.idcliente = cli.idcliente
-        WHERE sep.idactivo = _idactivo
-    );
-
-    IF _tpersona = "NATURAL" THEN
-        SELECT * FROM vws_list_separations_tpersona_natural_full
-            WHERE idactivo = _idactivo
-                AND inactive_at IS NULL;
-
-    ELSEIF _tpersona = "JURÍDICA" THEN
-        SELECT * FROM vws_list_separations_tpersona_juridica_full
-            WHERE idactivo = _idactivo
-                AND inactive_at IS NULL;
-    END IF;
+SELECT 
+    lcn.idseparacion,
+    lcn.idcliente,
+    lcn.cliente,
+    lcn.documento_nro,
+    lcn.tipo_persona
+FROM
+    vws_list_separations_tpersona_natural_full lcn
+    LEFT JOIN separaciones sep ON sep.idseparacion = lcn.idseparacion
+WHERE
+    sep.idactivo = 6
+    AND lcn.inactive_at IS NULL
+UNION
+SELECT 
+    lcj.idseparacion,
+    lcj.idcliente,
+    lcj.cliente,
+    lcj.documento_nro,
+    lcj.tipo_persona
+FROM
+    vws_list_separations_tpersona_juridica_full lcj
+    LEFT JOIN separaciones sep ON sep.idseparacion = lcj.idseparacion
+WHERE
+    sep.idactivo = 6
+    AND lcj.inactive_at IS NULL;
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_separation_n_expediente_docNro` (IN `_tipo_persona` VARCHAR(10), IN `_fechaInicio` DATE, IN `_fechaFin` DATE, IN `_campoCriterio` VARCHAR(12))   BEGIN
@@ -1322,20 +1955,101 @@ END$$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_lits_contracts_full_by_id` (IN `_idcontrato` INT)   BEGIN
 	
     SELECT 
-		idcontrato,
-        tipo_contato,
-        idseparacion,
-        idrepresentante_primario,
-        idrepresentante_secundario,
-        idcliente,
-        idconyugue,
-        idactivo,
-        tipo_cambio,
-        estado,
-        fecha_contrato,
-        det_contrato
-        FROM contatos
-		WHERE idcontrato = _idcontrato;
+        rs.idcontrato,
+        rs.n_expediente,
+        rs.tipo_contrato,
+        rs.idrepresentante_primario,
+        CONCAT(per.apellidos,', ',per.nombres) representante_primario,
+        per.documento_tipo AS rp_doc_type,
+        per.documento_nro AS rp_doc_nro,
+        rs.idrepresentante_secundario,
+        CONCAT(pers.apellidos,', ',pers.nombres) AS representante_secundario,
+        pers.documento_tipo AS rs_doc_type,
+        pers.documento_nro AS rs_doc_nro, 
+        rs.cliente,
+        rs.tipo_persona,
+        rs.documento_tipo,
+        rs.documento_nro,
+        CONCAT(pery.apellidos,', ',pery.nombres) AS conyugue,
+        pery.documento_tipo AS dc_type,
+        pery.documento_nro AS dc_nro, 
+        rs.sublote,
+        rs.denominacion,
+        rs.tipo_cambio,
+        rs.estado,
+        rs.fecha_contrato,
+        rs.det_contrato,
+        rs.precio_venta,
+        rs.archivo,
+        rs.nombres
+        FROM (
+            SELECT  
+                cnt.idcontrato,
+                cnt.n_expediente,
+                cnt.tipo_contrato,
+                cnt.idrepresentante_primario,
+                cnt.idrepresentante_secundario,
+                COALESCE(persj.cliente,persn.cliente) as cliente,
+                COALESCE(persj.tipo_persona,persn.tipo_persona) as tipo_persona,
+                COALESCE(persj.documento_tipo,persn.documento_tipo) as documento_tipo,
+                COALESCE(persj.documento_nro,persn.documento_nro) as documento_nro,
+                cnt.idconyugue,
+                ac.sublote,
+                py.denominacion,
+                cnt.tipo_cambio,
+                cnt.estado,
+                cnt.fecha_contrato,
+                cnt.det_contrato,
+                cnt.precio_venta,
+                cnt.archivo,
+                per.nombres
+                FROM contratos cnt
+                INNER JOIN separaciones sp ON sp.idseparacion = cnt.idseparacion
+                LEFT JOIN vws_list_separations_tpersona_juridica persj ON persj.idseparacion = sp.idseparacion
+                LEFT JOIN vws_list_separations_tpersona_natural persn ON persn.idseparacion = sp.idseparacion
+                INNER JOIN activos ac ON ac.idactivo = sp.idactivo
+                INNER JOIN proyectos py ON py.idproyecto = ac.idproyecto
+                INNER JOIN usuarios usu ON usu.idusuario = cnt.idusuario
+                INNER JOIN personas per ON per.idpersona = usu.idpersona
+                AND cnt.inactive_at IS NULL
+            UNION 
+            SELECT
+                cnt.idcontrato,
+                cnt.n_expediente,
+                cnt.tipo_contrato,
+                cnt.idrepresentante_primario,
+                cnt.idrepresentante_secundario,
+                COALESCE(CONCAT(pr.apellidos,', ',pr.nombres),pj.razon_social) AS cliente,
+                cl.tipo_persona,
+                COALESCE(pr.documento_tipo,pj.documento_tipo) AS documento_tipo,
+                COALESCE(pr.documento_nro,pj.documento_nro) AS documento_nro,
+                cnt.idconyugue,
+                ac.sublote,
+                py.denominacion,
+                cnt.tipo_cambio,
+                cnt.estado,
+                cnt.fecha_contrato,
+                cnt.det_contrato,
+                cnt.precio_venta,
+                cnt.archivo,
+                per.nombres
+                FROM contratos cnt
+                INNER JOIN clientes cl ON cl.idcliente = cnt.idcliente
+                LEFT JOIN personas pr ON pr.idpersona = cl.idpersona
+                LEFT JOIN personas_juridicas pj ON pj.idpersona_juridica = cl.idpersona_juridica
+                INNER JOIN activos ac ON ac.idactivo = cnt.idactivo
+                INNER JOIN proyectos py ON py.idproyecto = ac.idproyecto
+                INNER JOIN usuarios usu ON usu.idusuario = cnt.idusuario
+                INNER JOIN personas per ON per.idpersona = usu.idpersona
+                AND cnt.inactive_at IS NULL
+        ) AS rs
+        INNER JOIN representantes rp ON rp.idrepresentante = rs.idrepresentante_primario
+        INNER JOIN personas per ON per.idpersona = rp.idpersona
+        LEFT JOIN representantes rsec ON rsec.idrepresentante = rs.idrepresentante_secundario
+        LEFT JOIN personas pers ON pers.idpersona = rsec.idpersona
+        LEFT JOIN clientes cly ON cly.idcliente = rs.idconyugue
+        LEFT JOIN personas pery ON pery.idpersona = cly.idpersona
+        WHERE rs.idcontrato = _idcontrato;
 			
 END$$
 
@@ -1411,7 +2125,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_set_assets` (IN `_idactivo` INT
             perimetro 		= NULLIF(_perimetro, ""),
             idpresupuesto	= NULLIF(_idpresupuesto, ""),
             propietario_lote = _propietario_lote,
-            precio_lote		= precio_lote,
+            precio_lote		= NULLIF(precio_lote,""),
             precio_construccion = NULLIF(_precio_construccion,""),
             precio_venta 	= _precio_venta,
             precio_venta	= _precio_venta,
@@ -1497,6 +2211,32 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_set_clientN` (IN `_idcliente` I
 			SELECT ROW_COUNT() AS filasAfect;
 END$$
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_set_contract` (IN `_idcontrato` INT, IN `_n_expediente` VARCHAR(10), IN `_tipo_contrato` VARCHAR(40), IN `_idseparacion` INT, IN `_idrepresentante_primario` INT, IN `_idrepresentante_secundario` INT, IN `_idcliente` INT, IN `_idconyugue` INT, IN `_idactivo` INT, IN `_tipo_cambio` DECIMAL(4,3), IN `_estado` VARCHAR(10), IN `_fecha_contrato` DATE, IN `_precio_venta` DECIMAL(8,2), IN `_det_contrato` JSON, IN `_archivo` VARCHAR(100), IN `_idusuario` INT)   BEGIN
+
+	UPDATE contratos
+		SET
+            n_expediente   = _n_expediente,
+			tipo_contrato 	= _tipo_contrato, 
+			idseparacion	= NULLIF(_idseparacion,''), 
+            idrepresentante_primario	= idrepresentante_primario, 
+            idrepresentante_secundario	= NULLIF(_idrepresentante_secundario, ''),
+			idcliente		= NULLIF(_idcliente,''), 
+			idconyugue		= NULLIF(_idconyugue, ''),
+			idactivo		= NULLIF(_idactivo, ''),  
+			tipo_cambio		= _tipo_cambio, 
+			estado			= _estado,
+			fecha_contrato 	= _fecha_contrato,
+            precio_venta		= _precio_venta,
+			det_contrato	= NULLIF(_det_contrato, ''),
+            archivo			= NULLIF(_archivo, ''),
+            idusuario		= _idusuario,
+            update_at		= CURDATE()
+        WHERE
+			idcontrato = _idcontrato;
+
+    SELECT ROW_COUNT() AS filasAfect;
+END$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_set_contracts` (IN `_idcontrato` INT, IN `_tipo_contrato` VARCHAR(40), IN `_idseparacion` INT, IN `_idrepresentante_primario` INT, IN `_idrepresentante_secundario` INT, IN `_idcliente` INT, IN `_idconyugue` INT, IN `_idactivo` INT, IN `_tipo_cambio` DECIMAL(4,3), IN `_estado` VARCHAR(10), IN `_fecha_contrato` DATE, IN `_det_contrato` JSON, IN `_idusuario` INT)   BEGIN
 
 	UPDATE contratos
@@ -1528,7 +2268,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_set_detail_cost` (IN `_iddetall
             idusuario 				= _idusuario,
             update_at 				= CURDATE()
         WHERE
-			iddetalle_costos = _iddetalle_costo;
+			iddetalle_costo = _iddetalle_costo;
             
 	SELECT ROW_COUNT() AS filasAfect;
 END$$
@@ -1552,6 +2292,61 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_set_det_build` (IN `_idactivo` 
 	ELSE 
 		(SELECT COUNT(*) -2 AS filasAfect FROM activos WHERE idactivo = _idactivo);
     END IF;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_set_det_contract` (IN `_iddetalle_contrato` INT, IN `_idrepresentante` INT, IN `_idcontrato` INT)   BEGIN
+    UPDATE detalles_contratos
+        SET 
+            idrepresentante = _idrepresentante, 
+            idcontrato = _idcontrato,
+            update_at = CURDATE()
+        WHERE
+            iddetalle_contrato = _iddetalle_contrato;
+    
+    SELECT ROW_COUNT() AS filasAfect;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_set_det_quota` (IN `_idcuota` INT, IN `_fecha_pago` DATE, IN `_monto_pago` DECIMAL(8,2), IN `_detalles` VARCHAR(100), IN `_tipo_pago` VARCHAR(20), IN `_entidad_bancaria` VARCHAR(20), IN `_imagen` VARCHAR(100), IN `_idusuario` INT)   BEGIN
+    DECLARE _countInsert INT;
+    DECLARE _countUpdate INT;
+
+    INSERT INTO detalle_cuotas(
+        idcuota,
+        fecha_pago,
+        monto_pago,
+        detalles,
+        tipo_pago,
+        entidad_bancaria,
+        imagen
+    )
+    VALUES (
+        _idcuota,
+        _fecha_pago,
+        _monto_pago,
+        _detalles,
+        _tipo_pago,
+        _entidad_bancaria,
+        _imagen
+    );
+
+    SET _countInsert =  (SELECT ROW_COUNT());
+
+    UPDATE cuotas
+        SET
+        estado = "CANCELADO",
+        idusuario = _idusuario,
+        update_at = CURDATE()
+        WHERE idcuota = _idcuota;
+
+    SET _countUpdate = (SELECT ROW_COUNT());
+
+    CASE 
+        WHEN _countUpdate = 0 THEN
+            SELECT (_countInsert) AS filasAfect;
+        
+        ELSE
+            SELECT (_countUpdate) AS filasAfect;
+    END CASE;
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_set_idpresupuesto` (IN `_idactivo` INT, IN `_idpresupuesto` INT, IN `_idusuario` INT)   BEGIN
@@ -1601,12 +2396,27 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_set_projects` (IN `_idproyecto`
 	SELECT ROW_COUNT() AS filasAfect; -- FILAS AFECTADAS
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_set_refund` (IN `_iddevolucion` INT, IN `_n_expediente` VARCHAR(10), IN `_idseparacion` INT, IN `_detalle` VARCHAR(200), IN `_monto_devolucion` DECIMAL(8,2), IN `_imagen` VARCHAR(100), IN `_idusuario` INT)   BEGIN
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_set_quotas_allNoPay` (IN `_idcontrato` INT, IN `_idusuario` INT)   BEGIN
+    UPDATE cuotas
+        SET
+            inactive_at = CURDATE(),
+            idusuario = _idusuario
+        WHERE inactive_at IS NULL
+        AND estado != "CANCELADO"
+        AND idcontrato = _idcontrato;
+
+    SELECT ROW_COUNT() AS filasAfect;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_set_refund` (IN `_iddevolucion` INT, IN `_n_expediente` VARCHAR(10), IN `_idseparacion` INT, IN `_idcontrato` INT, IN `_tipo_devolucion` VARCHAR(20), IN `_detalle` VARCHAR(200), IN `_porcentaje_penalidad` TINYINT, IN `_monto_devolucion` DECIMAL(8,2), IN `_imagen` VARCHAR(100), IN `_idusuario` INT)   BEGIN
     UPDATE devoluciones
         SET
             n_expediente   = _n_expediente,
-            idseparacion   = _idseparacion,
+            idseparacion   = NULLIF(_idseparacion,'0'),
+            idcontrato    = NULLIF(_idcontrato,'0'),
+            tipo_devolucion = _tipo_devolucion,
             detalle        = _detalle,
+            porcentaje_penalidad = _porcentaje_penalidad,
             monto_devolucion = _monto_devolucion,
             imagen         = _imagen,
             update_at      = CURDATE(),
@@ -1632,27 +2442,53 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_set_represents` (IN `_idreprese
 	SELECT ROW_COUNT() AS filasAfect;
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_set_separation` (IN `_idseparacion` INT, IN `_n_expediente` VARCHAR(200), IN `_idactivo` INT, IN `_idcliente` INT, IN `_idconyugue` INT, IN `_separacion_monto` DECIMAL(8,2), IN `_imagen` VARCHAR(200), IN `_idusuario` INT)   BEGIN
-    UPDATE activos 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_set_separation` (IN `_idseparacion` INT, IN `_n_expediente` VARCHAR(10), IN `_idactivo` INT, IN `_idcliente` INT, IN `_idconyugue` INT, IN `_separacion_monto` DECIMAL(8,2), IN `_moneda_venta` VARCHAR(10), IN `_tipo_cambio` DECIMAL(5,4), IN `_imagen` VARCHAR(200), IN `_idusuario` INT)   BEGIN
+    UPDATE separaciones 
         SET
             n_expediente   = _n_expediente,
             idactivo       = _idactivo,
             idcliente      = _idcliente,
             idconyugue     = NULLIF(_idconyugue,''),
             separacion_monto = _separacion_monto,
+            moneda_venta     = _moneda_venta,
+            tipo_cambio     = _tipo_cambio,
             imagen         = _imagen,
             idusuario      = _idusuario,
             update_at      = CURDATE()
         WHERE idseparacion = _idseparacion;
+    
     SELECT ROW_COUNT() AS filasAfect;
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `sup_list_refunds` (IN `_tipo_persona` VARCHAR(10), IN `_fechaInicio` DATE, IN `_fechaFin` DATE)   BEGIN
-    SELECT * 
-        FROM vws_list_refunds
-        WHERE tipo_persona = _tipo_persona
-            AND create_at BETWEEN _fechaInicio AND _fechaFin
-            AND inactive_at IS NULL;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_set_statusQuota_automaticly` (IN `_idcuota` INT, IN `_estado` VARCHAR(20))   BEGIN
+    UPDATE cuotas
+        SET
+            estado = _estado
+        WHERE
+        idcuota = _idcuota;
+    
+    SELECT ROW_COUNT() AS filasAfect;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_user_login` (IN `_correo` VARCHAR(60))   BEGIN
+    SELECT
+        usu.idusuario,
+        usu.imagen,
+        usu.correo,
+        usu.contrasenia,
+        pr.apellidos,
+        pr.nombres,
+        pr.documento_tipo,
+        pr.documento_nro,
+        rl.idrol,
+        rl.rol,
+        sd.direccion
+        FROM usuarios usu
+        INNER JOIN personas pr ON pr.idpersona = usu.idpersona
+        INNER JOIN roles rl ON rl.idrol = usu.idrol
+        INNER JOIN sedes sd ON sd.idsede = usu.idsede
+        WHERE usu.inactive_at IS NULL
+        AND usu.correo = _correo;
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `sup_list_refunds_ById` (IN `_iddevolucion` INT)   BEGIN
@@ -1661,13 +2497,21 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `sup_list_refunds_ById` (IN `_iddevo
         WHERE iddevolucion = _iddevolucion;
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `sup_list_refunds_n_expedientes` (IN `_tipo_persona` VARCHAR(10), IN `_fechaInicio` DATE, IN `_fechaFin` DATE, IN `_n_expediente` VARCHAR(10))   BEGIN
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sup_list_refunds_n_expedientes` (IN `_tipo_devolucion` VARCHAR(20), IN `_fechaInicio` DATE, IN `_fechaFin` DATE, IN `_n_expediente` VARCHAR(10))   BEGIN
     SELECT * 
         FROM vws_list_refunds
-        WHERE tipo_persona = _tipo_persona
+        WHERE tipo_devolucion = _tipo_devolucion
             AND create_at BETWEEN _fechaInicio AND _fechaFin
             AND inactive_at IS NULL
             AND n_expediente_dev LIKE CONCAT(_n_expediente,'%');
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sup_list_refunds_tRefund` (IN `_tipo_devolucion` VARCHAR(20), IN `_fechaInicio` DATE, IN `_fechaFin` DATE)   BEGIN
+    SELECT * 
+        FROM vws_list_refunds
+        WHERE tipo_devolucion = _tipo_devolucion
+            AND create_at BETWEEN _fechaInicio AND _fechaFin
+            AND inactive_at IS NULL;
 END$$
 
 DELIMITER ;
@@ -1692,11 +2536,11 @@ CREATE TABLE `activos` (
   `partida_elect` varchar(100) NOT NULL,
   `latitud` varchar(20) DEFAULT NULL,
   `longitud` varchar(20) DEFAULT NULL,
-  `perimetro` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL DEFAULT '{"clave" :[""], "valor":[""]}' CHECK (json_valid(`perimetro`)),
-  `det_casa` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL DEFAULT '{"clave" :[""], "valor":[""]}' CHECK (json_valid(`det_casa`)),
+  `perimetro` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL DEFAULT '{"clave" :[], "valor":[]}' CHECK (json_valid(`perimetro`)),
+  `det_casa` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL DEFAULT '{"clave" :[], "valor":[]}' CHECK (json_valid(`det_casa`)),
   `idpresupuesto` int(11) DEFAULT NULL,
   `propietario_lote` varchar(70) NOT NULL,
-  `precio_lote` decimal(8,2) NOT NULL,
+  `precio_lote` decimal(8,2) DEFAULT NULL,
   `precio_construccion` decimal(8,2) DEFAULT NULL,
   `create_at` date NOT NULL DEFAULT curdate(),
   `update_at` date DEFAULT NULL,
@@ -1710,72 +2554,73 @@ CREATE TABLE `activos` (
 --
 
 INSERT INTO `activos` (`idactivo`, `idproyecto`, `tipo_activo`, `imagen`, `estado`, `sublote`, `direccion`, `moneda_venta`, `area_terreno`, `zcomunes_porcent`, `partida_elect`, `latitud`, `longitud`, `perimetro`, `det_casa`, `idpresupuesto`, `propietario_lote`, `precio_lote`, `precio_construccion`, `create_at`, `update_at`, `inactive_at`, `idusuario`, `precio_venta`) VALUES
-(1, 1, 'LOTE', '4e867593bfa060bb4b701bc9bb387d7ad78c4acf.jpg', 'SEPARADO', '1', 'Urbanización Alpha', 'USD', 300.00, 2, 'Partida 001', NULL, NULL, '{\"clave\":[\"x\",\"x\",\"\"],\"valor\":[\"40\",\"10\",\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 19, 'TERCEROS', 80000.00, 0.00, '2024-04-19', '2024-05-19', NULL, 1, 0.00),
-(2, 2, 'LOTE', NULL, 'SIN VENDER', '1', 'Urbanización Gamma', 'USD', 250.00, 0, 'Partida 003', 'null', 'null', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 12, 'A.I.F', 100000.00, 1160.00, '2024-04-19', '2024-05-19', NULL, 1, 101160.00),
-(3, 1, 'LOTE', 'dc52c8c0f2e8111674786ae5e5e6eb5a48f2c678.jpg', 'SIN VENDER', '3', 'Urbanización Epsilon', 'USD', 350.00, 0, 'Partida 005', NULL, NULL, '{\"clave\":[\"\"],\"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 19, 'A.I.F', 90000.00, 0.00, '2024-04-19', '2024-05-19', NULL, 1, 0.00),
-(4, 3, 'LOTE', NULL, 'SIN VENDER', '2', 'Urbanización Eta', 'USD', 400.00, 0, 'Partida 007', 'null', 'null', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 15, 'A.I.F', 120000.00, 710.00, '2024-04-19', '2024-05-19', NULL, 1, 120710.00),
-(5, 2, 'LOTE', NULL, 'SEPARADO', '3', 'Urbanización Iota', 'USD', 280.00, 0, 'Partida 009', 'null', 'null', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 12, 'A.I.F', 110000.00, 1160.00, '2024-04-19', '2024-05-19', NULL, 1, 111160.00),
-(6, 3, 'LOTE', NULL, 'SIN VENDER', '5', 'Urbanización Lambda', 'USD', 320.00, NULL, 'Partida 011', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 30, 'A.I.F', 95000.00, 0.00, '2024-04-19', '2024-05-22', NULL, 1, 0.00),
-(7, 4, 'LOTE', NULL, 'SEPARADO', '1', 'Urbanización Nu', 'USD', 300.00, NULL, 'Partida 013', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'A.I.F', 85000.00, 0.00, '2024-04-19', '2024-05-19', NULL, 1, 0.00),
-(8, 4, 'LOTE', NULL, 'SIN VENDER', '3', 'Urbanización Omicron', 'USD', 380.00, NULL, 'Partida 015', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'A.I.F', 110000.00, 0.00, '2024-04-19', '2024-05-19', NULL, 1, 0.00),
-(9, 1, 'LOTE', NULL, 'SIN VENDER', '7', 'Urbanización Rho', 'USD', 420.00, NULL, 'Partida 017', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 19, 'A.I.F', 105000.00, 0.00, '2024-04-19', '2024-05-19', NULL, 1, 0.00),
-(10, 2, 'LOTE', NULL, 'VENDIDO', '9', 'Urbanización Tau', 'USD', 450.00, 0, 'Partida 019', 'null', 'null', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\":[\"implementacion de banquitos\",\"construccion de veredas\",\"acabados de construccion\"],\"valor\":[\"fueron de madera\",\"se hicieron de cemento\",\"detalles de los acabados de la construccion\"]}', 12, 'A.I.F', 115000.00, 1160.00, '2024-04-19', '2024-05-19', NULL, 1, 116160.00),
-(11, 3, 'LOTE', NULL, 'SIN VENDER', '11', 'Urbanización Phi', 'USD', 480.00, NULL, 'Partida 021', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'A.I.F', 100000.00, 0.00, '2024-04-19', '2024-05-19', NULL, 1, 0.00),
-(12, 4, 'LOTE', NULL, 'SIN VENDER', '13', 'Urbanización Psi', 'USD', 500.00, NULL, 'Partida 023', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', NULL, 'A.I.F', 120000.00, 0.00, '2024-04-19', '2024-05-19', NULL, 1, 0.00),
-(13, 1, 'LOTE', NULL, 'SIN VENDER', '15', 'Urbanización Beta', 'USD', 300.00, NULL, 'Partida 025', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 19, 'A.I.F', 90000.00, 0.00, '2024-04-19', '2024-05-19', NULL, 1, 0.00),
-(14, 1, 'LOTE', '72047f2210fa4a9b0b971e9bbf430156d7ef48af.jpg', 'SIN VENDER', '2', 'Urbanización Zeta', 'USD', 280.00, 0, 'Partida 027', NULL, NULL, '{\"clave\":[\"tercera clave\",\"segunda clave\",\"primera clave\",\"\"],\"valor\":[\"tercer valor\",\"segundo valor\",\"primer valor\",\"\"]}', '{\"clave\":[],\"valor\":[]}', 19, 'A.I.F', 95000.00, 0.00, '2024-04-19', '2024-05-19', NULL, 1, 0.00),
-(15, 1, 'LOTE', NULL, 'SIN VENDER', '4', 'Urbanización Kappa', 'USD', 320.00, NULL, 'Partida 029', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 19, 'A.I.F', 110000.00, 0.00, '2024-04-19', '2024-05-19', NULL, 1, 0.00),
-(16, 1, 'LOTE', NULL, 'SIN VENDER', '6', 'Urbanización Sigma', 'USD', 300.00, NULL, 'Partida 031', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 19, 'A.I.F', 85000.00, 0.00, '2024-04-19', '2024-05-19', NULL, 1, 0.00),
-(17, 1, 'LOTE', NULL, 'SIN VENDER', '8', 'Urbanización Upsilon', 'USD', 380.00, NULL, 'Partida 033', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 19, 'A.I.F', 120000.00, 0.00, '2024-04-19', '2024-05-19', NULL, 1, 0.00),
-(18, 1, 'LOTE', NULL, 'SIN VENDER', '10', 'Urbanización Omega', 'USD', 420.00, 0, 'Partida 035', 'null', 'null', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\":[],\"valor\":[]}', 19, 'A.I.F', 105000.00, 360.00, '2024-04-19', '2024-05-19', NULL, 1, 105359.00),
-(19, 1, 'LOTE', NULL, 'SIN VENDER', '12', 'Urbanización Delta', 'USD', 450.00, NULL, 'Partida 037', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 19, 'A.I.F', 115000.00, 0.00, '2024-04-19', '2024-05-19', NULL, 1, 0.00),
-(20, 1, 'LOTE', NULL, 'SIN VENDER', '14', 'Urbanización Gamma', 'USD', 480.00, 0, 'Partida 039', 'null', 'null', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 19, 'A.I.F', 100000.00, 710.00, '2024-04-19', '2024-05-19', NULL, 1, 100710.00),
-(21, 1, 'LOTE', NULL, 'SIN VENDER', '16', 'Urbanización Epsilon', 'USD', 500.00, NULL, 'Partida 041', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 19, 'A.I.F', 120000.00, 0.00, '2024-04-19', '2024-05-19', NULL, 1, 0.00),
-(22, 1, 'LOTE', NULL, 'SIN VENDER', '18', 'Urbanización Zeta', 'USD', 300.00, NULL, 'Partida 043', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 19, 'A.I.F', 90000.00, 0.00, '2024-04-19', '2024-05-19', NULL, 1, 0.00),
-(23, 1, 'LOTE', NULL, 'SIN VENDER', '20', 'Urbanización Eta', 'USD', 250.00, NULL, 'Partida 045', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 19, 'A.I.F', 95000.00, 0.00, '2024-04-19', '2024-05-19', NULL, 1, 0.00),
-(24, 1, 'LOTE', NULL, 'SIN VENDER', '22', 'Urbanización Theta', 'USD', 280.00, NULL, 'Partida 047', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 19, 'A.I.F', 110000.00, 0.00, '2024-04-19', '2024-05-19', NULL, 1, 0.00),
-(25, 1, 'LOTE', NULL, 'SIN VENDER', '24', 'Urbanización Iota', 'USD', 320.00, NULL, 'Partida 049', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 19, 'A.I.F', 85000.00, 0.00, '2024-04-19', '2024-05-19', NULL, 1, 0.00),
-(26, 1, 'LOTE', NULL, 'SIN VENDER', '26', 'Urbanización Kappa', 'USD', 380.00, NULL, 'Partida 051', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 19, 'A.I.F', 120000.00, 0.00, '2024-04-19', '2024-05-19', NULL, 1, 0.00),
-(27, 1, 'LOTE', NULL, 'SIN VENDER', '28', 'Urbanización Lambda', 'USD', 420.00, NULL, 'Partida 053', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 19, 'A.I.F', 105000.00, 0.00, '2024-04-19', '2024-05-19', NULL, 1, 0.00),
-(28, 1, 'LOTE', NULL, 'SIN VENDER', '30', 'Urbanización Mu', 'USD', 450.00, NULL, 'Partida 055', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 19, 'A.I.F', 115000.00, 0.00, '2024-04-19', '2024-05-19', NULL, 1, 0.00),
-(29, 1, 'LOTE', NULL, 'SIN VENDER', '32', 'Urbanización Nu', 'USD', 480.00, NULL, 'Partida 057', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 19, 'A.I.F', 100000.00, 0.00, '2024-04-19', '2024-05-19', NULL, 1, 0.00),
-(30, 1, 'LOTE', NULL, 'SIN VENDER', '34', 'Urbanización Xi', 'USD', 500.00, NULL, 'Partida 059', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 19, 'A.I.F', 120000.00, 0.00, '2024-04-19', '2024-05-19', NULL, 1, 0.00),
-(31, 1, 'LOTE', NULL, 'SIN VENDER', '36', 'Urbanización Omicron', 'USD', 300.00, NULL, 'Partida 061', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 19, 'A.I.F', 90000.00, 0.00, '2024-04-19', '2024-05-19', NULL, 1, 0.00),
-(32, 1, 'LOTE', NULL, 'SIN VENDER', '38', 'Urbanización Pi', 'USD', 250.00, NULL, 'Partida 063', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 19, 'A.I.F', 95000.00, 0.00, '2024-04-19', '2024-05-19', NULL, 1, 0.00),
-(33, 1, 'LOTE', NULL, 'SIN VENDER', '40', 'Urbanización Rho', 'USD', 280.00, NULL, 'Partida 065', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 19, 'A.I.F', 110000.00, 0.00, '2024-04-19', '2024-05-19', NULL, 1, 0.00),
-(34, 1, 'LOTE', NULL, 'SIN VENDER', '42', 'Urbanización Sigma', 'USD', 320.00, NULL, 'Partida 067', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 19, 'A.I.F', 85000.00, 0.00, '2024-04-19', '2024-05-19', NULL, 1, 0.00),
-(35, 1, 'LOTE', NULL, 'SIN VENDER', '44', 'Urbanización Tau', 'USD', 380.00, NULL, 'Partida 069', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 19, 'A.I.F', 120000.00, 0.00, '2024-04-19', '2024-05-19', NULL, 1, 0.00),
-(36, 1, 'LOTE', NULL, 'SIN VENDER', '46', 'Urbanización Upsilon', 'USD', 420.00, NULL, 'Partida 071', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 19, 'A.I.F', 105000.00, 0.00, '2024-04-19', '2024-05-19', NULL, 1, 0.00),
-(37, 1, 'LOTE', NULL, 'SIN VENDER', '48', 'Urbanización Phi', 'USD', 450.00, NULL, 'Partida 073', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 19, 'A.I.F', 115000.00, 0.00, '2024-04-19', '2024-05-19', NULL, 1, 0.00),
-(38, 1, 'LOTE', NULL, 'SIN VENDER', '50', 'Urbanización Chi', 'USD', 480.00, NULL, 'Partida 075', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 19, 'A.I.F', 100000.00, 0.00, '2024-04-19', '2024-05-19', NULL, 1, 0.00),
-(39, 1, 'LOTE', NULL, 'SIN VENDER', '52', 'Urbanización Psi', 'USD', 500.00, NULL, 'Partida 077', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 19, 'A.I.F', 120000.00, 0.00, '2024-04-19', '2024-05-19', NULL, 1, 0.00),
-(40, 1, 'LOTE', NULL, 'SIN VENDER', '54', 'Urbanización Omega', 'USD', 300.00, NULL, 'Partida 079', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 19, 'A.I.F', 90000.00, 0.00, '2024-04-19', '2024-05-19', NULL, 1, 0.00),
-(41, 1, 'LOTE', NULL, 'SIN VENDER', '56', 'Urbanización Alpha', 'USD', 250.00, NULL, 'Partida 081', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 19, 'A.I.F', 95000.00, 0.00, '2024-04-19', '2024-05-19', NULL, 1, 0.00),
-(42, 1, 'LOTE', NULL, 'SIN VENDER', '58', 'Urbanización Beta', 'USD', 280.00, 0, 'Partida 083', NULL, NULL, '{\"clave\":[\"\"],\"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 19, 'A.I.F', 110000.00, 710.00, '2024-04-19', '2024-05-19', NULL, 1, 110710.00),
-(43, 1, 'LOTE', NULL, 'SIN VENDER', '60', 'Urbanización Gamma', 'USD', 320.00, NULL, 'Partida 085', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 19, 'A.I.F', 85000.00, 0.00, '2024-04-19', '2024-05-19', NULL, 1, 0.00),
-(44, 1, 'LOTE', NULL, 'SIN VENDER', '62', 'Urbanización Delta', 'USD', 380.00, NULL, 'Partida 087', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 19, 'A.I.F', 120000.00, 0.00, '2024-04-19', '2024-05-19', NULL, 1, 0.00),
-(45, 1, 'LOTE', NULL, 'SIN VENDER', '64', 'Urbanización Epsilon', 'USD', 420.00, NULL, 'Partida 089', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 19, 'A.I.F', 105000.00, 0.00, '2024-04-19', '2024-05-19', NULL, 1, 0.00),
-(46, 1, 'LOTE', NULL, 'SIN VENDER', '66', 'Urbanización Zeta', 'USD', 450.00, NULL, 'Partida 091', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 19, 'A.I.F', 115000.00, 0.00, '2024-04-19', '2024-05-19', NULL, 1, 0.00),
-(47, 1, 'LOTE', NULL, 'SIN VENDER', '68', 'Urbanización Eta', 'USD', 480.00, NULL, 'Partida 093', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 19, 'A.I.F', 100000.00, 0.00, '2024-04-19', '2024-05-19', NULL, 1, 0.00),
-(48, 1, 'LOTE', NULL, 'SIN VENDER', '70', 'Urbanización Theta', 'USD', 500.00, NULL, 'Partida 095', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 19, 'A.I.F', 120000.00, 0.00, '2024-04-19', '2024-05-19', NULL, 1, 0.00),
-(49, 1, 'LOTE', NULL, 'SIN VENDER', '72', 'Urbanización Iota', 'USD', 300.00, NULL, 'Partida 097', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 19, 'A.I.F', 90000.00, 0.00, '2024-04-19', '2024-05-19', NULL, 1, 0.00),
-(50, 1, 'LOTE', NULL, 'SIN VENDER', '74', 'Urbanización Kappa', 'USD', 250.00, NULL, 'Partida 099', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 19, 'A.I.F', 95000.00, 0.00, '2024-04-19', '2024-05-19', NULL, 1, 0.00),
-(51, 1, 'LOTE', NULL, 'SIN VENDER', '76', 'Urbanización Lambda', 'USD', 280.00, NULL, 'Partida 101', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 19, 'TERCEROS', 110000.00, 0.00, '2024-04-19', '2024-05-19', NULL, 1, 0.00),
-(52, 1, 'LOTE', NULL, 'SIN VENDER', '78', 'Urbanización Mu', 'USD', 320.00, NULL, 'Partida 103', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 19, 'TERCEROS', 85000.00, 0.00, '2024-04-19', '2024-05-19', NULL, 1, 0.00),
-(53, 1, 'LOTE', NULL, 'SIN VENDER', '80', 'Urbanización Nu', 'USD', 380.00, NULL, 'Partida 105', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 19, 'TERCEROS', 120000.00, 0.00, '2024-04-19', '2024-05-19', NULL, 1, 0.00),
-(54, 1, 'LOTE', NULL, 'SIN VENDER', '82', 'Urbanización Xi', 'USD', 420.00, NULL, 'Partida 107', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 19, 'TERCEROS', 105000.00, 0.00, '2024-04-19', '2024-05-19', NULL, 1, 0.00),
-(55, 1, 'LOTE', NULL, 'SIN VENDER', '84', 'Urbanización Omicron', 'USD', 450.00, NULL, 'Partida 109', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 19, 'TERCEROS', 115000.00, 0.00, '2024-04-19', '2024-05-19', NULL, 1, 0.00),
-(56, 1, 'LOTE', NULL, 'SIN VENDER', '86', 'Urbanización Pi', 'USD', 480.00, NULL, 'Partida 111', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 19, 'TERCEROS', 100000.00, 0.00, '2024-04-19', '2024-05-19', NULL, 1, 0.00),
-(57, 1, 'LOTE', NULL, 'SIN VENDER', '88', 'Urbanización Rho', 'USD', 500.00, NULL, 'Partida 113', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 19, 'TERCEROS', 120000.00, 0.00, '2024-04-19', '2024-05-19', NULL, 1, 0.00),
-(58, 1, 'LOTE', NULL, 'SIN VENDER', '90', 'Urbanización Sigma', 'USD', 300.00, NULL, 'Partida 115', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 19, 'TERCEROS', 90000.00, 0.00, '2024-04-19', '2024-05-19', NULL, 1, 0.00),
-(59, 1, 'LOTE', NULL, 'SIN VENDER', '92', 'Urbanización Tau', 'USD', 250.00, NULL, 'Partida 117', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 19, 'TERCEROS', 95000.00, 0.00, '2024-04-19', '2024-05-19', NULL, 1, 0.00),
-(60, 1, 'LOTE', NULL, 'SIN VENDER', '94', 'Urbanización Upsilon', 'USD', 280.00, NULL, 'Partida 119', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 19, 'TERCEROS', 110000.00, 0.00, '2024-04-19', '2024-05-19', NULL, 1, 0.00),
-(61, 1, 'LOTE', NULL, 'SIN VENDER', '96', 'Urbanización Phi', 'USD', 320.00, NULL, 'Partida 121', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 19, 'TERCEROS', 85000.00, 0.00, '2024-04-19', '2024-05-19', NULL, 1, 0.00),
-(62, 1, 'LOTE', NULL, 'SIN VENDER', '98', 'Urbanización Chi', 'USD', 380.00, NULL, 'Partida 123', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 19, 'TERCEROS', 120000.00, 0.00, '2024-04-19', '2024-05-19', NULL, 1, 0.00),
-(63, 1, 'LOTE', NULL, 'SIN VENDER', '100', 'Urbanización Psi', 'USD', 420.00, NULL, 'Partida 125', NULL, NULL, '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 19, 'TERCEROS', 105000.00, 0.00, '2024-04-19', '2024-05-19', NULL, 1, 0.00),
-(76, 1, 'LOTE', '933e9c5ac6fd6724d4b36d32152cc973f14dc579jpg', 'SIN VENDER', '59', 'av santa rosa#541', 'SOL', 0.00, 2, 'PARTIDA 3', NULL, NULL, '{\"clave\":[\"\"],\"valor\":[\"\"]}', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', 19, 'A.I.F', 0.00, NULL, '2024-04-21', '2024-05-19', NULL, 1, 0.00),
-(77, 1, 'LOTE', '1dbd8540b6eb7b40e376c46b6bc7b5b10ba23c2djpg', 'SIN VENDER', 'A-13', 'av los angeles 358', 'USD', 12.00, 1, 'partida nro 3', NULL, NULL, '{\"clave\":[\"\"],\"valor\":[\"\"]}', '{\"clave\":[],\"valor\":[]}', 19, 'A.I.F', 10000.00, 360.00, '2024-05-17', '2024-05-19', NULL, 1, 20360.00),
-(79, 2, 'CASA', '798ce61c45ef1b78ac640b4b962c2a891bdd769bjpg', 'SIN VENDER', '2', 'av las magnolias', 'USD', 1.00, 1, 'partida nro 3', NULL, NULL, '{\"clave\":[\"\"],\"valor\":[\"\"]}', '{\"clave\":[],\"valor\":[]}', 30, 'A.I.F', 500000.00, 360.00, '2024-05-19', '2024-05-19', NULL, 1, 500360.00);
+(1, 1, 'LOTE', '4e867593bfa060bb4b701bc9bb387d7ad78c4acf.jpg', 'VENDIDO', '1', 'Urbanización Alpha', 'USD', 300.00, 2, 'Partida 001', 'null', 'null', '{\"clave\" :[], \"valor\":[]}', '{\"clave\" :[], \"valor\":[]}', 19, 'TERCEROS', 80000.00, 2228.20, '2024-04-19', '2024-05-25', NULL, 1, 82228.20),
+(2, 2, 'LOTE', NULL, 'SIN VENDER', '1', 'Urbanización Gamma', 'USD', 250.00, 0, 'Partida 003', NULL, NULL, '{\"clave\" :[], \"valor\":[]}', '{\"clave\" :[], \"valor\":[]}', 12, 'A.I.F', 100000.00, 1160.00, '2024-04-19', '2024-05-19', NULL, 1, 101160.00),
+(3, 1, 'LOTE', 'dc52c8c0f2e8111674786ae5e5e6eb5a48f2c678.jpg', 'SIN VENDER', '3', 'Urbanización Epsilon', 'USD', 350.00, 0, 'Partida 005', NULL, NULL, '{\"clave\" :[], \"valor\":[]}', '{\"clave\" :[], \"valor\":[]}', 19, 'A.I.F', 90000.00, 0.00, '2024-04-19', '2024-05-24', NULL, 1, 0.00),
+(4, 3, 'LOTE', NULL, 'SIN VENDER', '2', 'Urbanización Eta', 'USD', 400.00, 0, 'Partida 007', NULL, NULL, '{\"clave\" :[], \"valor\":[]}', '{\"clave\" :[], \"valor\":[]}', 15, 'A.I.F', 120000.00, 710.00, '2024-04-19', '2024-06-02', NULL, 1, 120710.00),
+(5, 2, 'LOTE', NULL, 'VENDIDO', '3', 'Urbanización Iota', 'USD', 280.00, 0, 'Partida 009', NULL, NULL, '{\"clave\" :[], \"valor\":[]}', '{\"clave\" :[], \"valor\":[]}', 12, 'A.I.F', 110000.00, 1160.00, '2024-04-19', '2024-05-19', NULL, 1, 111160.00),
+(6, 3, 'LOTE', NULL, 'SIN VENDER', '5', 'Urbanización Lambda', 'USD', 320.00, 0, 'Partida 011', 'null', 'null', '{\"clave\" :[], \"valor\":[]}', '{\"clave\" :[], \"valor\":[]}', 30, 'A.I.F', 95000.00, 360.00, '2024-04-19', '2024-05-31', NULL, 1, 95360.00),
+(7, 4, 'LOTE', NULL, 'SEPARADO', '1', 'Urbanización Nu', 'USD', 300.00, NULL, 'Partida 013', NULL, NULL, '{\"clave\" :[], \"valor\":[]}', '{\"clave\" :[], \"valor\":[]}', 37, 'A.I.F', 85000.00, 0.00, '2024-04-19', '2024-05-24', NULL, 1, 0.00),
+(8, 4, 'LOTE', NULL, 'SIN VENDER', '3', 'Urbanización Omicron', 'USD', 380.00, 0, 'Partida 015', 'null', 'null', '{\"clave\" :[], \"valor\":[]}', '{\"clave\" :[], \"valor\":[]}', 37, 'A.I.F', 110000.00, 2832.00, '2024-04-19', '2024-05-24', NULL, 1, 112832.00),
+(9, 1, 'LOTE', NULL, 'SIN VENDER', '7', 'Urbanización Rho', 'USD', 420.00, NULL, 'Partida 017', NULL, NULL, '{\"clave\" :[], \"valor\":[]}', '{\"clave\" :[], \"valor\":[]}', 19, 'A.I.F', 105000.00, 0.00, '2024-04-19', '2024-05-24', NULL, 1, 0.00),
+(10, 2, 'LOTE', NULL, 'VENDIDO', '9', 'Urbanización Tau', 'USD', 450.00, 0, 'Partida 019', NULL, NULL, '{\"clave\" :[], \"valor\":[]}', '{\"clave\" :[], \"valor\":[]}', 12, 'A.I.F', 115000.00, 1160.00, '2024-04-19', '2024-05-19', NULL, 1, 116160.00),
+(11, 3, 'LOTE', NULL, 'SIN VENDER', '11', 'Urbanización Phi', 'USD', 480.00, NULL, 'Partida 021', NULL, NULL, '{\"clave\" :[], \"valor\":[]}', '{\"clave\" :[], \"valor\":[]}', NULL, 'A.I.F', 100000.00, 0.00, '2024-04-19', '2024-06-02', NULL, 1, 0.00),
+(12, 4, 'LOTE', NULL, 'SIN VENDER', '13', 'Urbanización Psi', 'USD', 500.00, 0, 'Partida 023', 'null', 'null', '{\"clave\" :[], \"valor\":[]}', '{\"clave\" :[], \"valor\":[]}', 37, 'A.I.F', 120000.00, 2832.00, '2024-04-19', '2024-05-24', NULL, 1, 122832.00),
+(13, 1, 'LOTE', NULL, 'VENDIDO', '15', 'Urbanización Beta', 'USD', 300.00, NULL, 'Partida 025', NULL, NULL, '{\"clave\" :[], \"valor\":[]}', '{\"clave\" :[], \"valor\":[]}', 19, 'A.I.F', 90000.00, 0.00, '2024-04-19', '2024-06-02', NULL, 3, 0.00),
+(14, 1, 'LOTE', '72047f2210fa4a9b0b971e9bbf430156d7ef48af.jpg', 'VENDIDO', '2', 'Urbanización Zeta', 'USD', 280.00, 0, 'Partida 027', NULL, NULL, '{\"clave\":[\"tercera clave\",\"segunda clave\",\"primera clave\",\"\"],\"valor\":[\"tercer valor\",\"segundo valor\",\"primer valor\",\"\"]}', '{\"clave\":[],\"valor\":[]}', 19, 'A.I.F', 95000.00, 0.00, '2024-04-19', '2024-05-27', NULL, 3, 0.00),
+(15, 1, 'LOTE', NULL, 'SIN VENDER', '4', 'Urbanización Kappa', 'USD', 320.00, NULL, 'Partida 029', NULL, NULL, '{\"clave\" :[], \"valor\":[]}', '{\"clave\" :[], \"valor\":[]}', 19, 'A.I.F', 110000.00, 0.00, '2024-04-19', '2024-05-24', NULL, 1, 0.00),
+(16, 1, 'LOTE', NULL, 'SIN VENDER', '6', 'Urbanización Sigma', 'USD', 300.00, NULL, 'Partida 031', NULL, NULL, '{\"clave\" :[], \"valor\":[]}', '{\"clave\" :[], \"valor\":[]}', 19, 'A.I.F', 85000.00, 0.00, '2024-04-19', '2024-05-24', NULL, 1, 0.00),
+(17, 1, 'LOTE', NULL, 'SIN VENDER', '8', 'Urbanización Upsilon', 'USD', 380.00, NULL, 'Partida 033', NULL, NULL, '{\"clave\" :[], \"valor\":[]}', '{\"clave\" :[], \"valor\":[]}', 19, 'A.I.F', 120000.00, 0.00, '2024-04-19', '2024-05-24', NULL, 1, 0.00),
+(18, 1, 'LOTE', NULL, 'SIN VENDER', '10', 'Urbanización Omega', 'USD', 420.00, 0, 'Partida 035', 'null', 'null', '{\"clave\" :[], \"valor\":[]}', '{\"clave\":[],\"valor\":[]}', 19, 'A.I.F', 105000.00, 2228.20, '2024-04-19', '2024-06-04', NULL, 1, 107228.20),
+(19, 1, 'LOTE', NULL, 'SIN VENDER', '12', 'Urbanización Delta', 'USD', 450.00, 0, 'Partida 037', 'null', 'null', '{\"clave\" :[], \"valor\":[]}', '{\"clave\" :[], \"valor\":[]}', 19, 'A.I.F', 115000.00, 2228.20, '2024-04-19', '2024-06-01', NULL, 1, 117228.20),
+(20, 1, 'LOTE', NULL, 'SIN VENDER', '14', 'Urbanización Gamma', 'USD', 480.00, 0, 'Partida 039', 'null', 'null', '{\"clave\" :[], \"valor\":[]}', '{\"clave\" :[], \"valor\":[]}', 19, 'A.I.F', 100000.00, 2228.20, '2024-04-19', '2024-05-26', NULL, 1, 102228.20),
+(21, 1, 'LOTE', NULL, 'SIN VENDER', '16', 'Urbanización Epsilon', 'USD', 500.00, NULL, 'Partida 041', NULL, NULL, '{\"clave\" :[], \"valor\":[]}', '{\"clave\" :[], \"valor\":[]}', 19, 'A.I.F', 120000.00, 0.00, '2024-04-19', '2024-05-24', NULL, 1, 0.00),
+(22, 1, 'LOTE', NULL, 'SIN VENDER', '18', 'Urbanización Zeta', 'USD', 300.00, NULL, 'Partida 043', NULL, NULL, '{\"clave\" :[], \"valor\":[]}', '{\"clave\" :[], \"valor\":[]}', 19, 'A.I.F', 90000.00, 0.00, '2024-04-19', '2024-05-24', NULL, 1, 0.00),
+(23, 1, 'LOTE', NULL, 'SIN VENDER', '20', 'Urbanización Eta', 'USD', 250.00, NULL, 'Partida 045', NULL, NULL, '{\"clave\" :[], \"valor\":[]}', '{\"clave\" :[], \"valor\":[]}', 19, 'A.I.F', 95000.00, 0.00, '2024-04-19', '2024-05-25', NULL, 1, 0.00),
+(24, 1, 'LOTE', NULL, 'SIN VENDER', '22', 'Urbanización Theta', 'USD', 280.00, NULL, 'Partida 047', NULL, NULL, '{\"clave\" :[], \"valor\":[]}', '{\"clave\" :[], \"valor\":[]}', 19, 'A.I.F', 110000.00, 0.00, '2024-04-19', '2024-05-24', NULL, 1, 0.00),
+(25, 1, 'LOTE', NULL, 'SIN VENDER', '24', 'Urbanización Iota', 'USD', 320.00, NULL, 'Partida 049', NULL, NULL, '{\"clave\" :[], \"valor\":[]}', '{\"clave\" :[], \"valor\":[]}', 19, 'A.I.F', 85000.00, 0.00, '2024-04-19', '2024-05-24', NULL, 1, 0.00),
+(26, 1, 'LOTE', NULL, 'SIN VENDER', '26', 'Urbanización Kappa', 'USD', 380.00, NULL, 'Partida 051', NULL, NULL, '{\"clave\" :[], \"valor\":[]}', '{\"clave\" :[], \"valor\":[]}', 19, 'A.I.F', 120000.00, 0.00, '2024-04-19', '2024-05-24', NULL, 1, 0.00),
+(27, 1, 'LOTE', NULL, 'SIN VENDER', '28', 'Urbanización Lambda', 'USD', 420.00, NULL, 'Partida 053', NULL, NULL, '{\"clave\" :[], \"valor\":[]}', '{\"clave\" :[], \"valor\":[]}', 19, 'A.I.F', 105000.00, 0.00, '2024-04-19', '2024-05-24', NULL, 1, 0.00),
+(28, 1, 'LOTE', NULL, 'SIN VENDER', '30', 'Urbanización Mu', 'USD', 450.00, NULL, 'Partida 055', NULL, NULL, '{\"clave\" :[], \"valor\":[]}', '{\"clave\" :[], \"valor\":[]}', 19, 'A.I.F', 115000.00, 0.00, '2024-04-19', '2024-05-24', NULL, 1, 0.00),
+(29, 1, 'LOTE', NULL, 'SIN VENDER', '32', 'Urbanización Nu', 'USD', 480.00, NULL, 'Partida 057', NULL, NULL, '{\"clave\" :[], \"valor\":[]}', '{\"clave\" :[], \"valor\":[]}', 19, 'A.I.F', 100000.00, 0.00, '2024-04-19', '2024-05-24', NULL, 1, 0.00),
+(30, 1, 'LOTE', NULL, 'SIN VENDER', '34', 'Urbanización Xi', 'USD', 500.00, NULL, 'Partida 059', NULL, NULL, '{\"clave\" :[], \"valor\":[]}', '{\"clave\" :[], \"valor\":[]}', 19, 'A.I.F', 120000.00, 0.00, '2024-04-19', '2024-05-24', NULL, 1, 0.00),
+(31, 1, 'LOTE', NULL, 'SIN VENDER', '36', 'Urbanización Omicron', 'USD', 300.00, NULL, 'Partida 061', NULL, NULL, '{\"clave\" :[], \"valor\":[]}', '{\"clave\" :[], \"valor\":[]}', 19, 'A.I.F', 90000.00, 0.00, '2024-04-19', '2024-05-24', NULL, 1, 0.00),
+(32, 1, 'LOTE', NULL, 'SIN VENDER', '38', 'Urbanización Pi', 'USD', 250.00, NULL, 'Partida 063', NULL, NULL, '{\"clave\" :[], \"valor\":[]}', '{\"clave\" :[], \"valor\":[]}', 19, 'A.I.F', 95000.00, 0.00, '2024-04-19', '2024-05-24', NULL, 1, 0.00),
+(33, 1, 'LOTE', NULL, 'SIN VENDER', '40', 'Urbanización Rho', 'USD', 280.00, NULL, 'Partida 065', NULL, NULL, '{\"clave\" :[], \"valor\":[]}', '{\"clave\" :[], \"valor\":[]}', 19, 'A.I.F', 110000.00, 0.00, '2024-04-19', '2024-05-24', NULL, 1, 0.00),
+(34, 1, 'LOTE', NULL, 'SIN VENDER', '42', 'Urbanización Sigma', 'USD', 320.00, NULL, 'Partida 067', NULL, NULL, '{\"clave\" :[], \"valor\":[]}', '{\"clave\" :[], \"valor\":[]}', 19, 'A.I.F', 85000.00, 0.00, '2024-04-19', '2024-05-24', NULL, 1, 0.00),
+(35, 1, 'LOTE', NULL, 'SIN VENDER', '44', 'Urbanización Tau', 'USD', 380.00, NULL, 'Partida 069', NULL, NULL, '{\"clave\" :[], \"valor\":[]}', '{\"clave\" :[], \"valor\":[]}', 19, 'A.I.F', 120000.00, 0.00, '2024-04-19', '2024-05-24', NULL, 1, 0.00),
+(36, 1, 'LOTE', NULL, 'SIN VENDER', '46', 'Urbanización Upsilon', 'USD', 420.00, NULL, 'Partida 071', NULL, NULL, '{\"clave\" :[], \"valor\":[]}', '{\"clave\" :[], \"valor\":[]}', 19, 'A.I.F', 105000.00, 0.00, '2024-04-19', '2024-05-24', NULL, 1, 0.00),
+(37, 1, 'LOTE', NULL, 'SIN VENDER', '48', 'Urbanización Phi', 'USD', 450.00, NULL, 'Partida 073', NULL, NULL, '{\"clave\" :[], \"valor\":[]}', '{\"clave\" :[], \"valor\":[]}', 19, 'A.I.F', 115000.00, 0.00, '2024-04-19', '2024-05-24', NULL, 1, 0.00),
+(38, 1, 'LOTE', NULL, 'SIN VENDER', '50', 'Urbanización Chi', 'USD', 480.00, NULL, 'Partida 075', NULL, NULL, '{\"clave\" :[], \"valor\":[]}', '{\"clave\" :[], \"valor\":[]}', 19, 'A.I.F', 100000.00, 0.00, '2024-04-19', '2024-05-24', NULL, 1, 0.00),
+(39, 1, 'LOTE', NULL, 'SIN VENDER', '52', 'Urbanización Psi', 'USD', 500.00, NULL, 'Partida 077', NULL, NULL, '{\"clave\" :[], \"valor\":[]}', '{\"clave\" :[], \"valor\":[]}', 19, 'A.I.F', 120000.00, 0.00, '2024-04-19', '2024-05-24', NULL, 1, 0.00),
+(40, 1, 'LOTE', NULL, 'SIN VENDER', '54', 'Urbanización Omega', 'USD', 300.00, NULL, 'Partida 079', NULL, NULL, '{\"clave\" :[], \"valor\":[]}', '{\"clave\" :[], \"valor\":[]}', 19, 'A.I.F', 90000.00, 0.00, '2024-04-19', '2024-05-24', NULL, 1, 0.00),
+(41, 1, 'LOTE', NULL, 'SIN VENDER', '56', 'Urbanización Alpha', 'USD', 250.00, NULL, 'Partida 081', NULL, NULL, '{\"clave\" :[], \"valor\":[]}', '{\"clave\" :[], \"valor\":[]}', 19, 'A.I.F', 95000.00, 0.00, '2024-04-19', '2024-05-24', NULL, 1, 0.00),
+(42, 1, 'LOTE', NULL, 'SIN VENDER', '58', 'Urbanización Beta', 'USD', 280.00, 0, 'Partida 083', NULL, NULL, '{\"clave\" :[], \"valor\":[]}', '{\"clave\" :[], \"valor\":[]}', 19, 'A.I.F', 110000.00, 710.00, '2024-04-19', '2024-05-24', NULL, 1, 110710.00),
+(43, 1, 'LOTE', NULL, 'SIN VENDER', '60', 'Urbanización Gamma', 'USD', 320.00, NULL, 'Partida 085', NULL, NULL, '{\"clave\" :[], \"valor\":[]}', '{\"clave\" :[], \"valor\":[]}', 19, 'A.I.F', 85000.00, 0.00, '2024-04-19', '2024-05-24', NULL, 1, 0.00),
+(44, 1, 'LOTE', NULL, 'SIN VENDER', '62', 'Urbanización Delta', 'USD', 380.00, NULL, 'Partida 087', NULL, NULL, '{\"clave\" :[], \"valor\":[]}', '{\"clave\" :[], \"valor\":[]}', 19, 'A.I.F', 120000.00, 0.00, '2024-04-19', '2024-05-24', NULL, 1, 0.00),
+(45, 1, 'LOTE', NULL, 'SIN VENDER', '64', 'Urbanización Epsilon', 'USD', 420.00, NULL, 'Partida 089', NULL, NULL, '{\"clave\" :[], \"valor\":[]}', '{\"clave\" :[], \"valor\":[]}', 19, 'A.I.F', 105000.00, 0.00, '2024-04-19', '2024-05-24', NULL, 1, 0.00),
+(46, 1, 'LOTE', NULL, 'SIN VENDER', '66', 'Urbanización Zeta', 'USD', 450.00, NULL, 'Partida 091', NULL, NULL, '{\"clave\" :[], \"valor\":[]}', '{\"clave\" :[], \"valor\":[]}', 19, 'A.I.F', 115000.00, 0.00, '2024-04-19', '2024-05-24', NULL, 1, 0.00),
+(47, 1, 'LOTE', NULL, 'SIN VENDER', '68', 'Urbanización Eta', 'USD', 480.00, NULL, 'Partida 093', NULL, NULL, '{\"clave\" :[], \"valor\":[]}', '{\"clave\" :[], \"valor\":[]}', 19, 'A.I.F', 100000.00, 0.00, '2024-04-19', '2024-05-24', NULL, 1, 0.00),
+(48, 1, 'LOTE', NULL, 'SIN VENDER', '70', 'Urbanización Theta', 'USD', 500.00, NULL, 'Partida 095', NULL, NULL, '{\"clave\" :[], \"valor\":[]}', '{\"clave\" :[], \"valor\":[]}', 19, 'A.I.F', 120000.00, 0.00, '2024-04-19', '2024-05-24', NULL, 1, 0.00),
+(49, 1, 'LOTE', NULL, 'SIN VENDER', '72', 'Urbanización Iota', 'USD', 300.00, NULL, 'Partida 097', NULL, NULL, '{\"clave\" :[], \"valor\":[]}', '{\"clave\" :[], \"valor\":[]}', 19, 'A.I.F', 90000.00, 0.00, '2024-04-19', '2024-05-24', NULL, 1, 0.00),
+(50, 1, 'LOTE', NULL, 'SIN VENDER', '74', 'Urbanización Kappa', 'USD', 250.00, NULL, 'Partida 099', NULL, NULL, '{\"clave\" :[], \"valor\":[]}', '{\"clave\" :[], \"valor\":[]}', 19, 'A.I.F', 95000.00, 0.00, '2024-04-19', '2024-05-24', NULL, 1, 0.00),
+(51, 1, 'LOTE', NULL, 'SIN VENDER', '76', 'Urbanización Lambda', 'USD', 280.00, NULL, 'Partida 101', NULL, NULL, '{\"clave\" :[], \"valor\":[]}', '{\"clave\" :[], \"valor\":[]}', 19, 'TERCEROS', 110000.00, 0.00, '2024-04-19', '2024-05-24', NULL, 1, 0.00),
+(52, 1, 'LOTE', NULL, 'SIN VENDER', '78', 'Urbanización Mu', 'USD', 320.00, NULL, 'Partida 103', NULL, NULL, '{\"clave\" :[], \"valor\":[]}', '{\"clave\" :[], \"valor\":[]}', 19, 'TERCEROS', 85000.00, 0.00, '2024-04-19', '2024-05-24', NULL, 1, 0.00),
+(53, 1, 'LOTE', NULL, 'SIN VENDER', '80', 'Urbanización Nu', 'USD', 380.00, NULL, 'Partida 105', NULL, NULL, '{\"clave\" :[], \"valor\":[]}', '{\"clave\" :[], \"valor\":[]}', 19, 'TERCEROS', 120000.00, 0.00, '2024-04-19', '2024-05-24', NULL, 1, 0.00),
+(54, 1, 'LOTE', NULL, 'SIN VENDER', '82', 'Urbanización Xi', 'USD', 420.00, NULL, 'Partida 107', NULL, NULL, '{\"clave\" :[], \"valor\":[]}', '{\"clave\" :[], \"valor\":[]}', 19, 'TERCEROS', 105000.00, 0.00, '2024-04-19', '2024-05-24', NULL, 1, 0.00),
+(55, 1, 'LOTE', NULL, 'SIN VENDER', '84', 'Urbanización Omicron', 'USD', 450.00, NULL, 'Partida 109', NULL, NULL, '{\"clave\" :[], \"valor\":[]}', '{\"clave\" :[], \"valor\":[]}', 19, 'TERCEROS', 115000.00, 0.00, '2024-04-19', '2024-05-24', NULL, 1, 0.00),
+(56, 1, 'LOTE', NULL, 'SIN VENDER', '86', 'Urbanización Pi', 'USD', 480.00, NULL, 'Partida 111', NULL, NULL, '{\"clave\" :[], \"valor\":[]}', '{\"clave\" :[], \"valor\":[]}', 19, 'TERCEROS', 100000.00, 0.00, '2024-04-19', '2024-05-24', NULL, 1, 0.00),
+(57, 1, 'LOTE', NULL, 'SIN VENDER', '88', 'Urbanización Rho', 'USD', 500.00, NULL, 'Partida 113', NULL, NULL, '{\"clave\" :[], \"valor\":[]}', '{\"clave\" :[], \"valor\":[]}', 19, 'TERCEROS', 120000.00, 0.00, '2024-04-19', '2024-05-24', NULL, 1, 0.00),
+(58, 1, 'LOTE', NULL, 'SIN VENDER', '90', 'Urbanización Sigma', 'USD', 300.00, NULL, 'Partida 115', NULL, NULL, '{\"clave\" :[], \"valor\":[]}', '{\"clave\" :[], \"valor\":[]}', 19, 'TERCEROS', 90000.00, 0.00, '2024-04-19', '2024-05-24', NULL, 1, 0.00),
+(59, 1, 'LOTE', NULL, 'SIN VENDER', '92', 'Urbanización Tau', 'USD', 250.00, NULL, 'Partida 117', NULL, NULL, '{\"clave\" :[], \"valor\":[]}', '{\"clave\" :[], \"valor\":[]}', 19, 'TERCEROS', 95000.00, 0.00, '2024-04-19', '2024-05-24', NULL, 1, 0.00),
+(60, 1, 'LOTE', NULL, 'SIN VENDER', '94', 'Urbanización Upsilon', 'USD', 280.00, NULL, 'Partida 119', NULL, NULL, '{\"clave\" :[], \"valor\":[]}', '{\"clave\" :[], \"valor\":[]}', 19, 'TERCEROS', 110000.00, 0.00, '2024-04-19', '2024-05-24', NULL, 1, 0.00),
+(61, 1, 'LOTE', NULL, 'SIN VENDER', '96', 'Urbanización Phi', 'USD', 320.00, NULL, 'Partida 121', NULL, NULL, '{\"clave\" :[], \"valor\":[]}', '{\"clave\" :[], \"valor\":[]}', 19, 'TERCEROS', 85000.00, 0.00, '2024-04-19', '2024-05-24', NULL, 1, 0.00),
+(62, 1, 'LOTE', NULL, 'SIN VENDER', '98', 'Urbanización Chi', 'USD', 380.00, NULL, 'Partida 123', NULL, NULL, '{\"clave\" :[], \"valor\":[]}', '{\"clave\" :[], \"valor\":[]}', 19, 'TERCEROS', 120000.00, 0.00, '2024-04-19', '2024-05-24', NULL, 1, 0.00),
+(63, 1, 'LOTE', NULL, 'SIN VENDER', '100', 'Urbanización Psi', 'USD', 420.00, 0, 'Partida 125', 'null', 'null', '{\"clave\" :[], \"valor\":[]}', '{\"clave\" :[], \"valor\":[]}', 19, 'TERCEROS', 105000.00, 2228.20, '2024-04-19', '2024-06-01', NULL, 1, 107228.20),
+(76, 1, 'LOTE', '933e9c5ac6fd6724d4b36d32152cc973f14dc579jpg', 'SIN VENDER', '59', 'av santa rosa#541', 'SOL', 0.00, 2, 'PARTIDA 3', NULL, NULL, '{\"clave\" :[], \"valor\":[]}', '{\"clave\" :[], \"valor\":[]}', 19, 'A.I.F', 0.00, NULL, '2024-04-21', '2024-05-24', NULL, 1, 0.00),
+(77, 1, 'LOTE', '1dbd8540b6eb7b40e376c46b6bc7b5b10ba23c2djpg', 'SIN VENDER', 'A-13', 'av los angeles 358', 'USD', 12.00, 1, 'partida nro 3', NULL, NULL, '{\"clave\":[\"\"],\"valor\":[\"\"]}', '{\"clave\":[],\"valor\":[]}', 19, 'A.I.F', 10000.00, 360.00, '2024-05-17', '2024-05-24', NULL, 1, 20360.00),
+(79, 2, 'CASA', '798ce61c45ef1b78ac640b4b962c2a891bdd769bjpg', 'SIN VENDER', '2', 'av las magnolias', 'USD', 1.00, 1, 'partida nro 3', NULL, NULL, '{\"clave\":[\"\"],\"valor\":[\"\"]}', '{\"clave\":[],\"valor\":[]}', 30, 'A.I.F', 500000.00, 360.00, '2024-05-19', '2024-05-19', NULL, 1, 500360.00),
+(80, 1, 'LOTE', '8d399badda50d7d559cf40b8f80dd3a73c0e5165jpg', 'SIN VENDER', '43', 'los angeles', 'USD', 1.00, 1, 'partida nro 3', 'null', 'null', '{\"clave\":[\"\"],\"valor\":[\"\"]}', '{\"clave\":[\"PISO PULIDO\",\"CONSTRUCCION DE VEREDAS\"],\"valor\":[\"PISO PULIDO DE 45 M2\",\"VEREDAS DE 1 METRO\"]}', 43, 'TERCEROS', 500.00, 1810.00, '2024-05-31', '2024-05-31', NULL, 1, 2310.00);
 
 --
 -- Disparadores `activos`
@@ -1945,7 +2790,8 @@ INSERT INTO `clientes` (`idcliente`, `tipo_persona`, `idpersona`, `idpersona_jur
 (30, 'JURÍDICA', NULL, 46, '2024-05-03', NULL, NULL, 1),
 (31, 'JURÍDICA', NULL, 48, '2024-05-03', NULL, NULL, 1),
 (32, 'JURÍDICA', NULL, 49, '2024-05-03', NULL, NULL, 1),
-(33, 'JURÍDICA', NULL, 51, '2024-05-03', NULL, NULL, 1);
+(33, 'JURÍDICA', NULL, 51, '2024-05-03', NULL, NULL, 1),
+(34, 'JURÍDICA', NULL, 52, '2024-05-31', NULL, NULL, 1);
 
 -- --------------------------------------------------------
 
@@ -1992,23 +2838,28 @@ CREATE TABLE `contratos` (
   `tipo_cambio` decimal(4,3) NOT NULL,
   `estado` varchar(10) NOT NULL,
   `fecha_contrato` date NOT NULL,
-  `det_contrato` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL DEFAULT '{"clave" :[""], "valor":[""]}' CHECK (json_valid(`det_contrato`)),
+  `det_contrato` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL DEFAULT '{"clave" :[], "valor":[]}' CHECK (json_valid(`det_contrato`)),
   `create_at` date NOT NULL DEFAULT curdate(),
   `update_at` date DEFAULT NULL,
   `inactive_at` date DEFAULT NULL,
-  `idusuario` int(11) NOT NULL
+  `idusuario` int(11) NOT NULL,
+  `n_expediente` varchar(10) NOT NULL,
+  `precio_venta` decimal(8,2) NOT NULL,
+  `archivo` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `contratos`
 --
 
-INSERT INTO `contratos` (`idcontrato`, `tipo_contrato`, `idseparacion`, `idrepresentante_primario`, `idrepresentante_secundario`, `idcliente`, `idconyugue`, `idactivo`, `tipo_cambio`, `estado`, `fecha_contrato`, `det_contrato`, `create_at`, `update_at`, `inactive_at`, `idusuario`) VALUES
-(1, 'VENTA DE LOTE', 1, 1, NULL, NULL, NULL, NULL, 3.500, 'VIGENTE', '2024-03-10', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '2024-04-19', NULL, NULL, 1),
-(2, 'VENTA DE LOTE', 2, 1, NULL, NULL, NULL, NULL, 3.500, 'VIGENTE', '2024-03-11', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '2024-04-19', NULL, NULL, 2),
-(3, 'VENTA DE LOTE', 3, 1, NULL, NULL, NULL, NULL, 3.500, 'VIGENTE', '2024-03-12', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '2024-04-19', NULL, NULL, 3),
-(5, 'VENTA DE LOTE', 2, 1, NULL, NULL, NULL, NULL, 3.500, 'VIGENTE', '2024-03-12', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '2024-04-19', NULL, NULL, 3),
-(6, 'VENTA DE LOTE', NULL, 1, NULL, NULL, NULL, 10, 3.500, 'VIGENTE', '2024-03-12', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '2024-04-19', NULL, NULL, 3);
+INSERT INTO `contratos` (`idcontrato`, `tipo_contrato`, `idseparacion`, `idrepresentante_primario`, `idrepresentante_secundario`, `idcliente`, `idconyugue`, `idactivo`, `tipo_cambio`, `estado`, `fecha_contrato`, `det_contrato`, `create_at`, `update_at`, `inactive_at`, `idusuario`, `n_expediente`, `precio_venta`, `archivo`) VALUES
+(1, 'VENTA DE LOTE', 1, 1, NULL, NULL, NULL, NULL, 3.500, 'VIGENTE', '2024-03-10', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '2024-04-19', NULL, NULL, 1, 'CONT-00001', 12000.00, ''),
+(2, 'VENTA DE LOTE', 2, 1, NULL, NULL, NULL, NULL, 3.500, 'VIGENTE', '2024-03-11', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '2024-04-19', NULL, NULL, 2, 'CONT-00002', 0.00, ''),
+(3, 'VENTA DE LOTE', 3, 1, NULL, NULL, NULL, NULL, 3.500, 'VIGENTE', '2024-03-12', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '2024-04-19', NULL, NULL, 3, 'CONT-00003', 0.00, ''),
+(5, 'VENTA DE LOTE', 2, 1, NULL, NULL, NULL, NULL, 3.500, 'VIGENTE', '2024-03-12', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '2024-04-19', NULL, NULL, 3, 'CONT-00004', 0.00, ''),
+(6, 'VENTA DE LOTE', NULL, 1, NULL, 5, NULL, 10, 3.500, 'VIGENTE', '2024-03-12', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '2024-04-19', NULL, NULL, 3, 'CONT-00005', 0.00, ''),
+(7, 'VENTA DE LOTE', NULL, 1, NULL, 5, NULL, 13, 3.500, 'VIGENTE', '2024-03-12', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '2024-04-19', NULL, NULL, 3, 'CONT-00006', 0.00, ''),
+(8, 'VENTA DE LOTE', NULL, 1, NULL, 26, NULL, 13, 3.500, 'VIGENTE', '2024-03-12', '{\"clave\" :[\"\"], \"valor\":[\"\"]}', '2024-04-19', NULL, NULL, 3, 'CONT-00006', 0.00, '');
 
 --
 -- Disparadores `contratos`
@@ -2043,6 +2894,95 @@ CREATE TRIGGER `trgr_contracts_add` AFTER INSERT ON `contratos` FOR EACH ROW BEG
 END
 $$
 DELIMITER ;
+DELIMITER $$
+CREATE TRIGGER `trgr_contracts_update` AFTER UPDATE ON `contratos` FOR EACH ROW BEGIN
+	DECLARE _oldIdactivo INT;
+	DECLARE _newIdactivo INT;
+
+	-- SI EL CAMPO INACTIVO ESTÁ VACÍO
+	IF NEW.inactive_at IS NULL THEN
+
+		IF NEW.idseparacion IS NOT NULL AND NEW.idseparacion != OLD.idseparacion THEN
+
+			SET _oldIdactivo = (
+				SELECT idactivo FROM separaciones
+				WHERE idseparacion = OLD.idseparacion
+			);
+
+			SET _newIdactivo = (
+				SELECT idactivo FROM separaciones
+				WHERE idseparacion = NEW.idseparacion
+			);
+
+			UPDATE activos
+				SET
+					estado = "VENDIDO",
+					update_at = CURDATE(),
+					idusuario = NEW.idusuario
+				WHERE
+					idactivo = _newIdactivo;
+
+			UPDATE activos
+				SET
+					estado = "SIN VENDER",
+					update_at = CURDATE(),
+					idusuario = NEW.idusuario
+				WHERE
+					idactivo = _oldIdactivo;
+
+		END IF;
+
+		IF NEW.idactivo IS NOT NULL AND NEW.idactivo != OLD.idactivo THEN
+
+			UPDATE activos
+				SET
+					estado = "VENDIDO",
+					update_at = CURDATE(),
+					idusuario = NEW.idusuario
+				WHERE
+					idactivo = NEW.idactivo;
+
+			UPDATE activos
+				SET
+					estado = "SIN VENDER",
+					update_at = CURDATE(),
+					idusuario = NEW.idusuario
+				WHERE
+					idactivo = OLD.idactivo;
+		END IF;
+	-- SI EL CAMPO INACTIVO NO ESTÁ VACÍO
+	ELSE
+
+		IF NEW.idseparacion IS NOT NULL THEN
+
+			SET _newIdactivo = (
+				SELECT idactivo FROM separaciones
+				WHERE idseparacion = NEW.idseparacion
+			);
+			
+			UPDATE activos
+				SET
+					estado = "SIN VENDER",
+					update_at = CURDATE(),
+					idusuario = NEW.idusuario
+				WHERE
+					idactivo = _newIdactivo;
+		END IF;
+
+		IF NEW.idactivo IS NOT NULL THEN
+			
+			UPDATE activos
+				SET
+					estado = "SIN VENDER",
+					update_at = CURDATE(),
+					idusuario = NEW.idusuario
+				WHERE
+					idactivo = NEW.idactivo;
+		END IF;
+	END IF;
+END
+$$
+DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -2055,10 +2995,7 @@ CREATE TABLE `cuotas` (
   `idcontrato` int(11) NOT NULL,
   `monto_cuota` decimal(8,2) NOT NULL,
   `fecha_vencimiento` date NOT NULL,
-  `fecha_pago` date DEFAULT NULL,
-  `detalles` varchar(100) DEFAULT NULL,
-  `tipo_pago` varchar(20) NOT NULL,
-  `entidad_bancaria` varchar(20) NOT NULL,
+  `estado` varchar(20) NOT NULL DEFAULT 'POR CANCELAR',
   `create_at` date NOT NULL DEFAULT curdate(),
   `update_at` date DEFAULT NULL,
   `inactive_at` date DEFAULT NULL,
@@ -2069,11 +3006,245 @@ CREATE TABLE `cuotas` (
 -- Volcado de datos para la tabla `cuotas`
 --
 
-INSERT INTO `cuotas` (`idcuota`, `idcontrato`, `monto_cuota`, `fecha_vencimiento`, `fecha_pago`, `detalles`, `tipo_pago`, `entidad_bancaria`, `create_at`, `update_at`, `inactive_at`, `idusuario`) VALUES
-(1, 1, 500.00, '2024-03-10', NULL, NULL, 'TRANSFERENCIA', 'BCP', '2024-04-19', NULL, NULL, 7),
-(2, 1, 500.00, '2024-04-10', NULL, NULL, 'TRANSFERENCIA', 'BCP', '2024-04-19', NULL, NULL, 7),
-(3, 2, 500.00, '2024-03-18', NULL, NULL, 'TRANSFERENCIA', 'BCP', '2024-04-19', NULL, NULL, 6),
-(4, 2, 500.00, '2024-04-13', NULL, NULL, 'TRANSFERENCIA', 'BCP', '2024-04-19', NULL, NULL, 6);
+INSERT INTO `cuotas` (`idcuota`, `idcontrato`, `monto_cuota`, `fecha_vencimiento`, `estado`, `create_at`, `update_at`, `inactive_at`, `idusuario`) VALUES
+(1, 1, 500.00, '2024-04-30', 'POR CANCELAR', '2024-05-30', '2024-05-30', '2024-05-31', 1),
+(2, 1, 500.00, '2024-03-31', 'VENCIDO', '2024-05-30', NULL, '2024-05-31', 1),
+(3, 1, 500.00, '2024-03-01', 'VENCIDO', '2024-05-30', NULL, '2024-05-31', 1),
+(4, 1, 500.00, '2024-01-31', 'VENCIDO', '2024-05-30', NULL, '2024-05-31', 1),
+(5, 1, 500.00, '2024-01-01', 'VENCIDO', '2024-05-30', NULL, '2024-05-31', 1),
+(6, 1, 500.00, '2023-12-02', 'VENCIDO', '2024-05-30', NULL, '2024-05-31', 1),
+(7, 1, 500.00, '2023-11-02', 'POR CANCELAR', '2024-05-30', '2024-06-01', '2024-06-01', 1),
+(8, 1, 500.00, '2023-10-03', 'POR CANCELAR', '2024-05-30', '2024-06-01', '2024-06-01', 1),
+(9, 1, 500.00, '2023-09-03', 'POR CANCELAR', '2024-05-30', '2024-05-31', '2024-05-31', 1),
+(10, 1, 500.00, '2023-08-04', 'POR CANCELAR', '2024-05-30', '2024-05-31', '2024-05-31', 1),
+(11, 1, 500.00, '2023-07-05', 'POR CANCELAR', '2024-05-30', '2024-05-30', '2024-05-31', 1),
+(12, 1, 500.00, '2023-06-05', 'POR CANCELAR', '2024-05-30', '2024-05-30', '2024-05-31', 1),
+(13, 1, 500.00, '2023-05-06', 'POR CANCELAR', '2024-05-30', '2024-05-30', '2024-05-31', 1),
+(14, 1, 500.00, '2023-04-06', 'POR CANCELAR', '2024-05-30', '2024-05-30', '2024-05-31', 1),
+(15, 1, 500.00, '2023-03-07', 'POR CANCELAR', '2024-05-30', '2024-05-30', '2024-05-31', 1),
+(16, 1, 500.00, '2024-06-29', 'POR CANCELAR', '2024-05-30', NULL, '2024-05-31', 1),
+(17, 1, 500.00, '2024-07-29', 'POR CANCELAR', '2024-05-30', NULL, '2024-05-31', 1),
+(18, 1, 500.00, '2024-08-28', 'POR CANCELAR', '2024-05-30', NULL, '2024-05-31', 1),
+(19, 1, 500.00, '2024-09-27', 'POR CANCELAR', '2024-05-30', NULL, '2024-05-31', 1),
+(20, 1, 500.00, '2024-10-27', 'POR CANCELAR', '2024-05-30', NULL, '2024-05-31', 1),
+(21, 1, 500.00, '2024-11-26', 'POR CANCELAR', '2024-05-30', NULL, '2024-05-31', 1),
+(22, 1, 500.00, '2024-12-26', 'POR CANCELAR', '2024-05-30', NULL, '2024-05-31', 1),
+(23, 1, 500.00, '2025-01-25', 'POR CANCELAR', '2024-05-30', NULL, '2024-05-31', 1),
+(24, 1, 500.00, '2025-02-24', 'POR CANCELAR', '2024-05-30', NULL, '2024-05-31', 1),
+(25, 1, 500.00, '2025-03-26', 'POR CANCELAR', '2024-05-30', NULL, '2024-05-31', 1),
+(26, 1, 500.00, '2025-04-25', 'POR CANCELAR', '2024-05-30', NULL, '2024-05-31', 1),
+(27, 1, 500.00, '2025-05-25', 'POR CANCELAR', '2024-05-30', NULL, '2024-05-31', 1),
+(28, 1, 500.00, '2025-06-24', 'POR CANCELAR', '2024-05-30', NULL, '2024-05-31', 1),
+(29, 1, 500.00, '2025-07-24', 'POR CANCELAR', '2024-05-30', NULL, '2024-05-31', 1),
+(30, 1, 500.00, '2025-08-23', 'POR CANCELAR', '2024-05-30', NULL, '2024-05-31', 1),
+(131, 1, 220.00, '2024-06-08', 'POR CANCELAR', '2024-05-31', NULL, '2024-05-31', 1),
+(132, 1, 220.00, '2024-07-08', 'POR CANCELAR', '2024-05-31', NULL, '2024-05-31', 1),
+(133, 1, 220.00, '2024-08-08', 'POR CANCELAR', '2024-05-31', NULL, '2024-05-31', 1),
+(134, 1, 220.00, '2024-09-08', 'POR CANCELAR', '2024-05-31', NULL, '2024-05-31', 1),
+(135, 1, 220.00, '2024-10-08', 'POR CANCELAR', '2024-05-31', NULL, '2024-05-31', 1),
+(136, 1, 220.00, '2024-11-08', 'POR CANCELAR', '2024-05-31', NULL, '2024-05-31', 1),
+(137, 1, 220.00, '2024-12-08', 'POR CANCELAR', '2024-05-31', NULL, '2024-05-31', 1),
+(138, 1, 220.00, '2025-01-08', 'POR CANCELAR', '2024-05-31', NULL, '2024-05-31', 1),
+(139, 1, 220.00, '2025-02-08', 'POR CANCELAR', '2024-05-31', NULL, '2024-05-31', 1),
+(140, 1, 220.00, '2025-03-08', 'POR CANCELAR', '2024-05-31', NULL, '2024-05-31', 1),
+(141, 1, 220.00, '2025-04-08', 'POR CANCELAR', '2024-05-31', NULL, '2024-05-31', 1),
+(142, 1, 220.00, '2025-05-08', 'POR CANCELAR', '2024-05-31', NULL, '2024-05-31', 1),
+(143, 1, 220.00, '2025-06-08', 'POR CANCELAR', '2024-05-31', NULL, '2024-05-31', 1),
+(144, 1, 220.00, '2025-07-08', 'POR CANCELAR', '2024-05-31', NULL, '2024-05-31', 1),
+(145, 1, 220.00, '2025-08-08', 'POR CANCELAR', '2024-05-31', NULL, '2024-05-31', 1),
+(146, 1, 220.00, '2025-09-08', 'POR CANCELAR', '2024-05-31', NULL, '2024-05-31', 1),
+(147, 1, 220.00, '2025-10-08', 'POR CANCELAR', '2024-05-31', NULL, '2024-05-31', 1),
+(148, 1, 220.00, '2025-11-08', 'POR CANCELAR', '2024-05-31', NULL, '2024-05-31', 1),
+(149, 1, 220.00, '2025-12-08', 'POR CANCELAR', '2024-05-31', NULL, '2024-05-31', 1),
+(150, 1, 220.00, '2026-01-08', 'POR CANCELAR', '2024-05-31', NULL, '2024-05-31', 1),
+(151, 1, 220.00, '2026-02-08', 'POR CANCELAR', '2024-05-31', NULL, '2024-05-31', 1),
+(152, 1, 220.00, '2026-03-08', 'POR CANCELAR', '2024-05-31', NULL, '2024-05-31', 1),
+(153, 1, 220.00, '2026-04-08', 'POR CANCELAR', '2024-05-31', NULL, '2024-05-31', 1),
+(154, 1, 220.00, '2026-05-08', 'POR CANCELAR', '2024-05-31', NULL, '2024-05-31', 1),
+(155, 1, 220.00, '2026-06-08', 'POR CANCELAR', '2024-05-31', NULL, '2024-05-31', 1),
+(156, 1, 220.00, '2026-07-08', 'POR CANCELAR', '2024-05-31', NULL, '2024-05-31', 1),
+(157, 1, 220.00, '2026-08-08', 'POR CANCELAR', '2024-05-31', NULL, '2024-05-31', 1),
+(158, 1, 220.00, '2026-09-08', 'POR CANCELAR', '2024-05-31', NULL, '2024-05-31', 1),
+(159, 1, 220.00, '2026-10-08', 'POR CANCELAR', '2024-05-31', NULL, '2024-05-31', 1),
+(160, 1, 220.00, '2026-11-08', 'POR CANCELAR', '2024-05-31', NULL, '2024-05-31', 1),
+(161, 1, 220.00, '2026-12-08', 'POR CANCELAR', '2024-05-31', NULL, '2024-05-31', 1),
+(162, 1, 220.00, '2027-01-08', 'POR CANCELAR', '2024-05-31', NULL, '2024-05-31', 1),
+(163, 1, 220.00, '2027-02-08', 'POR CANCELAR', '2024-05-31', NULL, '2024-05-31', 1),
+(164, 1, 220.00, '2027-03-08', 'POR CANCELAR', '2024-05-31', NULL, '2024-05-31', 1),
+(165, 1, 220.00, '2027-04-08', 'POR CANCELAR', '2024-05-31', NULL, '2024-05-31', 1),
+(166, 1, 220.00, '2027-05-08', 'POR CANCELAR', '2024-05-31', NULL, '2024-05-31', 1),
+(167, 1, 220.00, '2027-06-08', 'POR CANCELAR', '2024-05-31', NULL, '2024-05-31', 1),
+(168, 1, 220.00, '2027-07-08', 'POR CANCELAR', '2024-05-31', NULL, '2024-05-31', 1),
+(169, 1, 220.00, '2027-08-08', 'POR CANCELAR', '2024-05-31', NULL, '2024-05-31', 1),
+(170, 1, 220.00, '2027-09-08', 'POR CANCELAR', '2024-05-31', NULL, '2024-05-31', 1),
+(171, 1, 220.00, '2027-10-08', 'POR CANCELAR', '2024-05-31', NULL, '2024-05-31', 1),
+(172, 1, 220.00, '2027-11-08', 'POR CANCELAR', '2024-05-31', NULL, '2024-05-31', 1),
+(173, 1, 220.00, '2027-12-08', 'POR CANCELAR', '2024-05-31', NULL, '2024-05-31', 1),
+(174, 1, 220.00, '2028-01-08', 'POR CANCELAR', '2024-05-31', NULL, '2024-05-31', 1),
+(175, 1, 220.00, '2028-02-08', 'POR CANCELAR', '2024-05-31', NULL, '2024-05-31', 1),
+(176, 1, 220.00, '2028-03-08', 'POR CANCELAR', '2024-05-31', NULL, '2024-05-31', 1),
+(177, 1, 220.00, '2028-04-08', 'POR CANCELAR', '2024-05-31', NULL, '2024-05-31', 1),
+(178, 1, 220.00, '2028-05-08', 'POR CANCELAR', '2024-05-31', NULL, '2024-05-31', 1),
+(179, 1, 220.00, '2028-06-08', 'POR CANCELAR', '2024-05-31', NULL, '2024-05-31', 1),
+(180, 1, 220.00, '2028-07-08', 'POR CANCELAR', '2024-05-31', NULL, '2024-05-31', 1),
+(181, 1, 2200.00, '2024-06-09', 'POR CANCELAR', '2024-05-31', NULL, '2024-05-31', 1),
+(182, 1, 2200.00, '2024-07-09', 'POR CANCELAR', '2024-05-31', NULL, '2024-05-31', 1),
+(183, 1, 2200.00, '2024-08-09', 'POR CANCELAR', '2024-05-31', NULL, '2024-05-31', 1),
+(184, 1, 2200.00, '2024-09-09', 'POR CANCELAR', '2024-05-31', NULL, '2024-05-31', 1),
+(185, 1, 2200.00, '2024-10-09', 'POR CANCELAR', '2024-05-31', NULL, '2024-05-31', 1),
+(186, 1, 3666.67, '2024-06-30', 'POR CANCELAR', '2024-05-31', NULL, '2024-06-01', 1),
+(187, 1, 3666.67, '2024-07-30', 'POR CANCELAR', '2024-05-31', NULL, '2024-06-01', 1),
+(188, 1, 3666.67, '2024-08-30', 'POR CANCELAR', '2024-05-31', NULL, '2024-06-01', 1),
+(189, 1, 550.00, '2024-07-01', 'POR CANCELAR', '2024-06-01', NULL, '2024-06-01', 1),
+(190, 1, 550.00, '2024-08-01', 'POR CANCELAR', '2024-06-01', NULL, '2024-06-01', 1),
+(191, 1, 550.00, '2024-09-01', 'POR CANCELAR', '2024-06-01', NULL, '2024-06-01', 1),
+(192, 1, 550.00, '2024-10-01', 'POR CANCELAR', '2024-06-01', NULL, '2024-06-01', 1),
+(193, 1, 550.00, '2024-11-01', 'POR CANCELAR', '2024-06-01', NULL, '2024-06-01', 1),
+(194, 1, 550.00, '2024-12-01', 'POR CANCELAR', '2024-06-01', NULL, '2024-06-01', 1),
+(195, 1, 550.00, '2025-01-01', 'POR CANCELAR', '2024-06-01', NULL, '2024-06-01', 1),
+(196, 1, 550.00, '2025-02-01', 'POR CANCELAR', '2024-06-01', NULL, '2024-06-01', 1),
+(197, 1, 550.00, '2025-03-01', 'POR CANCELAR', '2024-06-01', NULL, '2024-06-01', 1),
+(198, 1, 550.00, '2025-04-01', 'POR CANCELAR', '2024-06-01', NULL, '2024-06-01', 1),
+(199, 1, 550.00, '2025-05-01', 'POR CANCELAR', '2024-06-01', NULL, '2024-06-01', 1),
+(200, 1, 550.00, '2025-06-01', 'POR CANCELAR', '2024-06-01', NULL, '2024-06-01', 1),
+(201, 1, 550.00, '2025-07-01', 'POR CANCELAR', '2024-06-01', NULL, '2024-06-01', 1),
+(202, 1, 550.00, '2025-08-01', 'POR CANCELAR', '2024-06-01', NULL, '2024-06-01', 1),
+(203, 1, 550.00, '2025-09-01', 'POR CANCELAR', '2024-06-01', NULL, '2024-06-01', 1),
+(204, 1, 550.00, '2025-10-01', 'POR CANCELAR', '2024-06-01', NULL, '2024-06-01', 1),
+(205, 1, 550.00, '2025-11-01', 'POR CANCELAR', '2024-06-01', NULL, '2024-06-01', 1),
+(206, 1, 550.00, '2025-12-01', 'POR CANCELAR', '2024-06-01', NULL, '2024-06-01', 1),
+(207, 1, 550.00, '2026-01-01', 'POR CANCELAR', '2024-06-01', NULL, '2024-06-01', 1),
+(208, 1, 550.00, '2026-02-01', 'POR CANCELAR', '2024-06-01', NULL, '2024-06-01', 1),
+(209, 1, 600.00, '2024-07-13', 'CANCELADO', '2024-06-01', '2024-06-01', NULL, 1),
+(210, 1, 600.00, '2024-08-13', 'POR CANCELAR', '2024-06-01', NULL, '2024-06-01', 1),
+(211, 1, 600.00, '2024-09-13', 'POR CANCELAR', '2024-06-01', NULL, '2024-06-01', 1),
+(212, 1, 600.00, '2024-10-13', 'POR CANCELAR', '2024-06-01', NULL, '2024-06-01', 1),
+(213, 1, 600.00, '2024-11-13', 'POR CANCELAR', '2024-06-01', NULL, '2024-06-01', 1),
+(214, 1, 600.00, '2024-12-13', 'POR CANCELAR', '2024-06-01', NULL, '2024-06-01', 1),
+(215, 1, 600.00, '2025-01-13', 'POR CANCELAR', '2024-06-01', NULL, '2024-06-01', 1),
+(216, 1, 600.00, '2025-02-13', 'POR CANCELAR', '2024-06-01', NULL, '2024-06-01', 1),
+(217, 1, 600.00, '2025-03-13', 'POR CANCELAR', '2024-06-01', NULL, '2024-06-01', 1),
+(218, 1, 600.00, '2025-04-13', 'POR CANCELAR', '2024-06-01', NULL, '2024-06-01', 1),
+(219, 1, 600.00, '2025-05-13', 'POR CANCELAR', '2024-06-01', NULL, '2024-06-01', 1),
+(220, 1, 600.00, '2025-06-13', 'POR CANCELAR', '2024-06-01', NULL, '2024-06-01', 1),
+(221, 1, 600.00, '2025-07-13', 'POR CANCELAR', '2024-06-01', NULL, '2024-06-01', 1),
+(222, 1, 600.00, '2025-08-13', 'POR CANCELAR', '2024-06-01', NULL, '2024-06-01', 1),
+(223, 1, 600.00, '2025-09-13', 'POR CANCELAR', '2024-06-01', NULL, '2024-06-01', 1),
+(224, 1, 600.00, '2025-10-13', 'POR CANCELAR', '2024-06-01', NULL, '2024-06-01', 1),
+(225, 1, 600.00, '2025-11-13', 'POR CANCELAR', '2024-06-01', NULL, '2024-06-01', 1),
+(226, 1, 600.00, '2025-12-13', 'POR CANCELAR', '2024-06-01', NULL, '2024-06-01', 1),
+(227, 1, 600.00, '2026-01-13', 'POR CANCELAR', '2024-06-01', NULL, '2024-06-01', 1),
+(228, 1, 600.00, '2026-02-13', 'POR CANCELAR', '2024-06-01', NULL, '2024-06-01', 1),
+(229, 1, 380.00, '2022-11-07', 'VENCIDO', '2024-06-01', NULL, '2024-06-01', 1),
+(230, 1, 380.00, '2022-12-07', 'VENCIDO', '2024-06-01', NULL, '2024-06-01', 1),
+(231, 1, 380.00, '2023-01-07', 'VENCIDO', '2024-06-01', NULL, '2024-06-01', 1),
+(232, 1, 380.00, '2023-02-07', 'VENCIDO', '2024-06-01', NULL, '2024-06-01', 1),
+(233, 1, 380.00, '2023-03-07', 'VENCIDO', '2024-06-01', NULL, '2024-06-01', 1),
+(234, 1, 380.00, '2023-04-07', 'VENCIDO', '2024-06-01', NULL, '2024-06-01', 1),
+(235, 1, 380.00, '2023-05-07', 'VENCIDO', '2024-06-01', NULL, '2024-06-01', 1),
+(236, 1, 380.00, '2023-06-07', 'VENCIDO', '2024-06-01', NULL, '2024-06-01', 1),
+(237, 1, 380.00, '2023-07-07', 'VENCIDO', '2024-06-01', NULL, '2024-06-01', 1),
+(238, 1, 380.00, '2023-08-07', 'VENCIDO', '2024-06-01', NULL, '2024-06-01', 1),
+(239, 1, 380.00, '2023-09-07', 'VENCIDO', '2024-06-01', NULL, '2024-06-01', 1),
+(240, 1, 380.00, '2023-10-07', 'VENCIDO', '2024-06-01', NULL, '2024-06-01', 1),
+(241, 1, 380.00, '2023-11-07', 'VENCIDO', '2024-06-01', NULL, '2024-06-01', 1),
+(242, 1, 380.00, '2023-12-07', 'VENCIDO', '2024-06-01', NULL, '2024-06-01', 1),
+(243, 1, 380.00, '2024-01-07', 'VENCIDO', '2024-06-01', NULL, '2024-06-01', 1),
+(244, 1, 380.00, '2024-02-07', 'VENCIDO', '2024-06-01', NULL, '2024-06-01', 1),
+(245, 1, 380.00, '2024-03-07', 'VENCIDO', '2024-06-01', NULL, '2024-06-01', 1),
+(246, 1, 380.00, '2024-04-07', 'VENCIDO', '2024-06-01', NULL, '2024-06-01', 1),
+(247, 1, 380.00, '2024-05-07', 'VENCIDO', '2024-06-01', NULL, '2024-06-01', 1),
+(248, 1, 380.00, '2024-06-07', 'POR CANCELAR', '2024-06-01', NULL, '2024-06-01', 1),
+(249, 1, 380.00, '2024-07-07', 'POR CANCELAR', '2024-06-01', NULL, '2024-06-01', 1),
+(250, 1, 380.00, '2024-08-07', 'POR CANCELAR', '2024-06-01', NULL, '2024-06-01', 1),
+(251, 1, 380.00, '2024-09-07', 'POR CANCELAR', '2024-06-01', NULL, '2024-06-01', 1),
+(252, 1, 380.00, '2024-10-07', 'POR CANCELAR', '2024-06-01', NULL, '2024-06-01', 1),
+(253, 1, 380.00, '2024-11-07', 'POR CANCELAR', '2024-06-01', NULL, '2024-06-01', 1),
+(254, 1, 380.00, '2024-12-07', 'POR CANCELAR', '2024-06-01', NULL, '2024-06-01', 1),
+(255, 1, 380.00, '2025-01-07', 'POR CANCELAR', '2024-06-01', NULL, '2024-06-01', 1),
+(256, 1, 380.00, '2025-02-07', 'POR CANCELAR', '2024-06-01', NULL, '2024-06-01', 1),
+(257, 1, 380.00, '2025-03-07', 'POR CANCELAR', '2024-06-01', NULL, '2024-06-01', 1),
+(258, 1, 380.00, '2025-04-07', 'POR CANCELAR', '2024-06-01', NULL, '2024-06-01', 1),
+(259, 1, 570.00, '2024-07-11', 'POR CANCELAR', '2024-06-01', NULL, '2024-06-01', 1),
+(260, 1, 570.00, '2024-08-11', 'POR CANCELAR', '2024-06-01', NULL, '2024-06-01', 1),
+(261, 1, 570.00, '2024-09-11', 'POR CANCELAR', '2024-06-01', NULL, '2024-06-01', 1),
+(262, 1, 570.00, '2024-10-11', 'POR CANCELAR', '2024-06-01', NULL, '2024-06-01', 1),
+(263, 1, 570.00, '2024-11-11', 'POR CANCELAR', '2024-06-01', NULL, '2024-06-01', 1),
+(264, 1, 570.00, '2024-12-11', 'POR CANCELAR', '2024-06-01', NULL, '2024-06-01', 1),
+(265, 1, 570.00, '2025-01-11', 'POR CANCELAR', '2024-06-01', NULL, '2024-06-01', 1),
+(266, 1, 570.00, '2025-02-11', 'POR CANCELAR', '2024-06-01', NULL, '2024-06-01', 1),
+(267, 1, 570.00, '2025-03-11', 'POR CANCELAR', '2024-06-01', NULL, '2024-06-01', 1),
+(268, 1, 570.00, '2025-04-11', 'POR CANCELAR', '2024-06-01', NULL, '2024-06-01', 1),
+(269, 1, 570.00, '2025-05-11', 'POR CANCELAR', '2024-06-01', NULL, '2024-06-01', 1),
+(270, 1, 570.00, '2025-06-11', 'POR CANCELAR', '2024-06-01', NULL, '2024-06-01', 1),
+(271, 1, 570.00, '2025-07-11', 'POR CANCELAR', '2024-06-01', NULL, '2024-06-01', 1),
+(272, 1, 570.00, '2025-08-11', 'POR CANCELAR', '2024-06-01', NULL, '2024-06-01', 1),
+(273, 1, 570.00, '2025-09-11', 'POR CANCELAR', '2024-06-01', NULL, '2024-06-01', 1),
+(274, 1, 570.00, '2025-10-11', 'POR CANCELAR', '2024-06-01', NULL, '2024-06-01', 1),
+(275, 1, 570.00, '2025-11-11', 'POR CANCELAR', '2024-06-01', NULL, '2024-06-01', 1),
+(276, 1, 570.00, '2025-12-11', 'POR CANCELAR', '2024-06-01', NULL, '2024-06-01', 1),
+(277, 1, 570.00, '2026-01-11', 'POR CANCELAR', '2024-06-01', NULL, '2024-06-01', 1),
+(278, 1, 570.00, '2026-02-11', 'POR CANCELAR', '2024-06-01', NULL, '2024-06-01', 1),
+(279, 1, 570.00, '2024-07-05', 'POR CANCELAR', '2024-06-01', NULL, '2024-06-01', 1),
+(280, 1, 570.00, '2024-08-05', 'POR CANCELAR', '2024-06-01', NULL, '2024-06-01', 1),
+(281, 1, 570.00, '2024-09-05', 'POR CANCELAR', '2024-06-01', NULL, '2024-06-01', 1),
+(282, 1, 570.00, '2024-10-05', 'POR CANCELAR', '2024-06-01', NULL, '2024-06-01', 1),
+(283, 1, 570.00, '2024-11-05', 'POR CANCELAR', '2024-06-01', NULL, '2024-06-01', 1),
+(284, 1, 570.00, '2024-12-05', 'POR CANCELAR', '2024-06-01', NULL, '2024-06-01', 1),
+(285, 1, 570.00, '2025-01-05', 'POR CANCELAR', '2024-06-01', NULL, '2024-06-01', 1),
+(286, 1, 570.00, '2025-02-05', 'POR CANCELAR', '2024-06-01', NULL, '2024-06-01', 1),
+(287, 1, 570.00, '2025-03-05', 'POR CANCELAR', '2024-06-01', NULL, '2024-06-01', 1),
+(288, 1, 570.00, '2025-04-05', 'POR CANCELAR', '2024-06-01', NULL, '2024-06-01', 1),
+(289, 1, 570.00, '2025-05-05', 'POR CANCELAR', '2024-06-01', NULL, '2024-06-01', 1),
+(290, 1, 570.00, '2025-06-05', 'POR CANCELAR', '2024-06-01', NULL, '2024-06-01', 1),
+(291, 1, 570.00, '2025-07-05', 'POR CANCELAR', '2024-06-01', NULL, '2024-06-01', 1),
+(292, 1, 570.00, '2025-08-05', 'POR CANCELAR', '2024-06-01', NULL, '2024-06-01', 1),
+(293, 1, 570.00, '2025-09-05', 'POR CANCELAR', '2024-06-01', NULL, '2024-06-01', 1),
+(294, 1, 570.00, '2025-10-05', 'POR CANCELAR', '2024-06-01', NULL, '2024-06-01', 1),
+(295, 1, 570.00, '2025-11-05', 'POR CANCELAR', '2024-06-01', NULL, '2024-06-01', 1),
+(296, 1, 570.00, '2025-12-05', 'POR CANCELAR', '2024-06-01', NULL, '2024-06-01', 1),
+(297, 1, 570.00, '2026-01-05', 'POR CANCELAR', '2024-06-01', NULL, '2024-06-01', 1),
+(298, 1, 570.00, '2026-02-05', 'POR CANCELAR', '2024-06-01', NULL, '2024-06-01', 1),
+(299, 1, 570.00, '2024-07-14', 'POR CANCELAR', '2024-06-01', NULL, '2024-06-01', 1),
+(300, 1, 570.00, '2024-08-14', 'POR CANCELAR', '2024-06-01', NULL, '2024-06-01', 1),
+(301, 1, 570.00, '2024-09-14', 'POR CANCELAR', '2024-06-01', NULL, '2024-06-01', 1),
+(302, 1, 570.00, '2024-10-14', 'POR CANCELAR', '2024-06-01', NULL, '2024-06-01', 1),
+(303, 1, 570.00, '2024-11-14', 'POR CANCELAR', '2024-06-01', NULL, '2024-06-01', 1),
+(304, 1, 570.00, '2024-12-14', 'POR CANCELAR', '2024-06-01', NULL, '2024-06-01', 1),
+(305, 1, 570.00, '2025-01-14', 'POR CANCELAR', '2024-06-01', NULL, '2024-06-01', 1),
+(306, 1, 570.00, '2025-02-14', 'POR CANCELAR', '2024-06-01', NULL, '2024-06-01', 1),
+(307, 1, 570.00, '2025-03-14', 'POR CANCELAR', '2024-06-01', NULL, '2024-06-01', 1),
+(308, 1, 570.00, '2025-04-14', 'POR CANCELAR', '2024-06-01', NULL, '2024-06-01', 1),
+(309, 1, 570.00, '2025-05-14', 'POR CANCELAR', '2024-06-01', NULL, '2024-06-01', 1),
+(310, 1, 570.00, '2025-06-14', 'POR CANCELAR', '2024-06-01', NULL, '2024-06-01', 1),
+(311, 1, 570.00, '2025-07-14', 'POR CANCELAR', '2024-06-01', NULL, '2024-06-01', 1),
+(312, 1, 570.00, '2025-08-14', 'POR CANCELAR', '2024-06-01', NULL, '2024-06-01', 1),
+(313, 1, 570.00, '2025-09-14', 'POR CANCELAR', '2024-06-01', NULL, '2024-06-01', 1),
+(314, 1, 570.00, '2025-10-14', 'POR CANCELAR', '2024-06-01', NULL, '2024-06-01', 1),
+(315, 1, 570.00, '2025-11-14', 'POR CANCELAR', '2024-06-01', NULL, '2024-06-01', 1),
+(316, 1, 570.00, '2025-12-14', 'POR CANCELAR', '2024-06-01', NULL, '2024-06-01', 1),
+(317, 1, 570.00, '2026-01-14', 'POR CANCELAR', '2024-06-01', NULL, '2024-06-01', 1),
+(318, 1, 570.00, '2026-02-14', 'POR CANCELAR', '2024-06-01', NULL, '2024-06-01', 1),
+(319, 1, 570.00, '2024-07-07', 'POR CANCELAR', '2024-06-01', NULL, NULL, 1),
+(320, 1, 570.00, '2024-08-07', 'POR CANCELAR', '2024-06-01', NULL, NULL, 1),
+(321, 1, 570.00, '2024-09-07', 'POR CANCELAR', '2024-06-01', NULL, NULL, 1),
+(322, 1, 570.00, '2024-10-07', 'POR CANCELAR', '2024-06-01', NULL, NULL, 1),
+(323, 1, 570.00, '2024-11-07', 'POR CANCELAR', '2024-06-01', NULL, NULL, 1),
+(324, 1, 570.00, '2024-12-07', 'POR CANCELAR', '2024-06-01', NULL, NULL, 1),
+(325, 1, 570.00, '2025-01-07', 'POR CANCELAR', '2024-06-01', NULL, NULL, 1),
+(326, 1, 570.00, '2025-02-07', 'POR CANCELAR', '2024-06-01', NULL, NULL, 1),
+(327, 1, 570.00, '2025-03-07', 'POR CANCELAR', '2024-06-01', NULL, NULL, 1),
+(328, 1, 570.00, '2025-04-07', 'POR CANCELAR', '2024-06-01', NULL, NULL, 1),
+(329, 1, 570.00, '2025-05-07', 'POR CANCELAR', '2024-06-01', NULL, NULL, 1),
+(330, 1, 570.00, '2025-06-07', 'POR CANCELAR', '2024-06-01', NULL, NULL, 1),
+(331, 1, 570.00, '2025-07-07', 'POR CANCELAR', '2024-06-01', NULL, NULL, 1),
+(332, 1, 570.00, '2025-08-07', 'POR CANCELAR', '2024-06-01', NULL, NULL, 1),
+(333, 1, 570.00, '2025-09-07', 'POR CANCELAR', '2024-06-01', NULL, NULL, 1),
+(334, 1, 570.00, '2025-10-07', 'POR CANCELAR', '2024-06-01', NULL, NULL, 1),
+(335, 1, 570.00, '2025-11-07', 'POR CANCELAR', '2024-06-01', NULL, NULL, 1),
+(336, 1, 570.00, '2025-12-07', 'POR CANCELAR', '2024-06-01', NULL, NULL, 1),
+(337, 1, 570.00, '2026-01-07', 'POR CANCELAR', '2024-06-01', NULL, NULL, 1),
+(338, 1, 570.00, '2026-02-07', 'POR CANCELAR', '2024-06-01', NULL, NULL, 1);
 
 -- --------------------------------------------------------
 
@@ -2159,6 +3330,14 @@ CREATE TABLE `detalles_contratos` (
   `inactive_at` date DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Volcado de datos para la tabla `detalles_contratos`
+--
+
+INSERT INTO `detalles_contratos` (`iddetalle_contrato`, `idrepresentante`, `idcontrato`, `create_at`, `update_at`, `inactive_at`) VALUES
+(1, 114, 8, '2024-06-02', NULL, NULL),
+(2, 115, 8, '2024-06-02', NULL, NULL);
+
 -- --------------------------------------------------------
 
 --
@@ -2195,7 +3374,68 @@ INSERT INTO `detalle_costos` (`iddetalle_costo`, `idpresupuesto`, `idsubcategori
 (9, 15, 8, 48, '3M // Rollo de Cinta aislante // unidad', 1, 55.00, '2024-05-17', NULL, NULL, 1),
 (10, 15, 22, NULL, 'IMPUESTOS', 1, 360.00, '2024-05-17', NULL, NULL, 1),
 (11, 15, 19, NULL, 'HABILITACIÓN DE TERRENO', 1, 270.00, '2024-05-17', NULL, NULL, 1),
-(12, 12, 21, NULL, 'PAGO POR FIRMAS', 1, 580.00, '2024-05-19', NULL, NULL, 1);
+(12, 12, 21, NULL, 'PAGO POR FIRMAS', 1, 580.00, '2024-05-19', NULL, NULL, 1),
+(13, 37, 2, NULL, 'Acindar // Bolsa de Arena fina // metro lineal', 12, 94.40, '2024-05-24', '2024-05-31', NULL, 1),
+(14, 19, 8, 71, 'Pavco // Registro roscado de 4\" // tonelada métrica', 3, 13.00, '2024-05-24', NULL, NULL, 1),
+(15, 19, 21, NULL, 'Pago por firmas', 2, 3.60, '2024-05-24', NULL, NULL, 1),
+(16, 19, 10, NULL, 'TARRAJEO', 1, 380.00, '2024-05-24', NULL, NULL, 1),
+(17, 19, 19, NULL, 'habilitación de terreno', 1, 600.00, '2024-05-24', NULL, NULL, 1),
+(18, 19, 6, 61, 'FV // Bolsa de Fragua para cerámica // paquete', 20, 9.60, '2024-05-24', NULL, NULL, 1),
+(19, 19, 6, 46, 'Majestad // Gallón de Pintura Látex // ml', 10, 65.00, '2024-05-24', NULL, NULL, 1),
+(20, 43, 3, NULL, 'LADRILLOS PANDERETA', 30, 60.00, '2024-05-31', NULL, NULL, 1),
+(21, 43, 2, 70, 'Tigre // Caja eléctrica octogonal // tonelada métrica', 5, 2.00, '2024-05-31', NULL, NULL, 1);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `detalle_cuotas`
+--
+
+CREATE TABLE `detalle_cuotas` (
+  `iddetalle_cuota` int(11) NOT NULL,
+  `idcuota` int(11) NOT NULL,
+  `monto_pago` decimal(8,2) NOT NULL,
+  `fecha_pago` date DEFAULT NULL,
+  `detalles` varchar(100) DEFAULT NULL,
+  `tipo_pago` varchar(20) DEFAULT NULL,
+  `entidad_bancaria` varchar(20) DEFAULT NULL,
+  `imagen` varchar(100) DEFAULT NULL,
+  `update_at` date DEFAULT NULL,
+  `inactive_at` date DEFAULT NULL,
+  `create_at` date NOT NULL DEFAULT curdate()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `detalle_cuotas`
+--
+
+INSERT INTO `detalle_cuotas` (`iddetalle_cuota`, `idcuota`, `monto_pago`, `fecha_pago`, `detalles`, `tipo_pago`, `entidad_bancaria`, `imagen`, `update_at`, `inactive_at`, `create_at`) VALUES
+(1, 1, 300.00, '2023-11-01', 'pago 1', 'transeferencia', 'bcp', 'imagen1', NULL, '2024-05-30', '2024-05-30'),
+(2, 1, 100.00, '2023-12-02', 'pago 1', 'transeferencia', 'bcp', 'imagen1', NULL, '2024-05-30', '2024-05-30'),
+(3, 1, 50.00, '2024-01-01', 'pago 1', 'transeferencia', 'bcp', 'imagen1', NULL, '2024-05-30', '2024-05-30'),
+(4, 1, 10.00, '2024-05-04', 'PAGO POR LA 5 CUOTA', 'TRANFERENCIA', 'BCP', '3092b43a19fcb5f65f92cc1256cb6bef591dae94.jpg', NULL, '2024-05-30', '2024-05-30'),
+(5, 1, 40.00, '2024-05-04', 'PAGO POR LA ULTIMA CUOTA', 'TRANFERENCIA', 'BBVA', '3092b43a19fcb5f65f92cc1256cb6bef591dae94.jpg', NULL, '2024-05-30', '2024-05-30'),
+(6, 15, 100.00, '2024-05-04', 'pago 1', 'TRANFERENCIA', 'BCP', '3092b43a19fcb5f65f92cc1256cb6bef591dae94.jpg', NULL, '2024-05-30', '2024-05-30'),
+(7, 14, 300.00, '2024-05-04', 'por cuota 1', 'EFECTIVO', 'BCP', '3092b43a19fcb5f65f92cc1256cb6bef591dae94.jpg', NULL, '2024-05-30', '2024-05-30'),
+(8, 14, 200.00, '2024-05-04', 'pago', 'TRANFERENCIA', 'INTERBANCK', '3092b43a19fcb5f65f92cc1256cb6bef591dae94.jpg', NULL, '2024-05-30', '2024-05-30'),
+(9, 13, 300.00, '2024-05-04', 'primer pago', 'TRANFERENCIA', 'INTERBANCK', '3092b43a19fcb5f65f92cc1256cb6bef591dae94.jpg', NULL, '2024-05-30', '2024-05-30'),
+(10, 13, 100.00, '2024-05-04', 'pago 2', 'EFECTIVO', 'INTERBANCK', '3092b43a19fcb5f65f92cc1256cb6bef591dae94.jpg', NULL, '2024-05-30', '2024-05-30'),
+(11, 13, 50.00, '2024-05-04', 'pago 3', 'EFECTIVO', 'INTERBANCK', '3092b43a19fcb5f65f92cc1256cb6bef591dae94.jpg', NULL, '2024-05-30', '2024-05-30'),
+(12, 13, 50.00, '2024-05-04', 'pago 3', 'EFECTIVO', 'INTERBANCK', '3092b43a19fcb5f65f92cc1256cb6bef591dae94.jpg', NULL, '2024-05-30', '2024-05-30'),
+(13, 12, 400.00, '2024-05-04', 'pago', 'TRANFERENCIA', 'BCP', '3092b43a19fcb5f65f92cc1256cb6bef591dae94.jpg', NULL, '2024-05-30', '2024-05-30'),
+(14, 12, 100.00, '2024-05-04', 'pago 2', 'TRANFERENCIA', 'INTERBANCK', '3092b43a19fcb5f65f92cc1256cb6bef591dae94.jpg', NULL, '2024-05-30', '2024-05-30'),
+(15, 11, 300.00, '2024-05-04', 'pago 1', 'TRANFERENCIA', 'BCP', '3092b43a19fcb5f65f92cc1256cb6bef591dae94.jpg', NULL, '2024-05-30', '2024-05-30'),
+(16, 11, 100.00, '2024-05-04', 'pago 3', 'TRANFERENCIA', 'BBVA', '3092b43a19fcb5f65f92cc1256cb6bef591dae94.jpg', NULL, '2024-05-30', '2024-05-30'),
+(17, 11, 100.00, '2024-05-04', 'PAGO 3', 'TRANFERENCIA', 'BBVA', '3092b43a19fcb5f65f92cc1256cb6bef591dae94.jpg', NULL, '2024-05-30', '2024-05-30'),
+(18, 10, 300.00, '2024-05-04', 'PAGO 1', 'TRANFERENCIA', 'BCP', '3092b43a19fcb5f65f92cc1256cb6bef591dae94.jpg', NULL, '2024-05-31', '2024-05-30'),
+(19, 10, 100.00, '2024-05-04', 'PAGO 3', 'TRANFERENCIA', 'BBVA', '3092b43a19fcb5f65f92cc1256cb6bef591dae94.jpg', NULL, '2024-05-31', '2024-05-30'),
+(20, 10, 50.00, '2024-05-30', 'pago 4', 'EFECTIVO', 'INTERBANCK', '3092b43a19fcb5f65f92cc1256cb6bef591dae94.jpg', NULL, '2024-05-31', '2024-05-30'),
+(21, 9, 500.00, '2024-05-30', 'pago 3', 'EFECTIVO', 'INTERBANCK', '3092b43a19fcb5f65f92cc1256cb6bef591dae94.jpg', NULL, '2024-05-31', '2024-05-30'),
+(22, 8, 400.00, '2024-05-31', 'PAGO POR LA PRIMERA CUOTA', 'EFECTIVO', 'INTERBANCK', 'a951edac9e3b22f318b6687a5213394034b9597f.jpg', NULL, '2024-06-01', '2024-05-31'),
+(23, 8, 100.00, '2024-05-31', 'PAGO POR LA SEGUNDA CUOTA', 'TRANFERENCIA', 'BBVA', 'a951edac9e3b22f318b6687a5213394034b9597f.jpg', NULL, '2024-06-01', '2024-05-31'),
+(24, 7, 499.00, '2024-05-31', 'PAGO POR 4 CUOTA', 'TRANFERENCIA', 'INTERBANCK', 'a951edac9e3b22f318b6687a5213394034b9597f.jpg', NULL, '2024-06-01', '2024-05-31'),
+(25, 7, 1.00, '2024-05-31', 'PAGO POR LA 5 CUOTA', 'TRANFERENCIA', 'INTERBANCK', 'a951edac9e3b22f318b6687a5213394034b9597f.jpg', NULL, '2024-06-01', '2024-05-31'),
+(26, 209, 600.00, '2024-06-01', 'pago por la primera cuota', 'TRANFERENCIA', 'BCP', '0aef06a9f316d87ac5e96608c21a2ae9f0188078.jpg', NULL, NULL, '2024-06-01');
 
 -- --------------------------------------------------------
 
@@ -2205,7 +3445,7 @@ INSERT INTO `detalle_costos` (`iddetalle_costo`, `idpresupuesto`, `idsubcategori
 
 CREATE TABLE `devoluciones` (
   `iddevolucion` int(11) NOT NULL,
-  `idseparacion` int(11) NOT NULL,
+  `idseparacion` int(11) DEFAULT NULL,
   `monto_devolucion` decimal(8,2) NOT NULL,
   `create_at` date NOT NULL DEFAULT curdate(),
   `update_at` date DEFAULT NULL,
@@ -2213,16 +3453,27 @@ CREATE TABLE `devoluciones` (
   `idusuario` int(11) NOT NULL,
   `detalle` varchar(200) NOT NULL,
   `n_expediente` varchar(10) NOT NULL,
-  `imagen` varchar(100) NOT NULL
-) ;
+  `imagen` varchar(100) NOT NULL,
+  `porcentaje_penalidad` tinyint(4) NOT NULL,
+  `tipo_devolucion` varchar(20) NOT NULL,
+  `idcontrato` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `devoluciones`
 --
 
-INSERT INTO `devoluciones` (`iddevolucion`, `idseparacion`, `monto_devolucion`, `create_at`, `update_at`, `inactive_at`, `idusuario`, `detalle`, `n_expediente`, `imagen`) VALUES
-(2, 5, 99.99, '2024-05-20', NULL, NULL, 1, 'No aprobado por el banco', 'DEC-000001', ''),
-(3, 3, 99.99, '2024-05-20', NULL, NULL, 1, 'No aprobado por el banco', 'DEC-000002', '');
+INSERT INTO `devoluciones` (`iddevolucion`, `idseparacion`, `monto_devolucion`, `create_at`, `update_at`, `inactive_at`, `idusuario`, `detalle`, `n_expediente`, `imagen`, `porcentaje_penalidad`, `tipo_devolucion`, `idcontrato`) VALUES
+(2, 5, 99.99, '2024-05-20', NULL, NULL, 1, 'No aprobado por el banco', 'DEC-000001', '', 0, 'POR SEPARACIÓN', NULL),
+(3, 3, 99.99, '2024-05-20', NULL, NULL, 1, 'No aprobado por el banco', 'DEC-000002', '', 0, 'POR SEPARACIÓN', NULL),
+(5, 8, 250.00, '2024-05-26', NULL, NULL, 1, 'El cliente deisitió oir problemas económicos', 'DEC-000010', 'noImage.jpg', 50, 'POR SEPARACIÓN', NULL),
+(6, 9, 250.00, '2024-05-26', NULL, NULL, 1, 'No cuenta con los papeles en regla', 'DEC-000100', 'noImage.jpg', 50, 'POR SEPARACIÓN', NULL),
+(7, 10, 250.00, '2024-05-26', NULL, NULL, 1, 'Documentos irregulares', 'DEC-300000', 'noImage.jpg', 50, 'POR SEPARACIÓN', NULL),
+(8, 12, 195.06, '2024-05-26', NULL, NULL, 1, 'No fué aprobado por el banco', 'DEC-000060', 'f716ad45a0bd1f829498c1b51f1e0c036348f2af.jpg', 30, 'POR SEPARACIÓN', NULL),
+(9, 16, 320.00, '2024-05-26', '2024-05-27', NULL, 1, 'No tiene el dinero', 'DEC-000013', '2363f7f736cdf3967cc62cbd0a2c8c2868936a00.jpg', 50, 'POR SEPARACIÓN', NULL),
+(10, 19, 250.00, '2024-05-31', NULL, NULL, 1, 'EL CLIENTE DESISTIO', 'DEC-560000', 'bd9e51fbea2cf1f70ed1fba5929e5c9c29ccaeb8.jpg', 50, 'POR SEPARACIÓN', NULL),
+(11, 24, 500.00, '2024-06-02', '2024-06-02', NULL, 1, 'por devolucion', 'DEC-000090', '7793dd26d7ef8e29834b44c3b0d0d79350828553.jpg', 100, 'POR SEPARACIÓN', NULL),
+(12, 25, 448.00, '2024-06-02', '2024-06-02', NULL, 1, 'no quiso seguir', 'DEC-000510', '1c51e6e594d2971e28abed4aefc72472a39ab3d8.jpg', 80, 'POR SEPARACIÓN', NULL);
 
 --
 -- Disparadores `devoluciones`
@@ -2230,27 +3481,79 @@ INSERT INTO `devoluciones` (`iddevolucion`, `idseparacion`, `monto_devolucion`, 
 DELIMITER $$
 CREATE TRIGGER `trgr_asset_status_refund` AFTER INSERT ON `devoluciones` FOR EACH ROW BEGIN
 	DECLARE _idactivo INT;
+	DECLARE _idseparacion_contrato INT;
 
-	SET _idactivo = (
-		SELECT idactivo FROM separaciones
-		WHERE idseparacion = NEW.idseparacion
-	);
+	-- SI EL ID SEPARACIÓN NO ESTÁ VACÍO
+	IF NEW.idseparacion IS NOT NULL THEN
+		SET _idactivo = (
+			SELECT idactivo FROM separaciones
+			WHERE idseparacion = NEW.idseparacion
+		);
 
-	UPDATE activos
-		SET
-			estado = "SIN VENDER",
-			update_at = CURDATE(),
-			idusuario = NEW.idusuario
-		WHERE
-			idactivo = _idactivo;
+		UPDATE activos
+			SET
+				estado = "SIN VENDER",
+				update_at = CURDATE(),
+				idusuario = NEW.idusuario
+			WHERE
+				idactivo = _idactivo;
 
-	UPDATE separaciones
-		SET
-			inactive_at = CURDATE(),
-			idusuario = NEW.idusuario
-		WHERE
-			idseparacion = NEW.idseparacion;
+		UPDATE separaciones
+			SET
+				inactive_at = CURDATE(),
+				idusuario = NEW.idusuario
+			WHERE
+				idseparacion = NEW.idseparacion;
 
+	-- SI EL ID CONTRATO NO ESTÁ VACÍO
+	ELSEIF NEW.idcontrato IS NOT NULL THEN
+
+
+		SET _idseparacion_contrato = (
+			SELECT idseparacion FROM contratos
+			WHERE idcontrato = NEW.idcontrato
+		);
+
+		-- SI EL IDSEPARACIÒN DEL CONTRATO NO ESTÁ VACÍO
+		IF _idseparacion_contrato IS NOT NULL THEN
+
+			SET _idactivo = (
+				SELECT idactivo FROM separaciones
+				WHERE idseparacion = _idseparacion_contrato
+			);
+
+			UPDATE activos
+				SET
+					estado = "SIN VENDER",
+					update_at = CURDATE(),
+					idusuario = NEW.idusuario
+				WHERE 
+					idactivo = _idactivo;
+		ELSE
+
+			SET _idactivo = (
+				SELECT idactivo FROM contratos
+				WHERE idcontrato = NEW.idcontrato
+			);
+
+			UPDATE activos
+				SET
+					estado = "SIN VENDER",
+					update_at = CURDATE(),
+					idusuario = NEW.idusuario
+				WHERE
+					idactivo = _idactivo;
+		END IF;
+
+		-- ACTUALIZA EL CONTRATO
+		UPDATE contratos
+			SET
+				estado = "INACTIVO",
+				inactive_at = CURDATE(),
+				idusuario = NEW.idusuario
+			WHERE
+				idcontrato = NEW.idcontrato;
+	END IF;
 END
 $$
 DELIMITER ;
@@ -4318,9 +5621,9 @@ CREATE TABLE `metricas` (
 --
 
 INSERT INTO `metricas` (`idmetrica`, `idproyecto`, `l_vendidos`, `l_noVendidos`, `l_separados`, `update_at`) VALUES
-(1, 1, 0, 58, 1, '2024-05-19 04:21:01'),
-(2, 2, 1, 5, 1, '2024-05-19 04:21:01'),
-(3, 3, 0, 6, 0, '2024-05-20 01:53:15'),
+(1, 1, 3, 57, 0, '2024-06-01 19:24:29'),
+(2, 2, 2, 5, 0, '2024-05-28 02:45:06'),
+(3, 3, 0, 6, 0, '2024-06-02 03:50:12'),
 (4, 4, 0, 5, 1, '2024-05-20 01:44:34'),
 (5, 5, 0, 0, 0, '2024-04-19 17:21:35'),
 (6, 6, 0, 0, 0, '2024-04-20 20:51:01');
@@ -4469,7 +5772,8 @@ INSERT INTO `personas_juridicas` (`idpersona_juridica`, `razon_social`, `documen
 (46, 'ATENCION INTEGRAL SALUD UTES OXAPAMPA', 'RUC', '20191045671', 1557, 'JR. ENRIQUE BOTTGER NRO. S/N  OXAPAMPA, PASCO - OXAPAMPA - OXAPAMPA', '2024-05-04', NULL, NULL),
 (48, 'CONSEJO NACIONAL CAMELIDOS SUDAMERICANOS', 'RUC', '20174198030', 1630, 'AV. LAYKAKOTA NRO. 339, PUNO - PUNO - PUNO', '2024-05-04', NULL, NULL),
 (49, 'GERENCIA REGIONAL DE TRABAJO Y PROMOCION DEL EMPLEO DEL GOBI', 'RUC', '20171312141', 335, 'CAL. UNIVERSIDAD NRO. 117 URB. VICTORIA, AREQUIPA - AREQUIPA - AREQUIP', '2024-05-04', NULL, NULL),
-(51, 'REGION TACNA HOSPITAL DE APOYO H.UNANUE', 'RUC', '20453223788', 1817, 'CAL. BLONDELL NRO. S/N, TACNA - TACNA - TACNA', '2024-05-04', NULL, NULL);
+(51, 'REGION TACNA HOSPITAL DE APOYO H.UNANUE', 'RUC', '20453223788', 1817, 'CAL. BLONDELL NRO. S/N, TACNA - TACNA - TACNA', '2024-05-04', NULL, NULL),
+(52, 'ATUNCAR VALERIO LUCAS ALFREDO', 'RUC', '10770685708', 1007, 'av san juan', '2024-05-31', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -4485,7 +5789,7 @@ CREATE TABLE `presupuestos` (
   `inactive_at` date DEFAULT NULL,
   `idusuario` int(11) NOT NULL,
   `codigo` char(8) NOT NULL
-) ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `presupuestos`
@@ -4521,7 +5825,16 @@ INSERT INTO `presupuestos` (`idpresupuesto`, `modelo`, `create_at`, `update_at`,
 (28, 'MODELO 3', '2024-05-17', NULL, '2024-05-19', 1, 'PRES-051'),
 (29, 'MODELO 58', '2024-05-17', NULL, '2024-05-19', 1, 'PRES-245'),
 (30, 'modelo 5', '2024-05-17', NULL, NULL, 1, 'PRES-90'),
-(35, 'MODELO 53', '2024-05-17', NULL, '2024-05-19', 1, 'PRES-008');
+(35, 'MODELO 53', '2024-05-17', NULL, '2024-05-19', 1, 'PRES-008'),
+(36, 'modelo mio', '2024-05-24', NULL, '2024-05-25', 1, 'PRES-005'),
+(37, 'modelo ark', '2024-05-24', '2024-05-24', NULL, 1, 'PRES-003'),
+(38, 'modelo ajeno', '2024-05-24', NULL, '2024-05-25', 1, 'PRES-006'),
+(39, 'modelo 34', '2024-05-24', NULL, '2024-05-25', 1, 'PRES-007'),
+(40, 'modelo 35', '2024-05-24', NULL, '2024-05-25', 1, 'PRES-008'),
+(41, 'modeo 50', '2024-05-24', NULL, '2024-05-25', 1, 'PRES-009'),
+(42, 'modelo 51', '2024-05-24', NULL, '2024-05-25', 1, 'PRES-010'),
+(43, 'CASA UNICA', '2024-05-31', NULL, NULL, 1, 'PRES-500'),
+(44, 'modelo arkI', '2024-05-31', NULL, NULL, 1, 'PRES-010');
 
 -- --------------------------------------------------------
 
@@ -4856,7 +6169,10 @@ INSERT INTO `rep_legales_clientes` (`idrepresentante`, `idpersona_juridica`, `re
 (138, 42, 'SANCHEZ APONTE MANUEL MARTIN', '1212121', '20494441', 'ADMINISTRADOR', 'sdf', 'HABILITADO', '2024-05-05', '2024-05-05', NULL),
 (139, 41, 'ZAVALA POLANCO CARLOS ALBERTO', 'DNI', '10599632', 'JEFE', 'partida nro 3', 'HABILITADO', '2024-05-05', '2024-05-05', NULL),
 (140, 41, 'AAAAAA', 'DNI', '20494411', 'ADMINISTRADOR', 'PARTIDA Nº3', 'HABILITADO', '2024-05-05', NULL, '2024-05-05'),
-(141, 41, 'CONCORI COAQUIRA EDGAR ROGELIO', 'DNI', '20408412', 'GERENTE', 'PARTIDA Nº2', 'HABILITADO', '2024-05-05', NULL, '2024-05-05');
+(141, 41, 'CONCORI COAQUIRA EDGAR ROGELIO', 'DNI', '20408412', 'GERENTE', 'PARTIDA Nº2', 'HABILITADO', '2024-05-05', NULL, '2024-05-05'),
+(142, 1, 'juan perez moran', 'DNI', '70173537', 'director', 'nro 3', 'HABILITADO', '2024-05-27', NULL, NULL),
+(143, 52, 'CARLOS ALBERTO', 'DNI', '10770685', 'DIRECTOR', 'NRO 3', 'HABILITADO', '2024-05-31', NULL, NULL),
+(144, 2, 'rep 1', 'dni', '12345678', 'director', 'partida nro3', 'HABILITADO', '2024-06-04', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -4878,12 +6194,12 @@ CREATE TABLE `roles` (
 --
 
 INSERT INTO `roles` (`idrol`, `rol`, `estado`, `create_at`, `update_at`, `inactive_at`) VALUES
-(1, 'REPRESENTANTE DE VENTAS 1', '1', '2024-04-19', NULL, NULL),
-(2, 'REPRESENTANTE DE VENTAS 2', '1', '2024-04-19', NULL, NULL),
-(3, 'ADMINISTRADOR PRINCIPAL', '1', '2024-04-19', NULL, NULL),
-(4, 'ADMINISTRADOR AASISTENTE', '1', '2024-04-19', NULL, NULL),
-(5, 'ADMINISTRADOR SECUNDARIO', '1', '2024-04-19', NULL, NULL),
-(6, 'VENDEDOR', '1', '2024-04-19', NULL, NULL);
+(1, 'ASISTENTE', '1', '2024-04-19', NULL, NULL),
+(2, 'TRÁMITES DOCUMENTARIOS', '1', '2024-04-19', NULL, NULL),
+(3, 'ASESOR DE VENTAS', '1', '2024-04-19', NULL, NULL),
+(4, 'GERENTE', '1', '2024-04-19', NULL, NULL),
+(5, 'ADMINISTRADOR', '1', '2024-04-19', NULL, NULL),
+(6, 'CAPATADOR', '1', '2024-04-19', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -4932,19 +6248,35 @@ CREATE TABLE `separaciones` (
   `inactive_at` date DEFAULT NULL,
   `idusuario` int(11) NOT NULL,
   `n_expediente` varchar(10) NOT NULL,
-  `detalle` varchar(200) NOT NULL
-) ;
+  `detalle` varchar(200) NOT NULL,
+  `moneda_venta` varchar(10) NOT NULL,
+  `tipo_cambio` decimal(5,4) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `separaciones`
 --
 
-INSERT INTO `separaciones` (`idseparacion`, `idactivo`, `idcliente`, `idconyugue`, `separacion_monto`, `imagen`, `create_at`, `update_at`, `inactive_at`, `idusuario`, `n_expediente`, `detalle`) VALUES
-(1, 1, 1, NULL, 99.99, '', '2024-03-07', NULL, NULL, 1, 'SEC-000001', ''),
-(2, 5, 1, NULL, 99.99, '', '2024-03-08', NULL, NULL, 1, 'SEC-000002', ''),
-(3, 6, 7, NULL, 99.99, '', '2024-03-08', NULL, '2024-03-08', 1, 'SEC-000003', ''),
-(4, 7, 2, NULL, 99.99, '', '2024-03-09', NULL, NULL, 1, 'SEC-000004', ''),
-(5, 8, 2, NULL, 99.99, '', '2024-03-09', NULL, NULL, 1, 'SEC-000005', '');
+INSERT INTO `separaciones` (`idseparacion`, `idactivo`, `idcliente`, `idconyugue`, `separacion_monto`, `imagen`, `create_at`, `update_at`, `inactive_at`, `idusuario`, `n_expediente`, `detalle`, `moneda_venta`, `tipo_cambio`) VALUES
+(1, 1, 1, NULL, 99.99, 'noImage.jpg', '2024-03-07', NULL, NULL, 1, 'SEC-000001', '', 'USD', 3.7500),
+(2, 5, 1, NULL, 99.99, 'noImage.jpg', '2024-03-08', NULL, NULL, 1, 'SEC-000002', '', 'USD', 3.7500),
+(3, 6, 7, NULL, 99.99, 'noImage.jpg', '2024-03-08', NULL, '2024-05-31', 1, 'SEC-000003', '', 'USD', 3.7500),
+(4, 7, 2, NULL, 99.99, 'noImage.jpg', '2024-03-09', NULL, NULL, 1, 'SEC-000004', '', 'USD', 3.7500),
+(5, 8, 2, NULL, 99.99, 'noImage.jpg', '2024-03-09', NULL, NULL, 1, 'SEC-000005', '', 'USD', 3.7500),
+(6, 6, 4, 5, 500.10, '7645859dac76f7d881072dde0200ab19505c2a80.jpg', '2024-05-25', '2024-05-25', '2024-05-31', 1, 'SEC-000026', '', 'USD', 3.7500),
+(7, 23, 4, 5, 501.00, '705d15aade34bc18e51b487f52744d0f3a2e9ffb.jpg', '2024-05-25', '2024-05-25', '2024-05-25', 1, 'SEC-000006', '', 'USD', 3.7500),
+(8, 18, 4, 5, 500.00, 'noImage.jpg', '2024-05-25', NULL, '2024-05-26', 1, 'SEC-000008', '', 'USD', 3.7500),
+(9, 19, 22, NULL, 500.00, 'noImage.jpg', '2024-05-25', NULL, '2024-05-26', 1, 'SEC-000015', '', 'USD', 3.7500),
+(10, 20, 25, NULL, 500.00, 'noImage.jpg', '2024-05-25', NULL, '2024-05-26', 1, 'SEC-000009', '', 'USD', 3.7500),
+(11, 4, 33, NULL, 500.00, '5b2e5489dbc8add08d32e0625c4a8d3bc18afc49.jpg', '2024-05-25', '2024-05-25', '2024-05-25', 1, 'SEC-100000', '', 'USD', 3.7500),
+(12, 18, 4, NULL, 650.20, '3626e805d5a57a2ed3a592194ec2ee9e82016384.jpg', '2024-05-26', NULL, '2024-05-26', 1, 'SEC-000030', '', 'USD', 3.4000),
+(16, 19, 4, NULL, 640.00, '4ad119cbba70bbddb57672a8bb28fd16d0d0afb7.jpg', '2024-05-26', NULL, '2024-05-26', 1, 'SEC-000100', '', 'USD', 3.7500),
+(18, 18, 4, 7, 600.00, '11ef89ef230c6117523ad5875c46dd07499e4fc3.jpg', '2024-05-26', NULL, '2024-05-31', 1, 'SEC-000500', '', 'USD', 3.5000),
+(19, 63, 27, NULL, 500.00, '32eeaf0b3e12f48dc51462526736eac056c4cc83.jpg', '2024-05-31', NULL, '2024-05-31', 1, 'SEC-300000', '', 'USD', 3.7500),
+(20, 63, 2, NULL, 600.00, '130d39e7cdf1095342fea2737c997ae3c88c022e.jpg', '2024-05-31', NULL, '2024-05-31', 1, 'SEC-000020', '', 'USD', 3.7500),
+(23, 19, 12, NULL, 500.00, '509867c14c578eaaac8ee92f319f4a9b1e9be5a9.jpg', '2024-06-01', '2024-06-01', '2024-06-01', 1, 'SEC-000050', '', 'USD', 3.7400),
+(24, 4, 4, NULL, 500.00, 'f12a498dfbadedbffdfd0947f206796a2a48cdff.jpg', '2024-06-02', NULL, '2024-06-02', 1, 'SEC-000060', '', 'USD', 3.7400),
+(25, 11, 5, 4, 560.00, 'ed19cea23d4d61f341dd992979aaab5bf0007b27.jpg', '2024-06-02', NULL, '2024-06-02', 1, 'SEC-000080', '', 'USD', 3.7400);
 
 --
 -- Disparadores `separaciones`
@@ -5035,36 +6367,6 @@ INSERT INTO `subcategoria_costos` (`idsubcategoria_costo`, `idcategoria_costo`, 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `sustentos_cuotas`
---
-
-CREATE TABLE `sustentos_cuotas` (
-  `idsustento_cuota` int(11) NOT NULL,
-  `idcuota` int(11) NOT NULL,
-  `ruta` varchar(100) NOT NULL,
-  `create_at` date NOT NULL DEFAULT curdate(),
-  `update_at` date DEFAULT NULL,
-  `inactive_at` date DEFAULT NULL,
-  `idusuario` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Volcado de datos para la tabla `sustentos_cuotas`
---
-
-INSERT INTO `sustentos_cuotas` (`idsustento_cuota`, `idcuota`, `ruta`, `create_at`, `update_at`, `inactive_at`, `idusuario`) VALUES
-(1, 1, '/ruta/imagen1.jpg', '2024-04-19', NULL, NULL, 1),
-(2, 1, '/ruta/imagen2.jpg', '2024-04-19', NULL, NULL, 1),
-(3, 1, '/ruta/imagen1.jpg', '2024-04-19', NULL, NULL, 1),
-(4, 1, '/ruta/imagen2.jpg', '2024-04-19', NULL, NULL, 1),
-(5, 2, '/ruta/imagen1.jpg', '2024-04-19', NULL, NULL, 2),
-(6, 2, '/ruta/imagen2.jpg', '2024-04-19', NULL, NULL, 2),
-(7, 2, '/ruta/imagen1.jpg', '2024-04-19', NULL, NULL, 2),
-(8, 2, '/ruta/imagen2.jpg', '2024-04-19', NULL, NULL, 2);
-
--- --------------------------------------------------------
-
---
 -- Estructura de tabla para la tabla `unidades_medida`
 --
 
@@ -5112,7 +6414,7 @@ CREATE TABLE `usuarios` (
   `imagen` varchar(100) DEFAULT NULL,
   `idpersona` int(11) NOT NULL,
   `correo` varchar(60) NOT NULL,
-  `contraseña` varchar(60) NOT NULL,
+  `contrasenia` varchar(60) NOT NULL,
   `codigo` char(9) DEFAULT NULL,
   `idrol` int(11) NOT NULL,
   `idsede` int(11) NOT NULL,
@@ -5125,8 +6427,8 @@ CREATE TABLE `usuarios` (
 -- Volcado de datos para la tabla `usuarios`
 --
 
-INSERT INTO `usuarios` (`idusuario`, `imagen`, `idpersona`, `correo`, `contraseña`, `codigo`, `idrol`, `idsede`, `create_at`, `update_at`, `inactive_at`) VALUES
-(1, NULL, 3, 'juancarlos@gmail.com', 'contraseña1', NULL, 1, 1, '2024-04-19', NULL, NULL),
+INSERT INTO `usuarios` (`idusuario`, `imagen`, `idpersona`, `correo`, `contrasenia`, `codigo`, `idrol`, `idsede`, `create_at`, `update_at`, `inactive_at`) VALUES
+(1, NULL, 3, 'juancarlos@gmail.com', '$2y$10$204pfIM2R3vZKvFSvfLMJuL9muaa9ns/pu7AnTRRCYC6hC.68Oat6', NULL, 1, 1, '2024-04-19', NULL, NULL),
 (2, NULL, 4, 'mariajose@gmail.com', 'contraseña2', NULL, 2, 1, '2024-04-19', NULL, NULL),
 (3, NULL, 5, 'pedroluis@gmail.com', 'contraseña3', NULL, 3, 1, '2024-04-19', NULL, NULL),
 (4, NULL, 6, 'anasofia@gmail.com', 'contraseña4', NULL, 4, 1, '2024-04-19', NULL, NULL),
@@ -5140,6 +6442,34 @@ INSERT INTO `usuarios` (`idusuario`, `imagen`, `idpersona`, `correo`, `contrase�
 (12, NULL, 14, 'pedroluis2@gmail.com', 'contraseña12', NULL, 5, 2, '2024-04-19', NULL, NULL),
 (13, NULL, 15, 'mariaisabel@gmail.com', 'contraseña13', NULL, 6, 2, '2024-04-19', NULL, NULL),
 (14, NULL, 16, 'antoniojose@gmail.com', 'contraseña14', NULL, 6, 2, '2024-04-19', NULL, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura Stand-in para la vista `vws_clientes_legal`
+-- (Véase abajo para la vista actual)
+--
+CREATE TABLE `vws_clientes_legal` (
+`idcliente` int(11)
+,`tipo_persona` varchar(10)
+,`documento_tipo` varchar(20)
+,`documento_nro` varchar(12)
+,`cliente` varchar(60)
+);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura Stand-in para la vista `vws_clients_natural`
+-- (Véase abajo para la vista actual)
+--
+CREATE TABLE `vws_clients_natural` (
+`idcliente` int(11)
+,`tipo_persona` varchar(10)
+,`documento_tipo` varchar(20)
+,`documento_nro` varchar(12)
+,`cliente` varchar(82)
+);
 
 -- --------------------------------------------------------
 
@@ -5192,10 +6522,51 @@ CREATE TABLE `vws_list_projects` (
 -- --------------------------------------------------------
 
 --
+-- Estructura Stand-in para la vista `vws_list_quotas`
+-- (Véase abajo para la vista actual)
+--
+CREATE TABLE `vws_list_quotas` (
+`idcuota` int(11)
+,`idcontrato` int(11)
+,`n_expediente` varchar(10)
+,`monto_cuota` decimal(8,2)
+,`cancelado` decimal(30,2)
+,`deuda` decimal(31,2)
+,`fecha_vencimiento` date
+,`fecha_pago` date
+,`estado` varchar(20)
+,`usuario` varchar(40)
+,`inactive_at` date
+);
+
+-- --------------------------------------------------------
+
+--
 -- Estructura Stand-in para la vista `vws_list_refunds`
 -- (Véase abajo para la vista actual)
 --
 CREATE TABLE `vws_list_refunds` (
+`iddevolucion` int(11)
+,`tipo_devolucion` varchar(20)
+,`n_expediente_dev` varchar(10)
+,`idseparacion` int(11)
+,`idcontrato` int(11)
+,`n_expediente_cont` varchar(10)
+,`n_expediente_sep` varchar(10)
+,`detalle` varchar(200)
+,`monto_devolucion` decimal(8,2)
+,`porcentaje_penalidad` tinyint(4)
+,`separacion_monto` decimal(8,2)
+,`sublote` varchar(6)
+,`denominacion` varchar(30)
+,`tipo_persona` varchar(10)
+,`cliente` varchar(82)
+,`documento_tipo` varchar(20)
+,`documento_nro` varchar(12)
+,`imagen` varchar(100)
+,`create_at` date
+,`inactive_at` date
+,`nombres` varchar(40)
 );
 
 -- --------------------------------------------------------
@@ -5216,7 +6587,7 @@ CREATE TABLE `vws_list_separations_tpersona_juridica` (
 ,`documento_tipo` varchar(20)
 ,`documento_nro` varchar(12)
 ,`separacion_monto` decimal(8,2)
-,`CREATE_at` date
+,`create_at` date
 ,`inactive_at_sep` date
 ,`usuario` varchar(40)
 );
@@ -5229,16 +6600,24 @@ CREATE TABLE `vws_list_separations_tpersona_juridica` (
 --
 CREATE TABLE `vws_list_separations_tpersona_juridica_full` (
 `idseparacion` int(11)
+,`n_expediente` varchar(10)
+,`idproyecto` int(11)
+,`idactivo` int(11)
 ,`sublote` varchar(6)
 ,`denominacion` varchar(30)
 ,`distrito` varchar(45)
 ,`provincia` varchar(45)
 ,`departamento` varchar(45)
+,`tipo_persona` varchar(10)
+,`idcliente` int(11)
 ,`cliente` varchar(60)
 ,`documento_tipo` varchar(20)
 ,`documento_nro` varchar(12)
+,`moneda_venta` varchar(10)
+,`tipo_cambio` decimal(5,4)
 ,`separacion_monto` decimal(8,2)
-,`CREATE_at` date
+,`create_at` date
+,`inactive_at` date
 ,`imagen` varchar(100)
 ,`usuario` varchar(40)
 );
@@ -5263,7 +6642,7 @@ CREATE TABLE `vws_list_separations_tpersona_natural` (
 ,`separacion_monto` decimal(8,2)
 ,`inactive_at_sep` date
 ,`usuario` varchar(40)
-,`CREATE_at` date
+,`create_at` date
 );
 
 -- --------------------------------------------------------
@@ -5274,21 +6653,29 @@ CREATE TABLE `vws_list_separations_tpersona_natural` (
 --
 CREATE TABLE `vws_list_separations_tpersona_natural_full` (
 `idseparacion` int(11)
+,`n_expediente` varchar(10)
+,`idproyecto` int(11)
+,`idactivo` int(11)
 ,`sublote` varchar(6)
 ,`denominacion` varchar(30)
 ,`distrito` varchar(45)
 ,`provincia` varchar(45)
 ,`departamento` varchar(45)
+,`tipo_persona` varchar(10)
+,`idcliente` int(11)
 ,`cliente` varchar(82)
 ,`documento_tipo` varchar(20)
 ,`documento_nro` varchar(12)
+,`idconyugue` int(11)
 ,`conyugue` varchar(82)
 ,`conyPers_documento_tipo` varchar(20)
 ,`conyPers_documento_nro` varchar(12)
+,`tipo_cambio` decimal(5,4)
+,`moneda_venta` varchar(10)
 ,`separacion_monto` decimal(8,2)
-,`CREATE_at` date
-,`imagen` varchar(100)
+,`create_at` date
 ,`inactive_at` date
+,`imagen` varchar(100)
 ,`usuario` varchar(40)
 );
 
@@ -5304,6 +6691,24 @@ CREATE TABLE `vws_ubigeo` (
 ,`provincia` varchar(45)
 ,`departamento` varchar(45)
 );
+
+-- --------------------------------------------------------
+
+--
+-- Estructura para la vista `vws_clientes_legal`
+--
+DROP TABLE IF EXISTS `vws_clientes_legal`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vws_clientes_legal`  AS SELECT `cli`.`idcliente` AS `idcliente`, `cli`.`tipo_persona` AS `tipo_persona`, `persj`.`documento_tipo` AS `documento_tipo`, `persj`.`documento_nro` AS `documento_nro`, `persj`.`razon_social` AS `cliente` FROM ((`clientes` `cli` join `personas_juridicas` `persj` on(`persj`.`idpersona_juridica` = `cli`.`idcliente`)) join `rep_legales_clientes` `rep` on(`rep`.`idpersona_juridica` = `persj`.`idpersona_juridica`)) WHERE `cli`.`inactive_at` is null ;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura para la vista `vws_clients_natural`
+--
+DROP TABLE IF EXISTS `vws_clients_natural`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vws_clients_natural`  AS SELECT `cli`.`idcliente` AS `idcliente`, `cli`.`tipo_persona` AS `tipo_persona`, `pers`.`documento_tipo` AS `documento_tipo`, `pers`.`documento_nro` AS `documento_nro`, concat(`pers`.`apellidos`,', ',`pers`.`nombres`) AS `cliente` FROM (`clientes` `cli` join `personas` `pers` on(`pers`.`idpersona` = `cli`.`idpersona`)) WHERE `cli`.`inactive_at` is null ;
 
 -- --------------------------------------------------------
 
@@ -5326,11 +6731,20 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 -- --------------------------------------------------------
 
 --
+-- Estructura para la vista `vws_list_quotas`
+--
+DROP TABLE IF EXISTS `vws_list_quotas`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vws_list_quotas`  AS SELECT `qt`.`idcuota` AS `idcuota`, `ct`.`idcontrato` AS `idcontrato`, `ct`.`n_expediente` AS `n_expediente`, `qt`.`monto_cuota` AS `monto_cuota`, sum(`detc`.`monto_pago`) AS `cancelado`, `qt`.`monto_cuota`- coalesce(sum(`detc`.`monto_pago`),0.00) AS `deuda`, `qt`.`fecha_vencimiento` AS `fecha_vencimiento`, (select `detalle_cuotas`.`fecha_pago` from `detalle_cuotas` where `detalle_cuotas`.`idcuota` = `qt`.`idcuota` order by `detalle_cuotas`.`iddetalle_cuota` desc limit 1) AS `fecha_pago`, `qt`.`estado` AS `estado`, `pers`.`nombres` AS `usuario`, `qt`.`inactive_at` AS `inactive_at` FROM ((((`cuotas` `qt` left join `detalle_cuotas` `detc` on(`detc`.`idcuota` = `qt`.`idcuota`)) join `contratos` `ct` on(`ct`.`idcontrato` = `qt`.`idcontrato`)) join `usuarios` `usu` on(`usu`.`idusuario` = `qt`.`idusuario`)) join `personas` `pers` on(`pers`.`idpersona` = `usu`.`idpersona`)) WHERE `detc`.`inactive_at` is null GROUP BY `qt`.`idcuota` ;
+
+-- --------------------------------------------------------
+
+--
 -- Estructura para la vista `vws_list_refunds`
 --
 DROP TABLE IF EXISTS `vws_list_refunds`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vws_list_refunds`  AS SELECT `dev`.`iddevolucion` AS `iddevolucion`, `dev`.`n_expediente` AS `n_expediente_dev`, `sep`.`idseparacion` AS `idseparacion`, `sep`.`n_expediente` AS `n_expediente_sep`, `dev`.`detalle` AS `detalle`, `dev`.`monto_devolucion` AS `monto_devolucion`, coalesce(`persj`.`tipo_persona`,`persn`.`tipo_persona`) AS `tipo_persona`, coalesce(`persj`.`cliente`,`persn`.`cliente`) AS `cliente`, coalesce(`persj`.`documento_tipo`,`persn`.`documento_tipo`) AS `documento_tipo`, coalesce(`persj`.`documento_nro`,`persn`.`documento_nro`) AS `documento_nro`, `dev`.`imagen` AS `imagen`, `dev`.`create_at` AS `create_at`, `dev`.`inactive_at` AS `inactive_at`, `usupers`.`nombres` AS `nombres` FROM (((((`devoluciones` `dev` join `separaciones` `sep` on(`sep`.`idseparacion` = `dev`.`idseparacion`)) left join `vws_list_seperations_tpersona_juridica` `persj` on(`persj`.`idseparacion` = `dev`.`idseparacion`)) left join `vws_list_seperations_tpersona_natural` `persn` on(`persn`.`idseparacion` = `dev`.`idseparacion`)) join `usuarios` `usu` on(`usu`.`idusuario` = `dev`.`idusuario`)) join `personas` `usupers` on(`usupers`.`idpersona` = `usu`.`idpersona`)) ORDER BY `dev`.`iddevolucion` DESC ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vws_list_refunds`  AS SELECT `dev`.`iddevolucion` AS `iddevolucion`, `dev`.`tipo_devolucion` AS `tipo_devolucion`, `dev`.`n_expediente` AS `n_expediente_dev`, `sep`.`idseparacion` AS `idseparacion`, `cnt`.`idcontrato` AS `idcontrato`, `cnt`.`n_expediente` AS `n_expediente_cont`, `sep`.`n_expediente` AS `n_expediente_sep`, `dev`.`detalle` AS `detalle`, `dev`.`monto_devolucion` AS `monto_devolucion`, `dev`.`porcentaje_penalidad` AS `porcentaje_penalidad`, `sep`.`separacion_monto` AS `separacion_monto`, `act`.`sublote` AS `sublote`, `proy`.`denominacion` AS `denominacion`, coalesce(`persj`.`tipo_persona`,`persn`.`tipo_persona`) AS `tipo_persona`, coalesce(`persj`.`cliente`,`persn`.`cliente`) AS `cliente`, coalesce(`persj`.`documento_tipo`,`persn`.`documento_tipo`) AS `documento_tipo`, coalesce(`persj`.`documento_nro`,`persn`.`documento_nro`) AS `documento_nro`, `dev`.`imagen` AS `imagen`, `dev`.`create_at` AS `create_at`, `dev`.`inactive_at` AS `inactive_at`, `usupers`.`nombres` AS `nombres` FROM ((((((((`devoluciones` `dev` left join `separaciones` `sep` on(`sep`.`idseparacion` = `dev`.`idseparacion`)) left join `vws_list_separations_tpersona_juridica` `persj` on(`persj`.`idseparacion` = `dev`.`idseparacion`)) left join `vws_list_separations_tpersona_natural` `persn` on(`persn`.`idseparacion` = `dev`.`idseparacion`)) join `usuarios` `usu` on(`usu`.`idusuario` = `dev`.`idusuario`)) join `activos` `act` on(`act`.`idactivo` = `sep`.`idactivo`)) left join `contratos` `cnt` on(`cnt`.`idcontrato` = `dev`.`idcontrato`)) join `proyectos` `proy` on(`proy`.`idproyecto` = `act`.`idproyecto`)) join `personas` `usupers` on(`usupers`.`idpersona` = `usu`.`idpersona`)) ORDER BY `dev`.`iddevolucion` DESC ;
 
 -- --------------------------------------------------------
 
@@ -5339,7 +6753,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 DROP TABLE IF EXISTS `vws_list_separations_tpersona_juridica`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vws_list_separations_tpersona_juridica`  AS SELECT `sep`.`idseparacion` AS `idseparacion`, `sep`.`n_expediente` AS `n_expediente`, `act`.`idactivo` AS `idactivo`, `act`.`sublote` AS `sublote`, `proy`.`denominacion` AS `denominacion`, `persj`.`razon_social` AS `cliente`, `clien`.`tipo_persona` AS `tipo_persona`, `clien`.`inactive_at` AS `inactive_at_client`, `persj`.`documento_tipo` AS `documento_tipo`, `persj`.`documento_nro` AS `documento_nro`, `sep`.`separacion_monto` AS `separacion_monto`, `sep`.`create_at` AS `CREATE_at`, `sep`.`inactive_at` AS `inactive_at_sep`, `usupers`.`nombres` AS `usuario` FROM ((((((`separaciones` `sep` join `activos` `act` on(`act`.`idactivo` = `sep`.`idactivo`)) join `proyectos` `proy` on(`proy`.`idproyecto` = `act`.`idproyecto`)) join `clientes` `clien` on(`clien`.`idcliente` = `sep`.`idcliente`)) join `personas_juridicas` `persj` on(`persj`.`idpersona_juridica` = `clien`.`idpersona_juridica`)) join `usuarios` `usu` on(`usu`.`idusuario` = `sep`.`idusuario`)) join `personas` `usupers` on(`usupers`.`idpersona` = `usu`.`idpersona`)) ORDER BY `sep`.`idseparacion` DESC ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vws_list_separations_tpersona_juridica`  AS SELECT `sep`.`idseparacion` AS `idseparacion`, `sep`.`n_expediente` AS `n_expediente`, `act`.`idactivo` AS `idactivo`, `act`.`sublote` AS `sublote`, `proy`.`denominacion` AS `denominacion`, `persj`.`razon_social` AS `cliente`, `clien`.`tipo_persona` AS `tipo_persona`, `clien`.`inactive_at` AS `inactive_at_client`, `persj`.`documento_tipo` AS `documento_tipo`, `persj`.`documento_nro` AS `documento_nro`, `sep`.`separacion_monto` AS `separacion_monto`, `sep`.`create_at` AS `create_at`, `sep`.`inactive_at` AS `inactive_at_sep`, `usupers`.`nombres` AS `usuario` FROM ((((((`separaciones` `sep` join `activos` `act` on(`act`.`idactivo` = `sep`.`idactivo`)) join `proyectos` `proy` on(`proy`.`idproyecto` = `act`.`idproyecto`)) join `clientes` `clien` on(`clien`.`idcliente` = `sep`.`idcliente`)) join `personas_juridicas` `persj` on(`persj`.`idpersona_juridica` = `clien`.`idpersona_juridica`)) join `usuarios` `usu` on(`usu`.`idusuario` = `sep`.`idusuario`)) join `personas` `usupers` on(`usupers`.`idpersona` = `usu`.`idpersona`)) ORDER BY `sep`.`idseparacion` DESC ;
 
 -- --------------------------------------------------------
 
@@ -5348,7 +6762,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 DROP TABLE IF EXISTS `vws_list_separations_tpersona_juridica_full`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vws_list_separations_tpersona_juridica_full`  AS SELECT `sep`.`idseparacion` AS `idseparacion`, `act`.`sublote` AS `sublote`, `proy`.`denominacion` AS `denominacion`, `dist`.`distrito` AS `distrito`, `prov`.`provincia` AS `provincia`, `dept`.`departamento` AS `departamento`, `persj`.`razon_social` AS `cliente`, `persj`.`documento_tipo` AS `documento_tipo`, `persj`.`documento_nro` AS `documento_nro`, `sep`.`separacion_monto` AS `separacion_monto`, `sep`.`create_at` AS `CREATE_at`, `sep`.`imagen` AS `imagen`, `usupers`.`nombres` AS `usuario` FROM (((((((((`separaciones` `sep` join `activos` `act` on(`act`.`idactivo` = `sep`.`idactivo`)) join `proyectos` `proy` on(`proy`.`idproyecto` = `act`.`idproyecto`)) join `distritos` `dist` on(`dist`.`iddistrito` = `proy`.`iddistrito`)) join `provincias` `prov` on(`prov`.`idprovincia` = `dist`.`idprovincia`)) join `departamentos` `dept` on(`dept`.`iddepartamento` = `prov`.`iddepartamento`)) join `clientes` `clien` on(`clien`.`idcliente` = `sep`.`idcliente`)) join `personas_juridicas` `persj` on(`persj`.`idpersona_juridica` = `clien`.`idpersona_juridica`)) join `usuarios` `usu` on(`usu`.`idusuario` = `sep`.`idusuario`)) join `personas` `usupers` on(`usupers`.`idpersona` = `usu`.`idpersona`)) ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vws_list_separations_tpersona_juridica_full`  AS SELECT `sep`.`idseparacion` AS `idseparacion`, `sep`.`n_expediente` AS `n_expediente`, `proy`.`idproyecto` AS `idproyecto`, `act`.`idactivo` AS `idactivo`, `act`.`sublote` AS `sublote`, `proy`.`denominacion` AS `denominacion`, `dist`.`distrito` AS `distrito`, `prov`.`provincia` AS `provincia`, `dept`.`departamento` AS `departamento`, `clien`.`tipo_persona` AS `tipo_persona`, `sep`.`idcliente` AS `idcliente`, `persj`.`razon_social` AS `cliente`, `persj`.`documento_tipo` AS `documento_tipo`, `persj`.`documento_nro` AS `documento_nro`, `sep`.`moneda_venta` AS `moneda_venta`, `sep`.`tipo_cambio` AS `tipo_cambio`, `sep`.`separacion_monto` AS `separacion_monto`, `sep`.`create_at` AS `create_at`, `sep`.`inactive_at` AS `inactive_at`, `sep`.`imagen` AS `imagen`, `usupers`.`nombres` AS `usuario` FROM (((((((((`separaciones` `sep` join `activos` `act` on(`act`.`idactivo` = `sep`.`idactivo`)) join `proyectos` `proy` on(`proy`.`idproyecto` = `act`.`idproyecto`)) join `distritos` `dist` on(`dist`.`iddistrito` = `proy`.`iddistrito`)) join `provincias` `prov` on(`prov`.`idprovincia` = `dist`.`idprovincia`)) join `departamentos` `dept` on(`dept`.`iddepartamento` = `prov`.`iddepartamento`)) join `clientes` `clien` on(`clien`.`idcliente` = `sep`.`idcliente`)) join `personas_juridicas` `persj` on(`persj`.`idpersona_juridica` = `clien`.`idpersona_juridica`)) join `usuarios` `usu` on(`usu`.`idusuario` = `sep`.`idusuario`)) join `personas` `usupers` on(`usupers`.`idpersona` = `usu`.`idpersona`)) ;
 
 -- --------------------------------------------------------
 
@@ -5357,7 +6771,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 DROP TABLE IF EXISTS `vws_list_separations_tpersona_natural`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vws_list_separations_tpersona_natural`  AS SELECT `sep`.`idseparacion` AS `idseparacion`, `sep`.`n_expediente` AS `n_expediente`, `act`.`idactivo` AS `idactivo`, `act`.`sublote` AS `sublote`, `proy`.`denominacion` AS `denominacion`, concat(ucase(`pers`.`apellidos`),', ',lcase(`pers`.`nombres`)) AS `cliente`, `clien`.`tipo_persona` AS `tipo_persona`, `clien`.`inactive_at` AS `inactive_at_client`, `pers`.`documento_tipo` AS `documento_tipo`, `pers`.`documento_nro` AS `documento_nro`, `sep`.`separacion_monto` AS `separacion_monto`, `sep`.`inactive_at` AS `inactive_at_sep`, `usupers`.`nombres` AS `usuario`, `sep`.`create_at` AS `CREATE_at` FROM ((((((`separaciones` `sep` join `activos` `act` on(`act`.`idactivo` = `sep`.`idactivo`)) join `proyectos` `proy` on(`proy`.`idproyecto` = `act`.`idproyecto`)) join `clientes` `clien` on(`clien`.`idcliente` = `sep`.`idcliente`)) join `personas` `pers` on(`pers`.`idpersona` = `clien`.`idpersona`)) join `usuarios` `usu` on(`usu`.`idusuario` = `sep`.`idusuario`)) join `personas` `usupers` on(`usupers`.`idpersona` = `usu`.`idpersona`)) ORDER BY `sep`.`idseparacion` DESC ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vws_list_separations_tpersona_natural`  AS SELECT `sep`.`idseparacion` AS `idseparacion`, `sep`.`n_expediente` AS `n_expediente`, `act`.`idactivo` AS `idactivo`, `act`.`sublote` AS `sublote`, `proy`.`denominacion` AS `denominacion`, concat(ucase(`pers`.`apellidos`),', ',lcase(`pers`.`nombres`)) AS `cliente`, `clien`.`tipo_persona` AS `tipo_persona`, `clien`.`inactive_at` AS `inactive_at_client`, `pers`.`documento_tipo` AS `documento_tipo`, `pers`.`documento_nro` AS `documento_nro`, `sep`.`separacion_monto` AS `separacion_monto`, `sep`.`inactive_at` AS `inactive_at_sep`, `usupers`.`nombres` AS `usuario`, `sep`.`create_at` AS `create_at` FROM ((((((`separaciones` `sep` join `activos` `act` on(`act`.`idactivo` = `sep`.`idactivo`)) join `proyectos` `proy` on(`proy`.`idproyecto` = `act`.`idproyecto`)) join `clientes` `clien` on(`clien`.`idcliente` = `sep`.`idcliente`)) join `personas` `pers` on(`pers`.`idpersona` = `clien`.`idpersona`)) join `usuarios` `usu` on(`usu`.`idusuario` = `sep`.`idusuario`)) join `personas` `usupers` on(`usupers`.`idpersona` = `usu`.`idpersona`)) ORDER BY `sep`.`idseparacion` DESC ;
 
 -- --------------------------------------------------------
 
@@ -5366,7 +6780,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 DROP TABLE IF EXISTS `vws_list_separations_tpersona_natural_full`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vws_list_separations_tpersona_natural_full`  AS SELECT `sep`.`idseparacion` AS `idseparacion`, `act`.`sublote` AS `sublote`, `proy`.`denominacion` AS `denominacion`, `dist`.`distrito` AS `distrito`, `prov`.`provincia` AS `provincia`, `dept`.`departamento` AS `departamento`, concat(ucase(`pers`.`apellidos`),', ',lcase(`pers`.`nombres`)) AS `cliente`, `pers`.`documento_tipo` AS `documento_tipo`, `pers`.`documento_nro` AS `documento_nro`, concat(ucase(`conypers`.`apellidos`),' ,',lcase(`conypers`.`nombres`)) AS `conyugue`, `conypers`.`documento_tipo` AS `conyPers_documento_tipo`, `conypers`.`documento_nro` AS `conyPers_documento_nro`, `sep`.`separacion_monto` AS `separacion_monto`, `sep`.`create_at` AS `CREATE_at`, `sep`.`imagen` AS `imagen`, `sep`.`inactive_at` AS `inactive_at`, `usupers`.`nombres` AS `usuario` FROM (((((((((((`separaciones` `sep` join `activos` `act` on(`act`.`idactivo` = `sep`.`idactivo`)) join `proyectos` `proy` on(`proy`.`idproyecto` = `act`.`idproyecto`)) join `distritos` `dist` on(`dist`.`iddistrito` = `proy`.`iddistrito`)) join `provincias` `prov` on(`prov`.`idprovincia` = `dist`.`idprovincia`)) join `departamentos` `dept` on(`dept`.`iddepartamento` = `prov`.`iddepartamento`)) join `clientes` `clien` on(`clien`.`idcliente` = `sep`.`idcliente`)) join `personas` `pers` on(`pers`.`idpersona` = `clien`.`idpersona`)) left join `clientes` `cony` on(`cony`.`idcliente` = `sep`.`idconyugue`)) left join `personas` `conypers` on(`conypers`.`idpersona` = `cony`.`idpersona`)) join `usuarios` `usu` on(`usu`.`idusuario` = `sep`.`idusuario`)) join `personas` `usupers` on(`usupers`.`idpersona` = `usu`.`idpersona`)) ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vws_list_separations_tpersona_natural_full`  AS SELECT `sep`.`idseparacion` AS `idseparacion`, `sep`.`n_expediente` AS `n_expediente`, `proy`.`idproyecto` AS `idproyecto`, `act`.`idactivo` AS `idactivo`, `act`.`sublote` AS `sublote`, `proy`.`denominacion` AS `denominacion`, `dist`.`distrito` AS `distrito`, `prov`.`provincia` AS `provincia`, `dept`.`departamento` AS `departamento`, `clien`.`tipo_persona` AS `tipo_persona`, `sep`.`idcliente` AS `idcliente`, concat(ucase(`pers`.`apellidos`),', ',lcase(`pers`.`nombres`)) AS `cliente`, `pers`.`documento_tipo` AS `documento_tipo`, `pers`.`documento_nro` AS `documento_nro`, `sep`.`idconyugue` AS `idconyugue`, concat(ucase(`conypers`.`apellidos`),', ',lcase(`conypers`.`nombres`)) AS `conyugue`, `conypers`.`documento_tipo` AS `conyPers_documento_tipo`, `conypers`.`documento_nro` AS `conyPers_documento_nro`, `sep`.`tipo_cambio` AS `tipo_cambio`, `sep`.`moneda_venta` AS `moneda_venta`, `sep`.`separacion_monto` AS `separacion_monto`, `sep`.`create_at` AS `create_at`, `sep`.`inactive_at` AS `inactive_at`, `sep`.`imagen` AS `imagen`, `usupers`.`nombres` AS `usuario` FROM (((((((((((`separaciones` `sep` join `activos` `act` on(`act`.`idactivo` = `sep`.`idactivo`)) join `proyectos` `proy` on(`proy`.`idproyecto` = `act`.`idproyecto`)) join `distritos` `dist` on(`dist`.`iddistrito` = `proy`.`iddistrito`)) join `provincias` `prov` on(`prov`.`idprovincia` = `dist`.`idprovincia`)) join `departamentos` `dept` on(`dept`.`iddepartamento` = `prov`.`iddepartamento`)) join `clientes` `clien` on(`clien`.`idcliente` = `sep`.`idcliente`)) join `personas` `pers` on(`pers`.`idpersona` = `clien`.`idpersona`)) left join `clientes` `cony` on(`cony`.`idcliente` = `sep`.`idconyugue`)) left join `personas` `conypers` on(`conypers`.`idpersona` = `cony`.`idpersona`)) join `usuarios` `usu` on(`usu`.`idusuario` = `sep`.`idusuario`)) join `personas` `usupers` on(`usupers`.`idpersona` = `usu`.`idpersona`)) ;
 
 -- --------------------------------------------------------
 
@@ -5468,12 +6882,20 @@ ALTER TABLE `detalle_costos`
   ADD KEY `fk_idusuario_det_costo` (`idusuario`);
 
 --
+-- Indices de la tabla `detalle_cuotas`
+--
+ALTER TABLE `detalle_cuotas`
+  ADD PRIMARY KEY (`iddetalle_cuota`),
+  ADD KEY `fk_idcuota_detalle_cuotas` (`idcuota`);
+
+--
 -- Indices de la tabla `devoluciones`
 --
 ALTER TABLE `devoluciones`
   ADD PRIMARY KEY (`iddevolucion`),
   ADD KEY `fk_idseparacion_dev` (`idseparacion`),
-  ADD KEY `fk_idusuario_dev` (`idusuario`);
+  ADD KEY `fk_idusuario_dev` (`idusuario`),
+  ADD KEY `fk_idcontrato_dev` (`idcontrato`);
 
 --
 -- Indices de la tabla `distritos`
@@ -5597,6 +7019,7 @@ ALTER TABLE `sedes`
 --
 ALTER TABLE `separaciones`
   ADD PRIMARY KEY (`idseparacion`),
+  ADD UNIQUE KEY `uk_n_expediente` (`n_expediente`),
   ADD KEY `fk_idactivo_sep` (`idactivo`),
   ADD KEY `fk_idcliente_sep` (`idcliente`),
   ADD KEY `fk_idconyugue_sep` (`idconyugue`),
@@ -5609,14 +7032,6 @@ ALTER TABLE `subcategoria_costos`
   ADD PRIMARY KEY (`idsubcategoria_costo`),
   ADD UNIQUE KEY `fk_subactegoria_costo_subcat_costo` (`subcategoria_costo`),
   ADD KEY `fk_idcategoria_costo_subcat_costo` (`idcategoria_costo`);
-
---
--- Indices de la tabla `sustentos_cuotas`
---
-ALTER TABLE `sustentos_cuotas`
-  ADD PRIMARY KEY (`idsustento_cuota`),
-  ADD KEY `fk_idcuota_sust_cuo` (`idcuota`),
-  ADD KEY `fk_idusuario_sust_cuo` (`idusuario`);
 
 --
 -- Indices de la tabla `unidades_medida`
@@ -5643,7 +7058,7 @@ ALTER TABLE `usuarios`
 -- AUTO_INCREMENT de la tabla `activos`
 --
 ALTER TABLE `activos`
-  MODIFY `idactivo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=80;
+  MODIFY `idactivo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=81;
 
 --
 -- AUTO_INCREMENT de la tabla `categoria_costos`
@@ -5655,7 +7070,7 @@ ALTER TABLE `categoria_costos`
 -- AUTO_INCREMENT de la tabla `clientes`
 --
 ALTER TABLE `clientes`
-  MODIFY `idcliente` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
+  MODIFY `idcliente` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
 
 --
 -- AUTO_INCREMENT de la tabla `constructora`
@@ -5667,13 +7082,13 @@ ALTER TABLE `constructora`
 -- AUTO_INCREMENT de la tabla `contratos`
 --
 ALTER TABLE `contratos`
-  MODIFY `idcontrato` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `idcontrato` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT de la tabla `cuotas`
 --
 ALTER TABLE `cuotas`
-  MODIFY `idcuota` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `idcuota` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=339;
 
 --
 -- AUTO_INCREMENT de la tabla `departamentos`
@@ -5691,19 +7106,25 @@ ALTER TABLE `desembolsos`
 -- AUTO_INCREMENT de la tabla `detalles_contratos`
 --
 ALTER TABLE `detalles_contratos`
-  MODIFY `iddetalle_contrato` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `iddetalle_contrato` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `detalle_costos`
 --
 ALTER TABLE `detalle_costos`
-  MODIFY `iddetalle_costo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `iddetalle_costo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+
+--
+-- AUTO_INCREMENT de la tabla `detalle_cuotas`
+--
+ALTER TABLE `detalle_cuotas`
+  MODIFY `iddetalle_cuota` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
 -- AUTO_INCREMENT de la tabla `devoluciones`
 --
 ALTER TABLE `devoluciones`
-  MODIFY `iddevolucion` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `iddevolucion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT de la tabla `distritos`
@@ -5751,13 +7172,13 @@ ALTER TABLE `personas`
 -- AUTO_INCREMENT de la tabla `personas_juridicas`
 --
 ALTER TABLE `personas_juridicas`
-  MODIFY `idpersona_juridica` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=52;
+  MODIFY `idpersona_juridica` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=53;
 
 --
 -- AUTO_INCREMENT de la tabla `presupuestos`
 --
 ALTER TABLE `presupuestos`
-  MODIFY `idpresupuesto` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `idpresupuesto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=45;
 
 --
 -- AUTO_INCREMENT de la tabla `provincias`
@@ -5781,7 +7202,7 @@ ALTER TABLE `representantes`
 -- AUTO_INCREMENT de la tabla `rep_legales_clientes`
 --
 ALTER TABLE `rep_legales_clientes`
-  MODIFY `idrepresentante` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=142;
+  MODIFY `idrepresentante` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=145;
 
 --
 -- AUTO_INCREMENT de la tabla `roles`
@@ -5799,19 +7220,13 @@ ALTER TABLE `sedes`
 -- AUTO_INCREMENT de la tabla `separaciones`
 --
 ALTER TABLE `separaciones`
-  MODIFY `idseparacion` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `idseparacion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 
 --
 -- AUTO_INCREMENT de la tabla `subcategoria_costos`
 --
 ALTER TABLE `subcategoria_costos`
   MODIFY `idsubcategoria_costo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
-
---
--- AUTO_INCREMENT de la tabla `sustentos_cuotas`
---
-ALTER TABLE `sustentos_cuotas`
-  MODIFY `idsustento_cuota` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT de la tabla `unidades_medida`
@@ -5888,9 +7303,16 @@ ALTER TABLE `detalle_costos`
   ADD CONSTRAINT `fk_idusuario_det_costo` FOREIGN KEY (`idusuario`) REFERENCES `usuarios` (`idusuario`);
 
 --
+-- Filtros para la tabla `detalle_cuotas`
+--
+ALTER TABLE `detalle_cuotas`
+  ADD CONSTRAINT `fk_idcuota_detalle_cuotas` FOREIGN KEY (`idcuota`) REFERENCES `cuotas` (`idcuota`);
+
+--
 -- Filtros para la tabla `devoluciones`
 --
 ALTER TABLE `devoluciones`
+  ADD CONSTRAINT `fk_idcontrato_dev` FOREIGN KEY (`idcontrato`) REFERENCES `contratos` (`idcontrato`),
   ADD CONSTRAINT `fk_idseparacion_dev` FOREIGN KEY (`idseparacion`) REFERENCES `separaciones` (`idseparacion`),
   ADD CONSTRAINT `fk_idusuario_dev` FOREIGN KEY (`idusuario`) REFERENCES `usuarios` (`idusuario`);
 
@@ -5985,13 +7407,6 @@ ALTER TABLE `separaciones`
 --
 ALTER TABLE `subcategoria_costos`
   ADD CONSTRAINT `fk_idcategoria_costo_subcat_costo` FOREIGN KEY (`idcategoria_costo`) REFERENCES `categoria_costos` (`idcategoria_costo`);
-
---
--- Filtros para la tabla `sustentos_cuotas`
---
-ALTER TABLE `sustentos_cuotas`
-  ADD CONSTRAINT `fk_idcuota_sust_cuo` FOREIGN KEY (`idcuota`) REFERENCES `cuotas` (`idcuota`),
-  ADD CONSTRAINT `fk_idusuario_sust_cuo` FOREIGN KEY (`idusuario`) REFERENCES `usuarios` (`idusuario`);
 
 --
 -- Filtros para la tabla `usuarios`

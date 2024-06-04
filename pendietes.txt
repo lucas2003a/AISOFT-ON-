@@ -6,3 +6,34 @@
 -control de usuarios
 - reportes
 - consulta para el dashboard
+
+··algoritmo de registro de fechas de cuotas
+
+    caso 1
+        - obtego el precio de venta (del contrato)
+        - escribo la cantidad de cuotas
+        - calculo el valor de la cuota (precio de venta / cantidad de cuotas)
+        - obtengo el monto por cada cuota
+        - obtengo la fecha del dia de hoy (para considerar de hoy en adelante la fecha de pago)
+        - calculo la fecha de pago de cada cuota (fecha de hoy + intervalo de meses)
+        - registro las cuotas
+    
+    caso 2
+        - obtego el precio de venta (del contrato)
+        - escribo el monto que quiero
+        - calculo la cantidad de cuotas (monto / valor de la cuota)
+        - obtengo la fecha del dia de hoy (para considerar de hoy en adelante la fecha de pago)
+        - calculo la fecha de pago de cada cuota (fecha de hoy + intervalo de meses)
+        - registro las cuotas
+
+++ algoritmo para reprogrmar las fechas de pago
+    - obtengo todas las coutas por cancelar
+    - obtengo el valor total de sus montos (suma total de los montos por cancelar)
+    - se usa el algoritmo para registrar fechas
+    - guarda esos datos en una coleccion de datos
+
+    por consultar y analizar
+
+    - actulizar o eliminar lo registros por cancelar y registrar o acutalizar los nuevos que estan guardados en la coleccion de datos
+
+ANALIZA LOS CONTRATOS PARA QUE SEPAS SI APLICAR UNA PENALIDAD A LOS MONTOS, SI EXISTE UN ATRAS, DE AQUI TAMBIEN FORULA TUS PREGUNTAS

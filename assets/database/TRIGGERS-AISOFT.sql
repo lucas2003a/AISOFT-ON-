@@ -160,41 +160,78 @@ CREATE TRIGGER trgr_asset_status_refund AFTER INSERT ON devoluciones
 FOR EACH ROW
 BEGIN
 	DECLARE _idactivo INT;
-	DECLARE _existContract TINYINT;
+	DECLARE _idseparacion_contrato INT;
 
-	SET _idactivo = (
-		SELECT idactivo FROM separaciones
-		WHERE idseparacion = NEW.idseparacion
-	);
+	-- SI EL ID SEPARACIÓN NO ESTÁ VACÍO
+	IF NEW.idseparacion IS NOT NULL THEN
+		SET _idactivo = (
+			SELECT idactivo FROM separaciones
+			WHERE idseparacion = NEW.idseparacion
+		);
 
-	SET _existContract = (
-		SELECT EXISTS(SELECT 1 FROM contratos
-		WHERE idactivo = _idactivo
-		AND inactive_at IS NULL)
-	);
+		UPDATE activos
+			SET
+				estado = "SIN VENDER",
+				update_at = CURDATE(),
+				idusuario = NEW.idusuario
+			WHERE
+				idactivo = _idactivo;
 
-	UPDATE activos
-		SET
-			estado = "SIN VENDER",
-			update_at = CURDATE(),
-			idusuario = NEW.idusuario
-		WHERE
-			idactivo = _idactivo;
-
-	UPDATE separaciones
-		SET
-			inactive_at = CURDATE(),
-			idusuario = NEW.idusuario
-		WHERE
-			idseparacion = NEW.idseparacion;
-
-	IF _existContract = 1 THEN
-		UPDATE contratos
+		UPDATE separaciones
 			SET
 				inactive_at = CURDATE(),
 				idusuario = NEW.idusuario
 			WHERE
-				idactivo = _idactivo;
+				idseparacion = NEW.idseparacion;
+
+	-- SI EL ID CONTRATO NO ESTÁ VACÍO
+	ELSEIF NEW.idcontrato IS NOT NULL THEN
+
+
+		SET _idseparacion_contrato = (
+			SELECT idseparacion FROM contratos
+			WHERE idcontrato = NEW.idcontrato
+		);
+
+		-- SI EL IDSEPARACIÒN DEL CONTRATO NO ESTÁ VACÍO
+		IF _idseparacion_contrato IS NOT NULL THEN
+
+			SET _idactivo = (
+				SELECT idactivo FROM separaciones
+				WHERE idseparacion = _idseparacion_contrato
+			);
+
+			UPDATE activos
+				SET
+					estado = "SIN VENDER",
+					update_at = CURDATE(),
+					idusuario = NEW.idusuario
+				WHERE 
+					idactivo = _idactivo;
+		ELSE
+
+			SET _idactivo = (
+				SELECT idactivo FROM contratos
+				WHERE idcontrato = NEW.idcontrato
+			);
+
+			UPDATE activos
+				SET
+					estado = "SIN VENDER",
+					update_at = CURDATE(),
+					idusuario = NEW.idusuario
+				WHERE
+					idactivo = _idactivo;
+		END IF;
+
+		-- ACTUALIZA EL CONTRATO
+		UPDATE contratos
+			SET
+				estado = "INACTIVO",
+				inactive_at = CURDATE(),
+				idusuario = NEW.idusuario
+			WHERE
+				idcontrato = NEW.idcontrato;
 	END IF;
 END $$
 DELIMITER ;
@@ -224,7 +261,7 @@ END $$
 DELIMITER ;
 
 DELIMITER $$
-CREATE  TRIGGER trgr_contracts_add AFTER INSERT ON contratos
+CREATE TRIGGER trgr_contracts_add AFTER INSERT ON contratos
 FOR EACH ROW
 BEGIN
 	DECLARE _idactivo INT;
@@ -251,6 +288,97 @@ BEGIN
 				idusuario = NEW.idusuario
 			WHERE 
 				idactivo = NEW.idactivo;
+	END IF;
+END $$
+DELIMITER ;
+
+DELIMITER $$
+CREATE TRIGGER trgr_contracts_update AFTER UPDATE ON contratos
+FOR EACH ROW
+BEGIN
+	DECLARE _oldIdactivo INT;
+	DECLARE _newIdactivo INT;
+
+	-- SI EL CAMPO INACTIVO ESTÁ VACÍO
+	IF NEW.inactive_at IS NULL THEN
+
+		IF NEW.idseparacion IS NOT NULL AND NEW.idseparacion != OLD.idseparacion THEN
+
+			SET _oldIdactivo = (
+				SELECT idactivo FROM separaciones
+				WHERE idseparacion = OLD.idseparacion
+			);
+
+			SET _newIdactivo = (
+				SELECT idactivo FROM separaciones
+				WHERE idseparacion = NEW.idseparacion
+			);
+
+			UPDATE activos
+				SET
+					estado = "VENDIDO",
+					update_at = CURDATE(),
+					idusuario = NEW.idusuario
+				WHERE
+					idactivo = _newIdactivo;
+
+			UPDATE activos
+				SET
+					estado = "SIN VENDER",
+					update_at = CURDATE(),
+					idusuario = NEW.idusuario
+				WHERE
+					idactivo = _oldIdactivo;
+
+		END IF;
+
+		IF NEW.idactivo IS NOT NULL AND NEW.idactivo != OLD.idactivo THEN
+
+			UPDATE activos
+				SET
+					estado = "VENDIDO",
+					update_at = CURDATE(),
+					idusuario = NEW.idusuario
+				WHERE
+					idactivo = NEW.idactivo;
+
+			UPDATE activos
+				SET
+					estado = "SIN VENDER",
+					update_at = CURDATE(),
+					idusuario = NEW.idusuario
+				WHERE
+					idactivo = OLD.idactivo;
+		END IF;
+	-- SI EL CAMPO INACTIVO NO ESTÁ VACÍO
+	ELSE
+
+		IF NEW.idseparacion IS NOT NULL THEN
+
+			SET _newIdactivo = (
+				SELECT idactivo FROM separaciones
+				WHERE idseparacion = NEW.idseparacion
+			);
+			
+			UPDATE activos
+				SET
+					estado = "SIN VENDER",
+					update_at = CURDATE(),
+					idusuario = NEW.idusuario
+				WHERE
+					idactivo = _newIdactivo;
+		END IF;
+
+		IF NEW.idactivo IS NOT NULL THEN
+			
+			UPDATE activos
+				SET
+					estado = "SIN VENDER",
+					update_at = CURDATE(),
+					idusuario = NEW.idusuario
+				WHERE
+					idactivo = NEW.idactivo;
+		END IF;
 	END IF;
 END $$
 DELIMITER ;

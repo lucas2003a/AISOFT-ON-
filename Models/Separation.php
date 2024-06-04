@@ -28,6 +28,22 @@ class Separation extends Conection{
     }
 
     /**
+     * Lista todas las separaciones exeptuando las que estan en un contrato
+     */
+    public function listSeparationsAll(){
+        try{
+
+            $query = $this->conection->prepare("CALL spu_list_separations_all()");
+            $query->execute();
+
+            return $query->fetchAll(PDO::FETCH_ASSOC);
+        }
+        catch(Exception $e){
+            die($e->getMessage());
+        }
+    }
+
+    /**
      * Método para listar las separaciones en base a 3 criterios(Tipo de persona, fecha inicio,fecha fin)
      */
     public function listSeparationsTPersona($dataSep = []){

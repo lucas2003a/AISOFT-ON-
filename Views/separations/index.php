@@ -969,8 +969,8 @@
           if (exist) {
             sAlert.sweetWarning("No se puede actualizar el registro", "Este registro cuenta con un contrato, intentalo más tarde.")
           } else {
-
-            window.location.href = `../refunds/add_refund.php?id=${code}`;
+            let type = btoa("sep");
+            window.location.href = `../refunds/add_refund.php?id=${code}&type=${type}`;
           }
         }else if(e.target.classList.contains("edit")){
 

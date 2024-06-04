@@ -12,6 +12,12 @@ if(isset($_POST["action"])){
 
                 echo json_encode($separation->listSeparations());
             break;
+
+
+        case "listSeparationsAll": 
+
+                echo json_encode($separation->listSeparationsAll());
+            break;
         case "listSeparationsTPersona": 
 
                 $dataObtained = [

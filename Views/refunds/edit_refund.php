@@ -456,8 +456,8 @@
                           
                           <!-- MONTO SEPARACIÓN -->
                           <div class="mt-4">
-                            <label for="monto_separacion" class="form-label">Monto de separación</label>
-                            <input type="text" name="monto_separacion" class="form-control" id="monto_separacion" readonly>
+                            <label for="monto_total" class="form-label">Monto de separación</label>
+                            <input type="text" name="monto_total" class="form-control" id="monto_total" readonly>
                           </div>
 
                           <!-- MONTO DE DEVOLUCIÓN -->
@@ -638,7 +638,9 @@
     const stringQuery = window.location.search;
     const params  = new URLSearchParams(stringQuery);
     const code = params.get("id");
+    const codeType = params.get("type");
     const iddevolucion = atob(code);
+    const type = atob(codeType);
 
     const $ = id => global.$(id);
     const $All = id => global.$All(id);
@@ -647,7 +649,7 @@
     let lastCode = false;
     let dataClients;
     let dataDev;
-    let idseparacion;
+    let montoContrato
 
     let newValue;
 
@@ -668,7 +670,6 @@
 
           console.log(result);
           dataDev = result
-          idseparacion = dataDev.idseparacion;
 
           let exp= dataDev.n_expediente_dev;
           let expSplit = exp.split("-");
@@ -695,7 +696,7 @@
           $("#porcentaje_penalidad").value = result.porcentaje_penalidad;
 
           //valor de la del monyo de separación
-          $("#monto_separacion").value = result.separacion_monto;
+          $("#monto_total").value = result.separacion_monto || await getAmount(id);
 
           //Valor de la monto de devolución
           $("#monto_devolucion").value = result.monto_devolucion;
@@ -708,21 +709,34 @@
     }
 
     //Obtiene los registros de una separacion por id (para obtener el monot de la separación)
-    async function getSeparationAmount(id) {
+    async function getAmount(id) {
 
       try {
-        let url = "../../Controllers/separation.controller.php";
+
+        let url = "";
         let params = new FormData();
 
-        params.append("action", "listSeparationById");
-        params.append("idseparacion", id);
+        if(type == "sep"){
+
+          url = "../../Controllers/separation.controller.php";
+  
+          params.append("action", "listSeparationById");
+          params.append("idseparacion", id);
+        }else{
+          url = "../../Controllers/quota.controller.php";
+  
+          params.append("action", "getQuotasContractReprogram");
+          params.append("idcontrato", id);
+        }
 
         let result = await global.sendAction(url, params);
 
         if(result) {
           
-          $("#monto_separacion").value = result.separacion_monto;
-          return result.separacion_monto;
+          let total = result.separacion_monto || result.precio_venta;
+          console.log(total)
+          $("#monto_total").value = total;
+          return total;
         }
       } catch (e) {
         console.error(e);
@@ -732,7 +746,7 @@
     //Calcula el nuevo monto de la devolución
     async function calculateNewAmount(){
       
-      let montoSep = Number.parseFloat(await getSeparationAmount(idseparacion));
+      let montoSep = Number.parseFloat(await getAmount(iddevolucion));
       let porcentaje = Number.parseFloat($("#porcentaje_penalidad").value || 0)
 
       console.log(montoSep)
@@ -846,7 +860,8 @@
         params.append("action", "setRefund");
         params.append("iddevolucion", iddev);
         params.append("n_expediente", newValue);
-        params.append("idseparacion", idseparacion);
+        params.append("idseparacion", dataDev.idseparacion);
+        params.append("idcontrato", dataDev.idcontrato);
         params.append("tipo_devolucion", $("#tipo_devolucion").value);
         params.append("detalle", $("#detalle").value);
         params.append("porcentaje_penalidad", $("#porcentaje_penalidad").value);
@@ -936,7 +951,6 @@
 
     // getTC();
     getRefundId(iddevolucion);
-    getSeparationAmount(idseparacion);
     getRefudsAll();
     /* --------------------------------- FUNCIÓN DE VALIDACIÓN --------------------------------------------------------- */
 

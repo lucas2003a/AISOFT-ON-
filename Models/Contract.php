@@ -12,6 +12,79 @@ class Contract extends Conection{
     }
 
     /**
+     * Método poara listar todos los contratos
+     */
+    public function listContracts(){
+        try{
+            $query = $this->conection->prepare("CALL spu_list_contractsAll()");
+            $query->execute();
+
+            return $query->fetchAll(PDO::FETCH_ASSOC);
+        }
+        catch(Exception $e){
+            die($e->getMessage());
+        }
+    }
+
+    /**
+     * Lista los contratos por el tipo de contrato
+     */
+    public function listContractByType($typeContract = ""){
+        try{
+            $query = $this->conection->prepare("CALL spu_list_contracts_types(?)");
+            $query->execute(array($typeContract));
+
+            return $query->fetchAll(PDO::FETCH_ASSOC);
+        }
+        catch(Exception $e){
+            die($e->getMessage());
+        }
+    }
+
+    /**
+     * Lista los contatos por su tipo y por su fecha
+     */
+    public function listContractsByTypeDate($dataContract= []){
+        try{
+            $query = $this->conection->prepare("CALL spu_list_contracts_types_date(?,?,?)");
+            $query->execute(
+                array(
+                    $dataContract['tipo_contrato'],
+                    $dataContract['fecha_inicio'],
+                    $dataContract['fecha_fin']
+                )
+            );
+            
+            return $query->fetchAll(PDO::FETCH_ASSOC);
+        }
+        catch(Exception $e){
+            die($e->getMessage());
+        }
+    }
+
+    /**
+     * Lista los contatos por su tipo, por su fecha y su número de expedieente
+     */
+    public function listContractsByTypeDateNexpediente($dataContract= []){
+        try{
+            $query = $this->conection->prepare("CALL spu_list_contracts_types_date_n_expediente(?,?,?,?)");
+            $query->execute(
+                array(
+                    $dataContract['tipo_contrato'],
+                    $dataContract['fecha_inicio'],
+                    $dataContract['fecha_fin'],
+                    $dataContract['n_expediente']
+                )
+            );
+            
+            return $query->fetchAll(PDO::FETCH_ASSOC);
+        }
+        catch(Exception $e){
+            die($e->getMessage());
+        }
+    }
+
+    /**
      * Método para verificar si existe un contrato con el idcontrato
      */
     public function existsContractIdContract($idcontrato =0 ){
@@ -30,7 +103,7 @@ class Contract extends Conection{
     /**
      * Método para verficar si existe un contratodo por el idseparacion
      */
-    public function existContrat($idseparacion = 0){
+    public function existContract($idseparacion = 0){
         try{
 
             $query = $this->conection->prepare("CALL spu_existContract_idseparacion(?)");
@@ -67,17 +140,23 @@ class Contract extends Conection{
 
         try{
 
-            $query = $this->conection->prepare("CALL spu_add_contracts(?,?,?,?,?,?,?,?,?)");
+            $query = $this->conection->prepare("CALL spu_add_contracts(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
             $query->execute(
                 array(
-                    $dataContract["idcliente"],
-                    $dataContract["idconyugue"],
+                    $dataContract["n_expediente"],
+                    $dataContract["tipo_contrato"],
+                    $dataContract["idseparacion"],
                     $dataContract["idrepresentante_primario"],
                     $dataContract["idrepresentante_secundario"],
+                    $dataContract["idcliente"],
+                    $dataContract["idconyugue"],
+                    $dataContract["idactivo"],
                     $dataContract["tipo_cambio"],
                     $dataContract["estado"],
-                    $dataContract["detalles"],
                     $dataContract["fecha_contrato"],
+                    $dataContract["precio_venta"],
+                    $dataContract["det_contrato"],
+                    $dataContract["archivo"],
                     $dataContract["idusuario"]
                 )
             );
@@ -96,18 +175,24 @@ class Contract extends Conection{
 
         try{
 
-            $query = $this->conection->prepare("CALL spu_set_contracts(?,?,?,?,?,?,?,?,?,?)");
+            $query = $this->conection->prepare("CALL spu_set_contracts(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
             $query->execute(
                 array(
                     $dataContract["idcontrato"],
-                    $dataContract["idcliente"],
-                    $dataContract["idconyugue"],
+                    $dataContract["n_expediente"],
+                    $dataContract["tipo_contrato"],
+                    $dataContract["idseparacion"],
                     $dataContract["idrepresentante_primario"],
                     $dataContract["idrepresentante_secundario"],
+                    $dataContract["idcliente"],
+                    $dataContract["idconyugue"],
+                    $dataContract["idactivo"],
                     $dataContract["tipo_cambio"],
                     $dataContract["estado"],
-                    $dataContract["detalles"],
                     $dataContract["fecha_contrato"],
+                    $dataContract["precio_venta"],
+                    $dataContract["det_contrato"],
+                    $dataContract["archivo"],
                     $dataContract["idusuario"]
                 )
             );
@@ -141,19 +226,36 @@ class Contract extends Conection{
         }
     }
 
+    /************************************************************  DETALLES DEL CONTRATO  **********************************************************/
+    
     /**
      * Método para listar los detalles de un contrato por el idactivo
      */
-    public function listDetContract($idactivo = 0){
+    public function listDetContract($idcontrato = 0){
 
         try{
 
-            $query = $this->conection->prepare("CALL CALL spu_list_det_contracts(?)");
-            $query->execute(array($idactivo));
+            $query = $this->conection->prepare("CALL spu_list_det_contracts(?)");
+            $query->execute(array($idcontrato));
 
             return $query->fetchAll(PDO::FETCH_ASSOC);
 
         }catch(Exception $e){
+            die($e->getMessage());
+        }
+    }
+
+    /**
+     * Método para listar los detalles del contrato por el id del detalle
+     */
+    public function listDetContractById($iddetalle_contrato = 0){
+        try{
+            $query = $this->conection->prepare("CALL spu_list_det_contract_ById(?)");
+            $query->execute(array($iddetalle_contrato));
+
+            return $query->fetch(PDO::FETCH_ASSOC);
+        }
+        catch(Exception $e){
             die($e->getMessage());
         }
     }
@@ -165,12 +267,11 @@ class Contract extends Conection{
 
         try{
 
-            $query = $this->conection->prepare("CALL spu_add_det_contracts(?,?,?)");
+            $query = $this->conection->prepare("CALL spu_add_det_contract(?,?)");
             $query->execute(
                 array(
-                    $dataDetCont["idactivo"],
-                    $dataDetCont["idcontrato"],
-                    $dataDetCont["idusuario"]
+                    $dataDetCont["idrepresentante"],
+                    $dataDetCont["idcontrato"]
                 )
             );
 
@@ -188,13 +289,12 @@ class Contract extends Conection{
 
         try{
 
-            $query = $this->conection->prepare("CALL spu_set_det_contracts(?,?,?,?)");
+            $query = $this->conection->prepare("CALL spu_set_det_contract(?,?,?,?)");
             $query->execute(
                 array(
                     $dataDetCont["iddetalle_contrato"],
-                    $dataDetCont["idactivo"],
-                    $dataDetCont["idcontrato"],
-                    $dataDetCont["idusuario"]
+                    $dataDetCont["idrepresentante"],
+                    $dataDetCont["idcontrato"]
                 )
             );
 
@@ -212,7 +312,7 @@ class Contract extends Conection{
 
         try{
 
-            $query = $this->conection->prepare("CALL spu_inactive_det_contracts(?)");
+            $query = $this->conection->prepare("CALL spu_inactive_det_contract(?)");
             $query->execute(array($iddetalle_contrato));
 
             return $query->fetch(PDO::FETCH_ASSOC);

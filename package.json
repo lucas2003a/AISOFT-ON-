@@ -5,5 +5,19 @@
   },
   "devDependencies": {
     "eslint": "^9.3.0"
-  }
+  },
+  "name": "c",
+  "version": "1.0.0",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs",
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "keywords": [],
+  "description": ""
 }

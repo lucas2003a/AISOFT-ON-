@@ -706,10 +706,6 @@
           if (result) {
             console.log(result)
 
-
-            // $("#labels").innerHTML = "";
-            // $("#content").innerHTML = "";
-
             $("#modalTitle").innerHTML = result.n_expediente_dev;
 
             $("#before_n_expediente").innerHTML = result.n_expediente_dev ? result.n_expediente_dev : result.n_expediene_contract;
@@ -722,25 +718,6 @@
             $("#monto_separacion").innerHTML = result.separacion_monto;
             $("#porcentaje_penalidad").innerHTML = result.porcentaje_penalidad;
             $("#monto_devolucion").innerHTML = result.monto_devolucion;
-
-            // if (result.conyugue) {
-
-            //   const labels = ["Conyugue", "Tipo de documento", "Nro de documento"];
-            //   const contents = [result.conyugue, result.conyPers_documento_tipo, result.conyPers_documento_nro];
-            //   console.log(contents)
-
-            //   $("#labels").innerHTML += "<hr>";
-            //   $("#content").innerHTML += "<hr>";
-
-            //   labels.forEach((label, index) => {
-
-            //     let tagLabel = `<h6><strong>${label} :</strong></h6>`;
-            //     $("#labels").innerHTML += tagLabel;
-
-            //     let tagContent = `<h6>${contents[index]}</h6>`;
-            //     $("#content").innerHTML += tagContent;
-            //   });
-            // }
 
           }
         } catch (e) {
@@ -801,7 +778,7 @@
                     <td class="text-xs text-truncate">${result.create_at}</td>
                     <td>
                         <a type="button" href="#" data-id="${result.iddevolucion}" class="btn btn-link text-info px-3 mb-0 open-modal" data-bs-toggle="modal" data-bs-target="#modal_det_sep" ><i class="fa-solid fa-eye open-modal" data-id="${result.iddevolucion}"></i></a>
-                        <a type="button" data-id="${result.iddevolucion}" data-expedient="${result.n_expediente_dev}" class="btn btn-link text-dark px-3 mb-0 edit"><i class="bi bi-pencil-fill edit" data-id="${result.iddevolucion}" data-expedient="${result.n_expediente_dev}"></i></a>
+                        <a type="button" data-id="${result.iddevolucion}" data-expedient="${result.n_expediente_dev}" data-type="${result.devolucion}"class="btn btn-link text-dark px-3 mb-0 edit"><i class="bi bi-pencil-fill edit" data-id="${result.iddevolucion}" data-expedient="${result.n_expediente_dev}"></i></a>
                     </td>
                   </tr>
                   `;
@@ -993,10 +970,15 @@
           let iddevolucion = e.target.dataset.id;
           let expedientE = e.target.dataset.expedient;
 
+          let typeContent = e.target.dataset.type
+          let type = typeContent == "POR CONTRATO" ? "cont" : "sep";
+          let typeCode = btoa(type)
+
           let code = btoa(iddevolucion);
           let expedient = btoa(expedientE);
 
-          window.location.href = `./edit_refund.php?id=${code}&expedient=${expedient}`;
+          window.location.href = `./edit_refund.php?id=${code}&expedient=${expedient}&type=${typeCode}`;
+
 
         }
       });

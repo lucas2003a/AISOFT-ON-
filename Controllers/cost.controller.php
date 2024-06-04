@@ -50,7 +50,7 @@ if(isset($_POST["action"])){
                     "iddetalle_costo"       => $_POST["iddetalle_costo"],
                     "idpresupuesto"         => $_POST["idpresupuesto"],
                     "idsubcategoria_costo"  => $_POST["idsubcategoria_costo"],
-                    "idmaterial "           => $_POST["idmaterial"],
+                    "idmaterial"           => $_POST["idmaterial"],
                     "detalle"               => $_POST["detalle"],
                     "cantidad"              => $_POST["cantidad"],
                     "precio_unitario"       => $_POST["precio_unitario"],

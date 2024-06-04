@@ -356,6 +356,22 @@ class Asset extends Conection
     }
 
     /**
+     * Lista solo los LOTES en estado SEAPARADOS
+     */
+    public function listOnlyLotsSep($idproyecto = 0)
+    {
+        try {
+
+            $query = $this->conection->prepare("CALL spu_list_onlyLots_sep(?)");
+            $query->execute(array($idproyecto));
+
+            return $query->fetchAll(PDO::FETCH_ASSOC);
+        } catch (Exception $e) {
+            die($e->getMessage());
+        }
+    }
+
+    /**
      * Método para listar solo las CASAS con estado SIN VENDER
      */
     public function listOnlyHouses($idproyecto = 0)

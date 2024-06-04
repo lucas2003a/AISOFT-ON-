@@ -395,7 +395,7 @@
                 </div>
                 <div class="row d-flex space-between">
                   <div class="col-md-6">
-                    <a class="btn btn-outline-success btn-sm mb-0 me-3" href="./add_asset.php" id="add-asset">AGREGAR CUOTA</a>
+                    <a class="btn btn-outline-success btn-sm mb-0 me-3" href="./add_asset.php" id="add-asset">Generar reporte</a>
                   </div>
                   <div class="col-md-6">
                     <div class="input-group">
@@ -410,53 +410,57 @@
         </div>
       </div>
 
+      <div id="card-error">
+
+      </div>
       <div style="height: 600px;overflow-y: auto;overflow-x:hidden;" id="cards-render">
 
-        <!-- PLNATILA DE CARD -->
-        <template id="card-template">
+        <!-- RENER CARDS -->
 
-          <div class="row">
-            <div class="col-12">
-              <div class="card pb-4" style="box-shadow: 20px 20px 27px 20px rgba(0, 0, 0, 0.05); margin:10px 80px 50px 80px;">
-                <div class="card-header pb-0">
-                  <div class="row">
-                    <div class="col-md-6">
+      </div>
+      <!-- PLNATILA DE CARD -->
+      <template id="card-template">
 
-                      <h6><strong class="text-apellidos"></strong></h6>
-                      <h6 class="text-nombres"></h6>
-                      <hr>
-                      <p class="text-documento"></p>
+        <div class="row">
+          <div class="col-12">
+            <div class="card pb-4 card-client" style="box-shadow: 20px 20px 27px 20px rgba(0, 0, 0, 0.05); margin:10px 40px 50px 40px;">
+              <div class="card-header pb-0">
+                <div class="row">
+                  <div class="col-md-6">
+
+                    <h6><strong class="text-apellidos"></strong></h6>
+                    <h6 class="text-nombres"></h6>
+                    <hr>
+                    <p class="text-documento"></p>
+                  </div>
+                  <div class="col-md-6 d-flex" style="justify-content: flex-end; align-items:center;">
+                    <div class="text-end">
+                      <button id="buttonEvent" type="button" class="btn btn-sm open-list bg-gradient-info opacity-10" data-bs-toggle="collapse" data-bs-target="#lista1" aria-expanded="true" aria-controls="lista1"><br>Abrir</button>
                     </div>
-                    <div class="col-md-6 d-flex" style="justify-content: flex-end; align-items:center;">
-                      <div class="text-end">
-                        <button id="buttonEvent" type="button" class="btn btn-sm open-list bg-gradient-info opacity-10" data-bs-toggle="collapse" data-bs-target="#lista1" aria-expanded="true" aria-controls="lista1"><br>Abrir</button>
-                      </div>
-                    </div>
-                    <div id="lista1" class="mt-2 accordion-collapse collapse contentAcordion" data-bs-parent="#accordion" aria-labelledby="buttonEvent" style="border-radius: 5px;background-color:rgba(0, 0, 0, 0.05)">
+                  </div>
+                  <div id="lista1" class="mt-2 accordion-collapse collapse contentAcordion" data-bs-parent="#accordion" aria-labelledby="buttonEvent" style="border-radius: 5px;background-color:rgba(0, 0, 0, 0.05)">
 
-                      <ul class="ulhover" style="list-style: none;">
+                    <ul class="ulhover" style="list-style: none;">
 
-                        <!-- SEGUNDA PLATILLA(RENDERIZA LA LISTA) -->
-                        <template class="clone-list">
-                          <li class="m-2 li-tag go">
-                            <a class="text-tag go"><strong class="text-expediente"></strong><span class="text-tipocontrato"></span></a>
-                            <hr>
-                          </li>
-                        </template>
-                        <!-- FIN DE LA SEGUNDA PLANTILLA -->
+                      <!-- SEGUNDA PLATILLA(RENDERIZA LA LISTA) -->
+                      <template class="clone-list">
+                        <li class="m-2 li-tag go">
+                          <a class="text-tag go"><strong class="text-expediente"></strong><span class="text-tipocontrato"></span></a>
+                          <hr>
+                        </li>
+                      </template>
+                      <!-- FIN DE LA SEGUNDA PLANTILLA -->
 
-                      </ul>
-                    </div>
+                    </ul>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        </template>
+        </div>
+      </template>
 
-        <!-- FIN DE CARTILLA DE CARD -->
-
-      </div>
+      <!-- FIN DE CARTILLA DE CARD -->
 
       <footer class="footer pt-3">
         <div class="container-fluid">
@@ -532,6 +536,8 @@
       </div>
     </div>
   </div>
+
+
   <!-- SWEET ALERT -->
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
@@ -544,7 +550,7 @@
   <script src="../../assets/js/globalFunctions.js"></script>
   <script src="../../assets/js/sweetAlert.js"></script>
   <script>
-    document.addEventListener("DOMContentLoaded", async function(){
+    document.addEventListener("DOMContentLoaded", async function() {
 
       /* INSTANCIAS */
       const global = new FunGlobal();
@@ -552,7 +558,75 @@
       const $ = id => global.$(id);
       const $All = id => global.$All(id);
 
+      let timmer;
+
       const uls = $All(".ulhover");
+
+      //Renderiza los datos enviados en cards
+      async function renderCards(array) {
+
+        let cardTemplate = $("#card-template");
+        let cardsRender = $("#cards-render");
+
+        for (result of array) {
+
+          //variable que contiene el template primario
+          let cardClone = cardTemplate.content.cloneNode(true);
+
+          //variable que contiene los datos de los contratos
+          let contents = await getContractsClients(result.idcliente);
+          console.log(contents)
+
+          //Recorrido por cada contrato
+          contents.forEach(content => {
+
+            //Clona la lista de aceurdo a los contratos
+            let liClone = cardClone.querySelector(".clone-list").content.cloneNode(true);
+            liClone.querySelector(".text-expediente").innerText = content.n_expediente;
+            liClone.querySelector(".text-tipocontrato").innerText = ` - ${content.tipo_contrato}`;
+
+            //Configuro los dataser para guardar el id del contrato
+            let aTag = liClone.querySelector(".text-tag");
+            let codeid = btoa(content.idcontrato);
+
+            aTag.setAttribute("href", `./detail_quotas.php?id=${codeid}`);
+            //Agrega el clone a la lista de contratos
+            cardClone.querySelector(".ulhover").appendChild(liClone);
+          });
+
+          //Modifca los atrbutos id y data de los botones tipo acordeon
+          let buttonOpen = cardClone.querySelector(".open-list");
+          buttonOpen.setAttribute("id", `buttonEvent-${result.idcliente}`);
+          buttonOpen.setAttribute("data-bs-target", `#lista-${result.idcliente}`);
+          buttonOpen.setAttribute("aria-controles", `lista-${result.idcliente}`);
+
+          let contentAcordion = cardClone.querySelector(".contentAcordion");
+          contentAcordion.setAttribute("id", `lista-${result.idcliente}`)
+          contentAcordion.setAttribute("aria-labelledby", `buttonEvent-${result.idcliente}`);
+
+          //Verfica si clientes cotinene una coma que sirve como referencia para saber si es persona natural o juridica
+          if (result.cliente.includes(",")) {
+
+            //Recorrido por cada cliente y se agrega el clone a la lista de clientes
+            let response = result.cliente;
+            let responseString = response.toString().split(",");
+            let nombres = responseString[1];
+            let apellidos = responseString[0];
+
+            cardClone.querySelector(".text-apellidos").innerText = apellidos;
+            cardClone.querySelector(".text-nombres").innerText = nombres;
+          } else {
+            cardClone.querySelector(".text-apellidos").innerText = result.cliente;
+            cardClone.querySelector(".text-nombres").innerText = "";
+          }
+
+          let documento = `${result.documento_tipo} - ${result.documento_nro}`;
+          cardClone.querySelector(".text-documento").innerText = documento;
+
+          //Agrega el card clonado a la plantilla principal
+          cardsRender.appendChild(cardClone);
+        }
+      }
 
       //Obtiene los contratos por cliente
       async function getContractsClients(id) {
@@ -568,11 +642,45 @@
           let results = await global.sendAction(url, params);
 
           if (results.length > 0) {
-            
+
             return results;
           }
         } catch (e) {
           console.error(e)
+        }
+      }
+
+      async function getClientesForSaleDN(dnumero) {
+        try {
+
+          let url = "../../Controllers/client.controller.php";
+
+          let params = new FormData();
+
+          params.append("action", "listClientsForSaleDN");
+          params.append("documento_nro", dnumero);
+
+          let results = await global.sendAction(url, params);
+
+          if (results.length > 0) {
+
+            $("#card-error").innerHTML = "";
+            $("#cards-render").innerHTML = "";
+
+            renderCards(results)
+
+          } else {
+            $("#cards-render").innerHTML = "";
+
+            let alertError = `
+            <div class="alert alert-danger text-white" role="alert">
+              <strong>No se ha encontrado resultados</strong> Vuelve a intentarlo
+            </div>`;
+
+            $("#card-error").innerHTML = alertError;
+          }
+        } catch (e) {
+          console.error(e);
         }
       }
 
@@ -591,86 +699,55 @@
 
           if (results.length > 0) {
 
-            let cardTemplate = $("#card-template");
-            let cardsRender = $("#cards-render");
 
-            console.log(results)
+            $("#card-error").innerHTML = "";
+            $("#cards-render").innerHTML = "";
 
-            for(result of results){
+            renderCards(results)
 
-              //variable que contiene el template primario
-              let cardClone = cardTemplate.content.cloneNode(true);
+          } else {
+            $("#cards-render").innerHTML = "";
 
-              //variable que contiene los datos de los contratos
-              let contents = await getContractsClients(result.idcliente);
-              console.log(contents)
-              
-              //Recorrido por cada contrato
-              contents.forEach(content => {
+            let alertError = `
+            <div class="alert alert-danger text-white" role="alert">
+              <strong>No se ha encontrado resultados</strong> Vuelve a intentarlo
+            </div>`;
 
-                //Clona la lista de aceurdo a los contratos
-                let liClone = cardClone.querySelector(".clone-list").content.cloneNode(true);
-                liClone.querySelector(".text-expediente").innerText = content.n_expediente;
-                liClone.querySelector(".text-tipocontrato").innerText = ` - ${content.tipo_contrato}`;
-
-                let aTag = liClone.querySelector(".text-tag");
-                let idcode = btoa(content.idcontrato)
-
-                aTag.setAttribute("href",`./detail_quotas.php?${idcode}`);
-
-                //Agrega el clone a la lista de contratos
-                cardClone.querySelector(".ulhover").appendChild(liClone);
-              });
-
-              //Modifca los atrbutos id y data de los botones tipo acordeon
-              let buttonOpen = cardClone.querySelector(".open-list");
-              buttonOpen.setAttribute("id", `buttonEvent-${result.idcliente}`);
-              buttonOpen.setAttribute("data-bs-target", `#lista-${result.idcliente}`);
-              buttonOpen.setAttribute("aria-controles", `lista-${result.idcliente}`);
-
-              let contentAcordion = cardClone.querySelector(".contentAcordion");
-              contentAcordion.setAttribute("id", `lista-${result.idcliente}`)
-              contentAcordion.setAttribute("aria-labelledby", `buttonEvent-${result.idcliente}`);
-
-              //Verfica si clientes cotinene una coma que sirve como referencia para saber si es persona natural o juridica
-              if (result.cliente.includes(",")) {
-
-                //Recorrido por cada cliente y se agrega el clone a la lista de clientes
-                let response = result.cliente;
-                let responseString = response.toString().split(",");
-                let nombres = responseString[1];
-                let apellidos = responseString[0];
-
-                cardClone.querySelector(".text-apellidos").innerText = apellidos;
-                cardClone.querySelector(".text-nombres").innerText = nombres;
-              } else {
-                cardClone.querySelector(".text-apellidos").innerText = result.cliente;
-                cardClone.querySelector(".text-nombres").innerText = "";
-              }
-
-              let documento = `${result.documento_tipo} - ${result.documento_nro}`;
-              cardClone.querySelector(".text-documento").innerText = documento;
-
-              //Agrega el card clonado a la plantilla principal
-              cardsRender.appendChild(cardClone);
-            }
+            $("#card-error").innerHTML = alertError;
           }
         } catch (e) {
           console.error(e);
         }
       }
-      
+
       await getClientesForSale();
 
-      console.log(Array.from(uls))
-      $("#cards-render").addEventListener("click",(e)=>{
+      $("#cards-render").addEventListener("click", (e) => {
 
-        if(e.target.classList.contains("go")){
+        if (e.target.classList.contains("go")) {
 
           let idcontrato = e.target.dataset.id
 
           console.log(idcontrato)
         }
+      });
+
+      $("#in-code").addEventListener("input", (e) => {
+
+        clearTimeout(timmer);
+
+        timmer = setTimeout(() => {
+
+          let dnumero = e.target.value
+
+          if (dnumero !== "") {
+
+            getClientesForSaleDN(dnumero)
+          }else{
+            getClientesForSale()
+          }
+        }, 1500);
+
       });
 
     });
