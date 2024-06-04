@@ -687,8 +687,8 @@
                           <div class="row">
                             <div class="col-md-10">
                               <label for="label-detalle">Detalles</label>
-                              <input type="text" id="label-detalle" class="form-control input-det" placeholder="Cabezera" required>
-                              <textarea name="content-detalle" id="content-detalle" cols="30" rows="5" class="form-control mt-2 input-det" required></textarea>
+                              <input type="text" id="label-detalle" class="form-control input-det-clave" placeholder="Cabezera" required>
+                              <textarea name="content-detalle" id="content-detalle" cols="30" rows="5" class="form-control mt-2 input-det-valor" required></textarea>
                               <div class="invalid-feedback">
                                 Detalle requerido.
                               </div>
@@ -721,10 +721,10 @@
                             <div class="mt-2">
 
                             <div class="form-group mt-4">
-                            <label for="in-image" class="label-img">
+                            <label for="in-doc" class="label-img">
                               <i class="material-icons"></i>
                               <span class="title" style="display: flex; justify-content: center;">Agregar archivo</span>
-                              <input type="file" accept=".jpg" id="in-image" required>
+                              <input type="file" accept=".pdf, .doc, .docx" id="in-doc" required>
                             </label>
                             <div class="invalid-feedback">
                               Archivo de contrato requerido.
@@ -738,7 +738,7 @@
                         </div>
 
                         <div class="row">
-                          <iframe src="../../MODELO-AIF-2.png" frameborder="4" style="width: 100%; height: 100%;"></iframe>
+                          <iframe id="frame" src="" frameborder="4" width="500" height="800"></iframe>
                         </div>
 
                         <div class="d-flex justify-content-center">
@@ -763,8 +763,8 @@
       <template id="det-clone">
         <div class="row mt-2">
           <div class="col-md-10">
-            <input type="text" id="label-detalle" class="form-control input-det" placeholder="Cabezera" required>
-            <textarea name="content-detalle" id="content-detalle" cols="30" rows="5" class="form-control mt-2 input-det" required></textarea>
+            <input type="text" id="label-detalle" class="form-control input-det-clave" placeholder="Cabezera" required>
+            <textarea name="content-detalle" id="content-detalle" cols="30" rows="5" class="form-control mt-2 input-det-valor" required></textarea>
             <div class="invalid-feedback">
               Detalle requerido.
             </div>
@@ -903,6 +903,60 @@
       let dataRepresentsAll = [];
       let date = new Date();
 
+      let frame = $("#frame");
+
+      function readFile(event){
+
+        let reader = new FileReader();  
+        let file = event.target.files[0];
+
+        reader.onload = (event)=>{
+
+          frame.setAttribute("src",`${event.target.result}`);
+
+        }
+
+        reader.readAsDataURL(file);
+        
+      }
+
+      async function addContract(){
+
+        try{
+
+          let detJson = await global.getJson(".input-det-clave",".input-det-valor");
+
+          let url = "../../Controllers/contract.controller.php";
+          let params = new FormData();
+
+          params.append("action","addContract");
+          params.append("n_expediente",$("#n_expediente").value)
+          params.append("tipo_contrato",$("#tipo_contrato").value)
+          params.append("idseparacion",$("#idseparacion").value)
+          params.append("idrepresentante_primario",$("#idrepresentante_primario").value)
+          params.append("idrepresentante_secundario",$("#idrepresentante_secundario").value)
+          params.append("idcliente",$("#idcliente").value)
+          params.append("idconyugue",$("#idconyugue").value)
+          params.append("idactivo",$("#idactivo").value)
+          params.append("tipo_cambio",$("#tipo_cambio").value)
+          params.append("estado",$("#estado").value)
+          params.append("fecha_contrato",$("#fecha_contrato").value)
+          params.append("precio_venta",$("#precio_venta").value)
+          params.append("det_contrato",$("#det_contrato").value)
+          params.append("archivo",$("#archivo").files[0])
+
+          let result = await global.sendAction(url, params);
+
+          if(result){
+            console.log(result);
+          }
+        }
+        catch(e){
+          console.error(e);
+        }
+      }
+
+      //Clona la etiqueta
       function cloneContent(){
 
         let detailContent = $("#det-clone").content.cloneNode(true);
@@ -1468,6 +1522,10 @@
           }
         })
       }
+
+      $("#in-doc").addEventListener("change",(e)=>{
+        readFile(e)
+      });
 
       $("#content-det").addEventListener("click",(e)=>{
 

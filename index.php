@@ -1,19 +1,12 @@
-<!--
-=========================================================
-* Soft UI Dashboard - v1.0.7
-=========================================================
+<?php
 
-* Product Page: https://www.creative-tim.com/product/soft-ui-dashboard
-* Copyright 2023 Creative Tim (https://www.creative-tim.com)
-* Licensed under MIT (https://www.creative-tim.com/license)
-* Coded by Creative Tim
+if(isset($_SESSION["status"]) && $_SESSION["status"]){
 
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
--->
+  header("Location: Views/dashboad.html");
+}
+?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 
 <head>
   <meta charset="utf-8" />
@@ -158,17 +151,28 @@
   </footer>
   <!-- -------- END FOOTER 3 w/ COMPANY DESCRIPTION WITH LINKS & SOCIAL ICONS & COPYRIGHT ------- -->
   <!--   Core JS Files   -->
-  <script scr="assets/js/globalFunctions.js"></script>
-  <script scr="assets/js/sweetAlert.js"></script>
-  <script src="assets/js/core/popper.min.js"></script>
-  <script src="assets/js/core/bootstrap.min.js"></script>
-  <script src="assets/js/plugins/perfect-scrollbar.min.js"></script>
-  <script src="assets/js/plugins/smooth-scrollbar.min.js"></script>
-  <script>
-    document.addEventListener("DOMContentLoaded", function() {
-      /* const global = new FunGlobal();
-      const sAlert = new Alert(); */
+  <!-- <script scr="./assets/js/globalFunctions.js"></script>
+  <script scr="./assets/js/sweetAlert.js"></script>
+  <script src="./assets/js/core/popper.min.js"></script>
+  <script src="./assets/js/core/bootstrap.min.js"></script>
+  <script src="./assets/js/plugins/perfect-scrollbar.min.js"></script>
+  <script src="./assets/js/plugins/smooth-scrollbar.min.js"></script> -->
 
+  <!-- SWEET ALERT -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+  <script src="./assets/js/core/popper.min.js"></script>
+  <script src="./assets/js/core/bootstrap.min.js"></script>
+  <script src="./assets/js/plugins/perfect-scrollbar.min.js"></script>
+  <script src="./assets/js/plugins/smooth-scrollbar.min.js"></script>
+  <script src="./assets/js/plugins/chartjs.min.js"></script>
+  <script src="./assets/js/globalFunctions.js"></script>
+  <script src="./assets/js/sweetAlert.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", ()=>{
+
+      const global = new FunGlobal();
+      const sAlert = new Alert();
 
       const $ = id => document.querySelector(id);
       const $All = id => document.querySelectorAll(id);
@@ -184,39 +188,22 @@
           params.append("correo", $("#correo").value);
           params.append("contrasenia", $("#contrasenia").value);
 
-          let result = await fetch(ur,{
-            method: "POST",
-            body: params
-          });
+          let result = await global.sendAction(url, params);
+          
+          if(!result.status){
+            console.log(result)
+            sAlert.sweetError("Error", result.message);
 
-          let response = result.json();
+          }else{
 
-          if (response.status) {
-            console.log(response)
-              Swal.fire({
-              icon: "success",
-              title: "Éxito",
-              text: "Logeo exitoso",
-              footer: response.message,
-              showConfirmButton: false,
-              timer:  1500,
-              timerProgressBar: true, //MUESTRA UNA BARRA DE PROGRESO
-              didClose: () =>{ //CUANDO ACABE EL TIEMPO O CIERRE EL MODAL
+            sAlert.sweetSuccess("Éxito","Acceso correcto");
 
-                console.log("hola")
-              }
-            });
-
-          } else {
-            Swal.fire({
-              icon: "error",
-              title: "Oops...",
-              text: "Ocurrió un error",
-              footer: response.message,
-              showConfirmButton: false,
-              timer: 1500
-            });
+            setTimeout(() => {
+              
+              window.location.href = "./Views/dashboard.html";
+            },1500);
           }
+
         } catch (e) {
 
         }
@@ -242,9 +229,7 @@
               form.reportValidity();
             } else {
               event.preventDefault();
-              console.time("op")
               userLogin(); //Ejecuta la función
-              console.timeEnd("op")
             }
 
             form.classList.add('was-validated') //=> AGREGA ESTA CLASE A LOS ELEMENTOS DEL FORMULARIO(MUESTRA LOS COMENTARIOS)

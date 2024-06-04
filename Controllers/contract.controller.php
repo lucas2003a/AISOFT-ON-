@@ -1,6 +1,7 @@
 <?php
 
 require_once "../Models/Contract.php";
+date_default_timezone_set("America/Lima");
 
 if(isset($_POST["action"])){
 
@@ -60,6 +61,10 @@ if(isset($_POST["action"])){
 
         case "addContract": 
             
+                $today = date("dmY");
+                $nomfile = sha1($today);
+                $url = "../media/files/" . $nomfile;
+
                 $dataObtained = [
 
                     "n_expediente"                 => $_POST["n_expediente"],
@@ -75,16 +80,25 @@ if(isset($_POST["action"])){
                     "fecha_contrato"    => $_POST["fecha_contrato"],
                     "precio_venta"    => $_POST["precio_venta"],
                     "det_contrato"    => $_POST["det_contrato"],
-                    "archivo"    => $_POST["archivo"],
+                    "archivo"    => $nomfile,
                     "idusuario"         => 1
                     // "idusuario"         => $_POST["idusuario"]
                 ];
+
+                if(move_uploaded_file($_FILES["archivo"]["tmp_name"],$url)){
+
+                    $dataObtained["archivo"] = $nomfile;
+                }
                 
                 echo json_encode($contract->addContract($dataObtained));
             break;
 
         case "setContract": 
             
+                $today = date("dmY");
+                $nomfile = sha1($today);
+                $url = "../media/files/" . $nomfile;
+
                 $dataObtained = [
 
                     "idcontrato"                => $_POST["idcontrato"],
@@ -101,10 +115,14 @@ if(isset($_POST["action"])){
                     "fecha_contrato"    => $_POST["fecha_contrato"],
                     "precio_venta"    => $_POST["precio_venta"],
                     "det_contrato"    => $_POST["det_contrato"],
-                    "archivo"    => $_POST["archivo"],
+                    "archivo"    => $nomfile,
                     "idusuario"         => 1
                     // "idusuario"         => $_POST["idusuario"]
                 ];
+
+                if(move_uploaded_file($_FILES["archivo"]["tmp_name"],$url)){
+                    $dataObtained["archivo"] = $nomfile;
+                }
 
                 echo json_encode($contract->setContract($dataObtained));
 
