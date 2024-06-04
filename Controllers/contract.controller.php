@@ -8,6 +8,10 @@ if(isset($_POST["action"])){
 
     switch($_POST["action"]){
 
+        case "listContractsAll": 
+            echo json_encode($contracts = $contract->listContracts());
+            break;
+            
         case "listContractByType": 
             $type = $_POST["tipo_contrato"];
 

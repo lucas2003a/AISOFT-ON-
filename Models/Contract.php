@@ -12,6 +12,21 @@ class Contract extends Conection{
     }
 
     /**
+     * Método poara listar todos los contratos
+     */
+    public function listContracts(){
+        try{
+            $query = $this->conection->prepare("CALL spu_list_contractsAll()");
+            $query->execute();
+
+            return $query->fetchAll(PDO::FETCH_ASSOC);
+        }
+        catch(Exception $e){
+            die($e->getMessage());
+        }
+    }
+
+    /**
      * Lista los contratos por el tipo de contrato
      */
     public function listContractByType($typeContract = ""){

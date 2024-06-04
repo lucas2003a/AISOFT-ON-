@@ -393,7 +393,7 @@
                 <div class="row d-flex" style="align-items: end;">
 
                   <div class="col-md-3 mt-2">
-                    
+
                     <label for="tipo_contrato">Tipo de contrato</label>
                     <select id="tipo_contrato" class="form-select" name="tipo_contrato">
                       <option value="VENTA DE LOTE" selected>Elije un tipo de contrato</option>
@@ -402,7 +402,7 @@
                       <option value="VENTA DE LOTE Y CASA">Venta de de lote y casa</option>
                     </select>
                   </div>
-                  
+
                   <div class="col-md-3 mt-2">
                     <label for="fechaInicio" class="form-label">
                       Fecha de inicio
@@ -426,8 +426,8 @@
 
                 </div>
                 <div class="row">
-                <div class="col-md-3 mt-2">
-                    
+                  <div class="col-md-3 mt-2">
+
                     <a type="button" class="mb-0  btn btn-sm btn-outline-success" href="./add_contract.php">AGREGAR CONTRATO</a>
                   </div>
                 </div>
@@ -463,6 +463,7 @@
                   </tbody>
                 </table>
                 <div id="render-alert">
+                  
 
 
                 </div>
@@ -607,7 +608,7 @@
   <script src="../../assets/js/globalFunctions.js"></script>
   <script src="../../assets/js/sweetAlert.js"></script>
   <script>
-    document.addEventListener("DOMContentLoaded", () => {
+    document.addEventListener("DOMContentLoaded", async function() {
 
       /* INSTANCIAS */
       const global = new FunGlobal();
@@ -615,28 +616,28 @@
 
       const $ = id => global.$(id);
       const $All = id => global.$All(id);
-      
+
       let timmer;
 
       //valida el rango de fechas
-      function validateDates(){
+      function validateDates() {
         const fecha_inicio = $("#fechaInicio").value;
         const inicioDate = new Date(fecha_inicio);
 
         const fecha_fin = $("#fechaFin").value;
         const finDate = new Date(fecha_fin);
 
-        if(inicioDate > finDate){
+        if (inicioDate > finDate) {
 
           getContractsType();
-        }else{
+        } else {
           getContractsTypeDate();
         }
 
       }
 
       //Obtiene el rango de fechas
-      function getDate(){
+      function getDate() {
 
         const date = new Date();
 
@@ -645,25 +646,25 @@
         const pastDate = new Date("2024-1-1");
 
 
-        let dateToday = date.getDate().toString().padStart(2,'0');
-        let monthToday = (date.getMonth() +  1).toString().padStart(2,'0');
+        let dateToday = date.getDate().toString().padStart(2, '0');
+        let monthToday = (date.getMonth() + 1).toString().padStart(2, '0');
         let yearToday = date.getFullYear().toString();
         let today = `${yearToday}-${monthToday}-${dateToday}`;
 
         futureDate.setMonth(date.getMonth() + 1);
 
-        if(futureDate.getDate() !== date.getDate()){
+        if (futureDate.getDate() !== date.getDate()) {
           futureDate.setDate(0);
         }
 
-        let futureDay = futureDate.getDate().toString().padStart(2,'0');
-        let futureMonth = (futureDate.getMonth() + 1).toString().padStart(2,'0');
+        let futureDay = futureDate.getDate().toString().padStart(2, '0');
+        let futureMonth = (futureDate.getMonth() + 1).toString().padStart(2, '0');
         let futureYear = futureDate.getFullYear().toString();
 
         let future = `${futureYear}-${futureMonth}-${futureDay}`;
 
-        let pastDay = pastDate.getDate().toString().padStart(2,'0');
-        let pastMonth = (pastDate.getMonth() + 1).toString().padStart(2,'0');
+        let pastDay = pastDate.getDate().toString().padStart(2, '0');
+        let pastMonth = (pastDate.getMonth() + 1).toString().padStart(2, '0');
         let pastYear = pastDate.getFullYear().toString();
 
         let past = `${pastYear}-${pastMonth}-${pastDay}`;
@@ -674,62 +675,73 @@
 
         $("#fechaFin").value = today;
         $("#fechaFin").min = today;
-        $("#fechaFin").max= future;
+        $("#fechaFin").max = future;
 
       }
 
       //Renderiza los datos en la tabla
-      function renderTable(array){
+      function renderTable(array) {
 
-        const tableBody = $("#table-contracts tbody");
+        
+        const tableBody = $("#table-contracts tbody"); 
+        const renderAlert = $("#render-alert");
+
         tableBody.innerHTML = "";
+        renderAlert.innerHTML = "";
+        
+        if(array.length > 0){
 
-        let numRow = 1;
-        array.forEach(element => {
-          
-          let newRow = `
-          <tr>
-            <td class="text-sm">${numRow}</td>
-            <td class="text-sm">${element.n_expediente}</td>
-            <td class="text-sm">${element.estado}</td>
-            <td class="text-sm">${element.cliente}</td>
-            <td class="text-sm">${element.documento_tipo}</td>
-            <td class="text-sm">${element.documento_nro}</td>
-            <td class="text-sm">${element.fecha_contrato}</td>
-            <td>
-              <div class="row">
-              <div class="col-lg-6 col-5 my-auto text-end">
-                <div class="dropdown float-lg-end pe-4">
+  
+          let numRow = 1;
+          array.forEach(element => {
+  
+            let newRow = `
+            <tr>
+              <td class="text-sm">${numRow}</td>
+              <td class="text-sm">${element.n_expediente}</td>
+              <td class="text-sm">${element.estado}</td>
+              <td class="text-sm">${element.cliente}</td>
+              <td class="text-sm">${element.documento_tipo}</td>
+              <td class="text-sm">${element.documento_nro}</td>
+              <td class="text-sm">${element.fecha_contrato}</td>
+              <td>
+              <div class="">
+                <div class="dropdown">
                   <a class="cursor-pointer" id="dropdownTable" data-bs-toggle="dropdown" aria-expanded="false">
                     <i class="fa fa-ellipsis-v text-secondary"></i>
                   </a>
-                  <ul class="dropdown-menu px-2 py-3 ms-sm-n4 ms-n5" aria-labelledby="dropdownTable">
-                    <li><a type="button" href="#" class="dropdown-item border-radius-md btn btn-link text-danger px-3 mb-0 open-modal"><i class="bi bi-arrow-down-square"></i> Descargar</a></li>
-                    <li><a type="button" href="#" class="dropdown-item border-radius-md btn btn-link text-secondary px-3 mb-0 return"><i class="fa-solid fa-right-left return"></i> Devolver</a></li>
-                    <li><a type="button" href="#" class="dropdown-item border-radius-md btn btn-link text-success px-3 mb-0"><i class="bi bi-arrow-right-square"></i> Ver más</a></li>
+                  <ul class="dropdown-menu" aria-labelledby="dropdownTable">
+                    <li><a href="#" class="dropdown-item border-radius-md"><i class="bi bi-arrow-down-square text-danger"></i>  Descargar</a></li>
+                    <li><a href="#" class="dropdown-item border-radius-md"><i class="fa-solid fa-right-left text-secondary"></i>  Devolver</a></li>
+                    <li><a href="#" class="dropdown-item border-radius-md"><i class="bi bi-arrow-right-square text-success"></i> Ver más</a></li>
+                    <li><a href="#" class="dropdown-item border-radius-md"><i class="bi bi-trash-fill text-danger"></i> Eliminar</a></li>
+                    <li><a href="#" class="dropdown-item border-radius-md"><i class="bi bi-pencil-fill text-primary"></i> Editar</a></li>
                   </ul>
                 </div>
               </div>
-              <div class="col-lg-6 col-5 my-auto">
-              
-              <a type="button" href="#" class="btn btn-link text-danger text-gradient px-3 mb-0 delete"><i class="bi bi-trash-fill delete"></i></a>
-              <a type="button" href="#" class="btn btn-link text-dark px-3 mb-0 edit"><i class="bi bi-pencil-fill edit"></i></a>
-              
-              </div>
-              </div>
-              
-            </td>
-          </tr>
+              </td>
+            </tr>
+            `;
+            numRow++
+            tableBody.innerHTML += newRow;
+          });
+
+        }else{
+
+          let alert = `
+            <div class="alert alert-danger text-white" role="alert">
+              <strong>No se encontraron datos.</strong> Intentelo otra vez
+            </div>
           `;
-          numRow++
-          tableBody.innerHTML += newRow;
-        });
+
+          renderAlert.innerHTML = alert;
+        }
       }
 
       //Obtiene los datos de los contratos según el tipo
-      async function getContractsType(){
+      async function getContractsType() {
 
-        try{
+        try {
           let url = "../../Controllers/contract.controller.php";
 
           let params = new FormData();
@@ -739,20 +751,19 @@
 
           let results = await global.sendAction(url, params);
 
-          if(results){
+          if (results) {
             console.log(results);
             renderTable(results)
           }
-        }
-        catch(e){
+        } catch (e) {
           console.error(e);
         }
       }
 
       //Obtiene los datos de los contratos según el tipo y la fecha
-      async function getContractsTypeDate(){
+      async function getContractsTypeDate() {
 
-        try{
+        try {
           let url = "../../Controllers/contract.controller.php";
 
           let params = new FormData();
@@ -764,20 +775,19 @@
 
           let results = await global.sendAction(url, params);
 
-          if(results){
+          if (results) {
             console.log(results);
             renderTable(results)
           }
-        }
-        catch(e){
+        } catch (e) {
           console.error(e);
         }
       }
 
       //Obtiene los datos de los contratos según el tipo, la fecha Y EL NUMERO DE EXPEDIENTE
-      async function getContractsTypeDateExpedient(){
+      async function getContractsTypeDateExpedient() {
 
-        try{
+        try {
           let url = "../../Controllers/contract.controller.php";
 
           let params = new FormData();
@@ -790,44 +800,43 @@
 
           let results = await global.sendAction(url, params);
 
-          if(results){
+          if (results) {
             console.log(results);
             renderTable(results)
           }
-        }
-        catch(e){
+        } catch (e) {
           console.error(e);
         }
       }
 
-      $("#in-code").addEventListener("input",(e)=>{
+      $("#in-code").addEventListener("input", (e) => {
 
         let valueInput = e.target.value;
 
-        if(valueInput){
+        if (valueInput) {
 
           clearTimeout(timmer);
 
-          timmer = setTimeout(()=>{
+          timmer = setTimeout(() => {
             getContractsTypeDateExpedient();
-          },1500);
+          }, 1500);
         }
       });
 
-      $("#fechaFin").addEventListener("change",()=>{
+      $("#fechaFin").addEventListener("change", () => {
         validateDates();
       });
 
-      $("#fechaInicio").addEventListener("change",()=>{
+      $("#fechaInicio").addEventListener("change", () => {
         validateDates();
       });
 
-      $("#tipo_contrato").addEventListener("change",()=>{
+      $("#tipo_contrato").addEventListener("change", () => {
         getContractsType();
       });
-      
-      getDate();
-      getContractsType();
+
+      await getDate();
+      await getContractsTypeDate();
     });
   </script>
   <script>

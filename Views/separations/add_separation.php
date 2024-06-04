@@ -977,7 +977,7 @@
 
       if (!lastCode) {
         lastCode = true;
-        let sliceValue = valueInput.slice(0,6); //Extrae l valores incluyendo el los del indice 0 y 6
+        let sliceValue = valueInput.slice(0,6); //Extrae los valores incluyendo los del indice 0 y 6
         let valueFormat = sliceValue.padEnd(6, '0')
         newValue = "SEC-" + valueFormat;
         $("#n_expediente").value = valueFormat;

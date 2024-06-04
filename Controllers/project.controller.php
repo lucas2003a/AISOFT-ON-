@@ -8,6 +8,16 @@ if(isset($_POST["action"])){
 
     switch($_POST["action"]){
 
+        case "listProjecTypeAct": 
+                $tipo_activo = $_POST["tipo_activo"];
+
+                echo json_encode($project->listProjectTypeAct($tipo_activo));
+            break;
+
+        case "listProjectDetailConst":
+              echo json_encode($project->listProjectDetailConst());
+            break;
+            
         case "listProject": 
             
                 echo json_encode($project->listProject());

@@ -83,7 +83,7 @@ END $$
 
 DELIMITER;
 
--- constructora
+-- constructora /////////////////////////////////////////////////////////////////////////////////////////
 DELIMITER $$
 
 CREATE PROCEDURE spu_list_companies()
@@ -94,7 +94,7 @@ END $$
 
 DELIMITER;
 
--- sedes
+-- sedes /////////////////////////////////////////////////////////////////////////////////////////////
 DELIMITER $$
 
 CREATE PROCEDURE spu_list_addresses(IN _iddistrito INT)
@@ -152,13 +152,13 @@ DELIMITER;
 
 use aisoft;
 
--- representates
+-- representates DE SEDE ////////////////////////////////////////////////////////////////////////////
 DELIMITER $$
 
 CREATE PROCEDURE spu_get_represents(IN _idrepresentante INT)
 BEGIN
 	SELECT 
-		rep.idrepresente,
+		rep.idrepresentante,
         pers.nombres,
         pers.apellidos,
         pers.documento_tipo,
@@ -169,7 +169,7 @@ BEGIN
         rep.cargo,
         rep.partida_elect,
         sed.direccion
-        FROM representates AS rep
+        FROM representantes AS rep
         INNER JOIN personas AS pers ON pers.idpersona = rep.idpersona
         INNER JOIN distritos AS dist ON dist.iddistrito = pers.iddistrito
         INNER JOIN provincias AS prov ON prov.idprovincia = dist.idprovincia
@@ -181,9 +181,104 @@ END $$
 
 DELIMITER;
 
--- PROYECTOS
 DELIMITER $$
 
+CREATE PROCEDURE spu_get_represents_idAdress(IN _idsede INT)
+BEGIN
+	SELECT 
+		rep.idrepresentante,
+        pers.nombres,
+        pers.apellidos,
+        pers.documento_tipo,
+        pers.documento_nro,
+        dist.distrito,
+        prov.provincia,
+		dept.departamento,
+        rep.cargo,
+        rep.partida_elect,
+        sed.direccion
+        FROM representantes AS rep
+        INNER JOIN personas AS pers ON pers.idpersona = rep.idpersona
+        INNER JOIN distritos AS dist ON dist.iddistrito = pers.iddistrito
+        INNER JOIN provincias AS prov ON prov.idprovincia = dist.idprovincia
+        INNER JOIN departamentos AS dept ON dept.iddepartamento = prov.iddepartamento
+        INNER JOIN sedes AS sed ON sed.idsede = rep.idsede
+        WHERE rep.idsede = _idsede
+        AND rep.inactive_at IS NULL;
+END $$
+
+DELIMITER;
+
+call spu_get_represents_idAdress(1);
+select * from representantes;
+
+-- PROYECTOS //////////////////////////////////////////////////////////////////////////////////
+
+DELIMITER $$
+CREATE PROCEDURE spu_list_projects_typeAct
+(
+    IN _tipo_activo VARCHAR(10)
+)
+BEGIN
+    DECLARE T_act varchar(10);
+
+    SET T_act = _tipo_activo;
+
+    IF T_act = "LOTE" THEN
+    SELECT 
+        py.idproyecto,
+        py.denominacion,
+        T_act as tipo
+        FROM proyectos py
+        INNER JOIN activos ac ON ac.idproyecto = py.idproyecto
+        WHERE py.inactive_at IS NULL
+            AND ac.inactive_at IS NULL
+            AND ac.tipo_activo = tipo_activo
+            AND JSON_LENGTH(JSON_EXTRACT(ac.det_casa,'$.clave')) = 0
+            AND JSON_LENGTH(JSON_EXTRACT(ac.det_casa,'$.valor')) = 0
+            AND ac.estado = "SEPARADO"
+            GROUP BY py.idproyecto
+            ORDER BY py.denominacion ASC;
+
+    ELSEIF _tipo_activo = "CASA" THEN 
+        SELECT 
+        py.idproyecto,
+        py.denominacion,
+        T_act as tipo
+        FROM proyectos py
+        INNER JOIN activos ac ON ac.idproyecto = py.idproyecto
+        WHERE py.inactive_at IS NULL
+            AND ac.inactive_at IS NULL
+            AND ac.tipo_activo = _tipo_activo
+            GROUP BY py.idproyecto
+            ORDER BY py.denominacion ASC;
+    END IF;
+END $$
+DELIMITER ;
+call spu_list_projects_typeAct("casa");
+DELIMITER $$
+CREATE PROCEDURE spu_list_projects_detConst()
+BEGIN
+    DECLARE T_act VARCHAR(10);
+    
+    SET T_act = 'DET-CONST';
+
+    SELECT 
+        py.idproyecto,
+        py.denominacion,
+        T_act as tipo
+        FROM proyectos py
+        INNER JOIN activos ac ON ac.idproyecto = py.idproyecto
+        WHERE py.inactive_at IS NULL
+            AND ac.inactive_at IS NULL
+            AND JSON_LENGTH(JSON_EXTRACT(ac.det_casa,'$.clave')) > 0
+            AND JSON_LENGTH(JSON_EXTRACT(ac.det_casa,'$.valor')) > 0
+            GROUP BY py.idproyecto
+            ORDER BY py.denominacion ASC;
+END $$
+DELIMITER ;
+
+DELIMITER $$
 CREATE PROCEDURE spu_list_projects()
 BEGIN
 	SELECT * FROM vws_list_projects;
@@ -688,6 +783,32 @@ BEGIN
 END $$
 
 DELIMITER;
+DELIMITER $$
+
+CREATE PROCEDURE spu_list_onlyLots_sep
+(
+    IN _idproyecto INT
+)
+BEGIN
+    SELECT 
+        act.idactivo,
+        proy.idproyecto,
+        proy.denominacion,
+        act.sublote,
+        act.estado,
+        act.moneda_venta
+        FROM activos act
+        INNER JOIN proyectos proy ON proy.idproyecto = act.idproyecto
+        WHERE act.tipo_activo = "LOTE"
+        AND act.estado = "SEPARADO"
+        AND act.inactive_at IS NULL
+        AND proy.idproyecto = _idproyecto
+        AND JSON_ARRAY(JSON_EXTRACT(det_casa,'$.clave')) = 0
+        AND JSON_ARRAY(JSON_EXTRACT(det_casa,'$.valor')) = 0
+        ORDER BY act.sublote;
+END $$
+
+DELIMITER;
 
 DELIMITER $$
 
@@ -1024,6 +1145,7 @@ BEGIN
 		SELECT
 			clien.idcliente,
 			clien.tipo_persona,
+            persj.idpersona_juridica,
 			persj.documento_tipo,
 			persj.documento_nro,
 			persj.razon_social,
@@ -1362,7 +1484,7 @@ BEGIN
 END $$
 
 DELIMITER;
-
+SELECT * from rep_legales_clientes;
 DELIMITER $$
 
 CREATE PROCEDURE spu_inactive_represents(IN _idrepresentante INT)
@@ -2001,6 +2123,32 @@ DELIMITER;
 
 DELIMITER $$
 
+CREATE PROCEDURE spu_list_separations_all()
+BEGIN
+
+    SELECT 
+        idseparacion,
+        n_expediente,
+        idactivo,
+        idcliente,
+        idconyugue,
+        separacion_monto
+        FROM separaciones
+        WHERE idseparacion NOT IN (
+            SELECT idseparacion
+            FROM contratos WHERE inactive_at IS NULL
+            AND idseparacion IS NOT NULL
+            AND inactive_at IS NULL
+        )
+        AND inactive_at IS NULL
+        ORDER BY n_expediente ASC;
+
+END $$
+
+DELIMITER;
+
+DELIMITER $$
+
 CREATE PROCEDURE spu_list_separation_tPersona
 (
     IN _tipo_persona VARCHAR(10),
@@ -2382,6 +2530,16 @@ END $$
 DELIMITER;
 -- CONTRATOS  ////////////////////////////////////////////////////////////////////////////////////
 
+DELIMITER $$
+CREATE PROCEDURE spu_list_contractsAll()
+BEGIN
+    SELECT 
+        idcontrato,
+        n_expediente
+        FROM contratos;
+
+END $$
+DELIMITER ;
 DELIMITER $$
 
 CREATE PROCEDURE spu_list_contracts_types
@@ -3229,6 +3387,36 @@ BEGIN
         WHERE idcuota = _idcuota;
 
     SELECT ROW_COUNT() AS filasAfect;
+END $$
+
+DELIMITER;
+
+-- USUARIOS ///////////////////////////////////////////////////////////////////////////////////////////////////
+DELIMITER $$
+
+CREATE PROCEDURE spu_user_login
+(
+    IN _correo VARCHAR(60)
+)
+BEGIN
+    SELECT
+        usu.idusuario,
+        usu.imagen,
+        usu.correo,
+        usu.contrasenia,
+        pr.apellidos,
+        pr.nombres,
+        pr.documento_tipo,
+        pr.documento_nro,
+        rl.idrol,
+        rl.rol,
+        sd.direccion
+        FROM usuarios usu
+        INNER JOIN personas pr ON pr.idpersona = usu.idpersona
+        INNER JOIN roles rl ON rl.idrol = usu.idrol
+        INNER JOIN sedes sd ON sd.idsede = usu.idsede
+        WHERE usu.inactive_at IS NULL
+        AND usu.correo = _correo;
 END $$
 
 DELIMITER;

@@ -122,7 +122,7 @@ CREATE TABLE usuarios
     imagen 				VARCHAR(100) 		NULL,
     idpersona			INT 				NOT NULL,
     correo	 			VARCHAR(60) 		NOT NULL,
-    contraseña 			VARCHAR(60) 		NOT NULL,
+    contrasenia 			VARCHAR(60) 		NOT NULL,
     codigo				CHAR(9) 			NULL,
     idrol				INT 				NOT NULL,
     idsede 				INT 				NOT NULL,
@@ -401,7 +401,7 @@ CREATE TABLE contratos
 	estado 					VARCHAR(10)		NOT NULL,
     fecha_contrato			DATE 			NOT NULL,
     det_contrato			JSON 			NOT NULL DEFAULT '{"clave" :[], "valor":[]}', -- BONOS, FINACIAMIENTOS, PENALIDAD, PLAZO ENTREGA, CUOTA INICIAL ..   
-    archivo                 VARCHAR(100)    NULL,
+    archivo                 VARCHAR(100)    NOT NULL,
 	create_at 				DATE 			NOT NULL	DEFAULT (CURDATE()),
     update_at				DATE 			NULL,
     inactive_at				DATE 			NULL,
@@ -414,6 +414,7 @@ CREATE TABLE contratos
     CONSTRAINT fk_idcliente2_cont FOREIGN KEY(idconyugue) REFERENCES clientes(idcliente),
     CONSTRAINT fk_idusuario_cont FOREIGN KEY(idusuario) REFERENCES usuarios(idusuario)
 )ENGINE = INNODB;
+
 
 -- DETALLE DE CONTRATOS
 CREATE TABLE detalles_contratos

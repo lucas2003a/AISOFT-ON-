@@ -211,6 +211,12 @@ if (isset($_POST["action"])) {
 
                 echo json_encode($asset->listOnlyLots($idproyecto));
             break;
+        case "listOnlyLotsSep":
+
+                $idproyecto = $_POST["idproyecto"];
+
+                echo json_encode($asset->listOnlyLotsSep($idproyecto));
+            break;
         
         case "listOnlyHouses":
 
