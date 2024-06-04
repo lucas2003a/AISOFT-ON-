@@ -439,7 +439,7 @@
                         <!-- SEGUNDA PLATILLA(RENDERIZA LA LISTA) -->
                         <template class="clone-list">
                           <li class="m-2 li-tag go">
-                            <p class="text-tag go"><strong class="text-expediente"></strong><span class="text-tipocontrato"></span></p>
+                            <a class="text-tag go"><strong class="text-expediente"></strong><span class="text-tipocontrato"></span></a>
                             <hr>
                           </li>
                         </template>
@@ -613,13 +613,10 @@
                 liClone.querySelector(".text-expediente").innerText = content.n_expediente;
                 liClone.querySelector(".text-tipocontrato").innerText = ` - ${content.tipo_contrato}`;
 
-                //Configuro los dataser para guardar el id del contrato
-                let liTag = liClone.querySelector(".li-tag");
-                let texTag = liClone.querySelector(".text-tag");
+                let aTag = liClone.querySelector(".text-tag");
+                let idcode = btoa(content.idcontrato)
 
-                console.log(liTag)
-                liTag.setAttribute("data-id", content.idcontrato);
-                texTag.setAttribute("data-id", content.idcontrato);
+                aTag.setAttribute("href",`./detail_quotas.php?${idcode}`);
 
                 //Agrega el clone a la lista de contratos
                 cardClone.querySelector(".ulhover").appendChild(liClone);
