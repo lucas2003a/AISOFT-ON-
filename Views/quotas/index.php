@@ -569,6 +569,7 @@
         let cardsRender = $("#cards-render");
 
         for (result of array) {
+          console.log(result)
 
           //variable que contiene el template primario
           let cardClone = cardTemplate.content.cloneNode(true);
@@ -703,6 +704,7 @@
             $("#card-error").innerHTML = "";
             $("#cards-render").innerHTML = "";
 
+            console.log(results)
             renderCards(results)
 
           } else {

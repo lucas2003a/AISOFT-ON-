@@ -1,6 +1,7 @@
 <?php
 
 require_once "../Models/Contract.php";
+date_default_timezone_set("America/Lima");
 
 if(isset($_POST["action"])){
 
@@ -59,52 +60,83 @@ if(isset($_POST["action"])){
             break;
 
         case "addContract": 
+
+                $today = date("dmY");
+                $nomFile = null;
             
                 $dataObtained = [
 
-                    "n_expediente"                 => $_POST["n_expediente"],
-                    "tipo_contrato"                => $_POST["tipo_contrato"],
-                    "idseparacion"  => $_POST["idseparacion"],
-                    "idrepresentante_primario" => $_POST["idrepresentante_primario"],
-                    "idrepresentante_secundario"       => $_POST["idrepresentante_secundario"],
-                    "idcliente"            => $_POST["idcliente"],
-                    "idconyugue"          => $_POST["idconyugue"],
-                    "idactivo"    => $_POST["idactivo"],
-                    "tipo_cambio"    => $_POST["tipo_cambio"],
-                    "estado"    => $_POST["estado"],
-                    "fecha_contrato"    => $_POST["fecha_contrato"],
-                    "precio_venta"    => $_POST["precio_venta"],
-                    "det_contrato"    => $_POST["det_contrato"],
-                    "archivo"    => $_POST["archivo"],
-                    "idusuario"         => 1
+                    "n_expediente"              => $_POST["n_expediente"],
+                    "tipo_contrato"             => $_POST["tipo_contrato"],
+                    "idseparacion"              => $_POST["idseparacion"],
+                    "idrepresentante_primario"  => $_POST["idrepresentante_primario"],
+                    "idrepresentante_secundario"=> $_POST["idrepresentante_secundario"],
+                    "idcliente"                 => $_POST["idcliente"],
+                    "idconyugue"                => $_POST["idconyugue"],
+                    "idactivo"                  => $_POST["idactivo"],
+                    "tipo_cambio"               => $_POST["tipo_cambio"],
+                    "estado"                    => $_POST["estado"],
+                    "fecha_contrato"            => $_POST["fecha_contrato"],
+                    "precio_venta"              => $_POST["precio_venta"],
+                    "moneda_venta"              => $_POST["moneda_venta"],
+                    "inicial"                   => $_POST["inicial"],
+                    "det_contrato"              => $_POST["det_contrato"],
+                    "archivo"                   => $nomFile,
+                    "idusuario"                 => 1
                     // "idusuario"         => $_POST["idusuario"]
                 ];
                 
+                if(isset($_FILES["archivo"]) && $_FILES["archivo"]["size"] > 0){
+                    $type = $_FILES["type"];
+
+                    $nomFile = sha1($today) . $type;
+                    $url = "../media/files/" . $nomFile;
+
+                    if(move_uploaded_file($_FILES["archivo"]["tmp_name"], $url)){
+                        $dataObtained["archivo"] = $nomFile;
+                    }
+                }
                 echo json_encode($contract->addContract($dataObtained));
             break;
 
         case "setContract": 
+
+                $today = date("dmY");
+                $nomFile = null;
             
                 $dataObtained = [
 
                     "idcontrato"                => $_POST["idcontrato"],
-                    "n_expediente"                 => $_POST["n_expediente"],
-                    "tipo_contrato"                => $_POST["tipo_contrato"],
-                    "idseparacion"  => $_POST["idseparacion"],
-                    "idrepresentante_primario" => $_POST["idrepresentante_primario"],
-                    "idrepresentante_secundario"       => $_POST["idrepresentante_secundario"],
-                    "idcliente"            => $_POST["idcliente"],
-                    "idconyugue"          => $_POST["idconyugue"],
-                    "idactivo"    => $_POST["idactivo"],
-                    "tipo_cambio"    => $_POST["tipo_cambio"],
-                    "estado"    => $_POST["estado"],
-                    "fecha_contrato"    => $_POST["fecha_contrato"],
-                    "precio_venta"    => $_POST["precio_venta"],
-                    "det_contrato"    => $_POST["det_contrato"],
-                    "archivo"    => $_POST["archivo"],
-                    "idusuario"         => 1
+                    "n_expediente"              => $_POST["n_expediente"],
+                    "tipo_contrato"             => $_POST["tipo_contrato"],
+                    "idseparacion"              => $_POST["idseparacion"],
+                    "idrepresentante_primario"  => $_POST["idrepresentante_primario"],
+                    "idrepresentante_secundario"=> $_POST["idrepresentante_secundario"],
+                    "idcliente"                 => $_POST["idcliente"],
+                    "idconyugue"                => $_POST["idconyugue"],
+                    "idactivo"                  => $_POST["idactivo"],
+                    "tipo_cambio"               => $_POST["tipo_cambio"],
+                    "estado"                    => $_POST["estado"],
+                    "fecha_contrato"            => $_POST["fecha_contrato"],
+                    "precio_venta"              => $_POST["precio_venta"],
+                    "moneda_venta"              => $_POST["moneda_venta"],
+                    "inicial"                   => $_POST["inicial"],
+                    "det_contrato"              => $_POST["det_contrato"],
+                    "archivo"                   => $nomFile,
+                    "idusuario"                 => 1
                     // "idusuario"         => $_POST["idusuario"]
                 ];
+
+                if(isset($_FILES["archivo"]) && $_FILES["archivo"]["size"] > 0){
+                    $type = $_FILES["type"];
+
+                    $nomFile = sha1($today) . $type;
+                    $url = "../media/files/" . $nomFile;
+
+                    if(move_uploaded_file($_FILES["archivo"]["tmp_name"], $url)){
+                        $dataObtained["archivo"] = $nomFile;
+                    }
+                }
 
                 echo json_encode($contract->setContract($dataObtained));
 

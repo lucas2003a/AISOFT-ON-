@@ -400,6 +400,9 @@ CREATE TABLE contratos
 	tipo_cambio 			DECIMAL(4,3) 	NOT NULL,
 	estado 					VARCHAR(10)		NOT NULL,
     fecha_contrato			DATE 			NOT NULL,
+    precio_venta            DECIMAL(8,2)    NOT NULL,
+    moneda_venta            VARCHAR(10)     NOT NULL,
+    inicial                 DECIMAL(8,2)    NOT NULL,
     det_contrato			JSON 			NOT NULL DEFAULT '{"clave" :[], "valor":[]}', -- BONOS, FINACIAMIENTOS, PENALIDAD, PLAZO ENTREGA, CUOTA INICIAL ..   
     archivo                 VARCHAR(100)    NOT NULL,
 	create_at 				DATE 			NOT NULL	DEFAULT (CURDATE()),
@@ -415,7 +418,6 @@ CREATE TABLE contratos
     CONSTRAINT fk_idusuario_cont FOREIGN KEY(idusuario) REFERENCES usuarios(idusuario)
 )ENGINE = INNODB;
 
-
 -- DETALLE DE CONTRATOS
 CREATE TABLE detalles_contratos
 (
@@ -427,36 +429,6 @@ CREATE TABLE detalles_contratos
     inactive_at	 				DATE NULL,
     CONSTRAINT fk_idrepresentante_dtc FOREIGN KEY(idrepresentante) REFERENCES rep_legales_clientes(idrepresentante),
     CONSTRAINT fk_idcontrato_dtc FOREIGN KEY(idcontrato) REFERENCES contratos(idcontrato)
-)ENGINE = INNODB;
-
-
-
--- FINANCIERAS
-CREATE TABLE financieras(
-	idfinanciera 			INT PRIMARY KEY AUTO_INCREMENT,
-    ruc						CHAR(11) 		NOT NULL,
-    razon_social 			VARCHAR(60) 	NOT NULL,
-    iddistrito 				INT 			NOT NULL,
-    direccion 				VARCHAR(70) 	NOT NULL,
-    CONSTRAINT fk_iddistrito_finans FOREIGN KEY(iddistrito) REFERENCES distritos(iddistrito),
-    CONSTRAINT uk_ruc_finans UNIQUE(ruc)
-)ENGINE = INNODB;
-
--- DESEMBOLSOS
-CREATE TABLE desembolsos(
-	iddesembolso			INT PRIMARY KEY AUTO_INCREMENT,
-    idfinanciera			INT 			NOT NULL,
-    idactivo 				INT 			NOT NULL,
-    monto_desemb 			DECIMAL(8,2) 	NOT NULL,
-    porcentaje				TINYINT			NOT NULL,
-    fecha_desembolso 		DATETIME		NOT NULL,
-	create_at 				DATE 			NOT NULL	DEFAULT (CURDATE()),
-    update_at				DATE 			NULL,
-    inactive_at				DATE 			NULL,
-    idusuario 				INT 			NOT NULL,
-    CONSTRAINT fk_idfinanciera_desemb FOREIGN KEY(idfinanciera) REFERENCES financieras(idfinanciera),
-    CONSTRAINT fk_idactivo_desemb	FOREIGN KEY(idactivo) REFERENCES activos(idactivo),
-    CONSTRAINT fk_idusuario_desemb FOREIGN KEY(idusuario) REFERENCES usuarios(idusuario)
 )ENGINE = INNODB;
 
 -- CUOTAS

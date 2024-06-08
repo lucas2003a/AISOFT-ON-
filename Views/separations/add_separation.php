@@ -391,7 +391,7 @@
                 <div class="h-50" style="display: flex; justify-content: center;">
 
                   <div class="position-relative d-flex align-items-center justify-content-center h-100">
-                    <img class="w-100 position-relative z-index-2 pt-4" style="width: 100%;" id="file-view" src="../../media/constancias_sep/NoImage.jpg" alt="">
+                    <!-- <img class="w-100 position-relative z-index-2 pt-4" style="width: 100%;" id="file-view" src="../../media/constancias_sep/NoImage.jpg" alt=""> -->
                   </div>
                 </div>
 
@@ -482,6 +482,7 @@
                               <i class="material-icons"></i>
                               <span class="title" style="display: flex; justify-content: center;">Agregar imagen de comprobante</span>
                               <input type="file" accept=".jpg" id="in-image" required>
+                              <img class="w-100 position-relative z-index-2 pt-4" style="width: 100%;" id="file-view" src="../../media/constancias_sep/NoImage.jpg" alt="">
                             </label>
                           </div>
                           <div class="d-grid p-3">

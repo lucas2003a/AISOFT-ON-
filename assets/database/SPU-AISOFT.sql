@@ -770,7 +770,8 @@ BEGIN
         proy.denominacion,
         act.sublote,
         act.estado,
-        act.moneda_venta
+        act.moneda_venta,
+        act.precio_venta
         FROM activos act
         INNER JOIN proyectos proy ON proy.idproyecto = act.idproyecto
         WHERE act.tipo_activo = "LOTE"
@@ -796,7 +797,8 @@ BEGIN
         proy.denominacion,
         act.sublote,
         act.estado,
-        act.moneda_venta
+        act.moneda_venta,
+        act.precio_venta
         FROM activos act
         INNER JOIN proyectos proy ON proy.idproyecto = act.idproyecto
         WHERE act.tipo_activo = "LOTE"
@@ -823,7 +825,8 @@ BEGIN
         proy.denominacion,
         act.sublote,
         act.estado,
-        act.moneda_venta
+        act.moneda_venta,
+        act.precio_venta
         FROM activos act
         INNER JOIN proyectos proy ON proy.idproyecto = act.idproyecto
         WHERE act.tipo_activo = "CASA"
@@ -848,7 +851,8 @@ BEGIN
         proy.denominacion,
         act.sublote,
         act.estado,
-        act.moneda_venta
+        act.moneda_venta,
+        act.precio_venta
         FROM activos act
         INNER JOIN proyectos proy ON proy.idproyecto = act.idproyecto
         WHERE act.tipo_activo = "LOTE"
@@ -1010,11 +1014,12 @@ BEGIN
         COALESCE(cl.documento_tipo, cn.documento_tipo) AS documento_tipo,
         COALESCE(cl.documento_nro, cn.documento_nro) AS documento_nro
         FROM contratos cont
-        INNER JOIN clientes clien ON clien.idcliente = cont.idcliente
-        LEFT JOIN vws_clientes_legal cl ON cl.idcliente = clien.idcliente
+        INNER JOIN clientes clien ON clien.idcliente = cont.idcliente 
+        LEFT JOIN vws_clientes_legal cl ON cl.idcliente = clien.idcliente 
         LEFT JOIN vws_clients_natural cn ON cn.idcliente = clien.idcliente
         WHERE cont.estado = 'VIGENTE'
         AND cont.inactive_at IS NULL
+        
     UNION 
     SELECT DISTINCT 
         COALESCE(cl.idcliente, cn.idcliente) AS idcliente,
@@ -1029,9 +1034,7 @@ BEGIN
         AND cont.inactive_at IS NULL;
     
 END $$
-
-DELIMITER;
-
+call spu_list_clients_contract();
 DELIMITER $$
 
 CREATE PROCEDURE spu_list_clients_contractID(IN _idcliente INT)
@@ -2766,6 +2769,10 @@ BEGIN
         rs.fecha_contrato,
         rs.det_contrato,
         rs.precio_venta,
+        rs.penalidad_moneda,
+        rs.penalidad_periodo,
+        rs.pendalidad_monto,
+        rs.inicial,
         rs.archivo,
         rs.nombres
         FROM (
@@ -2787,6 +2794,10 @@ BEGIN
                 cnt.fecha_contrato,
                 cnt.det_contrato,
                 cnt.precio_venta,
+                cnt.penalidad_moneda,
+                cnt.penalidad_periodo,
+                cnt.pendalidad_monto,
+                cnt.inicial,
                 cnt.archivo,
                 per.nombres
                 FROM contratos cnt
@@ -2817,6 +2828,10 @@ BEGIN
                 cnt.fecha_contrato,
                 cnt.det_contrato,
                 cnt.precio_venta,
+                cnt.penalidad_moneda,
+                cnt.penalidad_periodo,
+                cnt.pendalidad_monto,
+                cnt.inicial,
                 cnt.archivo,
                 per.nombres
                 FROM contratos cnt
@@ -2856,6 +2871,8 @@ CREATE PROCEDURE spu_add_contract
     IN _estado 				VARCHAR(10),
     IN _fecha_contrato 		DATE,
     IN _precio_venta 		DECIMAL(8,2),
+    IN _moneda_venta        VARCHAR(10),
+    IN _inicial 			DECIMAL(8,2),
     IN _det_contrato		JSON,
     IN _archivo             VARCHAR(100),
     IN _idusuario 			INT
@@ -2875,6 +2892,8 @@ BEGIN
                 estado,
                 fecha_contrato,
                 precio_venta,
+                moneda_venta,
+                inicial,
                 det_contrato,  
                 archivo,
                 idusuario
@@ -2892,8 +2911,10 @@ BEGIN
                     _estado, 
                     _fecha_contrato,
                     _precio_venta,
+                    _moneda_venta,
+                    _inicial,
                     NULLIF(det_contrato,""), 
-                    NULLIF(_archivo,""),
+                    _archivo,
                     _idusuario
 				);
                 
@@ -2906,6 +2927,7 @@ DELIMITER;
 DELIMITER $$
 
 CREATE PROCEDURE spu_set_contract
+
 (
 	IN _idcontrato 			INT,
 	IN _n_expediente         VARCHAR(10),
@@ -2920,6 +2942,8 @@ CREATE PROCEDURE spu_set_contract
     IN _estado 				VARCHAR(10),
     IN _fecha_contrato 		DATE,
     IN _precio_venta 		DECIMAL(8,2),
+    IN _moneda_venta        VARCHAR(10),
+    IN _inicial 			DECIMAL(8,2),
     IN _det_contrato		JSON,
     IN _archivo             VARCHAR(100),
     IN _idusuario 			INT
@@ -2940,8 +2964,10 @@ BEGIN
 			estado			= _estado,
 			fecha_contrato 	= _fecha_contrato,
             precio_venta		= _precio_venta,
-			det_contrato	= NULLIF(_det_contrato, ''),
-            archivo			= NULLIF(_archivo, ''),
+			det_contrato	    = NULLIF(_det_contrato, ''),
+            moneda_venta        = _moneda_venta,
+            inicial 			= _inicial,
+            archivo			= _archivo,
             idusuario		= _idusuario,
             update_at		= CURDATE()
         WHERE
@@ -3103,15 +3129,16 @@ BEGIN
         lq.idcontrato,
         ct.idcontrato,
         ct.precio_venta,
+        COALESCE(ct.inicial,0) AS inicial,
         (SUM(lq.cancelado)) as monto_cancelado,
-        (ct.precio_venta - (SUM(lq.cancelado))) as saldo
+        (ct.precio_venta - COALESCE(ct.inicial,0) - (SUM(lq.cancelado))) as saldo
         FROM vws_list_quotas lq
         INNER JOIN contratos ct ON ct.idcontrato = lq.idcontrato
         WHERE ct.idcontrato = _idcontrato;
 END $$
 
 DELIMITER;
-call spu_list_quotas_reprogram(1);
+call spu_list_quotas_reprogram(4);
 DELIMITER $$
 
 CREATE PROCEDURE spu_set_quotas_allNoPay

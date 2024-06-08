@@ -26782,7 +26782,7 @@ pre[class*="language-"] {
   /* Estilos para la etiqueta del input de tipo file */
   .label-img {
     width: 100%;
-    height: 100px; 
+    height: auto; 
     border: 2px dashed var(--input-file-color);
     border-radius: 5px;
     display: block;

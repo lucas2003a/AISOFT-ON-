@@ -468,6 +468,12 @@
                               </div>
                             </div>
 
+                            <!-- PRECIO VENTA -->
+                            <div class="mt-2">
+                              <label for="precio_venta">Precio de venta</label>
+                              <input type="text" name="precio_venta" id="precio_venta" class="form-control input-contract" readonly>
+                            </div>
+
 
                           </div>
 
@@ -522,7 +528,7 @@
                             <!-- IDREPRESENTANTE LEGAL -->
                             <div class="mt-2">
                               <label for="idrepresentante_legal">Representante legal</label>
-                              <p class="text-secondary text-sm">(ctrl para seleccion multiple)</p>
+                              <span class="text-secondary text-sm">(ctrl + click para selección multiple)</span>
                               <select name="idrepresentante_legal" id="idrepresentante_legal" class="form-select" multiple required>
                               </select>
                               <div class="invalid-feedback">
@@ -535,12 +541,14 @@
 
                           </div>
                         </div>
+
                         <div class="d-flex justify-content-center mt-4">
                           <div class="btn-group">
                             <button type="button" class="btn btn-secondary prevBtn" disabled>Anterior</button>
                             <button type="button" id="save-reps" class="btn btn-success nextBtn">Siguiente</button>
                           </div>
                         </div>
+
                       </div>
 
                       <div class="tab">
@@ -664,6 +672,12 @@
                             <div class="valid-feedback">
                               Tipo de cambio ingresado correctamente.
                             </div>
+
+                            <!-- MONEDA DE VENTA -->
+                            <div class="mt-2">
+                              <label for="moneda_venta">Moneda de venta</label>
+                              <input type="text" name="moneda_venta" id="moneda_venta" class="form-control" readonly>
+                            </div>
                           </div>
 
                           <div class="col-md-6">
@@ -680,20 +694,32 @@
                               </div>
                             </div>
 
+                            <!-- MONTO DE INICIAL -->
+                             <div class="mt-2">
+                              <label for="monto_inicial">Monto de inicial</label>
+                              <input type="number" name="monto_inicial" id="monto_inicial" class="form-control" min="500.00" value="0.00" step="0.01" required>
+                              <div class="invalid-feedback">
+                                Monto de inicial requerido.
+                              </div>
+                              <div class="valid-feedback">
+                                Monto de inicial ingresado correctamente.
+                              </div>
+                            </div>
+
                           </div>
                         </div>
-                        <hr>
+                        <hr class="mt-2">
                         <div class="mt-2" id="content-det">
                           <div class="row">
                             <div class="col-md-10">
                               <label for="label-detalle">Detalles</label>
-                              <input type="text" id="label-detalle" class="form-control input-det" placeholder="Cabezera" required>
-                              <textarea name="content-detalle" id="content-detalle" cols="30" rows="5" class="form-control mt-2 input-det" required></textarea>
+                              <input type="text" class="form-control input-key" placeholder="Cabezera" required>
+                              <textarea name="content-detalle" cols="30" rows="5" class="form-control input-value mt-2" required></textarea>
                               <div class="invalid-feedback">
                                 Detalle requerido.
                               </div>
                               <div class="valid-feedback">
-                                Detalle ingresada correctamente.
+                                Detalle ingresado correctamente.
                               </div>
                             </div>
                             <div class="col-md-2 d-flex align-items-center">
@@ -709,12 +735,12 @@
                         <div class="d-flex justify-content-center mt-2">
                           <div class="btn-group">
                             <button type="button" class="btn btn-secondary prevBtn">Anterior</button>
-                            <button type="button" class="btn btn-success nextBtn">Siguiente</button>
+                            <button type="button" id="getJson" class="btn btn-success nextBtn">Siguiente</button>
                           </div>
                         </div>
                       </div>
 
-                      <div class="tab">
+                      <div class="tab d-block">
 
                         <div class="row">
                           <div class="col-md-12">
@@ -738,7 +764,7 @@
                         </div>
 
                         <div class="row">
-                          <iframe src="../../MODELO-AIF-2.png" frameborder="4" style="width: 100%; height: 100%;"></iframe>
+                          <iframe src="../../MINUTA_COMPRA_VENTA_GOLDEN_HABITAT__MARZO_2019 (1).docx" id="frame" frameborder="4" width="500" height="800"></iframe>
                         </div>
 
                         <div class="d-flex justify-content-center">
@@ -763,8 +789,8 @@
       <template id="det-clone">
         <div class="row mt-2">
           <div class="col-md-10">
-            <input type="text" id="label-detalle" class="form-control input-det" placeholder="Cabezera" required>
-            <textarea name="content-detalle" id="content-detalle" cols="30" rows="5" class="form-control mt-2 input-det" required></textarea>
+            <input type="text" id="label-detalle" class="form-control input-key" placeholder="Cabezera" required>
+            <textarea name="content-detalle" id="content-detalle" cols="30" rows="5" class="form-control mt-2 input-value" required></textarea>
             <div class="invalid-feedback">
               Detalle requerido.
             </div>
@@ -902,7 +928,18 @@
       let filterRepresents = [];
       let dataRepresentsAll = [];
       let date = new Date();
+      let jsonDet = "";
 
+      function getJSON(){
+
+        let key = ".form-control.input-key";
+        let value = ".form-control.input-value";
+
+        let json = global.getJson(key, value);
+
+        jsonDet = json;
+      }
+      // Clona el contenido
       function cloneContent(){
 
         let detailContent = $("#det-clone").content.cloneNode(true);
@@ -1243,6 +1280,7 @@
               let tagOption = document.createElement("option");
               tagOption.value = result.idseparacion;
               tagOption.innerText = result.n_expediente;
+              newTag.dataset.precio_venta = result.precio_venta;
 
               $("#idseparacion").appendChild(tagOption);
             });
@@ -1280,6 +1318,8 @@
               let newTag = document.createElement("option");
               newTag.value = result.idlote;
               newTag.innerText = "LT - " + result.sublote;
+              newTag.dataset.precio_venta = result.precio_venta;
+              newTag.dataset.moneda_venta = result.moneda_venta;
 
               $("#idactivo").appendChild(newTag);
             });
@@ -1336,6 +1376,7 @@
 
           if (results.length > 0) {
 
+            console.log(results)
             $("#idactivo").innerHTML = "";
 
             let tagDef = document.createElement("option");
@@ -1349,6 +1390,8 @@
               let newTag = document.createElement("option");
               newTag.value = result.idlote;
               newTag.innerText = "LT - " + result.sublote;
+              newTag.dataset.precio_venta = result.precio_venta;
+              newTag.dataset.moneda_venta = result.moneda_venta;
 
               $("#idactivo").appendChild(newTag);
             });
@@ -1469,6 +1512,24 @@
         })
       }
 
+      $("#getJson").addEventListener("click",()=>{
+        getJSON();
+        console.log(jsonDet);
+      });
+
+      $("#idactivo").addEventListener("change",(e)=>{
+
+        let precio_venta = e.target.options[e.target.selectedIndex].dataset.precio_venta;
+        let moneda_venta = e.target.options[e.target.selectedIndex].dataset.moneda_venta;
+        let format_precio_venta = moneda_venta == "USD" ? "$/ " + precio_venta : "S/ " +  precio_venta;
+
+
+
+        $("#precio_venta").value = format_precio_venta;
+        $("#moneda_venta").value = moneda_venta;
+         
+      });
+
       $("#content-det").addEventListener("click",(e)=>{
 
         if(e.target.classList.contains("add-det")){
@@ -1476,9 +1537,12 @@
           validateDetail();
         }else if(e.target.classList.contains("less-det")){
           
-          let row = e.target.closest(".row");
+          sAlert.sweetConfirm("¿Deseas eliminar el registro?","Una vezeliminado no se podrá recuperar",()=>{
 
-          row.remove();
+            let row = e.target.closest(".row");
+            row.remove();
+          });
+
         }
       })
 
