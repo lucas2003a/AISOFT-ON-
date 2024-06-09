@@ -63,7 +63,13 @@ if(isset($_POST["action"])){
 
                 $today = date("dmY");
                 $nomFile = null;
-            
+
+                $response = [
+                    "status"  => false,
+                    "message"  => "",
+                    "data"  => []
+                ];
+
                 $dataObtained = [
 
                     "n_expediente"              => $_POST["n_expediente"],
@@ -75,7 +81,6 @@ if(isset($_POST["action"])){
                     "idconyugue"                => $_POST["idconyugue"],
                     "idactivo"                  => $_POST["idactivo"],
                     "tipo_cambio"               => $_POST["tipo_cambio"],
-                    "estado"                    => $_POST["estado"],
                     "fecha_contrato"            => $_POST["fecha_contrato"],
                     "precio_venta"              => $_POST["precio_venta"],
                     "moneda_venta"              => $_POST["moneda_venta"],
@@ -87,16 +92,39 @@ if(isset($_POST["action"])){
                 ];
                 
                 if(isset($_FILES["archivo"]) && $_FILES["archivo"]["size"] > 0){
-                    $type = $_FILES["type"];
+                    $type = pathinfo($_FILES["archivo"]["name"], PATHINFO_EXTENSION); //Obtiene la extensción del archivo original
 
-                    $nomFile = sha1($today) . $type;
-                    $url = "../media/files/" . $nomFile;
+                    if($type !== "pdf"){
+                        
+                        $response["status"] = false;
+                        $response["message"] = "Solo se acepta archivos con extensión .pdf";
+                    }else{
 
-                    if(move_uploaded_file($_FILES["archivo"]["tmp_name"], $url)){
-                        $dataObtained["archivo"] = $nomFile;
+                        $nomFile = sha1($today) .".{$type}";
+                        $url = "../media/files/" . $nomFile;
+                        
+                        if(move_uploaded_file($_FILES["archivo"]["tmp_name"], $url)){
+                            $dataObtained["archivo"] = $nomFile;
+                        }
+
+                        $data = $contract->addContract($dataObtained);
+                        
+                        if(!$data){
+                            
+                            $response["status"] = false;
+                            $response["message"] = "Error al registrar el contrato";
+                            }else{
+                                
+    
+                            $response["status"] = true;
+                            $response["message"] = "Registro realizado correctamente";
+                            $response["data"] = $data;
+                        }
                     }
+
                 }
-                echo json_encode($contract->addContract($dataObtained));
+                
+                echo json_encode($response);
             break;
 
         case "setContract": 
@@ -104,6 +132,10 @@ if(isset($_POST["action"])){
                 $today = date("dmY");
                 $nomFile = null;
             
+                $today = date("dmY");
+                $nomfile = sha1($today);
+                $url = "../media/files/" . $nomfile;
+
                 $dataObtained = [
 
                     "idcontrato"                => $_POST["idcontrato"],
@@ -161,6 +193,8 @@ if(isset($_POST["action"])){
 
                 break;
 
+            
+
         /********************************************  DETALLES DE CONTRATO ************************************************************/
         
         case "listDetContract": 
@@ -213,6 +247,27 @@ if(isset($_POST["action"])){
 
             break;
 
+    }
+}
+
+if(isset($_GET["action"])){
+
+    $contract = new Contract();
+
+    switch($_GET["action"]){
+        case "downloadPDF": 
+
+            $name = $_GET["nombre"];
+            $file = $_GET["archivo"];
+            $url = "../media/files/" . $file;
+
+            header("Content-Type: application/pdf");
+            header("Content-Disposition: inline; filename=".$name.".pdf"); //inline Manda a la vista previa
+            //header("Content-Disposition: attachment; filename=".$name.".pdf"); // attachment Fuerza la descarga directa
+
+            readfile($url);
+
+        break;
     }
 }
 ?>

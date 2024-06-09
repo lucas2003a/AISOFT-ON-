@@ -389,7 +389,7 @@ CREATE TABLE devoluciones
 CREATE TABLE contratos
 (
 	idcontrato 				INT PRIMARY KEY AUTO_INCREMENT,
-    n_expediente            VARCHAR(10) NOT NULL
+    n_expediente            VARCHAR(10)     NOT NULL,
     tipo_contrato 			VARCHAR(40)		NOT NULL,
     idseparacion 					INT 	NULL,
     idrepresentante_primario 		INT 	NOT NULL,	-- REPRESENTANTE DEL VENDEDOR
@@ -398,7 +398,7 @@ CREATE TABLE contratos
     idconyugue 						INT		NULL,		-- EL CONYUGUE (SOLO SI ESTÁ CASADO)
     idactivo 						INT 	NULL,
 	tipo_cambio 			DECIMAL(4,3) 	NOT NULL,
-	estado 					VARCHAR(10)		NOT NULL,
+	estado 					VARCHAR(10)		NOT NULL DEFAULT 'VIGENTE';,
     fecha_contrato			DATE 			NOT NULL,
     precio_venta            DECIMAL(8,2)    NOT NULL,
     moneda_venta            VARCHAR(10)     NOT NULL,
@@ -409,7 +409,7 @@ CREATE TABLE contratos
     update_at				DATE 			NULL,
     inactive_at				DATE 			NULL,
     idusuario 				INT 			NOT NULL,
-    CONSTRAINT chk_n_epediente_cont CHECK(n_expediente LIKE 'CONT-%'),
+    CONSTRAINT chk_n_expediente_cont CHECK(n_expediente LIKE 'CON-%'),
     CONSTRAINT fk_idseparacion_cont FOREIGN KEY(idseparacion) REFERENCES separaciones(idseparacion),
     CONSTRAINT fk_idrepresentante_cont FOREIGN KEY(idrepresentante_primario) REFERENCES representantes(idrepresentante),
     CONSTRAINT fk_idrepresentante2_cont FOREIGN KEY(idrepresentante_secundario) REFERENCES representantes(idrepresentante),
@@ -417,6 +417,7 @@ CREATE TABLE contratos
     CONSTRAINT fk_idcliente2_cont FOREIGN KEY(idconyugue) REFERENCES clientes(idcliente),
     CONSTRAINT fk_idusuario_cont FOREIGN KEY(idusuario) REFERENCES usuarios(idusuario)
 )ENGINE = INNODB;
+
 
 -- DETALLE DE CONTRATOS
 CREATE TABLE detalles_contratos
@@ -464,3 +465,4 @@ CREATE TABLE detalle_cuotas
 
 -- DROP TABLE sustentos_cuotas, cuotas, detalle_gastos, presupuestos, desembolsos, sustentos_sep, separaciones, contratos, viviendas, lotes;
 select * from devoluciones;
+set foreign_key_checks = 1 -- cambialo a 1

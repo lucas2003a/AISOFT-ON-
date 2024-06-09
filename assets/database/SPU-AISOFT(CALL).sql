@@ -29,6 +29,7 @@ CALL spu_list_drop_projects();
 CALL spu_list_drop_projects_by_code("b-20");
 CALL spu_restore_projects(6);
 
+select * from usuarios
 -- ACTIVOS
 SELECT * FROM ACTIvos;
 CALL spu_list_assets_by_id(5); -- OBTENGO LOS ACTIVOS POR ID
