@@ -767,6 +767,7 @@ BEGIN
         AND proy.idproyecto = _idproyecto
         AND JSON_ARRAY(JSON_EXTRACT(det_casa,'$.clave')) = 0
         AND JSON_ARRAY(JSON_EXTRACT(det_casa,'$.valor')) = 0
+        AND act.precio_venta > 0
         ORDER BY act.sublote;
 END $$
 
@@ -794,6 +795,7 @@ BEGIN
         AND proy.idproyecto = _idproyecto
         AND JSON_ARRAY(JSON_EXTRACT(det_casa,'$.clave')) = 0
         AND JSON_ARRAY(JSON_EXTRACT(det_casa,'$.valor')) = 0
+        AND act.precio_venta > 0
         ORDER BY act.sublote;
 END $$
 
@@ -820,6 +822,7 @@ BEGIN
         AND act.estado = "SIN VENDER"
         AND act.inactive_at IS NULL
         AND proy.idproyecto = _idproyecto
+        AND act.precio_venta > 0
         ORDER BY act.sublote;
 END $$
 
@@ -848,6 +851,7 @@ BEGIN
         AND proy.idproyecto = _idproyecto
         AND JSON_LENGTH(JSON_EXTRACT(act.det_casa,'$.clave')) > 0
         AND JSON_LENGTH(JSON_EXTRACT(act.det_casa,'$.valor')) > 0
+        AND act.precio_venta > 0
         ORDER BY act.sublote;
 END $$
 
@@ -2785,7 +2789,7 @@ BEGIN
                 COALESCE(persj.documento_tipo,persn.documento_tipo) as documento_tipo,
                 COALESCE(persj.documento_nro,persn.documento_nro) as documento_nro,
                 cnt.idconyugue,
-                ac.idactivo,
+                ac.idactivo, // ?y el idseparacion?
                 ac.sublote,
                 py.idproyecto,
                 py.denominacion,

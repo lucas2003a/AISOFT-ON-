@@ -748,7 +748,7 @@
                     <i class="fa fa-ellipsis-v text-secondary target"></i>
                   </a>
                   <ul class="dropdown-menu" aria-labelledby="dropdownTable">
-                    <li><a href="#" class="dropdown-item border-radius-md download" data-name="${fileName}" data-file="${element.archivo}"><i class="bi bi-arrow-down-square text-danger download" data-name="${fileName}" data-file="${element.archivo}"></i>  Descargar</a></li>
+                    <li><a href="../../Controllers/contract.controller.php?action=downloadPDF&archivo=${element.archivo}&nombre=${fileName}" class="dropdown-item border-radius-md download"><i class="bi bi-arrow-down-square text-danger download"></i>  Descargar</a></li>
                     <li><a href="#" class="dropdown-item border-radius-md"><i class="fa-solid fa-right-left text-secondary"></i>  Devolver</a></li>
                     <li><a href="#" class="dropdown-item border-radius-md"><i class="bi bi-arrow-right-square text-success"></i> Ver más</a></li>
                     <li><a href="#" class="dropdown-item border-radius-md"><i class="bi bi-trash-fill text-danger"></i> Eliminar</a></li>
@@ -848,15 +848,7 @@
 
       $("#table-contracts tbody").addEventListener("click",async function(e){
 
-          
-        if(e.target.classList.contains("download")){
-
-          
-          let archivo = e.target.dataset.file;
-          let name = e.target.dataset.name;
-
-          await downloadContract(archivo, name);
-        }
+  
       });
 
       $("#in-code").addEventListener("input", (e) => {

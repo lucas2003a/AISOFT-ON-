@@ -61,7 +61,7 @@ if(isset($_POST["action"])){
 
         case "addContract": 
 
-                $today = date("dmY");
+                $today = date("dmYhis");
                 $nomFile = null;
 
                 $response = [

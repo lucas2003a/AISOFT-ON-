@@ -398,7 +398,7 @@ CREATE TABLE contratos
     idconyugue 						INT		NULL,		-- EL CONYUGUE (SOLO SI ESTÁ CASADO)
     idactivo 						INT 	NULL,
 	tipo_cambio 			DECIMAL(4,3) 	NOT NULL,
-	estado 					VARCHAR(10)		NOT NULL DEFAULT 'VIGENTE';,
+	estado 					VARCHAR(10)		NOT NULL DEFAULT 'VIGENTE',
     fecha_contrato			DATE 			NOT NULL,
     precio_venta            DECIMAL(8,2)    NOT NULL,
     moneda_venta            VARCHAR(10)     NOT NULL,
@@ -433,7 +433,8 @@ CREATE TABLE detalles_contratos
 )ENGINE = INNODB;
 
 -- CUOTAS
-CREATE TABLE cuotas(
+CREATE TABLE cuotas
+(
 	idcuota 				INT PRIMARY KEY AUTO_INCREMENT,
     idcontrato		        INT  			NOT NULL,
     monto_cuota 			DECIMAL(8,2) 	NOT NULL,
@@ -464,5 +465,5 @@ CREATE TABLE detalle_cuotas
 )ENGINE = INNODB;
 
 -- DROP TABLE sustentos_cuotas, cuotas, detalle_gastos, presupuestos, desembolsos, sustentos_sep, separaciones, contratos, viviendas, lotes;
-select * from devoluciones;
-set foreign_key_checks = 1 -- cambialo a 1
+select * from contratos;
+set foreign_key_checks = 0 -- //!Cambialo a 1

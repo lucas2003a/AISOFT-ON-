@@ -922,6 +922,11 @@
       const $ = id => global.$(id);
       const $All = id => global.$All(id);
 
+      let stringQuery = window.location.search;
+      let params = new URLSearchParams(stringQuery);
+      let code = params.get("id");
+      let idcontrato = atob(code);
+
       let oldExpedient = false;
       let dataContract;
       let dataRepresents = [];
@@ -931,9 +936,35 @@
       let jsonDet = "";
       let frame = $("#frame");
 
-      //Obtiene el contrato por el id
+      // * Obtiene el contrato por el id
       async function getContractId(id){
 
+        try{
+          let url = "../../Controllers/contract.controller.php";
+
+          let params = new FormData();
+          params.append("action", "listContractId");
+          params.append("idcontrato",id);
+
+          let result = await global.sendAction(url, params);
+
+          if(result){
+            console.log(result)
+
+            // !Valor del númmero de expediente
+            let get_n_expediente = result.n_expediente;
+            let n_expediente_split = get_n_expediente.split("-");
+            let n_expediente = n_expediente_split[1];
+            $("#n_expediente").value = Number.parseInt(n_expediente);
+
+            // !Valor del tipoo de contrato
+            $("#tipo_contrato").value = result.tipo_contrato;
+            $("#tipo_contrato").dispatchEvent(new Event("change"));
+          }
+        }
+        catch{
+          console.error(e);
+        }
       }
 
       //Agrega un registro a la tabla "DETALLE DE CONTRATOS"
@@ -1809,6 +1840,7 @@
 
       await getToday();
       await getAllContracts();
+      await getContractId(idcontrato);
 
       /* --------------------------------- FUNCIÓN DE VALIDACIÓN --------------------------------------------------------- */
 
