@@ -466,4 +466,4 @@ CREATE TABLE detalle_cuotas
 
 -- DROP TABLE sustentos_cuotas, cuotas, detalle_gastos, presupuestos, desembolsos, sustentos_sep, separaciones, contratos, viviendas, lotes;
 select * from contratos;
-set foreign_key_checks = 0 -- //!Cambialo a 1
+set foreign_key_checks = 1 -- //!Cambialo a 1

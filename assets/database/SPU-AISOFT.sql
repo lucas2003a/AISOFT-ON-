@@ -2756,7 +2756,9 @@ BEGIN
         rs.idrepresentante_secundario,
         CONCAT(pers.apellidos,', ',pers.nombres) AS representante_secundario,
         pers.documento_tipo AS rs_doc_type,
-        pers.documento_nro AS rs_doc_nro, 
+        pers.documento_nro AS rs_doc_nro,
+        sd.iddistrito AS sede_1,
+        sds.iddistrito AS sede_2, 
         rs.cliente,
         rs.tipo_persona,
         rs.documento_tipo,
@@ -2764,6 +2766,8 @@ BEGIN
         CONCAT(pery.apellidos,', ',pery.nombres) AS conyugue,
         pery.documento_tipo AS dc_type,
         pery.documento_nro AS dc_nro, 
+        rs.idseparacion,
+        rs.n_separacion,
         rs.idactivo,
         rs.sublote,
         rs.idproyecto,
@@ -2789,7 +2793,9 @@ BEGIN
                 COALESCE(persj.documento_tipo,persn.documento_tipo) as documento_tipo,
                 COALESCE(persj.documento_nro,persn.documento_nro) as documento_nro,
                 cnt.idconyugue,
-                ac.idactivo, // ?y el idseparacion?
+                sp.idseparacion,
+                sp.n_expediente AS n_separacion,
+                ac.idactivo, 
                 ac.sublote,
                 py.idproyecto,
                 py.denominacion,
@@ -2823,6 +2829,8 @@ BEGIN
                 COALESCE(pr.documento_tipo,pj.documento_tipo) AS documento_tipo,
                 COALESCE(pr.documento_nro,pj.documento_nro) AS documento_nro,
                 cnt.idconyugue,
+                sp.idseparacion,
+                sp.n_expediente AS n_separacion,
                 ac.idactivo,
                 ac.sublote,
                 py.idproyecto,
@@ -2837,6 +2845,7 @@ BEGIN
                 cnt.archivo,
                 per.nombres
                 FROM contratos cnt
+                LEFT JOIN separaciones sp ON sp.idseparacion = cnt.idseparacion
                 INNER JOIN clientes cl ON cl.idcliente = cnt.idcliente
                 LEFT JOIN personas pr ON pr.idpersona = cl.idpersona
                 LEFT JOIN personas_juridicas pj ON pj.idpersona_juridica = cl.idpersona_juridica
@@ -2848,8 +2857,12 @@ BEGIN
         ) AS rs
         INNER JOIN representantes rp ON rp.idrepresentante = rs.idrepresentante_primario
         INNER JOIN personas per ON per.idpersona = rp.idpersona
+        INNER JOIN sedes sd ON sd.idsede = rp.idsede
+
         LEFT JOIN representantes rsec ON rsec.idrepresentante = rs.idrepresentante_secundario
         LEFT JOIN personas pers ON pers.idpersona = rsec.idpersona
+        LEFT JOIN sedes sds ON sds.idsede = rsec.idsede
+
         LEFT JOIN clientes cly ON cly.idcliente = rs.idconyugue
         LEFT JOIN personas pery ON pery.idpersona = cly.idpersona
         WHERE rs.idcontrato = _idcontrato;
@@ -3029,6 +3042,7 @@ BEGIN
         cnt.n_expediente,
         cnt.precio_venta,
         cnt.fecha_contrato,
+        rp.idrepresentante,
         rp.representante_legal,
         rp.documento_tipo,
         rp.documento_nro,
