@@ -937,6 +937,8 @@
       let frame = $("#frame");
       let detContracts;
 
+      // * Selecciona la sede
+
       // *  Obtiene el ubigeo
       async function getUbigeo(iddistrito) {
 
@@ -953,7 +955,7 @@
           if (result) {
             console.log(result)
 
-            /* const tagDistrito = document.createElement("option");
+            const tagDistrito = document.createElement("option");
             tagDistrito.value = result.iddistrito;
             tagDistrito.innerHTML = result.distrito.trim();
             $("#iddistrito").appendChild(tagDistrito);
@@ -965,7 +967,8 @@
             $("#idprovincia").appendChild(tagProvincia);
             $("#idprovincia").value = result.idprovincia;
 
-            $("#iddepartamento").value = result.iddepartamento; */
+            $("#iddepartamento").value = result.iddepartamento;
+            $("#iddistrito").dispatchEvent(new Event("change"));
           }
         } catch (e) {
           console.error(e);
@@ -1094,8 +1097,43 @@
             // !Valor de precio de venta
             $("#precio_venta").value = result.moneda_venta == "USD" ? "$/ " + result.precio_venta : "S/ " + result.precio_venta;
 
-            // !Valor de sede 1
-            getUbigeo(result.sede_1); // ? Arregla el metoo para setear los valore del ubigeo
+            // !Valor del ubigeo
+            await getUbigeo(result.sede_ubigeo_1); 
+
+            // !valor de idsede
+            // TODO: todas las validaciones dentro del setTimout se iran ejecutando en un intervalo de tiempo
+            setTimeout(() => {
+
+              console.log($("#idsede").options)
+              Array.from($("#idsede").options).forEach(option => {
+                if (option.value == result.idsede_1) {
+                  option.selected = true;
+                }
+              });
+
+              $("#idsede").dispatchEvent(new Event("change"));
+
+              // !Obtiene el valor del representante primario
+              setTimeout(()=>{
+                Array.from($("#idrepresentante_primario").options).forEach(option =>{
+                  if(option.value == result.idrepresentante_primario){
+                    option.selected = true;
+                  }
+                });
+                $("#idrepresentante_primario").dispatchEvent(new Event("change"))
+
+                // !Obtiene el valor del represenante secundario
+                setTimeout(() => {
+                  if(result.idrepresentante_secundario){
+                    Array.from($("#idrepresentante_secundario").options).forEach(option =>{
+                      if(option.value == result.idrepresentante_secundario){
+                        option.selected = true;
+                      }
+                    })
+                  }
+                }, 500);
+              },500)
+            }, 500);
 
           }
         } catch (e) {
