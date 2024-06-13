@@ -3428,3 +3428,5 @@ BEGIN
 END $$
 
 DELIMITER;
+
+select * from contratos;
