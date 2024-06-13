@@ -291,6 +291,7 @@ BEGIN
 	END IF;
 END $$
 DELIMITER ;
+SELECT * from contratos;
 
 DELIMITER $$
 CREATE TRIGGER trgr_contracts_update AFTER UPDATE ON contratos

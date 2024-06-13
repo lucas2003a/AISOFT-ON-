@@ -389,7 +389,7 @@ CREATE TABLE devoluciones
 CREATE TABLE contratos
 (
 	idcontrato 				INT PRIMARY KEY AUTO_INCREMENT,
-    n_expediente            VARCHAR(10) NOT NULL
+    n_expediente            VARCHAR(10)     NOT NULL,
     tipo_contrato 			VARCHAR(40)		NOT NULL,
     idseparacion 					INT 	NULL,
     idrepresentante_primario 		INT 	NOT NULL,	-- REPRESENTANTE DEL VENDEDOR
@@ -398,15 +398,18 @@ CREATE TABLE contratos
     idconyugue 						INT		NULL,		-- EL CONYUGUE (SOLO SI ESTÁ CASADO)
     idactivo 						INT 	NULL,
 	tipo_cambio 			DECIMAL(4,3) 	NOT NULL,
-	estado 					VARCHAR(10)		NOT NULL,
+	estado 					VARCHAR(10)		NOT NULL DEFAULT 'VIGENTE',
     fecha_contrato			DATE 			NOT NULL,
+    precio_venta            DECIMAL(8,2)    NOT NULL,
+    moneda_venta            VARCHAR(10)     NOT NULL,
+    inicial                 DECIMAL(8,2)    NOT NULL,
     det_contrato			JSON 			NOT NULL DEFAULT '{"clave" :[], "valor":[]}', -- BONOS, FINACIAMIENTOS, PENALIDAD, PLAZO ENTREGA, CUOTA INICIAL ..   
     archivo                 VARCHAR(100)    NOT NULL,
 	create_at 				DATE 			NOT NULL	DEFAULT (CURDATE()),
     update_at				DATE 			NULL,
     inactive_at				DATE 			NULL,
     idusuario 				INT 			NOT NULL,
-    CONSTRAINT chk_n_epediente_cont CHECK(n_expediente LIKE 'CONT-%'),
+    CONSTRAINT chk_n_expediente_cont CHECK(n_expediente LIKE 'CON-%'),
     CONSTRAINT fk_idseparacion_cont FOREIGN KEY(idseparacion) REFERENCES separaciones(idseparacion),
     CONSTRAINT fk_idrepresentante_cont FOREIGN KEY(idrepresentante_primario) REFERENCES representantes(idrepresentante),
     CONSTRAINT fk_idrepresentante2_cont FOREIGN KEY(idrepresentante_secundario) REFERENCES representantes(idrepresentante),
@@ -429,38 +432,9 @@ CREATE TABLE detalles_contratos
     CONSTRAINT fk_idcontrato_dtc FOREIGN KEY(idcontrato) REFERENCES contratos(idcontrato)
 )ENGINE = INNODB;
 
-
-
--- FINANCIERAS
-CREATE TABLE financieras(
-	idfinanciera 			INT PRIMARY KEY AUTO_INCREMENT,
-    ruc						CHAR(11) 		NOT NULL,
-    razon_social 			VARCHAR(60) 	NOT NULL,
-    iddistrito 				INT 			NOT NULL,
-    direccion 				VARCHAR(70) 	NOT NULL,
-    CONSTRAINT fk_iddistrito_finans FOREIGN KEY(iddistrito) REFERENCES distritos(iddistrito),
-    CONSTRAINT uk_ruc_finans UNIQUE(ruc)
-)ENGINE = INNODB;
-
--- DESEMBOLSOS
-CREATE TABLE desembolsos(
-	iddesembolso			INT PRIMARY KEY AUTO_INCREMENT,
-    idfinanciera			INT 			NOT NULL,
-    idactivo 				INT 			NOT NULL,
-    monto_desemb 			DECIMAL(8,2) 	NOT NULL,
-    porcentaje				TINYINT			NOT NULL,
-    fecha_desembolso 		DATETIME		NOT NULL,
-	create_at 				DATE 			NOT NULL	DEFAULT (CURDATE()),
-    update_at				DATE 			NULL,
-    inactive_at				DATE 			NULL,
-    idusuario 				INT 			NOT NULL,
-    CONSTRAINT fk_idfinanciera_desemb FOREIGN KEY(idfinanciera) REFERENCES financieras(idfinanciera),
-    CONSTRAINT fk_idactivo_desemb	FOREIGN KEY(idactivo) REFERENCES activos(idactivo),
-    CONSTRAINT fk_idusuario_desemb FOREIGN KEY(idusuario) REFERENCES usuarios(idusuario)
-)ENGINE = INNODB;
-
 -- CUOTAS
-CREATE TABLE cuotas(
+CREATE TABLE cuotas
+(
 	idcuota 				INT PRIMARY KEY AUTO_INCREMENT,
     idcontrato		        INT  			NOT NULL,
     monto_cuota 			DECIMAL(8,2) 	NOT NULL,
@@ -491,4 +465,5 @@ CREATE TABLE detalle_cuotas
 )ENGINE = INNODB;
 
 -- DROP TABLE sustentos_cuotas, cuotas, detalle_gastos, presupuestos, desembolsos, sustentos_sep, separaciones, contratos, viviendas, lotes;
-select * from devoluciones;
+select * from contratos;
+set foreign_key_checks = 1 -- //!Cambialo a 1

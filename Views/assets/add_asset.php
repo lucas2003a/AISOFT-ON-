@@ -541,7 +541,7 @@
                             <!-- PRECIO LOTE -->
                             <div class="mt-4">
                               <label for="precio_lote" class="form-label">Precio del lote</label>
-                              <input type="number" class="form-control" id="precio_lote" placeholder="Precio de venta" maxlength="7" minlength="7" min="1.00" value="0.00" required autofocus>
+                              <input type="number" class="form-control" id="precio_lote" placeholder="Precio de venta" maxlength="7" minlength="7" min="1.00" value="0.00" step="0.01" required autofocus>
                               <div class="invalid-feedback">
                                 Necesitas ingresar el precio del lote.
                               </div>
@@ -567,7 +567,7 @@
                             <!-- PRECIO CONSTRUCCION -->
                             <div class="mt-4">
                               <label for="precio_construccion" class="form-label">Precio de la construcción</label>
-                              <input type="number" class="form-control" id="precio_construccion" placeholder="Precio de construcción" maxlength="7" minlength="7" min="1.00">
+                              <input type="number" class="form-control" id="precio_construccion" placeholder="Precio de construcción" maxlength="7" minlength="7" min="1.00" step="0.01">
                               <div class="invalid-feedback">
                                 Necesitas ingresar el precio de construcción.
                               </div>
@@ -579,7 +579,7 @@
                             <!-- PRECIO VENTA -->
                             <div class="mt-4">
                               <label for="precio_venta" class="form-label">Precio de la venta</label>
-                              <input type="number" class="form-control" id="precio_venta" placeholder="Precio de venta" maxlength="8" minlength="8" min="1.00" value="0.00">
+                              <input type="number" class="form-control" id="precio_venta" placeholder="Precio de venta" maxlength="8" minlength="8" min="1.00" value="0.00" step="0.01">
                               <div class="invalid-feedback">
                                 Necesitas ingresar el precio de venta.
                               </div>

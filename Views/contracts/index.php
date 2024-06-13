@@ -442,7 +442,7 @@
             </div>
             <hr>
             <div class="card-body px-0 pt-0 pb-2">
-              <div class="table-responsive text-center p-0">
+              <div class="table-responsive text-center p-0" style="height: 300px;">
                 <table class="table align-items-center mb-0 table-hover" id="table-contracts">
                   <thead>
                     <tr>
@@ -619,6 +619,41 @@
 
       let timmer;
 
+      //Descarga el contrato PDF
+      async function downloadContract(file, name){
+
+        try{
+
+          console.log(file)
+          console.log(name)
+
+          let params = new URLSearchParams();
+          params.append("action","downloadPDF");
+          params.append("archivo",file);
+          params.append("nombre",name);
+
+          let url = `../../Controllers/contract.controller.php?${params}`;
+
+          window.location.href = url;
+
+          /* let result = await fetch(url,{
+              method: 'GET',
+              body: params
+            })
+          
+            let blob = await result.blob();
+            let urlBlob = URL.createObjectURL(blob);
+            letlink = document.createElement("a");
+
+            link.href =  */
+          
+
+        }
+        catch(e){
+          console.error(e);
+        }
+      }
+
       //valida el rango de fechas
       function validateDates() {
         const fecha_inicio = $("#fechaInicio").value;
@@ -694,7 +729,9 @@
   
           let numRow = 1;
           array.forEach(element => {
-  
+            
+            let code = btoa(element.idcontrato)
+            let fileName = element.n_expediente + " - " + element.tipo_contrato + " - " + element.cliente;
             let newRow = `
             <tr>
               <td class="text-sm">${numRow}</td>
@@ -707,15 +744,15 @@
               <td>
               <div class="">
                 <div class="dropdown">
-                  <a class="cursor-pointer" id="dropdownTable" data-bs-toggle="dropdown" aria-expanded="false">
-                    <i class="fa fa-ellipsis-v text-secondary"></i>
+                  <a class="cursor-pointer target" id="dropdownTable" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="fa fa-ellipsis-v text-secondary target"></i>
                   </a>
                   <ul class="dropdown-menu" aria-labelledby="dropdownTable">
-                    <li><a href="#" class="dropdown-item border-radius-md"><i class="bi bi-arrow-down-square text-danger"></i>  Descargar</a></li>
+                    <li><a href="../../Controllers/contract.controller.php?action=downloadPDF&archivo=${element.archivo}&nombre=${fileName}" class="dropdown-item border-radius-md download"><i class="bi bi-arrow-down-square text-danger download"></i>  Descargar</a></li>
                     <li><a href="#" class="dropdown-item border-radius-md"><i class="fa-solid fa-right-left text-secondary"></i>  Devolver</a></li>
                     <li><a href="#" class="dropdown-item border-radius-md"><i class="bi bi-arrow-right-square text-success"></i> Ver más</a></li>
                     <li><a href="#" class="dropdown-item border-radius-md"><i class="bi bi-trash-fill text-danger"></i> Eliminar</a></li>
-                    <li><a href="#" class="dropdown-item border-radius-md"><i class="bi bi-pencil-fill text-primary"></i> Editar</a></li>
+                    <li><a href="./edit_contract.php?id=${code}" class="dropdown-item border-radius-md"><i class="bi bi-pencil-fill text-primary"></i> Editar</a></li>
                   </ul>
                 </div>
               </div>
@@ -808,6 +845,11 @@
           console.error(e);
         }
       }
+
+      $("#table-contracts tbody").addEventListener("click",async function(e){
+
+  
+      });
 
       $("#in-code").addEventListener("input", (e) => {
 

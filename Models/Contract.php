@@ -140,7 +140,7 @@ class Contract extends Conection{
 
         try{
 
-            $query = $this->conection->prepare("CALL spu_add_contracts(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+            $query = $this->conection->prepare("CALL spu_add_contract(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
             $query->execute(
                 array(
                     $dataContract["n_expediente"],
@@ -152,9 +152,10 @@ class Contract extends Conection{
                     $dataContract["idconyugue"],
                     $dataContract["idactivo"],
                     $dataContract["tipo_cambio"],
-                    $dataContract["estado"],
                     $dataContract["fecha_contrato"],
                     $dataContract["precio_venta"],
+                    $dataContract["moneda_venta"],
+                    $dataContract["inicial"],
                     $dataContract["det_contrato"],
                     $dataContract["archivo"],
                     $dataContract["idusuario"]
@@ -175,7 +176,7 @@ class Contract extends Conection{
 
         try{
 
-            $query = $this->conection->prepare("CALL spu_set_contracts(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+            $query = $this->conection->prepare("CALL spu_set_contract(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
             $query->execute(
                 array(
                     $dataContract["idcontrato"],
@@ -188,9 +189,10 @@ class Contract extends Conection{
                     $dataContract["idconyugue"],
                     $dataContract["idactivo"],
                     $dataContract["tipo_cambio"],
-                    $dataContract["estado"],
                     $dataContract["fecha_contrato"],
                     $dataContract["precio_venta"],
+                    $dataContract["moneda_venta"],
+                    $dataContract["inicial"],
                     $dataContract["det_contrato"],
                     $dataContract["archivo"],
                     $dataContract["idusuario"]
