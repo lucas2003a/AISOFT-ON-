@@ -693,7 +693,7 @@
 
       console.log(montoSep)
       console.log(porcentaje)
-      let result = montoSep * (porcentaje / 100);
+      let result = montoSep - (montoSep * (porcentaje / 100));
 
       $("#monto_devolucion").value = result.toFixed(2);
     }

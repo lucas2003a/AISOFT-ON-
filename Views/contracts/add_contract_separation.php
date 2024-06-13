@@ -349,9 +349,9 @@
         <nav aria-label="breadcrumb">
           <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
             <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="#">Dashboard</a></li>
-            <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Editar contrato</li>
+            <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Agregar contrato</li>
           </ol>
-          <h6 class="font-weight-bolder mb-0" id="cabezera">EDITAR CONTRATO </h6>
+          <h6 class="font-weight-bolder mb-0" id="cabezera">AGREGAR CONTRATO </h6>
         </nav>
         <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
 
@@ -514,7 +514,7 @@
                             <!-- IDCONYUGUE -->
                             <div class="mt-2">
                               <label for="idconyugue">Conyugue</label>
-                              <select name="idconyugue" id="idconyugue" class="form-select input-contract" required>
+                              <select name="idconyugue" id="idconyugue" class="form-select input-contract">
                                 <option value="">Selecciona un conyugue</option>
                               </select>
                               <div class="invalid-feedback">
@@ -678,6 +678,16 @@
                               <label for="moneda_venta">Moneda de venta</label>
                               <input type="text" name="moneda_venta" id="moneda_venta" class="form-control" readonly>
                             </div>
+
+                            <!-- TIPO DE PAGO  -->
+                             <div class="mt-2">
+                              <label for="modalidad_pago" class="form-label">Modalidad de pago</label>
+                              <select name="modalidad_pago" id="modalidad_pago" class="form-select" required>
+                                <option value="">Selecciona una de pago</option>
+                                <option value="credito">A crédito</option>
+                                <option value="contado">Al contado</option>
+                              </select>
+                             </div>
                           </div>
 
                           <div class="col-md-6">
@@ -695,7 +705,7 @@
                             </div>
 
                             <!-- MONTO DE INICIAL -->
-                            <div class="mt-2">
+                             <div class="mt-2">
                               <label for="monto_inicial">Monto de inicial</label>
                               <input type="number" name="monto_inicial" id="monto_inicial" class="form-control" min="500.00" value="0.00" step="0.01" required>
                               <div class="invalid-feedback">
@@ -713,8 +723,8 @@
                           <div class="row">
                             <div class="col-md-10">
                               <label for="label-detalle">Detalles</label>
-                              <input type="text" class="form-control input-key" placeholder="Cabezera" id="input-key" required>
-                              <textarea name="content-detalle" cols="30" rows="5" class="form-control input-value mt-2" id="input-value" required></textarea>
+                              <input type="text" class="form-control input-key" placeholder="Cabezera" required>
+                              <textarea name="content-detalle" cols="30" rows="5" class="form-control input-value mt-2" required></textarea>
                               <div class="invalid-feedback">
                                 Detalle requerido.
                               </div>
@@ -746,35 +756,35 @@
                           <div class="col-md-12">
                             <div class="mt-2">
 
-                              <div class="form-group mt-4">
-                                <label for="in-doc" class="label-img">
-                                  <i class="material-icons"></i>
-                                  <span class="title" style="display: flex; justify-content: center;">Agregar archivo (solo archivos con extensión .pdf)</span>
-                                  <input type="file" accept=".pdf, .doc, .docx" id="in-doc" required>
-                                </label>
-                                <div class="invalid-feedback">
-                                  Archivo de contrato requerido.
-                                </div>
-                                <div class="valid-feedback">
-                                  Archivo de contrato ingresado correctamente.
-                                </div>
-                              </div>
-
+                            <div class="form-group mt-4">
+                            <label for="in-doc" class="label-img">
+                              <i class="material-icons"></i>
+                              <span class="title" style="display: flex; justify-content: center;">Agregar archivo (solo archivos con extensión .pdf)</span>
+                              <input type="file" accept=".pdf, .doc, .docx" id="in-doc" required>
+                            </label>
+                            <div class="invalid-feedback">
+                              Archivo de contrato requerido.
+                            </div>
+                            <div class="valid-feedback">
+                              Archivo de contrato ingresado correctamente.
                             </div>
                           </div>
-
-                          <div class="row">
-                            <iframe id="frame" src="" frameborder="4" width="500" height="800"></iframe>
-                          </div>
-
-                          <div class="d-flex justify-content-center">
-
-                            <div class="btn-group mt-4">
-                              <button type="button" class="btn btn-secondary prevBtn">Anterior</button>
-                              <button type="submit" class="btn btn-success submit" id="guardar">Guardar</button>
-                            </div>
+                            
                           </div>
                         </div>
+
+                        <div class="row">
+                          <iframe id="frame" src="" frameborder="4" width="500" height="800"></iframe>
+                        </div>
+
+                        <div class="d-flex justify-content-center">
+
+                          <div class="btn-group mt-4">
+                            <button type="button" class="btn btn-secondary prevBtn">Anterior</button>
+                            <button type="submit" class="btn btn-success submit" id="guardar">Guardar</button>
+                          </div>
+                        </div>
+                      </div>
                     </form>
 
                   </div>
@@ -789,7 +799,6 @@
       <template id="det-clone">
         <div class="row mt-2">
           <div class="col-md-10">
-            <label for="label-detalle">Detalles</label>
             <input type="text" id="label-detalle" class="form-control input-key" placeholder="Cabezera" required>
             <textarea name="content-detalle" id="content-detalle" cols="30" rows="5" class="form-control mt-2 input-value" required></textarea>
             <div class="invalid-feedback">
@@ -805,30 +814,9 @@
         </div>
       </template>
 
-      <template id="det-clone-less">
-        <div class="row mt-2">
-          <div class="col-md-10">
-            <label for="label-detalle">Detalles</label>
-            <input type="text" id="label-detalle" class="form-control input-key" placeholder="Cabezera" required>
-            <textarea name="content-detalle" id="content-detalle" cols="30" rows="5" class="form-control mt-2 input-value" required></textarea>
-            <div class="invalid-feedback">
-              Detalle requerido.
-            </div>
-            <div class="valid-feedback">
-              Detalle ingresada correctamente.
-            </div>
-          </div>
-          <div class="col-md-2 d-flex align-items-center">
-            <button type="button" class="btn bg-danger btn-sm text-white less-det">-</button>
-          </div>
-        </div>
-      </template>
-
       <template id="new-button">
         <button type="button" class="btn bg-danger btn-sm text-white less-det">-</button>
       </template>
-
-  
       <!-- TEMPLATE -->
 
       <!-- /FORMULARIO -->
@@ -944,316 +932,89 @@
       const $ = id => global.$(id);
       const $All = id => global.$All(id);
 
-      let stringQuery = window.location.search;
-      let params = new URLSearchParams(stringQuery);
-      let code = params.get("id");
-      let idcontrato = atob(code);
-
       let oldExpedient = false;
       let dataContract;
       let dataRepresents = [];
       let filterRepresents = [];
       let dataRepresentsAll = [];
+      let dataClients;
       let date = new Date();
       let jsonDet = "";
       let frame = $("#frame");
-      let detContracts;
 
-
-      // *  Obtiene el ubigeo
-      async function getUbigeo(iddistrito) {
-
-        try {
-
-          let url = "../../Controllers/ubigeo/district.controller.php";
-          let params = new FormData();
-
-          params.append("action", "getUbigeo");
-          params.append("iddistrito", iddistrito);
-
-          let result = await global.sendAction(url, params)
-
-          if (result) {
-            console.log(result)
-
-            const tagDistrito = document.createElement("option");
-            tagDistrito.value = result.iddistrito;
-            tagDistrito.innerHTML = result.distrito.trim();
-            $("#iddistrito").appendChild(tagDistrito);
-            $("#iddistrito").value = result.iddistrito;
-
-            const tagProvincia = document.createElement("option");
-            tagProvincia.value = result.idprovincia;
-            tagProvincia.innerHTML = result.provincia.trim();
-            $("#idprovincia").appendChild(tagProvincia);
-            $("#idprovincia").value = result.idprovincia;
-
-            $("#iddepartamento").value = result.iddepartamento;
-            $("#iddistrito").dispatchEvent(new Event("change"));
-          }
-        } catch (e) {
-          console.error(e);
-        }
-      };
-
-      // * Selecciona los representantes legales
-      async function selectRepresents() {
-
-        let options = $("#idrepresentante_legal").options;
-
-        Array.from(options).forEach(option => {
-
-          detContracts.forEach(det => {
-
-            if (det.idrepresentante == option.value) option.selected = true;
-          });
-        });
-      }
-
-      // * Lista los detalles del contrato
-      async function listDetContracts(idcontrato) {
+      
+      //Obiene datos de las cuotas
+      async function getQuotasId(id){
 
         try {
 
-          let url = "../../Controllers/contract.controller.php";
-          let params = new FormData();
-          params.append("action", "listDetContract");
-          params.append("idcontrato", idcontrato);
-
-          let result = await global.sendAction(url, params);
-
-          if (result) {
-            detContracts = result;
-            console.log(detContracts)
-          }
-        } catch (e) {
-          console.error(e);
-        }
-      }
-
-      // * Selecciona el valor del cliente
-      async function selectClientvalue(result) {
-
-        Array.from($("#idcliente").options).forEach(option => {
-          if (option.value == result.idcliente) {
-            option.selected = true;
-          }
-        })
-      }
-
-      // * Espera el evento
-      async function waitEvent(element, event) {
-
-        return new Promise((resolve, reject) => {
-
-          const handler = () => {
-
-            element.removeEventListener(event, handler);
-
-            resolve();
-          };
-
-          element.addEventListener(event, handler);
-        });
-      }
-
-      // * Obtiene el valor del tipo de contrato
-      async function getContractType(result) {
-
-        $("#tipo_contrato").value = result.tipo_contrato;
-
-        let changeEventPromise = waitEvent($("#tipo_contrato"), "change");
-
-        $("#tipo_contrato").dispatchEvent(new Event("change"));
-
-        
-        
-      }
-        
-      // * Inserta la opcion de la separación
-      async function insertOptionSeparation(result) {
-          
-        await getSeparationWithoutContract(); 
-        let newTag = document.createElement("option");
-        newTag.value = result.idseparacion;
-        newTag.innerText = result.n_separacion;
-        newTag.dataset.precio_venta = result.precio_venta;
-        newTag.dataset.moneda_venta = result.moneda_venta;
-
-        let referenceNode = $("#idseparacion").children[1];
-        $("#idseparacion").insertBefore(newTag, referenceNode);
-
-        Array.from($("#idseparacion").options).forEach(option => {
-          if (option.value == result.idseparacion) {
-            option.selected = true;
-          }
-        });
-        $("#idseparacion").dispatchEvent(new Event("change"));
-      }
-
-      // * Obtiene el contrato por el id
-      async function getContractId(id) {
-
-        try {
-          let url = "../../Controllers/contract.controller.php";
+          let url = "../../Controllers/quota.controller.php";
 
           let params = new FormData();
-          params.append("action", "listContractId");
+          params.append("action", "listQuotasIdcontrato");
           params.append("idcontrato", id);
 
-          let result = await global.sendAction(url, params);
+          let results = await global.sendAction(url, params);
 
-          if (result) {
-            console.log(result)
-
-            // !Valor del númmero de expediente
-            let get_n_expediente = result.n_expediente;
-            let n_expediente_split = get_n_expediente.split("-");
-            let n_expediente = n_expediente_split[1];
-            $("#n_expediente").value = Number.parseInt(n_expediente);
-
-            // !Valor del tipoo de contrato
-            await getContractType(result);
-
-            setTimeout(async function(){
-          
-              // !Valor de la separación
-              await insertOptionSeparation(result);
-  
-              // !Valor de precio de venta
-              $("#precio_venta").value = result.moneda_venta == "USD" ? "$/ " + result.precio_venta : "S/ " + result.precio_venta;
-            }, 500);
-
-            // !Valor del ubigeo
-            console.log("sede")
-            await getUbigeo(result.sede_ubigeo_1); 
-
-            // !valor de idsede
-            // TODO: todas las validaciones dentro del setTimout se iran ejecutando en un intervalo de tiempo
-            setTimeout(() => {
-
-              console.log($("#idsede").options)
-              Array.from($("#idsede").options).forEach(option => {
-                if (option.value == result.idsede_1) {
-                  option.selected = true;
-                }
-              });
-
-              $("#idsede").dispatchEvent(new Event("change"));
-
-              // !Obtiene el valor del representante primario
-              setTimeout(()=>{
-                Array.from($("#idrepresentante_primario").options).forEach(option =>{
-                  if(option.value == result.idrepresentante_primario){
-                    option.selected = true;
-                  }
-                });
-                $("#idrepresentante_primario").dispatchEvent(new Event("change"))
-
-                // !Obtiene el valor del represenante secundario
-                setTimeout(() => {
-                  if(result.idrepresentante_secundario){
-                    Array.from($("#idrepresentante_secundario").options).forEach(option =>{
-                      if(option.value == result.idrepresentante_secundario){
-                        option.selected = true;
-                      }
-                    })
-                  }
-                }, 500);
-              },500)
-            }, 500);
-
-            // !Valor del tipo de cambio
-            $("#tipo_cambio").value = result.tipo_cambio;
-
-            // !Valor de la fecha del contrato
-            $("#fecha_contrato").value = result.fecha_contrato;
-
-            // !Valor de la moneda de venta
-            $("#moneda_venta").value = result.moneda_venta;
-            console.log("moneda de venta : " + result.moneda_venta)
-
-            // !Valor del monto de incial
-            $("#monto_inicial").value = Number.parseFloat(result.inicial);
-            console.log(Number.parseFloat(result.inicial))
-
-            // !Valor de los detalles
-            let object = JSON.parse(result.det_contrato);
-
-            let keys = object.clave;
-            let values = object.valor;
-
-            for(index = 0; index < keys.length; index++){
-              
-              
-              let key = keys[index];
-              let value = values[index];
-              
-              // !Si las claves ni los valores están vacíos
-              if(key && value){
-
-                
-
-                // !Verifica si es el ultimo elemento del array
-                if(index == 0){
-  
-  
-                  $("#input-key").value = key;
-                  $("#input-value").value = value;
-  
-    
-                  
-                  // !Sino ....
-                  }else{
-                    let content_det = $("#content-det");
-                    let content_det_first_child = $("#content-det").firstChild;
-  
-                    let template = $("#det-clone-less").content.cloneNode(true);
-                    let lessButton = $("#new-button").content.cloneNode(true);
-
-                    template.querySelector(".input-key").value = key;
-                    template.querySelector(".input-value").value = value;
-
-                    content_det.insertBefore(template, content_det_first_child);
-                }
-              }
-            };
-
-            // !URL del archivo
-            $("#in-doc").disabled = result.archivo ? true : false;
-            $("#frame").src = "../../media/files/" + result.archivo;
-
+          if (results.data.length > 0) {
+            
+            return results.data;
           }
         } catch (e) {
           console.error(e);
         }
       }
 
-      //Agrega un registro a la tabla "DETALLE DE CONTRATOS"
-      async function addDetContract(idrep, idcont) {
+      //Registra la cuota
+      async function addQuotas(obj){
 
-        try {
+        try{
+          let url = "../../Controllers/quota.controller.php";
+
+          let params = new FormData();
+          params.append("action", "addQuota");
+          params.append("idcontrato", obj.idcontrato);
+          params.append("monto_cuota", obj.monto_cuota);
+          params.append("fecha_vencimiento", obj.fecha_vencimiento);
+
+          let result = await global.sendAction(url, params);
+
+          if(result){
+
+            return result.filasAfect;
+          }
+
+        }
+        catch(e){
+          console.error(e);
+        }
+      }
+      //Agrega un registro a la tabla "DETALLE DE CONTRATOS"
+      async function addDetContract(idrep, idcont){
+
+        try{
 
           let url = "../../Controllers/contract.controller.php";
 
           let params = new FormData();
           params.append("action", "addDetContract");
-          params.append("idrepresentante", idrep);
-          params.append("idcontrato", idcont);
+          params.append("idrepresentante",idrep);
+          params.append("idcontrato",idcont);
 
           let result = await global.sendAction(url, params);
 
-          if (result) {
+          if(result){
 
             return result.filasAfect;
           }
-        } catch (e) {
+        }
+        catch(e){
           console.error(e);
         }
       }
 
       //Transformar el detalle registrado en los inputs, a un JSON
-      function getJSON() {
+      function getJSON(){
 
         let key = ".form-control.input-key";
         let value = ".form-control.input-value";
@@ -1264,98 +1025,123 @@
       }
 
       // Clona el contenido del template
-      function readFile(event) {
+      function readFile(event){
 
-        let reader = new FileReader();
+        let reader = new FileReader();  
         let file = event.target.files[0];
 
-        reader.onload = (event) => {
+        reader.onload = (event)=>{
 
-          frame.setAttribute("src", `${event.target.result}`);
+          frame.setAttribute("src",`${event.target.result}`);
 
         }
 
         reader.readAsDataURL(file);
-
+        
       }
 
       //Registra un contrato
-      async function setContract(idcontrato){
+      async function addContract(){
 
-        try {
+        try{
+
+          let precio_obtenido = $("#precio_venta").value;
+          let precio_split = precio_obtenido.split(" ");
+          let precioVenta = Number.parseFloat(precio_split[1]);
           
-          let detJson = await global.getJson(".input-key", ".input-value");
-          console.log(detJson)
+          let detJson = await global.getJson(".input-det-clave",".input-det-valor");
 
           let url = "../../Controllers/contract.controller.php";
           let params = new FormData();
 
-          params.append("action", "setContract");
-          params.append("idcontrato", idcontrato);
-          params.append("n_expediente", "CON-" + $("#n_expediente").value)
-          params.append("tipo_contrato", $("#tipo_contrato").value)
-          params.append("idseparacion", $("#idseparacion").value)
-          params.append("idrepresentante_primario", $("#idrepresentante_primario").value)
-          params.append("idrepresentante_secundario", $("#idrepresentante_secundario").value)
-          params.append("idcliente", $("#idcliente").value)
-          params.append("idconyugue", $("#idconyugue").value)
-          params.append("idactivo", $("#idactivo").value)
-          params.append("tipo_cambio", $("#tipo_cambio").value)
-          params.append("fecha_contrato", $("#fecha_contrato").value)
-          params.append("precio_venta", $("#precio_venta").value)
-          params.append("moneda_venta", $("#moneda_venta").value)
-          params.append("inicial", $("#monto_inicial").value)
-          params.append("det_contrato", jsonDet)
-          params.append("archivo", $("#in-doc").files[0])
+          params.append("action","addContract");
+          params.append("n_expediente","CON-" + $("#n_expediente").value)
+          params.append("tipo_contrato",$("#tipo_contrato").value)
+          params.append("idseparacion",$("#idseparacion").value)
+          params.append("idrepresentante_primario",$("#idrepresentante_primario").value)
+          params.append("idrepresentante_secundario",$("#idrepresentante_secundario").value)
+          params.append("idcliente",$("#idcliente").value)
+          params.append("idconyugue",$("#idconyugue").value)
+          params.append("idactivo",$("#idactivo").value)
+          params.append("tipo_cambio",$("#tipo_cambio").value)
+          params.append("fecha_contrato",$("#fecha_contrato").value)
+          params.append("precio_venta",precioVenta)
+          params.append("moneda_venta",$("#moneda_venta").value)
+          params.append("inicial",$("#monto_inicial").value)
+          params.append("det_contrato",jsonDet)
+          params.append("archivo",$("#in-doc").files[0])
 
           let result = await global.sendAction(url, params);
 
-          if (result.status) {
-
+          if(result.status){
+            
             let idcontrato = result.data.idcontrato;
-
-            if (dataRepresents.length > 0) {
+            
+            if(dataRepresents.length > 0){
               let counter = 0;
-              for (item of dataRepresents) {
+              for(item of dataRepresents){
                 counter += await addDetContract(Number.parseInt(item), idcontrato);
               };
 
-              if (counter > 0) {
+              if(counter > 0){
 
                 sAlert.sweetSuccess("Éxito", "Registro realizado correctamente", () => {
 
-                  // window.location.href = "./index.php";
-
+                  
                 });
-              } else {
+              }else{
                 sAlert.sweetError("Error", "No se pudo registrar el contrato");
               }
 
-            } else {
-              sAlert.sweetSuccess("Éxito", result.message, () => {
+            }else{
+              sAlert.sweetSuccess("Éxito", result.message, async function(){
 
-                setTimeout(() => {
-
-                  window.location.href = "./index.php";
-                }, 1500);
               });
             }
-          } else {
+            
+            if($("#modalidad_pago").value == "credito"){
+              
+              let code = btoa(idcontrato)
+              window.location.href = `../quotas/add_quotas_credit.php?id=${code}`;
+
+              }else{
+                
+                dataForm = {
+                  "idcontrato": idcontrato,
+                  "monto_cuota": precioVenta,
+                  "fecha_vencimiento": $("#fecha_contrato").value
+                };
+    
+                let response = await addQuotas(dataForm);
+                
+                if(response){
+                  let dataCuota = await getQuotasId(idcontrato);
+
+                  dataCuota.forEach(element => {
+
+                    let code = btoa(element.idcuota);
+      
+                    window.location.href = `../quotas/pay_quota_cont.php?id=${code}`;
+                  });
+                }
+            }
+          }else{
             sAlert.sweetError("Error", result.message);
           }
-        } catch (e) {
+        }
+        catch(e){
           console.error(e);
         }
       }
 
       //Clona la etiqueta
-      function cloneContent() {
+      function cloneContent(){
 
         let detailContent = $("#det-clone").content.cloneNode(true);
         let buttonLess = $("#new-button").content.cloneNode(true);
 
         let container = $("#content-det");
-        let buttonAdd = $(".add-det");
+        let buttonAdd =$(".add-det");
 
         let parent = buttonAdd.parentNode;
 
@@ -1367,54 +1153,54 @@
       }
 
       //valida las cajas de texto del detalle
-      function validateDetail() {
+      function validateDetail(){
 
         let form = document.querySelectorAll(".input-det");
 
         let isValid = false
 
-        isValid = Array.from(form).every(input => {
-          if (input.value) {
+        isValid = Array.from(form).every(input =>{
+          if(input.value){
 
             return true;
 
-          } else {
+          }else{
             return false;
           }
         });
 
-        if (!isValid) {
+        if(!isValid){
           sAlert.sweetWarning("Cajas de texto vacías", "Complete todas las cajas de texto.")
-        } else {
+        }else{
           cloneContent();
         }
       }
 
       //Configura los límites del control calendario
-      async function setDate() {
-
+      async function setDate(){
+        
         let futureDate = new Date();
         let pastDate = new Date();
 
         futureDate.setMonth(date.getMonth() + 1);
         pastDate.setMonth(date.getMonth() - 1);
 
-        if (futureDate.getDate() !== date.getDate()) {
+        if(futureDate.getDate() !== date.getDate()){
           futureDate.setDate(0);
         }
 
-        if (pastDate.getDate() !== date.getDate()) {
+        if(pastDate.getDate() !== date.getDate()){
           pastDate.setDate(0);
         }
 
-        let pastDay = pastDate.getDate().toString().padStart(2, '0');
-        let pastMonth = (pastDate.getMonth() + 1).toString().padStart(2, '0');
+        let pastDay = pastDate.getDate().toString().padStart(2,'0');
+        let pastMonth = (pastDate.getMonth() + 1).toString().padStart(2,'0');
         let pastYear = pastDate.getFullYear().toString();
 
         let past = `${pastYear}-${pastMonth}-${pastDay}`;
 
-        let futureDay = futureDate.getDate().toString().padStart(2, '0');
-        let futureMonth = (futureDate.getMonth() + 1).toString().padStart(2, '0');
+        let futureDay = futureDate.getDate().toString().padStart(2,'0');
+        let futureMonth = (futureDate.getMonth() + 1).toString().padStart(2,'0');
         let futureYear = futureDate.getFullYear().toString();
 
         let future = `${futureYear}-${futureMonth}-${futureDay}`;
@@ -1425,10 +1211,10 @@
       }
 
       //Obtiene el día actual
-      async function getToday() {
+      async function getToday(){
 
-        let dayNow = date.getDate().toString().padStart(2, '0');
-        let monthNow = (date.getMonth() + 1).toString().padStart(2, '0');
+        let dayNow = date.getDate().toString().padStart(2,'0');
+        let monthNow = (date.getMonth() + 1).toString().padStart(2,'0');
         let yearNow = date.getFullYear();
 
         let today = `${yearNow}-${monthNow}-${dayNow}`;
@@ -1438,7 +1224,41 @@
 
       }
 
-      //Obtiene el representante secundario por el idsede
+      //Obtiene el tipo de cambio
+      async function getTC() {
+
+        try {
+
+          let params = new URLSearchParams();
+          let today = await getToday();
+
+          console.log(today)
+          params.append("action", "searchTC");
+          params.append("fecha", today);
+
+          let url = `../../Controllers/searchDocument.php?${params}`;
+
+          let results = await global.sendActionGET(url);
+
+          if (results) {
+
+            console.log(results)
+            if (results.data.data) {
+              let precio_venta = results.data.data.venta;
+              let number_format = precio_venta.toFixed(2);
+              let pVenta_format = Number.parseFloat(number_format);
+              $("#tipo_cambio").value = pVenta_format;
+
+            } else {
+              sAlert.sweetWarning("No se ha conseguido el tipo de cambio", "No se ha podido conseguir el tipo de cambio <br> Intentalo más tarde.")
+            }
+          }
+        } catch (e) {
+          console.error(e)
+        }
+      }
+
+      //Obtiene el representante por el idsede
       async function getRepresentsSecIdSede() {
         let valRepPrin = Number.parseInt($("#idrepresentante_primario").value)
 
@@ -1498,8 +1318,6 @@
               $("#idrepresentante_primario").appendChild(newTag);
             });
 
-
-
           }
         } catch (e) {
           console.error(e);
@@ -1523,19 +1341,17 @@
             console.log(result)
             $("#idcliente").innerHTML = "";
 
-            let tagDef = document.createElement("option");
+            let tagDef = document.createElement("option");  
             tagDef.value = "";
             tagDef.innerText = "Seleccione un cliente";
             $("#idcliente").appendChild(tagDef);
 
+            let name = result.razon_social ? result.documento_nro + " - " + result.razon_social : result.documento_nro + " - " + result.apellidos + ", " + result.nombres;
             let newTag = document.createElement("option");
             newTag.value = result.idcliente;
-            newTag.innerText = result.razon_social ? result.documento_nro + " - " + result.razon_social : result.documento_nro + " - " + result.apellidos + ", " + result.nombres;
-            newTag.dataset.t_persona = result.tipo_persona
+            newTag.innerText = name;
             $("#idcliente").appendChild(newTag);
 
-            // !Valor el cliente
-            await selectClientvalue(result);
             await getRepresents(result.idpersona_juridica)
 
 
@@ -1572,11 +1388,7 @@
               $("#idrepresentante_legal").appendChild(newTag);
             });
 
-            // !Valor del representante legal
-            await selectRepresents();
-
-
-          } else {
+          }else{
             $("#idrepresentante_legal").innerHTML = "";
           }
 
@@ -1599,8 +1411,8 @@
           let results = await global.sendAction(url, params);
 
           if (results.length > 0) {
-            console.log(results)
             dataClients = results;
+            console.log(dataClients)
             $("#idcliente").innerHTML = "";
 
             let defaultTag = document.createElement("option");
@@ -1612,9 +1424,10 @@
             results.forEach(result => {
 
               let name = result.tipo_persona == "NATURAL" ? result.apellidos.toUpperCase() + ", " + result.nombres.toLowerCase() : result.razon_social.toUpperCase();
+              console.log(name)
 
               let newOption = document.createElement("option");
-              newOption.text = result.documento_nro + " - " + name;
+              newOption.innerText = result.documento_nro + " - " + name;
               newOption.value = result.idcliente;
 
               if (result.idpersona_juridica) {
@@ -1647,6 +1460,7 @@
             console.log(result);
 
             result.tipo_persona == "NATURAL" ? $("#idrepresentante_legal").required = false : $("#idrepresentante_legal").required = true;
+
 
             await getCustomersId(result.idcliente)
           }
@@ -1737,7 +1551,7 @@
 
         console.log(idcliente)
         let parseIdcliente = Number.parseInt(idcliente);
-        if (dataClients.length > 0) {
+        if (dataClients) {
 
           console.log(dataClients);
           //Array que contiene los datos de los conyugues
@@ -1915,35 +1729,35 @@
         })
       }
 
-      $("#getJson").addEventListener("click", () => {
+      $("#getJson").addEventListener("click",()=>{
         getJSON();
         console.log(jsonDet);
       });
 
-      $("#idactivo").addEventListener("change", (e) => {
+      $("#idactivo").addEventListener("change",(e)=>{
 
         let precio_venta = e.target.options[e.target.selectedIndex].dataset.precio_venta;
         let moneda_venta = e.target.options[e.target.selectedIndex].dataset.moneda_venta;
-        let format_precio_venta = moneda_venta == "USD" ? "$/ " + precio_venta : "S/ " + precio_venta;
+        let format_precio_venta = moneda_venta == "USD" ? "$/ " + precio_venta : "S/ " +  precio_venta;
 
 
 
         $("#precio_venta").value = format_precio_venta;
         $("#moneda_venta").value = moneda_venta;
       });
-
-      $("#in-doc").addEventListener("change", (e) => {
+         
+      $("#in-doc").addEventListener("change",(e)=>{
         readFile(e)
       });
 
-      $("#content-det").addEventListener("click", (e) => {
+      $("#content-det").addEventListener("click",(e)=>{
 
-        if (e.target.classList.contains("add-det")) {
+        if(e.target.classList.contains("add-det")){
 
           validateDetail();
-        } else if (e.target.classList.contains("less-det")) {
-
-          sAlert.sweetConfirm("¿Deseas eliminar el registro?", "Una vezeliminado no se podrá recuperar", () => {
+        }else if(e.target.classList.contains("less-det")){
+          
+          sAlert.sweetConfirm("¿Deseas eliminar el registro?","Una vezeliminado no se podrá recuperar",()=>{
 
             let row = e.target.closest(".row");
             row.remove();
@@ -1979,9 +1793,6 @@
       $("#idcliente").addEventListener("change", (e) => {
 
         let idcliente = e.target[e.target.selectedIndex].value;
-        let tipo_persona = e.target[e.target.selectedIndex].dataset.t_persona
-
-        $("#idrepresentante_legal").readonly = tipo_persona == "JURÍDICA" ? false : true;
 
         getSpouses(idcliente);
 
@@ -2006,6 +1817,7 @@
         } else {
           $("#idconyugue").disabled = true;
           $("#idrepresentante_legal").disabled = false;
+          $("#idrepresentante_legal").required = true;
         }
 
       })
@@ -2028,10 +1840,11 @@
       $("#idseparacion").addEventListener("change", (e) => {
         let precio_venta = e.target.options[e.target.selectedIndex].dataset.precio_venta;
         let moneda_venta = e.target.options[e.target.selectedIndex].dataset.moneda_venta;
-        let format_precio_venta = moneda_venta == "USD" ? "$/ " + precio_venta : "S/ " + precio_venta;
+        let format_precio_venta = moneda_venta == "USD" ?  "$/ " + precio_venta : "S/ " + precio_venta;
 
         $("#precio_venta").value = format_precio_venta;
         $("#moneda_venta").value = moneda_venta;
+        
         getSeparationById();
       });
 
@@ -2039,7 +1852,16 @@
 
         let option = e.target.options[e.target.selectedIndex].dataset.type;
 
+        console.log(option)
         let form = document.querySelectorAll(".input-contract");
+
+        $("#idproyecto").innerHTML = "";
+
+            let tagDefault = document.createElement("option");
+            tagDefault.value = "";
+            tagDefault.text = "Seleccione un proyecto";
+
+            $("#idproyecto").appendChild(tagDefault);
 
         if (option == "DET-CASA") {
           Array.from(form).forEach(input => {
@@ -2049,7 +1871,7 @@
 
           $("#idseparacion").disabled = true;
 
-            await getProjectsDetConst();
+          getProjectsDetConst();
 
         } else {
           if (option == "LOTE") {
@@ -2063,7 +1885,6 @@
 
             $("#idseparacion").disabled = false;
             await getSeparationWithoutContract();
-            
 
           } else {
             Array.from(form).forEach(input => {
@@ -2073,7 +1894,7 @@
 
             $("#idseparacion").disabled = true;
           }
-            await getProjectsTypeAct(option);
+          getProjectsTypeAct(option);
         }
       });
 
@@ -2116,10 +1937,8 @@
         }
       });
 
-      /*await getToday();
-      await getAllContracts(); */
-      await listDetContracts(idcontrato);
-      await getContractId(idcontrato);
+      // await getTC();
+      await getAllContracts();
 
       /* --------------------------------- FUNCIÓN DE VALIDACIÓN --------------------------------------------------------- */
 
@@ -2140,12 +1959,12 @@
               event.preventDefault() //=> FRENA EL ENVÍO DEL FORMULARIO
               event.stopPropagation() //=> FRENA LA PROPAGACIÓN DE DATOS EN EL FORMULARIO
               form.reportValidity();
-              setContract(idcontrato)();
+              addContract();
             } else {
               event.preventDefault();
               sAlert.sweetConfirm("Datos nuevos", "¿Deseas actualizar el registro?", () => {
 
-                setContract(idcontrato); //Ejecuta la función
+                addContract(); //Ejecuta la función
               });
             }
 

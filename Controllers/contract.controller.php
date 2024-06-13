@@ -129,12 +129,14 @@ if(isset($_POST["action"])){
 
         case "setContract": 
 
-                $today = date("dmY");
+                $today = date("dmYhis");
                 $nomFile = null;
             
-                $today = date("dmY");
-                $nomfile = sha1($today);
-                $url = "../media/files/" . $nomfile;
+                $response = [
+                    "status"  => false,
+                    "message"  => "",
+                    "data"  => []
+                ];
 
                 $dataObtained = [
 
@@ -148,7 +150,6 @@ if(isset($_POST["action"])){
                     "idconyugue"                => $_POST["idconyugue"],
                     "idactivo"                  => $_POST["idactivo"],
                     "tipo_cambio"               => $_POST["tipo_cambio"],
-                    "estado"                    => $_POST["estado"],
                     "fecha_contrato"            => $_POST["fecha_contrato"],
                     "precio_venta"              => $_POST["precio_venta"],
                     "moneda_venta"              => $_POST["moneda_venta"],
@@ -158,19 +159,57 @@ if(isset($_POST["action"])){
                     "idusuario"                 => 1
                     // "idusuario"         => $_POST["idusuario"]
                 ];
-
+                
                 if(isset($_FILES["archivo"]) && $_FILES["archivo"]["size"] > 0){
-                    $type = $_FILES["type"];
+                    $type = pathinfo($_FILES["archivo"]["name"], PATHINFO_EXTENSION); //Obtiene la extensción del archivo original
 
-                    $nomFile = sha1($today) . $type;
-                    $url = "../media/files/" . $nomFile;
+                    if($type !== "pdf"){
+                        
+                        $response["status"] = false;
+                        $response["message"] = "Solo se acepta archivos con extensión .pdf";
+                    }else{
 
-                    if(move_uploaded_file($_FILES["archivo"]["tmp_name"], $url)){
-                        $dataObtained["archivo"] = $nomFile;
+                        $nomFile = sha1($today) .".{$type}";
+                        $url = "../media/files/" . $nomFile;
+                        
+                        if(move_uploaded_file($_FILES["archivo"]["tmp_name"], $url)){
+                            $dataObtained["archivo"] = $nomFile;
+                        }
+
+                        $data = $contract->setContract($dataObtained);
+                        
+                        if(!$data){
+                            
+                            $response["status"] = false;
+                            $response["message"] = "Error al actualizar el contrato";
+                            }else{
+                                
+    
+                            $response["status"] = true;
+                            $response["message"] = "Registro actualizar correctamente";
+                            $response["data"] = $data;
+                        }
                     }
-                }
 
-                echo json_encode($contract->setContract($dataObtained));
+                }else{
+                    $dataBD = $contract->listContractId($dataObtained["idcontrato"]);
+                    $dataObtained["archivo"] = $dataBD["archivo"];
+                    
+                    $data = $contract->setContract($dataObtained);
+
+                    if($data){
+                        $response["status"] = true;
+                        $response["message"] = "Registro actualizar correctamente";
+                        $response["data"] = $data;
+                    }else{
+                        $response["status"] = false;
+                        $response["message"] = "No se pudo actualizar el registro";
+                        $response["data"] = [];
+                    }
+
+                 }
+
+                echo json_encode($response);
 
             break;
         

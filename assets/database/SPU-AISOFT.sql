@@ -2150,8 +2150,6 @@ BEGIN
 END $$
 
 DELIMITER;
-select * from contratos;
-select * from detalles_contratos;
 DELIMITER $$
 
 CREATE PROCEDURE spu_list_separation_tPersona
@@ -2178,8 +2176,6 @@ BEGIN
 END $$
 
 DELIMITER;
-
-select * from personas_juridicas;
 
 DELIMITER $$
 
@@ -2599,8 +2595,6 @@ BEGIN
         ORDER BY idcontrato DESC;
 END $$
 
-SELECT * FROM contratos;
-
 DELIMITER;
 
 DELIMITER $$
@@ -2873,6 +2867,8 @@ END $$
 
 DELIMITER;
 
+select * from contratos;
+
 call spu_lits_contracts_full_by_id(3)
 select * from cuotas
 DELIMITER $$
@@ -2957,7 +2953,6 @@ CREATE PROCEDURE spu_set_contract
     IN _idconyugue			INT,
     IN _idactivo			INT,
     IN _tipo_cambio 		DECIMAL(4,3),
-    IN _estado 				VARCHAR(10),
     IN _fecha_contrato 		DATE,
     IN _precio_venta 		DECIMAL(8,2),
     IN _moneda_venta        VARCHAR(10),
@@ -2979,7 +2974,6 @@ BEGIN
 			idconyugue		= NULLIF(_idconyugue, ''),
 			idactivo		= NULLIF(_idactivo, ''),  
 			tipo_cambio		= _tipo_cambio, 
-			estado			= _estado,
 			fecha_contrato 	= _fecha_contrato,
             precio_venta		= _precio_venta,
 			det_contrato	    = NULLIF(_det_contrato, ''),
@@ -2991,11 +2985,10 @@ BEGIN
         WHERE
 			idcontrato = _idcontrato;
 
-    SELECT ROW_COUNT() AS filasAfect;
+    SELECT _idcontrato AS idcontrato;
 END $$
 
 DELIMITER;
-
 DELIMITER $$
 
 CREATE PROCEDURE spu_inactive_contracts
@@ -3157,9 +3150,6 @@ BEGIN
 END $$
 
 DELIMITER;
-call spu_list_quotas_reprogram(2);
-select * from contratos;
-select * from cuotas
 DELIMITER $$
 
 CREATE PROCEDURE spu_set_quotas_allNoPay
@@ -3181,8 +3171,6 @@ END $$
 
 DELIMITER;
 
-select * from contratos;
-
 update cuotas set inactive_at = NULL;
 
 DELIMITER $$
@@ -3200,10 +3188,6 @@ BEGIN
 END $$
 
 DELIMITER;
-
-select * from cuotas;
-
-call spu_list_quotas_idcontrato (1)
 
 DELIMITER $$
 
@@ -3243,8 +3227,6 @@ BEGIN
 END $$
 
 DELIMITER;
-
-call spu_list_quotas_ById (1)
 
 DELIMITER $$
 
@@ -3298,8 +3280,6 @@ BEGIN
 END $$
 
 DELIMITER;
-
-select * from cuotas;
 
 DELIMITER $$
 

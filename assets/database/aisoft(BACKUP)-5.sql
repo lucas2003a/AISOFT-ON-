@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 11-06-2024 a las 14:16:59
+-- Tiempo de generación: 13-06-2024 a las 20:23:03
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -1971,8 +1971,10 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_lits_contracts_full_by_id` (IN 
         CONCAT(pers.apellidos,', ',pers.nombres) AS representante_secundario,
         pers.documento_tipo AS rs_doc_type,
         pers.documento_nro AS rs_doc_nro,
-        sd.iddistrito AS sede_1,
-        sds.iddistrito AS sede_2, 
+        sd.idsede AS idsede_1,
+        sds.idsede AS idsede_2,
+        sd.iddistrito AS sede_ubigeo_1,
+        sds.iddistrito AS sede_ubigeo_2, 
         rs.cliente,
         rs.tipo_persona,
         rs.documento_tipo,
@@ -2241,7 +2243,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_set_clientN` (IN `_idcliente` I
 			SELECT ROW_COUNT() AS filasAfect;
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_set_contract` (IN `_idcontrato` INT, IN `_n_expediente` VARCHAR(10), IN `_tipo_contrato` VARCHAR(40), IN `_idseparacion` INT, IN `_idrepresentante_primario` INT, IN `_idrepresentante_secundario` INT, IN `_idcliente` INT, IN `_idconyugue` INT, IN `_idactivo` INT, IN `_tipo_cambio` DECIMAL(4,3), IN `_estado` VARCHAR(10), IN `_fecha_contrato` DATE, IN `_precio_venta` DECIMAL(8,2), IN `_moneda_venta` VARCHAR(10), IN `_inicial` DECIMAL(8,2), IN `_det_contrato` JSON, IN `_archivo` VARCHAR(100), IN `_idusuario` INT)   BEGIN
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_set_contract` (IN `_idcontrato` INT, IN `_n_expediente` VARCHAR(10), IN `_tipo_contrato` VARCHAR(40), IN `_idseparacion` INT, IN `_idrepresentante_primario` INT, IN `_idrepresentante_secundario` INT, IN `_idcliente` INT, IN `_idconyugue` INT, IN `_idactivo` INT, IN `_tipo_cambio` DECIMAL(4,3), IN `_fecha_contrato` DATE, IN `_precio_venta` DECIMAL(8,2), IN `_moneda_venta` VARCHAR(10), IN `_inicial` DECIMAL(8,2), IN `_det_contrato` JSON, IN `_archivo` VARCHAR(100), IN `_idusuario` INT)   BEGIN
 
 	UPDATE contratos
 		SET
@@ -2254,7 +2256,6 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_set_contract` (IN `_idcontrato`
 			idconyugue		= NULLIF(_idconyugue, ''),
 			idactivo		= NULLIF(_idactivo, ''),  
 			tipo_cambio		= _tipo_cambio, 
-			estado			= _estado,
 			fecha_contrato 	= _fecha_contrato,
             precio_venta		= _precio_venta,
 			det_contrato	    = NULLIF(_det_contrato, ''),
@@ -2266,7 +2267,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_set_contract` (IN `_idcontrato`
         WHERE
 			idcontrato = _idcontrato;
 
-    SELECT ROW_COUNT() AS filasAfect;
+    SELECT _idcontrato AS idcontrato;
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_set_contracts` (IN `_idcontrato` INT, IN `_tipo_contrato` VARCHAR(40), IN `_idseparacion` INT, IN `_idrepresentante_primario` INT, IN `_idrepresentante_secundario` INT, IN `_idcliente` INT, IN `_idconyugue` INT, IN `_idactivo` INT, IN `_tipo_cambio` DECIMAL(4,3), IN `_estado` VARCHAR(10), IN `_fecha_contrato` DATE, IN `_det_contrato` JSON, IN `_idusuario` INT)   BEGIN
@@ -2593,7 +2594,7 @@ INSERT INTO `activos` (`idactivo`, `idproyecto`, `tipo_activo`, `imagen`, `estad
 (5, 2, 'LOTE', NULL, 'VENDIDO', '3', 'Urbanización Iota', 'USD', 280.00, 0, 'Partida 009', NULL, NULL, '{\"clave\" :[], \"valor\":[]}', '{\"clave\" :[], \"valor\":[]}', 12, 'A.I.F', 110000.00, 1160.00, '2024-04-19', '2024-05-19', NULL, 1, 111160.00),
 (6, 3, 'LOTE', NULL, 'VENDIDO', '5', 'Urbanización Lambda', 'USD', 320.00, 0, 'Partida 011', 'null', 'null', '{\"clave\" :[], \"valor\":[]}', '{\"clave\" :[], \"valor\":[]}', 30, 'A.I.F', 95000.00, 360.00, '2024-04-19', '2024-06-09', NULL, 1, 95360.00),
 (7, 4, 'LOTE', NULL, 'VENDIDO', '1', 'Urbanización Nu', 'USD', 300.00, NULL, 'Partida 013', NULL, NULL, '{\"clave\" :[], \"valor\":[]}', '{\"clave\" :[], \"valor\":[]}', 37, 'A.I.F', 85000.00, 0.00, '2024-04-19', '2024-06-09', NULL, 1, 0.00),
-(8, 4, 'LOTE', NULL, 'VENDIDO', '3', 'Urbanización Omicron', 'USD', 380.00, 0, 'Partida 015', 'null', 'null', '{\"clave\" :[], \"valor\":[]}', '{\"clave\" :[], \"valor\":[]}', 37, 'A.I.F', 110000.00, 2832.00, '2024-04-19', '2024-06-09', NULL, 1, 112832.00),
+(8, 4, 'LOTE', NULL, 'VENDIDO', '3', 'Urbanización Omicron', 'USD', 380.00, 50, 'Partida 015', 'null', 'null', '{\"clave\":[\"\"],\"valor\":[\"\"]}', '{\"clave\" :[], \"valor\":[]}', 37, 'A.I.F', 110000.00, 1132.80, '2024-04-19', '2024-06-13', NULL, 1, 111132.80),
 (9, 1, 'LOTE', NULL, 'SIN VENDER', '7', 'Urbanización Rho', 'USD', 420.00, NULL, 'Partida 017', NULL, NULL, '{\"clave\" :[], \"valor\":[]}', '{\"clave\" :[], \"valor\":[]}', 19, 'A.I.F', 105000.00, 0.00, '2024-04-19', '2024-05-24', NULL, 1, 0.00),
 (10, 2, 'LOTE', NULL, 'VENDIDO', '9', 'Urbanización Tau', 'USD', 450.00, 0, 'Partida 019', NULL, NULL, '{\"clave\" :[], \"valor\":[]}', '{\"clave\" :[], \"valor\":[]}', 12, 'A.I.F', 115000.00, 1160.00, '2024-04-19', '2024-05-19', NULL, 1, 116160.00),
 (11, 3, 'CASA', 'f1e57fdb8618de8550fad4af0e176e2011cd7be6.jpg', 'VENDIDO', '11', 'Urbanización Phi', 'USD', 480.00, 12, 'Partida 021', NULL, NULL, '{\"clave\":[\"\"],\"valor\":[\"\"]}', '{\"clave\" :[], \"valor\":[]}', 37, 'A.I.F', 100000.00, 1132.80, '2024-04-19', '2024-06-09', NULL, 1, 101132.80),
@@ -2606,9 +2607,9 @@ INSERT INTO `activos` (`idactivo`, `idproyecto`, `tipo_activo`, `imagen`, `estad
 (18, 1, 'LOTE', NULL, 'VENDIDO', '10', 'Urbanización Omega', 'USD', 420.00, 0, 'Partida 035', 'null', 'null', '{\"clave\" :[], \"valor\":[]}', '{\"clave\":[],\"valor\":[]}', 19, 'A.I.F', 105000.00, 2228.20, '2024-04-19', '2024-06-09', NULL, 1, 107228.20),
 (19, 1, 'LOTE', NULL, 'VENDIDO', '12', 'Urbanización Delta', 'USD', 450.00, 0, 'Partida 037', 'null', 'null', '{\"clave\" :[], \"valor\":[]}', '{\"clave\" :[], \"valor\":[]}', 19, 'A.I.F', 115000.00, 2228.20, '2024-04-19', '2024-06-09', NULL, 1, 117228.20),
 (20, 1, 'LOTE', NULL, 'VENDIDO', '14', 'Urbanización Gamma', 'USD', 480.00, 0, 'Partida 039', 'null', 'null', '{\"clave\" :[], \"valor\":[]}', '{\"clave\":[\"Construccion de veredas\"],\"valor\":[\"Veredas 2 metros de distancia\"]}', 19, 'A.I.F', 100000.00, 2228.20, '2024-04-19', '2024-06-09', NULL, 1, 102228.20),
-(21, 1, 'LOTE', NULL, 'SEPARADO', '16', 'Urbanización Epsilon', 'USD', 500.00, 0, 'Partida 041', 'null', 'null', '{\"clave\" :[], \"valor\":[]}', '{\"clave\" :[], \"valor\":[]}', 19, 'A.I.F', 120000.00, 2228.20, '2024-04-19', '2024-06-10', NULL, 1, 122228.20),
+(21, 1, 'LOTE', NULL, 'SIN VENDER', '16', 'Urbanización Epsilon', 'USD', 500.00, 0, 'Partida 041', 'null', 'null', '{\"clave\" :[], \"valor\":[]}', '{\"clave\" :[], \"valor\":[]}', 19, 'A.I.F', 120000.00, 2228.20, '2024-04-19', '2024-06-13', NULL, 1, 122228.20),
 (22, 1, 'LOTE', NULL, 'VENDIDO', '18', 'Urbanización Zeta', 'USD', 300.00, NULL, 'Partida 043', NULL, NULL, '{\"clave\" :[], \"valor\":[]}', '{\"clave\" :[], \"valor\":[]}', 19, 'A.I.F', 90000.00, 0.00, '2024-04-19', '2024-06-09', NULL, 1, 0.00),
-(23, 1, 'LOTE', NULL, 'SEPARADO', '20', 'Urbanización Eta', 'USD', 250.00, 0, 'Partida 045', 'null', 'null', '{\"clave\" :[], \"valor\":[]}', '{\"clave\" :[], \"valor\":[]}', 19, 'A.I.F', 95000.00, 2228.20, '2024-04-19', '2024-06-10', NULL, 1, 97228.20),
+(23, 1, 'LOTE', NULL, 'SIN VENDER', '20', 'Urbanización Eta', 'USD', 250.00, 0, 'Partida 045', 'null', 'null', '{\"clave\" :[], \"valor\":[]}', '{\"clave\" :[], \"valor\":[]}', 19, 'A.I.F', 95000.00, 2228.20, '2024-04-19', '2024-06-13', NULL, 1, 97228.20),
 (24, 1, 'LOTE', NULL, 'SIN VENDER', '22', 'Urbanización Theta', 'USD', 280.00, 0, 'Partida 047', 'null', 'null', '{\"clave\" :[], \"valor\":[]}', '{\"clave\" :[], \"valor\":[]}', 19, 'A.I.F', 110000.00, 2228.20, '2024-04-19', '2024-06-10', NULL, 1, 112228.20),
 (25, 1, 'LOTE', NULL, 'SIN VENDER', '24', 'Urbanización Iota', 'USD', 320.00, NULL, 'Partida 049', NULL, NULL, '{\"clave\" :[], \"valor\":[]}', '{\"clave\" :[], \"valor\":[]}', 19, 'A.I.F', 85000.00, 0.00, '2024-04-19', '2024-05-24', NULL, 1, 0.00),
 (26, 1, 'LOTE', NULL, 'SIN VENDER', '26', 'Urbanización Kappa', 'USD', 380.00, NULL, 'Partida 051', NULL, NULL, '{\"clave\" :[], \"valor\":[]}', '{\"clave\" :[], \"valor\":[]}', 19, 'A.I.F', 120000.00, 0.00, '2024-04-19', '2024-05-24', NULL, 1, 0.00),
@@ -2893,7 +2894,7 @@ CREATE TABLE `contratos` (
 --
 
 INSERT INTO `contratos` (`idcontrato`, `n_expediente`, `tipo_contrato`, `idseparacion`, `idrepresentante_primario`, `idrepresentante_secundario`, `idcliente`, `idconyugue`, `idactivo`, `tipo_cambio`, `estado`, `fecha_contrato`, `precio_venta`, `moneda_venta`, `inicial`, `det_contrato`, `archivo`, `create_at`, `update_at`, `inactive_at`, `idusuario`) VALUES
-(1, 'CON-05952', 'VENTA DE LOTE', 5, 1, NULL, 2, NULL, NULL, 3.400, 'VIGENTE', '2024-06-09', 112832.00, 'USD', 650.00, '{\"clave\":[\"2\"],\"valor\":[\"2\"]}', '85bbdd4b01f4a8ebf92a89d74b51ad89768c697a.pdf', '2024-06-09', NULL, NULL, 1),
+(1, 'CON-5952', 'VENTA DE LOTE', 5, 1, NULL, 2, NULL, NULL, 3.400, 'VIGENTE', '2024-06-09', 0.00, 'USD', 650.00, '{\"clave\":[\"2\",\"3\",\"hola\"],\"valor\":[\"2\",\"3\",\"hola\"]}', '6d506efb56f3cfcc42597f54876dc5a534d20a23.pdf', '2024-06-09', '2024-06-13', NULL, 1),
 (2, 'CON-56981', 'VENTA DE CASA', NULL, 1, NULL, 27, NULL, 86, 3.700, 'VIGENTE', '2024-06-09', 1132.80, 'USD', 600.00, '{\"clave\":[\"3\"],\"valor\":[\"3\"]}', '6d506efb56f3cfcc42597f54876dc5a534d20a23.pdf', '2024-06-09', NULL, NULL, 1);
 
 --
@@ -3133,7 +3134,15 @@ CREATE TABLE `detalles_contratos` (
 INSERT INTO `detalles_contratos` (`iddetalle_contrato`, `idrepresentante`, `idcontrato`, `create_at`, `update_at`, `inactive_at`) VALUES
 (1, 144, 1, '2024-06-09', NULL, NULL),
 (2, 139, 2, '2024-06-09', NULL, NULL),
-(3, 139, 2, '2024-06-09', NULL, NULL);
+(3, 139, 2, '2024-06-09', NULL, NULL),
+(4, 144, 1, '2024-06-13', NULL, NULL),
+(5, 144, 1, '2024-06-13', NULL, NULL),
+(6, 144, 1, '2024-06-13', NULL, NULL),
+(7, 144, 1, '2024-06-13', NULL, NULL),
+(8, 144, 1, '2024-06-13', NULL, NULL),
+(9, 144, 1, '2024-06-13', NULL, NULL),
+(11, 144, 1, '2024-06-13', NULL, NULL),
+(12, 144, 1, '2024-06-13', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -5377,10 +5386,10 @@ CREATE TABLE `metricas` (
 --
 
 INSERT INTO `metricas` (`idmetrica`, `idproyecto`, `l_vendidos`, `l_noVendidos`, `l_separados`, `update_at`) VALUES
-(1, 1, 11, 47, 2, '2024-06-10 03:09:15'),
+(1, 1, 11, 49, 0, '2024-06-13 11:41:53'),
 (2, 2, 9, 4, 0, '2024-06-09 23:50:34'),
 (3, 3, 3, 3, 0, '2024-06-09 23:18:38'),
-(4, 4, 3, 3, 0, '2024-06-09 23:46:18'),
+(4, 4, 3, 3, 0, '2024-06-13 11:41:53'),
 (5, 5, 0, 0, 0, '2024-04-19 17:21:35'),
 (6, 6, 0, 0, 0, '2024-04-20 20:51:01');
 
@@ -6043,7 +6052,8 @@ INSERT INTO `separaciones` (`idseparacion`, `idactivo`, `idcliente`, `idconyugue
 (33, 4, 5, NULL, 6000.00, '804596cec00acb990c1703754d055e8d565625aa.jpg', '2024-06-09', NULL, NULL, 1, 'SEC-569800', '', 'USD', 3.7600),
 (34, 8, 7, NULL, 600.00, 'cefd2beee970842fae32ccb1e0127338f494ad60.jpg', '2024-06-09', NULL, NULL, 1, 'SEC-365800', '', 'USD', 3.7600),
 (35, 21, 7, NULL, 600.00, '6689fd053b60731828be7c3962f3757a86230f4c.jpg', '2024-06-10', NULL, NULL, 1, 'SEC-956800', '', 'USD', 3.7600),
-(36, 23, 5, NULL, 600.00, '9e9e8bb945a9abbd8a0b0a0d87834150c05f06b7.jpg', '2024-06-10', NULL, NULL, 1, 'SEC-956000', '', 'USD', 3.7600);
+(36, 23, 5, NULL, 600.00, '9e9e8bb945a9abbd8a0b0a0d87834150c05f06b7.jpg', '2024-06-10', NULL, NULL, 1, 'SEC-956000', '', 'USD', 3.7600),
+(37, 8, 5, NULL, 500.00, '08569f797bb0047c4ac5e9a56eb4a9ca0951c7d3.jpg', '2024-06-13', NULL, NULL, 1, 'SEC-395000', '', 'USD', 3.7700);
 
 --
 -- Disparadores `separaciones`
@@ -6852,7 +6862,7 @@ ALTER TABLE `departamentos`
 -- AUTO_INCREMENT de la tabla `detalles_contratos`
 --
 ALTER TABLE `detalles_contratos`
-  MODIFY `iddetalle_contrato` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `iddetalle_contrato` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT de la tabla `detalle_costos`
@@ -6960,7 +6970,7 @@ ALTER TABLE `sedes`
 -- AUTO_INCREMENT de la tabla `separaciones`
 --
 ALTER TABLE `separaciones`
-  MODIFY `idseparacion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
+  MODIFY `idseparacion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
 
 --
 -- AUTO_INCREMENT de la tabla `subcategoria_costos`

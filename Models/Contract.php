@@ -176,7 +176,7 @@ class Contract extends Conection{
 
         try{
 
-            $query = $this->conection->prepare("CALL spu_set_contracts(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+            $query = $this->conection->prepare("CALL spu_set_contract(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
             $query->execute(
                 array(
                     $dataContract["idcontrato"],

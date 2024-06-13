@@ -747,6 +747,7 @@
                         <a type="button" href="#" data-id="${result.idseparacion}" class="btn btn-link text-info px-3 mb-0 open-modal" data-bs-toggle="modal" data-bs-target="#modal_det_sep" ><i class="fa-solid fa-eye open-modal" data-id="${result.idseparacion}"></i></a>
                         <a type="button" data-id="${result.idseparacion}" data-expedient="${result.n_expediente}" class="btn btn-link text-danger text-gradient px-3 mb-0 delete"><i class="bi bi-trash-fill delete" data-id="${result.idseparacion}" data-expedient="${result.n_expediente}"></i></a>
                         <a type="button" data-expedient="${result.n_expediente}" data-id="${result.idseparacion}" class="btn btn-link text-dark px-3 mb-0 edit"><i data-id="${result.idseparacion}" data-expedient="${result.n_expediente}" class="bi bi-pencil-fill edit" data-id="${result.idseparacion}"></i></a>
+                        <a type="button" data-expedient="${result.n_expediente}" data-id="${result.idseparacion}" class="btn btn-link text-dark px-3 mb-0 go"><i data-id="${result.idseparacion}" data-expedient="${result.n_expediente}" class="bi bi-file-earmark-pdf go" data-id="${result.idseparacion}"></i></a>
                         <a type="button" data-id="${result.idseparacion}" class="btn btn-link text-secondary px-3 mb-0 return"><i class="fa-solid fa-right-left return" data-id="${result.idseparacion}"></i></a>
                     </td>
                   </tr>
@@ -981,6 +982,10 @@
           let expedient = btoa(expedientE);
 
           window.location.href=`./edit_separation.php?id=${code}&expedient=${expedient}`;
+        }else if(e.target.classList.contains("go")){
+          
+          let code = btoa(e.target.dataset.id);
+          window.location.href = "../contracts/add_contract_separation.php?"+ code;
         }
       });
 
