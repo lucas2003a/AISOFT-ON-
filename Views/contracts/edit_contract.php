@@ -416,7 +416,6 @@
                                 <option value="">Selecciona un tipo de contrato</option>
                                 <option data-type="LOTE" value="VENTA DE LOTE">Venta de lote</option>
                                 <option data-type="CASA" value="VENTA DE CASA">Venta de casa</option>
-                                <option data-type="DET-CASA" value="VENTA DE LOTE Y CASA">Venta de lote y casa</option>
                               </select>
                               <div class="invalid-feedback">
                                 Selecciona un tipo de contrato.
@@ -486,7 +485,7 @@
                               <select name="tipo_persona" id="tipo_persona" class="form-select input-contract" required>
                                 <option value="">Selecciona el tipo de persona</option>
                                 <option value="NATURAL">Natural</option>
-                                <option value="JURIDICA">Jurídica</option>
+                                <option value="JURÍDICA">Jurídica</option>
                               </select>
                               <div class="invalid-feedback">
                                 Selecciona el tipo de persona.
@@ -714,7 +713,13 @@
                             <div class="col-md-10">
                               <label for="label-detalle">Detalles</label>
                               <input type="text" class="form-control input-key" placeholder="Cabezera" id="input-key" required>
-                              <textarea name="content-detalle" cols="30" rows="5" class="form-control input-value mt-2" id="input-value" required></textarea>
+                              <div class="invalid-feedback">
+                                Detalle requerido.
+                              </div>
+                              <div class="valid-feedback">
+                                Detalle ingresado correctamente.
+                              </div>
+                              <textarea name="content-detalle" cols="30" rows="5" class="form-control input-value mt-2" id="input-value" placeholder="Detalle ...." required></textarea>
                               <div class="invalid-feedback">
                                 Detalle requerido.
                               </div>
@@ -791,7 +796,13 @@
           <div class="col-md-10">
             <label for="label-detalle">Detalles</label>
             <input type="text" id="label-detalle" class="form-control input-key" placeholder="Cabezera" required>
-            <textarea name="content-detalle" id="content-detalle" cols="30" rows="5" class="form-control mt-2 input-value" required></textarea>
+            <div class="invalid-feedback">
+              Detalle requerido.
+            </div>
+            <div class="valid-feedback">
+              Detalle ingresada correctamente.
+            </div>
+            <textarea name="content-detalle" id="content-detalle" cols="30" rows="5" class="form-control mt-2 input-value" placeholder="Detalle ...." required></textarea>
             <div class="invalid-feedback">
               Detalle requerido.
             </div>
@@ -959,6 +970,252 @@
       let frame = $("#frame");
       let detContracts;
 
+      // * Retorna una promesa
+      function returnPromise(array){
+
+        return new Promise((resolve, reject) => {
+          if(array.length > 0){
+            return array;
+            resolve();
+          }else{
+            reject();
+          }
+        })
+      }
+
+      // * Obitene los datos del contrato directo
+      async function getDirectContract(result){
+
+        let tipo = ($("#tipo_contrato")[$("#tipo_contrato").selectedIndex].dataset.type);
+        console.log(tipo);
+
+        await getProjectsTypeAct(tipo)
+
+        // ! Obtengo el proyecto
+        .then(()=>{
+
+          return new Promise((resolve, reject) =>{
+
+            let projects = Array.from($("#idproyecto").options);
+            referenceNode = projects[1];
+            paretntReference = referenceNode.parentNode;
+
+            let tagOption = document.createElement("option");
+            tagOption.value = result.idproyecto;
+            tagOption.innerText = result.denominacion;
+            
+            $("#idproyecto").append(tagOption);
+            resolve();
+            
+          });
+        })
+
+        // ! Selecciono el proyecto
+        .then(()=>{
+
+          return new Promise((resolve, reject) =>{
+
+
+            let projects = Array.from($("#idproyecto").options);
+  
+            projects.forEach(option => {
+  
+              if(option.value == result.idproyecto){
+                option.selected = true;
+                resolve();
+              }
+            })
+            
+          });
+        })
+
+        // ! Obtengo el cliente
+        .then(async function(){
+
+          await getCustomers();
+          return new Promise((resolve, reject) => {
+
+            let tagOption = document.createElement("option");
+            tagOption.vale = result.idactivo;
+            tagOption.innerText = "LT-" + result.sublote;
+            tagOption.selected = true;
+
+            $("#idactivo").append(tagOption);
+
+            let moneda = result.moneda_venta == "USD" ? "$/ " : "S/ ";
+
+            $("#precio_venta").value = moneda + result.precio_venta;
+            $("#moneda_venta").value = result.moneda_venta;
+            resolve();
+          });
+        })
+
+        // ! Seleciona el tipo de persona
+        .then(()=>{
+          
+          return new Promise((resolve, reject)=>{
+
+            Array.from($("#tipo_persona").options).forEach(option =>{
+  
+              if(option.value == result.tipo_persona) option.selected = true;
+            });
+            $("#tipo_persona").dispatchEvent(new Event("change"));
+
+            resolve();
+          });
+        })
+
+        // ! Crear un intervalo de tiempo hasta cargar los clientes
+        .then(()=>{
+
+          return new Promise((resolve, reject)=>{
+
+            let options = $("#idcliente").options;
+            if(options.length > 1){
+  
+              resolve();
+            }else{
+  
+              const interval = setInterval(()=>{
+  
+                if(options.length > 1){
+                  clearInterval(interval);
+                  resolve();
+                }
+              }, 100); // ! Revisa casa 100 milisegundos
+            }
+
+          });
+        })
+
+        // ! Selecciona el cliente
+        .then(()=>{
+
+          return new Promise((reolve, reject) =>{
+
+            options = Array.from($("#idcliente").options);
+
+            options.forEach(option => {
+
+              if(option.value == result.idcliente) option.selected = true;
+
+            });
+            $("#idcliente").dispatchEvent(new Event("change"));
+            reolve();
+          })
+        })
+
+        // ! Crea un intervalo de tiempo para seleccionar a los respresentantes
+        .then(()=>{
+
+          return new Promise((resolve, reject)=>{
+
+            getUbigeo(result.sede_distrito);
+            resolve();
+            
+          }).then(()=>{
+
+
+            return new Promise((resolve, reject)=>{
+
+              if($("#idsede").options.length > 1){
+                resolve();
+              }else{
+                const interval = setInterval(()=>{
+                  clearInterval(interval);
+                  resolve();
+                },100);
+              }
+            });
+
+          });
+
+        }) 
+
+        // ! Selecciona el ubigeo
+        .then(()=>{
+
+          return new Promise((resolve, reject)=>{
+
+            let options = Array.from($("#idsede").options);
+  
+            options.forEach(option => {
+              
+              if(option.value == result.idsede) option.selected = true;
+            })
+            $("#idsede").dispatchEvent(new Event("change"));
+            resolve();
+          });
+        })
+
+
+        // ! Obitene el representante legal
+        .then(()=>{
+          
+          return new Promise((resolve, reject)=>{
+            
+            let options = $("#idrepresentante_primario").options;
+            if(options.length > 1){
+              resolve();
+            }else{
+              const interval = setInterval(()=>{
+                clearInterval(interval);
+                resolve();
+              },100);
+            }
+          });
+        })
+        // ! Selecciona el representante primario
+        .then(()=>{
+          return new Promise((resolve, reject)=>{
+
+            let options = Array.from($("#idrepresentante_primario").options);
+
+            options.forEach(option => {
+              
+              if(option.value == result.idrepresentante_primario) option.selected = true;
+            });
+            $("#idrepresentante_primario").dispatchEvent(new Event("change"));
+            resolve();
+          });
+        })
+
+        // !Obitienes al representante secundario
+        .then(()=>{
+
+          if(result.idrepresentante_secundario){
+
+            return new Promise((resolve, reject)=>{
+              
+              let options = $("#idrepresentante_secundario").options;
+              if(options.length > 1){
+                resolve();
+              }else{
+                const interval = setInterval(()=>{
+                  clearInterval(interval);
+                  resolve();
+                },100);
+              }
+            })
+            .then(()=>{
+              return new Promise((resolve, reject)=>{
+                
+                let options = Array.from($("#idrepresentante_secundario").options);
+  
+                options.forEach(option => {
+                  
+                  if(option.value == result.idrepresentante_secundario) option.selected = true;
+                });
+                resolve();
+              })
+            });
+          }
+          
+        })
+        .catch(e => {
+          console.error(e)
+        });
+      }
 
       // *  Obtiene el ubigeo
       async function getUbigeo(iddistrito) {
@@ -1066,8 +1323,6 @@
 
         $("#tipo_contrato").dispatchEvent(new Event("change"));
 
-        
-        
       }
         
       // * Inserta la opcion de la separación
@@ -1115,53 +1370,60 @@
             // !Valor del tipoo de contrato
             await getContractType(result);
 
-            setTimeout(async function(){
-          
-              // !Valor de la separación
-              await insertOptionSeparation(result);
+            if(!result.idseparacion){
+              await getDirectContract(result);
+            }else{
+
+              setTimeout(async function(){
+            
+                // !Valor de la separación
+                await insertOptionSeparation(result);
+    
+                // !Valor de precio de venta
+                $("#precio_venta").value = result.moneda_venta == "USD" ? "$/ " + result.precio_venta : "S/ " + result.precio_venta;
+              }, 500);
   
-              // !Valor de precio de venta
-              $("#precio_venta").value = result.moneda_venta == "USD" ? "$/ " + result.precio_venta : "S/ " + result.precio_venta;
-            }, 500);
-
-            // !Valor del ubigeo
-            console.log("sede")
-            await getUbigeo(result.sede_ubigeo_1); 
-
-            // !valor de idsede
-            // TODO: todas las validaciones dentro del setTimout se iran ejecutando en un intervalo de tiempo
-            setTimeout(() => {
-
-              console.log($("#idsede").options)
-              Array.from($("#idsede").options).forEach(option => {
-                if (option.value == result.idsede_1) {
-                  option.selected = true;
-                }
-              });
-
-              $("#idsede").dispatchEvent(new Event("change"));
-
-              // !Obtiene el valor del representante primario
-              setTimeout(()=>{
-                Array.from($("#idrepresentante_primario").options).forEach(option =>{
-                  if(option.value == result.idrepresentante_primario){
+              // !Valor del ubigeo
+              console.log("sede")
+              await getUbigeo(result.sede_ubigeo_1); 
+  
+              // !valor de idsede
+              // TODO: todas las validaciones dentro del setTimout se iran ejecutando en un intervalo de tiempo
+              setTimeout(() => {
+  
+                console.log($("#idsede").options)
+                Array.from($("#idsede").options).forEach(option => {
+                  if (option.value == result.idsede_1) {
                     option.selected = true;
                   }
                 });
-                $("#idrepresentante_primario").dispatchEvent(new Event("change"))
+  
+                $("#idsede").dispatchEvent(new Event("change"));
+  
+                // !Obtiene el valor del representante primario
+                setTimeout(()=>{
+                  Array.from($("#idrepresentante_primario").options).forEach(option =>{
+                    if(option.value == result.idrepresentante_primario){
+                      option.selected = true;
+                    }
+                  });
+                  $("#idrepresentante_primario").dispatchEvent(new Event("change"))
+  
+                  // !Obtiene el valor del represenante secundario
+                  setTimeout(() => {
+                    if(result.idrepresentante_secundario){
+                      Array.from($("#idrepresentante_secundario").options).forEach(option =>{
+                        if(option.value == result.idrepresentante_secundario){
+                          option.selected = true;
+                        }
+                      })
+                    }
+                  }, 500);
+                },500)
+              }, 500);
+            }
 
-                // !Obtiene el valor del represenante secundario
-                setTimeout(() => {
-                  if(result.idrepresentante_secundario){
-                    Array.from($("#idrepresentante_secundario").options).forEach(option =>{
-                      if(option.value == result.idrepresentante_secundario){
-                        option.selected = true;
-                      }
-                    })
-                  }
-                }, 500);
-              },500)
-            }, 500);
+
 
             // !Valor del tipo de cambio
             $("#tipo_cambio").value = result.tipo_cambio;
@@ -1285,7 +1547,15 @@
         try {
           
           let detJson = await global.getJson(".input-key", ".input-value");
-          console.log(detJson)
+          let lote_value = $("#idactivo").value;
+          let lote_split = lote_value.split("-");
+          let lote = lote_split[1];
+
+          let precio_venta_value = $("#precio_venta").value;
+          let precio_venta_split = precio_venta_value.split(" ");
+          let precio_venta = Number.parseFloat(precio_venta_split[1]);
+          console.log("Precio venta: ", precio_venta)
+          console.log("tipo: ", typeof(precio_venta))
 
           let url = "../../Controllers/contract.controller.php";
           let params = new FormData();
@@ -1299,10 +1569,10 @@
           params.append("idrepresentante_secundario", $("#idrepresentante_secundario").value)
           params.append("idcliente", $("#idcliente").value)
           params.append("idconyugue", $("#idconyugue").value)
-          params.append("idactivo", $("#idactivo").value)
+          params.append("idactivo", lote)
           params.append("tipo_cambio", $("#tipo_cambio").value)
           params.append("fecha_contrato", $("#fecha_contrato").value)
-          params.append("precio_venta", $("#precio_venta").value)
+          params.append("precio_venta", precio_venta)
           params.append("moneda_venta", $("#moneda_venta").value)
           params.append("inicial", $("#monto_inicial").value)
           params.append("det_contrato", jsonDet)
@@ -1739,7 +2009,6 @@
         let parseIdcliente = Number.parseInt(idcliente);
         if (dataClients.length > 0) {
 
-          console.log(dataClients);
           //Array que contiene los datos de los conyugues
           let spouses = dataClients.filter(result => result.idcliente !== parseIdcliente && result.tipo_persona == "NATURAL")
 
@@ -1763,46 +2032,6 @@
             $("#idconyugue").appendChild(newOption);
           });
         }
-      }
-
-      //Obtiene los lotes con detalles de construccion
-      async function getLotesDetConstruction(idproyecto) {
-
-        try {
-          let url = "../../Controllers/asset.controller.php";
-          let params = new FormData();
-
-          params.append("action", "lisLotsAndHouses");
-          params.append("idproyecto", idproyecto);
-
-          let results = await global.sendAction(url, params);
-
-          if (results.length > 0) {
-
-            console.log(results)
-            $("#idactivo").innerHTML = "";
-
-            let tagDef = document.createElement("option");
-            tagDef.value = "";
-            tagDef.innerText = "Selecciona un lote";
-
-            $("#idactivo").appendChild(tagDef);
-
-            results.forEach(result => {
-
-              let newTag = document.createElement("option");
-              newTag.value = result.idactivo;
-              newTag.innerText = "LT - " + result.sublote;
-              newTag.dataset.precio_venta = result.precio_venta;
-              newTag.dataset.moneda_venta = result.moneda_venta;
-
-              $("#idactivo").appendChild(newTag);
-            });
-          }
-        } catch (e) {
-          console.error(e);
-        }
-
       }
 
       //Obtiene los proyects por el tipo de inmoviliario (casa o lote)
@@ -1836,44 +2065,11 @@
 
               $("#idproyecto").appendChild(newTag);
             });
+
+            returnPromise(results)
           }
         } catch {
 
-        }
-      }
-
-      //Obtiene los proyectos por el detalle de construcción del inmobiliario
-      async function getProjectsDetConst() {
-        try {
-          let url = "../../Controllers/project.controller.php";
-          let params = new FormData();
-
-          params.append("action", "listProjectDetailConst");
-
-          let results = await global.sendAction(url, params);
-
-          if (results.length > 0) {
-
-            $("#idproyecto").innerHTML = "";
-
-            let tagDefault = document.createElement("option");
-            tagDefault.value = "";
-            tagDefault.text = "Seleccione un proyecto";
-
-            $("#idproyecto").appendChild(tagDefault);
-
-            results.forEach(result => {
-
-              let newTag = document.createElement("option");
-              newTag.value = result.idproyecto;
-              newTag.innerText = result.denominacion;
-              newTag.dataset.tipo = result.tipo;
-
-              $("#idproyecto").appendChild(newTag);
-            });
-          }
-        } catch (e) {
-          console.error(e);
         }
       }
 
@@ -2041,39 +2237,27 @@
 
         let form = document.querySelectorAll(".input-contract");
 
-        if (option == "DET-CASA") {
+        if (option == "LOTE") {
+          Array.from(form).forEach(input => {
+
+            input.value = "";
+            input.disabled = true;
+          });
+
+          dataRepresents = [];
+
+          $("#idseparacion").disabled = false;
+          await getSeparationWithoutContract();
+          
+
+        } else {
           Array.from(form).forEach(input => {
 
             input.disabled = false;
           });
 
           $("#idseparacion").disabled = true;
-
-            await getProjectsDetConst();
-
-        } else {
-          if (option == "LOTE") {
-            Array.from(form).forEach(input => {
-
-              input.value = "";
-              input.disabled = true;
-            });
-
-            dataRepresents = [];
-
-            $("#idseparacion").disabled = false;
-            await getSeparationWithoutContract();
-            
-
-          } else {
-            Array.from(form).forEach(input => {
-
-              input.disabled = false;
-            });
-
-            $("#idseparacion").disabled = true;
-          }
-            await getProjectsTypeAct(option);
+          await getProjectsTypeAct(option);
         }
       });
 

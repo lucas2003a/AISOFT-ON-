@@ -226,11 +226,6 @@ if (isset($_POST["action"])) {
             
             break;
 
-        case "lisLotsAndHouses": 
-            
-                $idproyecto = $_POST["idproyecto"];
-
-                echo json_encode($asset->listLotsAndHouses($idproyecto));
-            break;
+        
     }
 }

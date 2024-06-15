@@ -1579,46 +1579,6 @@
         }
       }
 
-      //Obtiene los lotes con detalles de construccion
-      async function getLotesDetConstruction(idproyecto) {
-
-        try {
-          let url = "../../Controllers/asset.controller.php";
-          let params = new FormData();
-
-          params.append("action", "lisLotsAndHouses");
-          params.append("idproyecto", idproyecto);
-
-          let results = await global.sendAction(url, params);
-
-          if (results.length > 0) {
-
-            console.log(results)
-            $("#idactivo").innerHTML = "";
-
-            let tagDef = document.createElement("option");
-            tagDef.value = "";
-            tagDef.innerText = "Selecciona un lote";
-
-            $("#idactivo").appendChild(tagDef);
-
-            results.forEach(result => {
-
-              let newTag = document.createElement("option");
-              newTag.value = result.idactivo;
-              newTag.innerText = "LT - " + result.sublote;
-              newTag.dataset.precio_venta = result.precio_venta;
-              newTag.dataset.moneda_venta = result.moneda_venta;
-
-              $("#idactivo").appendChild(newTag);
-            });
-          }
-        } catch (e) {
-          console.error(e);
-        }
-
-      }
-
       //Obtiene los proyects por el tipo de inmoviliario (casa o lote)
       async function getProjectsTypeAct(type) {
 
@@ -1653,41 +1613,6 @@
           }
         } catch {
 
-        }
-      }
-
-      //Obtiene los proyectos por el detalle de construcción del inmobiliario
-      async function getProjectsDetConst() {
-        try {
-          let url = "../../Controllers/project.controller.php";
-          let params = new FormData();
-
-          params.append("action", "listProjectDetailConst");
-
-          let results = await global.sendAction(url, params);
-
-          if (results.length > 0) {
-
-            $("#idproyecto").innerHTML = "";
-
-            let tagDefault = document.createElement("option");
-            tagDefault.value = "";
-            tagDefault.text = "Seleccione un proyecto";
-
-            $("#idproyecto").appendChild(tagDefault);
-
-            results.forEach(result => {
-
-              let newTag = document.createElement("option");
-              newTag.value = result.idproyecto;
-              newTag.innerText = result.denominacion;
-              newTag.dataset.tipo = result.tipo;
-
-              $("#idproyecto").appendChild(newTag);
-            });
-          }
-        } catch (e) {
-          console.error(e);
         }
       }
 
@@ -1862,40 +1787,28 @@
             tagDefault.text = "Seleccione un proyecto";
 
             $("#idproyecto").appendChild(tagDefault);
-
-        if (option == "DET-CASA") {
-          Array.from(form).forEach(input => {
-
-            input.disabled = false;
-          });
-
-          $("#idseparacion").disabled = true;
-
-          getProjectsDetConst();
-
-        } else {
-          if (option == "LOTE") {
-            Array.from(form).forEach(input => {
-
-              input.value = "";
-              input.disabled = true;
-            });
-
-            dataRepresents = [];
-
-            $("#idseparacion").disabled = false;
-            await getSeparationWithoutContract();
-
-          } else {
-            Array.from(form).forEach(input => {
-
-              input.disabled = false;
-            });
-
-            $("#idseparacion").disabled = true;
-          }
-          getProjectsTypeAct(option);
-        }
+            
+            if (option == "LOTE") {
+              Array.from(form).forEach(input => {
+  
+                input.value = "";
+                input.disabled = true;
+              });
+  
+              dataRepresents = [];
+  
+              $("#idseparacion").disabled = false;
+              await getSeparationWithoutContract();
+  
+            } else {
+              Array.from(form).forEach(input => {
+  
+                input.disabled = false;
+              });
+  
+              $("#idseparacion").disabled = true;
+              getProjectsTypeAct(option);
+            }
       });
 
       $("#n_expediente").addEventListener("input", (e) => {

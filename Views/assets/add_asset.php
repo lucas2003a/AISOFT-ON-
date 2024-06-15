@@ -505,7 +505,7 @@
                             <!-- ÁREA -->
                             <div>
                               <label for="area" class="form-label">Área</label>
-                              <input type="number" class="form-control" id="area" min="1.0" value="000.00" placeholder="Àrea (m2)" required>
+                              <input type="number" class="form-control" id="area" min="1.0" step="0.01" value="0.00" placeholder="Área (m2)" required title="Porcentaje del área común (%)">
                               <div class="invalid-feedback">
                                 Necesitas ingresar el área del lote.
                               </div>
@@ -567,7 +567,7 @@
                             <!-- PRECIO CONSTRUCCION -->
                             <div class="mt-4">
                               <label for="precio_construccion" class="form-label">Precio de la construcción</label>
-                              <input type="number" class="form-control" id="precio_construccion" placeholder="Precio de construcción" maxlength="7" minlength="7" min="1.00" step="0.01">
+                              <input type="number" class="form-control" id="precio_construccion" placeholder="Precio de construcción" maxlength="7" minlength="7" min="1.00" step="0.01" readonly>
                               <div class="invalid-feedback">
                                 Necesitas ingresar el precio de construcción.
                               </div>
@@ -1051,11 +1051,15 @@
     $("#tipo_activo").addEventListener("change", (e) => {
       let tipoActivo = $("#tipo_activo").value;
 
+      $("#precio_lote").required = true;
+
       if (tipoActivo == "CASA") {
-        $("#precio_lote").disabled = true;
+        $("#idpresupuesto").required = true;
+        $("#moneda-venta").value = "SOL";
       }else{
-        $("#precio_lote").disabled = false;
+        $("#idpresupuesto").required = false;
       }
+
     });
 
     $("#precio_lote").addEventListener("input", (e) => {

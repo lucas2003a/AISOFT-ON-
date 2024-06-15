@@ -388,19 +388,4 @@ class Asset extends Conection
         }
     }
 
-    /**
-     * Método para listar los lotes con detalle de construcción = VENTA DE LOTE Y CASA
-     */
-    public function listLotsAndHouses($idproyecto = 0)
-    {
-        try {
-
-            $query = $this->conection->prepare("CALL spu_list_LotsAndHouses(?)");
-            $query->execute(array($idproyecto));
-
-            return $query->fetchAll(PDO::FETCH_ASSOC);
-        } catch (Exception $e) {
-            die($e->getMessage());
-        }
-    }
 }

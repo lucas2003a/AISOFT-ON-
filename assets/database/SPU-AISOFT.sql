@@ -210,7 +210,6 @@ END $$
 DELIMITER;
 
 call spu_get_represents_idAdress(1);
-select * from representantes;
 
 -- PROYECTOS //////////////////////////////////////////////////////////////////////////////////
 
@@ -242,28 +241,7 @@ END $$
 DELIMITER ;
 call spu_list_projects_typeAct("casa");
 DELIMITER $$
-CREATE PROCEDURE spu_list_projects_detConst()
-BEGIN
-    DECLARE T_act VARCHAR(10);
-    
-    SET T_act = 'DET-CONST';
-
-    SELECT 
-        py.idproyecto,
-        py.denominacion,
-        T_act as tipo
-        FROM proyectos py
-        INNER JOIN activos ac ON ac.idproyecto = py.idproyecto
-        WHERE py.inactive_at IS NULL
-            AND ac.inactive_at IS NULL
-            AND JSON_LENGTH(JSON_EXTRACT(ac.det_casa,'$.clave')) > 0
-            AND JSON_LENGTH(JSON_EXTRACT(ac.det_casa,'$.valor')) > 0
-            AND ac.estado = "SIN VENDER"
-            GROUP BY py.idproyecto
-            ORDER BY py.denominacion ASC;
-END $$
-DELIMITER ;
-
+use aisoft
 
 DELIMITER $$
 CREATE PROCEDURE spu_list_projects()
@@ -830,34 +808,6 @@ DELIMITER;
 
 DELIMITER $$
 
-CREATE PROCEDURE spu_list_LotsAndHouses
-(
-    IN _idproyecto INT
-)
-BEGIN
-    SELECT 
-        act.idactivo,
-        proy.idproyecto,
-        proy.denominacion,
-        act.sublote,
-        act.estado,
-        act.moneda_venta,
-        act.precio_venta
-        FROM activos act
-        INNER JOIN proyectos proy ON proy.idproyecto = act.idproyecto
-        WHERE act.tipo_activo = "LOTE"
-        AND act.estado = "SIN VENDER"
-        AND act.inactive_at IS NULL
-        AND proy.idproyecto = _idproyecto
-        AND JSON_LENGTH(JSON_EXTRACT(act.det_casa,'$.clave')) > 0
-        AND JSON_LENGTH(JSON_EXTRACT(act.det_casa,'$.valor')) > 0
-        AND act.precio_venta > 0
-        ORDER BY act.sublote;
-END $$
-
-DELIMITER;
-call spu_list_LotsAndHouses(1);
-select * from activos where sublote = 14;
 -- PERSONAS    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 DELIMITER $$
 
@@ -2748,13 +2698,12 @@ BEGIN
         per.documento_tipo AS rp_doc_type,
         per.documento_nro AS rp_doc_nro,
         rs.idrepresentante_secundario,
+        rs.idcliente,
         CONCAT(pers.apellidos,', ',pers.nombres) AS representante_secundario,
         pers.documento_tipo AS rs_doc_type,
         pers.documento_nro AS rs_doc_nro,
-        sd.idsede AS idsede_1,
-        sds.idsede AS idsede_2,
-        sd.iddistrito AS sede_ubigeo_1,
-        sds.iddistrito AS sede_ubigeo_2, 
+        sd.idsede,
+        sd.iddistrito AS sede_distrito,
         rs.cliente,
         rs.tipo_persona,
         rs.documento_tipo,
@@ -2784,6 +2733,7 @@ BEGIN
                 cnt.tipo_contrato,
                 cnt.idrepresentante_primario,
                 cnt.idrepresentante_secundario,
+                sp.idcliente,
                 COALESCE(persj.cliente,persn.cliente) as cliente,
                 COALESCE(persj.tipo_persona,persn.tipo_persona) as tipo_persona,
                 COALESCE(persj.documento_tipo,persn.documento_tipo) as documento_tipo,
@@ -2793,6 +2743,7 @@ BEGIN
                 sp.n_expediente AS n_separacion,
                 ac.idactivo, 
                 ac.sublote,
+                py.idsede,
                 py.idproyecto,
                 py.denominacion,
                 cnt.tipo_cambio,
@@ -2820,6 +2771,7 @@ BEGIN
                 cnt.tipo_contrato,
                 cnt.idrepresentante_primario,
                 cnt.idrepresentante_secundario,
+                cl.idcliente,
                 COALESCE(CONCAT(pr.apellidos,', ',pr.nombres),pj.razon_social) AS cliente,
                 cl.tipo_persona,
                 COALESCE(pr.documento_tipo,pj.documento_tipo) AS documento_tipo,
@@ -2829,6 +2781,7 @@ BEGIN
                 sp.n_expediente AS n_separacion,
                 ac.idactivo,
                 ac.sublote,
+                py.idsede,
                 py.idproyecto,
                 py.denominacion,
                 cnt.tipo_cambio,
@@ -2849,15 +2802,14 @@ BEGIN
                 INNER JOIN proyectos py ON py.idproyecto = ac.idproyecto
                 INNER JOIN usuarios usu ON usu.idusuario = cnt.idusuario
                 INNER JOIN personas per ON per.idpersona = usu.idpersona
-                AND cnt.inactive_at IS NULL
+                WHERE cnt.inactive_at IS NULL
         ) AS rs
         INNER JOIN representantes rp ON rp.idrepresentante = rs.idrepresentante_primario
         INNER JOIN personas per ON per.idpersona = rp.idpersona
-        INNER JOIN sedes sd ON sd.idsede = rp.idsede
+        INNER JOIN sedes sd ON sd.idsede = rs.idsede
 
         LEFT JOIN representantes rsec ON rsec.idrepresentante = rs.idrepresentante_secundario
         LEFT JOIN personas pers ON pers.idpersona = rsec.idpersona
-        LEFT JOIN sedes sds ON sds.idsede = rsec.idsede
 
         LEFT JOIN clientes cly ON cly.idcliente = rs.idconyugue
         LEFT JOIN personas pery ON pery.idpersona = cly.idpersona
@@ -2868,8 +2820,9 @@ END $$
 DELIMITER;
 
 select * from contratos;
+select * from activos;
 
-call spu_lits_contracts_full_by_id(3)
+call spu_lits_contracts_full_by_id(2)
 select * from cuotas
 DELIMITER $$
 
@@ -3456,3 +3409,5 @@ BEGIN
 END $$
 
 DELIMITER;
+
+select * from contratos;

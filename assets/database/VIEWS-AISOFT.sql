@@ -249,6 +249,7 @@ CREATE VIEW vws_list_separations_tpersona_natural_full AS
     SELECT
         sep.idseparacion,
         sep.n_expediente,
+        proy.idsede,
         proy.idproyecto,
         act.idactivo,
         act.sublote,
@@ -304,6 +305,7 @@ CREATE VIEW vws_list_separations_tpersona_juridica_full AS
         sep.idseparacion,
         sep.n_expediente,
         proy.idproyecto,
+        proy.idsede,
         act.idactivo,
         act.sublote,
         act.precio_venta,
@@ -354,6 +356,7 @@ CREATE VIEW vws_list_refunds AS
         dev.porcentaje_penalidad,
         sep.separacion_monto,
         act.sublote,
+        proy.idsede,
         proy.denominacion,
         COALESCE(
             persj.tipo_persona,
