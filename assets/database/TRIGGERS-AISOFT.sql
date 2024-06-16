@@ -276,10 +276,19 @@ BEGIN
         UPDATE activos
 			SET
 				estado = "VENDIDO",
+				existe_contrato = 1,
                 update_at = CURDATE(),
 				idusuario = NEW.idusuario
 			WHERE 
 				idactivo = _idactivo;
+
+        UPDATE separaciones
+			SET
+				existe_contrato = 1,
+				update_at = CURDATE(),
+				idusuario = NEW.idusuario
+			WHERE
+				idseparacion = NEW.idseparacion;
 	ELSE
 		UPDATE activos
 			SET
@@ -331,6 +340,22 @@ BEGIN
 				WHERE
 					idactivo = _oldIdactivo;
 
+			UPDATE separaciones
+				SET
+					update_at = CURDATE(),
+					existe_contrato = 1,
+					idusuario = NEW.idusuario
+				WHERE
+					idseparacion = NEW.idseparacion;
+
+			UPDATE separaciones
+				SET
+					update_at = CURDATE(),
+					existe_contrato = 0,
+					idusuario = NEW.idusuario
+				WHERE
+					idseparacion = OLD.idseparacion;
+
 		END IF;
 
 		IF NEW.idactivo IS NOT NULL AND NEW.idactivo != OLD.idactivo THEN
@@ -368,6 +393,14 @@ BEGIN
 					idusuario = NEW.idusuario
 				WHERE
 					idactivo = _newIdactivo;
+
+			UPDATE separaciones
+				SET
+					update_at = CURDATE(),
+					existe_contrato = 0,
+					idusuario = NEW.idusuario
+				WHERE
+					idseparacion = NEW.idseparacion;
 		END IF;
 
 		IF NEW.idactivo IS NOT NULL THEN

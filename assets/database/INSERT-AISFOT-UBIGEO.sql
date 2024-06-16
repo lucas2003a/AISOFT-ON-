@@ -1235,8 +1235,6 @@ INSERT INTO distritos (idprovincia, distrito) VALUES
 (99, 'Parcona'),
 (99, 'Pueblo Nuevo'),
 (99, 'Salas'),
-
-
 (99, 'San José de Los Molinos'),
 (99, 'San Juan Bautista'),
 (99, 'Santiago'),

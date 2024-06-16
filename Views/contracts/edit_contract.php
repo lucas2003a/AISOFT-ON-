@@ -839,7 +839,7 @@
         <button type="button" class="btn bg-danger btn-sm text-white less-det">-</button>
       </template>
 
-  
+
       <!-- TEMPLATE -->
 
       <!-- /FORMULARIO -->
@@ -970,251 +970,358 @@
       let frame = $("#frame");
       let detContracts;
 
+      let isEdit = false;
+
       // * Retorna una promesa
-      function returnPromise(array){
+      function returnPromise(array) {
 
         return new Promise((resolve, reject) => {
-          if(array.length > 0){
+          if (array.length > 0) {
             return array;
             resolve();
-          }else{
+          } else {
             reject();
           }
         })
       }
 
+      // * Obtienes a los represetantes y la sede por el proyecto
+      async function selectRepresentsIdsede(result) {
+
+        // ! Crea un intervalo de tiempo para seleccionar a los respresentantes
+        return new Promise((resolve, reject) => {
+
+            getUbigeo(result.sede_distrito);
+            resolve();
+          })
+          .then(() => {
+
+
+            return new Promise((resolve, reject) => {
+
+              if ($("#idsede").options.length > 1) {
+                resolve();
+              } else {
+                const interval = setInterval(() => {
+
+                  if ($("#idsede").options.length > 1) {
+                    clearInterval(interval);
+                    resolve();
+                    console.log("intervalo terminado")
+                  }
+                }, 100);
+              }
+            });
+
+          })
+
+          // ! Selecciona el ubigeo
+          .then(() => {
+
+            return new Promise((resolve, reject) => {
+
+              let options = Array.from($("#idsede").options);
+
+              options.forEach(option => {
+
+                let options = Array.from($("#idsede").options);
+                if (option.value == result.idsede) option.selected = true;
+              })
+              $("#idsede").dispatchEvent(new Event("change"));
+              resolve();
+            });
+          })
+
+
+          // ! Obitene el representante legal
+          .then(() => {
+
+            return new Promise((resolve, reject) => {
+
+              let options = $("#idrepresentante_primario").options;
+              if (options.length > 1) {
+                resolve();
+              } else {
+                const interval = setInterval(() => {
+
+                  let options = $("#idrepresentante_primario").options;
+                  if (options.length > 1) {
+
+                    clearInterval(interval);
+                    resolve();
+                  }
+                }, 100);
+              }
+            });
+          })
+          // ! Selecciona el representante primario
+          .then(() => {
+            return new Promise((resolve, reject) => {
+
+              let options = Array.from($("#idrepresentante_primario").options);
+
+              options.forEach(option => {
+
+                if (option.value == result.idrepresentante_primario) option.selected = true;
+              });
+              $("#idrepresentante_primario").dispatchEvent(new Event("change"));
+              resolve();
+            });
+          })
+
+          // !Obitienes al representante secundario
+          .then(() => {
+
+            if (result.idrepresentante_secundario) {
+
+              return new Promise((resolve, reject) => {
+
+                  let options = Array.from($("#idrepresentante_secundario").options);
+                  if (options.length > 1) {
+                    resolve();
+                  } else {
+                    const interval = setInterval(() => {
+
+                      let options = Array.from($("#idrepresentante_secundario").options);
+                      if (options.length > 1) {
+
+                        clearInterval(interval);
+                        resolve();
+                      }
+                    }, 100);
+                  }
+                })
+                .then(() => {
+                  return new Promise((resolve, reject) => {
+
+                    let options = Array.from($("#idrepresentante_secundario").options);
+
+                    options.forEach(option => {
+
+                      if (option.value == result.idrepresentante_secundario) option.selected = true;
+                    });
+                    resolve();
+                  })
+                });
+            }
+
+          }).then(()=>{
+
+            // !Valor del tipo de cambio
+            $("#tipo_cambio").value = result.tipo_cambio;
+    
+            // !Valor de la fecha del contrato
+            $("#fecha_contrato").value = result.fecha_contrato;
+    
+            // !Valor de la moneda de venta
+            $("#moneda_venta").value = result.moneda_venta;
+            console.log("moneda de venta : " + result.moneda_venta)
+    
+            // !Valor del monto de incial
+            $("#monto_inicial").value = Number.parseFloat(result.inicial);
+            console.log(Number.parseFloat(result.inicial))
+    
+            // !Valor de los detalles
+            let object = JSON.parse(result.det_contrato);
+    
+            let keys = object.clave;
+            let values = object.valor;
+    
+            for (index = 0; index < keys.length; index++) {
+    
+    
+              let key = keys[index];
+              let value = values[index];
+    
+              // !Si las claves ni los valores están vacíos
+              if (key && value) {
+    
+    
+    
+                // !Verifica si es el ultimo elemento del array
+                if (index == 0) {
+    
+    
+                  $("#input-key").value = key;
+                  $("#input-value").value = value;
+    
+    
+    
+                  // !Sino ....
+                } else {
+                  let content_det = $("#content-det");
+                  let content_det_first_child = $("#content-det").firstChild;
+    
+                  let template = $("#det-clone-less").content.cloneNode(true);
+                  let lessButton = $("#new-button").content.cloneNode(true);
+    
+                  template.querySelector(".input-key").value = key;
+                  template.querySelector(".input-value").value = value;
+    
+                  content_det.insertBefore(template, content_det_first_child);
+                }
+              }
+            };
+    
+            // !URL del archivo
+            $("#in-doc").disabled = result.archivo ? true : false;
+            $("#frame").src = "../../media/files/" + result.archivo;
+          })
+      }
+
       // * Obitene los datos del contrato directo
-      async function getDirectContract(result){
+      async function getDirectContract(result) {
 
         let tipo = ($("#tipo_contrato")[$("#tipo_contrato").selectedIndex].dataset.type);
         console.log(tipo);
 
         await getProjectsTypeAct(tipo)
 
-        // ! Obtengo el proyecto
-        .then(()=>{
-
-          return new Promise((resolve, reject) =>{
-
-            let projects = Array.from($("#idproyecto").options);
-            referenceNode = projects[1];
-            paretntReference = referenceNode.parentNode;
-
-            let tagOption = document.createElement("option");
-            tagOption.value = result.idproyecto;
-            tagOption.innerText = result.denominacion;
-            
-            $("#idproyecto").append(tagOption);
-            resolve();
-            
-          });
-        })
-
-        // ! Selecciono el proyecto
-        .then(()=>{
-
-          return new Promise((resolve, reject) =>{
-
-
-            let projects = Array.from($("#idproyecto").options);
-  
-            projects.forEach(option => {
-  
-              if(option.value == result.idproyecto){
-                option.selected = true;
-                resolve();
-              }
-            })
-            
-          });
-        })
-
-        // ! Obtengo el cliente
-        .then(async function(){
-
-          await getCustomers();
-          return new Promise((resolve, reject) => {
-
-            let tagOption = document.createElement("option");
-            tagOption.vale = result.idactivo;
-            tagOption.innerText = "LT-" + result.sublote;
-            tagOption.selected = true;
-
-            $("#idactivo").append(tagOption);
-
-            let moneda = result.moneda_venta == "USD" ? "$/ " : "S/ ";
-
-            $("#precio_venta").value = moneda + result.precio_venta;
-            $("#moneda_venta").value = result.moneda_venta;
-            resolve();
-          });
-        })
-
-        // ! Seleciona el tipo de persona
-        .then(()=>{
-          
-          return new Promise((resolve, reject)=>{
-
-            Array.from($("#tipo_persona").options).forEach(option =>{
-  
-              if(option.value == result.tipo_persona) option.selected = true;
-            });
-            $("#tipo_persona").dispatchEvent(new Event("change"));
-
-            resolve();
-          });
-        })
-
-        // ! Crear un intervalo de tiempo hasta cargar los clientes
-        .then(()=>{
-
-          return new Promise((resolve, reject)=>{
-
-            let options = $("#idcliente").options;
-            if(options.length > 1){
-  
-              resolve();
-            }else{
-  
-              const interval = setInterval(()=>{
-  
-                if(options.length > 1){
-                  clearInterval(interval);
-                  resolve();
-                }
-              }, 100); // ! Revisa casa 100 milisegundos
-            }
-
-          });
-        })
-
-        // ! Selecciona el cliente
-        .then(()=>{
-
-          return new Promise((reolve, reject) =>{
-
-            options = Array.from($("#idcliente").options);
-
-            options.forEach(option => {
-
-              if(option.value == result.idcliente) option.selected = true;
-
-            });
-            $("#idcliente").dispatchEvent(new Event("change"));
-            reolve();
-          })
-        })
-
-        // ! Crea un intervalo de tiempo para seleccionar a los respresentantes
-        .then(()=>{
-
-          return new Promise((resolve, reject)=>{
-
-            getUbigeo(result.sede_distrito);
-            resolve();
-            
-          }).then(()=>{
-
+          .then(() => {
 
             return new Promise((resolve, reject)=>{
 
-              if($("#idsede").options.length > 1){
-                resolve();
-              }else{
-                const interval = setInterval(()=>{
-                  clearInterval(interval);
-                  resolve();
-                },100);
-              }
-            });
+              let options = Array.from($("#idproyecto").options);
 
-          });
-
-        }) 
-
-        // ! Selecciona el ubigeo
-        .then(()=>{
-
-          return new Promise((resolve, reject)=>{
-
-            let options = Array.from($("#idsede").options);
-  
-            options.forEach(option => {
-              
-              if(option.value == result.idsede) option.selected = true;
-            })
-            $("#idsede").dispatchEvent(new Event("change"));
-            resolve();
-          });
-        })
-
-
-        // ! Obitene el representante legal
-        .then(()=>{
-          
-          return new Promise((resolve, reject)=>{
-            
-            let options = $("#idrepresentante_primario").options;
-            if(options.length > 1){
-              resolve();
-            }else{
-              const interval = setInterval(()=>{
-                clearInterval(interval);
-                resolve();
-              },100);
-            }
-          });
-        })
-        // ! Selecciona el representante primario
-        .then(()=>{
-          return new Promise((resolve, reject)=>{
-
-            let options = Array.from($("#idrepresentante_primario").options);
-
-            options.forEach(option => {
-              
-              if(option.value == result.idrepresentante_primario) option.selected = true;
-            });
-            $("#idrepresentante_primario").dispatchEvent(new Event("change"));
-            resolve();
-          });
-        })
-
-        // !Obitienes al representante secundario
-        .then(()=>{
-
-          if(result.idrepresentante_secundario){
-
-            return new Promise((resolve, reject)=>{
-              
-              let options = $("#idrepresentante_secundario").options;
               if(options.length > 1){
                 resolve();
               }else{
+
                 const interval = setInterval(()=>{
-                  clearInterval(interval);
-                  resolve();
-                },100);
-              }
-            })
-            .then(()=>{
-              return new Promise((resolve, reject)=>{
-                
-                let options = Array.from($("#idrepresentante_secundario").options);
-  
-                options.forEach(option => {
-                  
-                  if(option.value == result.idrepresentante_secundario) option.selected = true;
+
+                  if(options.length > 1){
+                    clearInterval(interval);
+                    resolve();
+                  }
                 });
-                resolve();
-              })
+              }
             });
-          }
-          
-        })
-        .catch(e => {
-          console.error(e)
-        });
+          })
+          // ! Obtengo el proyecto
+          .then(() => {
+
+            return new Promise((resolve, reject) => {
+
+              let projects = Array.from($("#idproyecto").options);
+              referenceNode = projects[1];
+              paretntReference = referenceNode.parentNode;
+
+              let tagOption = document.createElement("option");
+              tagOption.value = result.idproyecto;
+              tagOption.innerText = result.denominacion;
+
+              paretntReference.insertBefore(tagOption, referenceNode)
+              resolve();
+
+            });
+          })
+
+          // ! Selecciono el proyecto
+          .then(() => {
+
+            return new Promise((resolve, reject) => {
+
+
+              let projects = Array.from($("#idproyecto").options);
+
+              projects.forEach(option => {
+
+                if (option.value == result.idproyecto) {
+                  option.selected = true;
+                  resolve();
+                }
+              })
+
+            });
+          })
+
+          // ! Obtengo el cliente
+          .then(async function() {
+
+            await getCustomers();
+            return new Promise((resolve, reject) => {
+
+              let tagOption = document.createElement("option");
+              tagOption.vale = result.idactivo;
+              tagOption.innerText = "LT-" + result.sublote;
+              tagOption.selected = true;
+
+              $("#idactivo").append(tagOption);
+
+              let moneda = result.moneda_venta == "USD" ? "$/ " : "S/ ";
+
+              $("#precio_venta").value = moneda + result.precio_venta;
+              $("#moneda_venta").value = result.moneda_venta;
+              resolve();
+            });
+          })
+
+          // ! Seleciona el tipo de persona
+          .then(() => {
+
+            return new Promise((resolve, reject) => {
+
+              Array.from($("#tipo_persona").options).forEach(option => {
+
+                if (option.value == result.tipo_persona) option.selected = true;
+              });
+              $("#tipo_persona").dispatchEvent(new Event("change"));
+
+              resolve();
+            });
+          })
+
+          // ! Crear un intervalo de tiempo hasta cargar los clientes
+          .then(() => {
+
+            return new Promise((resolve, reject) => {
+
+              let options = $("#idcliente").options;
+              if (options.length > 1) {
+
+                resolve();
+              } else {
+
+                const interval = setInterval(() => {
+
+                  let options = $("#idcliente").options;
+                  if (options.length > 1) {
+                    clearInterval(interval);
+                    resolve();
+                  }
+                }, 100); // ! Revisa casa 100 milisegundos
+              }
+
+            });
+          })
+
+          // ! Selecciona el cliente
+          .then(() => {
+
+            return new Promise((reolve, reject) => {
+
+              options = Array.from($("#idcliente").options);
+
+              options.forEach(option => {
+
+                if (option.value == result.idcliente) option.selected = true;
+
+              });
+              $("#idcliente").dispatchEvent(new Event("change"));
+              reolve();
+            })
+          })
+
+
+          .then(async function() {
+
+            await selectRepresentsIdsede(result);
+          })
+
+
+          .catch(e => {
+            console.error(e)
+          });
       }
 
       // *  Obtiene el ubigeo
@@ -1324,26 +1431,11 @@
         $("#tipo_contrato").dispatchEvent(new Event("change"));
 
       }
-        
+
       // * Inserta la opcion de la separación
       async function insertOptionSeparation(result) {
-          
-        await getSeparationWithoutContract(); 
-        let newTag = document.createElement("option");
-        newTag.value = result.idseparacion;
-        newTag.innerText = result.n_separacion;
-        newTag.dataset.precio_venta = result.precio_venta;
-        newTag.dataset.moneda_venta = result.moneda_venta;
 
-        let referenceNode = $("#idseparacion").children[1];
-        $("#idseparacion").insertBefore(newTag, referenceNode);
 
-        Array.from($("#idseparacion").options).forEach(option => {
-          if (option.value == result.idseparacion) {
-            option.selected = true;
-          }
-        });
-        $("#idseparacion").dispatchEvent(new Event("change"));
       }
 
       // * Obtiene el contrato por el id
@@ -1370,120 +1462,123 @@
             // !Valor del tipoo de contrato
             await getContractType(result);
 
-            if(!result.idseparacion){
+            if (!result.idseparacion) {
               await getDirectContract(result);
-            }else{
+            } else {
 
-              setTimeout(async function(){
-            
-                // !Valor de la separación
-                await insertOptionSeparation(result);
-    
-                // !Valor de precio de venta
-                $("#precio_venta").value = result.moneda_venta == "USD" ? "$/ " + result.precio_venta : "S/ " + result.precio_venta;
-              }, 500);
-  
-              // !Valor del ubigeo
-              console.log("sede")
-              await getUbigeo(result.sede_ubigeo_1); 
-  
-              // !valor de idsede
-              // TODO: todas las validaciones dentro del setTimout se iran ejecutando en un intervalo de tiempo
-              setTimeout(() => {
-  
-                console.log($("#idsede").options)
-                Array.from($("#idsede").options).forEach(option => {
-                  if (option.value == result.idsede_1) {
-                    option.selected = true;
+              // ! Espeara al cargar las opcioes sde separaciones
+              return new Promise((resolve, reject) => {
+
+                  let options = Array.from($("#idseparacion").options);
+
+                  if (options.length > 0) {
+                    resolve();
+                  } else {
+
+                    const interval = setInterval(() => {
+
+                      let options = Array.from($("#idseparacion").options);
+                      if (options.length > 0) {
+                        clearInterval(interval);
+                        resolve();
+                      }
+                    }, 100)
                   }
-                });
-  
-                $("#idsede").dispatchEvent(new Event("change"));
-  
-                // !Obtiene el valor del representante primario
-                setTimeout(()=>{
-                  Array.from($("#idrepresentante_primario").options).forEach(option =>{
-                    if(option.value == result.idrepresentante_primario){
-                      option.selected = true;
+                })
+
+                // ! Creo la opción de separación
+                .then(() => {
+                  return new Promise((resolve, reject) => {
+
+                    let options = Array.from($("#idseparacion").options);
+                    let referenceNode = options.length > 1 ? options[1] : options[0];
+                    console.log(referenceNode)
+                    let referenceParent = referenceNode.parentNode;
+
+                    let newTag = document.createElement("option");
+                    newTag.value = result.idseparacion;
+                    newTag.innerText = result.n_separacion;
+                    newTag.dataset.precio_venta = result.precio_venta;
+                    newTag.dataset.moneda_venta = result.moneda_venta;
+
+                    if(options.length > 1){
+                      
+                      referenceParent.insertBefore(newTag, referenceNode);
+                    }else{
+                      $("#idseparacion").append(newTag);
+                    }
+                    resolve();
+                    console.log(options)
+                  })
+                })
+
+                // ! Selecciona la opción de separación
+                .then(() => {
+
+                  return new Promise((resolve, reject) => {
+
+                    let options = Array.from($("#idseparacion").options);
+
+                    options.forEach(option => {
+                      if (option.value == result.idseparacion) option.selected = true;
+                      $("#idseparacion").dispatchEvent(new Event("change"));
+                      resolve();
+                    })
+                  });
+                })
+
+                // ! Obtengo al cliente por el tipo de persona
+                .then(async function() {
+
+                  await getCustomers(result.tipo_persona);
+
+                  return new Promise((resolve, rejecet) => {
+
+                    let options = Array.from($("#idcliente").options);
+
+                    if (options.length > 1) {
+                      resolve();
+                    } else {
+
+                      const interval = setInterval(() => {
+
+                        let options = Array.from($("#idcliente").options);
+                        if (options.length > 1) {
+                          clearInterval(interval);
+                          resolve();
+                        }
+                      }, 100)
                     }
                   });
-                  $("#idrepresentante_primario").dispatchEvent(new Event("change"))
-  
-                  // !Obtiene el valor del represenante secundario
-                  setTimeout(() => {
-                    if(result.idrepresentante_secundario){
-                      Array.from($("#idrepresentante_secundario").options).forEach(option =>{
-                        if(option.value == result.idrepresentante_secundario){
-                          option.selected = true;
-                        }
-                      })
-                    }
-                  }, 500);
-                },500)
-              }, 500);
+                })
+
+                // ! Selecciono al cliente
+                .then(() => {
+
+                  return new Promise((resolve, reject) => {
+                    let options = Array.from($("#idcliente").options);
+
+                    options.forEach(option => {
+
+                      if (option.value == result.idcliente) option.selected = true;
+                    })
+                    resolve();
+                    $("#idcliente").dispatchEvent(new Event("change"));
+                  })
+                })
+                .then(async function() {
+
+                  await selectRepresentsIdsede(result);
+                })
+                .catch(e => {
+                  console.error(e);
+                })
             }
 
 
 
-            // !Valor del tipo de cambio
-            $("#tipo_cambio").value = result.tipo_cambio;
 
-            // !Valor de la fecha del contrato
-            $("#fecha_contrato").value = result.fecha_contrato;
 
-            // !Valor de la moneda de venta
-            $("#moneda_venta").value = result.moneda_venta;
-            console.log("moneda de venta : " + result.moneda_venta)
-
-            // !Valor del monto de incial
-            $("#monto_inicial").value = Number.parseFloat(result.inicial);
-            console.log(Number.parseFloat(result.inicial))
-
-            // !Valor de los detalles
-            let object = JSON.parse(result.det_contrato);
-
-            let keys = object.clave;
-            let values = object.valor;
-
-            for(index = 0; index < keys.length; index++){
-              
-              
-              let key = keys[index];
-              let value = values[index];
-              
-              // !Si las claves ni los valores están vacíos
-              if(key && value){
-
-                
-
-                // !Verifica si es el ultimo elemento del array
-                if(index == 0){
-  
-  
-                  $("#input-key").value = key;
-                  $("#input-value").value = value;
-  
-    
-                  
-                  // !Sino ....
-                  }else{
-                    let content_det = $("#content-det");
-                    let content_det_first_child = $("#content-det").firstChild;
-  
-                    let template = $("#det-clone-less").content.cloneNode(true);
-                    let lessButton = $("#new-button").content.cloneNode(true);
-
-                    template.querySelector(".input-key").value = key;
-                    template.querySelector(".input-value").value = value;
-
-                    content_det.insertBefore(template, content_det_first_child);
-                }
-              }
-            };
-
-            // !URL del archivo
-            $("#in-doc").disabled = result.archivo ? true : false;
-            $("#frame").src = "../../media/files/" + result.archivo;
 
           }
         } catch (e) {
@@ -1542,10 +1637,10 @@
       }
 
       //Registra un contrato
-      async function setContract(idcontrato){
+      async function setContract(idcontrato) {
 
         try {
-          
+
           let detJson = await global.getJson(".input-key", ".input-value");
           let lote_value = $("#idactivo").value;
           let lote_split = lote_value.split("-");
@@ -2208,17 +2303,8 @@
 
       $("#idproyecto").addEventListener("change", (e) => {
 
-        let idproyecto = e.target.options[e.target.selectedIndex].value;
-        let tipo = e.target.options[e.target.selectedIndex].dataset.tipo;
-
-        if (tipo == "DET-CONST") {
-
-          getLotesDetConstruction(idproyecto);
-
-        } else if (tipo == "CASA") {
-
-          getHouses(idproyecto);
-        }
+        getHouses(idproyecto);
+        
       });
 
       $("#idseparacion").addEventListener("change", (e) => {
@@ -2233,6 +2319,7 @@
 
       $("#tipo_contrato").addEventListener("change", async function(e) {
 
+        console.log(performance.now())
         let option = e.target.options[e.target.selectedIndex].dataset.type;
 
         let form = document.querySelectorAll(".input-contract");
@@ -2247,8 +2334,9 @@
           dataRepresents = [];
 
           $("#idseparacion").disabled = false;
+
           await getSeparationWithoutContract();
-          
+
 
         } else {
           Array.from(form).forEach(input => {

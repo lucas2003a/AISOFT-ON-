@@ -184,7 +184,7 @@ CREATE TABLE subcategoria_costos
     idcategoria_costo				INT 			NOT NULL,
     subcategoria_costo				VARCHAR(100)  	NOT NULL,
     CONSTRAINT fk_idcategoria_costo_subcat_costo FOREIGN KEY(idcategoria_costo) REFERENCES categoria_costos(idcategoria_costo),
-    CONSTRAINT fk_subactegoria_costo_subcat_costo UNIQUE(subactegoria_costo)
+    CONSTRAINT fk_subactegoria_costo_subcat_costo UNIQUE(subcategoria_costo)
 )ENGINE = INNODB;
 
 -- MARCAS
@@ -223,8 +223,9 @@ CREATE TABLE materiales
 CREATE TABLE presupuestos
 (
 	idpresupuesto 			INT PRIMARY KEY AUTO_INCREMENT,
-    codigo 					CHAR(8) NOT NULL,
+    codigo 					CHAR(8)         NOT NULL,
     modelo					VARCHAR(30)		NOT NULL,
+    area_construccion       DECIMAL(6,2)    NOT NULL,
     create_at				DATE 			NOT NULL 	DEFAULT(CURDATE()),
     update_at 				DATE        	NULL,
     inactive_at 			DATE 			NULL,
@@ -266,7 +267,9 @@ CREATE TABLE activos(
     sublote 			TINYINT 			NOT NULL,
     direccion			VARCHAR(70) 		NOT NULL,
     moneda_venta 		VARCHAR(10) 		NOT NULL,
-    area_terreno   		DECIMAL(5,2) 		NOT NULL,
+    area_terreno   		DECIMAL(6,2) 		NOT NULL,
+    area_construccion   DECIMAL(6,2)        NULL,
+    area_techada        DECIMAL(6,2)        NULL,
     zcomunes_porcent	TINYINT		 		NULL,
     partida_elect 		VARCHAR(100) 		NOT NULL,
     latitud 			VARCHAR(20) 		NULL,
@@ -351,6 +354,7 @@ CREATE TABLE separaciones
     fecha_pago				DATE 			NOT NULL,
     imagen					VARCHAR(100) 	NOT NULL,
     detalle                 VARCHAR(200)    NOT NULL,
+    existe_contrato         BIT             NOT NULL DEFAULT 0,  
 	create_at 				DATE 			NOT NULL	DEFAULT (CURDATE()),
     update_at				DATE 			NULL,
     inactive_at				DATE 			NULL,
@@ -362,7 +366,7 @@ CREATE TABLE separaciones
     CONSTRAINT fk_idconyugue_sep FOREIGN KEY(idconyugue) REFERENCES clientes(idcliente),
     CONSTRAINT fk_idusuario_sep FOREIGN KEY(idusuario) REFERENCES usuarios(idusuario)
 )ENGINE = INNODB;
-SELECT * from separaciones;
+
 -- deboluciones
 CREATE TABLE devoluciones
 (
@@ -464,6 +468,46 @@ CREATE TABLE detalle_cuotas
     CONSTRAINT fk_idcuota_detalle_cuotas FOREIGN KEY(idcuota) REFERENCES cuotas(idcuota)
 )ENGINE = INNODB;
 
+-- ACTUALIZACIONES
+CREATE TABLE actualizaciones
+(
+    idactualizacion         INT PRIMARY KEY AUTO_INCREMENT,
+    objeto_cambio           VARCHAR(200)            NOT NULL,
+    motivo                  VARCHAR(45)             NOT NULL,
+    detalle                 VARCHAR(200)            NOT NULL,
+    usuario                 VARCHAR(150)            NOT NULL,
+    create_at               DATETIME                NOT NULL DEFAULT (NOW())
+)ENGINE = INNODB;
+
+-- CONFIGURACIONES
+CREATE TABLE configuraciones
+(
+    idconfiguracion         INT PRIMARY KEY AUTO_INCREMENT,
+    clave                   VARCHAR(100)            NOT NULL,
+    valor                   VARCHAR(200)            NOT NULL,
+    create_at               DATETIME                NOT NULL DEFAULT(NOW()),
+    update_at               DATETIME                NULL
+)ENGINE = INNODB;
+
 -- DROP TABLE sustentos_cuotas, cuotas, detalle_gastos, presupuestos, desembolsos, sustentos_sep, separaciones, contratos, viviendas, lotes;
 select * from contratos;
-set foreign_key_checks = 1 -- //!Cambialo a 1
+set foreign_key_checks = 0-- //!Cambialo a 1
+
+
+DELIMITER $$
+CREATE PROCEDURE spu_list_tables
+(
+    IN  db_table VARCHAR(255)
+)
+BEGIN
+    DECLARE _query VARCHAR(255);
+
+    SET _query = CONCAT("SELECT * FROM ",db_table);
+    PREPARE stmt FROM _query;
+    EXECUTE stmt;
+    DEALLOCATE PREPARE stmt;
+
+END$$
+DELIMITER ;
+
+call spu_list_tables("contratos")

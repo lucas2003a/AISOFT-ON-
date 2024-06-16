@@ -209,8 +209,6 @@ END $$
 
 DELIMITER;
 
-call spu_get_represents_idAdress(1);
-
 -- PROYECTOS //////////////////////////////////////////////////////////////////////////////////
 
 DELIMITER $$
@@ -239,9 +237,6 @@ BEGIN
     END IF;
 END $$
 DELIMITER ;
-call spu_list_projects_typeAct("casa");
-DELIMITER $$
-use aisoft
 
 DELIMITER $$
 CREATE PROCEDURE spu_list_projects()
@@ -356,7 +351,10 @@ DELIMITER;
 -- LOTES
 DELIMITER $$
 
-CREATE PROCEDURE spu_list_assets_by_id(IN _idactivo INT)
+CREATE PROCEDURE spu_list_assets_by_id
+(
+    IN _idactivo INT
+)
 BEGIN
 		SELECT 
 		act.idactivo,
@@ -372,6 +370,8 @@ BEGIN
         dept.departamento,
         act.moneda_venta,
         act.area_terreno,
+        act.area_construccion,
+        act.area_techada,
         act.zcomunes_porcent,
         act.partida_elect,
         act.latitud,
@@ -401,7 +401,10 @@ DELIMITER;
 
 DELIMITER $$
 
-CREATE PROCEDURE spu_list_assets_idProject(IN _idproyecto INT)
+CREATE PROCEDURE spu_list_assets_idProject
+(
+    IN _idproyecto INT
+)
 BEGIN
 	SELECT * FROM vws_list_assets_short
     WHERE idproyecto = _idproyecto;
@@ -411,7 +414,11 @@ DELIMITER;
 
 DELIMITER $$
 
-CREATE PROCEDURE spu_list_assets_short_idpr(IN _idproyecto INT, IN _propietario_lote VARCHAR(10))
+CREATE PROCEDURE spu_list_assets_short_idpr
+(
+    IN _idproyecto INT, 
+    IN _propietario_lote VARCHAR(10)
+)
 BEGIN
 	SELECT * FROM vws_list_assets_short
     WHERE idproyecto = _idproyecto
@@ -422,7 +429,11 @@ DELIMITER;
 
 DELIMITER $$
 
-CREATE PROCEDURE spu_list_assets_by_sublote(IN _idproyecto INT, IN _sublote CHAR(5)) -- => POR SUBLOTE
+CREATE PROCEDURE spu_list_assets_by_sublote
+(
+    IN _idproyecto INT, 
+    IN _sublote CHAR(5)
+) -- => POR SUBLOTE
 BEGIN
 	SELECT * 
 		FROM vws_list_assets_short
@@ -443,7 +454,9 @@ CREATE PROCEDURE spu_add_assets
     IN _sublote 		VARCHAR(6),
     IN _direccion 		CHAR(70),
     IN _moneda_venta 	VARCHAR(10),
-    IN _area_terreno 	DECIMAL(5,2),
+    IN _area_terreno 	DECIMAL(6,2),
+    IN _area_construccion 	DECIMAL(6,2),
+    IN _area_techada 	DECIMAL(6,2),
     IN _zcomunes_porcent TINYINT,
     IN _partida_elect 	VARCHAR(100),
     IN _latitud			VARCHAR(20),
@@ -465,7 +478,9 @@ BEGIN
                         sublote, 
                         direccion, 
                         moneda_venta, 
-                        area_terreno, 
+                        area_terreno,
+                        area_construccion,
+                        area_techada, 
                         zcomunes_porcent, 
                         partida_elect,
 						latitud, 
@@ -487,7 +502,9 @@ BEGIN
                 _sublote, 
                 _direccion, 
                 _moneda_venta, 
-                _area_terreno, 
+                _area_terreno,
+                NULLIF(_area_construccion,""), 
+                NULLIF(_area_techada,""), 
                 _zcomunes_porcent, 
                 _partida_elect,
 				NULLIF(_latitud,""), 
@@ -518,7 +535,9 @@ CREATE PROCEDURE spu_set_assets
     IN _sublote 		VARCHAR(6),
     IN _direccion 		CHAR(70),
     IN _moneda_venta 	VARCHAR(10),
-    IN _area_terreno 	DECIMAL(5,2),
+    IN _area_terreno 	DECIMAL(6,2),
+    IN _area_construccion 	DECIMAL(6,2),
+    IN _area_techada 	DECIMAL(6,2),
     IN _zcomunes_porcent TINYINT,
     IN _partida_elect 	VARCHAR(100),
     IN _latitud			VARCHAR(20),
@@ -542,6 +561,8 @@ BEGIN
             direccion 		= _direccion,
             moneda_venta 	= _moneda_venta,
             area_terreno	= _area_terreno,
+            area_construccion = _area_construccion,
+            area_techada    = _area_techada,
             zcomunes_porcent = _zcomunes_porcent,
             partida_elect 	= _partida_elect,
             latitud 		= NULLIF(_latitud,""),
@@ -806,7 +827,6 @@ END $$
 
 DELIMITER;
 
-DELIMITER $$
 
 -- PERSONAS    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 DELIMITER $$
@@ -977,11 +997,9 @@ BEGIN
         AND cont.inactive_at IS NULL;
     
 END $$
-call spu_list_clients_contract();
+
 DELIMITER $$
 
-update contratos set estado = "VIGENTE";
-select * from contratos;
 CREATE PROCEDURE spu_list_clients_contractID(IN _idcliente INT)
 BEGIN
     SELECT 
@@ -1432,7 +1450,7 @@ BEGIN
 END $$
 
 DELIMITER;
-SELECT * from rep_legales_clientes;
+
 DELIMITER $$
 
 CREATE PROCEDURE spu_inactive_represents(IN _idrepresentante INT)
@@ -1800,11 +1818,12 @@ CREATE PROCEDURE spu_add_budget
 (
 	IN _codigo		CHAR(8),
     IN _modelo 		VARCHAR(30),
-    IN _idusuario 	INT
+    IN _idusuario 	INT,
+    IN _area_construccion DECIMAL(6,2)
 )
 BEGIN
-	INSERT INTO presupuestos(modelo, idusuario, codigo)
-					VALUES(_modelo, _idusuario, _codigo);
+	INSERT INTO presupuestos(modelo, idusuario, codigo, area_construccion)
+					VALUES(_modelo, _idusuario, _codigo, _area_construccion);
                     
 	SELECT @@last_insert_id AS idpresupuesto,
 			codigo,
@@ -1833,6 +1852,7 @@ CREATE PROCEDURE spu_set_budget
 	IN _idpresupuesto 		INT,
     IN _codigo 				CHAR(8),
     IN _modelo				VARCHAR(30),
+    IN _area_construccion   DECIMAL(6,2),
     IN _idusuario			INT
 )
 BEGIN
@@ -1840,6 +1860,7 @@ BEGIN
 		SET
 			codigo 		= _codigo,
             modelo		= _modelo,
+            area_construccion = _area_construccion,
             idusuario 	= _idusuario,
             update_at 	= CURDATE()
 		WHERE idpresupuesto = _idpresupuesto;
@@ -1876,16 +1897,23 @@ DELIMITER;
 
 DELIMITER $$
 
-CREATE PROCEDURE spu_count_budget_idbudget(IN _idpresupuesto INT)
+CREATE PROCEDURE spu_count_budget_idbudget
+(
+    IN _idpresupuesto INT
+)
 BEGIN
     SELECT EXISTS(SELECT 1 FROM activos WHERE idpresupuesto = _idpresupuesto AND inactive_at IS NULL) AS cantidad;
 END
 
 DELIMITER;
+
 -- DETALLE DE COSTOS /////////////////////////////////////////////////////////////////////////////////////////
 DELIMITER $$
 
-CREATE PROCEDURE spu_list_detail_cost(IN _idpresupuesto INT)
+CREATE PROCEDURE spu_list_detail_cost
+(
+    IN _idpresupuesto INT
+)
 BEGIN
 		SELECT
 			detcost.iddetalle_costo,
@@ -2082,7 +2110,8 @@ BEGIN
         ac.moneda_venta,
         sp.idcliente,
         sp.idconyugue,
-        sp.separacion_monto
+        sp.separacion_monto,
+        sp.existe_contrato
         FROM separaciones sp
         INNER JOIN activos ac ON ac.idactivo = sp.idactivo 
         WHERE idseparacion NOT IN (
@@ -2140,7 +2169,8 @@ BEGIN
         lcn.idcliente,
         lcn.cliente,
         lcn.documento_nro,
-        lcn.tipo_persona
+        lcn.tipo_persona,
+        lcn.existe_contrato
     FROM
         vws_list_separations_tpersona_natural_full lcn
         LEFT JOIN separaciones sep ON sep.idseparacion = lcn.idseparacion
@@ -2153,7 +2183,8 @@ BEGIN
         lcj.idcliente,
         lcj.cliente,
         lcj.documento_nro,
-        lcj.tipo_persona
+        lcj.tipo_persona,
+        lcj.existe_contrato
     FROM
         vws_list_separations_tpersona_juridica_full lcj
         LEFT JOIN separaciones sep ON sep.idseparacion = lcj.idseparacion
@@ -2294,7 +2325,9 @@ DELIMITER;
 DELIMITER $$
 
 CREATE PROCEDURE spu_get_separation_ById
-(IN _idseparacion INT)
+(
+    IN _idseparacion INT
+)
 BEGIN
     DECLARE _tpersona VARCHAR(10);
 
@@ -2316,6 +2349,7 @@ BEGIN
 END $$
 
 DELIMITER;
+
 
 -- DEVLOUCIONES   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 DELIMITER $$
@@ -2370,14 +2404,14 @@ DELIMITER;
 DELIMITER $$
 
 CREATE PROCEDURE sup_list_refunds_ById
-(IN _iddevolucion INT)
+(
+    IN _iddevolucion INT
+)
 BEGIN
     SELECT * 
         FROM vws_list_refunds
         WHERE iddevolucion = _iddevolucion;
 END $$
-
-CALL sup_list_refunds_ById (12);
 
 DELIMITER;
 
@@ -2605,6 +2639,7 @@ BEGIN
         ORDER BY idcontrato DESC;
 END $$
 DELIMITER ;
+
 DELIMITER $$
 CREATE PROCEDURE spu_list_contracts_types_date_n_expediente
 (
@@ -2819,11 +2854,6 @@ END $$
 
 DELIMITER;
 
-select * from contratos;
-select * from activos;
-
-call spu_lits_contracts_full_by_id(2)
-select * from cuotas
 DELIMITER $$
 
 CREATE PROCEDURE spu_add_contract
@@ -2888,7 +2918,6 @@ BEGIN
 
 END $$
 
-select * from contratos
 DELIMITER;
 
 DELIMITER $$
@@ -3103,6 +3132,7 @@ BEGIN
 END $$
 
 DELIMITER;
+
 DELIMITER $$
 
 CREATE PROCEDURE spu_set_quotas_allNoPay
@@ -3123,8 +3153,6 @@ BEGIN
 END $$
 
 DELIMITER;
-
-update cuotas set inactive_at = NULL;
 
 DELIMITER $$
 
@@ -3206,6 +3234,9 @@ BEGIN
     END IF;
 END $$
 
+DELIMITER;
+
+DELIMITER $$
 CREATE PROCEDURE spu_list_quotas_estado_fven
 (
     IN _idcontrato INT,
@@ -3253,7 +3284,7 @@ END $$
 
 DELIMITER;
 
--- PLANTILLA
+-- CUOTAS
 DELIMITER $$
 
 CREATE PROCEDURE spu_add_quota
@@ -3271,7 +3302,7 @@ BEGIN
 END $$
 
 DELIMITER;
--- PLANTILLA
+
 DELIMITER $$
 
 CREATE PROCEDURE spu_set_det_quota
@@ -3403,6 +3434,91 @@ END $$
 DELIMITER;
 
 DELIMITER $$
+CREATE PROCEDURE spu_set_password
+(
+    IN _idusuario INT,
+    IN _contrasenia VARCHAR(255)
+)
+BEGIN
+    UPDATE usuarios
+        SET 
+            contrasenia = _contrasenia
+        WHERE
+            idusuario = _idusuario;
+
+    SELECT ROW_COUNT() AS filasAfect;
+END $$
+DELIMITER ;
+
+-- ACTTUALIZACIONES
+DELIMITER $$
+CREATE PROCEDURE spu_list_updates
+(
+    IN _fechaInicio DATE,
+    IN _fechaFin DATE
+)
+BEGIN 
+    SELECT 
+        idactualizacion,
+        objeto_cambio,
+        motivo,
+        detalle,
+        usuario,
+        create_at
+        FROM actualizaciones
+        WHERE DATE(create_at) BETWEEN _fechaInicio AND _fechaFin
+        ORDER BY create_at DESC;
+END $$
+DELIMITER ;
+
+DELIMITER $$
+
+CREATE PROCEDURE spu_add_update
+(
+    IN _objeto_cambio   VARCHAR(200),
+    IN _motivo          VARCHAR(45),
+    IN _detalle         VARCHAR(200),
+    IN _usuario         VARCHAR(150)
+)
+BEGIN
+    INSERT INTO actualizaciones(
+                    objeto_cambio,
+                    motivo,
+                    detalle,
+                    usuario
+                )
+                VALUES(
+                    _objeto_cambio,
+                    _motivo,
+                    _detalle,
+                    _usuario
+                );
+
+    SELECT ROW_COUNT() AS filasAfect;
+END $$
+
+DELIMITER;
+
+-- CONFIGURACIONES
+DELIMITER $$
+
+CREATE PROCEDURE spu_list_configs
+(
+    IN _clave VARCHAR(100)
+)
+BEGIN
+    SELECT * 
+    FROM configuraciones 
+    WHERE clave = _clave;
+END $$
+
+DELIMITER;
+
+CALL spu_list_configs("contrasenia_defecto");
+
+insert into configuraciones(clave, valor) values("contrasenia_defecto","peru2024");
+-- PLANTILLA
+DELIMITER $$
 
 CREATE PROCEDURE ()
 BEGIN
@@ -3410,4 +3526,3 @@ END $$
 
 DELIMITER;
 
-select * from contratos;
