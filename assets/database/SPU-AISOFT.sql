@@ -1711,6 +1711,7 @@ BEGIN
 		pres.idpresupuesto,
         pres.codigo,
         pres.modelo,
+        pres.area_construccion,
         CASE
 			WHEN detcost.idpresupuesto IS NOT NULL AND detcost.inactive_at IS NULL THEN
 				(SUM(detcost.cantidad * detcost.precio_unitario)) 
@@ -1732,7 +1733,10 @@ DELIMITER;
 
 DELIMITER $$
 
-CREATE PROCEDURE spu_search_budgets(IN _codigo VARCHAR(8))
+CREATE PROCEDURE spu_search_budgets
+(
+    IN _codigo VARCHAR(8)
+)
 BEGIN
 	DECLARE _valueDefault DECIMAL(8,2);
     SET _valueDefault = 0.00;
@@ -1740,6 +1744,7 @@ BEGIN
 		pres.idpresupuesto,
         pres.codigo,
         pres.modelo,
+        pres.area_construccion,
         CASE
 			WHEN detcost.idpresupuesto IS NOT NULL AND detcost.inactive_at IS NULL THEN
 				(SUM(detcost.cantidad * detcost.precio_unitario)) 
@@ -1762,7 +1767,10 @@ DELIMITER;
 
 DELIMITER $$
 
-CREATE PROCEDURE spu_get_budget_by_id(IN _idpresupuesto INT)
+CREATE PROCEDURE spu_get_budget_by_id
+(
+    IN _idpresupuesto INT
+)
 BEGIN
 	DECLARE _valueDefault DECIMAL(8,2);
     SET _valueDefault = 0.00;
@@ -1770,6 +1778,7 @@ BEGIN
 		pres.idpresupuesto,
         pres.codigo,
         pres.modelo,
+        pres.area_construccion,
         CASE
 			WHEN detcost.idpresupuesto IS NOT NULL AND detcost.inactive_at IS NULL THEN
 				(SUM(detcost.cantidad * detcost.precio_unitario)) 
@@ -1792,12 +1801,16 @@ DELIMITER;
 
 DELIMITER $$
 
-CREATE PROCEDURE spu_list_budgets_assets()
+CREATE PROCEDURE spu_list_budgets_assets
+(
+    IN _area_construida DECIMAL(6,2)
+)
 BEGIN
 	SELECT
 		pres.idpresupuesto,
         pres.codigo,
         pres.modelo,
+        pres.area_construccion,
 		(SUM(detcost.cantidad * detcost.precio_unitario)) AS total,
         pers.nombres AS usuario
 		FROM presupuestos pres
@@ -1806,6 +1819,7 @@ BEGIN
         INNER JOIN personas pers ON pers.idpersona = usu.idpersona
         WHERE pres.inactive_at IS NULL
         AND detcost.inactive_at IS NULL
+        AND pres.area_construida = _area_construida
         GROUP BY pres.idpresupuesto
         ORDER BY pres.codigo ASC;
 END $$
@@ -1836,7 +1850,10 @@ DELIMITER;
 
 DELIMITER $$
 
-CREATE PROCEDURE spu_count_budgets(IN _idpresuspuesto INT)
+CREATE PROCEDURE spu_count_budgets
+(
+    IN _idpresuspuesto INT
+)
 BEGIN
 	SELECT COUNT(idpresupuesto)
 		FROM presupuestos

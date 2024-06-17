@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 17-06-2024 a las 01:44:52
+-- Tiempo de generación: 17-06-2024 a las 11:25:01
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -403,6 +403,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_get_budget_by_id` (IN `_idpresu
 		pres.idpresupuesto,
         pres.codigo,
         pres.modelo,
+        pres.area_construccion,
         CASE
 			WHEN detcost.idpresupuesto IS NOT NULL AND detcost.inactive_at IS NULL THEN
 				(SUM(detcost.cantidad * detcost.precio_unitario)) 
@@ -776,6 +777,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_budgets` ()   BEGIN
 		pres.idpresupuesto,
         pres.codigo,
         pres.modelo,
+        pres.area_construccion,
         CASE
 			WHEN detcost.idpresupuesto IS NOT NULL AND detcost.inactive_at IS NULL THEN
 				(SUM(detcost.cantidad * detcost.precio_unitario)) 
@@ -793,11 +795,12 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_budgets` ()   BEGIN
         ORDER BY pres.codigo ASC;
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_budgets_assets` ()   BEGIN
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_budgets_assets` (IN `_area_construida` DECIMAL(6,2))   BEGIN
 	SELECT
 		pres.idpresupuesto,
         pres.codigo,
         pres.modelo,
+        pres.area_construccion,
 		(SUM(detcost.cantidad * detcost.precio_unitario)) AS total,
         pers.nombres AS usuario
 		FROM presupuestos pres
@@ -806,6 +809,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_budgets_assets` ()   BEGIN
         INNER JOIN personas pers ON pers.idpersona = usu.idpersona
         WHERE pres.inactive_at IS NULL
         AND detcost.inactive_at IS NULL
+        AND pres.area_construida = _area_construida
         GROUP BY pres.idpresupuesto
         ORDER BY pres.codigo ASC;
 END$$
@@ -1915,6 +1919,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_search_budgets` (IN `_codigo` V
 		pres.idpresupuesto,
         pres.codigo,
         pres.modelo,
+        pres.area_construccion,
         CASE
 			WHEN detcost.idpresupuesto IS NOT NULL AND detcost.inactive_at IS NULL THEN
 				(SUM(detcost.cantidad * detcost.precio_unitario)) 

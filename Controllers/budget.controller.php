@@ -65,7 +65,9 @@ if (isset($_POST["action"])) {
 
         case "listBudgetsAsset":
 
-            echo json_encode($budget->listBudgetsAsset());
+            $area_construida = $_POST["area_construida"];
+
+            echo json_encode($budget->listBudgetsAsset($area_construida));
             break;
     }
 }

@@ -130,12 +130,12 @@ class Budget extends Conection
     /**
      * Método para listar los presupuestos con contenido
      */
-    public function listBudgetsAsset()
+    public function listBudgetsAsset($area_construida = 0)
     {
 
         try {
-            $query = $this->conection->prepare("CALL spu_list_budgets_assets()");
-            $query->execute();
+            $query = $this->conection->prepare("CALL spu_list_budgets_assets(?)");
+            $query->execute(array($area_construida));
 
             return $query->fetchAll(PDO::FETCH_ASSOC);
         } catch (Exception $e) {
