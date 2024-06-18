@@ -1860,7 +1860,7 @@ BEGIN
         INNER JOIN personas pers ON pers.idpersona = usu.idpersona
         WHERE pres.inactive_at IS NULL
         AND detcost.inactive_at IS NULL
-        AND pres.area_construida = _area_construida
+        AND pres.area_construccion = _area_construida
         GROUP BY pres.idpresupuesto
         ORDER BY pres.codigo ASC;
 END $$

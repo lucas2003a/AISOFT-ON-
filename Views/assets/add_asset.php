@@ -502,7 +502,7 @@
                         </div>
                       </div>
 
-                      <div class="tab d-block">
+                      <div class="tab">
                         <div class="row">
                           <div class="col-md-6">
 
@@ -613,7 +613,7 @@
                             <!-- ÁREA COSNTRUCCIÓN -->
                              <div class="mt-2">
                               <label for="area_construccion">Área de construcción (m2)</label>
-                              <input type="number" id="area_construccion" class="form-control form-area" value="0.00" step="0.01">
+                              <input type="number" id="area_construccion" class="form-control form-area" value="0.00" min="1" step="0.01" required>
                               <div class="invalid-feedback">
                                 Registra el área de construcción
                               </div>
@@ -625,7 +625,7 @@
                             <!-- ÁREA TECHADA -->
                              <div class="mt-4">
                               <label for="area_techada">Àrea techada  (m2)</label>
-                              <input type="number" name="area_techada" id="area_techada" class="form-control" value="0.00" step="0.01">
+                              <input type="number" name="area_techada" id="area_techada" class="form-control" value="0.00" min="1" step="0.01" required>
                               <div class="invalid-feedback">
                                 Registra el área techada
                               </div>
@@ -1021,7 +1021,7 @@
         params.append("idproyecto", idProyecto);
         params.append("tipo_activo", $("#tipo_activo").value);
         params.append("imagen", img);
-        params.append("estado", $("#estado").value);
+        params.append("estado", "SIN VENDER");
         params.append("sublote", $("#sublote").value);
         params.append("direccion", $("#direccion").value);
         params.append("moneda_venta", $("#moneda-venta").value);
@@ -1106,14 +1106,15 @@
       if (tipoActivo == "CASA") {
         $("#idpresupuesto").required = true;
         $("#moneda-venta").value = "SOL";
-        $("#area_construccion").min = "1";
-        $("#area_techada").min = "1";
-      } else {
-        $("#idpresupuesto").required = false;
-        $("#moneda-venta").value = "";
-        $("#area_construccion").min = "";
-        $("#area_techada").min = "";
-
+        $("#area_construccion").disabled = false;
+        $("#area_techada").disabled = false;
+        $("#idpresupuesto").disabled = false;
+        } else {
+          $("#idpresupuesto").required = false;
+          $("#moneda-venta").value = "";
+          $("#area_construccion").disabled = true;
+          $("#area_techada").disabled = true;
+          $("#idpresupuesto").disabled = true;
       }
 
     });

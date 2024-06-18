@@ -96,7 +96,7 @@ class Asset extends Conection
 
         try {
 
-            $query = $this->conection->prepare("CALL spu_add_assets(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+            $query = $this->conection->prepare("CALL spu_add_assets(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
             $query->execute(
                 array(
                     $dataAsset["idproyecto"],
@@ -107,6 +107,8 @@ class Asset extends Conection
                     $dataAsset["direccion"],
                     $dataAsset["moneda_venta"],
                     $dataAsset["area_terreno"],
+                    $dataAsset["area_construccion"],
+                    $dataAsset["area_techada"],
                     $dataAsset["zcomunes_porcent"],
                     $dataAsset["partida_elect"],
                     $dataAsset["latitud"],
@@ -135,7 +137,7 @@ class Asset extends Conection
 
         try {
 
-            $query = $this->conection->prepare("CALL spu_set_assets(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+            $query = $this->conection->prepare("CALL spu_set_assets(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
             $query->execute(
                 array(
                     $dataAsset["idactivo"],
@@ -147,6 +149,8 @@ class Asset extends Conection
                     $dataAsset["direccion"],
                     $dataAsset["moneda_venta"],
                     $dataAsset["area_terreno"],
+                    $dataAsset["area_construccion"],
+                    $dataAsset["area_techada"],
                     $dataAsset["zcomunes_porcent"],
                     $dataAsset["partida_elect"],
                     $dataAsset["latitud"],

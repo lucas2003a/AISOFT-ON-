@@ -74,6 +74,7 @@ CREATE TABLE sedes
     CONSTRAINT fk_iddistrito_sed FOREIGN KEY(iddistrito) REFERENCES distritos(iddistrito)
 )ENGINE = INNODB;
 select * from proyectos;
+
 -- REPRESENTANTES
 CREATE TABLE representantes
 (
@@ -266,7 +267,7 @@ CREATE TABLE activos(
     tipo_activo 		VARCHAR(10) 		NOT NULL,
     imagen 				VARCHAR(100) 		NULL,
     estado 				VARCHAR(10) 		NOT NULL DEFAULT "SIN VENDER", 
-    sublote 			TINYINT 			NOT NULL,
+    sublote 			VARCHAR(6) 			NOT NULL,
     direccion			VARCHAR(70) 		NOT NULL,
     moneda_venta 		VARCHAR(10) 		NOT NULL,
     area_terreno   		DECIMAL(6,2) 		NOT NULL,
