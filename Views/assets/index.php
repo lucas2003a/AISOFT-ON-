@@ -451,6 +451,9 @@
 
                   </tbody>
                 </table>
+                <div id="render-error">
+
+                </div>
               </div>
             </div>
           </div>
@@ -570,6 +573,7 @@ document.addEventListener("DOMContentLoaded",()=>{
     let numberRow = 1;
 
     $("#table-assets tbody").innerHTML = "";
+    $("#render-error").innerHTML = "";
 
     let newRow = ``;
 
@@ -623,7 +627,7 @@ document.addEventListener("DOMContentLoaded",()=>{
           <strong class="text-white">No existe lotes</strong> Asegurate de que existan los registros.
       </div>
       `;
-      $("#table-assets tbody").innerHTML += newRow;
+      $("#render-error").innerHTML += newRow;
     }
     
 

@@ -33,19 +33,18 @@ INSERT INTO personas(nombres, apellidos, documento_tipo, documento_nro, estado_c
 
                 
 -- REPRESENTANTES
-INSERT INTO representantes(idconstructora, nombres, apellidos, documento_tipo, documento_nro, iddistrito, direccion, partida_elect)
-			VALUES(1, 'ISAIAS LATINEZ','BLAS GUEROVICH','DNI','11122233',107,'AV LOS SAUCES','PARTIDA ELECTRONICA NRO 1');
-            
+INSERT INTO representantes(idpersona, cargo,partida_elect, idsede,idusuario)VALUES(1,"GERENTE GENERAL","0001",1,1);
 SELECT * FROM representantes;
+SELECT * FROM sedes;
 
 -- DIRECCIONES
-INSERT INTO direcciones(idconstructora, iddistrito, direccion, referencia)
+INSERT INTO sedes(idconstructora, iddistrito, direccion, referencia)
 			VALUES
 				(1, 1007, "MZA. A LOTE. 06 URB. JULIO ARBOLEDA","A 1/2 CUADRA DE MAESTRO"),
                 (1, 1009, "AV. LOS ALAMOS MZA. C LOTE. 25 URB. EL ROSAL","FRENTE AL PARQUE"),
 				(1, 1010, "CALLE LOS GIRASOLES MZA. E LOTE. 10 URB. LAS MARGARITAS","A 200 METROS DE LA AVENIDA PRINCIPAL");
                 
-INSERT INTO direcciones(idconstructora, iddistrito, direccion, referencia)
+INSERT INTO sedes(idconstructora, iddistrito, direccion, referencia)
 			VALUES
 				(2, 1008, "MZA. A LOTE. 06 URB. JULIO ARBOLEDA","A 1/2 CUADRA DE MAESTRO"),
                 (2, 1010, "AV. LOS ALAMOS MZA. C LOTE. 25 URB. EL ROSAL","FRENTE AL PARQUE"),
@@ -72,41 +71,31 @@ INSERT INTO permisos(idrol, modulo)
 					(1, 'EDITAR-CLIENTES'),
 					(1, 'CREAR-VENTAS'),
 					(1, 'ELIMINAR-PROYECTOS'),
-
-			-- Representante de ventas 2
-				(2, 'LISTAR-PROYECTOS'),
-				(2, 'EDITAR-activos'),
-				(2, 'CREAR-CLIENTES'),
-				(2, 'ELIMINAR-VENTAS'),
-
-			-- Administrador principal
-				(3, 'LISTAR-CLIENTES'),
-				(3, 'EDITAR-VENTAS'),
-				(3, 'CREAR-activos'),
-				(3, 'ELIMINAR-PROYECTOS'),
-
-			-- Administrador asistente
-				(4, 'LISTAR-VENTAS'),
-				(4, 'EDITAR-PROYECTOS'),
-				(4, 'CREAR-CLIENTES'),
-				(4, 'ELIMINAR-activos'),
-
-			-- Administrador secundario
-				(5, 'LISTAR-PROYECTOS'),
-				(5, 'EDITAR-activos'),
-				(5, 'CREAR-VENTAS'),
-				(5, 'ELIMINAR-CLIENTES'),
-
-			-- Vendedor
-				(6, 'LISTAR-activos'),
-				(6, 'EDITAR-CLIENTES'),
-				(6, 'CREAR-VENTAS'),
-				(6, 'ELIMINAR-PROYECTOS');
+					(2, 'LISTAR-PROYECTOS'),-- Representante de ventas 2
+					(2, 'EDITAR-activos'),
+					(2, 'CREAR-CLIENTES'),
+					(2, 'ELIMINAR-VENTAS'),
+					(3, 'LISTAR-CLIENTES'), -- Administrador principal
+					(3, 'EDITAR-VENTAS'),
+					(3, 'CREAR-activos'),
+					(3, 'ELIMINAR-PROYECTOS'),
+					(4, 'LISTAR-VENTAS'), -- Administrador asistente
+					(4, 'EDITAR-PROYECTOS'),
+					(4, 'CREAR-CLIENTES'),
+					(4, 'ELIMINAR-activos'),
+					(5, 'LISTAR-PROYECTOS'), 	-- Administrador secundario
+					(5, 'EDITAR-activos'),
+					(5, 'CREAR-VENTAS'),
+					(5, 'ELIMINAR-CLIENTES'),
+					(6, 'LISTAR-activos'), -- Vendedor
+					(6, 'EDITAR-CLIENTES'),
+					(6, 'CREAR-VENTAS'),
+					(6, 'ELIMINAR-PROYECTOS');
 
 SELECT * FROM permisos;
 
 -- USUARIOS
-INSERT INTO usuarios (idpersona, correo, contraseña, idrol, idsede)
+INSERT INTO usuarios (idpersona, correo, contrasenia, idrol, idsede)
 VALUES
 	-- idsede 1 => (1, 1007, "MZA. A LOTE. 06 URB. JULIO ARBOLEDA","A 1/2 CUADRA DE MAESTRO")
 	(3,'juancarlos@gmail.com', 'contraseña1', 1, 1),
@@ -167,6 +156,7 @@ INSERT INTO subcategoria_costos(idcategoria_costo,subcategoria_costo)
                     (2,"COSTOS ADMINISTRATIVOS DIRECTO"),
                     (2,"IMPUESTOS");
 
+SELECT * FROM subcategoria_costos;
 -- MARCAS
 INSERT INTO marcas (marca) VALUES
 ('Pavco'),

@@ -526,8 +526,8 @@
                 </div>
                 <div class="card-body" style="padding: 50px mt-0">
                   
-                <div class="d-flex align-items-center justify-content-center h-100">
-                  <img class="border-radius-lg w-100 position-relative z-index-2 mt-4" style="height: 300px;" src="../../media/logos/${newImage}" alt="${item.imagen}">
+                <div class="d-flex align-items-center justify-content-center img-content h-100">
+                  <img class="border-radius-lg w-100 position-relative z-index-2 mt-4" src="../../media/logos/${newImage}" alt="${item.imagen}">
                     </div>
                     <span>${item.codigo}</span>
                   <div class="row">

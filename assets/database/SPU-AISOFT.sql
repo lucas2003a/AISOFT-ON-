@@ -42,6 +42,7 @@ DELIMITER $$
 
 CREATE PROCEDURE spu_get_ubigeo(IN _iddistrito INT)
 BEGIN
+
 	SELECT 
 		dist.iddistrito,
         dist.distrito,
@@ -99,22 +100,62 @@ DELIMITER $$
 
 CREATE PROCEDURE spu_list_addresses(IN _iddistrito INT)
 BEGIN
-	SELECT
-		sed.idsede,
-        emp.ruc,
-		emp.razon_social,
-        emp.partida_elect,
-        sed.referencia,
-        sed.direccion,
-        dist.distrito,
-        prov.provincia,
-        dept.departamento
-		FROM sedes AS sed
-        INNER JOIN constructora AS emp ON emp.idconstructora = sed.idconstructora
-        INNER JOIN distritos AS dist ON dist.iddistrito = sed.iddistrito
-        INNER JOIN provincias AS prov ON prov.idprovincia = dist.idprovincia
-        INNER JOIN departamentos AS dept ON dept.iddepartamento = prov.iddepartamento
-        WHERE sed.iddistrito = _iddistrito;
+
+    DECLARE _existSede BIT;
+    DECLARE _idprovincia INT;
+
+    SET _existSede = (
+        SELECT EXISTS(
+            SELECT 1
+            FROM sedes
+            WHERE iddistrito = _iddistrito
+            LIMIT 1
+        )
+    );
+
+    SET _idprovincia = (
+        SELECT idprovincia
+        FROM distritos
+        WHERE iddistrito = _iddistrito
+    );
+
+    IF _existSede = 1 THEN
+
+        SELECT
+            sed.idsede,
+            emp.ruc,
+            emp.razon_social,
+            emp.partida_elect,
+            sed.referencia,
+            sed.direccion,
+            dist.distrito,
+            prov.provincia,
+            dept.departamento
+            FROM sedes AS sed
+            INNER JOIN constructora AS emp ON emp.idconstructora = sed.idconstructora
+            INNER JOIN distritos AS dist ON dist.iddistrito = sed.iddistrito
+            INNER JOIN provincias AS prov ON prov.idprovincia = dist.idprovincia
+            INNER JOIN departamentos AS dept ON dept.iddepartamento = prov.iddepartamento
+            WHERE sed.iddistrito = _iddistrito;
+    ELSE
+
+        SELECT
+            sed.idsede,
+            emp.ruc,
+            emp.razon_social,
+            emp.partida_elect,
+            sed.referencia,
+            CONCAT(sed.direccion,' - ',dist.distrito) AS direccion,
+            dist.distrito,
+            prov.provincia,
+            dept.departamento
+            FROM sedes AS sed
+            INNER JOIN constructora AS emp ON emp.idconstructora = sed.idconstructora
+            INNER JOIN distritos AS dist ON dist.iddistrito = sed.iddistrito
+            INNER JOIN provincias AS prov ON prov.idprovincia = dist.idprovincia
+            INNER JOIN departamentos AS dept ON dept.iddepartamento = prov.iddepartamento
+            WHERE prov.idprovincia = _idprovincia;
+    END IF;
 END $$
 
 DELIMITER;
@@ -283,7 +324,7 @@ CREATE PROCEDURE spu_add_projects
 BEGIN
 	INSERT INTO proyectos(idsede, imagen, codigo, denominacion, latitud, longitud, iddistrito, direccion, idusuario)
 			VALUES
-				(_idsede, NULLIF(_imagen,""), _codigo, _denominacion, NULLIF(_latitud, ""), NULLIF(_longitud, ""), _iddistrito, _direccion, _idusuario);
+				(_idsede, _imagen, _codigo, _denominacion, NULLIF(_latitud,""), NULLIF(_longitud, ""), _iddistrito, _direccion, _idusuario);
                 
 	SELECT ROW_COUNT() AS filasAfect; -- FILAS AFECTADAS
 END $$
@@ -309,7 +350,7 @@ BEGIN
 	UPDATE proyectos
 		SET
             idsede			= _idsede,
-            imagen 			= NULLIF(_imagen,""),
+            imagen 			= _imagen,
             codigo 			= _codigo,
             denominacion 	= _denominacion,
             latitud 		= NULLIF(_latitud,""),
@@ -3531,6 +3572,20 @@ END $$
 
 DELIMITER;
 
+DELIMITER $$
+CREATE PROCEDURE spu_update_config
+(
+    IN _idconfiguracion INT,
+    IN _valor VARCHAR(200)
+)
+BEGIN
+    UPDATE configuraciones
+        SET valor = _valor
+    WHERE idconfiguracion = _idconfiguracion;
+END $$
+
+DELIMITER;
+
 CALL spu_list_configs("contrasenia_defecto");
 
 insert into configuraciones(clave, valor) values("contrasenia_defecto","peru2024");
@@ -3543,3 +3598,4 @@ END $$
 
 DELIMITER;
 
+select* from pres

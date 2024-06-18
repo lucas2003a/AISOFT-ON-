@@ -112,7 +112,7 @@
                       <g id="office" transform="translate(153.000000, 2.000000)">
                         <path class="color-background opacity-6" d="M12.25,17.5 L8.75,17.5 L8.75,1.75 C8.75,0.78225 9.53225,0 10.5,0 L31.5,0 C32.46775,0 33.25,0.78225 33.25,1.75 L33.25,12.25 L29.75,12.25 L29.75,3.5 L12.25,3.5 L12.25,17.5 Z"></path>
                         <svg class="color-background" xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-person-lines-fill" viewBox="0 0 16 16">
-                          <path  d="M6 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m-5 6s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zM11 3.5a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 0 1h-4a.5.5 0 0 1-.5-.5m.5 2.5a.5.5 0 0 0 0 1h4a.5.5 0 0 0 0-1zm2 3a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1zm0 3a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1z"/>
+                          <path d="M6 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m-5 6s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zM11 3.5a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 0 1h-4a.5.5 0 0 1-.5-.5m.5 2.5a.5.5 0 0 0 0 1h4a.5.5 0 0 0 0-1zm2 3a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1zm0 3a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1z" />
                         </svg>
                       </g>
                     </g>
@@ -134,9 +134,9 @@
                     <g transform="translate(1716.000000, 291.000000)">
                       <g id="office" transform="translate(153.000000, 2.000000)">
                         <path class="color-background opacity-6" d="M12.25,17.5 L8.75,17.5 L8.75,1.75 C8.75,0.78225 9.53225,0 10.5,0 L31.5,0 C32.46775,0 33.25,0.78225 33.25,1.75 L33.25,12.25 L29.75,12.25 L29.75,3.5 L12.25,3.5 L12.25,17.5 Z"></path>
-                        <svg  class="color-background" xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-calculator" viewBox="0 0 16 16">
-                          <path d="M12 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1zM4 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z"/>
-                          <path d="M4 2.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5h-7a.5.5 0 0 1-.5-.5zm0 4a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm0 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm0 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm3-6a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm0 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm0 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm3-6a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm0 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5z"/>
+                        <svg class="color-background" xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-calculator" viewBox="0 0 16 16">
+                          <path d="M12 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1zM4 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z" />
+                          <path d="M4 2.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5h-7a.5.5 0 0 1-.5-.5zm0 4a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm0 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm0 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm3-6a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm0 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm0 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm3-6a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm0 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5z" />
                         </svg>
                       </g>
                     </g>
@@ -181,7 +181,7 @@
                   <g transform="translate(-1869.000000, -293.000000)" fill="#FFFFFF" fill-rule="nonzero">
                     <g transform="translate(1716.000000, 291.000000)">
                       <g id="office" transform="translate(153.000000, 2.000000)">
-                      <svg class="color-background" xmlns="http://www.w3.org/2000/svg"  width="50" height="50" fill="currentColor" class="bi bi-backspace-fill" viewBox="0 0 16 16">
+                        <svg class="color-background" xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-backspace-fill" viewBox="0 0 16 16">
                           <path d="M15.683 3a2 2 0 0 0-2-2h-7.08a2 2 0 0 0-1.519.698L.241 7.35a1 1 0 0 0 0 1.302l4.843 5.65A2 2 0 0 0 6.603 15h7.08a2 2 0 0 0 2-2zM5.829 5.854a.5.5 0 1 1 .707-.708l2.147 2.147 2.146-2.147a.5.5 0 1 1 .707.708L9.39 8l2.146 2.146a.5.5 0 0 1-.707.708L8.683 8.707l-2.147 2.147a.5.5 0 0 1-.707-.708L7.976 8z" />
                         </svg>
                       </g>
@@ -205,8 +205,8 @@
                     <g transform="translate(1716.000000, 291.000000)">
                       <g id="office" transform="translate(153.000000, 2.000000)">
                         <svg class="color-background" xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-credit-card" viewBox="0 0 16 16">
-                          <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v1h14V4a1 1 0 0 0-1-1zm13 4H1v5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1z"/>
-                          <path d="M2 10a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1z"/>
+                          <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v1h14V4a1 1 0 0 0-1-1zm13 4H1v5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1z" />
+                          <path d="M2 10a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1z" />
                         </svg>
                       </g>
                     </g>
@@ -229,7 +229,7 @@
                     <g transform="translate(1716.000000, 291.000000)">
                       <g id="office" transform="translate(153.000000, 2.000000)">
                         <svg class="color-background" xmlns="http://www.w3.org/2000/svg" width="40" height="50" fill="currentColor" class="bi bi-people-fill" viewBox="0 0 16 16">
-                          <path d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6m-5.784 6A2.24 2.24 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.3 6.3 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1zM4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5"/>
+                          <path d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6m-5.784 6A2.24 2.24 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.3 6.3 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1zM4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5" />
                         </svg>
                       </g>
                     </g>
@@ -252,8 +252,8 @@
                     <g transform="translate(1716.000000, 291.000000)">
                       <g id="office" transform="translate(153.000000, 2.000000)">
                         <svg class="color-background" xmlns="http://www.w3.org/2000/svg" width="50" height="43" fill="currentColor" class="bi bi-file-earmark-font" viewBox="0 0 16 16">
-                          <path d="M10.943 6H5.057L5 8h.5c.18-1.096.356-1.192 1.694-1.235l.293-.01v5.09c0 .47-.1.582-.898.655v.5H9.41v-.5c-.803-.073-.903-.184-.903-.654V6.755l.298.01c1.338.043 1.514.14 1.694 1.235h.5l-.057-2z"/>
-                          <path d="M14 4.5V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h5.5zm-3 0A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V4.5z"/>
+                          <path d="M10.943 6H5.057L5 8h.5c.18-1.096.356-1.192 1.694-1.235l.293-.01v5.09c0 .47-.1.582-.898.655v.5H9.41v-.5c-.803-.073-.903-.184-.903-.654V6.755l.298.01c1.338.043 1.514.14 1.694 1.235h.5l-.057-2z" />
+                          <path d="M14 4.5V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h5.5zm-3 0A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V4.5z" />
                         </svg>
                       </g>
                     </g>
@@ -276,8 +276,8 @@
                     <g transform="translate(1716.000000, 291.000000)">
                       <g id="office" transform="translate(153.000000, 2.000000)">
                         <svg class="color-background" xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-eye" viewBox="0 0 16 16">
-                          <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8M1.173 8a13 13 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5s3.879 1.168 5.168 2.457A13 13 0 0 1 14.828 8q-.086.13-.195.288c-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5s-3.879-1.168-5.168-2.457A13 13 0 0 1 1.172 8z"/>
-                          <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5M4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0"/>
+                          <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8M1.173 8a13 13 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5s3.879 1.168 5.168 2.457A13 13 0 0 1 14.828 8q-.086.13-.195.288c-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5s-3.879-1.168-5.168-2.457A13 13 0 0 1 1.172 8z" />
+                          <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5M4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0" />
                         </svg>
                       </g>
                     </g>
@@ -288,7 +288,7 @@
             <span class="nav-link-text ms-1">Monitoreo</span>
           </a>
         </li>
-        
+
         <li class="nav-item mt-3">
           <h6 class="ps-4 ms-2 text-uppercase text-xs font-weight-bolder opacity-6">Panel de usuario</h6>
         </li>
@@ -353,9 +353,9 @@
           <h6 class="font-weight-bolder mb-0">AGREGAR PROYECTO</h6>
         </nav>
         <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
-          
+
           <ul class="navbar-nav  justify-content-end">
-            
+
             <li class="nav-item d-flex align-items-center">
               <a href="javascript:;" class="nav-link text-body font-weight-bold px-0">
                 <i class="fa fa-user me-sm-1"></i>
@@ -371,7 +371,7 @@
                 </div>
               </a>
             </li>
-            
+
           </ul>
         </div>
       </div>
@@ -383,185 +383,204 @@
       <!-- FORMULARIO -->
       <div>
         <div class="col-lg-12 mb-lg-0 mb-4 mt-4">
-            <div class="card">
-              <div class="card-body" style="padding: 50px">
+          <div class="card">
+            <div class="card-body" style="padding: 50px">
+              <form class="row needs-validation" id="form-add-project" novalidate>
                 <div class="row">
-                <div class="h-50" style="display: flex; justify-content: center;">
-                      
-                      <div class="position-relative d-flex align-items-center justify-content-center h-100">
-                        <img class="w-100 position-relative z-index-2 pt-4" style="width: 100%;" id="file-view" src="../../media/logos/NoImage.jpg" alt="">
+                  <div class="h-50" style="display: flex; justify-content: center;">
+
+
+
+                    <!-- IMAGEN PRINCIPAL -->
+
+                    <div class="position-relative d-flex align-items-center justify-content-center h-100">
+
+                      <!-- IMAGEN -->
+                      <div class="form-group" style="margin-top: 70px;">
+                        <label for="in-image" class="label-img">
+                          <i class="material-icons"></i>
+                          <span class="title" style="display: flex; justify-content: center;">Agregar imagen</span>
+                          <input type="file" accept=".jpg" id="in-image" required>
+                          <div class="invalid-feedback">
+                            Selcciona una imagen
+                          </div>
+                          <div class="valid-feedback">
+                            Imagen seleccionada correctamente
+                          </div>
+
+                          <!-- CONTENEDOR DE LA IMAGEN -->
+                          <div class="img-content">
+
+                            <img class="w-100 position-relative z-index-2 pt-4" id="file-view" src="../../media/logos/NoImage.jpg" alt="">
+                          </div>
+                        </label>
                       </div>
+
                     </div>
+
+                  </div>
 
                   <div>
-                    
+
                     <div class="d-flex flex-column h-100">
-                      <form class="row needs-validation" id="form-add-project" novalidate>
-                            <div class="row">
-                                <div class="col-md-6">
+                      <div class="row">
+                        <div class="col-md-6">
 
-                                    <!-- DATOS GENERALES -->
-                                    
-                                    <!-- DEPARTEMENTO -->
-                                    <div class="mt-4">
-                                      <label for="iddepartamento" class="form-label">Departamento</label>
-                                        <select class="form-select custom-select-scroll" id="iddepartamento" required>
-                                            <option selected disabled value="">Departamento</option>
-                                        </select>
-                                        <div class="invalid-feedback">
-                                            Necesitas escojer un departamento.
-                                        </div>
-                                        <div class="valid-feedback">
-                                            Departamento escojido correctamente.
-                                        </div>
-                                    </div>
-    
-                                    <!-- PROVINCIA -->
-                                    <div class="mt-4">
-                                        <label for="idprovincia" class="form-label">Provincia</label>
-                                        <select class="form-select custom-select-scroll" id="idprovincia" required>
-                                            <option selected disabled value="">Provincia</option>
-                                        </select>
-                                        <div class="invalid-feedback">
-                                            Necesitas escojer una provincia.
-                                        </div>
-                                        <div class="valid-feedback">
-                                            Provincia escojida correctamente.
-                                        </div>
-                                    </div>
-    
-                                    <!-- DISTRITO -->
-                                    <div class="mt-4">
-                                        <label for="iddistrito" class="form-label">Distrito</label>
-                                        <select class="form-select custom-select-scroll" id="iddistrito" required>
-                                            <option selected disabled value="">Distrito</option>
-                                        </select>
-                                        <div class="invalid-feedback">
-                                            Necesitas escojer un distrito.
-                                        </div>
-                                        <div class="valid-feedback">
-                                            Distrito escojido correctamente.
-                                        </div>
-                                    </div>
+                          <!-- DATOS GENERALES -->
 
-                                    <!-- IDDIRECCIÓN -->
-                                    <div class="mt-4">
-                                        <label for="idsede" class="form-label">Sede</label>
-                                        <select class="form-select custom-select-scroll" id="idsede" required>
-                                            <option selected disabled value="">Sede</option>                                            
-                                        </select>
-                                        <div class="invalid-feedback">
-                                            Necesitas escojer una sede.
-                                        </div>
-                                        <div class="valid-feedback">
-                                            Sede escojida correctament
-                                        </div>
-                                    </div>
-
-                                    <!-- CODIGO -->
-                                    <div class="mt-4">
-                                        <label for="codigo" class="form-label">Código</label>
-                                        <input type="text" class="form-control" id="codigo" placeholder="Código" required autofocus>
-                                        <div class="invalid-feedback">
-                                            Necesitas ingresar un código.
-                                        </div>
-                                        <div class="valid-feedback">
-                                            Código registrado correctamente.
-                                        </div>
-                                    </div>
-    
-                                    <!-- DENOMINACÓN -->
-                                    <div class="mt-4">
-                                        <label for="denominacion" class="form-label">Denominación</label>
-                                        <input type="text" class="form-control" id="denominacion" placeholder="Denominación" readonly required>
-                                        <div class="invalid-feedback">
-                                            Necesitas ingresar una denominación.
-                                        </div>
-                                        <div class="valid-feedback">
-                                            Denominación ingresada correctamente.
-                                        </div>
-                                    </div>
-    
-                                    
-    
-    
-                                    
-                                </div>
-    
-                                <div class="col-md-6">
-                                  <!-- DIRECCIÓN -->
-                                    <div class="mt-4">
-                                        <label for="direccion" class="form-label">Dirección</label>
-                                        <input type="text" class="form-control" id="direccion" placeholder="Dirección" readonly required>
-                                        <div class="invalid-feedback">
-                                            Necesitas ingresar una dirección.
-                                        </div>
-                                        <div class="valid-feedback">
-                                            Dirección ingresada correctamente.
-                                        </div>
-                                    </div>
-                                    <!-- UBICACIÓN Y MEDIDAS-->
-    
-                                    <!-- LATITUD -->
-                                    <div class="mt-4">
-                                        <label for="latitud" class="form-label">Latitud</label>                                  
-                                        <input type="text" class="form-control" id="latitud">
-                                        <div class="valid-feedback">
-                                            <!-- -- -->
-                                        </div>
-                                    </div>
-        
-                                    <!-- LONGITUD -->
-                                    <div class="mt-4  ">
-                                        <label for="longitud" class="form-label">Longitud</label>
-                                        <input type="text" class="form-control" id="longitud">
-                                        <div class="valid-feedback">
-                                            <!-- -- -->
-                                        </div>
-                                    </div>
-                                    
-                                    <!-- IMAGEN -->
-                                    <div class="form-group" style="margin-top: 70px;">
-                                        <label for="in-image" class="label-img">
-                                            <i class="material-icons"></i>
-                                            <span class="title" style="display: flex; justify-content: center;">Agregar imagen</span>
-                                            <input type="file" accept=".jpg" id="in-image">
-                                        </label>
-                                    </div>
-                                    <div class="d-grid p-3">
-
-                                        <button class="btn btn-success" type="submit" id="guardar" disabled>Guardar</button>
-                                    </div>
-                                </div>                                    
+                          <!-- DEPARTEMENTO -->
+                          <div class="mt-4">
+                            <label for="iddepartamento" class="form-label">Departamento</label>
+                            <select class="form-select custom-select-scroll" id="iddepartamento" required>
+                              <option selected disabled value="">Departamento</option>
+                            </select>
+                            <div class="invalid-feedback">
+                              Necesitas escojer un departamento.
                             </div>
-                        </form>
+                            <div class="valid-feedback">
+                              Departamento escojido correctamente.
+                            </div>
+                          </div>
+
+                          <!-- PROVINCIA -->
+                          <div class="mt-4">
+                            <label for="idprovincia" class="form-label">Provincia</label>
+                            <select class="form-select custom-select-scroll" id="idprovincia" required>
+                              <option selected disabled value="">Provincia</option>
+                            </select>
+                            <div class="invalid-feedback">
+                              Necesitas escojer una provincia.
+                            </div>
+                            <div class="valid-feedback">
+                              Provincia escojida correctamente.
+                            </div>
+                          </div>
+
+                          <!-- DISTRITO -->
+                          <div class="mt-4">
+                            <label for="iddistrito" class="form-label">Distrito</label>
+                            <select class="form-select custom-select-scroll" id="iddistrito" required>
+                              <option selected disabled value="">Distrito</option>
+                            </select>
+                            <div class="invalid-feedback">
+                              Necesitas escojer un distrito.
+                            </div>
+                            <div class="valid-feedback">
+                              Distrito escojido correctamente.
+                            </div>
+                          </div>
+
+                          <!-- IDDIRECCIÓN -->
+                          <div class="mt-4">
+                            <label for="idsede" class="form-label">Sede</label>
+                            <select class="form-select custom-select-scroll" id="idsede" required>
+                              <option selected disabled value="">Sede</option>
+                            </select>
+                            <div class="invalid-feedback">
+                              Necesitas escojer una sede.
+                            </div>
+                            <div class="valid-feedback">
+                              Sede escojida correctament
+                            </div>
+                          </div>
+
+                          <!-- CODIGO -->
+                          <div class="mt-4">
+                            <label for="codigo" class="form-label">Código</label>
+                            <input type="text" class="form-control" id="codigo" placeholder="Código" required autofocus>
+                            <div class="invalid-feedback">
+                              Necesitas ingresar un código.
+                            </div>
+                            <div class="valid-feedback">
+                              Código registrado correctamente.
+                            </div>
+                          </div>
+
+                          <!-- DENOMINACÓN -->
+                          <div class="mt-4">
+                            <label for="denominacion" class="form-label">Denominación</label>
+                            <input type="text" class="form-control" id="denominacion" placeholder="Denominación" readonly required>
+                            <div class="invalid-feedback">
+                              Necesitas ingresar una denominación.
+                            </div>
+                            <div class="valid-feedback">
+                              Denominación ingresada correctamente.
+                            </div>
+                          </div>
+
+
+
+
+
+                        </div>
+
+                        <div class="col-md-6">
+                          <!-- DIRECCIÓN -->
+                          <div class="mt-4">
+                            <label for="direccion" class="form-label">Dirección</label>
+                            <input type="text" class="form-control" id="direccion" placeholder="Dirección" readonly required>
+                            <div class="invalid-feedback">
+                              Necesitas ingresar una dirección.
+                            </div>
+                            <div class="valid-feedback">
+                              Dirección ingresada correctamente.
+                            </div>
+                          </div>
+                          <!-- UBICACIÓN Y MEDIDAS-->
+
+                          <!-- LATITUD -->
+                          <div class="mt-4">
+                            <label for="latitud" class="form-label">Latitud</label>
+                            <input type="text" class="form-control" id="latitud">
+                            <div class="valid-feedback">
+                              <!-- -- -->
+                            </div>
+                          </div>
+
+                          <!-- LONGITUD -->
+                          <div class="mt-4  ">
+                            <label for="longitud" class="form-label">Longitud</label>
+                            <input type="text" class="form-control" id="longitud">
+                            <div class="valid-feedback">
+                              <!-- -- -->
+                            </div>
+                          </div>
+
+
+                          <div class="d-grid p-3">
+
+                            <button class="btn btn-success" type="submit" id="guardar" disabled>Guardar</button>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
-                  
-                </div>
-                </div>
-              </div>
-            </div>
-          </div>
-      </div>     
 
-
-      <footer class="footer pt-3  ">
-        <div class="container-fluid">
-          <div class="row align-items-center justify-content-lg-between">
-            <div class="col-lg-6 mb-lg-0 mb-4">
-              <div class="copyright text-center text-sm text-muted text-lg-start">
-                © <script>
-                  document.write(new Date().getFullYear())
-                </script>,
-                auspiciado por
-                <a href="https://www.creative-tim.com" class="font-weight-bold" target="_blank">A.I.F Contratistas Generales S.A.C</a>
-                (sistema web).
-              </div>
+                </div>
+              </form>
             </div>
           </div>
         </div>
-      </footer>
+      </div>
+    </div>
+
+
+    <footer class="footer pt-3  ">
+      <div class="container-fluid">
+        <div class="row align-items-center justify-content-lg-between">
+          <div class="col-lg-6 mb-lg-0 mb-4">
+            <div class="copyright text-center text-sm text-muted text-lg-start">
+              © <script>
+                document.write(new Date().getFullYear())
+              </script>,
+              auspiciado por
+              <a href="https://www.creative-tim.com" class="font-weight-bold" target="_blank">A.I.F Contratistas Generales S.A.C</a>
+              (sistema web).
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
     </div>
   </main>
   <div class="fixed-plugin">
@@ -632,7 +651,6 @@
   <script src="../../assets/js/projects/interactionForms.js"></script>
   <script src="../../assets/js/renderUbigeo.js"></script>
   <script>
-
     const global = new FunGlobal();
     const sAlert = new Alert();
 
@@ -642,75 +660,74 @@
     const cardProject = $("#card-project");
     const inCodigo = $("#in-codigo");
 
-    let dataProject;            //VARIABLE QUE ALMACENA LOS DATOS OBTENIDOS DE LA CONSULTA
-    
+    let dataProject; //VARIABLE QUE ALMACENA LOS DATOS OBTENIDOS DE LA CONSULTA
+
     let timer;
-    
+
     /**
      * FUNCIÓN PARA OBETENR LOS DATOS DEL PROYECTO
      */
-    async function getData(){
-    
-      try{
+    async function getData() {
+
+      try {
 
         let url = `../../Controllers/project.controller.php`;
-        
+
         let params = new FormData();
-        params.append("action","listProject");
+        params.append("action", "listProject");
 
         let results = await global.sendAction(url, params);
-        
-        if(results){
+
+        if (results) {
 
           dataProject = results;
         }
 
-      }
-      catch(e){
+      } catch (e) {
 
         console.error(e);
       }
     };
-    
+
     /**
      * FUCIÓN PARA COMPARAR LA INFORMACIÓN DE LOS INPUTS
      * @param {array} array 
      * @param {string} column 
      * @param {object} param 
      */
-    async function searchInfo(array, column, param){
-      
+    async function searchInfo(array, column, param) {
+
       return new Promise((resolve, reject) => {
-        
-        if(column == "codigo"){
+
+        if (column == "codigo") {
 
           const found = array.find(element => element[column] == param)
 
-          if(found){
-            
+          if (found) {
+
             sAlert.sweetWarning("Se ha encontrado coincidencias", `"${param}" ya existe, ingresa otro`);
-            $("#denominacion").setAttribute("readonly",true);
+            $("#denominacion").setAttribute("readonly", true);
 
             reject();
 
-          }else{
-            
+          } else {
+
             $("#codigo").removeAttribute("autofocus");
             $("#denominacion").removeAttribute("readonly");
             $("#denominacion").focus();
             resolve()
           }
-      
-        }else if(column = "denominacion"){
+
+        } else if (column = "denominacion") {
 
           const found = array.find(element => element[column] == param);
 
-          if(found){
+          if (found) {
 
             sAlert.sweetWarning("Se ha encontrado coincidencias", `"${param}" ya existe, ingresa otro`);
             reject();
 
-          }else{
+          } else {
 
             $("#denominacion").removeAttribute("autofocus");
             $("#direccion").removeAttribute("readonly");
@@ -720,122 +737,137 @@
         }
       })
     };
-    
-    /**
-    * FUNCIÓN PARA ENVIAR DATOS 
-    */
-    async function sendData(){
 
-      try{
+    /**
+     * FUNCIÓN PARA ENVIAR DATOS 
+     */
+    async function sendData() {
+
+      try {
 
         //Realizo la operación
         let params = new FormData()
         let url = `../../Controllers/project.controller.php`;
-  
-        params.append("action","addProject");
-        params.append("imagen",$("#in-image").files[0]);
-        params.append("idsede",$("#idsede").value);
-        params.append("codigo",$("#codigo").value);
-        params.append("denominacion",$("#denominacion").value);
-        params.append("latitud",$("#latitud").value);
-        params.append("longitud",$("#longitud").value);
-        params.append("iddistrito",$("#iddistrito").value);
-        params.append("direccion",$("#direccion").value);
+
+        params.append("action", "addProject");
+        params.append("imagen", $("#in-image").files[0]);
+        params.append("idsede", $("#idsede").value);
+        params.append("codigo", $("#codigo").value);
+        params.append("denominacion", $("#denominacion").value);
+        params.append("latitud", $("#latitud").value);
+        params.append("longitud", $("#longitud").value);
+        params.append("iddistrito", $("#iddistrito").value);
+        params.append("direccion", $("#direccion").value);
 
         let result = await global.sendAction(url, params);
 
-        if(result.filasAfect > 0){
-            sAlert.sweetConfirmAdd("El registro fué exitoso","¿Deseas volver a registrar?",
-            ()=>{
-                $("#form-add-project").reset();
-                $("#form-add-project").classList.remove("was-validated");
-  
-            },()=>{
-                window.location.href = "./index.php";
+        if (result.filasAfect > 0) {
+          sAlert.sweetConfirmAdd("El registro fué exitoso", "¿Deseas volver a registrar?",
+            () => {
+              $("#form-add-project").reset();
+              $("#form-add-project").classList.remove("was-validated");
+
+            }, () => {
+              window.location.href = "./index.php";
             })
-        }else{
-            sweetAlert.alertError("No se termiado el registro","Vuelve a intentarlo");
+        } else {
+          sweetAlert.alertError("No se termiado el registro", "Vuelve a intentarlo");
         }
-      }
-      catch(e){
+      } catch (e) {
 
         console.error(e);
       }
     }
-    
-    $("#direccion").addEventListener("input",(e)=>{
-        
-        clearTimeout(timer);
 
-        timer = setTimeout(() => {
-          
-          if(e !== ""){ //TECLA ENTER
-  
-              $("#guardar").removeAttribute("disabled");
-          }
-        }, 1500);
-    });
-    
-    $("#denominacion").addEventListener("keypress",(e)=>{
+    $("#direccion").addEventListener("input", (e) => {
 
-        if(e.keyCode == 13){
+      clearTimeout(timer);
 
-            let denominacion = $("#denominacion").value;
-    
-            if(denominacion != ""){
-    
-                searchInfo(dataProject,"denominacion",denominacion);
-            }
+      timer = setTimeout(() => {
+
+        if (e !== "") { //TECLA ENTER
+
+          $("#guardar").removeAttribute("disabled");
         }
-    });
-    
-    $("#codigo").addEventListener("keypress",(e)=>{
-    
-        if(e.keyCode == 13){
-
-            let code = $("#codigo").value;
-            
-            if(code != ""){
-    
-                searchInfo(dataProject,"codigo",code);
-            }
-        } 
-
+      }, 1500);
     });
 
-    
+    $("#denominacion").addEventListener("blur", (e) => {
+
+      let inputValue = e.target.value;
+
+      if (inputValue) {
+
+        let denominacion = inputValue;
+
+        if (denominacion != "") {
+
+          searchInfo(dataProject, "denominacion", denominacion)
+          .then(()=>{
+            $("#direccion").focus();
+          })
+          .catch(()=>{
+            $("#denominacion").focus();
+          });
+        }
+      }
+    });
+
+    $("#codigo").addEventListener("blur", (e) => {
+
+      let inputValue = e.target.value;
+
+      if (inputValue) {
+
+        let code = inputValue;
+
+        if (code != "") {
+
+          searchInfo(dataProject, "codigo", code)
+          .then(()=>{
+            $("#denominacion").focus();
+          })
+          .catch(()=>{
+            $("#codigo").focus();
+          });
+        }
+      }
+
+    });
+
+
     // FUNCIÓN DE BOOTSTRAP PARA LAVALIDACIÓN
 
     //ESTA EESTRUCTUARA INDICA AL NAVEGADOR QUE CUANDO LEA ESTA FUNCION, LA EJECUTE INMEDIATAMENTE
     (() => {
-        'use strict' //=> USO ESTRICTO POR POLITICAS DE SEGURIDAD EN EL FORMULARIO
+      'use strict' //=> USO ESTRICTO POR POLITICAS DE SEGURIDAD EN EL FORMULARIO
 
-         //SELECCIONA TODOS LOS ELEMENTOS DEL FORMULARIO QUE TIENE LA CLASE "needs-validation
-        const forms = document.querySelectorAll('.needs-validation')
+      //SELECCIONA TODOS LOS ELEMENTOS DEL FORMULARIO QUE TIENE LA CLASE "needs-validation
+      const forms = document.querySelectorAll('.needs-validation')
 
-        // TOMA EL ELEMENTO "FORMS" Y LO CONVIERTE A UN ARRAY
-        // SE INCLUYE EN UN FOREAH PARA ITERAR SOBRE SUS ELEMENTOS
+      // TOMA EL ELEMENTO "FORMS" Y LO CONVIERTE A UN ARRAY
+      // SE INCLUYE EN UN FOREAH PARA ITERAR SOBRE SUS ELEMENTOS
 
-        Array.from(forms).forEach(form => {
-            form.addEventListener('submit', event => {
+      Array.from(forms).forEach(form => {
+        form.addEventListener('submit', event => {
 
-                //SI LA VALIDACIÓN DEL FORMULARIO ES FALSE
-                if (!form.checkValidity()) {
-                event.preventDefault()      //=> FRENA EL ENVÍO DEL FORMULARIO
-                event.stopPropagation()     //=> FRENA LA PROPAGACIÓN DE DATOS EN EL FORMULARIO
-            }else{
-                event.preventDefault();
-                sAlert.sweetConfirm("Datos nuevos","¿Desea crear el nuevo registro?",()=>{
+          //SI LA VALIDACIÓN DEL FORMULARIO ES FALSE
+          if (!form.checkValidity()) {
+            event.preventDefault() //=> FRENA EL ENVÍO DEL FORMULARIO
+            event.stopPropagation() //=> FRENA LA PROPAGACIÓN DE DATOS EN EL FORMULARIO
+          } else {
+            event.preventDefault();
+            sAlert.sweetConfirm("Datos nuevos", "¿Desea crear el nuevo registro?", () => {
 
-                    sendData();
-                })
-            }
+              sendData();
+            })
+          }
 
-            form.classList.add('was-validated') //=> AGREGA ESTA CLASE A LOS ELEMENTOS DEL FORMULARIO(MUESTRA LOS COMENTARIOS)
-            }, false) //=> ESTE TERCER ARGUMENTO INDICA QUE EL EVENTO NO SE ESTA CAPTURANDO EN LA ""FASE DE CAPTURA" SINO EN "PROPAGACIÓN NORMAL"
-        })  
+          form.classList.add('was-validated') //=> AGREGA ESTA CLASE A LOS ELEMENTOS DEL FORMULARIO(MUESTRA LOS COMENTARIOS)
+        }, false) //=> ESTE TERCER ARGUMENTO INDICA QUE EL EVENTO NO SE ESTA CAPTURANDO EN LA ""FASE DE CAPTURA" SINO EN "PROPAGACIÓN NORMAL"
+      })
     })()
-    
+
     getData();
   </script>
   <script>

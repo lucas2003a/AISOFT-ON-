@@ -2111,12 +2111,4 @@ INSERT INTO distritos (idprovincia, distrito) VALUES
 (196, 'Purus');
 
 select * from distritos;
-
-SELECT
-	dep.departamento,
-	prov.provincia,
-	dist.distrito
-	FROM distritos AS dist
-    INNER JOIN provincias AS prov ON prov.idprovincia = dist.idprovincia
-    INNER JOIN departamentos AS dep ON dep.iddepartamento = prov.iddepartamento
-    where dist.distrito = "el carmen";
+TRUNCATE table distritos;

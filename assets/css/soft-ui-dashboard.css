@@ -26831,4 +26831,14 @@ pre[class*="language-"] {
     cursor:pointer;
   }
 
+  .img-content  img{
+
+    max-width: 40rem;
+    width: 40rem;
+    max-height: 20rem;
+    height: 20rem;
+    object-fit: contain;
+    object-position: center;
+    border-radius: 5%;
+  }
 /*# sourceMappingURL=dashboard-free.css.map */

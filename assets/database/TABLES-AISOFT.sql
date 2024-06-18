@@ -73,7 +73,7 @@ CREATE TABLE sedes
     CONSTRAINT fk_idconstructora_sed FOREIGN KEY(idconstructora) REFERENCES constructora(idconstructora),
     CONSTRAINT fk_iddistrito_sed FOREIGN KEY(iddistrito) REFERENCES distritos(iddistrito)
 )ENGINE = INNODB;
-
+select * from proyectos;
 -- REPRESENTANTES
 CREATE TABLE representantes
 (
@@ -85,9 +85,11 @@ CREATE TABLE representantes
     create_at 			DATE 			NOT NULL	DEFAULT (CURDATE()),
     update_at			DATE 			NULL,
     inactive_at			DATE 			NULL,
+    idusuario			INT 			NOT NULL,
     CONSTRAINT uk_idpersona_rep UNIQUE(idpersona),
 	CONSTRAINT fk_idpersona_rep FOREIGN KEY(idpersona) REFERENCES personas(idpersona),
-    CONSTRAINT fk_idsede_rep FOREIGN KEY(idsede) REFERENCES sedes(idsede)
+    CONSTRAINT fk_idsede_rep FOREIGN KEY(idsede) REFERENCES sedes(idsede),
+    CONSTRAINT fk_idusuario_rep FOREIGN KEY(idusuario) REFERENCES usuarios(idusuario)
 )ENGINE = INNODB;
 
 -- ROLES
@@ -139,7 +141,7 @@ CREATE TABLE usuarios
 CREATE TABLE proyectos(
 	idproyecto 				INT PRIMARY KEY AUTO_INCREMENT,
     idsede					INT				NOT NULL,
-    imagen					VARCHAR(100) 	NULL,
+    imagen					VARCHAR(100) 	NOT NULL,
     codigo	 				VARCHAR(20) 	NOT NULL, -- "A-12 NOMBRE DEL PROYECTO" => VARIA
     denominacion 			VARCHAR(30) 	NOT NULL,
     latitud					VARCHAR(20) 	NULL,
@@ -491,7 +493,7 @@ CREATE TABLE configuraciones
 
 -- DROP TABLE sustentos_cuotas, cuotas, detalle_gastos, presupuestos, desembolsos, sustentos_sep, separaciones, contratos, viviendas, lotes;
 select * from contratos;
-set foreign_key_checks = 1-- //!Cambialo a 1
+set foreign_key_checks = 0-- //!Cambialo a 1
 
 
 DELIMITER $$

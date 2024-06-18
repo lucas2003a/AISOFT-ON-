@@ -23,8 +23,8 @@ document.addEventListener("DOMContentLoaded",()=>{
 
             //ESTABLECE LA RUTA DE LA IMAGEN (RUTA TEMPORAL)
             viewImage.setAttribute("src",`${event.target.result}`);
-            viewImage.style.width = "100%";
-            viewImage.style.height = "20rem";
+            /* viewImage.style.width = "100%";
+            viewImage.style.height = "20rem"; */
 
         };
 

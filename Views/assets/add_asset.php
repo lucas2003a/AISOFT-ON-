@@ -182,7 +182,7 @@
                   <g transform="translate(-1869.000000, -293.000000)" fill="#FFFFFF" fill-rule="nonzero">
                     <g transform="translate(1716.000000, 291.000000)">
                       <g id="office" transform="translate(153.000000, 2.000000)">
-                      <svg class="color-background" xmlns="http://www.w3.org/2000/svg"  width="50" height="50" fill="currentColor" class="bi bi-backspace-fill" viewBox="0 0 16 16">
+                        <svg class="color-background" xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-backspace-fill" viewBox="0 0 16 16">
                           <path d="M15.683 3a2 2 0 0 0-2-2h-7.08a2 2 0 0 0-1.519.698L.241 7.35a1 1 0 0 0 0 1.302l4.843 5.65A2 2 0 0 0 6.603 15h7.08a2 2 0 0 0 2-2zM5.829 5.854a.5.5 0 1 1 .707-.708l2.147 2.147 2.146-2.147a.5.5 0 1 1 .707.708L9.39 8l2.146 2.146a.5.5 0 0 1-.707.708L8.683 8.707l-2.147 2.147a.5.5 0 0 1-.707-.708L7.976 8z" />
                         </svg>
                       </g>
@@ -194,7 +194,7 @@
             <span class="nav-link-text ms-1">Devoluciones</span>
           </a>
         </li>
-        
+
         <!-- CUOTAS -->
         <li class="nav-item">
           <a class="nav-link" href="../quotas/index.php">
@@ -467,28 +467,34 @@
                               </div>
                             </div>
 
-                            <!-- IMAGEN -->
-                            <div class="form-group">
-                              <label for="in-image" class="label-img">
-                                <i class="material-icons"></i>
-                                <span class="title d-flex justify-content-center">Agregar imagen</span>
-                                <input type="file" accept=".jpg" id="in-image">
-                              </label>
-                            </div>
                           </div>
                           <div class="col-md-6">
 
                             <div class="col-lg-12 ms-auto text-center mt-5 mt-lg-0">
-                              <div class="h-100" style="display: flex; justify-content: center;">
+                              <!-- IMAGEN -->
+                              <div class="form-group" style="margin-top: 70px;">
+                                <label for="in-image" class="label-img">
+                                  <i class="material-icons"></i>
+                                  <span class="title" style="display: flex; justify-content: center;">Agregar imagen</span>
+                                  <input type="file" accept=".jpg" id="in-image">
+                                  <div class="invalid-feedback">
+                                    Selcciona una imagen
+                                  </div>
+                                  <div class="valid-feedback">
+                                    Imagen seleccionada correctamente
+                                  </div>
 
-                                <div class="position-relative d-flex align-items-center justify-content-center h-100">
-                                  <img class="w-100 position-relative z-index-2 pt-4" id="file-view" style="min-height: max-content; padding: 2rem;" src="../../media/lotes/NoImage.jpg" alt="">
-                                </div>
+                                  <!-- CONTENEDOR DE LA IMAGEN -->
+                                  <div class="img-content">
+
+                                    <img class="w-100 position-relative z-index-2 pt-4" id="file-view" src="../../media/logos/NoImage.jpg" alt="">
+                                  </div>
+                                </label>
                               </div>
                             </div>
                           </div>
                         </div>
-                        <div class="d-flex justify-content-center">
+                        <div class="d-flex justify-content-center mt-4">
                           <div class="btn-group">
                             <button type="button" class="btn btn-secondary prevBtn" disabled>Anterior</button>
                             <button type="button" class="btn btn-success nextBtn">Siguiente</button>
@@ -496,7 +502,7 @@
                         </div>
                       </div>
 
-                      <div class="tab">
+                      <div class="tab d-block">
                         <div class="row">
                           <div class="col-md-6">
 
@@ -504,7 +510,7 @@
 
                             <!-- ÁREA -->
                             <div>
-                              <label for="area" class="form-label">Área</label>
+                              <label for="area" class="form-label">Área terreno (m2)</label>
                               <input type="number" class="form-control" id="area" min="1.0" step="0.01" value="0.00" placeholder="Área (m2)" required title="Porcentaje del área común (%)">
                               <div class="invalid-feedback">
                                 Necesitas ingresar el área del lote.
@@ -603,6 +609,30 @@
                           </div>
 
                           <div class="col-md-6">
+
+                            <!-- ÁREA COSNTRUCCIÓN -->
+                             <div class="mt-2">
+                              <label for="area_construccion">Área de construcción (m2)</label>
+                              <input type="number" id="area_construccion" class="form-control form-area" value="0.00" step="0.01">
+                              <div class="invalid-feedback">
+                                Registra el área de construcción
+                              </div>
+                              <div class="valid-feedback">
+                                Área de construcción registrada correctamente.
+                              </div>
+                             </div>
+
+                            <!-- ÁREA TECHADA -->
+                             <div class="mt-4">
+                              <label for="area_techada">Àrea techada  (m2)</label>
+                              <input type="number" name="area_techada" id="area_techada" class="form-control" value="0.00" step="0.01">
+                              <div class="invalid-feedback">
+                                Registra el área techada
+                              </div>
+                              <div class="valid-feedback">
+                                Área techada registrada correctamente.
+                              </div>
+                             </div>
 
                             <!-- LATITUD -->
                             <div>
@@ -799,15 +829,17 @@
     let AllDataAssets;
     let dataPoject;
     let precioContstruccion = 0;
+    let timer;
 
     //Obtiene los presupuestos
-    async function getBudgets() {
+    async function getBudgets(area_construida) {
 
       try {
         let url = "../../Controllers/budget.controller.php";
 
         let params = new FormData();
         params.append("action", "listBudgetsAsset");
+        params.append("area_construida", area_construida);
 
         let results = await global.sendAction(url, params);
 
@@ -994,6 +1026,8 @@
         params.append("direccion", $("#direccion").value);
         params.append("moneda_venta", $("#moneda-venta").value);
         params.append("area_terreno", $("#area").value);
+        params.append("area_construccion", $("#area_construccion").value);
+        params.append("area_techada", $("#area_techada").value);
         params.append("zcomunes_porcent", $("#z-comunes").value);
         params.append("partida_elect", $("#partida-elect").value);
         params.append("latitud", $("#latitud").value);
@@ -1029,6 +1063,22 @@
       }
     }
 
+    $("#area_construccion").addEventListener("input",(e)=>{
+
+      let inputValue = e.target.value;
+
+      if(inputValue){
+
+        clearTimeout(timer);
+
+        timer = setTimeout(() => {
+
+          getBudgets(inputValue)
+          console.log(inputValue)
+        }, 1500);
+      }
+    })
+
     $("#sublote").addEventListener("blur", (e) => {
 
       let sublote = $("#sublote").value;
@@ -1037,7 +1087,7 @@
 
         searchInfo(AllDataAssets, "sublote", sublote)
           .then(() => {})
-          .catch(()=>{
+          .catch(() => {
             $("#sublote").focus();
           })
 
@@ -1056,8 +1106,14 @@
       if (tipoActivo == "CASA") {
         $("#idpresupuesto").required = true;
         $("#moneda-venta").value = "SOL";
-      }else{
+        $("#area_construccion").min = "1";
+        $("#area_techada").min = "1";
+      } else {
         $("#idpresupuesto").required = false;
+        $("#moneda-venta").value = "";
+        $("#area_construccion").min = "";
+        $("#area_techada").min = "";
+
       }
 
     });
