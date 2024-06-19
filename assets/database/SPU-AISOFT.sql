@@ -3640,4 +3640,5 @@ END $$
 
 DELIMITER;
 
-select* from pres
+select* from presupuestos;
+select* from configuraciones;

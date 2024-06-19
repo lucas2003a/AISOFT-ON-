@@ -53,6 +53,7 @@ if (isset($_POST["action"])) {
 
                 echo json_encode($dataBudget);
             }
+
             break;
 
         case "setBudget":

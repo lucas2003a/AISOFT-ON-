@@ -745,13 +745,17 @@
       const $ = id => global.$(id);
       const $All = id => global.$All(id);
 
+
       if (sessionStorage.getItem("isRecovered") == "true") {
 
         $("#codigo").disabled = true;
         $("#modelo").disabled = true;
+        $("#area_construccion").disabled = true;
       } else {
+        
         $("#codigo").disabled = false;
         $("#modelo").disabled = false;
+        $("#area_construccion").disabled = false;
       }
 
       let bootstrap;
@@ -786,11 +790,13 @@
 
           let params = new FormData();
           params.append("action", "listConfig");
-          params.append("clave","serie_presupuesto");
+          params.append("clave","serie-presupuesto");
 
           let result = await global.sendAction(url, params);
 
           if(result){
+
+            console.log(result)
 
             let alphanum = "PRES-";
             let number = Number.parseInt(result.valor) + 1;
@@ -941,7 +947,7 @@
               idpresupuesto: result.idpresupuesto,
               codigo: result.codigo,
               modelo: result.modelo,
-              area_construccion: result.area_construccion
+              area_construccion: Number.parseFloat(result.area_construccion)
             };
 
             console.log(data);
@@ -1446,7 +1452,7 @@
       $("#area_construccion").addEventListener("input",(e)=>{
 
         let inputValue = e.target.value;
-        let area_const = Number.parseFloat(inputValue)
+        area_const = Number.parseFloat(inputValue)
         console.log(inputValue)
         console.log(typeof(inputValue))
         console.log(Number.parseFloat($("#area_construccion").value))
@@ -1777,7 +1783,10 @@
       getLotsAll();
       renderDetbudgets(dataStorage);
       getBudgetsData();
-      getSerieCode();
+
+      if(sessionStorage.getItem("isRecovered") == "false"){
+        getSerieCode();
+      }
 
       if (dataStorage.length > 0) {
         renderDetbudgets(dataStorage);

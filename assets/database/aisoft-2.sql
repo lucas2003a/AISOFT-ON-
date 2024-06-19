@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 19-06-2024 a las 13:36:24
+-- Tiempo de generación: 19-06-2024 a las 20:20:57
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -2601,7 +2601,7 @@ CREATE TABLE `configuraciones` (
 
 INSERT INTO `configuraciones` (`idconfiguracion`, `clave`, `valor`, `create_at`, `update_at`) VALUES
 (1, 'contrasenia', 'peru2024', '2024-06-18 20:00:47', NULL),
-(7, 'serie-presupuesto', '1', '2024-06-18 23:54:17', '2024-06-19 00:00:00');
+(9, 'serie-presupuesto', '1', '2024-06-19 12:42:11', NULL);
 
 -- --------------------------------------------------------
 
@@ -2658,7 +2658,7 @@ CREATE TABLE `contratos` (
   `update_at` date DEFAULT NULL,
   `inactive_at` date DEFAULT NULL,
   `idusuario` int(11) NOT NULL
-) ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Disparadores `contratos`
@@ -2936,7 +2936,7 @@ CREATE TABLE `devoluciones` (
   `update_at` date DEFAULT NULL,
   `inactive_at` date DEFAULT NULL,
   `idusuario` int(11) NOT NULL
-) ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Disparadores `devoluciones`
@@ -5183,14 +5183,14 @@ CREATE TABLE `presupuestos` (
   `update_at` date DEFAULT NULL,
   `inactive_at` date DEFAULT NULL,
   `idusuario` int(11) NOT NULL
-) ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `presupuestos`
 --
 
 INSERT INTO `presupuestos` (`idpresupuesto`, `codigo`, `modelo`, `area_construccion`, `create_at`, `update_at`, `inactive_at`, `idusuario`) VALUES
-(11, 'PRES-00001', 'casa andina', 0.00, '2024-06-19', NULL, NULL, 1);
+(15, 'PRES-00001', 'casa-andina', 50.00, '2024-06-19', NULL, NULL, 1);
 
 -- --------------------------------------------------------
 
@@ -5574,7 +5574,7 @@ CREATE TABLE `separaciones` (
   `update_at` date DEFAULT NULL,
   `inactive_at` date DEFAULT NULL,
   `idusuario` int(11) NOT NULL
-) ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Disparadores `separaciones`
@@ -6407,7 +6407,7 @@ ALTER TABLE `clientes`
 -- AUTO_INCREMENT de la tabla `configuraciones`
 --
 ALTER TABLE `configuraciones`
-  MODIFY `idconfiguracion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `idconfiguracion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT de la tabla `constructora`
@@ -6503,7 +6503,7 @@ ALTER TABLE `personas_juridicas`
 -- AUTO_INCREMENT de la tabla `presupuestos`
 --
 ALTER TABLE `presupuestos`
-  MODIFY `idpresupuesto` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `idpresupuesto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT de la tabla `provincias`
