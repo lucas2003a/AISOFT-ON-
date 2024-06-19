@@ -1871,10 +1871,10 @@ DELIMITER $$
 
 CREATE PROCEDURE spu_add_budget
 (
-	IN _codigo		CHAR(8),
+	IN _codigo		CHAR(10),
     IN _modelo 		VARCHAR(30),
-    IN _idusuario 	INT,
-    IN _area_construccion DECIMAL(6,2)
+    IN _area_construccion DECIMAL(6,2),
+    IN _idusuario 	INT
 )
 BEGIN
 	INSERT INTO presupuestos(modelo, idusuario, codigo, area_construccion)
@@ -1882,13 +1882,14 @@ BEGIN
                     
 	SELECT @@last_insert_id AS idpresupuesto,
 			codigo,
-            modelo
+            modelo,
+            area_construccion
             FROM presupuestos
             WHERE idpresupuesto = @@last_insert_id;
 END $$
 
 DELIMITER;
-
+SELECT  * from presupuestos;
 DELIMITER $$
 
 CREATE PROCEDURE spu_count_budgets
@@ -1908,7 +1909,7 @@ DELIMITER $$
 CREATE PROCEDURE spu_set_budget
 (
 	IN _idpresupuesto 		INT,
-    IN _codigo 				CHAR(8),
+    IN _codigo 				CHAR(10),
     IN _modelo				VARCHAR(30),
     IN _area_construccion   DECIMAL(6,2),
     IN _idusuario			INT
@@ -3556,7 +3557,7 @@ BEGIN
 END $$
 
 DELIMITER;
-
+select * from contratos;
 -- CONFIGURACIONES
 DELIMITER $$
 
@@ -3565,30 +3566,71 @@ CREATE PROCEDURE spu_list_configs
     IN _clave VARCHAR(100)
 )
 BEGIN
-    SELECT * 
-    FROM configuraciones 
-    WHERE clave = _clave;
+
+    DECLARE _existKey BIT;
+
+    SET _existKey = (
+        SELECT EXISTS(
+            SELECT 1 
+            FROM configuraciones
+            WHERE clave = _clave
+            )
+        );
+
+    IF _existKey  = 1 THEN
+
+        SELECT *
+            FROM configuraciones
+            WHERE clave = _clave;
+    ELSE
+        
+        SELECT 0 AS valor;
+    END IF;
 END $$
 
 DELIMITER;
+SELECT * from usuarios;
+SELECT * from configuraciones;
+SELECT * from presupuestos;
 
 DELIMITER $$
-CREATE PROCEDURE spu_update_config
+CREATE PROCEDURE spu_upset_config
 (
-    IN _idconfiguracion INT,
+    IN _clave VARCHAR(100),
     IN _valor VARCHAR(200)
 )
 BEGIN
-    UPDATE configuraciones
-        SET valor = _valor
-    WHERE idconfiguracion = _idconfiguracion;
+    DECLARE _existKey BIT;
+
+    SET _existKey = (
+        SELECT EXISTS(
+            SELECT 1 
+            FROM configuraciones
+            WHERE clave = _clave
+            )
+        );
+
+    IF _existKey  = 1 THEN
+
+        UPDATE configuraciones
+            SET valor       = _valor,
+                update_at   = CURDATE()
+            WHERE clave = _clave;
+    ELSE
+        
+        INSERT INTO configuraciones(clave, valor)
+                    VALUES(_clave, _valor);
+    END IF;
 END $$
 
 DELIMITER;
 
-CALL spu_list_configs("contrasenia_defecto");
+CALL spu_list_configs("contrasenia_defectos");
 
-insert into configuraciones(clave, valor) values("contrasenia_defecto","peru2024");
+CALL spu_upset_config("contrasenia",3);
+
+select * from presupuestos;
+insert into configuraciones(clave, valor) values("contrasenia","peru2024");
 -- PLANTILLA
 DELIMITER $$
 

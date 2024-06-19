@@ -467,6 +467,9 @@
 
                         </tbody>
                       </table>
+                      <div id="render-error">
+
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -563,12 +566,36 @@
                   </div>
                 </li>
 
-                <!-- PARTIDA ELECTRÓNICA -->
+                <!-- ÁREA DEL TERRENO -->
                 <li class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg">
                   <div class="d-flex flex-column">
                     <h6 class="mb-1 text-dark font-weight-bold text-sm">Área del terreno</h6>
                   </div>
                   <div class="d-flex align-items-center text-sm" id="area_terreno">
+
+                    <!-- RENDER -->
+
+                  </div>
+                </li>
+
+                <!-- ÁREA DEL CONSTRUCCIÓN -->
+                <li class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg">
+                  <div class="d-flex flex-column">
+                    <h6 class="mb-1 text-dark font-weight-bold text-sm">Área de construcción</h6>
+                  </div>
+                  <div class="d-flex align-items-center text-sm" id="area_construccion">
+
+                    <!-- RENDER -->
+
+                  </div>
+                </li>
+
+                <!-- ÁREA TECHADA -->
+                <li class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg">
+                  <div class="d-flex flex-column">
+                    <h6 class="mb-1 text-dark font-weight-bold text-sm">Área techada</h6>
+                  </div>
+                  <div class="d-flex align-items-center text-sm" id="area_techada">
 
                     <!-- RENDER -->
 
@@ -1085,6 +1112,7 @@
           if (result) {
 
             dataDetAsset = result;
+            console.log(result)
             idPresupuesto = result.idpresupuesto;
 
             await getResumeSubcategory(idPresupuesto);
@@ -1105,10 +1133,12 @@
             $("#tipo_activo").innerHTML = result.tipo_activo;
             $("#partida_elect").innerHTML = result.partida_elect;
             $("#area_terreno").innerHTML = result.area_terreno ? `${result.area_terreno} m2` : 0 + "m2";
+            $("#area_construccion").innerHTML = result.area_construccion ? `${result.area_construccion} m2` : 0 + "m2";
+            $("#area_techada").innerHTML = result.area_techada ? `${result.area_techada} m2` : 0 + "m2";
 
             $("#zcomunes_porcent").innerHTML = result.zcomunes_porcen ? `${result.zcomunes_porcent} %` : 0 + " %";
 
-            $("#precio_venta").innerHTML = result.moneda_venta == "USD" ? `$ ${result.precio_venta}` : `S ${result.precio_venta}`;
+            $("#precio_venta").innerHTML = result.moneda_venta == "USD" ? `$/ ${result.precio_venta}` : `S/ ${result.precio_venta}`;
             $("#modelo_presupuesto").innerHTML = result.modelo;
 
             det_casaJSON = result.det_casa
@@ -1447,7 +1477,7 @@
             renderTable("#table-clients tbody", results);
           } else {
 
-            renderListError("#table-clients tbody")
+            renderListError("#render-error")
           }
         } catch (e) {
 

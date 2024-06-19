@@ -510,7 +510,7 @@
                             <!-- ÁREA -->
                             <div>
                               <label for="area" class="form-label">Área terreno (m2)</label>
-                              <input type="number" class="form-control" id="area" min="1.0" step="0.01" value="0.00" placeholder="Área (m2)" required title="Porcentaje del área común (%)">
+                              <input type="number" class="form-control" id="area" min="1.0" step="0.01" placeholder="Área (m2)" required title="Porcentaje del área común (%)">
                               <div class="invalid-feedback">
                                 Necesitas ingresar el área del lote.
                               </div>
@@ -522,7 +522,7 @@
                             <!-- ZONAS COMUNES -->
                             <div class="mt-4">
                               <label for="z-comunes" class="form-label">Zonas comunes</label>
-                              <input type="number" class="form-control" id="z-comunes" value="0" min="1.0" max="100" placeholder="Zonas comúnes (%)">
+                              <input type="number" class="form-control" id="z-comunes" min="1.0" step="0.1" placeholder="Zonas comúnes (%)" required>
 
                             </div>
 
@@ -546,7 +546,7 @@
                             <!-- PRECIO LOTE -->
                             <div class="mt-4">
                               <label for="precio_lote" class="form-label">Precio del lote</label>
-                              <input type="number" class="form-control" id="precio_lote" placeholder="Precio de venta" maxlength="7" minlength="7" min="1.00" value="0.00" step="0.01" required autofocus>
+                              <input type="number" class="form-control" id="precio_lote" placeholder="Precio de venta" maxlength="7" minlength="7" min="1.00" step="0.01" required autofocus>
                               <div class="invalid-feedback">
                                 Necesitas ingresar el precio del lote.
                               </div>
@@ -584,7 +584,7 @@
                             <!-- PRECIO VENTA -->
                             <div class="mt-4">
                               <label for="precio_venta" class="form-label">Precio de la venta</label>
-                              <input type="number" class="form-control" id="precio_venta" placeholder="Precio de venta" maxlength="8" minlength="8" min="1.00" value="0.00" step="0.01">
+                              <input type="number" class="form-control" id="precio_venta" placeholder="Precio de venta" maxlength="8" minlength="8" min="1.00" step="0.01">
                               <div class="invalid-feedback">
                                 Necesitas ingresar el precio de venta.
                               </div>
@@ -612,7 +612,7 @@
                             <!-- ÁREA COSNTRUCCIÓN -->
                             <div class="mt-2">
                               <label for="area_construccion">Área de construcción (m2)</label>
-                              <input type="number" id="area_construccion" class="form-control form-area" value="0.00" min="1" step="0.01" required>
+                              <input type="number" id="area_construccion" class="form-control form-area" min="1" step="0.01" required>
                               <div class="invalid-feedback">
                                 Registra el área de construcción
                               </div>
@@ -624,7 +624,7 @@
                             <!-- ÁREA TECHADA -->
                             <div class="mt-4">
                               <label for="area_techada">Àrea techada (m2)</label>
-                              <input type="number" name="area_techada" id="area_techada" class="form-control" value="0.00" min="1" step="0.01" required>
+                              <input type="number" name="area_techada" id="area_techada" class="form-control" min="1" step="0.01" required>
                               <div class="invalid-feedback">
                                 Registra el área techada
                               </div>

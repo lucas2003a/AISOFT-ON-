@@ -226,7 +226,7 @@ CREATE TABLE materiales
 CREATE TABLE presupuestos
 (
 	idpresupuesto 			INT PRIMARY KEY AUTO_INCREMENT,
-    codigo 					CHAR(8)         NOT NULL,
+    codigo 					CHAR(10)         NOT NULL,
     modelo					VARCHAR(30)		NOT NULL,
     area_construccion       DECIMAL(6,2)    NOT NULL,
     create_at				DATE 			NOT NULL 	DEFAULT(CURDATE()),
@@ -489,8 +489,10 @@ CREATE TABLE configuraciones
     clave                   VARCHAR(100)            NOT NULL,
     valor                   VARCHAR(200)            NOT NULL,
     create_at               DATETIME                NOT NULL DEFAULT(NOW()),
-    update_at               DATETIME                NULL
+    update_at               DATETIME                NULL,
+    CONSTRAINT uk_clave_config UNIQUE(clave)
 )ENGINE = INNODB;
+
 
 -- DROP TABLE sustentos_cuotas, cuotas, detalle_gastos, presupuestos, desembolsos, sustentos_sep, separaciones, contratos, viviendas, lotes;
 select * from contratos;

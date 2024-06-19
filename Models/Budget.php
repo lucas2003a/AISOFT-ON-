@@ -68,11 +68,12 @@ class Budget extends Conection
     {
         try {
 
-            $query = $this->conection->prepare("CALL spu_add_budget(?,?,?)");
+            $query = $this->conection->prepare("CALL spu_add_budget(?,?,?,?)");
             $query->execute(
                 array(
                     $dataBudget["codigo"],
                     $dataBudget["modelo"],
+                    $dataBudget["area_construccion"],
                     $dataBudget["idusuario"]
                 )
             );

@@ -436,6 +436,9 @@
                   </tbody>
                 </table>
               </div>
+              <div id="render-error">
+
+              </div>
             </div>
           </div>
         </div>
@@ -645,10 +648,10 @@
         } else {
           newRow = `
       <div class="alert alert-danger m-4 text-white" role="alert">
-          <strong class="text-white">No existe el presupuesto</strong> Verifica el código.
+          <strong class="text-white">No existe el presupuesto</strong> No existe datos de los presupuestos.
       </div>
       `;
-          $("#table-budgets tbody").innerHTML += newRow;
+          $("#render-error").innerHTML += newRow;
         }
 
 
