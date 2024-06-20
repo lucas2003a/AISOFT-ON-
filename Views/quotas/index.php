@@ -12,6 +12,14 @@
 
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 -->
+<?php
+
+session_start();
+
+if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
+  header("Location:../../index.php");
+}
+?>
 <!DOCTYPE html>
 <html lang="es">
 
@@ -587,6 +595,7 @@
             liClone.querySelector(".text-tipocontrato").innerText = ` - ${content.tipo_contrato}`;
 
             //Configuro los dataser para guardar el id del contrato
+            console.log(content.idcontrato)
             let aTag = liClone.querySelector(".text-tag");
             let codeid = btoa(content.idcontrato);
 

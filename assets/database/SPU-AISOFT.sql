@@ -3689,3 +3689,5 @@ select * from contratos;
 select* from subcategoria_costos;
 select* from configuraciones;
 >>>>>>> f9fb3ea538ab8002885777c1a696bbdba29bf9cd
+
+select * from cuotas;
