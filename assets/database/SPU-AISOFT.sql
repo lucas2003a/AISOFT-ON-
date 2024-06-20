@@ -251,22 +251,17 @@ END $$
 DELIMITER;
 
 -- PROYECTOS //////////////////////////////////////////////////////////////////////////////////
-
+call spu_list_projects_typeAct("lote");
 DELIMITER $$
 CREATE PROCEDURE spu_list_projects_typeAct
 (
     IN _tipo_activo VARCHAR(10)
 )
 BEGIN
-    DECLARE T_act varchar(10);
-
-    SET T_act = _tipo_activo;
-
-    IF _tipo_activo = "CASA" THEN 
         SELECT 
         py.idproyecto,
         py.denominacion,
-        T_act as tipo
+        _tipo_activo as tipo
         FROM proyectos py
         INNER JOIN activos ac ON ac.idproyecto = py.idproyecto
         WHERE py.inactive_at IS NULL
@@ -275,7 +270,7 @@ BEGIN
             AND ac.estado = "SIN VENDER"
             GROUP BY py.idproyecto
             ORDER BY py.denominacion ASC;
-    END IF;
+    
 END $$
 DELIMITER ;
 
@@ -711,7 +706,7 @@ DELIMITER;
 
 DELIMITER $$
 
-CREATE PROCEDURE spu_list_lots_noBudgets()
+CREATE PROCEDURE spu_list_houses_noBudgets()
 BEGIN
 	SELECT 	
 			act.idactivo,
@@ -723,11 +718,14 @@ BEGIN
             INNER JOIN proyectos proy ON proy.idproyecto = act.idproyecto
             LEFT JOIN presupuestos pres ON pres.idpresupuesto = act.idpresupuesto
 			WHERE pres.idpresupuesto IS NULL
-			AND act.inactive_at IS NULL;
+			AND act.inactive_at IS NULL
+            AND act.tipo_activo = "CASA";
+
 END $$
 
 DELIMITER;
 
+CALL spu_list_houses_noBudgets();
 DELIMITER $$
 
 CREATE PROCEDURE spu_list_lots_withBudgets()
@@ -774,12 +772,18 @@ BEGIN
 			act.idproyecto, 
             proy.denominacion,
 			act.sublote, 
-            act.idpresupuesto 
+            act.idpresupuesto,
+            act.tipo_activo 
             FROM activos act 
             INNER JOIN proyectos proy ON proy.idproyecto = act.idproyecto
             LEFT JOIN presupuestos pres ON pres.idpresupuesto = act.idpresupuesto
             WHERE act.inactive_at IS NULL
-				AND act.idpresupuesto = _idpresupuesto OR act.idpresupuesto IS NULL;
+            AND (
+                
+			act.idpresupuesto = _idpresupuesto OR act.idpresupuesto IS NULL
+            )
+            AND act.tipo_activo = "CASA";
+            
 END $$
 
 DELIMITER;
@@ -1009,7 +1013,7 @@ DELIMITER;
 -- CLIENTES ---------------------------------------------------------------------------------------------------------------------------------------
 
 DELIMITER $$
-
+SELECT * FROM contratos;
 CREATE PROCEDURE spu_list_clients_contract()
 BEGIN
     SELECT 
@@ -1771,12 +1775,12 @@ BEGIN
 END $$
 
 DELIMITER;
-
+select * from configuraciones;
 DELIMITER $$
 
 CREATE PROCEDURE spu_search_budgets
 (
-    IN _codigo VARCHAR(8)
+    IN _codigo VARCHAR(10)
 )
 BEGIN
 	DECLARE _valueDefault DECIMAL(8,2);
@@ -1928,7 +1932,8 @@ BEGIN
 		(SELECT ROW_COUNT()) AS filasAfect,
         idpresupuesto,
         codigo,
-        modelo
+        modelo,
+        area_construccion
         FROM presupuestos
 		WHERE idpresupuesto = _idpresupuesto;
 END $$
@@ -2187,6 +2192,7 @@ BEGIN
 
 END $$
 
+SELECT * FROM ACTIVOS;
 DELIMITER;
 DELIMITER $$
 
@@ -2297,7 +2303,11 @@ CREATE PROCEDURE spu_add_separation
     IN _separacion_monto DECIMAL(8,2),
     IN _moneda_venta    VARCHAR(10),
     IN _tipo_cambio     DECIMAL(5,4),
+    IN _fecha_pago      DATE,
+    IN _modalidad_pago  VARCHAR(20),
+    IN _entidad_bancaria  VARCHAR(30),
     IN _imagen          VARCHAR(200),
+    IN _detalle          VARCHAR(200),
     IN _idusuario       INT
 )
 BEGIN
@@ -2309,18 +2319,26 @@ BEGIN
             separacion_monto,
             moneda_venta,
             tipo_cambio,
+            fecha_pago,
+            modalidad_pago,
+            entidad_bancaria,
             imagen,
+            detalle,
             idusuario
     ) 
         VALUES(
             _n_expediente,
             _idactivo,
-            _idcliente,
+            _idcliente, 
             NULLIF(_idconyugue,''),
             _separacion_monto,
             _moneda_venta,
             _tipo_cambio,
+            _fecha_pago, 
+            _modalidad_pago,
+            _entidad_bancaria,
             _imagen,
+            _detalle,
             _idusuario
         );
 
@@ -2341,7 +2359,11 @@ CREATE PROCEDURE spu_set_separation
     IN _separacion_monto DECIMAL(8,2),
     IN _moneda_venta    VARCHAR(10),
     IN _tipo_cambio     DECIMAL(5,4),
+    IN _fecha_pago      DATE,
+    IN _modalidad_pago  VARCHAR(20),
+    IN _entidad_bancaria  VARCHAR(30),
     IN _imagen          VARCHAR(200),
+    IN _detalle         VARCHAR(200),
     IN _idusuario       INT
 )
 BEGIN
@@ -2354,7 +2376,11 @@ BEGIN
             separacion_monto = _separacion_monto,
             moneda_venta     = _moneda_venta,
             tipo_cambio     = _tipo_cambio,
+            fecha_pago      = _fecha_pago,
+            modalidad_pago  = _modalidad_pago,
+            entidad_bancaria = _entidad_bancaria,
             imagen         = _imagen,
+            detalle         = _detalle,
             idusuario      = _idusuario,
             update_at      = CURDATE()
         WHERE idseparacion = _idseparacion;
@@ -3378,6 +3404,8 @@ CREATE PROCEDURE spu_set_det_quota
 BEGIN
     DECLARE _countInsert INT;
     DECLARE _countUpdate INT;
+    DECLARE _monto_cuota DECIMAL(8,2);
+    DECLARE _monto_pagado DECIMAL(8,2);
 
     INSERT INTO detalle_cuotas(
         idcuota,
@@ -3400,9 +3428,24 @@ BEGIN
 
     SET _countInsert =  (SELECT ROW_COUNT());
 
+    SET _monto_cuota = (
+        SELECT monto_cuota 
+        FROM cuotas
+        WHERE idcuota = _idcuota
+    );
+
+    SET _monto_pagado = (
+        SELECT SUM(monto_pago) AS monto_pago
+        FROM detalle_cuotas
+        WHERE idcuota = _idcuota
+    );
+
     UPDATE cuotas
         SET
-        estado = "CANCELADO",
+        estado = CASE 
+                    WHEN _monto_cuota = _monto_pagado THEN "CANCELADO"
+                    ELSE "EN PROCESO"
+                END,
         idusuario = _idusuario,
         update_at = CURDATE()
         WHERE idcuota = _idcuota;
@@ -3417,7 +3460,7 @@ BEGIN
             SELECT (_countUpdate) AS filasAfect;
     END CASE;
 END $$
-
+SELECT * FROM contratos;
 DELIMITER;
 
 DELIMITER $$
@@ -3614,7 +3657,7 @@ BEGIN
 
         UPDATE configuraciones
             SET valor       = _valor,
-                update_at   = CURDATE()
+                update_at   = NOW()
             WHERE clave = _clave;
     ELSE
         
@@ -3629,7 +3672,7 @@ CALL spu_list_configs("contrasenia_defectos");
 
 CALL spu_upset_config("contrasenia",3);
 
-select * from presupuestos;
+select * from activos;
 insert into configuraciones(clave, valor) values("contrasenia","peru2024");
 -- PLANTILLA
 DELIMITER $$
@@ -3640,5 +3683,5 @@ END $$
 
 DELIMITER;
 
-select* from presupuestos;
+select* from subcategoria_costos;
 select* from configuraciones;

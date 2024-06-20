@@ -661,7 +661,7 @@
 
         let numRow = 1;
 
-        array.forEach(element => {
+        array.forEach((element, index) => {
 
           let fechaPago = element.fecha_pago ? element.fecha_pago : "0000-00-00"
           let trEstado = element.estado == "POR CANCELAR" ? `<td class="text-primary"><strong>${element.estado}</strong></td>` :
@@ -671,6 +671,8 @@
           let deuda = element.deuda ? `<strong>${element.deuda}</strong>` : "0.00";
           let payDisabled = element.cancelado < element.monto_cuota ? "" : "disabled";
           let cancelDisabled = element.cancelado ? "" :"disabled";
+
+          let disabledPay = element.estado == "POR CANCELAR" && array[index-1].estado !== "CANCELADO" ? "disabled" : "";
 
           let code = btoa(element.idcuota);
           let row = `
@@ -682,7 +684,7 @@
             <td>${fechaPago}</td>
             ${trEstado}
             <td>
-              <a href="./pay_quota.php?id=${code}" type="button" class="btn bg-gradient-info open-modal ${payDisabled}"><i class="fas fa-wallet open-modal"></i></a>
+              <a href="./pay_quota.php?id=${code}" type="button" class="btn bg-gradient-info open-modal ${disabledPay} ${payDisabled}"><i class="fas fa-wallet open-modal"></i></a>
               <button type="button" class="btn bg-gradient-danger cancel" ${cancelDisabled} data-id="${element.idcuota}"><i class="fas fa-times-circle cancel" data-id="${element.idcuota}"></i></button>
             </td>
           </tr>`;

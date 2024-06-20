@@ -647,7 +647,7 @@
 
         <!-- DETALLES DE CONSTRUCCIÓN -->
 
-        <div class="col-md-12 mb-lg-0 mb-4">
+        <div class="col-md-12 mb-lg-0 mb-4" id="show-detail">
           <div class="card mt-4">
             <div class="card-header pb-0 p-3">
               <div class="row">
@@ -1141,6 +1141,7 @@
             $("#precio_venta").innerHTML = result.moneda_venta == "USD" ? `$/ ${result.precio_venta}` : `S/ ${result.precio_venta}`;
             $("#modelo_presupuesto").innerHTML = result.modelo;
 
+            if(result.tipo_activo == "LOTE") $("#show-detail").style.display = "none";
             det_casaJSON = result.det_casa
             getBudgetsID(idPresupuesto);
             renderDetBuild(det_casaJSON);

@@ -186,9 +186,11 @@ CREATE TABLE subcategoria_costos
 	idsubcategoria_costo 			INT PRIMARY KEY AUTO_INCREMENT,
     idcategoria_costo				INT 			NOT NULL,
     subcategoria_costo				VARCHAR(100)  	NOT NULL,
+    requiere_material               CHAR(2)         NOT NULL,
     CONSTRAINT fk_idcategoria_costo_subcat_costo FOREIGN KEY(idcategoria_costo) REFERENCES categoria_costos(idcategoria_costo),
     CONSTRAINT fk_subactegoria_costo_subcat_costo UNIQUE(subcategoria_costo)
 )ENGINE = INNODB;
+
 
 -- MARCAS
 CREATE TABLE marcas
@@ -347,22 +349,24 @@ CREATE TABLE clientes
 CREATE TABLE separaciones
 (
 	idseparacion  			INT PRIMARY KEY AUTO_INCREMENT,
-    n_expediente            VARCHAR(10) 	NOT NULL,
-    idactivo				INT 			NOT NULL,
-    idcliente 				INT  			NOT NULL,
-    idconyugue 				INT 			NULL,
-    tipo_cambio 			DECIMAL(5,4) 	NOT NULL,
-    moneda_venta 			VARCHAR(10) 	NOT NULL,
-    separacion_monto		DECIMAL(8,2) 	NOT NULL,
-    fecha_pago				DATE 			NOT NULL,
-    imagen					VARCHAR(100) 	NOT NULL,
-    detalle                 VARCHAR(200)    NOT NULL,
+    -n_expediente            VARCHAR(10) 	NOT NULL,
+    -idactivo				INT 			NOT NULL,
+    -idcliente 				INT  			NOT NULL,
+    -idconyugue 				INT 			NULL,
+    -tipo_cambio 			DECIMAL(5,4) 	NOT NULL,
+    -moneda_venta 			VARCHAR(10) 	NOT NULL,
+    -separacion_monto		DECIMAL(8,2) 	NOT NULL,
+    -fecha_pago				DATE 			NOT NULL,
+    -imagen					VARCHAR(100) 	NOT NULL,
+    -detalle                 VARCHAR(200)    NOT NULL,
+    -modalidad_pago          VARCHAR(20)     NOT NULL,
+    -entidad_bancaria        VARCHAR(30)     NOT NULL,
     existe_contrato         BIT             NOT NULL DEFAULT 0,  
 	create_at 				DATE 			NOT NULL	DEFAULT (CURDATE()),
     update_at				DATE 			NULL,
     inactive_at				DATE 			NULL,
-    idusuario 				INT 			NOT NULL,
-    CONSTRAINT chk_n_expediente_sep CHECK(n_expediente LIKE 'SEC-%'),
+    -idusuario 				INT 			NOT NULL,
+    CONSTRAINT chk_n_expediente_sep CHECK(n_expediente LIKE 'SEPC-%'),
     CONSTRAINT uk_n_expediente UNIQUE(n_expediente),
     CONSTRAINT fk_idactivo_sep FOREIGN KEY(idactivo) REFERENCES activos(idactivo),
     CONSTRAINT fk_idcliente_sep FOREIGN KEY(idcliente) REFERENCES clientes(idcliente),
@@ -386,7 +390,7 @@ CREATE TABLE devoluciones
     update_at				DATE 		NULL,
     inactive_at				DATE 		NULL,
     idusuario 				INT 		NOT NULL,
-    CONSTRAINT chk_n_expediente_dev CHECK(n_expediente LIKE 'DEC-%'),
+    CONSTRAINT chk_n_expediente_dev CHECK(n_expediente LIKE 'DEVC-%'),
     CONSTRAINT fk_idseparacion_dev FOREIGN KEY(idseparacion) REFERENCES separaciones(idseparacion),
     CONSTRAINT fk_idcontrato_dev FOREIGN KEY(idcontrato) REFERENCES contratos(idcontrato),
     CONSTRAINT fk_idusuario_dev FOREIGN KEY(idusuario) REFERENCES usuarios(idusuario)
@@ -416,7 +420,7 @@ CREATE TABLE contratos
     update_at				DATE 			NULL,
     inactive_at				DATE 			NULL,
     idusuario 				INT 			NOT NULL,
-    CONSTRAINT chk_n_expediente_cont CHECK(n_expediente LIKE 'CON-%'),
+    CONSTRAINT chk_n_expediente_cont CHECK(n_expediente LIKE 'CONT-%'),
     CONSTRAINT fk_idseparacion_cont FOREIGN KEY(idseparacion) REFERENCES separaciones(idseparacion),
     CONSTRAINT fk_idrepresentante_cont FOREIGN KEY(idrepresentante_primario) REFERENCES representantes(idrepresentante),
     CONSTRAINT fk_idrepresentante2_cont FOREIGN KEY(idrepresentante_secundario) REFERENCES representantes(idrepresentante),
@@ -424,7 +428,6 @@ CREATE TABLE contratos
     CONSTRAINT fk_idcliente2_cont FOREIGN KEY(idconyugue) REFERENCES clientes(idcliente),
     CONSTRAINT fk_idusuario_cont FOREIGN KEY(idusuario) REFERENCES usuarios(idusuario)
 )ENGINE = INNODB;
-
 
 -- DETALLE DE CONTRATOS
 CREATE TABLE detalles_contratos
@@ -495,24 +498,5 @@ CREATE TABLE configuraciones
 
 
 -- DROP TABLE sustentos_cuotas, cuotas, detalle_gastos, presupuestos, desembolsos, sustentos_sep, separaciones, contratos, viviendas, lotes;
-select * from contratos;
-set foreign_key_checks = 0-- //!Cambialo a 1
 
-
-DELIMITER $$
-CREATE PROCEDURE spu_list_tables
-(
-    IN  db_table VARCHAR(255)
-)
-BEGIN
-    DECLARE _query VARCHAR(255);
-
-    SET _query = CONCAT("SELECT * FROM ",db_table);
-    PREPARE stmt FROM _query;
-    EXECUTE stmt;
-    DEALLOCATE PREPARE stmt;
-
-END$$
-DELIMITER ;
-
-call spu_list_tables("contratos")
+select * from configuraciones;

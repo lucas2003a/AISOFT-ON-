@@ -62,6 +62,7 @@ if (isset($_POST["action"])) {
                 "idpresupuesto" => $_POST["idpresupuesto"],
                 "codigo"        => $_POST["codigo"],
                 "modelo"        => $_POST["modelo"],
+                "area_construccion" => $_POST["area_construccion"],
                 "idusuario"     => 1
                 /* "idusuario"     => $_POST["idusuario"] */
             ];

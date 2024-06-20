@@ -1,10 +1,13 @@
 <?php
 
 require_once "../Models/Refund.php";
+require_once "../Models/Configuration.php";
+date_default_timezone_set("America/Lima");
 
 if(isset($_POST["action"])){
 
     $refund = new Refund();
+    $config = new Configuration();
 
     switch($_POST["action"]){
 
@@ -46,6 +49,11 @@ if(isset($_POST["action"])){
                 $today = date("dmYhis");
                 $nom_img = "noImage.jpg";
 
+                $dataConfig = [
+                    "clave" => $_POST["clave"],
+                    "valor" => $_POST["valor"]
+                ];
+
                 $dataObtained = [
                         "n_expediente"  =>  $_POST["n_expediente"],
                         "idseparacion"  =>  $_POST["idseparacion"],
@@ -69,7 +77,12 @@ if(isset($_POST["action"])){
                     }
                 }
 
-                echo json_encode($refund->addRefund($dataObtained));
+                $data = $refund->addRefund($dataObtained);
+
+                if($data){
+                    $config->upsetConfig($dataConfig);
+                }
+                echo json_encode($data);
             break;
 
         case "setRefund": 

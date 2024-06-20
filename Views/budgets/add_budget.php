@@ -739,12 +739,12 @@
   <script>
     document.addEventListener("DOMContentLoaded", () => {
 
+      
       const global = new FunGlobal();
       const sAlert = new Alert();
 
       const $ = id => global.$(id);
       const $All = id => global.$All(id);
-
 
       if (sessionStorage.getItem("isRecovered") == "true") {
 
@@ -753,6 +753,8 @@
         $("#area_construccion").disabled = true;
       } else {
         
+        //sessionStorage.setItem("isRecovered","false");
+        //sessionStorage.removeItem("dataBudget")
         $("#codigo").disabled = false;
         $("#modelo").disabled = false;
         $("#area_construccion").disabled = false;
@@ -1318,7 +1320,7 @@
           let url = "../../Controllers/asset.controller.php";
 
           let params = new FormData();
-          params.append("action", "listLotsNoBudget");
+          params.append("action", "listHousesNoBudgets");
 
           let results = await global.sendAction(url, params);
 
@@ -1680,8 +1682,12 @@
         if (counter) {
 
           sAlert.sweetSuccess("Datos nuevos", `Registros actualizados : ${counter}`, () => {
-            window.location.href = "./index.php";
+
+            sessionStorage.setItem("isRecovered","false");
+            sessionStorage.removeItem("dataBudget");
+            sessionStorage.removeItem("dataStoraged");
             $("#save_lots").disabled = false;
+            window.location.href = "./index.php";
           });
         } else {
           sAlert.sweetError("No se han realizado registro", "Por favor vuelvelo a intentar");

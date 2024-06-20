@@ -1523,6 +1523,7 @@ document.addEventListener("DOMContentLoaded",()=>{
   async function processRepresents(idpersonaJuridica){
 
     const representsList = $All("#list-represents li");
+
     let numList = representsList.length;
 
     let counterEdit = 0;
@@ -1532,6 +1533,7 @@ document.addEventListener("DOMContentLoaded",()=>{
     let textEdit = "";
     let textAdd = "";
     let textDelete = "";
+
 
     for(id of idStoDelete){
       
@@ -1705,7 +1707,7 @@ document.addEventListener("DOMContentLoaded",()=>{
   }
 
   //Validar formulario
-  function validateFom(form, callback) {
+  function validateForm(form, callback) {
     'use strict' //=> USO ESTRICTO POR POLITICAS DE SEGURIDAD EN EL FORMULARIO
 
      //SELECCIONA TODOS LOS ELEMENTOS DEL FORMULARIO QUE TIENE LA CLASE "needs-validation
@@ -1751,7 +1753,7 @@ document.addEventListener("DOMContentLoaded",()=>{
       
       }else{
   
-        validateFom("#form-data-client",setClient);
+        validateForm("#form-data-client",setClient);
         resolve();
   
       }
@@ -1914,7 +1916,7 @@ document.addEventListener("DOMContentLoaded",()=>{
     e.preventDefault();
     if(idpersonaJuridica){
 
-      validateFom("#form-data-client",processRepresents(idpersonaJuridica));
+      validateForm("#form-data-client",processRepresents(idpersonaJuridica));
     }else{
       sAlert.sweetError("No se ha realizado el registro","Necesitas registrar la empresa");
     }

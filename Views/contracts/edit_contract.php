@@ -397,22 +397,13 @@
                             <!-- NRO DE EXPEDIENTE -->
                             <div class="mt-2">
                               <label for="n_expediente" class="form-label">Nº de expediente</label>
-                              <div class="input-group">
-                                <span class="input-group-text">CON-</span>
-                                <input type="number" name="n_expediente" id="n_expediente" class="form-control" value="00000" min="00001" step="1" maxlength="5" required autofocus>
-                                <div class="invalid-feedback">
-                                  Necesitas ingresar el número del número de expediente.
-                                </div>
-                                <div class="valid-feedback">
-                                  Número de expediente registrado correctamente.
-                                </div>
-                              </div>
+                              <input type="text" name="n_expediente" id="n_expediente" class="form-control" readonly>
                             </div>
 
                             <!-- TIPO DE CONTRATO -->
                             <div class="mt-2">
                               <label for="tipo_contrato" class="form-label">Tipo de contrato</label>
-                              <select name="tipo_contrato" id="tipo_contrato" class="form-select" required>
+                              <select name="tipo_contrato" id="tipo_contrato" class="form-select" required autofocus>
                                 <option value="">Selecciona un tipo de contrato</option>
                                 <option data-type="LOTE" value="VENTA DE LOTE">Venta de lote</option>
                                 <option data-type="CASA" value="VENTA DE CASA">Venta de casa</option>
@@ -1454,10 +1445,7 @@
             console.log(result)
 
             // !Valor del númmero de expediente
-            let get_n_expediente = result.n_expediente;
-            let n_expediente_split = get_n_expediente.split("-");
-            let n_expediente = n_expediente_split[1];
-            $("#n_expediente").value = Number.parseInt(n_expediente);
+            $("#n_expediente").value = result.n_expediente;
 
             // !Valor del tipoo de contrato
             await getContractType(result);

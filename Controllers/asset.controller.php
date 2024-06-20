@@ -185,9 +185,9 @@ if (isset($_POST["action"])) {
             echo json_encode($asset->setIdBudget($dataObtained));
             break;
 
-        case "listLotsNoBudget":
+        case "listHousesNoBudgets":
 
-            echo json_encode($asset->listLotsNoBudgets());
+            echo json_encode($asset->listHousesNoBudgets());
             break;
 
         case "listLotsWithBudget":

@@ -1114,17 +1114,13 @@
       $("#precio_lote").required = true;
 
       if (tipoActivo == "CASA") {
-        $("#idpresupuesto").required = true;
         $("#moneda-venta").value = "SOL";
         $("#area_construccion").disabled = false;
         $("#area_techada").disabled = false;
-        $("#idpresupuesto").disabled = false;
         } else {
-          $("#idpresupuesto").required = false;
           $("#moneda-venta").value = "";
           $("#area_construccion").disabled = true;
-          $("#area_techada").disabled = true;
-          $("#idpresupuesto").disabled = true;
+          $("#idpresupuesto").disabled = true
       }
 
     });

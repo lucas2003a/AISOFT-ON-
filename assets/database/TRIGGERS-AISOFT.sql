@@ -276,7 +276,6 @@ BEGIN
         UPDATE activos
 			SET
 				estado = "VENDIDO",
-				existe_contrato = 1,
                 update_at = CURDATE(),
 				idusuario = NEW.idusuario
 			WHERE 

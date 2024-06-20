@@ -603,6 +603,7 @@
         let numberRow = 1;
 
         $("#table-budgets tbody").innerHTML = "";
+        $("#render-error").innerHTML = "";
 
         let newRow = ``;
 

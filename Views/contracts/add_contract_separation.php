@@ -398,21 +398,14 @@
                             <div class="mt-2">
                               <label for="n_expediente" class="form-label">Nº de expediente</label>
                               <div class="input-group">
-                                <span class="input-group-text">CON-</span>
-                                <input type="number" name="n_expediente" id="n_expediente" class="form-control" value="00000" min="00001" step="1" maxlength="5" required autofocus>
-                                <div class="invalid-feedback">
-                                  Necesitas ingresar el número del número de expediente.
-                                </div>
-                                <div class="valid-feedback">
-                                  Número de expediente registrado correctamente.
-                                </div>
+                                <input type="text" name="n_expediente" id="n_expediente" class="form-control" readonly>
                               </div>
                             </div>
 
                             <!-- TIPO DE CONTRATO -->
                             <div class="mt-2">
                               <label for="tipo_contrato" class="form-label">Tipo de contrato</label>
-                              <select name="tipo_contrato" id="tipo_contrato" class="form-select" required>
+                              <select name="tipo_contrato" id="tipo_contrato" class="form-select" required autofocus>
                                 <option value="">Selecciona un tipo de contrato</option>
                                 <option data-type="LOTE" value="VENTA DE LOTE">Venta de lote</option>
                                 <option data-type="CASA" value="VENTA DE CASA">Venta de casa</option>
@@ -946,6 +939,47 @@
       let code = params.get("id");
       let idseparacion = atob(code);
 
+      // * Obtenie el numero de serie código
+      async function getSerieCode() {
+
+        try {
+
+          let url = "../../Controllers/configuration.controller.php";
+
+          let params = new FormData();
+          params.append("action", "listConfig");
+          params.append("clave", "serie-contrato");
+
+          let result = await global.sendAction(url, params);
+
+          if (result) {
+
+            console.log(result)
+
+            let alphanum = "CONT-";
+            let number = Number.parseInt(result.valor) + 1;
+            let numberString = String(number).toString().padStart(5, '0');
+            let serie = alphanum + numberString
+            console.log(serie)
+
+            const alpha_serie = {
+              "clave": "serie-contrato",
+              "serie": serie,
+              "number": number,
+              "numberString": numberString,
+              "alphanum": alphanum
+            }
+
+            $("#n_expediente").value = serie;
+
+            return alpha_serie;
+          }
+
+        } catch (e) {
+          console.error(e)
+        }
+      }
+
       // *  Obtiene el ubigeo
       async function getUbigeo(iddistrito) {
 
@@ -1029,7 +1063,7 @@
               } else {
 
                 const interval = setInterval(() => {
-                  
+
                   options = Array.from($("#idcliente").options);
                   if (options.length > 1) {
                     clearInterval(interval);
@@ -1050,19 +1084,19 @@
               resolve()
             });
           })
-          .then(async function(){
+          .then(async function() {
 
             await getUbigeo(result.iddistrito)
-            return new Promise((resolve, reject)=>{
+            return new Promise((resolve, reject) => {
 
               let options = Array.from($("#iddistrito").options);
 
-              if(options.length > 1){
+              if (options.length > 1) {
                 resolve();
-              }else{
-                const interval = setInterval(()=>{
+              } else {
+                const interval = setInterval(() => {
                   options = Array.from($("#iddistrito").options);
-                  if(options.length > 1){
+                  if (options.length > 1) {
                     clearInterval(interval);
                     resolve();
                   }
@@ -1071,19 +1105,19 @@
             });
 
           })
-          .then(()=>{
+          .then(() => {
             return new Promise((resolve, reject) => {
 
               let options = Array.from($("#idsede").options);
 
-              if(options.length > 1){
+              if (options.length > 1) {
 
                 resolve();
-              }else{
-                
-                const interval = setInterval(()=>{
+              } else {
+
+                const interval = setInterval(() => {
                   options = Array.from($("#idsede").options);
-                  if(options.length > 1){
+                  if (options.length > 1) {
                     clearInterval(interval);
                     resolve();
                   }
@@ -1093,14 +1127,14 @@
             });
 
           })
-          .then(()=>{
+          .then(() => {
             return new Promise((resolve, reject) => {
 
               let options = Array.from($("#idsede").options);
 
-              options.forEach(option =>{
+              options.forEach(option => {
 
-                if(option.value == result.idsede) option.selected = true;
+                if (option.value == result.idsede) option.selected = true;
               });
               $("#idsede").dispatchEvent(new Event("change"));
               resolve()
@@ -1214,6 +1248,7 @@
           let precio_obtenido = $("#precio_venta").value;
           let precio_split = precio_obtenido.split(" ");
           let precioVenta = Number.parseFloat(precio_split[1]);
+          let serie = await getSerieCode();
 
           let detJson = await global.getJson(".input-det-clave", ".input-det-valor");
 
@@ -1221,7 +1256,7 @@
           let params = new FormData();
 
           params.append("action", "addContract");
-          params.append("n_expediente", "CON-" + $("#n_expediente").value)
+          params.append("n_expediente", serie.serie)
           params.append("tipo_contrato", $("#tipo_contrato").value)
           params.append("idseparacion", $("#idseparacion").value)
           params.append("idrepresentante_primario", $("#idrepresentante_primario").value)
@@ -1236,6 +1271,8 @@
           params.append("inicial", $("#monto_inicial").value)
           params.append("det_contrato", jsonDet)
           params.append("archivo", $("#in-doc").files[0])
+          params.append("clave", serie.clave)
+          params.append("valor", serie.number)
 
           let result = await global.sendAction(url, params);
 
@@ -1920,7 +1957,7 @@
         let idproyecto = e.target.options[e.target.selectedIndex].value;
         let tipo = e.target.options[e.target.selectedIndex].dataset.tipo;
 
-      
+
         getHouses(idproyecto);
       });
 
@@ -2011,6 +2048,7 @@
         }
       });
 
+      await getSerieCode();
       await getTC();
       await getSeparationById(idseparacion);
       await getAllContracts();

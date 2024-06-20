@@ -37,7 +37,7 @@
   <link href="../../assets/css/nucleo-svg.css" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <!-- CSS Files -->
-  <link id="Viewstyle" href="../../assets/css/soft-ui-dashboard_v2.css?v=1.0.7" rel="stylesheet" />
+  <link id="Viewstyle" href="../../assets/css/soft-ui-dashboard.css?v=1.0.7" rel="stylesheet" />
   <!-- Nepcha Analytics (nepcha.com) -->
   <!-- Nepcha is a easy-to-use web analytics. No cookies and fully compliant with GDPR, CCPA and PECR. -->
   <script defer data-site="YOUR_DOMAIN_HERE" src="https://api.nepcha.com/js/nepcha-analytics.js"></script>
@@ -102,7 +102,7 @@
 
         <!-- CLIENTES -->
         <li class="nav-item">
-          <a class="nav-link" href="../clients/index.php">
+          <a class="nav-link" href="../Clients/index.php">
             <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
               <svg width="12px" height="12px" viewBox="0 0 42 42" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <title>office</title>
@@ -174,7 +174,7 @@
 
         <!-- DEVOLUCIONES -->
         <li class="nav-item">
-          <a class="nav-link " href="../refunds/index.php">
+          <a class="nav-link active" href="../refunds/index.php">
             <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
               <svg width="12px" height="12px" viewBox="0 0 42 42" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <title>office</title>
@@ -244,7 +244,7 @@
 
         <!-- CONTRATOS -->
         <li class="nav-item">
-          <a class="nav-link active" href="../contracts/index.php">
+          <a class="nav-link" href="../contracts/index.php">
             <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
               <svg width="12px" height="12px" viewBox="0 0 42 42" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <title>office</title>
@@ -349,12 +349,15 @@
         <nav aria-label="breadcrumb">
           <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
             <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="#">Dashboard</a></li>
-            <li class="breadcrumb-item text-sm text-dark active" aria-current="page">contratos</li>
+            <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="#">Devoluciones</a></li>
+            <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Agregar devolución</li>
           </ol>
-          <h6 class="font-weight-bolder mb-0" id="cabezera">CONTRATOS </h6>
+          <h6 class="font-weight-bolder mb-0" id="cabezera">AGREGAR DEVOLUCIÓN</h6>
         </nav>
         <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
+
           <ul class="navbar-nav  justify-content-end">
+
             <li class="nav-item d-flex align-items-center">
               <a href="javascript:;" class="nav-link text-body font-weight-bold px-0">
                 <i class="fa fa-user me-sm-1"></i>
@@ -379,126 +382,155 @@
     <!-- End Navbar -->
     <div class="container py-4">
 
-      <!-- CONTENIDO -->
-
-      <div class="row">
-        <div class="col-12">
-          <div class="card mb-4">
-            <div class="card-header pb-0">
+      <!-- FORMULARIO -->
+      <div>
+        <div class="col-lg-12 mb-lg-0 mb-4 mt-4">
+          <div class="card">
+            <div class="card-body" style="padding: 50px">
               <div class="row">
-                <div class="col-md-3">
 
-                  <h6>Tabla - contratos</h6>
+
+                <div>
+
+                  <div class="d-flex flex-column h-100">
+                    <form class="row needs-validation" id="form-add-separation" novalidate>
+                      <div class="row">
+                        <div class="col-md-6">
+
+                          <!-- DATOS GENERALES -->
+
+                          <!-- NRO EXPEDIENTE -->
+                          <div class="mt-4">
+                            <label for="n_expediente" class="form-label">Nº de expediente</label>
+                            <input type="text" class="form-control" id="n_expediente" readonly>
+                          </div>
+
+                          <div class="mt-4">
+                            <label for="tipo_devolucion" class="form-label">Tipo de devolución</label>
+                            <select name="tipo_devolucion" id="tipo_devolucion" class="form-select" required autofocus>
+                              <option value="">Selecciona un tipo de devolución</option>
+                              <option value="POR SEPARACIÓN">Por separación</option>
+                              <option value="POR CONTRATO">Por contrato</option>
+                            </select>
+                          </div>
+
+                          <!-- DETALLE -->
+                          <div class="mt-4">
+
+                            <label for="detalle" class="form-label">Detalle</label>
+                            <div style="position:relative;">
+                              <span id="count-char" style="display: flex; justify-content:end; position:absolute;padding:2px; font-size: 15px;">000/200</span>
+                              <textarea name="detalle" class="form-control" style="padding-top: 25px;" id="detalle" cols="65" rows="3" maxlength="200" required></textarea>
+                            </div>
+                            <div class="invalid-feedback">
+                              Necesitas ingresar un detalle.
+                            </div>
+                            <div class="valid-feedback">
+                              Detalle registrado correctamente.
+                            </div>
+                          </div>
+
+                          <!-- PORCENTAJE DE PENALIDAD -->
+                          <div class="mt-4">
+                            <label for="procentaje_penalidad" class="form-label">Procentaje de penalidad</label>
+                            <div class="input-group">
+                              <span class="input-group-text">%</span>
+                              <input type="number" class="form-control" id="porcentaje_penalidad" placeholder="Porcentaje de penaliad" min="1" max="100" value="0" required>
+                            </div>
+                            <div class="invalid-feedback">
+                              Necesistas registrar el porcentaje de penalidad
+                            </div>
+                            <div class="valid-feedback">
+                              Porcentaje de penalidad registrado correctamente
+                            </div>
+                          </div>
+
+                          <!-- MONTO TOTAL -->
+                          <div class="mt-4">
+                            <label for="monto_total" class="form-label">Monto total</label>
+                            <input type="text" name="monto_total" class="form-control" id="monto_total" readonly>
+                          </div>
+
+                          <!-- MONTO DE DEVOLUCIÓN -->
+                          <div class="mt-4">
+                            <label for="monto_devolucion" class="form-label">Monto de devolución</label>
+                            <input type="number" class="form-control" id="monto_devolucion" placeholder="Monto de devolución" value="0.00" min="100.00" step="0.01" required>
+                            <div class="invalid-feedback">
+                              Necesitas ingresar el monto de devolución.
+                            </div>
+                            <div class="valid-feedback">
+                              Monto de devolución ingresado correctamente.
+                            </div>
+                          </div>
+
+                          <!-- IMAGEN -->
+                          <div class="form-group mt-4">
+                            <label for="in-image" class="label-img">
+                              <i class="material-icons"></i>
+                              <span class="title" style="display: flex; justify-content: center;">Agregar imagen de comprobante</span>
+                              <input type="file" accept=".jpg" id="in-image" required>
+                            </label>
+                          </div>
+
+
+                          <div class="d-grid p-3">
+
+                            <button class="btn btn-success" type="submit" id="guardar">Guardar</button>
+                          </div>
+
+                        </div>
+
+                        <div class="col-md-6">
+                          <div class="h-50" style="display: flex; justify-content: center;">
+
+                            <div class="position-relative d-flex align-items-center justify-content-center h-100">
+                              <img class="w-100 position-relative z-index-2 pt-4" style="width: 100%;" id="file-view" src="../../media/constancias_sep/NoImage.jpg" alt="">
+                            </div>
+                          </div>
+
+                        </div>
+                      </div>
+                    </form>
+                  </div>
                 </div>
-                <div class="row d-flex" style="align-items: end;">
 
-                  <div class="col-md-3 mt-2">
-
-                    <label for="tipo_contrato">Tipo de contrato</label>
-                    <select id="tipo_contrato" class="form-select" name="tipo_contrato">
-                      <option value="VENTA DE LOTE" selected>Elije un tipo de contrato</option>
-                      <option value="VENTA DE LOTE">Venta de lote</option>
-                      <option value="VENTA DE CASA">Venta de casa</option>
-                    </select>
-                  </div>
-
-                  <div class="col-md-3 mt-2">
-                    <label for="fechaInicio" class="form-label">
-                      Fecha de inicio
-                    </label>
-                    <input type="date" name="fechaInicio" class="form-control" id="fechaInicio">
-                  </div>
-                  <div class="col-md-3 mt-2">
-                    <label for="fechaFin" class="form-label">
-                      Fecha de fin
-                    </label>
-                    <input type="date" name="fechaFin" class="form-control" id="fechaFin">
-                  </div>
-
-                  <div class="col-md-3 d-grid mt-2">
-                    <label for="in-code">Nº de expediente</label>
-                    <div class="input-group">
-                      <span class="input-group-text text-body"><i class="fas fa-search" aria-hidden="true"></i></span>
-                      <input type="text" class="form-control" placeholder="Nº de expediente..." id="in-code" name="in-code">
-                    </div>
-                  </div>
-
-                </div>
-                <div class="row">
-                  <div class="col-md-3 mt-2">
-
-                    <a type="button" class="mb-0  btn btn-sm btn-outline-success" href="./add_contract.php">AGREGAR CONTRATO</a>
-                  </div>
-                </div>
-                <div class="row d-flex" style="justify-content: space-between; align-items: start;">
-                  <div class="col-md-3 m-2">
-                    <div class="btn-group text-start mt-2">
-                    </div>
-
-                  </div>
-                </div>
-              </div>
-            </div>
-            <hr>
-            <div class="card-body px-0 pt-0 pb-2">
-              <div class="table-responsive text-center p-0" style="height: 300px;">
-                <table class="table align-items-center mb-0 table-hover" id="table-contracts">
-                  <thead>
-                    <tr>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">#</th>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Nº de expediente</th>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Estado</th>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Cliente</th>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Tipo de documento</th>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Nº de documento</th>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Fecha del contrato</th>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Operaciones</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-
-                    <!-- RENDER -->
-
-                  </tbody>
-                </table>
-                <div id="render-alert">
-                  
-
-
-                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
+    </div>
 
-      <footer class="footer pt-3  ">
-        <div class="container-fluid">
-          <div class="row align-items-center justify-content-lg-between">
-            <div class="col-lg-6 mb-lg-0 mb-4">
-              <div class="copyright text-center text-sm text-muted text-lg-start">
-                © <script>
-                  document.write(new Date().getFullYear())
-                </script>,
-                auspiciado por
-                <a href="https://www.creative-tim.com" class="font-weight-bold" target="_blank">A.I.F Contratistas Generales S.A.C</a>
-                (sistema web).
-              </div>
+    <footer class="footer pt-3  ">
+      <div class="container-fluid">
+        <div class="row align-items-center justify-content-lg-between">
+          <div class="col-lg-6 mb-lg-0 mb-4">
+            <div class="copyright text-center text-sm text-muted text-lg-start">
+              © <script>
+                document.write(new Date().getFullYear())
+              </script>,
+              auspiciado por
+              <a href="https://www.creative-tim.com" class="font-weight-bold" target="_blank">A.I.F Contratistas Generales S.A.C</a>
+              (sistema web).
             </div>
           </div>
         </div>
-      </footer>
+      </div>
+    </footer>
     </div>
   </main>
   <div class="fixed-plugin">
     <a class="fixed-plugin-button text-dark position-fixed px-3 py-2">
       <i class="fa fa-cog py-2"> </i>
     </a>
+
+
+    <!-- CONFIGURACIONES DEL PANEL -->
     <div class="card shadow-lg ">
       <div class="card-header pb-0 pt-3 ">
         <div class="float-start">
-          <h5 class="mt-3 mb-0">Soft UI Configurator</h5>
-          <p>See our dashboard options.</p>
+          <h5 class="mt-3 mb-0">Configurar tu interfáz</h5>
+          <p>Mira las opciones de configuración</p>
         </div>
         <div class="float-end mt-4">
           <button class="btn btn-link text-dark p-0 fixed-plugin-close-button">
@@ -529,8 +561,8 @@
           <p class="text-sm">Puedes escojer entre dos tipos de sidebar.</p>
         </div>
         <div class="d-flex">
-          <button class="btn bg-gradient-primary w-100 px-3 mb-2 active" data-class="bg-transparent" onclick="sidebarType(this)">Transparent</button>
-          <button class="btn bg-gradient-primary w-100 px-3 mb-2 ms-2" data-class="bg-white" onclick="sidebarType(this)">White</button>
+          <button class="btn bg-gradient-primary w-100 px-3 mb-2 active" data-class="bg-transparent" onclick="sidebarType(this)">Transparente</button>
+          <button class="btn bg-gradient-primary w-100 px-3 mb-2 ms-2" data-class="bg-white" onclick="sidebarType(this)">Blanco</button>
         </div>
         <p class="text-sm d-xl-none d-block mt-2">Solo puedes cambiar la transparecia del seidebar en la vista de escritorio.</p>
 
@@ -545,55 +577,32 @@
     </div>
   </div>
 
-  <!-- MODAL -->
-  <!-- Button trigger modal -->
-  <!-- Modal -->
-  <div class="modal fade" id="modal_det_sep" tabindex="-1" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-scrollable modal-lg modal-fullscreen-sm-down" role="document">
-      <div class="modal-content">
-        <div class="modal-header bg-secondary">
-          <h5 class="modal-title text-white" id="modalTitle">
-            --
-          </h5>
-          <button type="button" class="btn-close text-dark" data-bs-dismiss="modal" aria-label="Close"></button>
+  <!-- Modal trigger button -->
+  <button type="button" id="show-modal" class="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#modalId" style="position: absolute; left: -9999px; top: -9999px;">
+    Launch
+  </button>
+
+  <!-- Modal Body -->
+  <!-- if you want to close by clicking outside the modal, delete the last endpoint:data-bs-backdrop and data-bs-keyboard -->
+  <div class="modal fade" id="modalId" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+      <div class="modal-content bg-transparent" style="border: none;">
+        <div class="modal-header" style="border-bottom: none;">
+
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-        <div class="modal-body">
-          <div style="margin: 5% 10% 5% 10%;">
-            <div class="d-flex" style="justify-content: space-between;">
-              <div>
-
-                <h6><strong>Cliente :</strong></h6>
-                <h6><strong>Documento tipo :</strong></h6>
-                <h6><strong>Documento número :</strong></h6>
-                <h6><strong>Proyecto :</strong></h6>
-                <h6><strong>Sublote :</strong></h6>
-                <h6><strong>Monto de separación :</strong></h6>
-                <div id="labels">
-
-                </div>
-              </div>
-              <div>
-                <h6 id="cliente"></h6>
-                <h6 id="documento_tipo"></h6>
-                <h6 id="documento_nro"></h6>
-                <h6 id="proyecto"></h6>
-                <h6 id="sublote"></h6>
-                <h6 id="monto_separación"></h6>
-                <div id="content">
-
-                </div>
-              </div>
-            </div>
-          </div>
+        <div class="modal-body d-lg-flex justify-content-center">
+          <img id="viewer" src="" alt="" style="height: 500px; width: 500px;">
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-primary" data-bs-dismiss="modal">
-            Cerrar
-          </button>
+        <div class="modal-footer d-flex justify-content-center" style="border-top: none;">
+          <h4 class="text-white bold" id="name_image">CONSTANCIA</h4>
         </div>
       </div>
     </div>
   </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
   <!-- SWEET ALERT -->
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -601,270 +610,326 @@
   <!--   Core JS Files   -->
   <script src="../../assets/js/core/popper.min.js"></script>
   <script src="../../assets/js/core/bootstrap.min.js"></script>
+  <script src="../../assets/js/core/bootstrap.bundle.min.js"></script>
   <script src="../../assets/js/plugins/perfect-scrollbar.min.js"></script>
   <script src="../../assets/js/plugins/smooth-scrollbar.min.js"></script>
   <script src="../../assets/js/plugins/chartjs.min.js"></script>
   <script src="../../assets/js/globalFunctions.js"></script>
   <script src="../../assets/js/sweetAlert.js"></script>
+
+  <!-- <script src="../../assets/js/renderUbigeo.js"></script>  -->
+
+  <!-- SELECT2 - JQUERY -->
+  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
   <script>
-    document.addEventListener("DOMContentLoaded", async function() {
+    const global = new FunGlobal();
+    const sAlert = new Alert();
 
-      /* INSTANCIAS */
-      const global = new FunGlobal();
-      const sAlert = new Alert();
+    const stringQuery = window.location.search;
+    const params = new URLSearchParams(stringQuery);
+    const code = params.get("id");
+    const codeType = params.get("type");
+    const generalId = atob(code);
+    const type = atob(codeType);
 
-      const $ = id => global.$(id);
-      const $All = id => global.$All(id);
+    console.log(generalId)
+    const $ = id => global.$(id);
+    const $All = id => global.$All(id);
 
-      let timmer;
+    let datarefunds;
+    let lastCode = false;
+    let dataClients;
+    let newValue;
 
-      //Descarga el contrato PDF
-      async function downloadContract(file, name){
+    // * Obtienie el numero de serie código
+    async function getSerieCode() {
 
-        try{
+      try {
 
-          console.log(file)
-          console.log(name)
+        let url = "../../Controllers/configuration.controller.php";
 
-          let params = new URLSearchParams();
-          params.append("action","downloadPDF");
-          params.append("archivo",file);
-          params.append("nombre",name);
+        let params = new FormData();
+        params.append("action", "listConfig");
+        params.append("clave", "serie-presupuesto");
 
-          let url = `../../Controllers/contract.controller.php?${params}`;
+        let result = await global.sendAction(url, params);
 
-          window.location.href = url;
-          
+        if (result) {
 
+          console.log(result)
+
+          let alphanum = "DEVC-";
+          let number = Number.parseInt(result.valor) + 1;
+          let numberString = String(number).toString().padStart(5, '0');
+          let serie = alphanum + numberString
+          console.log(serie)
+
+          const alpha_serie = {
+            "clave": "serie-presupuesto",
+            "serie": serie,
+            "number": number,
+            "numberString": numberString,
+            "alphanum": alphanum
+          }
+
+          $("#codigo").value = serie;
+
+          return alpha_serie;
         }
-        catch(e){
-          console.error(e);
-        }
+
+      } catch (e) {
+        console.error(e)
       }
+    }
 
-      //valida el rango de fechas
-      function validateDates() {
-        const fecha_inicio = $("#fechaInicio").value;
-        const inicioDate = new Date(fecha_inicio);
+    //Obtiene los registros de una separacion por id (para obtener el monot de la separación)
+    async function getAmount(id) {
 
-        const fecha_fin = $("#fechaFin").value;
-        const finDate = new Date(fecha_fin);
+      try {
 
-        if (inicioDate > finDate) {
+        let url = "";
+        let params = new FormData();
 
-          getContractsType();
+        if (type == "sep") {
+
+          url = "../../Controllers/separation.controller.php";
+
+          params.append("action", "listSeparationById");
+          params.append("idseparacion", id);
         } else {
-          getContractsTypeDate();
+          url = "../../Controllers/quota.controller.php";
+
+          params.append("action", "getQuotasContractReprogram");
+          params.append("idcontrato", id);
         }
 
-      }
+        let result = await global.sendAction(url, params);
 
-      //Obtiene el rango de fechas
-      function getDate() {
+        if (result) {
 
-        const date = new Date();
-
-        const futureDate = new Date();
-
-        const pastDate = new Date("2024-1-1");
-
-
-        let dateToday = date.getDate().toString().padStart(2, '0');
-        let monthToday = (date.getMonth() + 1).toString().padStart(2, '0');
-        let yearToday = date.getFullYear().toString();
-        let today = `${yearToday}-${monthToday}-${dateToday}`;
-
-        futureDate.setMonth(date.getMonth() + 1);
-
-        if (futureDate.getDate() !== date.getDate()) {
-          futureDate.setDate(0);
+          let total = result.separacion_monto || result.precio_venta;
+          $("#monto_total").value = total;
+          return total;
         }
-
-        let futureDay = futureDate.getDate().toString().padStart(2, '0');
-        let futureMonth = (futureDate.getMonth() + 1).toString().padStart(2, '0');
-        let futureYear = futureDate.getFullYear().toString();
-
-        let future = `${futureYear}-${futureMonth}-${futureDay}`;
-
-        let pastDay = pastDate.getDate().toString().padStart(2, '0');
-        let pastMonth = (pastDate.getMonth() + 1).toString().padStart(2, '0');
-        let pastYear = pastDate.getFullYear().toString();
-
-        let past = `${pastYear}-${pastMonth}-${pastDay}`;
-
-        $("#fechaInicio").value = today;
-        $("#fechaInicio").max = today;
-        $("#fechaInicio").min = past;
-
-        $("#fechaFin").value = today;
-        $("#fechaFin").min = today;
-        $("#fechaFin").max = future;
-
+      } catch (e) {
+        console.error(e);
       }
+    }
 
-      //Renderiza los datos en la tabla
-      function renderTable(array) {
+    //Calcula el nuevo monto de la devolución
+    async function calculateNewAmount() {
 
-        
-        const tableBody = $("#table-contracts tbody"); 
-        const renderAlert = $("#render-alert");
+      let montoSep = Number.parseFloat(await getAmount(generalId));
+      let porcentaje = Number.parseFloat($("#porcentaje_penalidad").value || 0)
 
-        tableBody.innerHTML = "";
-        renderAlert.innerHTML = "";
-        
-        if(array.length > 0){
+      console.log(montoSep)
+      console.log(porcentaje)
+      let result = montoSep - (montoSep * (porcentaje / 100));
 
-  
-          let numRow = 1;
-          array.forEach(element => {
-            
-            let code = btoa(element.idcontrato)
-            let fileName = element.n_expediente + " - " + element.tipo_contrato + " - " + element.cliente;
-            let newRow = `
-            <tr>
-              <td class="text-sm">${numRow}</td>
-              <td class="text-sm">${element.n_expediente}</td>
-              <td class="text-sm">${element.estado}</td>
-              <td class="text-sm">${element.cliente}</td>
-              <td class="text-sm">${element.documento_tipo}</td>
-              <td class="text-sm">${element.documento_nro}</td>
-              <td class="text-sm">${element.fecha_contrato}</td>
-              <td>
-                <div class="btn-group">
-                  <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" data-bs-auto-close="true" aria-expanded="false">
-                          
-                  </button>
-                  <ul class="dropdown-menu">
-                    <li><a href="../../Controllers/contract.controller.php?action=downloadPDF&archivo=${element.archivo}&nombre=${fileName}" class="dropdown-item border-radius-md download"><i class="bi bi-arrow-down-square text-danger download"></i>  Descargar</a></li>
-                    <li><a href="../refunds/add_refund_contract.php?id=${code}" class="dropdown-item border-radius-md"><i class="fa-solid fa-right-left text-secondary"></i>  Devolver</a></li>
-                    <li><a href="#" class="dropdown-item border-radius-md"><i class="bi bi-arrow-right-square text-success"></i> Ver más</a></li>
-                    <li><a href="./edit_contract.php?id=${code}" class="dropdown-item border-radius-md"><i class="bi bi-pencil-fill text-primary"></i> Editar</a></li>
-                  </ul>
-                </div>
-              </td>
-            </tr>
-            `;
-            numRow++
-            tableBody.innerHTML += newRow;
-          });
+      $("#monto_devolucion").value = result.toFixed(2);
+    }
 
-        }else{
+    //Obtiene la fecha actual
+    async function getToday() {
+      let date = new Date();
 
-          let alert = `
-            <div class="alert alert-danger text-white" role="alert">
-              <strong>No se encontraron datos.</strong> Intentelo otra vez
-            </div>
-          `;
+      let day = date.getDay().toString().padStart(2, '0');
+      let month = (date.getMonth() + 1).toString().padStart(2, '0');
+      let year = date.getFullYear().toString().padStart(2, '0');
 
-          renderAlert.innerHTML = alert;
+      let today = `${year}-${month}-${day}`;
+      return today;
+    }
+
+    //Obtiene el tipo de cambio
+    async function getTC() {
+
+      try {
+
+        let params = new URLSearchParams();
+        let today = await getToday();
+
+        params.append("action", "searchTC");
+        params.append("fecha", today);
+
+        let url = `../../Controllers/searchDocument.php?${params}`;
+
+        let results = await global.sendActionGET(url);
+
+        if (results) {
+          let precio_venta = results.data.data.venta;
+          let number_format = precio_venta.toFixed(2);
+          let pVenta_format = Number.parseFloat(number_format);
+
+
+          $("#tipo_cambio").value = pVenta_format;
         }
+      } catch (e) {
+        console.error(e)
       }
+    }
 
-      //Obtiene los datos de los contratos según el tipo
-      async function getContractsType() {
+    //Obtiene los datos de las devoluciones
+    async function getRefudsAll() {
 
-        try {
-          let url = "../../Controllers/contract.controller.php";
+      try {
 
-          let params = new FormData();
+        let url = "../../Controllers/refund.controller.php";
 
-          params.append("action", "listContractByType");
-          params.append("tipo_contrato", $("#tipo_contrato").value);
+        let params = new FormData();
+        params.append("action", "listRefundsAll");
 
-          let results = await global.sendAction(url, params);
+        let results = await global.sendAction(url, params);
 
-          if (results) {
-            console.log(results);
-            renderTable(results)
-          }
-        } catch (e) {
-          console.error(e);
+        if (results.length > 0) {
+          datarefunds = results;
+          console.log(datarefunds);
         }
+      } catch (e) {
+        console.error(e);
       }
+    }
 
-      //Obtiene los datos de los contratos según el tipo y la fecha
-      async function getContractsTypeDate() {
+    //Valida los datos(inptu n_expediente y idactivo)
+    function validateDate(campo, value, array) {
 
-        try {
-          let url = "../../Controllers/contract.controller.php";
+      return new Promise((resolve, reject) => {
 
-          let params = new FormData();
+        let isFound = array.find(element => element[campo] == value)
 
-          params.append("action", "listContractsByTypeDate");
-          params.append("tipo_contrato", $("#tipo_contrato").value);
-          params.append("fecha_inicio", $("#fechaInicio").value);
-          params.append("fecha_fin", $("#fechaFin").value);
-
-          let results = await global.sendAction(url, params);
-
-          if (results) {
-            console.log(results);
-            renderTable(results)
-          }
-        } catch (e) {
-          console.error(e);
-        }
-      }
-
-      //Obtiene los datos de los contratos según el tipo, la fecha Y EL NUMERO DE EXPEDIENTE
-      async function getContractsTypeDateExpedient() {
-
-        try {
-          let url = "../../Controllers/contract.controller.php";
-
-          let params = new FormData();
-
-          params.append("action", "listContractsByTypeDateNexpediente");
-          params.append("tipo_contrato", $("#tipo_contrato").value);
-          params.append("fecha_inicio", $("#fechaInicio").value);
-          params.append("fecha_fin", $("#fechaFin").value);
-          params.append("n_expediente", $("#in-code").value);
-
-          let results = await global.sendAction(url, params);
-
-          if (results) {
-            console.log(results);
-            renderTable(results)
-          }
-        } catch (e) {
-          console.error(e);
-        }
-      }
-
-      $("#table-contracts tbody").addEventListener("click",async function(e){
-
-  
-      });
-
-      $("#in-code").addEventListener("input", (e) => {
-
-        let valueInput = e.target.value;
-
-        if (valueInput) {
-
-          clearTimeout(timmer);
-
-          timmer = setTimeout(() => {
-            getContractsTypeDateExpedient();
-          }, 1500);
+        if (isFound) {
+          sAlert.sweetWarning("Se ha encontrado coincidencias", `"${value}" ya existe, ingresa otro`);
+          reject();
+          console.log("dato encontrado");
+        } else {
+          resolve();
+          console.log("data no encontrado");
         }
       });
 
-      $("#fechaFin").addEventListener("change", () => {
-        validateDates();
-      });
+    }
 
-      $("#fechaInicio").addEventListener("change", () => {
-        validateDates();
-      });
+    function readFile(event) {
+      let file = event.target.files[0];
+      let reader = new FileReader();
 
-      $("#tipo_contrato").addEventListener("change", () => {
-        getContractsType();
-      });
+      reader.onload = (event) => {
+        $("#file-view").setAttribute("src", (event.target.result));
+        $("#file-view").style.width = "100%";
+        $("#file-view").style.height = "20rem";
+      }
 
-      await getDate();
-      await getContractsTypeDate();
+      reader.readAsDataURL(file);
+    }
+
+    //Registra una separación
+    async function addRefund(genID) {
+
+      try {
+
+        const serie = await getSerieCode()
+        let url = "../../Controllers/refund.controller.php";
+        let params = new FormData()
+
+        if (type == "sep") {
+
+          params.append("action", "addRefund");
+          params.append("n_expediente", serie.serie);
+          params.append("idseparacion", genID);
+          params.append("idcontrato", "");
+        } else {
+          params.append("action", "addRefund");
+          params.append("n_expediente", serie.serie);
+          params.append("idseparacion", "");
+          params.append("idcontrato", genID);
+        }
+        params.append("tipo_devolucion", $("#tipo_devolucion").value);
+        params.append("detalle", $("#detalle").value);
+        params.append("porcentaje_penalidad", $("#porcentaje_penalidad").value);
+        params.append("monto_devolucion", $("#monto_devolucion").value);
+        params.append("imagen", $("#in-image").files[0]);
+        params.append("clave", serie.clave);
+        params.append("valor", serie.number);
+
+        let result = await global.sendAction(url, params);
+
+        if (result.filasAfect > 0) {
+          console.log(result);
+          sAlert.sweetSuccess("El registro fué exstisoso", "La devolución fué correctamente registrada", () => {
+            history.back(); //Regresa a la pagina anterior, history.go(-2) seria dos paginas atras
+          })
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
+    $("#detalle").addEventListener("input", (e) => {
+
+      let inputValue = e.target.value;
+      let count = inputValue.length.toString().padStart(3, '0');
+
+      $("#count-char").innerHTML = `${count}/200`;
     });
+
+    $("#porcentaje_penalidad").addEventListener("input", () => {
+
+      calculateNewAmount();
+    });
+
+
+    $("#in-image").addEventListener("change", (e) => {
+
+      if (e.target.files.length > 0) {
+        readFile(e);
+      }
+    });
+
+    $("#file-view").addEventListener("click", (e) => {
+
+      let img = e.target.src;
+      console.log(img)
+      $("#viewer").src = img;
+      $("#viewer").alt = img;
+      $("#show-modal").click()
+    })
+
+    // getTC();
+    getSerieCode();
+    getAmount(generalId);
+    getRefudsAll();
+    /* --------------------------------- FUNCIÓN DE VALIDACIÓN --------------------------------------------------------- */
+
+    (() => {
+      'use strict' //=> USO ESTRICTO POR POLITICAS DE SEGURIDAD EN EL FORMULARIO
+
+      //SELECCIONA TODOS LOS ELEMENTOS DEL FORMULARIO QUE TIENE LA CLASE "needs-validation
+      const forms = document.querySelectorAll('.needs-validation')
+
+      // TOMA EL ELEMENTO "FORMS" Y LO CONVIERTE A UN ARRAY
+      // SE INCLUYE EN UN FOREAH PARA ITERAR SOBRE SUS ELEMENTOS
+
+      Array.from(forms).forEach(form => {
+        form.addEventListener('submit', event => {
+
+          //SI LA VALIDACIÓN DEL FORMULARIO ES FALSE
+          if (!form.checkValidity()) {
+            event.preventDefault() //=> FRENA EL ENVÍO DEL FORMULARIO
+            event.stopPropagation() //=> FRENA LA PROPAGACIÓN DE DATOS EN EL FORMULARIO
+            form.reportValidity();
+          } else {
+            event.preventDefault();
+            sAlert.sweetConfirm("Datos nuevos", "¿Deseas actualizar el registro?", () => {
+
+              addRefund(generalId); //Ejecuta la función
+            });
+          }
+
+          form.classList.add('was-validated') //=> AGREGA ESTA CLASE A LOS ELEMENTOS DEL FORMULARIO(MUESTRA LOS COMENTARIOS)
+        }, false) //=> ESTE TERCER ARGUMENTO INDICA QUE EL EVENTO NO SE ESTA CAPTURANDO EN LA ""FASE DE CAPTURA" SINO EN "PROPAGACIÓN NORMAL"
+      })
+    })();
   </script>
   <script>
     var win = navigator.platform.indexOf('Win') > -1;

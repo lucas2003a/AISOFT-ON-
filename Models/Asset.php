@@ -278,12 +278,12 @@ class Asset extends Conection
     /**
      * Lista los lotes sin sin presupuesto
      */
-    public function listLotsNoBudgets()
+    public function listHousesNoBudgets()
     {
 
         try {
 
-            $query = $this->conection->prepare("CALL spu_list_lots_noBudgets()");
+            $query = $this->conection->prepare("CALL spu_list_houses_noBudgets()");
             $query->execute();
 
             return $query->fetchAll(PDO::FETCH_ASSOC);

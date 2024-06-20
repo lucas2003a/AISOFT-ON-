@@ -182,7 +182,7 @@
                   <g transform="translate(-1869.000000, -293.000000)" fill="#FFFFFF" fill-rule="nonzero">
                     <g transform="translate(1716.000000, 291.000000)">
                       <g id="office" transform="translate(153.000000, 2.000000)">
-                      <svg class="color-background" xmlns="http://www.w3.org/2000/svg"  width="50" height="50" fill="currentColor" class="bi bi-backspace-fill" viewBox="0 0 16 16">
+                        <svg class="color-background" xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-backspace-fill" viewBox="0 0 16 16">
                           <path d="M15.683 3a2 2 0 0 0-2-2h-7.08a2 2 0 0 0-1.519.698L.241 7.35a1 1 0 0 0 0 1.302l4.843 5.65A2 2 0 0 0 6.603 15h7.08a2 2 0 0 0 2-2zM5.829 5.854a.5.5 0 1 1 .707-.708l2.147 2.147 2.146-2.147a.5.5 0 1 1 .707.708L9.39 8l2.146 2.146a.5.5 0 0 1-.707.708L8.683 8.707l-2.147 2.147a.5.5 0 0 1-.707-.708L7.976 8z" />
                         </svg>
                       </g>
@@ -407,22 +407,14 @@
                           <!-- NRO EXPEDIENTE -->
                           <div class="mt-4">
                             <label for="n_expediente" class="form-label">Nº de expediente</label>
-                            <div class="input-group">
-                              <span class="input-group-text">SEC-</span>
-                              <input type="number" class="form-control" id="n_expediente" placeholder="Nº de expediente" value="000000" min="000001" step="1" autofocus required>
-                            </div>
-                            <div class="invalid-feedback">
-                              Necesitas ingresar el nro de expediente.
-                            </div>
-                            <div class="valid-feedback">
-                              Nº de expediente registrado correctamente.
-                            </div>
+                            <input type="text" class="form-control" id="n_expediente" placeholder="Nº de expediente" readonly>
+
                           </div>
 
                           <!-- TIPO DE PERSONA -->
                           <div class="mt-4">
                             <label for="tipo_persona" class="form-label">Tipo de persona</label>
-                            <select class="form-select custom-select-scroll" id="tipo_persona" required>
+                            <select class="form-select custom-select-scroll" id="tipo_persona" required autofocus>
                               <option selected value="">Tipo de persona</option>
                               <option value="NATURAL">Natural</option>
                               <option value="JURÍDICA">Jurídica</option>
@@ -439,7 +431,7 @@
                           <div class="mt-4">
                             <label for="idcliente" class="form-label">Cliente</label>
                             <select class="form-select custom-select-scroll" id="idcliente" required>
-                              <option selected disabled value="">Seleccione un cliente</option>
+                              <option value="">Seleccione un cliente</option>
                             </select>
                             <div class="invalid-feedback">
                               Necesitas escojer una cliente.
@@ -476,8 +468,15 @@
                             </div>
                           </div>
 
+
+                          <!-- DETALLES -->
+                          <div class="mt-4">
+                            <label for="detalle" class="form-label">Detalles</label>
+                            <textarea name="detalle" id="detalle" cols="30" rows="5" class="form-control" required></textarea>
+                          </div>
+
                           <!-- IMAGEN -->
-                          <div class="form-group mt-4">
+                          <div class="form-group mt-4 img-content">
                             <label for="in-image" class="label-img">
                               <i class="material-icons"></i>
                               <span class="title" style="display: flex; justify-content: center;">Agregar imagen de comprobante</span>
@@ -485,6 +484,9 @@
                               <img class="w-100 position-relative z-index-2 pt-4" style="width: 100%;" id="file-view" src="../../media/constancias_sep/NoImage.jpg" alt="">
                             </label>
                           </div>
+
+
+
                           <div class="d-grid p-3">
 
                             <button class="btn btn-success" type="submit" id="guardar">Guardar</button>
@@ -498,7 +500,7 @@
                           <!-- PROYECTOS -->
                           <div class="mt-4">
                             <label for="idproyecto" class="form-label">Proyectos</label>
-                            <select class="form-select custom-select-scroll" id="idproyecto" disabled>
+                            <select class="form-select custom-select-scroll" id="idproyecto" required>
                               <option selected disabled value="">Seleccione un proyecto</option>
                             </select>
                             <div class="invalid-feedback">
@@ -542,6 +544,34 @@
                             </div>
                             <div class="valid-feedback">
                               Monto de separación ingresado correctamente.
+                            </div>
+
+                            <!-- FECHA PAGO -->
+                            <div class="mt-4">
+                              <label class="form-label" name="fecha_pago">Fecha de pago</label>
+                              <input type="date" class="form-control" id="fecha_pago" required>
+                            </div>
+
+                            <!-- MODALIAD DE PAGO -->
+                            <div class="mt-4">
+                              <label for="modalidad_pago" class="form-label">Tipo de pago</label>
+                              <select name="modalidad_pago" id="modalidad_pago" class="form-select" required>
+                                <option value="">Seleccione una modalidad de pago</option>
+                                <option value="TRANFERENCIA">Transferencia</option>
+                                <option value="EFECTIVO">Efectivo</option>
+                              </select>
+                            </div>
+
+                            <!-- ENTIDAD BANCARIA -->
+                            <div class="mt-4">
+                              <label for="entidad_bancaria">Entidad bancaria</label>
+                              <select name="entidad_bancaria" id="entidad_bancaria" class="form-select" required>
+                                <option value="">Selecciona una entidad bancaria</option>
+                                <option value="BCP">BCP</option>
+                                <option value="INTERBANCK">INTERBANCK</option>
+                                <option value="BBVA">BBVA</option>
+                                <option value="SCOTIABANK">SCOTIABANK</option>
+                              </select>
                             </div>
                           </div>
                         </div>
@@ -635,27 +665,9 @@
 
   <!-- Modal trigger button -->
   <button type="button" id="show-modal" class="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#modalId" style="position: absolute; left: -9999px; top: -9999px;">
-      Launch
-    </button>
+    Launch
+  </button>
 
-  <!-- Modal Body -->
-  <!-- if you want to close by clicking outside the modal, delete the last endpoint:data-bs-backdrop and data-bs-keyboard -->
-  <div class="modal fade" id="modalId" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-      <div class="modal-content bg-transparent" style="border: none;">
-        <div class="modal-header" style="border-bottom: none;">
-
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body d-lg-flex justify-content-center">
-          <img id="viewer" src="" alt="" style="height: 500px; width: 500px;">
-        </div>
-        <div class="modal-footer d-flex justify-content-center" style="border-top: none;">
-          <h4 class="text-white bold" id="name_image">CONSTANCIA</h4>
-        </div>
-      </div>
-    </div>
-  </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
@@ -690,6 +702,48 @@
     let dataClients;
     let newValue;
 
+
+    // * Obtienie el numero de serie código
+    async function getSerieCode() {
+
+      try {
+
+        let url = "../../Controllers/configuration.controller.php";
+
+        let params = new FormData();
+        params.append("action", "listConfig");
+        params.append("clave", "serie-separacion");
+
+        let result = await global.sendAction(url, params);
+
+        if (result) {
+
+          console.log(result)
+
+          let alphanum = "SEPC-";
+          let number = Number.parseInt(result.valor) + 1;
+          let numberString = String(number).toString().padStart(5, '0');
+          let serie = alphanum + numberString
+          console.log(serie)
+
+          const alpha_serie = {
+            "clave": "serie-separacion",
+            "serie": serie,
+            "number": number,
+            "numberString": numberString,
+            "alphanum": alphanum
+          }
+
+          $("#n_expediente").value = serie;
+
+          return alpha_serie;
+        }
+
+      } catch (e) {
+        console.error(e)
+      }
+    }
+
     //Obtiene la fecha actual
     async function getToday() {
       let date = new Date();
@@ -699,6 +753,9 @@
       let year = date.getFullYear().toString().padStart(2, '0');
 
       let today = `${year}-${month}-${day}`;
+
+      $("#fecha_pago").value = today;
+      $("#fecha_pago").min = today;
       return today;
     }
 
@@ -721,14 +778,14 @@
         if (results) {
 
           console.log(results)
-          if(results.data.data){
+          if (results.data.data) {
             let precio_venta = results.data.data.venta;
             let number_format = precio_venta.toFixed(2);
             let pVenta_format = Number.parseFloat(number_format);
             $("#tipo_cambio").value = pVenta_format;
 
-          }else{
-            sAlert.sweetWarning("No se ha conseguido el tipo de cambio","No se ha podido conseguir el tipo de cambio <br> Intentalo más tarde.")
+          } else {
+            sAlert.sweetWarning("No se ha conseguido el tipo de cambio", "No se ha podido conseguir el tipo de cambio <br> Intentalo más tarde.")
           }
         }
       } catch (e) {
@@ -784,7 +841,8 @@
         let url = "../../Controllers/project.controller.php";
 
         let params = new FormData();
-        params.append("action", "listProject");
+        params.append("action", "listProjecTypeAct");
+        params.append("tipo_activo", "LOTE");
 
         let results = await global.sendAction(url, params);
 
@@ -906,104 +964,76 @@
 
       console.log(idcliente)
       let parseIdcliente = Number.parseInt(idcliente);
-      if(dataClients.length > 0){
+      if (dataClients.length > 0) {
 
         console.log(dataClients);
         //Array que contiene los datos de los conyugues
-        let spouses = dataClients.filter(result => result.idcliente !==  parseIdcliente && result.tipo_persona == "NATURAL")
-  
+        let spouses = dataClients.filter(result => result.idcliente !== parseIdcliente && result.tipo_persona == "NATURAL")
+
         console.log(spouses);
         $("#idconyugue").innerHTML = "";
-  
+
         let defaultTag = document.createElement("option");
         defaultTag.innerText = "Seleccione una persona";
         defaultTag.value = "";
-  
+
         $("#idconyugue").appendChild(defaultTag);
-  
+
         spouses.forEach(spouse => {
-  
+
           let name = spouse.apellidos.toUpperCase() + ", " + spouse.nombres.toLowerCase();
-  
+
           let newOption = document.createElement("option");
           newOption.text = spouse.documento_nro + " - " + name;
           newOption.value = spouse.idcliente;
-  
+
           $("#idconyugue").appendChild(newOption);
         });
       }
     }
 
     //Registra una separación
-    async function addSeparation(){
+    async function addSeparation() {
 
-      try{
+      try {
 
+        let serie = await getSerieCode()
         let url = "../../Controllers/separation.controller.php";
         let params = new FormData()
 
         params.append("action", "addSeparation");
-        params.append("n_expediente", newValue);
+        params.append("n_expediente", serie.serie);
         params.append("idactivo", $("#idactivo").value);
         params.append("idcliente", $("#idcliente").value);
         params.append("idconyugue", $("#idconyugue").value);
         params.append("separacion_monto", $("#separacion_monto").value);
         params.append("moneda_venta", $("#moneda_venta").value);
         params.append("tipo_cambio", $("#tipo_cambio").value);
+        params.append("fecha_pago", $("#fecha_pago").value);
+        params.append("modalidad_pago", $("#modalidad_pago").value);
+        params.append("entidad_bancaria", $("#entidad_bancaria").value);
         params.append("imagen", $("#in-image").files[0]);
+        params.append("detalle", $("#detalle").value);
+        params.append("clave", serie.clave);
+        params.append("valor", serie.number);
 
-        let result = await global.sendAction(url,params);
+        let result = await global.sendAction(url, params);
 
-        if(result.filasAfect > 0){
+        if (result.filasAfect > 0) {
           console.log(result);
-          sAlert.sweetConfirmAdd("El registro fué exitoso","¿Deseas volver a registrar?",
-            ()=>{
-                $("#form-add-separation").reset();
-                $("#form-add-separation").classList.remove("was-validated");
-  
-            },()=>{
-                window.location.href = "./index.php";
+          sAlert.sweetConfirmAdd("El registro fué exitoso", "¿Deseas volver a registrar?",
+            () => {
+              $("#form-add-separation").reset();
+              $("#form-add-separation").classList.remove("was-validated");
+
+            }, () => {
+              window.location.href = "./index.php";
             })
         }
-      }catch(e){
+      } catch (e) {
         console.error(e);
       }
     }
-
-    $("#n_expediente").addEventListener("blur", (e) => {
-
-      console.log(lastCode)
-      e.preventDefault();
-      let valueInput = e.target.value;
-
-      if (!lastCode) {
-        lastCode = true;
-        let sliceValue = valueInput.slice(0,6); //Extrae los valores incluyendo los del indice 0 y 6
-        let valueFormat = sliceValue.padEnd(6, '0')
-        newValue = "SEC-" + valueFormat;
-        $("#n_expediente").value = valueFormat;
-
-        validateDate("n_expediente", newValue, dataSeparations)
-          .then(() => {
-            console.log("no existe");
-          }).catch(() => {
-            $("#n_expediente").focus();
-            lastCode = false;
-          })
-      }
-    });
-
-    $("#n_expediente").addEventListener("input", (e) => {
-
-      e.preventDefault();
-      
-      let valueInput = e.target.value;
-
-      if (e.target.dataset.prevVal !== valueInput) {
-        lastCode = false;
-      }
-      e.target.dataset.prevVal = valueInput;
-    });
 
     $("#idproyecto").addEventListener("change", (e) => {
 
@@ -1041,11 +1071,6 @@
 
       getSpouses(idcliente);
 
-      if (idcliente) {
-        $("#idproyecto").disabled = false;
-      } else {
-        $("#idproyecto").disabled = true;
-      }
     });
 
 
@@ -1056,18 +1081,11 @@
       }
     });
 
-    $("#file-view").addEventListener("click",(e)=>{
-
-      let img = e.target.src;
-      console.log(img)
-      $("#viewer").src = img;
-      $("#viewer").alt = img;
-      $("#show-modal").click()
-    })
-
     getTC();
     getProjects();
     getSeparations();
+
+    getSerieCode();
     /* --------------------------------- FUNCIÓN DE VALIDACIÓN --------------------------------------------------------- */
 
     (() => {
