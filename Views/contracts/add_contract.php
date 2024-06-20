@@ -416,7 +416,6 @@
                                 <option value="">Selecciona un tipo de contrato</option>
                                 <option data-type="LOTE" value="VENTA DE LOTE">Venta de lote</option>
                                 <option data-type="CASA" value="VENTA DE CASA">Venta de casa</option>
-                                <option data-type="DET-CASA" value="VENTA DE LOTE Y CASA">Venta de lote y casa</option>
                               </select>
                               <div class="invalid-feedback">
                                 Selecciona un tipo de contrato.
@@ -680,14 +679,14 @@
                             </div>
 
                             <!-- TIPO DE PAGO  -->
-                             <div class="mt-2">
+                            <div class="mt-2">
                               <label for="modalidad_pago" class="form-label">Modalidad de pago</label>
                               <select name="modalidad_pago" id="modalidad_pago" class="form-select" required>
                                 <option value="">Selecciona una de pago</option>
                                 <option value="credito">A crédito</option>
                                 <option value="contado">Al contado</option>
                               </select>
-                             </div>
+                            </div>
                           </div>
 
                           <div class="col-md-6">
@@ -705,7 +704,7 @@
                             </div>
 
                             <!-- MONTO DE INICIAL -->
-                             <div class="mt-2">
+                            <div class="mt-2">
                               <label for="monto_inicial">Monto de inicial</label>
                               <input type="number" name="monto_inicial" id="monto_inicial" class="form-control" min="500.00" value="0.00" step="0.01" required>
                               <div class="invalid-feedback">
@@ -756,35 +755,35 @@
                           <div class="col-md-12">
                             <div class="mt-2">
 
-                            <div class="form-group mt-4">
-                            <label for="in-doc" class="label-img">
-                              <i class="material-icons"></i>
-                              <span class="title" style="display: flex; justify-content: center;">Agregar archivo (solo archivos con extensión .pdf)</span>
-                              <input type="file" accept=".pdf, .doc, .docx" id="in-doc" required>
-                            </label>
-                            <div class="invalid-feedback">
-                              Archivo de contrato requerido.
+                              <div class="form-group mt-4">
+                                <label for="in-doc" class="label-img">
+                                  <i class="material-icons"></i>
+                                  <span class="title" style="display: flex; justify-content: center;">Agregar archivo (solo archivos con extensión .pdf)</span>
+                                  <input type="file" accept=".pdf, .doc, .docx" id="in-doc" required>
+                                </label>
+                                <div class="invalid-feedback">
+                                  Archivo de contrato requerido.
+                                </div>
+                                <div class="valid-feedback">
+                                  Archivo de contrato ingresado correctamente.
+                                </div>
+                              </div>
+
                             </div>
-                            <div class="valid-feedback">
-                              Archivo de contrato ingresado correctamente.
+                          </div>
+
+                          <div class="row">
+                            <iframe id="frame" src="" frameborder="4" width="500" height="800"></iframe>
+                          </div>
+
+                          <div class="d-flex justify-content-center">
+
+                            <div class="btn-group mt-4">
+                              <button type="button" class="btn btn-secondary prevBtn">Anterior</button>
+                              <button type="submit" class="btn btn-success submit" id="guardar">Guardar</button>
                             </div>
                           </div>
-                            
-                          </div>
                         </div>
-
-                        <div class="row">
-                          <iframe id="frame" src="" frameborder="4" width="500" height="800"></iframe>
-                        </div>
-
-                        <div class="d-flex justify-content-center">
-
-                          <div class="btn-group mt-4">
-                            <button type="button" class="btn btn-secondary prevBtn">Anterior</button>
-                            <button type="submit" class="btn btn-success submit" id="guardar">Guardar</button>
-                          </div>
-                        </div>
-                      </div>
                     </form>
 
                   </div>
@@ -942,9 +941,49 @@
       let jsonDet = "";
       let frame = $("#frame");
 
-      
+      // * Obtienie el numero de serie código
+      async function getSerieCode() {
+
+        try {
+
+          let url = "../../Controllers/configuration.controller.php";
+
+          let params = new FormData();
+          params.append("action", "listConfig");
+          params.append("clave", "serie-presupuesto");
+
+          let result = await global.sendAction(url, params);
+
+          if (result) {
+
+            console.log(result)
+
+            let alphanum = "PRES-";
+            let number = Number.parseInt(result.valor) + 1;
+            let numberString = String(number).toString().padStart(5, '0');
+            let serie = alphanum + numberString
+            console.log(serie)
+
+            const alpha_serie = {
+              "clave": "serie-presupuesto",
+              "serie": serie,
+              "number": number,
+              "numberString": numberString,
+              "alphanum": alphanum
+            }
+
+            $("#codigo").value = serie;
+
+            return alpha_serie;
+          }
+
+        } catch (e) {
+          console.error(e)
+        }
+      }
+
       //Obiene datos de las cuotas
-      async function getQuotasId(id){
+      async function getQuotasId(id) {
 
         try {
 
@@ -957,7 +996,7 @@
           let results = await global.sendAction(url, params);
 
           if (results.data.length > 0) {
-            
+
             return results.data;
           }
         } catch (e) {
@@ -966,9 +1005,9 @@
       }
 
       //Registra la cuota
-      async function addQuotas(obj){
+      async function addQuotas(obj) {
 
-        try{
+        try {
           let url = "../../Controllers/quota.controller.php";
 
           let params = new FormData();
@@ -979,42 +1018,40 @@
 
           let result = await global.sendAction(url, params);
 
-          if(result){
+          if (result) {
 
             return result.filasAfect;
           }
 
-        }
-        catch(e){
+        } catch (e) {
           console.error(e);
         }
       }
       //Agrega un registro a la tabla "DETALLE DE CONTRATOS"
-      async function addDetContract(idrep, idcont){
+      async function addDetContract(idrep, idcont) {
 
-        try{
+        try {
 
           let url = "../../Controllers/contract.controller.php";
 
           let params = new FormData();
           params.append("action", "addDetContract");
-          params.append("idrepresentante",idrep);
-          params.append("idcontrato",idcont);
+          params.append("idrepresentante", idrep);
+          params.append("idcontrato", idcont);
 
           let result = await global.sendAction(url, params);
 
-          if(result){
+          if (result) {
 
             return result.filasAfect;
           }
-        }
-        catch(e){
+        } catch (e) {
           console.error(e);
         }
       }
 
       //Transformar el detalle registrado en los inputs, a un JSON
-      function getJSON(){
+      function getJSON() {
 
         let key = ".form-control.input-key";
         let value = ".form-control.input-value";
@@ -1025,123 +1062,122 @@
       }
 
       // Clona el contenido del template
-      function readFile(event){
+      function readFile(event) {
 
-        let reader = new FileReader();  
+        let reader = new FileReader();
         let file = event.target.files[0];
 
-        reader.onload = (event)=>{
+        reader.onload = (event) => {
 
-          frame.setAttribute("src",`${event.target.result}`);
+          frame.setAttribute("src", `${event.target.result}`);
 
         }
 
         reader.readAsDataURL(file);
-        
+
       }
 
       //Registra un contrato
-      async function addContract(){
+      async function addContract() {
 
-        try{
+        try {
 
           let precio_obtenido = $("#precio_venta").value;
           let precio_split = precio_obtenido.split(" ");
           let precioVenta = Number.parseFloat(precio_split[1]);
-          
-          let detJson = await global.getJson(".input-det-clave",".input-det-valor");
+
+          let detJson = await global.getJson(".input-det-clave", ".input-det-valor");
 
           let url = "../../Controllers/contract.controller.php";
           let params = new FormData();
 
-          params.append("action","addContract");
-          params.append("n_expediente","CON-" + $("#n_expediente").value)
-          params.append("tipo_contrato",$("#tipo_contrato").value)
-          params.append("idseparacion",$("#idseparacion").value)
-          params.append("idrepresentante_primario",$("#idrepresentante_primario").value)
-          params.append("idrepresentante_secundario",$("#idrepresentante_secundario").value)
-          params.append("idcliente",$("#idcliente").value)
-          params.append("idconyugue",$("#idconyugue").value)
-          params.append("idactivo",$("#idactivo").value)
-          params.append("tipo_cambio",$("#tipo_cambio").value)
-          params.append("fecha_contrato",$("#fecha_contrato").value)
-          params.append("precio_venta",precioVenta)
-          params.append("moneda_venta",$("#moneda_venta").value)
-          params.append("inicial",$("#monto_inicial").value)
-          params.append("det_contrato",jsonDet)
-          params.append("archivo",$("#in-doc").files[0])
+          params.append("action", "addContract");
+          params.append("n_expediente", "CON-" + $("#n_expediente").value)
+          params.append("tipo_contrato", $("#tipo_contrato").value)
+          params.append("idseparacion", $("#idseparacion").value)
+          params.append("idrepresentante_primario", $("#idrepresentante_primario").value)
+          params.append("idrepresentante_secundario", $("#idrepresentante_secundario").value)
+          params.append("idcliente", $("#idcliente").value)
+          params.append("idconyugue", $("#idconyugue").value)
+          params.append("idactivo", $("#idactivo").value)
+          params.append("tipo_cambio", $("#tipo_cambio").value)
+          params.append("fecha_contrato", $("#fecha_contrato").value)
+          params.append("precio_venta", precioVenta)
+          params.append("moneda_venta", $("#moneda_venta").value)
+          params.append("inicial", $("#monto_inicial").value)
+          params.append("det_contrato", jsonDet)
+          params.append("archivo", $("#in-doc").files[0])
 
           let result = await global.sendAction(url, params);
 
-          if(result.status){
-            
+          if (result.status) {
+
             let idcontrato = result.data.idcontrato;
-            
-            if(dataRepresents.length > 0){
+
+            if (dataRepresents.length > 0) {
               let counter = 0;
-              for(item of dataRepresents){
+              for (item of dataRepresents) {
                 counter += await addDetContract(Number.parseInt(item), idcontrato);
               };
 
-              if(counter > 0){
+              if (counter > 0) {
 
                 sAlert.sweetSuccess("Éxito", "Registro realizado correctamente", () => {
 
-                  
+
                 });
-              }else{
+              } else {
                 sAlert.sweetError("Error", "No se pudo registrar el contrato");
               }
 
-            }else{
-              sAlert.sweetSuccess("Éxito", result.message, async function(){
+            } else {
+              sAlert.sweetSuccess("Éxito", result.message, async function() {
 
               });
             }
-            
-            if($("#modalidad_pago").value == "credito"){
-              
+
+            if ($("#modalidad_pago").value == "credito") {
+
               let code = btoa(idcontrato)
               window.location.href = `../quotas/add_quotas_credit.php?id=${code}`;
 
-              }else{
-                
-                dataForm = {
-                  "idcontrato": idcontrato,
-                  "monto_cuota": precioVenta,
-                  "fecha_vencimiento": $("#fecha_contrato").value
-                };
-    
-                let response = await addQuotas(dataForm);
-                
-                if(response){
-                  let dataCuota = await getQuotasId(idcontrato);
+            } else {
 
-                  dataCuota.forEach(element => {
+              dataForm = {
+                "idcontrato": idcontrato,
+                "monto_cuota": precioVenta,
+                "fecha_vencimiento": $("#fecha_contrato").value
+              };
 
-                    let code = btoa(element.idcuota);
-      
-                    window.location.href = `../quotas/pay_quota_cont.php?id=${code}`;
-                  });
-                }
+              let response = await addQuotas(dataForm);
+
+              if (response) {
+                let dataCuota = await getQuotasId(idcontrato);
+
+                dataCuota.forEach(element => {
+
+                  let code = btoa(element.idcuota);
+
+                  window.location.href = `../quotas/pay_quota_cont.php?id=${code}`;
+                });
+              }
             }
-          }else{
+          } else {
             sAlert.sweetError("Error", result.message);
           }
-        }
-        catch(e){
+        } catch (e) {
           console.error(e);
         }
       }
 
       //Clona la etiqueta
-      function cloneContent(){
+      function cloneContent() {
 
         let detailContent = $("#det-clone").content.cloneNode(true);
         let buttonLess = $("#new-button").content.cloneNode(true);
 
         let container = $("#content-det");
-        let buttonAdd =$(".add-det");
+        let buttonAdd = $(".add-det");
 
         let parent = buttonAdd.parentNode;
 
@@ -1153,54 +1189,54 @@
       }
 
       //valida las cajas de texto del detalle
-      function validateDetail(){
+      function validateDetail() {
 
         let form = document.querySelectorAll(".input-det");
 
         let isValid = false
 
-        isValid = Array.from(form).every(input =>{
-          if(input.value){
+        isValid = Array.from(form).every(input => {
+          if (input.value) {
 
             return true;
 
-          }else{
+          } else {
             return false;
           }
         });
 
-        if(!isValid){
+        if (!isValid) {
           sAlert.sweetWarning("Cajas de texto vacías", "Complete todas las cajas de texto.")
-        }else{
+        } else {
           cloneContent();
         }
       }
 
       //Configura los límites del control calendario
-      async function setDate(){
-        
+      async function setDate() {
+
         let futureDate = new Date();
         let pastDate = new Date();
 
         futureDate.setMonth(date.getMonth() + 1);
         pastDate.setMonth(date.getMonth() - 1);
 
-        if(futureDate.getDate() !== date.getDate()){
+        if (futureDate.getDate() !== date.getDate()) {
           futureDate.setDate(0);
         }
 
-        if(pastDate.getDate() !== date.getDate()){
+        if (pastDate.getDate() !== date.getDate()) {
           pastDate.setDate(0);
         }
 
-        let pastDay = pastDate.getDate().toString().padStart(2,'0');
-        let pastMonth = (pastDate.getMonth() + 1).toString().padStart(2,'0');
+        let pastDay = pastDate.getDate().toString().padStart(2, '0');
+        let pastMonth = (pastDate.getMonth() + 1).toString().padStart(2, '0');
         let pastYear = pastDate.getFullYear().toString();
 
         let past = `${pastYear}-${pastMonth}-${pastDay}`;
 
-        let futureDay = futureDate.getDate().toString().padStart(2,'0');
-        let futureMonth = (futureDate.getMonth() + 1).toString().padStart(2,'0');
+        let futureDay = futureDate.getDate().toString().padStart(2, '0');
+        let futureMonth = (futureDate.getMonth() + 1).toString().padStart(2, '0');
         let futureYear = futureDate.getFullYear().toString();
 
         let future = `${futureYear}-${futureMonth}-${futureDay}`;
@@ -1211,10 +1247,10 @@
       }
 
       //Obtiene el día actual
-      async function getToday(){
+      async function getToday() {
 
-        let dayNow = date.getDate().toString().padStart(2,'0');
-        let monthNow = (date.getMonth() + 1).toString().padStart(2,'0');
+        let dayNow = date.getDate().toString().padStart(2, '0');
+        let monthNow = (date.getMonth() + 1).toString().padStart(2, '0');
         let yearNow = date.getFullYear();
 
         let today = `${yearNow}-${monthNow}-${dayNow}`;
@@ -1341,7 +1377,7 @@
             console.log(result)
             $("#idcliente").innerHTML = "";
 
-            let tagDef = document.createElement("option");  
+            let tagDef = document.createElement("option");
             tagDef.value = "";
             tagDef.innerText = "Seleccione un cliente";
             $("#idcliente").appendChild(tagDef);
@@ -1388,7 +1424,7 @@
               $("#idrepresentante_legal").appendChild(newTag);
             });
 
-          }else{
+          } else {
             $("#idrepresentante_legal").innerHTML = "";
           }
 
@@ -1579,46 +1615,6 @@
         }
       }
 
-      //Obtiene los lotes con detalles de construccion
-      async function getLotesDetConstruction(idproyecto) {
-
-        try {
-          let url = "../../Controllers/asset.controller.php";
-          let params = new FormData();
-
-          params.append("action", "lisLotsAndHouses");
-          params.append("idproyecto", idproyecto);
-
-          let results = await global.sendAction(url, params);
-
-          if (results.length > 0) {
-
-            console.log(results)
-            $("#idactivo").innerHTML = "";
-
-            let tagDef = document.createElement("option");
-            tagDef.value = "";
-            tagDef.innerText = "Selecciona un lote";
-
-            $("#idactivo").appendChild(tagDef);
-
-            results.forEach(result => {
-
-              let newTag = document.createElement("option");
-              newTag.value = result.idactivo;
-              newTag.innerText = "LT - " + result.sublote;
-              newTag.dataset.precio_venta = result.precio_venta;
-              newTag.dataset.moneda_venta = result.moneda_venta;
-
-              $("#idactivo").appendChild(newTag);
-            });
-          }
-        } catch (e) {
-          console.error(e);
-        }
-
-      }
-
       //Obtiene los proyects por el tipo de inmoviliario (casa o lote)
       async function getProjectsTypeAct(type) {
 
@@ -1653,41 +1649,6 @@
           }
         } catch {
 
-        }
-      }
-
-      //Obtiene los proyectos por el detalle de construcción del inmobiliario
-      async function getProjectsDetConst() {
-        try {
-          let url = "../../Controllers/project.controller.php";
-          let params = new FormData();
-
-          params.append("action", "listProjectDetailConst");
-
-          let results = await global.sendAction(url, params);
-
-          if (results.length > 0) {
-
-            $("#idproyecto").innerHTML = "";
-
-            let tagDefault = document.createElement("option");
-            tagDefault.value = "";
-            tagDefault.text = "Seleccione un proyecto";
-
-            $("#idproyecto").appendChild(tagDefault);
-
-            results.forEach(result => {
-
-              let newTag = document.createElement("option");
-              newTag.value = result.idproyecto;
-              newTag.innerText = result.denominacion;
-              newTag.dataset.tipo = result.tipo;
-
-              $("#idproyecto").appendChild(newTag);
-            });
-          }
-        } catch (e) {
-          console.error(e);
         }
       }
 
@@ -1729,35 +1690,35 @@
         })
       }
 
-      $("#getJson").addEventListener("click",()=>{
+      $("#getJson").addEventListener("click", () => {
         getJSON();
         console.log(jsonDet);
       });
 
-      $("#idactivo").addEventListener("change",(e)=>{
+      $("#idactivo").addEventListener("change", (e) => {
 
         let precio_venta = e.target.options[e.target.selectedIndex].dataset.precio_venta;
         let moneda_venta = e.target.options[e.target.selectedIndex].dataset.moneda_venta;
-        let format_precio_venta = moneda_venta == "USD" ? "$/ " + precio_venta : "S/ " +  precio_venta;
+        let format_precio_venta = moneda_venta == "USD" ? "$/ " + precio_venta : "S/ " + precio_venta;
 
 
 
         $("#precio_venta").value = format_precio_venta;
         $("#moneda_venta").value = moneda_venta;
       });
-         
-      $("#in-doc").addEventListener("change",(e)=>{
+
+      $("#in-doc").addEventListener("change", (e) => {
         readFile(e)
       });
 
-      $("#content-det").addEventListener("click",(e)=>{
+      $("#content-det").addEventListener("click", (e) => {
 
-        if(e.target.classList.contains("add-det")){
+        if (e.target.classList.contains("add-det")) {
 
           validateDetail();
-        }else if(e.target.classList.contains("less-det")){
-          
-          sAlert.sweetConfirm("¿Deseas eliminar el registro?","Una vezeliminado no se podrá recuperar",()=>{
+        } else if (e.target.classList.contains("less-det")) {
+
+          sAlert.sweetConfirm("¿Deseas eliminar el registro?", "Una vezeliminado no se podrá recuperar", () => {
 
             let row = e.target.closest(".row");
             row.remove();
@@ -1840,11 +1801,11 @@
       $("#idseparacion").addEventListener("change", (e) => {
         let precio_venta = e.target.options[e.target.selectedIndex].dataset.precio_venta;
         let moneda_venta = e.target.options[e.target.selectedIndex].dataset.moneda_venta;
-        let format_precio_venta = moneda_venta == "USD" ?  "$/ " + precio_venta : "S/ " + precio_venta;
+        let format_precio_venta = moneda_venta == "USD" ? "$/ " + precio_venta : "S/ " + precio_venta;
 
         $("#precio_venta").value = format_precio_venta;
         $("#moneda_venta").value = moneda_venta;
-        
+
         getSeparationById();
       });
 
@@ -1857,43 +1818,31 @@
 
         $("#idproyecto").innerHTML = "";
 
-            let tagDefault = document.createElement("option");
-            tagDefault.value = "";
-            tagDefault.text = "Seleccione un proyecto";
+        let tagDefault = document.createElement("option");
+        tagDefault.value = "";
+        tagDefault.text = "Seleccione un proyecto";
 
-            $("#idproyecto").appendChild(tagDefault);
+        $("#idproyecto").appendChild(tagDefault);
 
-        if (option == "DET-CASA") {
+        if (option == "LOTE") {
+          Array.from(form).forEach(input => {
+
+            input.value = "";
+            input.disabled = true;
+          });
+
+          dataRepresents = [];
+
+          $("#idseparacion").disabled = false;
+          await getSeparationWithoutContract();
+
+        } else {
           Array.from(form).forEach(input => {
 
             input.disabled = false;
           });
 
           $("#idseparacion").disabled = true;
-
-          getProjectsDetConst();
-
-        } else {
-          if (option == "LOTE") {
-            Array.from(form).forEach(input => {
-
-              input.value = "";
-              input.disabled = true;
-            });
-
-            dataRepresents = [];
-
-            $("#idseparacion").disabled = false;
-            await getSeparationWithoutContract();
-
-          } else {
-            Array.from(form).forEach(input => {
-
-              input.disabled = false;
-            });
-
-            $("#idseparacion").disabled = true;
-          }
           getProjectsTypeAct(option);
         }
       });

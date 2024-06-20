@@ -68,11 +68,12 @@ class Budget extends Conection
     {
         try {
 
-            $query = $this->conection->prepare("CALL spu_add_budget(?,?,?)");
+            $query = $this->conection->prepare("CALL spu_add_budget(?,?,?,?)");
             $query->execute(
                 array(
                     $dataBudget["codigo"],
                     $dataBudget["modelo"],
+                    $dataBudget["area_construccion"],
                     $dataBudget["idusuario"]
                 )
             );
@@ -90,12 +91,13 @@ class Budget extends Conection
     {
         try {
 
-            $query = $this->conection->prepare("CALL spu_set_budget(?,?,?,?)");
+            $query = $this->conection->prepare("CALL spu_set_budget(?,?,?,?,?)");
             $query->execute(
                 array(
                     $dataBudget["idpresupuesto"],
                     $dataBudget["codigo"],
                     $dataBudget["modelo"],
+                    $dataBudget["area_construccion"],
                     $dataBudget["idusuario"]
                 )
             );
@@ -130,12 +132,12 @@ class Budget extends Conection
     /**
      * Método para listar los presupuestos con contenido
      */
-    public function listBudgetsAsset()
+    public function listBudgetsAsset($area_construida = 0)
     {
 
         try {
-            $query = $this->conection->prepare("CALL spu_list_budgets_assets()");
-            $query->execute();
+            $query = $this->conection->prepare("CALL spu_list_budgets_assets(?)");
+            $query->execute(array($area_construida));
 
             return $query->fetchAll(PDO::FETCH_ASSOC);
         } catch (Exception $e) {

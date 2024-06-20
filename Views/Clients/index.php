@@ -449,6 +449,9 @@
 
                   </tbody>
                 </table>
+                <div id="render-error">
+
+                </div>
               </div>
             </div>
           </div>
@@ -892,6 +895,7 @@ document.addEventListener("DOMContentLoaded",()=>{
     let numberRow = 1;
 
     $("#table-clients tbody").innerHTML = "";
+    $("#render-error").innerHTML = "";
 
     let newRow = ``;
 
@@ -941,10 +945,10 @@ document.addEventListener("DOMContentLoaded",()=>{
     }else{
       newRow =`
       <div class="alert alert-danger m-4 text-white" role="alert">
-          <strong class="text-white">No existe sublotes</strong> Asegurate de que existan los registros.
+          <strong class="text-white">No existe clientes</strong> Asegurate de que existan los registros.
       </div>
       `;
-      $("#table-clients tbody").innerHTML += newRow;
+      $("#render-error").innerHTML += newRow;
     }
     
 

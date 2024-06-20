@@ -57,6 +57,8 @@ if (isset($_POST["action"])) {
                 "direccion"             => $_POST["direccion"],
                 "moneda_venta"          => $_POST["moneda_venta"],
                 "area_terreno"          => $_POST["area_terreno"],
+                "area_construccion"     => $_POST["area_construccion"],
+                "area_techada"          => $_POST["area_techada"],
                 "zcomunes_porcent"      => $_POST["zcomunes_porcent"],
                 "partida_elect"         => $_POST["partida_elect"],
                 "latitud"               => $_POST["latitud"],
@@ -103,6 +105,8 @@ if (isset($_POST["action"])) {
                 "direccion"         => $_POST["direccion"],
                 "moneda_venta"      => $_POST["moneda_venta"],
                 "area_terreno"      => $_POST["area_terreno"],
+                "area_construccion"     => $_POST["area_construccion"],
+                "area_techada"          => $_POST["area_techada"],
                 "zcomunes_porcent"  => $_POST["zcomunes_porcent"],
                 "partida_elect"     => $_POST["partida_elect"],
                 "latitud"           => $_POST["latitud"],
@@ -181,9 +185,9 @@ if (isset($_POST["action"])) {
             echo json_encode($asset->setIdBudget($dataObtained));
             break;
 
-        case "listLotsNoBudget":
+        case "listHousesNoBudgets":
 
-            echo json_encode($asset->listLotsNoBudgets());
+            echo json_encode($asset->listHousesNoBudgets());
             break;
 
         case "listLotsWithBudget":
@@ -226,11 +230,6 @@ if (isset($_POST["action"])) {
             
             break;
 
-        case "lisLotsAndHouses": 
-            
-                $idproyecto = $_POST["idproyecto"];
-
-                echo json_encode($asset->listLotsAndHouses($idproyecto));
-            break;
+        
     }
 }

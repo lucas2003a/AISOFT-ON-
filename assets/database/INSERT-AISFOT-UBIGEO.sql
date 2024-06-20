@@ -1235,8 +1235,6 @@ INSERT INTO distritos (idprovincia, distrito) VALUES
 (99, 'Parcona'),
 (99, 'Pueblo Nuevo'),
 (99, 'Salas'),
-
-
 (99, 'San José de Los Molinos'),
 (99, 'San Juan Bautista'),
 (99, 'Santiago'),
@@ -2113,12 +2111,4 @@ INSERT INTO distritos (idprovincia, distrito) VALUES
 (196, 'Purus');
 
 select * from distritos;
-
-SELECT
-	dep.departamento,
-	prov.provincia,
-	dist.distrito
-	FROM distritos AS dist
-    INNER JOIN provincias AS prov ON prov.idprovincia = dist.idprovincia
-    INNER JOIN departamentos AS dep ON dep.iddepartamento = prov.iddepartamento
-    where dist.distrito = "el carmen";
+TRUNCATE table distritos;

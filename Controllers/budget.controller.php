@@ -1,10 +1,12 @@
 <?php
 
 require_once "../Models/Budget.php";
+require_once "../Models/Configuration.php";
 
 if (isset($_POST["action"])) {
 
     $budget = new Budget();
+    $config = new Configuration();
 
     switch ($_POST["action"]) {
 
@@ -29,14 +31,29 @@ if (isset($_POST["action"])) {
 
         case "addBudget":
 
+            $dataConfig = [
+                "clave" => $_POST["clave"],
+                "valor" => $_POST["valor"]
+            ];
+
+            
+
             $dataObtained = [
                 "codigo"        => $_POST["codigo"],
                 "modelo"        => $_POST["modelo"],
+                "area_construccion" => $_POST["area_construccion"],
                 "idusuario"     => 1
                 /* "idusuario"     => $_POST["idusuario"] */
             ];
 
-            echo json_encode($budget->addBudget($dataObtained));
+            $dataBudget =  $budget->addBudget($dataObtained);
+
+            if($dataBudget){
+                $config->upsetConfig($dataConfig);
+
+                echo json_encode($dataBudget);
+            }
+
             break;
 
         case "setBudget":
@@ -45,6 +62,7 @@ if (isset($_POST["action"])) {
                 "idpresupuesto" => $_POST["idpresupuesto"],
                 "codigo"        => $_POST["codigo"],
                 "modelo"        => $_POST["modelo"],
+                "area_construccion" => $_POST["area_construccion"],
                 "idusuario"     => 1
                 /* "idusuario"     => $_POST["idusuario"] */
             ];
@@ -65,7 +83,9 @@ if (isset($_POST["action"])) {
 
         case "listBudgetsAsset":
 
-            echo json_encode($budget->listBudgetsAsset());
+            $area_construida = $_POST["area_construida"];
+
+            echo json_encode($budget->listBudgetsAsset($area_construida));
             break;
     }
 }

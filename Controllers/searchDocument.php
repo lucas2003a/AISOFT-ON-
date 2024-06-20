@@ -5,7 +5,7 @@ $tokenDEV = "7e172115e78fb88fd9dd583208f04b1628ba0caeb441c47b3f58fc7e275f9069";
 
 if (isset($_GET["action"])) {
 
-  
+
   $responseData = [
     "message" => "",
     "data" => ""
@@ -17,29 +17,40 @@ if (isset($_GET["action"])) {
 
       $numDoc = $_GET["documento_nro"];
 
-      $url = "https://api.sunat.dev/dni/{$numDoc}?apikey={$token}";
+      $params = json_encode(["dni" => $numDoc]);
 
+      $curl = curl_init();
+      curl_setopt_array($curl, array(
+        CURLOPT_URL => "https://apiperu.dev/api/dni",
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_CUSTOMREQUEST => "POST",
+        CURLOPT_SSL_VERIFYPEER => false,
+        CURLOPT_POSTFIELDS => $params,
+        CURLOPT_HTTPHEADER => [
+          'Accept: application/json',
+          'Content-Type: application/json',
+          'Authorization: Bearer ' . $tokenDEV
+        ],
+      ));
 
-      try {
+      $response = curl_exec($curl);
+      $data = json_decode($response);
 
-        $response = file_get_contents($url);
+      $err = curl_error($curl);
+      curl_close($curl);
 
-        $data = json_decode($response);
+      if ($err) {
+        echo "cURL Error #:" . $err;
+        $responseData["message"] = "Documento no encontrado";
+        $responseData["status"] = false;
+      } else {
 
-        if ($data !== null) {
-
-          $responseData["message"] = "Documento encontrado";
-          $responseData["data"] = $data;
-        } else {
-
-          $responseData["message"] = "Documento no encontrado";
-        }
-
-        echo json_encode($responseData);
-      } catch (Exception $e) {
-
-        die($e->getMessage());
+        $responseData["message"] = "Documento encontrado";
+        $responseData["status"] = true;
+        $responseData["data"] = $data;
       }
+
+      echo json_encode($responseData);
       break;
 
     case "searchRUC":
@@ -120,7 +131,7 @@ if (isset($_GET["action"])) {
 
     case "searchCE":
       $numDoc = $_GET["documento_nro"];
-      
+
       $url = "https://api.sunat.dev/ce/{$numDoc}?apikey={$token}";
 
       try {

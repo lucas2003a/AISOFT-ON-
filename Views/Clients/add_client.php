@@ -666,7 +666,7 @@
   <!-- Modal -->
   <div class="modal fade" id="modal-data-represents" tabindex="-1" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
     <div class="modal-dialog modal-dialog-scrollable modal-fullscreen-sm-down modal-lg" role="document">
-      <form action="" id="form-data-represents" class="row needs-validation" novalidate>
+      <form action="" id="form-data-represents" class="row needs-validation">
         <div class="modal-content p-0">
           <div class="modal-header bg-secondary">
             <h5 class="modal-title" id="modalTitleId">
@@ -1022,24 +1022,17 @@ document.addEventListener("DOMContentLoaded",()=>{
 
       let result = await global.sendActionGET(url);
 
-      if(result){
+      if(result.status){
         
-        let docs = result.data.body;
+        console.log(result)
 
-        let ubigeo = docs.ubigeo;
+        result = result.data.da
 
-        //OBTENGO LOS IDS DEL UBIGEO
-        let dataUbigeo = await searchUbigeo(ubigeo);
-
-        await getUbigeo(dataUbigeo.iddistrito);
-
-        $("#apellidos").value = `${docs.apePaterno} ${docs.apeMaterno}`;
-        $("#nombres").value = docs.preNombres;
-        $("#direccion").value = docs.desDireccion;
-        /* $("#documento_tipo").value = result.tipoDocumento; */
+        $("#apellidos").value = `${result.apellido_paterno} ${result.apellido_materno}`;
+        $("#nombres").value = result.nombres;
 
       }else{
-        sAlert.sweetError("El documento ingresado no existe","No existe una persona con este documento");
+        sAlert.sweetError("Hubo un error",result.message);
       }
 
       $("#buscar").classList.toggle("d-none");
@@ -1115,7 +1108,7 @@ document.addEventListener("DOMContentLoaded",()=>{
                             <!-- TIPO DE DOCUMENTO DEL REPRESENTATE -->
                             <div class="mt-4 col-md-6">
                                 <label for="documento_t_representante" class="form-label">Tipo de documento</label>
-                                <input type="text" name="documento_tipo" placeholder="Tipo de documento" class="form-control" value="${rep.tipo_de_documento}" required>
+                                <input type="text" name="documento_tipo" placeholder="Tipo de documento" class="form-control" value="${rep.tipo_de_documento}" readonly>
                                 <div class="invalid-feedback">
                                     Necesitas registrar el tipo de documento del representante.
                                 </div>
@@ -1321,7 +1314,7 @@ document.addEventListener("DOMContentLoaded",()=>{
   async function processRepresents(idpesonajuridica){
 
     const representsList = $All("#list-represents li");
-
+    
     let counter = 0;
     let oneChecked = false;
 
@@ -1455,8 +1448,8 @@ document.addEventListener("DOMContentLoaded",()=>{
   }
 
   //Validar formulario
-  function validateFom(form, callback) {
-    'use strict' //=> USO ESTRICTO POR POLITICAS DE SEGURIDAD EN EL FORMULARIO
+  function validateForm(form, callback) {
+    'use strict'; //=> USO ESTRICTO POR POLITICAS DE SEGURIDAD EN EL FORMULARIO
 
      //SELECCIONA TODOS LOS ELEMENTOS DEL FORMULARIO QUE TIENE LA CLASE "needs-validation
     const forms = document.querySelectorAll(form)
@@ -1501,7 +1494,7 @@ document.addEventListener("DOMContentLoaded",()=>{
       
       }else{
   
-        validateFom("#form-data-client",addClient);
+        validateForm("#form-data-client",addClient);
         resolve();
   
       }
@@ -1598,8 +1591,10 @@ document.addEventListener("DOMContentLoaded",()=>{
       const dniOption = document.createElement("option");
       dniOption.value = "DNI";
       dniOption.innerText = "DNI";
+      dniOption.selected = true;
 
       $("#documento_tipo").appendChild(dniOption);
+      $("#documento_tipo").dispatchEvent(new Event("change"));
     }
   }
 
@@ -1617,8 +1612,8 @@ document.addEventListener("DOMContentLoaded",()=>{
 
     }else if(tDocument.value == "CARNET DE EXTRANJERÍA"){
 
-      $("#documento_nro").maxLength = 12;
-      $("#documento_nro").minLength = 0;
+      $("#documento_nro").maxLength = 9;
+      $("#documento_nro").minLength = 9;
       $("#nacionalidad").required = true;
 
     }else if(tDocument.value == "RUC"){
@@ -1638,7 +1633,7 @@ document.addEventListener("DOMContentLoaded",()=>{
     
     $("#buscar").addEventListener("click",()=>{
 
-      validateFom("#search_person",searchDocument);
+      validateForm("#search_person",searchDocument);
     })
 
   $("#documento_tipo").addEventListener("change",(e)=>{
@@ -1660,7 +1655,7 @@ document.addEventListener("DOMContentLoaded",()=>{
     
     if(idpersonaJuridica){
 
-      validateFom("#form-data-client",processRepresents(idpersonaJuridica));
+      validateForm("#form-data-client",processRepresents(idpersonaJuridica));
       
     }else{
       sAlert.sweetError("No se ha realizado el registro","Necesitas registrar la empresa");

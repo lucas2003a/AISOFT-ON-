@@ -601,7 +601,6 @@
 
     try{
 
-      $("#add-asset").setAttribute("href",`./add_asset.php?idproy=${code}&name=${codeName}`);
       let url = "../../Controllers/asset.controller.php";
   
       let params = new FormData();

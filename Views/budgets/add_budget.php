@@ -403,13 +403,12 @@
                   <form action="" class="row needs-validation" id="form-budget" novalidate>
                     <div class="row d-flex align-items-center">
 
-                      <div class="col-md-5">
+                      <!-- NÚMERO DE SERIE (CÓDIGO)-->
+                      <div class="col-md-3">
                         <div class="m-2">
                           <label for="codigo" class="form-label">Código</label>
-                          <div class="input-group">
-                            <span class="input-group-text">PRES -</span>
-                            <input class="form-control" type="number" name="codigo" id="codigo" value="000" min="001" maxlength="3" step="001" placeholder="Código" required autofocus>
-                          </div>
+                          <input class="form-control" type="text" name="codigo" id="codigo" readonly>
+                          
                           <div class="invalid-feedback">
                             Necesitas ingresar el código del presupuesto.
                           </div>
@@ -419,10 +418,26 @@
                         </div>
                       </div>
 
-                      <div class="col-md-5">
+                      <!-- MODELO  -->
+                      <div class="col-md-3">
                         <div class="m-2">
                           <label for="modelo" class="form-label">Modelo</label>
-                          <input class="form-control" type="text" name="modelo" id="modelo" placeholder="Modelo" required>
+                          <input class="form-control" type="text" name="modelo" id="modelo" placeholder="Modelo" required autofocus>
+                          <div class="invalid-feedback">
+                            Necesitas ingresar el modelo del presupuesto.
+                          </div>
+                          <div class="valid-feedback">
+                            Modelo de presupuesto registrado correctamente.
+                          </div>
+                        </div>
+                      </div>
+
+
+                      <!-- ÁRE DE CONSTRUCCIÓN -->
+                      <div class="col-md-3">
+                        <div class="m-2">
+                          <label for="area_construccion" class="form-label">Área de construcción (m2)</label>
+                          <input class="form-control" type="number" name="area_construccion" id="area_construccion" min="1" step="0.01" placeholder="Área de construcción(m2)" required>
                           <div class="invalid-feedback">
                             Necesitas ingresar el modelo del presupuesto.
                           </div>
@@ -724,6 +739,7 @@
   <script>
     document.addEventListener("DOMContentLoaded", () => {
 
+      
       const global = new FunGlobal();
       const sAlert = new Alert();
 
@@ -734,15 +750,21 @@
 
         $("#codigo").disabled = true;
         $("#modelo").disabled = true;
+        $("#area_construccion").disabled = true;
       } else {
+        
+        //sessionStorage.setItem("isRecovered","false");
+        //sessionStorage.removeItem("dataBudget")
         $("#codigo").disabled = false;
         $("#modelo").disabled = false;
+        $("#area_construccion").disabled = false;
       }
 
       let bootstrap;
 
       let det_casaJSON;
       let idPresupuesto;
+      let area_const;
 
       //recuperando datos del sessionStorage
       const dataRestored = sessionStorage.getItem("dataStoraged");
@@ -760,6 +782,48 @@
       let allDataBudget;
       let codeValue;
       let modelValue;
+
+      // * Obtenie el numero de serie código
+      async function getSerieCode() {
+
+        try{
+
+          let url = "../../Controllers/configuration.controller.php";
+
+          let params = new FormData();
+          params.append("action", "listConfig");
+          params.append("clave","serie-presupuesto");
+
+          let result = await global.sendAction(url, params);
+
+          if(result){
+
+            console.log(result)
+
+            let alphanum = "PRES-";
+            let number = Number.parseInt(result.valor) + 1;
+            let numberString = String(number).toString().padStart(5,'0');
+            let serie = alphanum + numberString
+            console.log(serie)
+
+            const alpha_serie ={
+              "clave": "serie-presupuesto",
+              "serie": serie,
+              "number": number,
+              "numberString": numberString,
+              "alphanum": alphanum
+            }
+
+            $("#codigo").value = serie;
+
+            return alpha_serie;
+          }
+
+        }
+        catch(e){
+          console.error(e)
+        }
+      }
 
       // Valida los datos de la cabezera del presupuesto
       function validateData(value, column, array) {
@@ -862,12 +926,17 @@
 
         try {
 
+          serie = await getSerieCode();
+
           let url = "../../Controllers/budget.controller.php"
 
           let params = new FormData();
           params.append("action", "addBudget");
-          params.append("codigo", codeValue);
+          params.append("codigo", serie.serie);
           params.append("modelo", modelValue);
+          params.append("area_construccion",area_const);
+          params.append("clave", serie.clave);
+          params.append("valor", serie.number);
 
           let result = await global.sendAction(url, params);
 
@@ -876,21 +945,19 @@
             isRecovering = true;
             idpresupuesto = result.idpresupuesto
 
-            let codeObt = result.codigo;
-            let splitCode = codeObt.split("-");
-            let newCode = splitCode[1].trim();
-
             let data = {
               idpresupuesto: result.idpresupuesto,
-              codigo: newCode,
-              modelo: result.modelo
+              codigo: result.codigo,
+              modelo: result.modelo,
+              area_construccion: Number.parseFloat(result.area_construccion)
             };
 
             console.log(data);
 
             console.log(data)
-            $("#codigo").value = newCode;
+            $("#codigo").value = result.codigo;
             $("#modelo").value = result.modelo;
+            $("#area_construccion").value = result.area_construccion;
 
             sessionStorage.setItem("dataBudget", JSON.stringify(data));
             dataBudget = JSON.parse(sessionStorage.getItem("dataBudget"));
@@ -899,6 +966,7 @@
               sessionStorage.setItem("isRecovered", "true");
               $("#codigo").disabled = true;
               $("#modelo").disabled = true;
+              $("#area_construccion").disabled = true;
               $("#add").disabled = false;
             });
 
@@ -1252,7 +1320,7 @@
           let url = "../../Controllers/asset.controller.php";
 
           let params = new FormData();
-          params.append("action", "listLotsNoBudget");
+          params.append("action", "listHousesNoBudgets");
 
           let results = await global.sendAction(url, params);
 
@@ -1345,43 +1413,58 @@
       };
 
       //Valida el formulario
-      async function validateForm(form, callback) {
+      async function validateForm(formdata, callback) {
         return new Promise((resolve, reject) => {
 
           'use strict'
 
-          const forms = document.querySelectorAll(form)
+          const form = document.querySelector(formdata);
 
-          Array.from(forms).forEach(form => {
+          if (!form.checkValidity()) {
+            event.preventDefault() //=> FRENA EL ENVÍO DEL FORMULARIO
+            event.stopPropagation() //=> FRENA LA PROPAGACIÓN DE DATOS EN EL FORMULARIO
+            form.reportValidity();
+
+            reject();
+          } else {
+
+            event.preventDefault();
+
+            sAlert.sweetConfirm("Datos nuevos", "¿Deseas actualizar el registro?", () => {
+
+              callback()
+              form.reset();
+              form.classList.remove("was-validated")
+
+            });
+
+            resolve();
+          }
+
+          form.classList.add('was-validated') //=> AGREGA ESTA CLASE A LOS ELEMENTOS DEL FORMULARIO(MUESTRA LOS COMENTARIOS)
+          /* Array.from(forms).forEach(form => {
             form.addEventListener('submit', event => {
 
-              if (!form.checkValidity()) {
-                event.preventDefault() //=> FRENA EL ENVÍO DEL FORMULARIO
-                event.stopPropagation() //=> FRENA LA PROPAGACIÓN DE DATOS EN EL FORMULARIO
-                form.reportValidity();
-
-                reject();
-              } else {
-
-                event.preventDefault();
-
-                sAlert.sweetConfirm("Datos nuevos", "¿Deseas actualizar el registro?", () => {
-
-                  callback()
-                  form.reset();
-                  form.classList.remove("was-validated")
-
-                });
-
-                resolve();
-              }
-
-              form.classList.add('was-validated') //=> AGREGA ESTA CLASE A LOS ELEMENTOS DEL FORMULARIO(MUESTRA LOS COMENTARIOS)
             }, false) //=> ESTE TERCER ARGUMENTO INDICA QUE EL EVENTO NO SE ESTA CAPTURANDO EN LA ""FASE DE CAPTURA" SINO EN "PROPAGACIÓN NORMAL"
-          })
+          }) */
 
         });
       };
+
+      $("#area_construccion").addEventListener("input",(e)=>{
+
+        let inputValue = e.target.value;
+        area_const = Number.parseFloat(inputValue)
+        console.log(inputValue)
+        console.log(typeof(inputValue))
+        console.log(Number.parseFloat($("#area_construccion").value))
+
+        if(inputValue || inputValue > 0){
+          $("#save_budget").disabled = false;
+        }else{
+          $("#save_budget").disabled = true;
+        }
+      });
 
       $("#material").addEventListener("change",()=>{
 
@@ -1599,8 +1682,12 @@
         if (counter) {
 
           sAlert.sweetSuccess("Datos nuevos", `Registros actualizados : ${counter}`, () => {
-            window.location.href = "./index.php";
+
+            sessionStorage.setItem("isRecovered","false");
+            sessionStorage.removeItem("dataBudget");
+            sessionStorage.removeItem("dataStoraged");
             $("#save_lots").disabled = false;
+            window.location.href = "./index.php";
           });
         } else {
           sAlert.sweetError("No se han realizado registro", "Por favor vuelvelo a intentar");
@@ -1639,7 +1726,6 @@
       $("#form-budget").addEventListener("submit", (e) => {
 
         e.preventDefault();
-        let codigo = $("#codigo").value;
         let modelo = $("#modelo").value;
 
         validateForm("#form-budget", addBudget)
@@ -1659,7 +1745,8 @@
       })
 
       $("#form_det_budget").addEventListener("submit", (e) => {
-        e.preventDefault(e)
+
+        e.preventDefault();
         validateForm("#form_det_budget", storageData);
       })
 
@@ -1675,7 +1762,7 @@
           validateData(modelInput, "modelo", allDataBudget)
             .then(() => {
 
-              $("#save_budget").disabled = false;
+              $("#area_construccion").focus();
             })
             .catch(e => {
               console.error(e);
@@ -1703,6 +1790,10 @@
       renderDetbudgets(dataStorage);
       getBudgetsData();
 
+      if(sessionStorage.getItem("isRecovered") == "false"){
+        getSerieCode();
+      }
+
       if (dataStorage.length > 0) {
         renderDetbudgets(dataStorage);
 
@@ -1714,6 +1805,7 @@
         idPresupuesto = dataBudget.idpresupuesto;
         $("#codigo").value = dataBudget.codigo;
         $("#modelo").value = dataBudget.modelo;
+        $("#area_construccion").value = dataBudget.area_construccion;
         $("#add").disabled = false;
       }
 

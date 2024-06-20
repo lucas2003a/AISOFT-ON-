@@ -89,7 +89,16 @@ DELIMITER $$
 DELIMITER $$
 
 CREATE VIEW vws_list_assets_short AS
-SELECT act.idactivo, proy.idproyecto, act.propietario_lote, act.estado, act.sublote, act.direccion, dist.distrito, prov.provincia, dept.departamento, pers.nombres AS usuario
+SELECT  act.idactivo, 
+        proy.idproyecto, 
+        act.propietario_lote, 
+        act.estado, 
+        act.sublote, 
+        act.direccion, 
+        dist.distrito, 
+        prov.provincia, 
+        dept.departamento, 
+        pers.nombres AS usuario
 FROM
     activos AS act
     INNER JOIN proyectos AS proy ON proy.idproyecto = act.idproyecto
@@ -105,10 +114,8 @@ $$
 
 DELIMITER;
 
-DELIMITER $$
-
 -- CLIENTES
-DELIMITER $$
+/*DELIMITER $$
 
 CREATE VIEW vws_list_clients AS
 SELECT
@@ -137,13 +144,12 @@ FROM
     INNER JOIN usuarios AS usu ON usu.idusuario = clien.idusuario
 WHERE
     clien.inactive_at IS NULL
-ORDER BY clien.documento_nro ASC;
+ORDER BY clien.documento_nro ASC; 
 
-$$
 
-DELIMITER;
+DELIMITER;*/
 
-DELIMITER $$
+/* DELIMITER $$
 
 CREATE VIEW vws_list_inactive_clients AS
 SELECT
@@ -174,9 +180,7 @@ WHERE
     clien.inactive_at IS NOT NULL
 ORDER BY clien.documento_nro ASC;
 
-$$
-
-DELIMITER;
+DELIMITER; */
 
 -- SEPARACIONES
 DELIMITER $$
@@ -198,6 +202,7 @@ CREATE VIEW vws_list_separations_tpersona_natural AS
         pers.documento_tipo,
         pers.documento_nro,
         sep.separacion_monto,
+        sep.existe_contrato,
         sep.inactive_at AS inactive_at_sep,
         usuPers.nombres AS usuario,
         sep.create_at
@@ -229,6 +234,7 @@ SELECT
     persj.documento_nro,
     sep.separacion_monto,
     sep.create_at,
+    sep.existe_contrato,
     sep.inactive_at AS inactive_at_sep,
     usuPers.nombres AS usuario
 FROM
@@ -249,12 +255,14 @@ CREATE VIEW vws_list_separations_tpersona_natural_full AS
     SELECT
         sep.idseparacion,
         sep.n_expediente,
+        proy.idsede,
         proy.idproyecto,
         act.idactivo,
         act.sublote,
         act.precio_venta,
         proy.denominacion,
         dist.distrito,
+        sd.iddistrito,
         prov.provincia,
         dept.departamento,
         clien.tipo_persona,
@@ -280,12 +288,14 @@ CREATE VIEW vws_list_separations_tpersona_natural_full AS
         sep.create_at,
         sep.inactive_at,
         sep.imagen,
+        sep.existe_contrato,
         usuPers.nombres AS usuario
     FROM
     separaciones AS sep
     INNER JOIN activos AS act ON act.idactivo = sep.idactivo
     INNER JOIN proyectos AS proy ON proy.idproyecto = act.idproyecto
     INNER JOIN distritos AS dist ON dist.iddistrito = proy.iddistrito
+    INNER JOIN sedes AS sd ON sd.idsede = proy.idsede
     INNER JOIN provincias AS prov ON prov.idprovincia = dist.idprovincia
     INNER JOIN departamentos AS dept ON dept.iddepartamento = prov.iddepartamento
     INNER JOIN clientes AS clien ON clien.idcliente = sep.idcliente
@@ -304,11 +314,13 @@ CREATE VIEW vws_list_separations_tpersona_juridica_full AS
         sep.idseparacion,
         sep.n_expediente,
         proy.idproyecto,
+        proy.idsede,
         act.idactivo,
         act.sublote,
         act.precio_venta,
         proy.denominacion,
         dist.distrito,
+        sd.iddistrito,
         prov.provincia,
         dept.departamento,
         clien.tipo_persona,
@@ -322,11 +334,13 @@ CREATE VIEW vws_list_separations_tpersona_juridica_full AS
         sep.create_at,
         sep.inactive_at,
         sep.imagen,
+        sep.existe_contrato,
         usuPers.nombres AS usuario
     FROM
     separaciones AS sep
     INNER JOIN activos AS act ON act.idactivo = sep.idactivo
     INNER JOIN proyectos AS proy ON proy.idproyecto = act.idproyecto
+    INNER JOIN sedes AS sd ON sd.idsede = proy.idsede
     INNER JOIN distritos AS dist ON dist.iddistrito = proy.iddistrito
     INNER JOIN provincias AS prov ON prov.idprovincia = dist.idprovincia
     INNER JOIN departamentos AS dept ON dept.iddepartamento = prov.iddepartamento
@@ -354,6 +368,7 @@ CREATE VIEW vws_list_refunds AS
         dev.porcentaje_penalidad,
         sep.separacion_monto,
         act.sublote,
+        proy.idsede,
         proy.denominacion,
         COALESCE(
             persj.tipo_persona,
@@ -422,7 +437,6 @@ CREATE VIEW vws_clientes_legal
 DELIMITER ;
 
 SELECT * from rep_legales_clientes;
-DELIMITER $$
 
 DELIMITER $$
 CREATE VIEW vws_list_quotas

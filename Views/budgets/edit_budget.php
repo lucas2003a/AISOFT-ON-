@@ -183,7 +183,7 @@
                   <g transform="translate(-1869.000000, -293.000000)" fill="#FFFFFF" fill-rule="nonzero">
                     <g transform="translate(1716.000000, 291.000000)">
                       <g id="office" transform="translate(153.000000, 2.000000)">
-                      <svg class="color-background" xmlns="http://www.w3.org/2000/svg"  width="50" height="50" fill="currentColor" class="bi bi-backspace-fill" viewBox="0 0 16 16">
+                        <svg class="color-background" xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-backspace-fill" viewBox="0 0 16 16">
                           <path d="M15.683 3a2 2 0 0 0-2-2h-7.08a2 2 0 0 0-1.519.698L.241 7.35a1 1 0 0 0 0 1.302l4.843 5.65A2 2 0 0 0 6.603 15h7.08a2 2 0 0 0 2-2zM5.829 5.854a.5.5 0 1 1 .707-.708l2.147 2.147 2.146-2.147a.5.5 0 1 1 .707.708L9.39 8l2.146 2.146a.5.5 0 0 1-.707.708L8.683 8.707l-2.147 2.147a.5.5 0 0 1-.707-.708L7.976 8z" />
                         </svg>
                       </g>
@@ -195,7 +195,7 @@
             <span class="nav-link-text ms-1">Devoluciones</span>
           </a>
         </li>
-        
+
         <!-- CUOTAS -->
         <li class="nav-item">
           <a class="nav-link" href="../quotas/index.php">
@@ -403,13 +403,12 @@
                   <form action="" class="row needs-validation" id="form-budget" novalidate>
                     <div class="row d-flex align-items-center">
 
-                      <div class="col-md-5">
+                      <!-- NÚMERO DE SERIE (CÓDIGO)-->
+                      <div class="col-md-3">
                         <div class="m-2">
                           <label for="codigo" class="form-label">Código</label>
-                          <div class="input-group">
-                            <span class="input-group-text">PRES - </span>                          
-                            <input class="form-control" type="number" name="codigo" id="codigo" value="000" min="001" maxlength="3" sped="001" placeholder="Código" required autofocus>
-                          </div>
+                          <input class="form-control" type="text" name="codigo" id="codigo" readonly>
+
                           <div class="invalid-feedback">
                             Necesitas ingresar el código del presupuesto.
                           </div>
@@ -419,10 +418,26 @@
                         </div>
                       </div>
 
-                      <div class="col-md-5">
+                      <!-- MODELO  -->
+                      <div class="col-md-3">
                         <div class="m-2">
                           <label for="modelo" class="form-label">Modelo</label>
-                          <input class="form-control" type="text" name="modelo" id="modelo" placeholder="Modelo" required>
+                          <input class="form-control" type="text" name="modelo" id="modelo" placeholder="Modelo" required autofocus>
+                          <div class="invalid-feedback">
+                            Necesitas ingresar el modelo del presupuesto.
+                          </div>
+                          <div class="valid-feedback">
+                            Modelo de presupuesto registrado correctamente.
+                          </div>
+                        </div>
+                      </div>
+
+
+                      <!-- ÁRE DE CONSTRUCCIÓN -->
+                      <div class="col-md-3">
+                        <div class="m-2">
+                          <label for="area_construccion" class="form-label">Área de construcción (m2)</label>
+                          <input class="form-control" type="number" name="area_construccion" id="area_construccion" min="1" step="0.01" placeholder="Área de construcción(m2)" required>
                           <div class="invalid-feedback">
                             Necesitas ingresar el modelo del presupuesto.
                           </div>
@@ -432,7 +447,7 @@
                         </div>
                       </div>
                       <div class="col-md-2 mt-4 text-button align-bottom">
-                        <button type="submit" class="btn btn-sm bg-gradient-info mb-0" id="save_budget"><i class="fa-solid fa-floppy-disk"></i> Guardar</button>
+                        <button type="submit" class="btn btn-sm bg-gradient-info mb-0" id="save_budget" disabled><i class="fa-solid fa-floppy-disk"></i> Guardar</button>
                       </div>
                     </div>
                   </form>
@@ -754,6 +769,7 @@
     let iddetalleCosto;
     let indexDelete = []
     let codeVelue;
+    let area_construccion;
 
     // Elimina un detalle del presupuesto
     async function deleteDetBudget(iddet) {
@@ -905,29 +921,30 @@
         let params = new FormData();
         params.append("action", "setBudget");
         params.append("idpresupuesto", idpresupuestoOBT);
-        params.append("codigo", finalCode);
+        params.append("codigo", $("#codigo").value);
         params.append("modelo", $("#modelo").value);
+        params.append("area_construccion", area_construccion);
 
         let result = await global.sendAction(url, params);
 
         if (result) {
 
+          console.log(result)
           if (result.filasAfect > 0) {
 
-            let codeDBT = result.codigo
-            let splitCode = codeDBT.split("-");
-            let newCode = splitCode[1].trim();
             let data = {
               idpresupuesto: result.idpresupuesto,
-              codigo: newCode,
-              modelo: result.modelo
+              codigo: result.codigp,
+              modelo: result.modelo,
+              area_construccion: result.area_construccion
             };
 
-            $("#codigo").value = newCode;
+            $("#codigo").value = result.codigo;
             $("#modelo").value = result.modelo;
+            $("#area_construccion").value = result.area_construccion;
 
             sAlert.sweetSuccess("Éxito", "Presupuesto actualizado correctamente", () => {
-
+              $("#save_budget").disabled = true;
             });
           }
 
@@ -1030,18 +1047,15 @@
 
         if (results) {
 
+          console.log(results)
           let data = JSON.stringify(results);
           sessionStorage.setItem("dataBudget", data);
 
           dataGetBudget = results;
 
-          let codeOBT = results.codigo;
-          let splitCode = codeOBT.split("-");
-          let newCode = splitCode[1].trim();
-
-          $("#codigo").value = newCode;
+          $("#codigo").value = results.codigo;
           $("#modelo").value = results.modelo;
-          finalCode = "PRES-" + newCode;
+          $("#area_construccion").value = results.area_construccion;
 
         }
       } catch (e) {
@@ -1404,17 +1418,14 @@
     };
 
     //Valida el formulario
-    async function validateForm(form, callback) {
+    async function validateForm(formdata, callback) {
       return new Promise((resolve, reject) => {
 
         'use strict'
 
-        const forms = document.querySelectorAll(form)
-        const formsHidden = document.querySelectorAll(".form-hidden");
-        Array.from(forms).forEach(form => {
-          form.addEventListener('submit', event => {
+        const form = document.querySelector(formdata)
 
-            if (!form.checkValidity()) {
+        if (!form.checkValidity()) {
               event.preventDefault() //=> FRENA EL ENVÍO DEL FORMULARIO
               event.stopPropagation() //=> FRENA LA PROPAGACIÓN DE DATOS EN EL FORMULARIO
               form.reportValidity();
@@ -1435,9 +1446,7 @@
               resolve();
             }
 
-            form.classList.add('was-validated') //=> AGREGA ESTA CLASE A LOS ELEMENTOS DEL FORMULARIO(MUESTRA LOS COMENTARIOS)
-          }, false) //=> ESTE TERCER ARGUMENTO INDICA QUE EL EVENTO NO SE ESTA CAPTURANDO EN LA ""FASE DE CAPTURA" SINO EN "PROPAGACIÓN NORMAL"
-        })
+            form.classList.add('was-validated')
 
       });
     };
@@ -1459,6 +1468,19 @@
         }, 1000);
       })
     }
+
+    $("#area_construccion").addEventListener("input",(e)=>{
+
+      let valueInput = e.target.value
+
+      if(valueInput){
+
+        area_construccion = Number.parseFloat(valueInput);
+        $("#save_budget").disabled = false;
+      }else{
+        $("#save_budget").disabled = true;
+      }
+    })
 
     $("#material").addEventListener("change", () => {
 
@@ -1576,45 +1598,6 @@
       }
     })
 
-    $("#codigo").addEventListener("blur", (e) => {
-
-      e.preventDefault();
-      let inputValue = e.target.value;
-
-      if (!lastCode) {
-        let sliceValue = inputValue.slice(0,3);
-        let codeFormat = sliceValue.padStart(3, "0");
-        let codeValue = "PRES-" + codeFormat;
-        finalCode = codeValue
-        $("#codigo").value = codeFormat;
-        lastCode = true;
-
-        if(inputValue !== dataGetBudget.codigo){
-          
-          validateData(codeValue, "codigo", allDataBudget)
-            .then(() => {
-              $("#modelo").focus();
-            })
-            .catch(e => {
-              $("#codigo").focus();
-              lastCode = false;
-            })
-        }
-      }
-    })
-
-    $("#codigo").addEventListener("input", (e) => {
-
-      e.preventDefault();
-      let valueInput = e.target.value;
-
-      if (e.target.dataset.prevValue !== valueInput) {
-        lastCode = false;
-      }
-
-      e.target.dataset.prevValue = valueInput;
-    });
-
     $("#save_lots").addEventListener("click", async function() {
 
       $("#save_lots").disabled = true;
@@ -1709,7 +1692,7 @@
 
       if (valueInput !== dataGetBudget.modelo) {
 
-        if(!lastModel){
+        if (!lastModel) {
 
           validateData($("#modelo").value, "modelo", allDataBudget)
             .then(() => {
@@ -1724,11 +1707,11 @@
       }
     });
 
-    $("#modelo").addEventListener("input",(e)=>{
+    $("#modelo").addEventListener("input", (e) => {
 
       let valueInput = e.target.value;
 
-      if(e.target.dataset.prevValue !== valueInput){
+      if (e.target.dataset.prevValue !== valueInput) {
         lastModel = false;
       }
 

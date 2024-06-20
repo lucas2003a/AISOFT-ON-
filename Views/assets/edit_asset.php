@@ -181,7 +181,7 @@
                   <g transform="translate(-1869.000000, -293.000000)" fill="#FFFFFF" fill-rule="nonzero">
                     <g transform="translate(1716.000000, 291.000000)">
                       <g id="office" transform="translate(153.000000, 2.000000)">
-                      <svg class="color-background" xmlns="http://www.w3.org/2000/svg"  width="50" height="50" fill="currentColor" class="bi bi-backspace-fill" viewBox="0 0 16 16">
+                        <svg class="color-background" xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-backspace-fill" viewBox="0 0 16 16">
                           <path d="M15.683 3a2 2 0 0 0-2-2h-7.08a2 2 0 0 0-1.519.698L.241 7.35a1 1 0 0 0 0 1.302l4.843 5.65A2 2 0 0 0 6.603 15h7.08a2 2 0 0 0 2-2zM5.829 5.854a.5.5 0 1 1 .707-.708l2.147 2.147 2.146-2.147a.5.5 0 1 1 .707.708L9.39 8l2.146 2.146a.5.5 0 0 1-.707.708L8.683 8.707l-2.147 2.147a.5.5 0 0 1-.707-.708L7.976 8z" />
                         </svg>
                       </g>
@@ -193,7 +193,7 @@
             <span class="nav-link-text ms-1">Devoluciones</span>
           </a>
         </li>
-        
+
         <!-- CUOTAS -->
         <li class="nav-item">
           <a class="nav-link" href="../quotas/index.php">
@@ -407,13 +407,13 @@
                             <!-- ESTADO -->
                             <div class="mt-4">
                               <label for="estado" class="form-label">Estado</label>
-                              <input type="text" class="form-control" id="estado" readonly>
+                              <input type="text" class="form-control" id="estado" value="SIN VENDER" readonly>
 
                             </div>
 
                             <!-- TIPO ACTIVO -->
                             <div class="mt-4">
-                              <label for="estado" class="form-label">Tipo de propiedad</label>
+                              <label for="tipo_activo" class="form-label">Tipo de propiedad</label>
                               <select name="tipo_activo" class="form-select" id="tipo_activo" required>
                                 <option value="" default>Tipo de propiedad</option>
                                 <option value="LOTE">Lote</option>
@@ -429,8 +429,8 @@
 
                             <!-- PROPIETARIO LOTE -->
                             <div class="mt-4">
-                              <label for="estado" class="form-label">Propietarios</label>
-                              <select name="propietario_lote" class="form-select" id="propietario_lote" readonly>
+                              <label for="propietario_lote" class="form-label">Propietarios</label>
+                              <select name="propietario_lote" class="form-select" id="propietario_lote">
                                 <option value="A.I.F">A.I.F</option>
                                 <option value="TERCEROS">Terceros</option>
                               </select>
@@ -466,28 +466,34 @@
                               </div>
                             </div>
 
-                            <!-- IMAGEN -->
-                            <div class="form-group">
-                              <label for="in-image" class="label-img">
-                                <i class="material-icons"></i>
-                                <span class="title d-flex justify-content-center">Agregar imagen</span>
-                                <input type="file" accept=".jpg" id="in-image">
-                              </label>
-                            </div>
                           </div>
                           <div class="col-md-6">
 
                             <div class="col-lg-12 ms-auto text-center mt-5 mt-lg-0">
-                              <div class="h-100" style="display: flex; justify-content: center;">
+                              <!-- IMAGEN -->
+                              <div class="form-group" style="margin-top: 70px;">
+                                <label for="in-image" class="label-img">
+                                  <i class="material-icons"></i>
+                                  <span class="title" style="display: flex; justify-content: center;">Agregar imagen</span>
+                                  <input type="file" accept=".jpg" id="in-image">
+                                  <div class="invalid-feedback">
+                                    Selcciona una imagen
+                                  </div>
+                                  <div class="valid-feedback">
+                                    Imagen seleccionada correctamente
+                                  </div>
 
-                                <div class="position-relative d-flex align-items-center justify-content-center h-100">
-                                  <img class="w-100 position-relative z-index-2 pt-4" id="file-view" style="min-height: max-content; padding: 2rem;" src="" alt="">
-                                </div>
+                                  <!-- CONTENEDOR DE LA IMAGEN -->
+                                  <div class="img-content">
+
+                                    <img class="w-100 position-relative z-index-2 pt-4" id="file-view" src="../../media/logos/NoImage.jpg" alt="">
+                                  </div>
+                                </label>
                               </div>
                             </div>
                           </div>
                         </div>
-                        <div class="d-flex justify-content-center">
+                        <div class="d-flex justify-content-center mt-4">
                           <div class="btn-group">
                             <button type="button" class="btn btn-secondary prevBtn" disabled>Anterior</button>
                             <button type="button" class="btn btn-success nextBtn">Siguiente</button>
@@ -503,8 +509,8 @@
 
                             <!-- ÁREA -->
                             <div>
-                              <label for="area" class="form-label">Área</label>
-                              <input type="number" class="form-control" id="area" min="1.0" value="000.00" placeholder="Àrea (m2)" required>
+                              <label for="area" class="form-label">Área terreno (m2)</label>
+                              <input type="number" class="form-control" id="area" min="1.0" step="0.01" placeholder="Área (m2)" required title="Porcentaje del área común (%)">
                               <div class="invalid-feedback">
                                 Necesitas ingresar el área del lote.
                               </div>
@@ -516,7 +522,7 @@
                             <!-- ZONAS COMUNES -->
                             <div class="mt-4">
                               <label for="z-comunes" class="form-label">Zonas comunes</label>
-                              <input type="number" class="form-control" id="z-comunes" value="0" min="1.0" max="100" placeholder="Zonas comúnes (%)">
+                              <input type="number" class="form-control" id="z-comunes" min="1.0" step="0.1" placeholder="Zonas comúnes (%)" required>
 
                             </div>
 
@@ -524,7 +530,7 @@
                             <!-- MONEDA VENTA -->
                             <div class="mt-4">
                               <label for="moneda-venta" class="form-label">Moneda de venta</label>
-                              <select class="form-control custom-select-scroll" id="moneda-venta" required>
+                              <select class="form-select custom-select-scroll" id="moneda-venta" required>
                                 <option value="">Tipo moneda</option>
                                 <option value="USD">Dólares</option>
                                 <option value="SOL">Soles</option>
@@ -540,7 +546,7 @@
                             <!-- PRECIO LOTE -->
                             <div class="mt-4">
                               <label for="precio_lote" class="form-label">Precio del lote</label>
-                              <input type="number" class="form-control" id="precio_lote" placeholder="Precio de venta" maxlength="7" minlength="7" min="1.00" value="0.00" step="0.01" required autofocus>
+                              <input type="number" class="form-control" id="precio_lote" placeholder="Precio de venta" maxlength="7" minlength="7" min="1.00" step="0.01" required autofocus>
                               <div class="invalid-feedback">
                                 Necesitas ingresar el precio del lote.
                               </div>
@@ -566,9 +572,9 @@
                             <!-- PRECIO CONSTRUCCION -->
                             <div class="mt-4">
                               <label for="precio_construccion" class="form-label">Precio de la construcción</label>
-                              <input type="number" class="form-control" id="precio_construccion" placeholder="Precio de construcción" maxlength="7" minlength="7" min="1.00" step="0.01">
+                              <input type="number" class="form-control" id="precio_construccion" placeholder="Precio de construcción" maxlength="7" minlength="7" min="1.00" step="0.01" readonly>
                               <div class="invalid-feedback">
-                                Necesitas ingresar el preecio de construcción.
+                                Necesitas ingresar el precio de construcción.
                               </div>
                               <div class="valid-feedback">
                                 Precio de construcción registrado correctamente.
@@ -578,7 +584,7 @@
                             <!-- PRECIO VENTA -->
                             <div class="mt-4">
                               <label for="precio_venta" class="form-label">Precio de la venta</label>
-                              <input type="number" class="form-control" id="precio_venta" placeholder="Precio de venta" maxlength="8" minlength="8" min="1.00" value="0.00" step="0.01">
+                              <input type="number" class="form-control" id="precio_venta" placeholder="Precio de venta" maxlength="8" minlength="8" min="1.00" step="0.01">
                               <div class="invalid-feedback">
                                 Necesitas ingresar el precio de venta.
                               </div>
@@ -602,6 +608,30 @@
                           </div>
 
                           <div class="col-md-6">
+
+                            <!-- ÁREA COSNTRUCCIÓN -->
+                            <div class="mt-2">
+                              <label for="area_construccion">Área de construcción (m2)</label>
+                              <input type="number" id="area_construccion" class="form-control form-area" min="1" step="0.01" required>
+                              <div class="invalid-feedback">
+                                Registra el área de construcción
+                              </div>
+                              <div class="valid-feedback">
+                                Área de construcción registrada correctamente.
+                              </div>
+                            </div>
+
+                            <!-- ÁREA TECHADA -->
+                            <div class="mt-4">
+                              <label for="area_techada">Àrea techada (m2)</label>
+                              <input type="number" name="area_techada" id="area_techada" class="form-control" min="1" step="0.01" required>
+                              <div class="invalid-feedback">
+                                Registra el área techada
+                              </div>
+                              <div class="valid-feedback">
+                                Área techada registrada correctamente.
+                              </div>
+                            </div>
 
                             <!-- LATITUD -->
                             <div>
@@ -804,13 +834,14 @@
     let idProyecto;
 
     //Obtiene los presupuestos
-    async function getBudgets() {
+    async function getBudgets(area_construida) {
 
       try {
         let url = "../../Controllers/budget.controller.php";
 
         let params = new FormData();
         params.append("action", "listBudgetsAsset");
+        params.append("area_construida", area_construida);
 
         let results = await global.sendAction(url, params);
 
@@ -825,8 +856,6 @@
 
             $("#idpresupuesto").appendChild(newTag);
           })
-
-          await getAsset(idActivo);
         }
       } catch (e) {
         console.error(e)
@@ -960,19 +989,19 @@
         /* FORMULARIO DESCRIPCIÓN  */
         $("#area").value = asset.area_terreno;
         $("#z-comunes").value = asset.zcomunes_porcent;
-        $("#moneda-venta").value = asset.moneda_venta;
+        //$("#moneda-venta").value = asset.moneda_venta;
         $("#precio_lote").value = asset.precio_lote;
 
         setTimeout(() => {
-          
-          Array.from($("#idpresupuesto").options).forEach(option =>{
-            if(option.value == asset.idpresupuesto){
+
+          Array.from($("#idpresupuesto").options).forEach(option => {
+            if (option.value == asset.idpresupuesto) {
               option.selected = true;
             }
           });
         }, 1000);
         $("#precio_construccion").value = asset.precio_construccion;
-        $("#precio_venta").value = asset. precio_venta;
+        $("#precio_venta").value = asset.precio_venta;
         $("#partida-elect").value = asset.partida_elect;
         $("#latitud").value = asset.latitud;
         $("#longitud").value = asset.longitud;
@@ -1008,8 +1037,97 @@
           idProyecto = dataAsset.idproyecto;
           console.log(dataAsset);
 
+          let optionsTypesLots = Array.from($("#tipo_activo").options);
+          let optionsMoney = Array.from($("#moneda-venta").options)                   
+          
           getAssetsAll(idProyecto);
           renderData(dataAsset);
+
+          return new Promise((resolve, reject)=>{
+            
+            optionsMoney.forEach(option =>{
+
+              console.log(option)
+              if(option.value == dataAsset.moneda_venta){
+                option.selected = true;
+              }
+            });
+            
+
+            optionsTypesLots.forEach(option =>{
+              
+              if(option.value == dataAsset.tipo_activo){
+                option.selected = true;
+                resolve()
+              }
+            });
+
+          })
+          .then(()=>{
+            return new Promise((resolve, reject)=>{
+              $("#tipo_activo").dispatchEvent(new Event("change"));
+              resolve()
+            })
+          })
+          .then(()=>{
+            return new Promise((resolve, reject)=>{
+            
+              optionsMoney.forEach(option =>{
+
+                console.log(option)
+                if(option.value == dataAsset.moneda_venta){
+                  option.selected = true;
+                  resolve()
+                }
+              });
+            });
+          })
+          .then(()=>{
+            
+            if(dataAsset.idpresupuesto){
+
+              return new Promise((resolve, reject)=>{
+
+                let budgetsOptions = Array.from($("#idpresupuesto").options)
+
+                if(budgetsOptions.length > 1){
+                  resolve()
+                }else{
+
+                  const interval = setInterval(() => {
+                    
+                    if(dataAsset.length > 1){
+                      clearInterval(interval);
+                      resolve();
+                    }
+                  }, 100);
+                }
+              });
+            }
+              
+          })
+          .then(()=>{
+            
+            if(dataAsset.idpresupuesto){
+
+              return new Promise((resolve, reject)=>{
+
+                let budgetsOptions = Array.from($("#idpresupuesto").options)
+
+                budgetsOptions.forEach(option =>{
+                  if(option.value == dataAsset.idpresupuesto){
+                    option.selected = true;
+                  }
+                })
+
+                $("#idpresupuesto").dispatchEvent(new Event("change"));
+              });
+            }
+              
+          });
+
+          
+          
 
         }
       } catch (e) {
@@ -1072,8 +1190,9 @@
         params.append("sublote", $("#sublote").value);
         params.append("direccion", $("#direccion").value);
         params.append("moneda_venta", $("#moneda-venta").value);
-        params.append("precio_venta", $("#precio_lote").value);
         params.append("area_terreno", $("#area").value);
+        params.append("area_construccion", $("#area_construccion").value);
+        params.append("area_techada", $("#area_techada").value);
         params.append("zcomunes_porcent", $("#z-comunes").value);
         params.append("partida_elect", $("#partida-elect").value);
         params.append("latitud", $("#latitud").value);
@@ -1109,6 +1228,22 @@
       }
     }
 
+    $("#area_construccion").addEventListener("input", (e) => {
+
+      let inputValue = e.target.value;
+
+      if (inputValue) {
+
+        clearTimeout(timer);
+
+        timer = setTimeout(() => {
+
+          getBudgets(inputValue)
+          console.log(inputValue)
+        }, 1500);
+      }
+    })
+
     $("#sublote").addEventListener("blur", (e) => {
 
       let sublote = $("#sublote").value;
@@ -1117,7 +1252,7 @@
 
         searchInfo(AllDataAssets, "sublote", sublote)
           .then(() => {})
-          .catch(()=>{
+          .catch(() => {
             $("#sublote").focus();
           });
 
@@ -1132,9 +1267,17 @@
       let tipoActivo = $("#tipo_activo").value;
 
       if (tipoActivo == "CASA") {
-        $("#precio_lote").disabled = true;
-      }else{
-        $("#precio_lote").disabled = false;
+        $("#idpresupuesto").required = true;
+        $("#moneda-venta").value = "SOL";
+        $("#area_construccion").disabled = false;
+        $("#area_techada").disabled = false;
+        $("#idpresupuesto").disabled = false;
+      } else {
+        $("#idpresupuesto").required = false;
+        $("#moneda-venta").value = "";
+        $("#area_construccion").disabled = true;
+        $("#area_techada").disabled = true;
+        $("#idpresupuesto").disabled = true;
       }
     });
 
@@ -1158,10 +1301,10 @@
       $("#precio_venta").value = monto + precioLote;
     });
 
-    getBudgets();
+    getAsset(idActivo);
 
     /* --------------------------------- FUNCIÓN DE VALIDACIÓN --------------------------------------------------------- */
-    
+
     (() => {
       'use strict' //=> USO ESTRICTO POR POLITICAS DE SEGURIDAD EN EL FORMULARIO
 

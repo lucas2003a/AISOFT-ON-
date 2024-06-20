@@ -13,10 +13,6 @@ if(isset($_POST["action"])){
 
                 echo json_encode($project->listProjectTypeAct($tipo_activo));
             break;
-
-        case "listProjectDetailConst":
-              echo json_encode($project->listProjectDetailConst());
-            break;
             
         case "listProject": 
             

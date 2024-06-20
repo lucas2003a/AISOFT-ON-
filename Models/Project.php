@@ -28,21 +28,6 @@ class Project extends Conection{
     }
 
     /**
-     * Método para listar los proyectos se gun el detalle de construccion de un lote
-     */
-    public function listProjectDetailConst(){
-        try{
-            $query = $this->conection->prepare("CALL spu_list_projects_detConst()");
-            $query->execute();
-
-            return $query->fetchAll(PDO::FETCH_ASSOC);
-        }
-        catch(Exception $e){
-            die($e->getMessage());
-        }
-    }
-
-    /**
      * Método para listar los proyectos activos
      */
     public function listProject(){

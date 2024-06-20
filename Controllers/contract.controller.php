@@ -1,11 +1,13 @@
 <?php
 
 require_once "../Models/Contract.php";
+require_once "../Models/Configuration.php";
 date_default_timezone_set("America/Lima");
 
 if(isset($_POST["action"])){
 
     $contract = new Contract();
+    $config = new Configuration;
 
     switch($_POST["action"]){
 
@@ -70,6 +72,12 @@ if(isset($_POST["action"])){
                     "data"  => []
                 ];
 
+                $dataConfig = [
+                    "clave" => $_POST["clave"],
+                    "valor" => $_POST["valor"]
+                ];
+
+
                 $dataObtained = [
 
                     "n_expediente"              => $_POST["n_expediente"],
@@ -119,6 +127,7 @@ if(isset($_POST["action"])){
                             $response["status"] = true;
                             $response["message"] = "Registro realizado correctamente";
                             $response["data"] = $data;
+                            $config->upsetConfig($dataConfig);
                         }
                     }
 

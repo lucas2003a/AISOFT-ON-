@@ -1,10 +1,12 @@
 <?php
 
 require_once "../Models/Separation.php";
+require_once "../Models/Configuration.php";
 
 if(isset($_POST["action"])){
 
     $separation = new Separation();
+    $config = new Configuration();
 
     switch($_POST["action"]){
 
@@ -59,6 +61,11 @@ if(isset($_POST["action"])){
                 $today = date("dhmYhis");
                 $nom_img = "noImage.jpg";
 
+                $dataConfig = [
+                    "clave" => $_POST["clave"],
+                    "valor" => $_POST["valor"]
+                ];
+
                 $dataObtained = [
                     "n_expediente"  => $_POST["n_expediente"],
                     "idactivo"      => $_POST["idactivo"],
@@ -67,7 +74,11 @@ if(isset($_POST["action"])){
                     "separacion_monto" => $_POST["separacion_monto"],
                     "moneda_venta"  => $_POST["moneda_venta"],
                     "tipo_cambio"   => $_POST["tipo_cambio"],
+                    "fecha_pago"   => $_POST["fecha_pago"],
+                    "modalidad_pago"   => $_POST["modalidad_pago"],
+                    "entidad_bancaria"   => $_POST["entidad_bancaria"],
                     "imagen"        => $nom_img,
+                    "detalle"        => $_POST["detalle"],
                     "idusuario"     => 1
                     // "idusuario"     => $_POST["idusuario"]
                 ];
@@ -86,7 +97,13 @@ if(isset($_POST["action"])){
                     $dataObtained["imagen"] = $nom_img;
                 }
 
-                echo json_encode($separation->addSeparation($dataObtained));
+                $data = $separation->addSeparation($dataObtained);
+                
+                if($data){
+
+                    $config->upsetConfig($dataConfig);
+                    echo json_encode($data);
+                }
                 
             break;
 
@@ -103,7 +120,11 @@ if(isset($_POST["action"])){
                     "separacion_monto" => $_POST["separacion_monto"],
                     "moneda_venta"  => $_POST["moneda_venta"],
                     "tipo_cambio"   => $_POST["tipo_cambio"],
+                    "fecha_pago"   => $_POST["fecha_pago"],
+                    "modalidad_pago"   => $_POST["modalidad_pago"],
+                    "entidad_bancaria"   => $_POST["entidad_bancaria"],
                     "imagen"        => $nom_img,
+                    "detalle"        => $_POST["detalle"],
                     "idusuario"     => 1
                     // "idusuario"     => $_POST["idusuario"]
                 ];

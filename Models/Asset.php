@@ -96,7 +96,7 @@ class Asset extends Conection
 
         try {
 
-            $query = $this->conection->prepare("CALL spu_add_assets(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+            $query = $this->conection->prepare("CALL spu_add_assets(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
             $query->execute(
                 array(
                     $dataAsset["idproyecto"],
@@ -107,6 +107,8 @@ class Asset extends Conection
                     $dataAsset["direccion"],
                     $dataAsset["moneda_venta"],
                     $dataAsset["area_terreno"],
+                    $dataAsset["area_construccion"],
+                    $dataAsset["area_techada"],
                     $dataAsset["zcomunes_porcent"],
                     $dataAsset["partida_elect"],
                     $dataAsset["latitud"],
@@ -135,7 +137,7 @@ class Asset extends Conection
 
         try {
 
-            $query = $this->conection->prepare("CALL spu_set_assets(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+            $query = $this->conection->prepare("CALL spu_set_assets(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
             $query->execute(
                 array(
                     $dataAsset["idactivo"],
@@ -147,6 +149,8 @@ class Asset extends Conection
                     $dataAsset["direccion"],
                     $dataAsset["moneda_venta"],
                     $dataAsset["area_terreno"],
+                    $dataAsset["area_construccion"],
+                    $dataAsset["area_techada"],
                     $dataAsset["zcomunes_porcent"],
                     $dataAsset["partida_elect"],
                     $dataAsset["latitud"],
@@ -274,12 +278,12 @@ class Asset extends Conection
     /**
      * Lista los lotes sin sin presupuesto
      */
-    public function listLotsNoBudgets()
+    public function listHousesNoBudgets()
     {
 
         try {
 
-            $query = $this->conection->prepare("CALL spu_list_lots_noBudgets()");
+            $query = $this->conection->prepare("CALL spu_list_houses_noBudgets()");
             $query->execute();
 
             return $query->fetchAll(PDO::FETCH_ASSOC);
@@ -388,19 +392,4 @@ class Asset extends Conection
         }
     }
 
-    /**
-     * Método para listar los lotes con detalle de construcción = VENTA DE LOTE Y CASA
-     */
-    public function listLotsAndHouses($idproyecto = 0)
-    {
-        try {
-
-            $query = $this->conection->prepare("CALL spu_list_LotsAndHouses(?)");
-            $query->execute(array($idproyecto));
-
-            return $query->fetchAll(PDO::FETCH_ASSOC);
-        } catch (Exception $e) {
-            die($e->getMessage());
-        }
-    }
 }
