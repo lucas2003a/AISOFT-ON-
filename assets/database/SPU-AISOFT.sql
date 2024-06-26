@@ -3685,3 +3685,5 @@ DELIMITER;
 
 select* from subcategoria_costos;
 select* from configuraciones;
+
+SHOW TABLE configuraciones;
