@@ -41,6 +41,11 @@ if(isset($_POST["action"])){
                     $status["status"] = true;
                     $status["rol"] = $data["rol"];
                     $status["message"] = "Usuario logueado correctamente";
+
+                    $status["data"] = $data;
+
+                    
+                        
                 }else{
                     $_SESSION["status"] = false;
                     $status["message"] = "Contraseña incorrecta";
@@ -48,13 +53,20 @@ if(isset($_POST["action"])){
             }
 
             echo json_encode($status);
+
+            /* if($_SESSION["rol"] == "ADMINISTRADOR PRINCIPAL"){
+                header("Location:../Views/budgets/index.php");
+            }else{
+                header("Location:../Views/dashboard.php");
+            } */
+
             break;
     }
 }
 
 if(isset($_GET["action"])){
 
-    if($_GET["action"]== "detroy"){
+    if($_GET["action"]== "destroy"){
 
         session_destroy();
         session_unset();

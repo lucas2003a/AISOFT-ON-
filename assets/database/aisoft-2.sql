@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 20-06-2024 a las 20:07:45
+-- Tiempo de generación: 21-06-2024 a las 00:35:21
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -2518,10 +2518,11 @@ CREATE TABLE `activos` (
 
 INSERT INTO `activos` (`idactivo`, `idproyecto`, `tipo_activo`, `imagen`, `estado`, `sublote`, `direccion`, `moneda_venta`, `area_terreno`, `area_construccion`, `area_techada`, `zcomunes_porcent`, `partida_elect`, `latitud`, `longitud`, `perimetro`, `det_casa`, `idpresupuesto`, `propietario_lote`, `precio_lote`, `precio_construccion`, `precio_venta`, `create_at`, `update_at`, `inactive_at`, `idusuario`) VALUES
 (1, 5, 'LOTE', 'cac10d67f7877a2085c6625203e7f62c88538d2ajpg', 'VENDIDO', 1, 'aav san juan', 'SOL', 50.00, NULL, NULL, 50, 'partida electronica nro 4', NULL, NULL, '{\"clave\":[\"\"],\"valor\":[\"\"]}', '{\"clave\" :[], \"valor\":[]}', NULL, 'TERCEROS', 20000.00, NULL, 20000.00, '2024-06-18', '2024-06-20', NULL, 1),
-(2, 5, 'LOTE', '1aa4959315c6c15dcf073415f5f5a93f7df4d7cajpg', 'SIN VENDER', 2, 'aav san juan tijuana', 'SOL', 60.00, 0.00, 0.00, 30, 'partida nro 5', NULL, NULL, '{\"clave\":[\"\"],\"valor\":[\"\"]}', '{\"clave\" :[], \"valor\":[]}', NULL, 'A.I.F', 25000.00, NULL, 25000.00, '2024-06-18', '2024-06-18', NULL, 1),
+(2, 5, 'LOTE', '1aa4959315c6c15dcf073415f5f5a93f7df4d7cajpg', 'VENDIDO', 2, 'aav san juan tijuana', 'SOL', 60.00, 0.00, 0.00, 30, 'partida nro 5', NULL, NULL, '{\"clave\":[\"\"],\"valor\":[\"\"]}', '{\"clave\" :[], \"valor\":[]}', NULL, 'A.I.F', 25000.00, NULL, 25000.00, '2024-06-18', '2024-06-20', NULL, 1),
 (3, 5, 'CASA', '61307ab9cb5e52725e2f126ad3021c06ab1dc0e4jpg', 'SIN VENDER', 3, 'av san juan', 'SOL', 50.00, 50.00, 50.00, 10, 'partida nro 4', NULL, NULL, '{\"clave\":[\"\"],\"valor\":[\"\"]}', '{\"clave\" :[], \"valor\":[]}', NULL, 'TERCEROS', 50000.00, NULL, 50000.00, '2024-06-19', '2024-06-19', NULL, 1),
 (4, 5, 'CASA', '61307ab9cb5e52725e2f126ad3021c06ab1dc0e4jpg', 'SIN VENDER', 4, 'av san juan', 'SOL', 50.00, NULL, NULL, 10, 'partida nro 4', 'null', 'null', '{\"clave\":[\"\"],\"valor\":[\"\"]}', '{\"clave\" :[], \"valor\":[]}', 13, 'TERCEROS', 50000.00, 700.00, 50700.00, '2024-06-19', '2024-06-20', NULL, 1),
-(5, 5, 'CASA', '61307ab9cb5e52725e2f126ad3021c06ab1dc0e4jpg', 'SIN VENDER', 5, 'av san juan', 'SOL', 50.00, NULL, NULL, 10, 'partida nro 4', 'null', 'null', '{\"clave\":[\"\"],\"valor\":[\"\"]}', '{\"clave\" :[], \"valor\":[]}', 12, 'TERCEROS', 50000.00, 464.40, 50464.40, '2024-06-19', '2024-06-20', NULL, 1);
+(5, 5, 'CASA', '61307ab9cb5e52725e2f126ad3021c06ab1dc0e4jpg', 'SIN VENDER', 5, 'av san juan', 'SOL', 50.00, NULL, NULL, 10, 'partida nro 4', 'null', 'null', '{\"clave\":[\"\"],\"valor\":[\"\"]}', '{\"clave\" :[], \"valor\":[]}', 12, 'TERCEROS', 50000.00, 464.40, 50464.40, '2024-06-19', '2024-06-20', NULL, 1),
+(6, 5, 'LOTE', NULL, 'SIN VENDER', 6, 'av san juan', 'USD', 50.00, NULL, 12.00, 20, 'partida nro 4', NULL, NULL, '{\"clave\":[\"\"],\"valor\":[\"\"]}', '{\"clave\" :[], \"valor\":[]}', NULL, 'A.I.F', 25000.00, NULL, 25000.00, '2024-06-20', NULL, NULL, 1);
 
 --
 -- Disparadores `activos`
@@ -2697,10 +2698,10 @@ CREATE TABLE `configuraciones` (
 --
 
 INSERT INTO `configuraciones` (`idconfiguracion`, `clave`, `valor`, `create_at`, `update_at`) VALUES
-(1, 'contrasenia', 'peru2024', '2024-06-18 20:00:47', NULL),
+(1, 'contrasenia', '2', '2024-06-18 20:00:47', NULL),
 (8, 'serie-presupuesto', '2', '2024-06-19 15:51:10', '2024-06-19 00:00:00'),
-(9, 'serie-separacion', '2', '2024-06-20 08:13:59', '2024-06-20 00:00:00'),
-(10, 'serie-contrato', '1', '2024-06-20 08:13:59', '2024-06-20 00:00:00');
+(9, 'serie-separacion', '3', '2024-06-20 08:13:59', '2024-06-20 00:00:00'),
+(10, 'serie-contrato', '3', '2024-06-20 08:13:59', '2024-06-20 00:00:00');
 
 -- --------------------------------------------------------
 
@@ -2757,14 +2758,15 @@ CREATE TABLE `contratos` (
   `update_at` date DEFAULT NULL,
   `inactive_at` date DEFAULT NULL,
   `idusuario` int(11) NOT NULL
-) ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `contratos`
 --
 
 INSERT INTO `contratos` (`idcontrato`, `n_expediente`, `tipo_contrato`, `idseparacion`, `idrepresentante_primario`, `idrepresentante_secundario`, `idcliente`, `idconyugue`, `idactivo`, `tipo_cambio`, `estado`, `fecha_contrato`, `precio_venta`, `moneda_venta`, `inicial`, `det_contrato`, `archivo`, `create_at`, `update_at`, `inactive_at`, `idusuario`) VALUES
-(3, 'CONT-00001', 'VENTA DE LOTE', 1, 1, NULL, 2, NULL, NULL, 3.820, 'VIGENTE', '2024-06-20', 20000.00, 'SOL', 600.00, '{\"clave\":[\"FECHA DE VENCIMIENTO\"],\"valor\":[\"EL CONTRATO VENCE EL 3 DE MAYO DEL 2025\"]}', '57176b725dfa90d38da746e6780ae53c9041a72b.pdf', '2024-06-20', NULL, NULL, 1);
+(3, 'CONT-00001', 'VENTA DE LOTE', 1, 1, NULL, 2, NULL, NULL, 3.820, 'VIGENTE', '2024-06-20', 20000.00, 'SOL', 600.00, '{\"clave\":[\"FECHA DE VENCIMIENTO\"],\"valor\":[\"EL CONTRATO VENCE EL 3 DE MAYO DEL 2025\"]}', '57176b725dfa90d38da746e6780ae53c9041a72b.pdf', '2024-06-20', NULL, NULL, 1),
+(4, 'CONT-00003', 'VENTA DE LOTE', 2, 1, NULL, 1, NULL, NULL, 3.820, 'VIGENTE', '2024-06-20', 25000.00, 'SOL', 500.00, '{\"clave\":[\"fecha de vencimiento\"],\"valor\":[\"el contrato vence el 20/05/2028\"]}', '377537dc6fe1a744ea4dfc2e71a1fd7e320ac208.pdf', '2024-06-20', NULL, NULL, 1);
 
 --
 -- Disparadores `contratos`
@@ -2983,7 +2985,57 @@ INSERT INTO `cuotas` (`idcuota`, `idcontrato`, `monto_cuota`, `fecha_vencimiento
 (37, 3, 500.00, '2027-07-19', 'POR CANCELAR', '2024-06-20', NULL, NULL, 1),
 (38, 3, 500.00, '2027-08-19', 'POR CANCELAR', '2024-06-20', NULL, NULL, 1),
 (39, 3, 500.00, '2027-09-19', 'POR CANCELAR', '2024-06-20', NULL, NULL, 1),
-(40, 3, 500.00, '2027-10-19', 'POR CANCELAR', '2024-06-20', NULL, NULL, 1);
+(40, 3, 500.00, '2027-10-19', 'POR CANCELAR', '2024-06-20', NULL, NULL, 1),
+(41, 4, 500.00, '2024-07-19', 'POR CANCELAR', '2024-06-20', NULL, NULL, 1),
+(42, 4, 500.00, '2024-08-19', 'POR CANCELAR', '2024-06-20', NULL, NULL, 1),
+(43, 4, 500.00, '2024-09-19', 'POR CANCELAR', '2024-06-20', NULL, NULL, 1),
+(44, 4, 500.00, '2024-10-19', 'POR CANCELAR', '2024-06-20', NULL, NULL, 1),
+(45, 4, 500.00, '2024-11-19', 'POR CANCELAR', '2024-06-20', NULL, NULL, 1),
+(46, 4, 500.00, '2024-12-19', 'POR CANCELAR', '2024-06-20', NULL, NULL, 1),
+(47, 4, 500.00, '2025-01-19', 'POR CANCELAR', '2024-06-20', NULL, NULL, 1),
+(48, 4, 500.00, '2025-02-19', 'POR CANCELAR', '2024-06-20', NULL, NULL, 1),
+(49, 4, 500.00, '2025-03-19', 'POR CANCELAR', '2024-06-20', NULL, NULL, 1),
+(50, 4, 500.00, '2025-04-19', 'POR CANCELAR', '2024-06-20', NULL, NULL, 1),
+(51, 4, 500.00, '2025-05-19', 'POR CANCELAR', '2024-06-20', NULL, NULL, 1),
+(52, 4, 500.00, '2025-06-19', 'POR CANCELAR', '2024-06-20', NULL, NULL, 1),
+(53, 4, 500.00, '2025-07-19', 'POR CANCELAR', '2024-06-20', NULL, NULL, 1),
+(54, 4, 500.00, '2025-08-19', 'POR CANCELAR', '2024-06-20', NULL, NULL, 1),
+(55, 4, 500.00, '2025-09-19', 'POR CANCELAR', '2024-06-20', NULL, NULL, 1),
+(56, 4, 500.00, '2025-10-19', 'POR CANCELAR', '2024-06-20', NULL, NULL, 1),
+(57, 4, 500.00, '2025-11-19', 'POR CANCELAR', '2024-06-20', NULL, NULL, 1),
+(58, 4, 500.00, '2025-12-19', 'POR CANCELAR', '2024-06-20', NULL, NULL, 1),
+(59, 4, 500.00, '2026-01-19', 'POR CANCELAR', '2024-06-20', NULL, NULL, 1),
+(60, 4, 500.00, '2026-02-19', 'POR CANCELAR', '2024-06-20', NULL, NULL, 1),
+(61, 4, 500.00, '2026-03-19', 'POR CANCELAR', '2024-06-20', NULL, NULL, 1),
+(62, 4, 500.00, '2026-04-19', 'POR CANCELAR', '2024-06-20', NULL, NULL, 1),
+(63, 4, 500.00, '2026-05-19', 'POR CANCELAR', '2024-06-20', NULL, NULL, 1),
+(64, 4, 500.00, '2026-06-19', 'POR CANCELAR', '2024-06-20', NULL, NULL, 1),
+(65, 4, 500.00, '2026-07-19', 'POR CANCELAR', '2024-06-20', NULL, NULL, 1),
+(66, 4, 500.00, '2026-08-19', 'POR CANCELAR', '2024-06-20', NULL, NULL, 1),
+(67, 4, 500.00, '2026-09-19', 'POR CANCELAR', '2024-06-20', NULL, NULL, 1),
+(68, 4, 500.00, '2026-10-19', 'POR CANCELAR', '2024-06-20', NULL, NULL, 1),
+(69, 4, 500.00, '2026-11-19', 'POR CANCELAR', '2024-06-20', NULL, NULL, 1),
+(70, 4, 500.00, '2026-12-19', 'POR CANCELAR', '2024-06-20', NULL, NULL, 1),
+(71, 4, 500.00, '2027-01-19', 'POR CANCELAR', '2024-06-20', NULL, NULL, 1),
+(72, 4, 500.00, '2027-02-19', 'POR CANCELAR', '2024-06-20', NULL, NULL, 1),
+(73, 4, 500.00, '2027-03-19', 'POR CANCELAR', '2024-06-20', NULL, NULL, 1),
+(74, 4, 500.00, '2027-04-19', 'POR CANCELAR', '2024-06-20', NULL, NULL, 1),
+(75, 4, 500.00, '2027-05-19', 'POR CANCELAR', '2024-06-20', NULL, NULL, 1),
+(76, 4, 500.00, '2027-06-19', 'POR CANCELAR', '2024-06-20', NULL, NULL, 1),
+(77, 4, 500.00, '2027-07-19', 'POR CANCELAR', '2024-06-20', NULL, NULL, 1),
+(78, 4, 500.00, '2027-08-19', 'POR CANCELAR', '2024-06-20', NULL, NULL, 1),
+(79, 4, 500.00, '2027-09-19', 'POR CANCELAR', '2024-06-20', NULL, NULL, 1),
+(80, 4, 500.00, '2027-10-19', 'POR CANCELAR', '2024-06-20', NULL, NULL, 1),
+(81, 4, 500.00, '2027-11-19', 'POR CANCELAR', '2024-06-20', NULL, NULL, 1),
+(82, 4, 500.00, '2027-12-19', 'POR CANCELAR', '2024-06-20', NULL, NULL, 1),
+(83, 4, 500.00, '2028-01-19', 'POR CANCELAR', '2024-06-20', NULL, NULL, 1),
+(84, 4, 500.00, '2028-02-19', 'POR CANCELAR', '2024-06-20', NULL, NULL, 1),
+(85, 4, 500.00, '2028-03-19', 'POR CANCELAR', '2024-06-20', NULL, NULL, 1),
+(86, 4, 500.00, '2028-04-19', 'POR CANCELAR', '2024-06-20', NULL, NULL, 1),
+(87, 4, 500.00, '2028-05-19', 'POR CANCELAR', '2024-06-20', NULL, NULL, 1),
+(88, 4, 500.00, '2028-06-19', 'POR CANCELAR', '2024-06-20', NULL, NULL, 1),
+(89, 4, 500.00, '2028-07-19', 'POR CANCELAR', '2024-06-20', NULL, NULL, 1),
+(90, 4, 500.00, '2028-08-19', 'POR CANCELAR', '2024-06-20', NULL, NULL, 1);
 
 -- --------------------------------------------------------
 
@@ -3131,7 +3183,7 @@ CREATE TABLE `devoluciones` (
   `update_at` date DEFAULT NULL,
   `inactive_at` date DEFAULT NULL,
   `idusuario` int(11) NOT NULL
-) ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -5158,7 +5210,7 @@ INSERT INTO `metricas` (`idmetrica`, `idproyecto`, `l_vendidos`, `l_noVendidos`,
 (2, 2, 0, 0, 0, '2024-06-17 21:05:15'),
 (3, 3, 0, 0, 0, '2024-06-17 21:22:22'),
 (4, 4, 0, 0, 0, '2024-06-17 21:22:50'),
-(5, 5, 1, 4, 0, '2024-06-20 11:18:15');
+(5, 5, 2, 4, 0, '2024-06-20 16:08:01');
 
 -- --------------------------------------------------------
 
@@ -5295,7 +5347,7 @@ CREATE TABLE `presupuestos` (
   `update_at` date DEFAULT NULL,
   `inactive_at` date DEFAULT NULL,
   `idusuario` int(11) NOT NULL
-) ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `presupuestos`
@@ -5704,14 +5756,15 @@ CREATE TABLE `separaciones` (
   `idusuario` int(11) NOT NULL,
   `modalidad_pago` varchar(20) NOT NULL,
   `entidad_bancaria` varchar(30) NOT NULL
-) ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `separaciones`
 --
 
 INSERT INTO `separaciones` (`idseparacion`, `n_expediente`, `idactivo`, `idcliente`, `idconyugue`, `tipo_cambio`, `moneda_venta`, `separacion_monto`, `fecha_pago`, `imagen`, `detalle`, `existe_contrato`, `create_at`, `update_at`, `inactive_at`, `idusuario`, `modalidad_pago`, `entidad_bancaria`) VALUES
-(1, 'SEPC-00002', 1, 2, NULL, 3.8200, 'SOL', 500.00, '2024-06-20', '52abbd62dca8eaddef34d98067d824016868873e.jpg', 'separación del lote 1 de centenario', b'1', '2024-06-20', '2024-06-20', NULL, 1, 'TRANFERENCIA', 'BBVA');
+(1, 'SEPC-00002', 1, 2, NULL, 3.8200, 'SOL', 500.00, '2024-06-20', '52abbd62dca8eaddef34d98067d824016868873e.jpg', 'separación del lote 1 de centenario', b'1', '2024-06-20', '2024-06-20', NULL, 1, 'TRANFERENCIA', 'BBVA'),
+(2, 'SEPC-00003', 2, 1, NULL, 3.8200, 'SOL', 600.00, '2024-06-20', 'fb134b570b2850a833aa27209f5382e40bc5db70.jpg', 'separacion del lote 2 de centenario', b'1', '2024-06-20', '2024-06-20', NULL, 1, 'TRANFERENCIA', 'BCP');
 
 --
 -- Disparadores `separaciones`
@@ -5863,20 +5916,20 @@ CREATE TABLE `usuarios` (
 --
 
 INSERT INTO `usuarios` (`idusuario`, `imagen`, `idpersona`, `correo`, `contrasenia`, `codigo`, `idrol`, `idsede`, `create_at`, `update_at`, `inactive_at`) VALUES
-(1, NULL, 3, 'juancarlos@gmail.com', 'contraseña1', NULL, 1, 1, '2024-06-17', NULL, NULL),
-(2, NULL, 4, 'mariajose@gmail.com', 'contraseña2', NULL, 2, 1, '2024-06-17', NULL, NULL),
-(3, NULL, 5, 'pedroluis@gmail.com', 'contraseña3', NULL, 3, 1, '2024-06-17', NULL, NULL),
-(4, NULL, 6, 'anasofia@gmail.com', 'contraseña4', NULL, 4, 1, '2024-06-17', NULL, NULL),
-(5, NULL, 7, 'josemaria@gmail.com', 'contraseña5', NULL, 5, 1, '2024-06-17', NULL, NULL),
-(6, NULL, 8, 'luisaelena@gmail.com', 'contraseña6', NULL, 6, 1, '2024-06-17', NULL, NULL),
-(7, NULL, 9, 'jorgepablo@gmail.com', 'contraseña7', NULL, 6, 1, '2024-06-17', NULL, NULL),
-(8, NULL, 10, 'carlosantonio@gmail.com', 'contraseña8', NULL, 1, 2, '2024-06-17', NULL, NULL),
-(9, NULL, 11, 'mariacarmen@gmail.com', 'contraseña9', NULL, 2, 2, '2024-06-17', NULL, NULL),
-(10, NULL, 12, 'franciscojavier@gmail.com', 'contraseña10', NULL, 3, 2, '2024-06-17', NULL, NULL),
-(11, NULL, 13, 'elenaisabel@gmail.com', 'contraseña11', NULL, 4, 2, '2024-06-17', NULL, NULL),
-(12, NULL, 14, 'pedroluis2@gmail.com', 'contraseña12', NULL, 5, 2, '2024-06-17', NULL, NULL),
-(13, NULL, 15, 'mariaisabel@gmail.com', 'contraseña13', NULL, 6, 2, '2024-06-17', NULL, NULL),
-(14, NULL, 16, 'antoniojose@gmail.com', 'contraseña14', NULL, 6, 2, '2024-06-17', NULL, NULL);
+(1, NULL, 3, 'juancarlos@gmail.com', '$2y$10$8Hfxze.TOef0XhG/Uk/t4uzH77BXCSeF5Cl9fC0tuktcTIG3WBh2u', NULL, 1, 1, '2024-06-17', NULL, NULL),
+(2, NULL, 4, 'mariajose@gmail.com', '$2y$10$8Hfxze.TOef0XhG/Uk/t4uzH77BXCSeF5Cl9fC0tuktcTIG3WBh2u', NULL, 2, 1, '2024-06-17', NULL, NULL),
+(3, NULL, 5, 'pedroluis@gmail.com', '$2y$10$8Hfxze.TOef0XhG/Uk/t4uzH77BXCSeF5Cl9fC0tuktcTIG3WBh2u', NULL, 3, 1, '2024-06-17', NULL, NULL),
+(4, NULL, 6, 'anasofia@gmail.com', '$2y$10$8Hfxze.TOef0XhG/Uk/t4uzH77BXCSeF5Cl9fC0tuktcTIG3WBh2u', NULL, 4, 1, '2024-06-17', NULL, NULL),
+(5, NULL, 7, 'josemaria@gmail.com', '$2y$10$8Hfxze.TOef0XhG/Uk/t4uzH77BXCSeF5Cl9fC0tuktcTIG3WBh2u', NULL, 5, 1, '2024-06-17', NULL, NULL),
+(6, NULL, 8, 'luisaelena@gmail.com', '$2y$10$8Hfxze.TOef0XhG/Uk/t4uzH77BXCSeF5Cl9fC0tuktcTIG3WBh2u', NULL, 6, 1, '2024-06-17', NULL, NULL),
+(7, NULL, 9, 'jorgepablo@gmail.com', '$2y$10$8Hfxze.TOef0XhG/Uk/t4uzH77BXCSeF5Cl9fC0tuktcTIG3WBh2u', NULL, 6, 1, '2024-06-17', NULL, NULL),
+(8, NULL, 10, 'carlosantonio@gmail.com', '$2y$10$8Hfxze.TOef0XhG/Uk/t4uzH77BXCSeF5Cl9fC0tuktcTIG3WBh2u', NULL, 1, 2, '2024-06-17', NULL, NULL),
+(9, NULL, 11, 'mariacarmen@gmail.com', '$2y$10$8Hfxze.TOef0XhG/Uk/t4uzH77BXCSeF5Cl9fC0tuktcTIG3WBh2u', NULL, 2, 2, '2024-06-17', NULL, NULL),
+(10, NULL, 12, 'franciscojavier@gmail.com', '$2y$10$8Hfxze.TOef0XhG/Uk/t4uzH77BXCSeF5Cl9fC0tuktcTIG3WBh2u', NULL, 3, 2, '2024-06-17', NULL, NULL),
+(11, NULL, 13, 'elenaisabel@gmail.com', '$2y$10$8Hfxze.TOef0XhG/Uk/t4uzH77BXCSeF5Cl9fC0tuktcTIG3WBh2u', NULL, 4, 2, '2024-06-17', NULL, NULL),
+(12, NULL, 14, 'pedroluis2@gmail.com', '$2y$10$8Hfxze.TOef0XhG/Uk/t4uzH77BXCSeF5Cl9fC0tuktcTIG3WBh2u', NULL, 5, 2, '2024-06-17', NULL, NULL),
+(13, NULL, 15, 'mariaisabel@gmail.com', '$2y$10$8Hfxze.TOef0XhG/Uk/t4uzH77BXCSeF5Cl9fC0tuktcTIG3WBh2u', NULL, 6, 2, '2024-06-17', NULL, NULL),
+(14, NULL, 16, 'antoniojose@gmail.com', '$2y$10$8Hfxze.TOef0XhG/Uk/t4uzH77BXCSeF5Cl9fC0tuktcTIG3WBh2u', NULL, 6, 2, '2024-06-17', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -6524,7 +6577,7 @@ ALTER TABLE `usuarios`
 -- AUTO_INCREMENT de la tabla `activos`
 --
 ALTER TABLE `activos`
-  MODIFY `idactivo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `idactivo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT de la tabla `actualizaciones`
@@ -6560,13 +6613,13 @@ ALTER TABLE `constructora`
 -- AUTO_INCREMENT de la tabla `contratos`
 --
 ALTER TABLE `contratos`
-  MODIFY `idcontrato` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `idcontrato` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de la tabla `cuotas`
 --
 ALTER TABLE `cuotas`
-  MODIFY `idcuota` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
+  MODIFY `idcuota` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=91;
 
 --
 -- AUTO_INCREMENT de la tabla `departamentos`
@@ -6644,7 +6697,7 @@ ALTER TABLE `personas_juridicas`
 -- AUTO_INCREMENT de la tabla `presupuestos`
 --
 ALTER TABLE `presupuestos`
-  MODIFY `idpresupuesto` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `idpresupuesto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT de la tabla `provincias`
@@ -6686,7 +6739,7 @@ ALTER TABLE `sedes`
 -- AUTO_INCREMENT de la tabla `separaciones`
 --
 ALTER TABLE `separaciones`
-  MODIFY `idseparacion` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `idseparacion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `subcategoria_costos`

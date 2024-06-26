@@ -464,6 +464,10 @@ CREATE VIEW vws_list_quotas
         GROUP BY qt.idcuota
 DELIMITER ;
 
-select * from vws_list_quotas;
+use aisoft;
+select * from roles;
 
 
+update usuarios set contrasenia = "$2y$10$8Hfxze.TOef0XhG/Uk/t4uzH77BXCSeF5Cl9fC0tuktcTIG3WBh2u";
+
+select * from usuarios inner join roles WHERE roles.idrol = usuarios.idrol;

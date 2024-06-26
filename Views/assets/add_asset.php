@@ -12,6 +12,14 @@
 
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 -->
+<?php
+
+session_start();
+
+if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
+  header("Location:../../index.php");
+}
+?>
 <!DOCTYPE html>
 <html lang="es">
 
@@ -1120,6 +1128,7 @@
         } else {
           $("#moneda-venta").value = "";
           $("#area_construccion").disabled = true;
+          $("#area_techada").disabled = true;
           $("#idpresupuesto").disabled = true
       }
 

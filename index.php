@@ -5,6 +5,7 @@ if(isset($_SESSION["status"]) && $_SESSION["status"]){
   header("Location: Views/dashboad.html");
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="es">
 
@@ -196,6 +197,7 @@ if(isset($_SESSION["status"]) && $_SESSION["status"]){
 
           }else{
 
+            console.log(result)
             sAlert.sweetSuccess("Éxito","Acceso correcto");
 
             setTimeout(() => {

@@ -12,6 +12,14 @@
 
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 -->
+<?php
+
+session_start();
+
+if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
+  header("Location:../../index.php");
+}
+?>
 <!DOCTYPE html>
 <html lang="es">
 
@@ -672,7 +680,11 @@
           let payDisabled = element.cancelado < element.monto_cuota ? "" : "disabled";
           let cancelDisabled = element.cancelado ? "" :"disabled";
 
-          let disabledPay = element.estado == "POR CANCELAR" && array[index-1].estado !== "CANCELADO" ? "disabled" : "";
+          let disabledPay = ""
+          if(index > 0){
+
+            disabledPay = element.estado == "POR CANCELAR" && array[index-1].estado !== "CANCELADO" ? "disabled" : "";
+          }
 
           let code = btoa(element.idcuota);
           let row = `
