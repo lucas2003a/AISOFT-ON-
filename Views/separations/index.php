@@ -742,6 +742,8 @@ if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
                 let isDisabled = result.existe_contrato ? "disabled" : "";
                 let code = btoa(result.idseparacion);
                 let expedient = btoa(result.n_expediente);
+
+                let liContract = !result.existe_contrato? `<li><a type="button" data-expedient="${result.n_expediente}" data-id="${result.idseparacion}" class="dropdown-item go  ${isDisabled}"><i data-id="${result.idseparacion}" data-expedient="${result.n_expediente}" class="bi bi-file-earmark-pdf text-danger go" data-id="${result.idseparacion}"></i> Generar contrato</a></li>` : "";
                 
                 newRow = `
                   <tr>
@@ -759,9 +761,9 @@ if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
                         </button>
                         <ul class="dropdown-menu">
                           <li><a type="button" href="#" data-id="${result.idseparacion}" class="dropdown-item px-3 mb-0 open-modal" data-bs-toggle="modal" data-bs-target="#modal_det_sep" ><i class="fa-solid fa-eye open-modal text-info" data-id="${result.idseparacion}"></i> Ver</a></li>
-                          <li><a type="button" data-id="${result.idseparacion}" data-expedient="${result.n_expediente}" class="dropdown-item delete"><i class="bi bi-trash-fill delete text-danger" data-id="${result.idseparacion}" data-expedient="${result.n_expediente}"></i> Eliminar</a></li>
+                          <!--<li><a type="button" data-id="${result.idseparacion}" data-expedient="${result.n_expediente}" class="dropdown-item delete"><i class="bi bi-trash-fill delete text-danger" data-id="${result.idseparacion}" data-expedient="${result.n_expediente}"></i> Eliminar</a></li>-->
                           <li><a type="button" data-expedient="${result.n_expediente}" data-id="${result.idseparacion}" class="dropdown-item edit"><i data-id="${result.idseparacion}" data-expedient="${result.n_expediente}" class="bi bi-pencil-fill text-primary edit" data-id="${result.idseparacion}"></i> Editar</a></li>
-                          <li><a type="button" data-expedient="${result.n_expediente}" data-id="${result.idseparacion}" class="dropdown-item go  ${isDisabled}"><i data-id="${result.idseparacion}" data-expedient="${result.n_expediente}" class="bi bi-file-earmark-pdf text-danger go" data-id="${result.idseparacion}"></i> Generar contrato</a></li>
+                          ${liContract}
                           <li><a type="button" data-id="${result.idseparacion}" class="dropdown-item text-secondary px-3 mb-0 return"><i class="fa-solid fa-right-left text-secondary return" data-id="${result.idseparacion}"></i> Devolución</a></li>
                           </ul>
                       </div>

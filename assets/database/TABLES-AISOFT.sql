@@ -349,29 +349,30 @@ CREATE TABLE clientes
 CREATE TABLE separaciones
 (
 	idseparacion  			INT PRIMARY KEY AUTO_INCREMENT,
-    -n_expediente            VARCHAR(10) 	NOT NULL,
-    -idactivo				INT 			NOT NULL,
-    -idcliente 				INT  			NOT NULL,
-    -idconyugue 				INT 			NULL,
-    -tipo_cambio 			DECIMAL(5,4) 	NOT NULL,
-    -moneda_venta 			VARCHAR(10) 	NOT NULL,
-    -separacion_monto		DECIMAL(8,2) 	NOT NULL,
-    -fecha_pago				DATE 			NOT NULL,
-    -imagen					VARCHAR(100) 	NOT NULL,
-    -detalle                 VARCHAR(200)    NOT NULL,
-    -modalidad_pago          VARCHAR(20)     NOT NULL,
-    -entidad_bancaria        VARCHAR(30)     NOT NULL,
+    n_expediente            VARCHAR(10) 	NOT NULL,
+    idactivo				INT 			NOT NULL,
+    idcliente 				INT  			NOT NULL,
+    idconyugue 				INT 			NULL,
+    tipo_cambio 			DECIMAL(5,4) 	NOT NULL,
+    moneda_venta 			VARCHAR(10) 	NOT NULL,
+    separacion_monto		DECIMAL(8,2) 	NOT NULL,
+    fecha_pago				DATE 			NOT NULL,
+    imagen					VARCHAR(100) 	NOT NULL,
+    detalle                 VARCHAR(200)    NOT NULL,
+    modalidad_pago          VARCHAR(20)     NOT NULL,
+    entidad_bancaria        VARCHAR(30)     NOT NULL,
+    nro_operacion           CHAR(10)     NOT NULL,
     existe_contrato         BIT             NOT NULL DEFAULT 0,  
 	create_at 				DATE 			NOT NULL	DEFAULT (CURDATE()),
     update_at				DATE 			NULL,
     inactive_at				DATE 			NULL,
-    -idusuario 				INT 			NOT NULL,
+    idusuario 				INT 			NOT NULL,
     CONSTRAINT chk_n_expediente_sep CHECK(n_expediente LIKE 'SEPC-%'),
     CONSTRAINT uk_n_expediente UNIQUE(n_expediente),
     CONSTRAINT fk_idactivo_sep FOREIGN KEY(idactivo) REFERENCES activos(idactivo),
     CONSTRAINT fk_idcliente_sep FOREIGN KEY(idcliente) REFERENCES clientes(idcliente),
     CONSTRAINT fk_idconyugue_sep FOREIGN KEY(idconyugue) REFERENCES clientes(idcliente),
-    CONSTRAINT fk_idusuario_sep FOREIGN KEY(idusuario) REFERENCES usuarios(idusuario)
+    CONSTRAINT fk_idusuario_sep FOREIGN KEY(idusuario) REFERENCES usuarios(idusuario),
 )ENGINE = INNODB;
 
 -- deboluciones
@@ -500,3 +501,11 @@ CREATE TABLE configuraciones
 -- DROP TABLE sustentos_cuotas, cuotas, detalle_gastos, presupuestos, desembolsos, sustentos_sep, separaciones, contratos, viviendas, lotes;
 
 select * from configuraciones;
+select * from usuarios;
+set foreign_key_checks = 0;
+update usuarios set contrasenia = "$2y$10$6LJpKa/E0MPdYF.z.xJRNu0kaqXDBLesKMUET4a6IsFUShOYJ8zwm";
+
+update activos set estado = "SIN VENDER";
+TRUNCATE TABLE detalles_contratos;
+TRUNCATE TABLE contratos;
+TRUNCATE TABLE separaciones;

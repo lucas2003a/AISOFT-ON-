@@ -131,21 +131,22 @@ class Separation extends Conection{
     public function addSeparation($dataSep = []){
 
         try{
-            $query = $this->conection->prepare("CALL spu_add_separation(?,?,?,?,?,?,?,?,?,?,?,?,?)");
+            $query = $this->conection->prepare("CALL spu_add_separation(?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
             $query->execute(
                 array(
                     $dataSep["n_expediente"],
                     $dataSep["idactivo"],
                     $dataSep["idcliente"],
                     $dataSep["idconyugue"],
-                    $dataSep["separacion_monto"],
-                    $dataSep["moneda_venta"],
                     $dataSep["tipo_cambio"],
+                    $dataSep["moneda_venta"],
+                    $dataSep["separacion_monto"],
                     $dataSep["fecha_pago"],
-                    $dataSep["modalidad_pago"],
-                    $dataSep["entidad_bancaria"],
                     $dataSep["imagen"],
                     $dataSep["detalle"],
+                    $dataSep["modalidad_pago"],
+                    $dataSep["entidad_bancaria"],
+                    $dataSep["nro_operacion"],
                     $dataSep["idusuario"]
                 )
             );
@@ -163,7 +164,7 @@ class Separation extends Conection{
     public function setSeparation($dataSep = []){
 
         try{
-            $query = $this->conection->prepare("CALL spu_set_separation(?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+            $query = $this->conection->prepare("CALL spu_set_separation(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
             $query->execute(
                 array(
                     $dataSep["idseparacion"],
@@ -171,14 +172,15 @@ class Separation extends Conection{
                     $dataSep["idactivo"],
                     $dataSep["idcliente"],
                     $dataSep["idconyugue"],
-                    $dataSep["separacion_monto"],
-                    $dataSep["moneda_venta"],
                     $dataSep["tipo_cambio"],
+                    $dataSep["moneda_venta"],
+                    $dataSep["separacion_monto"],
                     $dataSep["fecha_pago"],
-                    $dataSep["modalidad_pago"],
-                    $dataSep["entidad_bancaria"],
                     $dataSep["imagen"],
                     $dataSep["detalle"],
+                    $dataSep["modalidad_pago"],
+                    $dataSep["entidad_bancaria"],
+                    $dataSep["nro_operacion"],
                     $dataSep["idusuario"]
                 )
             );

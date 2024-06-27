@@ -476,6 +476,12 @@ if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
                             </div>
                           </div>
 
+                          <!-- FECHA PAGO -->
+                          <div class="mt-4">
+                              <label class="form-label" name="fecha_pago">Fecha de pago</label>
+                              <input type="date" class="form-control" id="fecha_pago" required>
+                            </div>
+
 
                           <!-- DETALLES -->
                           <div class="mt-4">
@@ -554,18 +560,14 @@ if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
                               Monto de separación ingresado correctamente.
                             </div>
 
-                            <!-- FECHA PAGO -->
-                            <div class="mt-4">
-                              <label class="form-label" name="fecha_pago">Fecha de pago</label>
-                              <input type="date" class="form-control" id="fecha_pago" required>
-                            </div>
+                            
 
                             <!-- MODALIAD DE PAGO -->
                             <div class="mt-4">
                               <label for="modalidad_pago" class="form-label">Tipo de pago</label>
                               <select name="modalidad_pago" id="modalidad_pago" class="form-select" required>
                                 <option value="">Seleccione una modalidad de pago</option>
-                                <option value="TRANFERENCIA">Transferencia</option>
+                                <option value="TRANSFERENCIA">Transferencia</option>
                                 <option value="EFECTIVO">Efectivo</option>
                               </select>
                             </div>
@@ -580,6 +582,11 @@ if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
                                 <option value="BBVA">BBVA</option>
                                 <option value="SCOTIABANK">SCOTIABANK</option>
                               </select>
+                            </div>
+
+                            <div class="mt-4">
+                              <label for="nro_operacion">Nro de operación</label>
+                              <input type="number" name="nro_operacion" id="nro_operacion" placeholder="Nro de operación" class="form-control" min="1" placeholder="0000000000" required>
                             </div>
                           </div>
                         </div>
@@ -709,6 +716,7 @@ if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
     let lastCode = false;
     let dataClients;
     let newValue;
+    let timer;
 
 
     // * Obtienie el numero de serie código
@@ -1014,14 +1022,15 @@ if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
         params.append("idactivo", $("#idactivo").value);
         params.append("idcliente", $("#idcliente").value);
         params.append("idconyugue", $("#idconyugue").value);
-        params.append("separacion_monto", $("#separacion_monto").value);
-        params.append("moneda_venta", $("#moneda_venta").value);
         params.append("tipo_cambio", $("#tipo_cambio").value);
+        params.append("moneda_venta", $("#moneda_venta").value);
+        params.append("separacion_monto", $("#separacion_monto").value);
         params.append("fecha_pago", $("#fecha_pago").value);
-        params.append("modalidad_pago", $("#modalidad_pago").value);
-        params.append("entidad_bancaria", $("#entidad_bancaria").value);
         params.append("imagen", $("#in-image").files[0]);
         params.append("detalle", $("#detalle").value);
+        params.append("modalidad_pago", $("#modalidad_pago").value);
+        params.append("entidad_bancaria", $("#entidad_bancaria").value);
+        params.append("nro_operacion", $("#nro_operacion").value);
         params.append("clave", serie.clave);
         params.append("valor", serie.number);
 
@@ -1042,6 +1051,32 @@ if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
         console.error(e);
       }
     }
+    $("#nro_operacion").addEventListener("input",(e)=>{
+
+      
+      let valueInput = e.target.value;
+      let valueInt = Number.parseInt(valueInput);
+      
+      console.log(valueInput)
+      if(valueInput && valueInt > 0){
+
+        clearTimeout(timer)
+        timer = setTimeout(()=>{
+          
+          let value_path = valueInput.padStart(10,'0');
+          let value = value_path.substring((value_path.length)-10) // ! Obtiene los ultimos 10 elementos
+          $("#nro_operacion").value = value;
+        },1500)
+      }
+    });
+
+    $("#modalidad_pago").addEventListener("change",(e)=>{
+
+      valueSelect = e.target.value;
+
+      if(valueSelect == "TRANSFERENCIA")$("#nro_operacion").disabled = false, $("#entidad_bancaria").disabled = false;
+      else $("#nro_operacion").disabled = true,$("#entidad_bancaria").disabled = true
+    });
 
     $("#idproyecto").addEventListener("change", (e) => {
 

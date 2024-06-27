@@ -1013,7 +1013,6 @@ DELIMITER;
 -- CLIENTES ---------------------------------------------------------------------------------------------------------------------------------------
 
 DELIMITER $$
-SELECT * FROM contratos;
 CREATE PROCEDURE spu_list_clients_contract()
 BEGIN
     SELECT 
@@ -2191,11 +2190,9 @@ BEGIN
         ORDER BY sp.n_expediente ASC;
 
 END $$
-
-SELECT * FROM ACTIVOS;
 DELIMITER;
-DELIMITER $$
 
+DELIMITER $$
 CREATE PROCEDURE spu_list_separation_tPersona
 (
     IN _tipo_persona VARCHAR(10),
@@ -2300,15 +2297,16 @@ CREATE PROCEDURE spu_add_separation
     IN _idactivo        INT,
     IN _idcliente       INT,
     IN _idconyugue      INT,
-    IN _separacion_monto DECIMAL(8,2),
-    IN _moneda_venta    VARCHAR(10),
     IN _tipo_cambio     DECIMAL(5,4),
-    IN _fecha_pago      DATE,
-    IN _modalidad_pago  VARCHAR(20),
-    IN _entidad_bancaria  VARCHAR(30),
-    IN _imagen          VARCHAR(200),
-    IN _detalle          VARCHAR(200),
-    IN _idusuario       INT
+    IN _moneda_venta    VARCHAR(10),
+    IN _separacion_monto    DECIMAL(8,2),
+    IN _fecha_pago          DATE,
+    IN _imagen              VARCHAR(200),
+    IN _detalle             VARCHAR(200),
+    IN _modalidad_pago      VARCHAR(20),
+    IN _entidad_bancaria    VARCHAR(30),
+    IN _nro_operacion       CHAR(10),
+    IN _idusuario           INT
 )
 BEGIN
     INSERT INTO separaciones (
@@ -2316,14 +2314,15 @@ BEGIN
             idactivo,
             idcliente,
             idconyugue,
-            separacion_monto,
-            moneda_venta,
             tipo_cambio,
+            moneda_venta,
+            separacion_monto,
             fecha_pago,
-            modalidad_pago,
-            entidad_bancaria,
             imagen,
             detalle,
+            modalidad_pago,
+            entidad_bancaria,
+            nro_operacion,
             idusuario
     ) 
         VALUES(
@@ -2331,22 +2330,22 @@ BEGIN
             _idactivo,
             _idcliente, 
             NULLIF(_idconyugue,''),
-            _separacion_monto,
-            _moneda_venta,
             _tipo_cambio,
+            _moneda_venta,
+            _separacion_monto,
             _fecha_pago, 
-            _modalidad_pago,
-            _entidad_bancaria,
             _imagen,
             _detalle,
+            _modalidad_pago,
+            _entidad_bancaria,
+            _nro_operacion,
             _idusuario
         );
 
     SELECT ROW_COUNT() AS filasAfect;
 END $$
-
 DELIMITER;
-
+SELECT * FROM separaciones;
 DELIMITER $$
 
 CREATE PROCEDURE spu_set_separation
@@ -2356,15 +2355,16 @@ CREATE PROCEDURE spu_set_separation
     IN _idactivo        INT,
     IN _idcliente       INT,
     IN _idconyugue      INT,
-    IN _separacion_monto DECIMAL(8,2),
-    IN _moneda_venta    VARCHAR(10),
     IN _tipo_cambio     DECIMAL(5,4),
-    IN _fecha_pago      DATE,
-    IN _modalidad_pago  VARCHAR(20),
-    IN _entidad_bancaria  VARCHAR(30),
-    IN _imagen          VARCHAR(200),
-    IN _detalle         VARCHAR(200),
-    IN _idusuario       INT
+    IN _moneda_venta    VARCHAR(10),
+    IN _separacion_monto    DECIMAL(8,2),
+    IN _fecha_pago          DATE,
+    IN _imagen              VARCHAR(200),
+    IN _detalle             VARCHAR(200),
+    IN _modalidad_pago      VARCHAR(20),
+    IN _entidad_bancaria    VARCHAR(30),
+    IN _nro_operacion       CHAR(10),
+    IN _idusuario           INT
 )
 BEGIN
     UPDATE separaciones 
@@ -2373,14 +2373,15 @@ BEGIN
             idactivo       = _idactivo,
             idcliente      = _idcliente,
             idconyugue     = NULLIF(_idconyugue,''),
-            separacion_monto = _separacion_monto,
-            moneda_venta     = _moneda_venta,
-            tipo_cambio     = _tipo_cambio,
-            fecha_pago      = _fecha_pago,
-            modalidad_pago  = _modalidad_pago,
-            entidad_bancaria = _entidad_bancaria,
-            imagen         = _imagen,
-            detalle         = _detalle,
+            tipo_cambio         = _tipo_cambio,
+            moneda_venta        = _moneda_venta,
+            separacion_monto    = _separacion_monto,
+            fecha_pago          = _fecha_pago,
+            imagen              = _imagen,
+            detalle             = _detalle,
+            modalidad_pago      = _modalidad_pago,
+            entidad_bancaria    = _entidad_bancaria,
+            nro_operacion       = _nro_operacion,
             idusuario      = _idusuario,
             update_at      = CURDATE()
         WHERE idseparacion = _idseparacion;

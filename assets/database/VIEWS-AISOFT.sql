@@ -184,7 +184,6 @@ DELIMITER; */
 
 -- SEPARACIONES
 DELIMITER $$
-
 CREATE VIEW vws_list_separations_tpersona_natural AS
     SELECT
         sep.idseparacion,
@@ -202,6 +201,7 @@ CREATE VIEW vws_list_separations_tpersona_natural AS
         pers.documento_tipo,
         pers.documento_nro,
         sep.separacion_monto,
+        sep.nro_operacion,
         sep.existe_contrato,
         sep.inactive_at AS inactive_at_sep,
         usuPers.nombres AS usuario,
@@ -219,7 +219,6 @@ CREATE VIEW vws_list_separations_tpersona_natural AS
 DELIMITER;
 
 DELIMITER $$
-
 CREATE VIEW vws_list_separations_tpersona_juridica AS
 SELECT
     sep.idseparacion,
@@ -233,6 +232,7 @@ SELECT
     persj.documento_tipo,
     persj.documento_nro,
     sep.separacion_monto,
+    sep.nro_operacion,
     sep.create_at,
     sep.existe_contrato,
     sep.inactive_at AS inactive_at_sep,
@@ -250,7 +250,6 @@ ORDER BY sep.idseparacion DESC;
 DELIMITER;
 
 DELIMITER $$
-
 CREATE VIEW vws_list_separations_tpersona_natural_full AS
     SELECT
         sep.idseparacion,
@@ -285,6 +284,11 @@ CREATE VIEW vws_list_separations_tpersona_natural_full AS
         sep.tipo_cambio,
         sep.moneda_venta,
         sep.separacion_monto,
+        sep.fecha_pago,
+        sep.detalle,
+        sep.modalidad_pago,
+        sep.entidad_bancaria,
+        sep.nro_operacion,
         sep.create_at,
         sep.inactive_at,
         sep.imagen,
@@ -331,6 +335,11 @@ CREATE VIEW vws_list_separations_tpersona_juridica_full AS
         sep.moneda_venta,
         sep.tipo_cambio,
         sep.separacion_monto,
+        sep.fecha_pago,
+        sep.detalle,
+        sep.modalidad_pago,
+        sep.entidad_bancaria,
+        sep.nro_operacion,
         sep.create_at,
         sep.inactive_at,
         sep.imagen,

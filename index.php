@@ -2,7 +2,7 @@
 
 if(isset($_SESSION["status"]) && $_SESSION["status"]){
 
-  header("Location: Views/dashboad.html");
+  header("Location: Views/dashboad.php");
 }
 ?>
 
@@ -202,7 +202,7 @@ if(isset($_SESSION["status"]) && $_SESSION["status"]){
 
             setTimeout(() => {
               
-              window.location.href = "./Views/dashboard.html";
+              window.location.href = "./Views/dashboard.php";
             },1500);
           }
 

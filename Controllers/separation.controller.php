@@ -71,15 +71,16 @@ if(isset($_POST["action"])){
                     "idactivo"      => $_POST["idactivo"],
                     "idcliente"     => $_POST["idcliente"],
                     "idconyugue"    => $_POST["idconyugue"],
-                    "separacion_monto" => $_POST["separacion_monto"],
-                    "moneda_venta"  => $_POST["moneda_venta"],
                     "tipo_cambio"   => $_POST["tipo_cambio"],
-                    "fecha_pago"   => $_POST["fecha_pago"],
-                    "modalidad_pago"   => $_POST["modalidad_pago"],
-                    "entidad_bancaria"   => $_POST["entidad_bancaria"],
-                    "imagen"        => $nom_img,
-                    "detalle"        => $_POST["detalle"],
-                    "idusuario"     => 1
+                    "moneda_venta"  => $_POST["moneda_venta"],
+                    "separacion_monto"  => $_POST["separacion_monto"],
+                    "fecha_pago"        => $_POST["fecha_pago"],
+                    "imagen"            => $nom_img,
+                    "detalle"           => $_POST["detalle"],
+                    "modalidad_pago"    => $_POST["modalidad_pago"],
+                    "entidad_bancaria"  => $_POST["entidad_bancaria"],
+                    "nro_operacion"     => $_POST["nro_operacion"],
+                    "idusuario"         => 1
                     // "idusuario"     => $_POST["idusuario"]
                 ];
 
@@ -117,15 +118,16 @@ if(isset($_POST["action"])){
                     "idactivo"      => $_POST["idactivo"],
                     "idcliente"     => $_POST["idcliente"],
                     "idconyugue"    => $_POST["idconyugue"],
-                    "separacion_monto" => $_POST["separacion_monto"],
-                    "moneda_venta"  => $_POST["moneda_venta"],
                     "tipo_cambio"   => $_POST["tipo_cambio"],
-                    "fecha_pago"   => $_POST["fecha_pago"],
-                    "modalidad_pago"   => $_POST["modalidad_pago"],
-                    "entidad_bancaria"   => $_POST["entidad_bancaria"],
-                    "imagen"        => $nom_img,
-                    "detalle"        => $_POST["detalle"],
-                    "idusuario"     => 1
+                    "moneda_venta"  => $_POST["moneda_venta"],
+                    "separacion_monto"  => $_POST["separacion_monto"],
+                    "fecha_pago"        => $_POST["fecha_pago"],
+                    "imagen"            => $nom_img,
+                    "detalle"           => $_POST["detalle"],
+                    "modalidad_pago"    => $_POST["modalidad_pago"],
+                    "entidad_bancaria"  => $_POST["entidad_bancaria"],
+                    "nro_operacion"     => $_POST["nro_operacion"],
+                    "idusuario"         => 1
                     // "idusuario"     => $_POST["idusuario"]
                 ];
 
@@ -135,6 +137,14 @@ if(isset($_POST["action"])){
 
                     if(move_uploaded_file($_FILES["imagen"]["tmp_name"],$url)){
                         $dataObtained["imagen"] = $nom_img;
+                    }
+                }else{
+
+                    $idseparacion = $_POST["idseparacion"];
+                    $data = $separation->listSeparationById($idseparacion);
+
+                    if($data){
+                        $dataObtained["imagen"] = $data["imagen"];
                     }
                 }
 

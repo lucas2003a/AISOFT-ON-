@@ -16,7 +16,7 @@
 
 session_start();
 
-if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
+if (!isset($_SESSION["status"]) || !$_SESSION["status"]) {
   header("Location:../../index.php");
 }
 ?>
@@ -190,7 +190,7 @@ if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
                   <g transform="translate(-1869.000000, -293.000000)" fill="#FFFFFF" fill-rule="nonzero">
                     <g transform="translate(1716.000000, 291.000000)">
                       <g id="office" transform="translate(153.000000, 2.000000)">
-                      <svg class="color-background" xmlns="http://www.w3.org/2000/svg"  width="50" height="50" fill="currentColor" class="bi bi-backspace-fill" viewBox="0 0 16 16">
+                        <svg class="color-background" xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-backspace-fill" viewBox="0 0 16 16">
                           <path d="M15.683 3a2 2 0 0 0-2-2h-7.08a2 2 0 0 0-1.519.698L.241 7.35a1 1 0 0 0 0 1.302l4.843 5.65A2 2 0 0 0 6.603 15h7.08a2 2 0 0 0 2-2zM5.829 5.854a.5.5 0 1 1 .707-.708l2.147 2.147 2.146-2.147a.5.5 0 1 1 .707.708L9.39 8l2.146 2.146a.5.5 0 0 1-.707.708L8.683 8.707l-2.147 2.147a.5.5 0 0 1-.707-.708L7.976 8z" />
                         </svg>
                       </g>
@@ -395,12 +395,6 @@ if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
           <div class="card">
             <div class="card-body" style="padding: 50px">
               <div class="row">
-                <div class="h-50" style="display: flex; justify-content: center;">
-
-                  <div class="position-relative d-flex align-items-center justify-content-center h-100">
-                    <img class="w-100 position-relative z-index-2 pt-4" style="width: 100%;" id="file-view" src="../../media/constancias_sep/NoImage.jpg" alt="">
-                  </div>
-                </div>
 
                 <div>
 
@@ -414,22 +408,14 @@ if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
                           <!-- NRO EXPEDIENTE -->
                           <div class="mt-4">
                             <label for="n_expediente" class="form-label">Nº de expediente</label>
-                            <div class="input-group">
-                              <span class="input-group-text">SEC-</span>
-                              <input type="number" class="form-control" id="n_expediente" placeholder="Nº de expediente" value="000000" min="000001" step="1" autofocus required>
-                            </div>
-                            <div class="invalid-feedback">
-                              Necesitas ingresar el nro de expediente.
-                            </div>
-                            <div class="valid-feedback">
-                              Nº de expediente registrado correctamente.
-                            </div>
+                            <input type="text" class="form-control" id="n_expediente" placeholder="Nº de expediente" readonly>
+
                           </div>
 
                           <!-- TIPO DE PERSONA -->
                           <div class="mt-4">
                             <label for="tipo_persona" class="form-label">Tipo de persona</label>
-                            <select class="form-select custom-select-scroll" id="tipo_persona" required>
+                            <select class="form-select custom-select-scroll" id="tipo_persona" required autofocus>
                               <option selected value="">Tipo de persona</option>
                               <option value="NATURAL">Natural</option>
                               <option value="JURÍDICA">Jurídica</option>
@@ -446,7 +432,7 @@ if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
                           <div class="mt-4">
                             <label for="idcliente" class="form-label">Cliente</label>
                             <select class="form-select custom-select-scroll" id="idcliente" required>
-                              <option selected disabled value="">Seleccione un cliente</option>
+                              <option value="">Seleccione un cliente</option>
                             </select>
                             <div class="invalid-feedback">
                               Necesitas escojer una cliente.
@@ -474,7 +460,7 @@ if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
                           <!-- TIPO DE CAMBIO -->
                           <div class="mt-4">
                             <label for="tipo_cambio" class="form-label">Tipo de cambio</label>
-                            <input type="number" class="form-control" id="tipo_cambio" readonly>
+                            <input type="number" class="form-control" id="tipo_cambio" required min="1.00" value="0.00" step="0.01">
                             <div class="invalid-feedback">
 
                             </div>
@@ -483,14 +469,31 @@ if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
                             </div>
                           </div>
 
+                          <!-- FECHA PAGO -->
+                          <div class="mt-4">
+                            <label class="form-label" name="fecha_pago">Fecha de pago</label>
+                            <input type="date" class="form-control" id="fecha_pago" required>
+                          </div>
+
+
+                          <!-- DETALLES -->
+                          <div class="mt-4">
+                            <label for="detalle" class="form-label">Detalles</label>
+                            <textarea name="detalle" id="detalle" cols="30" rows="5" class="form-control" required></textarea>
+                          </div>
+
                           <!-- IMAGEN -->
-                          <div class="form-group mt-4">
+                          <div class="form-group mt-4 img-content">
                             <label for="in-image" class="label-img">
                               <i class="material-icons"></i>
                               <span class="title" style="display: flex; justify-content: center;">Agregar imagen de comprobante</span>
-                              <input type="file" accept=".jpg" id="in-image" required>
+                              <input type="file" accept=".jpg" id="in-image">
+                              <img class="w-100 position-relative z-index-2 pt-4" style="width: 100%;" id="file-view" src="../../media/constancias_sep/NoImage.jpg" alt="">
                             </label>
                           </div>
+
+
+
                           <div class="d-grid p-3">
 
                             <button class="btn btn-success" type="submit" id="guardar">Guardar</button>
@@ -504,7 +507,7 @@ if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
                           <!-- PROYECTOS -->
                           <div class="mt-4">
                             <label for="idproyecto" class="form-label">Proyectos</label>
-                            <select class="form-select custom-select-scroll" id="idproyecto" disabled>
+                            <select class="form-select custom-select-scroll" id="idproyecto" required>
                               <option selected disabled value="">Seleccione un proyecto</option>
                             </select>
                             <div class="invalid-feedback">
@@ -548,6 +551,35 @@ if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
                             </div>
                             <div class="valid-feedback">
                               Monto de separación ingresado correctamente.
+                            </div>
+
+
+
+                            <!-- MODALIAD DE PAGO -->
+                            <div class="mt-4">
+                              <label for="modalidad_pago" class="form-label">Tipo de pago</label>
+                              <select name="modalidad_pago" id="modalidad_pago" class="form-select" required>
+                                <option value="">Seleccione una modalidad de pago</option>
+                                <option value="TRANSFERENCIA">Transferencia</option>
+                                <option value="EFECTIVO">Efectivo</option>
+                              </select>
+                            </div>
+
+                            <!-- ENTIDAD BANCARIA -->
+                            <div class="mt-4">
+                              <label for="entidad_bancaria">Entidad bancaria</label>
+                              <select name="entidad_bancaria" id="entidad_bancaria" class="form-select" required>
+                                <option value="">Selecciona una entidad bancaria</option>
+                                <option value="BCP">BCP</option>
+                                <option value="INTERBANCK">INTERBANCK</option>
+                                <option value="BBVA">BBVA</option>
+                                <option value="SCOTIABANK">SCOTIABANK</option>
+                              </select>
+                            </div>
+
+                            <div class="mt-4">
+                              <label for="nro_operacion">Nro de operación</label>
+                              <input type="number" name="nro_operacion" id="nro_operacion" placeholder="Nro de operación" class="form-control" min="1" placeholder="0000000000" required>
                             </div>
                           </div>
                         </div>
@@ -705,7 +737,8 @@ if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
     let newValue;
     let dataSeparationId;
     let dataLots;
-
+    let timer;
+    let n_expediente;
     //Obtiene los datos del lote por su id
     async function getLotId(id) {
 
@@ -783,18 +816,14 @@ if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
           console.log(result)
           dataSeparationId = result;
 
-          //Valor el nro de expedient
-          let expedient = result.n_expediente;
-          let expedientSplit = expedient.split("-");
-          let expedientNumber = expedientSplit[1];
-
           $("#cabezera").innerHTML += result.n_expediente;
           // Imagen
           $("#file-view").setAttribute("src", `../../media/constancias_sep/${result.imagen}`);
           $("#in-image").setAttribute("src", `../../media/constancias_sep/${result.imagen}`);
 
           //n_expediente
-          $("#n_expediente").value = expedientNumber;
+          n_expediente = result.n_expediente
+          $("#n_expediente").value = n_expediente;
 
           //valor del tipo de persona
           let tipo_persona = result.tipo_persona;
@@ -829,6 +858,10 @@ if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
 
           }
 
+          //Fecha pago
+          $("#fecha_pago").value = result.fecha_pago;
+          //Detalle
+          $("#detalle").value = result.detalle;
           //Moneda de venta
           $("#moneda_venta").value = result.moneda_venta;
 
@@ -837,6 +870,16 @@ if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
 
           //Valor del tipo de cambio
           $("#tipo_cambio").value = result.tipo_cambio;
+
+          //Modalidad de pago
+          $("#modalidad_pago").value = result.modalidad_pago;
+          $("#modalidad_pago").dispatchEvent(new Event("change"));
+
+          //Entidad bancaria
+          $("#entidad_bancaria").value = result.entidad_bancaria;
+
+          //Nro de ooperación
+          $("#nro_operacion").value = result.nro_operacion;
 
         }
       } catch (e) {
@@ -1102,21 +1145,26 @@ if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
 
         params.append("action", "setSeparation");
         params.append("idseparacion", idseparacion);
-        params.append("n_expediente", finalExpedient);
+        params.append("n_expediente", n_expediente );
         params.append("idactivo", $("#idactivo").value);
         params.append("idcliente", $("#idcliente").value);
         params.append("idconyugue", $("#idconyugue").value);
-        params.append("separacion_monto", $("#separacion_monto").value);
-        params.append("moneda_venta", $("#moneda_venta").value);
         params.append("tipo_cambio", $("#tipo_cambio").value);
+        params.append("moneda_venta", $("#moneda_venta").value);
+        params.append("separacion_monto", $("#separacion_monto").value);
+        params.append("fecha_pago", $("#fecha_pago").value);
         params.append("imagen", $("#in-image").files[0]);
+        params.append("detalle", $("#detalle").value);
+        params.append("modalidad_pago", $("#modalidad_pago").value);
+        params.append("entidad_bancaria", $("#entidad_bancaria").value);
+        params.append("nro_operacion", $("#nro_operacion").value);
 
         let result = await global.sendAction(url, params);
 
         if (result.filasAfect > 0) {
           console.log(result);
-          sAlert.sweetSuccess("El registro fué exitoso", "¿Deseas volver a registrar?",()=>{
-            
+          sAlert.sweetSuccess("El registro fué exitoso", "¿Deseas volver a registrar?", () => {
+
             window.location.href = "./index.php";
           });
         }
@@ -1125,46 +1173,33 @@ if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
       }
     }
 
-    $("#n_expediente").addEventListener("blur", (e) => {
+    $("#nro_operacion").addEventListener("input", (e) => {
 
-      console.log(lastCode)
-      e.preventDefault();
+
       let valueInput = e.target.value;
-      console.log(valueInput);
+      let valueInt = Number.parseInt(valueInput);
 
-      let getNExpediente = dataSeparationId.n_expediente;
-      let n_expedietenteSplit = getNExpediente.split("-");
-      let newNExpediente = n_expedietenteSplit[1];
-      console.log(newNExpediente)
+      console.log(valueInput)
+      if (valueInput && valueInt > 0) {
 
-      if (!lastCode && valueInput !== newNExpediente) {
-        lastCode = true;
-        let sliceValue = valueInput.slice(0, 6); //Extrae l valores incluyendo el los del indice 0 y 6
-        let valueFormat = sliceValue.padEnd(6, '0')
-        newValue = "SEC-" + valueFormat;
-        $("#n_expediente").value = valueFormat;
+        clearTimeout(timer)
+        timer = setTimeout(() => {
 
-        validateDate("n_expediente", newValue, dataSeparations)
-          .then(() => {
-            console.log("no existe");
-          }).catch(() => {
-            $("#n_expediente").focus();
-            lastCode = false;
-          })
+          let value_path = valueInput.padStart(10, '0');
+          let value = value_path.substring((value_path.length) - 10) // ! Obtiene los ultimos 10 elementos
+          $("#nro_operacion").value = value;
+        }, 1500)
       }
     });
 
-    $("#n_expediente").addEventListener("input", (e) => {
+    $("#modalidad_pago").addEventListener("change", (e) => {
 
-      e.preventDefault();
+      valueSelect = e.target.value;
 
-      let valueInput = e.target.value;
-
-      if (e.target.dataset.prevVal !== valueInput) {
-        lastCode = false;
-      }
-      e.target.dataset.prevVal = valueInput;
+      if(valueSelect == "TRANSFERENCIA")$("#nro_operacion").disabled = false, $("#entidad_bancaria").disabled = false;
+      else $("#nro_operacion").disabled = true,$("#entidad_bancaria").disabled = true
     });
+
 
     $("#idproyecto").addEventListener("change", (e) => {
 
