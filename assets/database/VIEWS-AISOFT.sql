@@ -440,13 +440,13 @@ CREATE VIEW vws_clientes_legal
             persj.documento_nro,
             persj.razon_social AS cliente
             FROM clientes cli
-            INNER JOIN personas_juridicas persj ON persj.idpersona_juridica = cli.idcliente
+            INNER JOIN personas_juridicas persj ON persj.idpersona_juridica = cli.idpersona_juridica
             INNER JOIN rep_legales_clientes rep ON rep.idpersona_juridica = persj.idpersona_juridica  
             WHERE cli.inactive_at IS NULL;            
 DELIMITER ;
 
-SELECT * from rep_legales_clientes;
-
+SELECT * from vws_clientes_legal;
+select * from clientes;
 DELIMITER $$
 CREATE VIEW vws_list_quotas
     AS

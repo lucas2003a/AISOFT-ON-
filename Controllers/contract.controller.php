@@ -215,7 +215,6 @@ if(isset($_POST["action"])){
                         $response["message"] = "No se pudo actualizar el registro";
                         $response["data"] = [];
                     }
-
                  }
 
                 echo json_encode($response);
@@ -308,12 +307,18 @@ if(isset($_GET["action"])){
             $name = $_GET["nombre"];
             $file = $_GET["archivo"];
             $url = "../media/files/" . $file;
-
+            
+            echo json_encode($url);
             header("Content-Type: application/pdf");
-            header("Content-Disposition: inline; filename=".$name.".pdf"); //inline Manda a la vista previa
+            header("Content-Disposition: inline; filename=\"".$name.".pdf\""); //inline Manda a la vista previa
             //header("Content-Disposition: attachment; filename=".$name.".pdf"); // attachment Fuerza la descarga directa
+            // usar \\ y después "" indica que tenga en concideración los caracteres especiales
 
             readfile($url);
+
+            if(!readfile($url)){
+                echo "Hubo un error: " .error_get_last(); 
+            }
 
         break;
     }

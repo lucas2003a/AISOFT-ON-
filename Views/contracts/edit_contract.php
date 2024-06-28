@@ -970,6 +970,7 @@ if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
       let detContracts;
 
       let isEdit = false;
+      let serieContract;
 
       // * Retorna una promesa
       function returnPromise(array) {
@@ -1450,7 +1451,8 @@ if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
           let result = await global.sendAction(url, params);
 
           if (result) {
-            console.log(result)
+
+            setContract = result.n_expediente;
 
             // !Valor del númmero de expediente
             $("#n_expediente").value = result.n_expediente;
@@ -1653,7 +1655,7 @@ if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
 
           params.append("action", "setContract");
           params.append("idcontrato", idcontrato);
-          params.append("n_expediente", "CON-" + $("#n_expediente").value)
+          params.append("n_expediente", serieContract)
           params.append("tipo_contrato", $("#tipo_contrato").value)
           params.append("idseparacion", $("#idseparacion").value)
           params.append("idrepresentante_primario", $("#idrepresentante_primario").value)

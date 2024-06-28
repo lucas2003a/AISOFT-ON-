@@ -773,8 +773,7 @@ if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
                             </div>
                           </div>
 
-                          <div class="row">
-                            <iframe id="frame" src="" frameborder="4" width="500" height="800"></iframe>
+                          <div class="row" id="view-iframe">
                           </div>
 
                           <div class="d-flex justify-content-center">
@@ -785,6 +784,7 @@ if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
                             </div>
                           </div>
                         </div>
+                      </div>
                     </form>
 
                   </div>
@@ -940,7 +940,7 @@ if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
       let dataClients;
       let date = new Date();
       let jsonDet = "";
-      let frame = $("#frame");
+      let iframe;
 
       let queryString = window.location.search;
       let params = new URLSearchParams(queryString);
@@ -1238,13 +1238,35 @@ if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
         let reader = new FileReader();
         let file = event.target.files[0];
 
-        reader.onload = (event) => {
-
-          frame.setAttribute("src", `${event.target.result}`);
-
+        
+        reader.onerror = (event)=>{
+          console.error("Hubo un error: ", reader.error)
         }
 
-        reader.readAsDataURL(file);
+        reader.onprogress = (event)=>{
+
+        };
+
+        reader.onload = (event) => {
+
+          iframe = document.createElement("iframe");
+          iframe.type = "application/json";
+          iframe.width = "500";
+          iframe.height = "800";
+          
+          parentIiframe = $("#view-iframe")
+          parentIiframe.append(iframe);
+
+          let ArrayBuffer = event.target.result;
+          let blob = new Blob([ArrayBuffer],{type:"application/pdf"});
+          
+          let url = window.URL.createObjectURL(blob);
+
+          iframe.setAttribute("src", `${url}`);
+
+        }
+        
+        reader.readAsArrayBuffer(file);
 
       }
 

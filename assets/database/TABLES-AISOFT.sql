@@ -501,11 +501,16 @@ CREATE TABLE configuraciones
 -- DROP TABLE sustentos_cuotas, cuotas, detalle_gastos, presupuestos, desembolsos, sustentos_sep, separaciones, contratos, viviendas, lotes;
 
 select * from configuraciones;
-select * from usuarios;
-set foreign_key_checks = 0;
+select * from contratos;
+select * from separaciones;
+select * from detalle_cuotas;
+set foreign_key_checks = 1;
 update usuarios set contrasenia = "$2y$10$6LJpKa/E0MPdYF.z.xJRNu0kaqXDBLesKMUET4a6IsFUShOYJ8zwm";
 
 update activos set estado = "SIN VENDER";
 TRUNCATE TABLE detalles_contratos;
 TRUNCATE TABLE contratos;
+TRUNCATE TABLE cuotas;
+TRUNCATE TABLE detalle_cuotas;
 TRUNCATE TABLE separaciones;
+select * from activos;

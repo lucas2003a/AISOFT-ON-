@@ -16,7 +16,7 @@
 
 session_start();
 
-if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
+if (!isset($_SESSION["status"]) || !$_SESSION["status"]) {
   header("Location:../../index.php");
 }
 ?>
@@ -406,21 +406,14 @@ if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
                             <div class="mt-2">
                               <label for="n_expediente" class="form-label">Nº de expediente</label>
                               <div class="input-group">
-                                <span class="input-group-text">CON-</span>
-                                <input type="number" name="n_expediente" id="n_expediente" class="form-control" value="00000" min="00001" step="1" maxlength="5" required autofocus>
-                                <div class="invalid-feedback">
-                                  Necesitas ingresar el número del número de expediente.
-                                </div>
-                                <div class="valid-feedback">
-                                  Número de expediente registrado correctamente.
-                                </div>
+                                <input type="text" name="n_expediente" id="n_expediente" class="form-control" readonly>
                               </div>
                             </div>
 
                             <!-- TIPO DE CONTRATO -->
                             <div class="mt-2">
                               <label for="tipo_contrato" class="form-label">Tipo de contrato</label>
-                              <select name="tipo_contrato" id="tipo_contrato" class="form-select" required>
+                              <select name="tipo_contrato" id="tipo_contrato" class="form-select" required autofocus>
                                 <option value="">Selecciona un tipo de contrato</option>
                                 <option data-type="LOTE" value="VENTA DE LOTE">Venta de lote</option>
                                 <option data-type="CASA" value="VENTA DE CASA">Venta de casa</option>
@@ -780,8 +773,7 @@ if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
                             </div>
                           </div>
 
-                          <div class="row">
-                            <iframe id="frame" src="" frameborder="4" width="500" height="800"></iframe>
+                          <div class="row" id="view-iframe">
                           </div>
 
                           <div class="d-flex justify-content-center">
@@ -792,6 +784,8 @@ if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
                             </div>
                           </div>
                         </div>
+                      </div>
+
                     </form>
 
                   </div>
@@ -947,9 +941,64 @@ if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
       let dataClients;
       let date = new Date();
       let jsonDet = "";
-      let frame = $("#frame");
+      let iframe;
 
-      // * Obtienie el numero de serie código
+      // *  Obtiene el ubigeo
+      async function getUbigeo(iddistrito) {
+
+        try {
+
+          let url = "../../Controllers/ubigeo/district.controller.php";
+          let params = new FormData();
+
+          params.append("action", "getUbigeo");
+          params.append("iddistrito", iddistrito);
+
+          let result = await global.sendAction(url, params)
+
+          if (result) {
+            console.log(result)
+
+            const tagDistrito = document.createElement("option");
+            tagDistrito.value = result.iddistrito;
+            tagDistrito.innerHTML = result.distrito.trim();
+            $("#iddistrito").appendChild(tagDistrito);
+            $("#iddistrito").value = result.iddistrito;
+
+            const tagProvincia = document.createElement("option");
+            tagProvincia.value = result.idprovincia;
+            tagProvincia.innerHTML = result.provincia.trim();
+            $("#idprovincia").appendChild(tagProvincia);
+            $("#idprovincia").value = result.idprovincia;
+
+            $("#iddepartamento").value = result.iddepartamento;
+            $("#iddistrito").dispatchEvent(new Event("change"));
+
+            return new Promise((resolve, reject) => {
+              let options = Array.from($("#idsede").options);
+
+              if(options.length > 1){
+                resolve();
+              }else{
+
+                let interval = setInterval(() => {
+
+                  options = Array.from($("#idsede").options);
+
+                  if (options.length > 1) {
+                    clearInterval(interval);
+                    resolve();
+                  }
+                }, 500);
+              }
+            });
+          }
+        } catch (e) {
+          console.error(e);
+        }
+      };
+
+      // * Obtenie el numero de serie código
       async function getSerieCode() {
 
         try {
@@ -958,7 +1007,7 @@ if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
 
           let params = new FormData();
           params.append("action", "listConfig");
-          params.append("clave", "serie-presupuesto");
+          params.append("clave", "serie-contrato");
 
           let result = await global.sendAction(url, params);
 
@@ -966,21 +1015,21 @@ if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
 
             console.log(result)
 
-            let alphanum = "PRES-";
+            let alphanum = "CONT-";
             let number = Number.parseInt(result.valor) + 1;
             let numberString = String(number).toString().padStart(5, '0');
             let serie = alphanum + numberString
             console.log(serie)
 
             const alpha_serie = {
-              "clave": "serie-presupuesto",
+              "clave": "serie-contrato",
               "serie": serie,
               "number": number,
               "numberString": numberString,
               "alphanum": alphanum
             }
 
-            $("#codigo").value = serie;
+            $("#n_expediente").value = serie;
 
             return alpha_serie;
           }
@@ -1069,19 +1118,37 @@ if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
         jsonDet = json;
       }
 
-      // Clona el contenido del template
+      // Lee erl archivo
       function readFile(event) {
 
         let reader = new FileReader();
         let file = event.target.files[0];
 
+        reader.onerror = (event) => {
+          console.error(file.error);
+        }
+
         reader.onload = (event) => {
 
-          frame.setAttribute("src", `${event.target.result}`);
+          iframe = document.createElement("iframe");
+          iframe.type = "application/json";
+          iframe.height = "800";
+          iframe.width = "500";
+
+          let parentIiframe = $("#view-iframe")
+          parentIiframe.append(iframe);
+
+          let arrayBuffer = event.target.result;
+          let blob = new Blob([arrayBuffer], {
+            type: "application/pdf"
+          });
+          let url = URL.createObjectURL(blob);
+
+          iframe.setAttribute("src", `${url}`);
 
         }
 
-        reader.readAsDataURL(file);
+        reader.readAsArrayBuffer(file);
 
       }
 
@@ -1094,27 +1161,31 @@ if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
           let precio_split = precio_obtenido.split(" ");
           let precioVenta = Number.parseFloat(precio_split[1]);
 
+          let serie = await getSerieCode();
+
           let detJson = await global.getJson(".input-det-clave", ".input-det-valor");
 
           let url = "../../Controllers/contract.controller.php";
           let params = new FormData();
 
           params.append("action", "addContract");
-          params.append("n_expediente", "CON-" + $("#n_expediente").value)
-          params.append("tipo_contrato", $("#tipo_contrato").value)
-          params.append("idseparacion", $("#idseparacion").value)
-          params.append("idrepresentante_primario", $("#idrepresentante_primario").value)
-          params.append("idrepresentante_secundario", $("#idrepresentante_secundario").value)
-          params.append("idcliente", $("#idcliente").value)
-          params.append("idconyugue", $("#idconyugue").value)
-          params.append("idactivo", $("#idactivo").value)
-          params.append("tipo_cambio", $("#tipo_cambio").value)
-          params.append("fecha_contrato", $("#fecha_contrato").value)
-          params.append("precio_venta", precioVenta)
-          params.append("moneda_venta", $("#moneda_venta").value)
-          params.append("inicial", $("#monto_inicial").value)
-          params.append("det_contrato", jsonDet)
-          params.append("archivo", $("#in-doc").files[0])
+          params.append("n_expediente", serie.serie);
+          params.append("tipo_contrato", $("#tipo_contrato").value);
+          params.append("idseparacion", $("#idseparacion").value);
+          params.append("idrepresentante_primario", $("#idrepresentante_primario").value);
+          params.append("idrepresentante_secundario", $("#idrepresentante_secundario").value);
+          params.append("idcliente", $("#idcliente").value);
+          params.append("idconyugue", $("#idconyugue").value);
+          params.append("idactivo", $("#idactivo").value);
+          params.append("tipo_cambio", $("#tipo_cambio").value);
+          params.append("fecha_contrato", $("#fecha_contrato").value);
+          params.append("precio_venta", precioVenta);
+          params.append("moneda_venta", $("#moneda_venta").value);
+          params.append("inicial", $("#monto_inicial").value);
+          params.append("det_contrato", jsonDet);
+          params.append("archivo", $("#in-doc").files[0]);
+          params.append("clave", serie.clave);
+          params.append("valor", serie.number);
 
           let result = await global.sendAction(url, params);
 
@@ -1488,6 +1559,42 @@ if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
         }
       }
 
+      // *  Obtiene el ubigeo
+      async function getUbigeo(iddistrito) {
+
+        try {
+
+          let url = "../../Controllers/ubigeo/district.controller.php";
+          let params = new FormData();
+
+          params.append("action", "getUbigeo");
+          params.append("iddistrito", iddistrito);
+
+          let result = await global.sendAction(url, params)
+
+          if (result) {
+            console.log(result)
+
+            const tagDistrito = document.createElement("option");
+            tagDistrito.value = result.iddistrito;
+            tagDistrito.innerHTML = result.distrito.trim();
+            $("#iddistrito").appendChild(tagDistrito);
+            $("#iddistrito").value = result.iddistrito;
+
+            const tagProvincia = document.createElement("option");
+            tagProvincia.value = result.idprovincia;
+            tagProvincia.innerHTML = result.provincia.trim();
+            $("#idprovincia").appendChild(tagProvincia);
+            $("#idprovincia").value = result.idprovincia;
+
+            $("#iddepartamento").value = result.iddepartamento;
+            $("#iddistrito").dispatchEvent(new Event("change"));
+          }
+        } catch (e) {
+          console.error(e);
+        }
+      };
+
       //Obitne los datos de la separación por su id
       async function getSeparationById() {
         try {
@@ -1507,6 +1614,127 @@ if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
 
 
             await getCustomersId(result.idcliente)
+
+            return new Promise((resolve, reject) => {
+
+                let options = Array.from($("#idcliente").options);
+
+                if (options.length > 1) {
+                  resolve();
+
+                } else {
+
+                  let timer = setInterval(() => {
+
+                    options = Array.from($("#idcliente").options);
+
+                    if (options.length > 1) {
+                      clearInterval(timer);
+                      resolve();
+                    }
+                  }, 500);
+                }
+              }).then(() => {
+
+                return new Promise((resolve, reject) => {
+
+                  let options = Array.from($("#idcliente").options);
+
+                  options.forEach(option => {
+
+                    if (option.value == result.idcliente) option.selected = true;
+                  });
+
+                  $("#idcliente").dispatchEvent(new Event("change"));
+                  resolve();
+                });
+
+              })
+              .then(() => {
+
+                return new Promise((resolve, reject) => {
+
+                    if (result.idconyugue) {
+                      let options = Array.from($("#idconyugue").options);
+
+                      if (options.length > 1) {
+                        resolve();
+                      } else {
+
+                        let timer = setInterval(() => {
+
+                          options = Array.from($("#idconyugue").options);
+
+                          if (options.length > 1) {
+
+                            clearInterval(timer)
+                            resolve();
+                          }
+                        }, 500);
+                      }
+                    } else {
+
+                      resolve()
+                    }
+                  })
+                  .then(() => {
+
+                    return new Promise((resolve, reject) => {
+
+                      let options = Array.from($("#idconyugue").options);
+
+                      options.forEach(option => {
+
+                        if (option.value == result.idconyugue) option.selected = true;
+                      });
+
+                      $("#idconyugue").dispatchEvent(new Event("change"));
+                      resolve();
+                    });
+                  })
+
+              }).then(async function() {
+
+                await getUbigeo(result.iddistrito);
+
+                return new Promise((resolve, reject) => {
+
+                  let options = Array.from($("#idsede").options);
+
+                  if (options.length > 1) {
+                    resolve();
+                  } else {
+
+                    let interval = setInterval(() => {
+
+                      options = Array.from($("#idsede").options);
+
+                      if (options.length > 1) {
+                        clearInterval(interval)
+                        resolve();
+                      }
+                      console.log('interval sede :>> ', interval);
+                    }, 500);
+                  }
+
+                  console.log('options :>> ', options);
+                });
+
+              }).then(() => {
+
+                let options = Array.from($("#idsede").options);
+
+                options.forEach(option => {
+
+                  if (option.value == result.idsede) option.selected = true;
+
+                });
+                $("#idsede").dispatchEvent(new Event("change"));
+
+              })
+              .catch((e) => {
+                console.error(e);
+              });
           }
         } catch (e) {
           console.error(e);
@@ -1651,6 +1879,8 @@ if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
               newTag.value = result.idproyecto;
               newTag.innerText = result.denominacion;
               newTag.dataset.tipo = result.tipo;
+              newTag.dataset.distrito = result.iddistrito;
+              newTag.dataset.sede = result.idsede;
 
               $("#idproyecto").appendChild(newTag);
             });
@@ -1696,6 +1926,34 @@ if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
 
           }
         })
+      }
+
+      async function toogleOptionsClients(optionSelected) {
+        let options = []
+
+        switch (optionSelected) {
+          case "LOTE":
+            options = [
+              '<option value="">Selecciona el tipo de persona</option>',
+              '<option value="NATURAL">Natural</option>',
+              '<option value="JURÍDICA">Jurídica</option>',
+            ];
+
+            break;
+
+          case "CASA":
+            options = [
+              '<option value="">Selecciona el tipo de persona</option>',
+              '<option value="NATURAL">Natural</option>'
+            ];
+            break;
+        }
+
+        $("#tipo_persona").innerHTML = "";
+
+        options.forEach(option => {
+          $("#tipo_persona").innerHTML += option;
+        });
       }
 
       $("#getJson").addEventListener("click", () => {
@@ -1791,10 +2049,12 @@ if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
 
       })
 
-      $("#idproyecto").addEventListener("change", (e) => {
+      $("#idproyecto").addEventListener("change", async function(e){
 
         let idproyecto = e.target.options[e.target.selectedIndex].value;
         let tipo = e.target.options[e.target.selectedIndex].dataset.tipo;
+        let idsede = e.target.options[e.target.selectedIndex].dataset.sede;
+        let iddistrito = e.target.options[e.target.selectedIndex].dataset.distrito;
 
         if (tipo == "DET-CONST") {
 
@@ -1803,6 +2063,9 @@ if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
         } else if (tipo == "CASA") {
 
           getHouses(idproyecto);
+          await getUbigeo(iddistrito).then((result) => {
+            $("#idsede").value = idsede
+          })
         }
       });
 
@@ -1821,8 +2084,9 @@ if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
 
         let option = e.target.options[e.target.selectedIndex].dataset.type;
 
-        console.log(option)
         let form = document.querySelectorAll(".input-contract");
+
+        await toogleOptionsClients(option)
 
         $("#idproyecto").innerHTML = "";
 
@@ -1896,6 +2160,7 @@ if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
 
       // await getTC();
       await getAllContracts();
+      await getSerieCode();
 
       /* --------------------------------- FUNCIÓN DE VALIDACIÓN --------------------------------------------------------- */
 

@@ -560,30 +560,9 @@ if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
         </div>
         <div class="modal-body">
           <div style="margin: 5% 10% 5% 10%;">
-            <div class="d-flex" style="justify-content: space-between;">
-              <div>
-
-                <h6><strong>Cliente :</strong></h6>
-                <h6><strong>Documento tipo :</strong></h6>
-                <h6><strong>Documento número :</strong></h6>
-                <h6><strong>Proyecto :</strong></h6>
-                <h6><strong>Sublote :</strong></h6>
-                <h6><strong>Monto de separación :</strong></h6>
-                <div id="labels">
-
-                </div>
-              </div>
-              <div>
-                <h6 id="cliente"></h6>
-                <h6 id="documento_tipo"></h6>
-                <h6 id="documento_nro"></h6>
-                <h6 id="proyecto"></h6>
-                <h6 id="sublote"></h6>
-                <h6 id="monto_separación"></h6>
-                <div id="content">
-
-                </div>
-              </div>
+            <div class="d-flex row" style="justify-content: space-between;" id="render-details">
+              
+              <!-- RENDER DETALLES -->
             </div>
           </div>
         </div>
@@ -663,36 +642,65 @@ if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
           if (result) {
             console.log(result)
 
-            $("#labels").innerHTML = "";
-            $("#content").innerHTML = "";
+            let divDetails = $("#render-details");
+            let montoPagado = "";
+            let monedas = {
+
+              SOL: "S/ " + result.separacion_monto,
+              USD: "$/ " + result.separacion_monto
+            };
+           
+            montoPagado = monedas[result.moneda_venta];
+
+            const content = [
+              {clave: "Cliente", valor: result.cliente},
+              {clave: "Tipo de documento", valor: result.documento_tipo},
+              {clave: "Nro de documento", valor: result.documento_nro},
+              {clave: "Proyecto", valor: result.denominacion},
+              {clave: "Sublote", valor: result.sublote},
+              {clave: "Conyugue", valor: result.conyugue || "SIN REGISTRAR"},
+              {clave: "Tipo de documento (conyugue)", valor:  result.conyPers_documento_tipo || "SIN REGISTRAR"},
+              {clave: "Nro de documento (conyugue)", valor: result.conyPers_documento_nro || "SIN REGISTRAR"},
+              {clave: "Monto de separación", valor: montoPagado},
+              {clave: "Modalidad de pago", valor: result.modalidad_pago},
+              {clave: "Comprobante", valor: "../../media/constancias_sep/" + result.imagen},
+            ];
 
             $("#modalTitle").innerHTML = result.n_expediente;
 
-            $("#cliente").innerHTML = result.cliente;
-            $("#documento_tipo").innerHTML = result.documento_tipo;
-            $("#documento_nro").innerHTML = result.documento_nro;
-            $("#proyecto").innerHTML = result.denominacion;
-            $("#sublote").innerHTML = result.sublote;
-            $("#monto_separación").innerHTML = result.separacion_monto;
+            content.forEach(element => {
+              let html = ``;
+              
+              if(element.clave !== "Comprobante"){
 
-            if (result.conyugue) {
+                html = `
+                    <div class="col-md-6">
+                      <div class="mt-2">
+                        <h6><strong>${element.clave}: </strong></h6>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="mt-2">
+                        <h6>${element.valor}</h6>
+                      </div>
+                    </div>
+                `;
+              }else{
 
-              const labels = ["Conyugue", "Tipo de documento", "Nro de documento"];
-              const contents = [result.conyugue, result.conyPers_documento_tipo, result.conyPers_documento_nro];
-              console.log(contents)
+                html = `
+                <div class="mt-4">
+                  <h6><strong>${element.clave}: </strong></h6>
+                </div>
+                <div class="d-flex justify-content-center img-content">
+                  <div class="mt-2">
+                    <img src="${element.valor}" alt="${element.valor}">
+                  </div>
+                </div>
+                `;
+              }
 
-              $("#labels").innerHTML += "<hr>";
-              $("#content").innerHTML += "<hr>";
-
-              labels.forEach((label, index) => {
-
-                let tagLabel = `<h6><strong>${label} :</strong></h6>`;
-                $("#labels").innerHTML += tagLabel;
-
-                let tagContent = `<h6>${contents[index]}</h6>`;
-                $("#content").innerHTML += tagContent;
-              });
-            }
+              divDetails.innerHTML += html;
+            });
 
           }
         } catch (e) {
@@ -742,8 +750,22 @@ if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
                 let isDisabled = result.existe_contrato ? "disabled" : "";
                 let code = btoa(result.idseparacion);
                 let expedient = btoa(result.n_expediente);
+                let liContract = "";
 
-                let liContract = !result.existe_contrato? `<li><a type="button" data-expedient="${result.n_expediente}" data-id="${result.idseparacion}" class="dropdown-item go  ${isDisabled}"><i data-id="${result.idseparacion}" data-expedient="${result.n_expediente}" class="bi bi-file-earmark-pdf text-danger go" data-id="${result.idseparacion}"></i> Generar contrato</a></li>` : "";
+                let contractOptions =  [
+                  `<li><a type="button" data-expedient="${result.n_expediente}" data-id="${result.idseparacion}" class="dropdown-item go  ${isDisabled}"><i data-id="${result.idseparacion}" data-expedient="${result.n_expediente}" class="bi bi-file-earmark-pdf text-danger go" data-id="${result.idseparacion}"></i> Generar contrato</a></li>`,
+                  `<li><a type="button" data-id="${result.idseparacion}" class="dropdown-item text-secondary px-3 mb-0 return"><i class="fa-solid fa-right-left text-secondary return" data-id="${result.idseparacion}"></i> Devolución</a></li>`,
+                  `<li><a type="button" data-expedient="${result.n_expediente}" data-id="${result.idseparacion}" class="dropdown-item edit"><i data-id="${result.idseparacion}" data-expedient="${result.n_expediente}" class="bi bi-pencil-fill text-primary edit" data-id="${result.idseparacion}"></i> Editar</a></li>`
+                ];
+
+                if(!result.existe_contrato){
+
+                  contractOptions.forEach(option => {
+                    liContract += option;
+                  });
+                }else{
+                  liContract = "";
+                }
                 
                 newRow = `
                   <tr>
@@ -761,10 +783,7 @@ if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
                         </button>
                         <ul class="dropdown-menu">
                           <li><a type="button" href="#" data-id="${result.idseparacion}" class="dropdown-item px-3 mb-0 open-modal" data-bs-toggle="modal" data-bs-target="#modal_det_sep" ><i class="fa-solid fa-eye open-modal text-info" data-id="${result.idseparacion}"></i> Ver</a></li>
-                          <!--<li><a type="button" data-id="${result.idseparacion}" data-expedient="${result.n_expediente}" class="dropdown-item delete"><i class="bi bi-trash-fill delete text-danger" data-id="${result.idseparacion}" data-expedient="${result.n_expediente}"></i> Eliminar</a></li>-->
-                          <li><a type="button" data-expedient="${result.n_expediente}" data-id="${result.idseparacion}" class="dropdown-item edit"><i data-id="${result.idseparacion}" data-expedient="${result.n_expediente}" class="bi bi-pencil-fill text-primary edit" data-id="${result.idseparacion}"></i> Editar</a></li>
                           ${liContract}
-                          <li><a type="button" data-id="${result.idseparacion}" class="dropdown-item text-secondary px-3 mb-0 return"><i class="fa-solid fa-right-left text-secondary return" data-id="${result.idseparacion}"></i> Devolución</a></li>
                           </ul>
                       </div>
                     </td>

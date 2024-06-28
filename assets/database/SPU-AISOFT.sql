@@ -261,6 +261,8 @@ BEGIN
         SELECT 
         py.idproyecto,
         py.denominacion,
+        py.iddistrito,
+        py.idsede,
         _tipo_activo as tipo
         FROM proyectos py
         INNER JOIN activos ac ON ac.idproyecto = py.idproyecto
@@ -1041,7 +1043,8 @@ BEGIN
         AND cont.inactive_at IS NULL;
     
 END $$
-
+DELIMITER ;
+CALL spu_list_clients_contract();
 DELIMITER $$
 
 CREATE PROCEDURE spu_list_clients_contractID(IN _idcliente INT)
