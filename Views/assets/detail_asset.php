@@ -1421,6 +1421,7 @@ if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
 
       function renderTable(idtable, data) {
 
+        console.log('data :>> ', data);
         let numRow = 1;
         data.forEach(element =>{
 

@@ -90,7 +90,7 @@ class Refund extends Conection{
      */
     public function addRefund($dataDev = []){
         try{
-            $query = $this->conection->prepare("CALL spu_add_refund(?,?,?,?,?,?,?,?,?)");
+            $query = $this->conection->prepare("CALL spu_add_refund(?,?,?,?,?,?,?,?,?,?,?,?,?)");
             $query->execute(
                 array(
                     $dataDev["n_expediente"],
@@ -100,6 +100,10 @@ class Refund extends Conection{
                     $dataDev["detalle"],
                     $dataDev["porcentaje_penalidad"],
                     $dataDev["monto_devolucion"],
+                    $dataDev["tipo_cambio"],
+                    $dataDev["modalidad_pago"],
+                    $dataDev["entidad_bancaria"],
+                    $dataDev["nro_operacion"],
                     $dataDev["imagen"],
                     $dataDev["idusuario"]
                 )
@@ -116,7 +120,7 @@ class Refund extends Conection{
      */
     public function setRefund($dataDev = []){
         try{
-            $query = $this->conection->prepare("CALL spu_set_refund(?,?,?,?,?,?,?,?,?,?)");
+            $query = $this->conection->prepare("CALL spu_set_refund(?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
             $query->execute(
                 array(
                     $dataDev["iddevolucion"],
@@ -127,6 +131,10 @@ class Refund extends Conection{
                     $dataDev["detalle"],
                     $dataDev["porcentaje_penalidad"],
                     $dataDev["monto_devolucion"],
+                    $dataDev["tipo_cambio"],
+                    $dataDev["modalidad_pago"],
+                    $dataDev["entidad_bancaria"],
+                    $dataDev["nro_operacion"],
                     $dataDev["imagen"],
                     $dataDev["idusuario"]
                 )

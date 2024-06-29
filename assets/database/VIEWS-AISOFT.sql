@@ -360,8 +360,111 @@ CREATE VIEW vws_list_separations_tpersona_juridica_full AS
 
 DELIMITER;
 
+/* -------------------------------------------------------------------------- */
+/*                                  CONTRATOS                                 */
+/* -------------------------------------------------------------------------- */
+
+
+DELIMITER $$
+CREATE VIEW vws_list_contracts
+    AS
+    SELECT 
+        ct.idcontrato,
+        ct.n_expediente,
+        ct.idcliente,
+        ct.idconyugue,
+        cl.tipo_persona,
+        ac.idactivo,
+        ac.sublote,
+        py.idproyecto,
+        py.denominacion,
+        COALESCE(CONCAT(UPPER(ps.apellidos),', ',LOWER(ps.nombres)),pj.razon_social) AS cliente,
+        COALESCE(ps.documento_tipo,pj.documento_tipo) AS documento_tipo,
+        COALESCE(ps.documento_nro,pj.documento_nro) AS documento_nro,
+        CONCAT(UPPER(psc.apellidos),', ',LOWER(psc.nombres)) AS conyugue,
+        psc.documento_tipo AS documento_tipo_cn,
+        psc.documento_nro AS documento_nro_cn,
+        ct.precio_venta,
+        ct.moneda_venta,
+        ct.inicial,
+        ct.tipo_cambio,
+        ct.fecha_contrato  
+        FROM contratos ct
+        LEFT JOIN separaciones sp ON sp.idseparacion = ct.idseparacion
+        LEFT JOIN clientes cl ON(
+            (ct.idseparacion IS NULL AND cl.idcliente = ct.idcliente)
+            OR
+            (ct.idseparacion IS NOT NULL AND cl.idcliente = sp.idcliente)
+        )
+        LEFT JOIN personas_juridicas pj ON pj.idpersona_juridica = cl.idpersona_juridica
+        LEFT JOIN personas ps ON ps.idpersona = cl.idpersona        
+        LEFT JOIN clientes cn ON cn.idcliente = ct.idconyugue
+        LEFT JOIN personas psc ON psc.idpersona = cn.idpersona
+        LEFT JOIN activos ac ON(
+            (ct.idactivo IS NULL AND ac.idactivo = sp.idactivo)
+            OR
+            (ct.idactivo IS NOT NULL AND ac.idactivo = ct.idactivo)
+        )
+        INNER JOIN proyectos py ON py.idproyecto = ac.idproyecto;
+$$
+DELIMITER ;
+
+/* -------------------------------------------------------------------------- */
+/*                                  CLIENTES                                  */
+/* -------------------------------------------------------------------------- */
+
+DELIMITER $$
+
+CREATE VIEW vws_list_clients
+    AS
+        SELECT
+            cl.idcliente,
+            cl.tipo_persona,
+            COALESCE(CONCAT(UPPER(ps.apellidos),', ',LOWER(ps.nombres)),pj.razon_social)AS cliente,
+            COALESCE(ps.documento_tipo,pj.documento_tipo) AS documento_tipo,
+            COALESCE(ps.documento_nro,pj.documento_nro) AS documento_nro,
+            cl.create_at
+        FROM
+            clientes cl
+        LEFT JOIN personas_juridicas pj ON pj.idpersona_juridica = cl.idpersona_juridica
+        LEFT JOIN personas ps ON ps.idpersona = cl.idpersona;
+$$
+DELIMITER ;
+
+
 -- DEVOLUCIONES ///////////////////////////////////////////////////////
 DELIMITER $$
+
+CREATE VIEW vws_list_refunds 
+AS
+    SELECT
+        dv.iddevolucion,
+        dv.n_expediente,
+        ct.n_expediente AS expediente_contrato,
+        dv.tipo_devolucion,
+        dv.idcontrato,
+        dv.idseparacion,
+        COALESCE(ct.idcliente,lc.idcliente) AS idcliente,
+        COALESCE(ct.cliente,lc.cliente) AS cliente,
+        COALESCE(ct.documento_tipo,lc.documento_tipo) AS documento_tipo,
+        COALESCE(ct.documento_nro,lc.documento_nro) AS documento_nro,
+        ct.moneda_venta,
+        dv.monto_devolucion,
+        dv.create_at,
+        dv.inactive_at
+    FROM devoluciones dv
+    LEFT JOIN vws_list_contracts ct ON ct.idcontrato = dv.idcontrato
+    LEFT JOIN separaciones sp ON sp.idseparacion = dv.idseparacion
+    INNER JOIN clientes cl ON(
+        (dv.idcontrato IS NULL AND cl.idcliente = sp.idcliente)
+        OR
+        (dv.idseparacion IS NULL AND cl.idcliente = ct.idcliente)
+    )
+    INNER JOIN vws_list_clients lc ON lc.idcliente = cl.idcliente
+    ORDER BY dv.iddevolucion DESC;
+
+DELIMITER;
+/* DELIMITER $$
 
 CREATE VIEW vws_list_refunds AS
     SELECT
@@ -408,8 +511,10 @@ CREATE VIEW vws_list_refunds AS
         INNER JOIN personas AS usuPers ON usuPers.idpersona = usu.idpersona
     ORDER BY dev.iddevolucion DESC;
 
-DELIMITER;
+DELIMITER; */
 SELECT * from vws_list_refunds;
+SELECT * from devoluciones;
+SELECT * from contratos;
 
 
 DELIMITER $$

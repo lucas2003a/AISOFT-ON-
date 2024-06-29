@@ -2063,8 +2063,30 @@ if (!isset($_SESSION["status"]) || !$_SESSION["status"]) {
         } else if (tipo == "CASA") {
 
           getHouses(idproyecto);
-          await getUbigeo(iddistrito).then((result) => {
-            $("#idsede").value = idsede
+          await getUbigeo(iddistrito)
+          
+          return new Promise((resolve, reject) => {
+          
+            let options = Array.from($("#idsede").options);
+
+            if(options.length > 1){
+              resolve();
+            }else{
+
+              let interval = setInterval(() => {
+                
+                options = Array.from($("#idsede").options);
+
+                if(options.length > 1){
+                  clearInterval(interval);
+                  resolve();
+                }
+              }, 500);
+            }
+          })
+          .then(() => {
+            $("#idsede").value = idsede;
+            $("#idsede").dispatchEvent(new Event("change"));
           })
         }
       });

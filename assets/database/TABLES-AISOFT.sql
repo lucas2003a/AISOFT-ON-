@@ -360,8 +360,8 @@ CREATE TABLE separaciones
     imagen					VARCHAR(100) 	NOT NULL,
     detalle                 VARCHAR(200)    NOT NULL,
     modalidad_pago          VARCHAR(20)     NOT NULL,
-    entidad_bancaria        VARCHAR(30)     NOT NULL,
-    nro_operacion           CHAR(10)     NOT NULL,
+    entidad_bancaria        VARCHAR(30)     NULL,
+    nro_operacion           CHAR(10)        NULL,
     existe_contrato         BIT             NOT NULL DEFAULT 0,  
 	create_at 				DATE 			NOT NULL	DEFAULT (CURDATE()),
     update_at				DATE 			NULL,
@@ -384,13 +384,17 @@ CREATE TABLE devoluciones
     idseparacion		INT 			NULL,
     idcontrato          INT             NULL,
     detalle             VARCHAR(200)    NOT NULL,
-    porcentaje_penalidad TINYINT        NOT NULL,
-    monto_devolucion 	DECIMAL(8,2)	NOT NULL,
-    imagen                  VARCHAR(100) NOT NULL,
-    create_at 				DATE 		NOT NULL	DEFAULT (CURDATE()),
-    update_at				DATE 		NULL,
-    inactive_at				DATE 		NULL,
-    idusuario 				INT 		NOT NULL,
+    porcentaje_penalidad    TINYINT         NOT NULL,
+    monto_devolucion 	    DECIMAL(8,2)	NOT NULL,
+    modalidad_pago          VARCHAR(20)     NOT NULL,
+    tipo_cambio             DECIMAL(5,4)    NOT NULL,
+    entidad_bancaria        VARCHAR(30)     NULL,
+    nro_operacion           CHAR(10)        NULL,
+    imagen                  VARCHAR(100)    NOT NULL,
+    create_at 				DATE 		    NOT NULL	DEFAULT (CURDATE()),
+    update_at				DATE 		    NULL,
+    inactive_at				DATE 		    NULL,
+    idusuario 				INT 		    NOT NULL,
     CONSTRAINT chk_n_expediente_dev CHECK(n_expediente LIKE 'DEVC-%'),
     CONSTRAINT fk_idseparacion_dev FOREIGN KEY(idseparacion) REFERENCES separaciones(idseparacion),
     CONSTRAINT fk_idcontrato_dev FOREIGN KEY(idcontrato) REFERENCES contratos(idcontrato),
@@ -464,15 +468,16 @@ CREATE TABLE detalle_cuotas
     iddetalle_cuota         INT PRIMARY KEY AUTO_INCREMENT,
     idcuota                 INT             NOT NULL,
     monto_pago 			    DECIMAL(8,2) 	NOT NULL,
-    fecha_pago 				DATE 			NULL,
-    detalles  	 			VARCHAR(100) 	NULL,
-    tipo_pago 				VARCHAR(20) 	NULL,
+    fecha_pago 			    DATE 			NOT NULL,
+    detalles  	 			VARCHAR(100) 	NOT NULL,
+    modalidad_pago          VARCHAR(20) 	NOT NULL,
     entidad_bancaria 		VARCHAR(20) 	NULL,
-    imagen                  VARCHAR(100)    NULL,
-    create_at               DATE NOT NULL DEFAULT(CURDATE()),
+    nro_operacion           CHAR(10)        NULL,
+    imagen                  VARCHAR(100)    NOT NULL,
+    create_at               DATE            NOT NULL DEFAULT(CURDATE()),
     update_at				DATE 			NULL,
     inactive_at				DATE 			NULL,
-    CONSTRAINT fk_idcuota_detalle_cuotas FOREIGN KEY(idcuota) REFERENCES cuotas(idcuota)
+    CONSTRAINT fk_idcuota_detalle_cuotas FOREIGN KEY(idcuota) REFERENCES cuotas(idcuota)       
 )ENGINE = INNODB;
 
 -- ACTUALIZACIONES
@@ -500,17 +505,39 @@ CREATE TABLE configuraciones
 
 -- DROP TABLE sustentos_cuotas, cuotas, detalle_gastos, presupuestos, desembolsos, sustentos_sep, separaciones, contratos, viviendas, lotes;
 
-select * from configuraciones;
+/* select * from configuraciones;
 select * from contratos;
 select * from separaciones;
 select * from detalle_cuotas;
 set foreign_key_checks = 1;
 update usuarios set contrasenia = "$2y$10$6LJpKa/E0MPdYF.z.xJRNu0kaqXDBLesKMUET4a6IsFUShOYJ8zwm";
 
-update activos set estado = "SIN VENDER";
+-- update activos set estado = "SIN VENDER";
 TRUNCATE TABLE detalles_contratos;
 TRUNCATE TABLE contratos;
 TRUNCATE TABLE cuotas;
 TRUNCATE TABLE detalle_cuotas;
 TRUNCATE TABLE separaciones;
+TRUNCATE TABLE devoluciones;
 select * from activos;
+select * from sedes;
+select * from proyectos; */
+/* update proyectos 
+    SET
+        idsede = 
+            CASE 
+                WHEN idsede = 4 THEN 1
+                WHEN idsede = 5 THEN 2  
+                WHEN idsede = 6 THEN 3
+                else idsede  
+            END; */
+/* select * from representantes;
+select * from constructora;
+select * from devoluciones; */
+/* delete cn    
+    from constructora cn    
+    INNER JOIN sedes sd ON sd.idconstructora = cn.idconstructora
+    where cn.idconstructora > 1; */
+
+
+

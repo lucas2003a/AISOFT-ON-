@@ -2234,13 +2234,14 @@ BEGIN
         lcn.idcliente,
         lcn.cliente,
         lcn.documento_nro,
+        lcn.documento_tipo,
         lcn.tipo_persona,
         lcn.existe_contrato
     FROM
         vws_list_separations_tpersona_natural_full lcn
         LEFT JOIN separaciones sep ON sep.idseparacion = lcn.idseparacion
     WHERE
-        sep.idactivo = 6
+        sep.idactivo = _idactivo
         AND lcn.inactive_at IS NULL
     UNION
     SELECT 
@@ -2248,13 +2249,14 @@ BEGIN
         lcj.idcliente,
         lcj.cliente,
         lcj.documento_nro,
+        lcj.documento_tipo,
         lcj.tipo_persona,
         lcj.existe_contrato
     FROM
         vws_list_separations_tpersona_juridica_full lcj
         LEFT JOIN separaciones sep ON sep.idseparacion = lcj.idseparacion
     WHERE
-    sep.idactivo = 6
+    sep.idactivo = _idactivo
     AND lcj.inactive_at IS NULL;
 END $$
 
@@ -2340,8 +2342,8 @@ BEGIN
             _imagen,
             _detalle,
             _modalidad_pago,
-            _entidad_bancaria,
-            _nro_operacion,
+            NULLIF(_entidad_bancaria,''),
+            NULLIF(_nro_operacion,''),
             _idusuario
         );
 
@@ -2383,8 +2385,8 @@ BEGIN
             imagen              = _imagen,
             detalle             = _detalle,
             modalidad_pago      = _modalidad_pago,
-            entidad_bancaria    = _entidad_bancaria,
-            nro_operacion       = _nro_operacion,
+            entidad_bancaria    = NULLIF(_entidad_bancaria,''),
+            nro_operacion       = NULLIF(_nro_operacion,''),
             idusuario      = _idusuario,
             update_at      = CURDATE()
         WHERE idseparacion = _idseparacion;
@@ -2508,15 +2510,19 @@ DELIMITER $$
 
 CREATE PROCEDURE spu_add_refund
 (
-    IN _n_expediente    VARCHAR(10),
-    IN _idseparacion    INT,
-    IN _idcontrato        INT,
-    IN _tipo_devolucion VARCHAR(20),
-    IN _detalle         VARCHAR(200),
-    IN _porcentaje_penalidad  TINYINT,
-    IN _monto_devolucion DECIMAL(8,2),
-    IN _imagen          VARCHAR(100),
-    IN _idusuario       INT
+    IN _n_expediente        VARCHAR(10),
+    IN _idseparacion        INT,
+    IN _idcontrato          INT,
+    IN _tipo_devolucion     VARCHAR(20),
+    IN _detalle             VARCHAR(200),
+    IN _porcentaje_penalidad    TINYINT,
+    IN _monto_devolucion        DECIMAL(8,2),
+    IN _tipo_cambio         DECIMAL(5,4),
+    IN _modalidad_pago      VARCHAR(20),
+    IN _entidad_bancaria    VARCHAR(30),
+    IN _nro_operacion       CHAR(10),
+    IN _imagen              VARCHAR(100),
+    IN _idusuario           INT
 )
 BEGIN
     INSERT INTO devoluciones(
@@ -2527,6 +2533,10 @@ BEGIN
                     detalle,
                     porcentaje_penalidad,
                     monto_devolucion,
+                    tipo_cambio,
+                    modalidad_pago,
+                    entidad_bancaria,
+                    nro_operacion,
                     imagen,
                     idusuario
                 )
@@ -2538,6 +2548,10 @@ BEGIN
                     _detalle,
                     _porcentaje_penalidad,
                     _monto_devolucion,
+                    _tipo_cambio,
+                    _modalidad_pago,
+                    NULLIF(_entidad_bancaria,''),
+                    NULLIF(_nro_operacion,''),
                     _imagen,
                     _idusuario
                 );
@@ -2554,27 +2568,35 @@ CREATE PROCEDURE spu_set_refund
     IN _iddevolucion    INT,
     IN _n_expediente    VARCHAR(10),
     IN _idseparacion    INT,
-    IN _idcontrato    INT,
+    IN _idcontrato      INT,
     IN _tipo_devolucion VARCHAR(20),
     IN _detalle         VARCHAR(200),
-    IN _porcentaje_penalidad  TINYINT,
-    IN _monto_devolucion DECIMAL(8,2),
+    IN _porcentaje_penalidad    TINYINT,
+    IN _monto_devolucion        DECIMAL(8,2),
+    IN _tipo_cambio     DECIMAL(5,4),
+    IN _modalidad_pago  VARCHAR(20),
+    IN _entidad_bancaria        VARCHAR(30) ,
+    IN _nro_operacion   CHAR(10),
     IN _imagen          VARCHAR(100),
     IN _idusuario       INT
 )
 BEGIN
     UPDATE devoluciones
         SET
-            n_expediente   = _n_expediente,
-            idseparacion   = NULLIF(_idseparacion,'0'),
-            idcontrato    = NULLIF(_idcontrato,'0'),
+            n_expediente    = _n_expediente,
+            idseparacion    = NULLIF(_idseparacion,'0'),
+            idcontrato      = NULLIF(_idcontrato,'0'),
             tipo_devolucion = _tipo_devolucion,
-            detalle        = _detalle,
-            porcentaje_penalidad = _porcentaje_penalidad,
-            monto_devolucion = _monto_devolucion,
-            imagen         = _imagen,
-            update_at      = CURDATE(),
-            idusuario      = _idusuario
+            detalle         = _detalle,
+            porcentaje_penalidad    = _porcentaje_penalidad,
+            monto_devolucion        = _monto_devolucion,
+            tipo_cambio     = _tipo_cambio,
+            modalidad_pago  = _modalidad_pago,
+            entidad_bancaria        = NULLIF(_entidad_bancaria,''),
+            nro_operacion   = NULLIF(_nro_operacion,''),
+            imagen          = _imagen,
+            update_at       = CURDATE(),
+            idusuario       = _idusuario
         WHERE
             iddevolucion = _iddevolucion;
     
@@ -3281,7 +3303,7 @@ BEGIN
             ORDER BY iddetalle_cuota DESC LIMIT 1) AS fecha_pago,
             qt.estado,
             detc.entidad_bancaria,
-            detc.tipo_pago,
+            detc.modalidad_pago,
             detc.detalles,
             detc.imagen,
             pers.nombres AS usuario,
@@ -3400,8 +3422,9 @@ CREATE PROCEDURE spu_set_det_quota
     IN _fecha_pago      DATE,
     IN _monto_pago      DECIMAL(8,2),
     IN _detalles        VARCHAR(100),
-    IN _tipo_pago       VARCHAR(20),
+    IN _modalidad_pago  VARCHAR(20),
     IN _entidad_bancaria VARCHAR(20),
+    IN _nro_operacion   CHAR(10),
     IN _imagen          VARCHAR(100),
     IN _idusuario       INT
 )
@@ -3416,8 +3439,9 @@ BEGIN
         fecha_pago,
         monto_pago,
         detalles,
-        tipo_pago,
+        modalidad_pago,
         entidad_bancaria,
+        nro_operacion,
         imagen
     )
     VALUES (
@@ -3425,8 +3449,9 @@ BEGIN
         _fecha_pago,
         _monto_pago,
         _detalles,
-        _tipo_pago,
-        _entidad_bancaria,
+        _modalidad_pago,
+        NULLIF(_entidad_bancaria,''),
+        NULLIF(_nro_operacion,''),
         _imagen
     );
 
@@ -3464,7 +3489,7 @@ BEGIN
             SELECT (_countUpdate) AS filasAfect;
     END CASE;
 END $$
-SELECT * FROM contratos;
+
 DELIMITER;
 
 DELIMITER $$

@@ -414,7 +414,7 @@ if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
                             <input placeholder="Número de cuotas" type="number" name="numero_cuotas" id="numero_cuotas" class="form-control" value="0" min="1" step="1" required>
                           </div>
 
-                          <!-- MONOT DE LA CUOTA -->
+                          <!-- MONTO DE LA CUOTA -->
                           <div class="mt-2">
                             <label for="monto_cuota">Monto de cuota</label>
                             <input type="number" placeholder="Monto de cuota" name="monto_cuota" id="monto_cuota" class="form-control" value="0" min="1" step="1" readonly>

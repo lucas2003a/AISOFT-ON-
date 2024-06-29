@@ -775,18 +775,23 @@ if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
                 let newRow = "";
                 let code = btoa(result.iddevolucion);
                 let expedient = btoa(result.n_expediente_dev);
+
+                let moneda = {
+                   SOL : "S/ " + result.monto_devolucion,
+                   USD : "$/ " + result.monto_devolucion
+                };
                 newRow = `
                   <tr>
                     <td class="text-xs text-truncate">${numberRow}</td>
-                    <td class="text-xs text-truncate">${result.n_expediente_dev}</td>
+                    <td class="text-xs text-truncate">${result.n_expediente}</td>
                     <td class="text-xs text-truncate">${result.cliente}</td> 
                     <td class="text-xs text-truncate">${result.documento_tipo}</td> 
                     <td class="text-xs text-truncate">${result.documento_nro}</td> 
-                    <td class="text-xs text-truncate">${result.monto_devolucion}</td> 
+                    <td class="text-xs text-truncate">${moneda[result.moneda_venta]}</td> 
                     <td class="text-xs text-truncate">${result.create_at}</td>
                     <td>
                         <a type="button" href="#" data-id="${result.iddevolucion}" class="btn btn-link text-info px-3 mb-0 open-modal" data-bs-toggle="modal" data-bs-target="#modal_det_sep" ><i class="fa-solid fa-eye open-modal" data-id="${result.iddevolucion}"></i></a>
-                        <a type="button" data-id="${result.iddevolucion}" data-expedient="${result.n_expediente_dev}" data-type="${result.devolucion}"class="btn btn-link text-dark px-3 mb-0 edit"><i class="bi bi-pencil-fill edit" data-id="${result.iddevolucion}" data-expedient="${result.n_expediente_dev}"></i></a>
+                        <a type="button" data-id="${result.iddevolucion}" data-expedient="${result.n_expediente}" data-type="${result.devolucion}"class="btn btn-link text-dark px-3 mb-0 edit"><i class="bi bi-pencil-fill edit" data-id="${result.iddevolucion}" data-expedient="${result.n_expediente_dev}"></i></a>
                     </td>
                   </tr>
                   `;

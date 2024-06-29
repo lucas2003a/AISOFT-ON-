@@ -55,15 +55,19 @@ if(isset($_POST["action"])){
                 ];
 
                 $dataObtained = [
-                        "n_expediente"  =>  $_POST["n_expediente"],
-                        "idseparacion"  =>  $_POST["idseparacion"],
-                        "idcontrato"  =>  $_POST["idcontrato"],
-                        "tipo_devolucion" =>  $_POST["tipo_devolucion"],
-                        "detalle"       =>  $_POST["detalle"],
-                        "porcentaje_penalidad" =>  $_POST["porcentaje_penalidad"],
-                        "monto_devolucion" =>  $_POST ["monto_devolucion"],
-                        "imagen"        =>  $nom_img,
-                        "idusuario"     =>  1
+                        "n_expediente"      =>  $_POST["n_expediente"],
+                        "idseparacion"      =>  $_POST["idseparacion"],
+                        "idcontrato"        =>  $_POST["idcontrato"],
+                        "tipo_devolucion"   =>  $_POST["tipo_devolucion"],
+                        "detalle"           =>  $_POST["detalle"],
+                        "porcentaje_penalidad"  =>  $_POST["porcentaje_penalidad"],
+                        "monto_devolucion"      =>  $_POST ["monto_devolucion"],
+                        "tipo_cambio"           =>  $_POST["tipo_cambio"],
+                        "modalidad_pago"        =>  $_POST["modalidad_pago"],
+                        "entidad_bancaria"  =>  $_POST["entidad_bancaria"],
+                        "nro_operacion"     =>  $_POST["nro_operacion"],
+                        "imagen"            =>  $nom_img,
+                        "idusuario"         =>  1
                         // "idusuario"     =>  $_POST["idusuario"]
                 ];
 
@@ -91,16 +95,20 @@ if(isset($_POST["action"])){
                 $nom_img = "noImage.jpg";
                 
                 $dataObtained = [
-                        "iddevolucion"  =>  $_POST["iddevolucion"],
-                        "n_expediente"  =>  $_POST["n_expediente"],
-                        "idseparacion"  =>  $_POST["idseparacion"],
-                        "idcontrato"  =>  $_POST["idcontrato"],
-                        "tipo_devolucion" =>  $_POST["tipo_devolucion"],
-                        "detalle"       =>  $_POST["detalle"],
-                        "porcentaje_penalidad" =>  $_POST["porcentaje_penalidad"],
-                        "monto_devolucion" =>  $_POST ["monto_devolucion"],
-                        "imagen"        =>  $nom_img,
-                        "idusuario"     =>  1
+                        "iddevolucion"      =>  $_POST["iddevolucion"],
+                        "n_expediente"      =>  $_POST["n_expediente"],
+                        "idseparacion"      =>  $_POST["idseparacion"],
+                        "idcontrato"        =>  $_POST["idcontrato"],
+                        "tipo_devolucion"   =>  $_POST["tipo_devolucion"],
+                        "detalle"           =>  $_POST["detalle"],
+                        "porcentaje_penalidad"  =>  $_POST["porcentaje_penalidad"],
+                        "monto_devolucion"      =>  $_POST ["monto_devolucion"],
+                        "tipo_cambio"           =>  $_POST["tipo_cambio"],
+                        "modalidad_pago"        =>  $_POST["modalidad_pago"],
+                        "entidad_bancaria"  =>  $_POS["entidad_bancaria"],
+                        "nro_operacion"     =>  $_POST["nro_operacion"],
+                        "imagen"            =>  $nom_img,
+                        "idusuario"         =>  1
                         // "idusuario"     =>  $_POST["idusuario"]
                 ];
 

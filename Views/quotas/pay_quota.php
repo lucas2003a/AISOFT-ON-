@@ -16,7 +16,7 @@
 
 session_start();
 
-if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
+if (!isset($_SESSION["status"]) || !$_SESSION["status"]) {
   header("Location:../../index.php");
 }
 ?>
@@ -410,13 +410,13 @@ if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
                           <!-- FECHA PAGO -->
                           <div class="mt-2">
                             <label class="form-label" name="fecha_pago">Fecha de pago</label>
-                              <input type="date" class="form-control" id="fecha_pago" required>
+                            <input type="date" class="form-control" id="fecha_pago" required>
                           </div>
 
                           <!-- DEUDA -->
                           <div class="mt-2">
                             <label class="form-label" name="deuda">Deuda</label>
-                              <input type="number" class="form-control" id="deuda" readonly>
+                            <input type="number" class="form-control" id="deuda" readonly>
                           </div>
 
                           <!-- MONTO DE PAGO -->
@@ -432,18 +432,18 @@ if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
                             <textarea name="detalles" id="detalles" cols="30" rows="5" class="form-control" required></textarea>
                           </div>
 
-                          <!-- TIPO DE PAGO -->
-                          <div class="mt-2">
-                            <label for="tipo_pago" class="form-label">Tipo de pago</label>
-                            <select name="tipo_pago" id="tipo_pago" class="form-select" required>
-                              <option value="">Seleccione un tipo de pago</option>
-                              <option value="TRANFERENCIA">Transferencia</option>
+                          <!-- MODALIAD DE PAGO -->
+                          <div class="mt-4">
+                            <label for="modalidad_pago" class="form-label">Tipo de pago</label>
+                            <select name="modalidad_pago" id="modalidad_pago" class="form-select" required>
+                              <option value="">Seleccione una modalidad de pago</option>
+                              <option value="TRANSFERENCIA">Transferencia</option>
                               <option value="EFECTIVO">Efectivo</option>
                             </select>
                           </div>
 
                           <!-- ENTIDAD BANCARIA -->
-                          <div class="mt-2">
+                          <div class="mt-4">
                             <label for="entidad_bancaria">Entidad bancaria</label>
                             <select name="entidad_bancaria" id="entidad_bancaria" class="form-select" required>
                               <option value="">Selecciona una entidad bancaria</option>
@@ -454,13 +454,10 @@ if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
                             </select>
                           </div>
 
-                          <!-- IMAGEN -->
-                          <div class="form-group mt-4">
-                            <label for="in-image" class="label-img">
-                              <i class="material-icons"></i>
-                              <span class="title" style="display: flex; justify-content: center;">Agregar imagen de comprobante</span>
-                              <input type="file" accept=".jpg" id="in-image" required>
-                            </label>
+                          <!-- NRO DE OPERACION -->
+                          <div class="mt-4">
+                            <label for="nro_operacion">Nro de operación</label>
+                            <input type="number" name="nro_operacion" id="nro_operacion" placeholder="Nro de operación" class="form-control" min="1" placeholder="0000000000" required>
                           </div>
 
 
@@ -472,11 +469,25 @@ if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
                         </div>
 
                         <div class="col-md-6">
-                          <div class="h-50" style="display: flex; justify-content: center;">
+                          <!-- IMAGEN -->
+                          <div class="form-group" style="margin-top: 70px;">
+                            <label for="in-image" class="label-img">
+                              <i class="material-icons"></i>
+                              <span class="title" style="display: flex; justify-content: center;">Agregar comprobante</span>
+                              <input type="file" accept=".jpg" id="in-image" required>
+                              <div class="invalid-feedback">
+                                Selcciona una imagen
+                              </div>
+                              <div class="valid-feedback">
+                                Imagen seleccionada correctamente
+                              </div>
 
-                            <div class="position-relative d-flex align-items-center justify-content-center h-100">
-                              <img class="w-100 position-relative z-index-2 pt-4" style="width: 100%;" id="file-view" src="../../media/pagos/NoImage.jpg" alt="">
-                            </div>
+                              <!-- CONTENEDOR DE LA IMAGEN -->
+                              <div class="img-content">
+
+                                <img class="w-100 position-relative z-index-2 pt-4" id="file-view" src="../../media/pagos/NoImage.jpg" alt="">
+                              </div>
+                            </label>
                           </div>
 
                         </div>
@@ -568,30 +579,6 @@ if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
     </div>
   </div>
 
-  <!-- Modal trigger button -->
-  <button type="button" id="show-modal" class="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#modalId" style="position: absolute; left: -9999px; top: -9999px;">
-    Launch
-  </button>
-
-  <!-- Modal Body -->
-  <!-- if you want to close by clicking outside the modal, delete the last endpoint:data-bs-backdrop and data-bs-keyboard -->
-  <div class="modal fade" id="modalId" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-      <div class="modal-content bg-transparent" style="border: none;">
-        <div class="modal-header" style="border-bottom: none;">
-
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body d-lg-flex justify-content-center">
-          <img id="viewer" src="" alt="" style="height: 500px; width: 500px;">
-        </div>
-        <div class="modal-footer d-flex justify-content-center" style="border-top: none;">
-          <h4 class="text-white bold" id="name_image">CONSTANCIA</h4>
-        </div>
-      </div>
-    </div>
-  </div>
-
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
@@ -614,25 +601,26 @@ if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
   <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
   <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
   <script>
-    document.addEventListener("DOMContentLoaded", async function(){
+    document.addEventListener("DOMContentLoaded", async function() {
 
       const global = new FunGlobal();
       const sAlert = new Alert();
-  
+
       const $ = id => global.$(id);
       const $All = id => global.$All(id);
-  
+
       const stringQuery = window.location.search;
-      const params  = new URLSearchParams(stringQuery);
+      const params = new URLSearchParams(stringQuery);
       const code = params.get("id");
       const idcuota = atob(code);
       console.log(idcuota)
 
       let idcontrato;
-  
+      let timer;
+
       //Actualiza la cuota
-      async function setDetailQuota(id){
-        try{
+      async function setDetailQuota(id) {
+        try {
 
           let url = "../../Controllers/quota.controller.php";
           let params = new FormData();
@@ -642,16 +630,17 @@ if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
           params.append("fecha_pago", $("#fecha_pago").value);
           params.append("monto_pago", $("#monto_pago").value);
           params.append("detalles", $("#detalles").value);
-          params.append("tipo_pago", $("#tipo_pago").value);
+          params.append("modalidad_pago", $("#modalidad_pago").value);
           params.append("entidad_bancaria", $("#entidad_bancaria").value);
+          params.append("nro_operacion", $("#nro_operacion").value);
           params.append("imagen", $("#in-image").files[0]);
 
           let result = await global.sendAction(url, params);
 
-          if(result){
+          if (result) {
             console.log(result)
-            if(result.filasAfect > 0){
-              sAlert.sweetSuccess("Éxito", "El registro fué actualizado", ()=>{
+            if (result.filasAfect > 0) {
+              sAlert.sweetSuccess("Éxito", "El registro fué actualizado", () => {
                 let codeContract = btoa(idcontrato);
 
                 window.location.href = `./detail_quotas.php?id=${codeContract}`;
@@ -659,52 +648,51 @@ if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
             }
           }
 
-        }
-        catch(e){
+        } catch (e) {
           console.error(e);
         }
       }
 
       //Obtiene los datos de la cuota
-      async function getDataQuota(id){
-  
-        try{
-            let url = "../../Controllers/quota.controller.php";
-            let params = new FormData();
-            params.append("action", "getQuotaId");
-            params.append("idcuota", id);
-  
-            let result = await global.sendAction(url, params);
-  
-            if(result){
-              console.log(result)
-              $("#deuda").value = Number.parseFloat(result.deuda).toFixed(2)
-              $("#monto_pago").max = $("#deuda").value;
-              idcontrato = result.idcontrato;
-            }
-  
-        }catch(e){
+      async function getDataQuota(id) {
+
+        try {
+          let url = "../../Controllers/quota.controller.php";
+          let params = new FormData();
+          params.append("action", "getQuotaId");
+          params.append("idcuota", id);
+
+          let result = await global.sendAction(url, params);
+
+          if (result) {
+            console.log(result)
+            $("#deuda").value = Number.parseFloat(result.deuda).toFixed(2)
+            $("#monto_pago").max = $("#deuda").value;
+            idcontrato = result.idcontrato;
+          }
+
+        } catch (e) {
           console.error(e);
         }
       }
-  
+
       //Obtiene la fecha actual
-      function getToday(){
-  
+      function getToday() {
+
         let today = new Date();
-  
-        let day = today.getDate().toString().padStart(2,'0');
-        let month = (today.getMonth()+1).toString().padStart(2,'0');
+
+        let day = today.getDate().toString().padStart(2, '0');
+        let month = (today.getMonth() + 1).toString().padStart(2, '0');
         let year = today.getFullYear();
-  
+
         let actual = `${year}-${month}-${day}`;
-  
+
         return actual;
       }
-  
+
       //Establece límites para la fecha de pago
-      function setDateLimits(date){
-  
+      function setDateLimits(date) {
+
         $("#fecha_pago").value = date;
         $("#fecha_pago").max = date;
       }
@@ -713,50 +701,67 @@ if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
       function readFile(event) {
         let file = event.target.files[0];
         let reader = new FileReader();
-  
+
         reader.onload = (event) => {
           $("#file-view").setAttribute("src", (event.target.result));
           $("#file-view").style.width = "100%";
           $("#file-view").style.height = "20rem";
         }
-  
+
         reader.readAsDataURL(file);
       }
-  
-      
+
+      $("#nro_operacion").addEventListener("input", (e) => {
+
+
+        let valueInput = e.target.value;
+        let valueInt = Number.parseInt(valueInput);
+
+        console.log(valueInput)
+        if (valueInput && valueInt > 0) {
+
+          clearTimeout(timer)
+          timer = setTimeout(() => {
+
+            let value_path = valueInput.padStart(10, '0');
+            let value = value_path.substring((value_path.length) - 10) // ! Obtiene los ultimos 10 elementos
+            $("#nro_operacion").value = value;
+          }, 1500)
+        }
+      });
+
+      $("#modalidad_pago").addEventListener("change", (e) => {
+
+        valueSelect = e.target.value;
+
+        if (valueSelect == "TRANSFERENCIA") $("#nro_operacion").disabled = false, $("#entidad_bancaria").disabled = false;
+        else $("#nro_operacion").disabled = true, $("#entidad_bancaria").disabled = true
+      });
+
       $("#in-image").addEventListener("change", (e) => {
-  
+
         if (e.target.files.length > 0) {
           readFile(e);
         }
       });
-  
-      $("#file-view").addEventListener("click", (e) => {
-  
-        let img = e.target.src;
-        console.log(img)
-        $("#viewer").src = img;
-        $("#viewer").alt = img;
-        $("#show-modal").click()
-      });
-  
+
       getDataQuota(idcuota);
       setDateLimits(getToday());
-  
+
       /* --------------------------------- FUNCIÓN DE VALIDACIÓN --------------------------------------------------------- */
-  
+
       (() => {
         'use strict' //=> USO ESTRICTO POR POLITICAS DE SEGURIDAD EN EL FORMULARIO
-  
+
         //SELECCIONA TODOS LOS ELEMENTOS DEL FORMULARIO QUE TIENE LA CLASE "needs-validation
         const forms = document.querySelectorAll('.needs-validation')
-  
+
         // TOMA EL ELEMENTO "FORMS" Y LO CONVIERTE A UN ARRAY
         // SE INCLUYE EN UN FOREAH PARA ITERAR SOBRE SUS ELEMENTOS
-  
+
         Array.from(forms).forEach(form => {
           form.addEventListener('submit', event => {
-  
+
             //SI LA VALIDACIÓN DEL FORMULARIO ES FALSE
             if (!form.checkValidity()) {
               event.preventDefault() //=> FRENA EL ENVÍO DEL FORMULARIO
@@ -765,11 +770,11 @@ if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
             } else {
               event.preventDefault();
               sAlert.sweetConfirm("Datos nuevos", "¿Deseas actualizar el registro?", () => {
-  
+
                 setDetailQuota(idcuota); //Ejecuta la función
               });
             }
-  
+
             form.classList.add('was-validated') //=> AGREGA ESTA CLASE A LOS ELEMENTOS DEL FORMULARIO(MUESTRA LOS COMENTARIOS)
           }, false) //=> ESTE TERCER ARGUMENTO INDICA QUE EL EVENTO NO SE ESTA CAPTURANDO EN LA ""FASE DE CAPTURA" SINO EN "PROPAGACIÓN NORMAL"
         })

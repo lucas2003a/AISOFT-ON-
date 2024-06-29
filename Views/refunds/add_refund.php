@@ -16,7 +16,7 @@
 
 session_start();
 
-if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
+if (!isset($_SESSION["status"]) || !$_SESSION["status"]) {
   header("Location:../../index.php");
 }
 ?>
@@ -410,58 +410,35 @@ if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
                           <!-- NRO EXPEDIENTE -->
                           <div class="mt-4">
                             <label for="n_expediente" class="form-label">Nº de expediente</label>
-                            <div class="input-group">
-                              <span class="input-group-text">DEC-</span>
-                              <input type="number" class="form-control" id="n_expediente" placeholder="Nº de expediente" value="000000" min="000001" step="1" autofocus required>
-                            </div>
-                            <div class="invalid-feedback">
-                              Necesitas ingresar el nro de expediente.
-                            </div>
-                            <div class="valid-feedback">
-                              Nº de expediente registrado correctamente.
-                            </div>
+                            <input type="text" class="form-control" id="n_expediente" readonly>
                           </div>
 
                           <div class="mt-4">
                             <label for="tipo_devolucion" class="form-label">Tipo de devolución</label>
-                            <select name="tipo_devolucion" id="tipo_devolucion" class="form-select" required>
+                            <select name="tipo_devolucion" id="tipo_devolucion" class="form-select" required autofocus>
                               <option value="">Selecciona un tipo de devolución</option>
                               <option value="POR SEPARACIÓN">Por separación</option>
                               <option value="POR CONTRATO">Por contrato</option>
                             </select>
                           </div>
 
-                          <!-- DETALLE -->
-                          <div class="mt-4">
-                          
-                            <label for="detalle" class="form-label">Detalle</label>
-                            <div style="position:relative;">
-                              <span id="count-char" style="display: flex; justify-content:end; position:absolute;padding:2px; font-size: 15px;">000/200</span>
-                              <textarea name="detalle" class="form-control" style="padding-top: 25px;" id="detalle" cols="65" rows="3" maxlength="200" required></textarea>
-                            </div>
-                            <div class="invalid-feedback">
-                              Necesitas ingresar un detalle.
-                            </div>
-                            <div class="valid-feedback">
-                              Detalle registrado correctamente.
-                            </div>
-                          </div>
+
 
                           <!-- PORCENTAJE DE PENALIDAD -->
                           <div class="mt-4">
                             <label for="procentaje_penalidad" class="form-label">Procentaje de penalidad</label>
                             <div class="input-group">
                               <span class="input-group-text">%</span>
-                               <input type="number" class="form-control" id="porcentaje_penalidad" placeholder="Porcentaje de penaliad" min="1" max="100" value="0" required>
+                              <input type="number" class="form-control" id="porcentaje_penalidad" placeholder="Porcentaje de penaliad" min="1" max="100" value="0" required>
                             </div>
                             <div class="invalid-feedback">
-                                Necesistas registrar el porcentaje de penalidad
+                              Necesistas registrar el porcentaje de penalidad
                             </div>
                             <div class="valid-feedback">
-                                Porcentaje de penalidad registrado correctamente
+                              Porcentaje de penalidad registrado correctamente
                             </div>
                           </div>
-                          
+
                           <!-- MONTO TOTAL -->
                           <div class="mt-4">
                             <label for="monto_total" class="form-label">Monto total</label>
@@ -480,16 +457,28 @@ if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
                             </div>
                           </div>
 
+
+
                           <!-- IMAGEN -->
-                          <div class="form-group mt-4">
+                          <div class="form-group" style="margin-top: 30px;">
                             <label for="in-image" class="label-img">
                               <i class="material-icons"></i>
-                              <span class="title" style="display: flex; justify-content: center;">Agregar imagen de comprobante</span>
+                              <span class="title" style="display: flex; justify-content: center;">Agregar comprobante</span>
                               <input type="file" accept=".jpg" id="in-image" required>
+                              <div class="invalid-feedback">
+                                Selcciona una imagen
+                              </div>
+                              <div class="valid-feedback">
+                                Imagen seleccionada correctamente
+                              </div>
+
+                              <!-- CONTENEDOR DE LA IMAGEN -->
+                              <div class="img-content">
+
+                                <img class="w-100 position-relative z-index-2 pt-4" id="file-view" src="../../media/constancias_sep/NoImage.jpg" alt="">
+                              </div>
                             </label>
                           </div>
-
-
                           <div class="d-grid p-3">
 
                             <button class="btn btn-success" type="submit" id="guardar">Guardar</button>
@@ -498,10 +487,60 @@ if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
                         </div>
 
                         <div class="col-md-6">
-                          <div class="h-50" style="display: flex; justify-content: center;">
 
-                            <div class="position-relative d-flex align-items-center justify-content-center h-100">
-                              <img class="w-100 position-relative z-index-2 pt-4" style="width: 100%;" id="file-view" src="../../media/constancias_sep/NoImage.jpg" alt="">
+                          <!-- MODALIDAD DE PAGO -->
+                          <div class="mt-4">
+                            <label for="modalidad_pago" class="form-label">Tipo de pago</label>
+                            <select name="modalidad_pago" id="modalidad_pago" class="form-select" required>
+                              <option value="">Seleccione una modalidad de pago</option>
+                              <option value="TRANSFERENCIA">Transferencia</option>
+                              <option value="EFECTIVO">Efectivo</option>
+                            </select>
+                          </div>
+
+                          <!-- ENTIDAD BANCARIA -->
+                          <div class="mt-4">
+                            <label for="entidad_bancaria">Entidad bancaria</label>
+                            <select name="entidad_bancaria" id="entidad_bancaria" class="form-select" required>
+                              <option value="">Selecciona una entidad bancaria</option>
+                              <option value="BCP">BCP</option>
+                              <option value="INTERBANCK">INTERBANCK</option>
+                              <option value="BBVA">BBVA</option>
+                              <option value="SCOTIABANK">SCOTIABANK</option>
+                            </select>
+                          </div>
+
+                          <!-- NRO DE OPERACION -->
+                          <div class="mt-4">
+                            <label for="nro_operacion">Nro de operación</label>
+                            <input type="number" name="nro_operacion" id="nro_operacion" placeholder="Nro de operación" class="form-control" min="1" placeholder="0000000000" required>
+                          </div>
+
+                          <!-- TIPO DE CAMBIO -->
+                          <div class="mt-4">
+                            <label for="tipo_cambio">Tipo de cambio</label>
+                            <input type="number" name="tipo_cambio" class="form-control" id="tipo_cambio" min="1" step="0.01" required>
+                          </div>
+
+                          <!-- MONEDA DE VENTA -->
+                          <div class="mt-4">
+                            <label for="moneda_venta">Moneda de venta</label>
+                            <input type="text" name="moneda_venta" class="form-control" id="moneda_venta" readonly>
+                          </div>
+
+                          <!-- DETALLE -->
+                          <div class="mt-4">
+
+                            <label for="detalle" class="form-label">Detalle</label>
+                            <div style="position:relative;">
+                              <span id="count-char" style="display: flex; justify-content:end; position:absolute;padding:2px; font-size: 15px;">000/200</span>
+                              <textarea name="detalle" class="form-control" style="padding-top: 25px;" id="detalle" cols="65" rows="3" maxlength="200" required></textarea>
+                            </div>
+                            <div class="invalid-feedback">
+                              Necesitas ingresar un detalle.
+                            </div>
+                            <div class="valid-feedback">
+                              Detalle registrado correctamente.
                             </div>
                           </div>
 
@@ -594,30 +633,6 @@ if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
     </div>
   </div>
 
-  <!-- Modal trigger button -->
-  <button type="button" id="show-modal" class="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#modalId" style="position: absolute; left: -9999px; top: -9999px;">
-    Launch
-  </button>
-
-  <!-- Modal Body -->
-  <!-- if you want to close by clicking outside the modal, delete the last endpoint:data-bs-backdrop and data-bs-keyboard -->
-  <div class="modal fade" id="modalId" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-      <div class="modal-content bg-transparent" style="border: none;">
-        <div class="modal-header" style="border-bottom: none;">
-
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body d-lg-flex justify-content-center">
-          <img id="viewer" src="" alt="" style="height: 500px; width: 500px;">
-        </div>
-        <div class="modal-footer d-flex justify-content-center" style="border-top: none;">
-          <h4 class="text-white bold" id="name_image">CONSTANCIA</h4>
-        </div>
-      </div>
-    </div>
-  </div>
-
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
@@ -644,7 +659,7 @@ if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
     const sAlert = new Alert();
 
     const stringQuery = window.location.search;
-    const params  = new URLSearchParams(stringQuery);
+    const params = new URLSearchParams(stringQuery);
     const code = params.get("id");
     const codeType = params.get("type");
     const generalId = atob(code);
@@ -659,6 +674,47 @@ if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
     let dataClients;
     let newValue;
 
+    // * Obtienie el numero de serie código
+    async function getSerieCode() {
+
+      try {
+
+        let url = "../../Controllers/configuration.controller.php";
+
+        let params = new FormData();
+        params.append("action", "listConfig");
+        params.append("clave", "serie-devolucion");
+
+        let result = await global.sendAction(url, params);
+
+        if (result) {
+
+          console.log(result)
+
+          let alphanum = "DEVC-";
+          let number = Number.parseInt(result.valor) + 1;
+          let numberString = String(number).toString().padStart(5, '0');
+          let serie = alphanum + numberString
+          console.log(serie)
+
+          const alpha_serie = {
+            "clave": "serie-devolucion",
+            "serie": serie,
+            "number": number,
+            "numberString": numberString,
+            "alphanum": alphanum
+          }
+
+          $("#n_expediente").value = serie;
+
+          return alpha_serie;
+        }
+
+      } catch (e) {
+        console.error(e)
+      }
+    }
+
     //Obtiene los registros de una separacion por id (para obtener el monot de la separación)
     async function getAmount(id) {
 
@@ -667,25 +723,26 @@ if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
         let url = "";
         let params = new FormData();
 
-        if(type == "sep"){
+        if (type == "sep") {
 
           url = "../../Controllers/separation.controller.php";
-  
+
           params.append("action", "listSeparationById");
           params.append("idseparacion", id);
-        }else{
+        } else {
           url = "../../Controllers/quota.controller.php";
-  
+
           params.append("action", "getQuotasContractReprogram");
           params.append("idcontrato", id);
         }
 
         let result = await global.sendAction(url, params);
 
-        if(result) {
-          
+        if (result) {
+
           let total = result.separacion_monto || result.precio_venta;
           $("#monto_total").value = total;
+          $("#tipo_devolucion").value = "POR SEPARACIÓN";
           return total;
         }
       } catch (e) {
@@ -694,8 +751,8 @@ if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
     }
 
     //Calcula el nuevo monto de la devolución
-    async function calculateNewAmount(){
-      
+    async function calculateNewAmount() {
+
       let montoSep = Number.parseFloat(await getAmount(generalId));
       let porcentaje = Number.parseFloat($("#porcentaje_penalidad").value || 0)
 
@@ -747,7 +804,7 @@ if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
     }
 
     //Obtiene los datos de las devoluciones
-    async function getRefudsAll(){
+    async function getRefudsAll() {
 
       try {
 
@@ -804,18 +861,19 @@ if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
 
       try {
 
+        const serie = await getSerieCode();
         let url = "../../Controllers/refund.controller.php";
         let params = new FormData()
 
-        if(type == "sep"){
+        if (type == "sep") {
 
           params.append("action", "addRefund");
-          params.append("n_expediente", newValue);
+          params.append("n_expediente", serie.serie);
           params.append("idseparacion", genID);
           params.append("idcontrato", "");
-        }else{
+        } else {
           params.append("action", "addRefund");
-          params.append("n_expediente", newValue);
+          params.append("n_expediente", serie.serie);
           params.append("idseparacion", "");
           params.append("idcontrato", genID);
         }
@@ -823,13 +881,19 @@ if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
         params.append("detalle", $("#detalle").value);
         params.append("porcentaje_penalidad", $("#porcentaje_penalidad").value);
         params.append("monto_devolucion", $("#monto_devolucion").value);
+        params.append("tipo_cambio", $("#tipo_cambio").value);
+        params.append("modalidad_pago", $("#modalidad_pago").value);
+        params.append("entidad_bancaria", $("#entidad_bancaria").value);
+        params.append("nro_operacion", $("#nro_operacion").value);
         params.append("imagen", $("#in-image").files[0]);
+        params.append("clave", serie.clave);
+        params.append("valor", serie.number);
 
         let result = await global.sendAction(url, params);
 
         if (result.filasAfect > 0) {
           console.log(result);
-          sAlert.sweetSuccess("El registro fué exstisoso","La devolución fué correctamente registrada",()=>{
+          sAlert.sweetSuccess("El registro fué exstisoso", "La devolución fué correctamente registrada", () => {
             history.back(); //Regresa a la pagina anterior, history.go(-2) seria dos paginas atras
           })
         }
@@ -838,53 +902,46 @@ if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
       }
     }
 
-    $("#detalle").addEventListener("input",(e)=>{
+    $("#nro_operacion").addEventListener("input", (e) => {
+
+
+      let valueInput = e.target.value;
+      let valueInt = Number.parseInt(valueInput);
+
+      console.log(valueInput)
+      if (valueInput && valueInt > 0) {
+
+        clearTimeout(timer)
+        timer = setTimeout(() => {
+
+          let value_path = valueInput.padStart(10, '0');
+          let value = value_path.substring((value_path.length) - 10) // ! Obtiene los ultimos 10 elementos
+          $("#nro_operacion").value = value;
+        }, 1500)
+      }
+    });
+
+    $("#modalidad_pago").addEventListener("change", (e) => {
+
+      valueSelect = e.target.value;
+
+      if (valueSelect == "TRANSFERENCIA") $("#nro_operacion").disabled = false, $("#entidad_bancaria").disabled = false;
+      else $("#nro_operacion").disabled = true, $("#entidad_bancaria").disabled = true
+    });
+
+    $("#detalle").addEventListener("input", (e) => {
 
       let inputValue = e.target.value;
-      let count = inputValue.length.toString().padStart(3,'0');
+      let count = inputValue.length.toString().padStart(3, '0');
 
       $("#count-char").innerHTML = `${count}/200`;
     });
 
-    $("#porcentaje_penalidad").addEventListener("input",()=>{
+    $("#porcentaje_penalidad").addEventListener("input", () => {
 
       calculateNewAmount();
     });
 
-    $("#n_expediente").addEventListener("blur", (e) => {
-
-      console.log(lastCode)
-      e.preventDefault();
-      let valueInput = e.target.value;
-
-      if (!lastCode) {
-        lastCode = true;
-        let sliceValue = valueInput.slice(0, 6); //Extrae l valores incluyendo el los del indice 0 y 6
-        let valueFormat = sliceValue.padEnd(6, '0')
-        newValue = "DEC-" + valueFormat;
-        $("#n_expediente").value = valueFormat;
-
-        validateDate("n_expediente_dev", newValue, datarefunds)
-          .then(() => {
-            console.log("no existe");
-          }).catch(() => {
-            $("#n_expediente").focus();
-            lastCode = false;
-          })
-      }
-    });
-
-    $("#n_expediente").addEventListener("input", (e) => {
-
-      e.preventDefault();
-
-      let valueInput = e.target.value;
-
-      if (e.target.dataset.prevVal !== valueInput) {
-        lastCode = false;
-      }
-      e.target.dataset.prevVal = valueInput;
-    });
 
     $("#in-image").addEventListener("change", (e) => {
 
@@ -893,16 +950,8 @@ if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
       }
     });
 
-    $("#file-view").addEventListener("click", (e) => {
-
-      let img = e.target.src;
-      console.log(img)
-      $("#viewer").src = img;
-      $("#viewer").alt = img;
-      $("#show-modal").click()
-    })
-
-    // getTC();
+    getTC();
+    getSerieCode()
     getAmount(generalId);
     getRefudsAll();
     /* --------------------------------- FUNCIÓN DE VALIDACIÓN --------------------------------------------------------- */

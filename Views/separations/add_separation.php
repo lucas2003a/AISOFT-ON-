@@ -490,12 +490,23 @@ if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
                           </div>
 
                           <!-- IMAGEN -->
-                          <div class="form-group mt-4 img-content">
+                          <div class="form-group" style="margin-top: 70px;">
                             <label for="in-image" class="label-img">
                               <i class="material-icons"></i>
-                              <span class="title" style="display: flex; justify-content: center;">Agregar imagen de comprobante</span>
+                              <span class="title" style="display: flex; justify-content: center;">Agregar comprobante</span>
                               <input type="file" accept=".jpg" id="in-image" required>
-                              <img class="w-100 position-relative z-index-2 pt-4" style="width: 100%;" id="file-view" src="../../media/constancias_sep/NoImage.jpg" alt="">
+                              <div class="invalid-feedback">
+                                Selcciona una imagen
+                              </div>
+                              <div class="valid-feedback">
+                                Imagen seleccionada correctamente
+                              </div>
+
+                              <!-- CONTENEDOR DE LA IMAGEN -->
+                              <div class="img-content">
+
+                                <img class="w-100 position-relative z-index-2 pt-4" id="file-view" src="../../media/constancias_sep/NoImage.jpg" alt="">
+                              </div>
                             </label>
                           </div>
 
@@ -562,7 +573,7 @@ if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
 
                             
 
-                            <!-- MODALIAD DE PAGO -->
+                            <!-- MODALIDAD DE PAGO -->
                             <div class="mt-4">
                               <label for="modalidad_pago" class="form-label">Tipo de pago</label>
                               <select name="modalidad_pago" id="modalidad_pago" class="form-select" required>
@@ -584,10 +595,12 @@ if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
                               </select>
                             </div>
 
+                            <!-- NRO DE OPERACION -->
                             <div class="mt-4">
                               <label for="nro_operacion">Nro de operación</label>
                               <input type="number" name="nro_operacion" id="nro_operacion" placeholder="Nro de operación" class="form-control" min="1" placeholder="0000000000" required>
                             </div>
+
                           </div>
                         </div>
                       </div>
@@ -1051,6 +1064,7 @@ if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
         console.error(e);
       }
     }
+
     $("#nro_operacion").addEventListener("input",(e)=>{
 
       

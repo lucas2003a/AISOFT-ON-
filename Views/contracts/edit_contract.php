@@ -1483,7 +1483,7 @@ if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
                     }, 100)
                   }
                 })
-
+                
                 // ! Creo la opción de separación
                 .then(() => {
                   return new Promise((resolve, reject) => {

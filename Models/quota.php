@@ -153,15 +153,16 @@ class Quota extends Conection{
     public function setDetailQuota($dataQuotas = []){
         try{
             
-            $query = $this->conection->prepare("CALL spu_set_det_quota(?,?,?,?,?,?,?,?)");
+            $query = $this->conection->prepare("CALL spu_set_det_quota(?,?,?,?,?,?,?,?,?)");
             $query->execute(
                 array(
                     $dataQuotas['idcuota'],
                     $dataQuotas['fecha_pago'],
                     $dataQuotas['monto_pago'],
                     $dataQuotas['detalles'],
-                    $dataQuotas['tipo_pago'],
+                    $dataQuotas['modalidad_pago'],
                     $dataQuotas['entidad_bancaria'],
+                    $dataQuotas['nro_operacion'],
                     $dataQuotas['imagen'],
                     $dataQuotas['idusuario']
                 )

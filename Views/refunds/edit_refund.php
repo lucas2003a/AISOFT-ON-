@@ -16,7 +16,7 @@
 
 session_start();
 
-if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
+if (!isset($_SESSION["status"]) || !$_SESSION["status"]) {
   header("Location:../../index.php");
 }
 ?>
@@ -433,7 +433,7 @@ if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
 
                           <!-- DETALLE -->
                           <div class="mt-4">
-                          
+
                             <label for="detalle" class="form-label">Detalle</label>
                             <div style="position:relative;">
                               <span id="count-char" style="display: flex; justify-content:end; position:absolute;padding:2px; font-size: 15px;">000/200</span>
@@ -452,16 +452,16 @@ if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
                             <label for="procentaje_penalidad" class="form-label">Procentaje de penalidad</label>
                             <div class="input-group">
                               <span class="input-group-text">%</span>
-                               <input type="number" class="form-control" id="porcentaje_penalidad" placeholder="Porcentaje de penaliad" min="1" max="100" value="0" required>
+                              <input type="number" class="form-control" id="porcentaje_penalidad" placeholder="Porcentaje de penaliad" min="1" max="100" value="0" required>
                             </div>
                             <div class="invalid-feedback">
-                                Necesistas registrar el porcentaje de penalidad
+                              Necesistas registrar el porcentaje de penalidad
                             </div>
                             <div class="valid-feedback">
-                                Porcentaje de penalidad registrado correctamente
+                              Porcentaje de penalidad registrado correctamente
                             </div>
                           </div>
-                          
+
                           <!-- MONTO SEPARACIÓN -->
                           <div class="mt-4">
                             <label for="monto_total" class="form-label">Monto de separación</label>
@@ -480,14 +480,34 @@ if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
                             </div>
                           </div>
 
-                          <!-- IMAGEN -->
-                          <div class="form-group mt-4">
-                            <label for="in-image" class="label-img">
-                              <i class="material-icons"></i>
-                              <span class="title" style="display: flex; justify-content: center;">Agregar imagen de comprobante</span>
-                              <input type="file" accept=".jpg" id="in-image" required>
-                            </label>
+                          <!-- MODALIDAD DE PAGO -->
+                          <div class="mt-4">
+                            <label for="modalidad_pago" class="form-label">Tipo de pago</label>
+                            <select name="modalidad_pago" id="modalidad_pago" class="form-select" required>
+                              <option value="">Seleccione una modalidad de pago</option>
+                              <option value="TRANSFERENCIA">Transferencia</option>
+                              <option value="EFECTIVO">Efectivo</option>
+                            </select>
                           </div>
+
+                          <!-- ENTIDAD BANCARIA -->
+                          <div class="mt-4">
+                            <label for="entidad_bancaria">Entidad bancaria</label>
+                            <select name="entidad_bancaria" id="entidad_bancaria" class="form-select" required>
+                              <option value="">Selecciona una entidad bancaria</option>
+                              <option value="BCP">BCP</option>
+                              <option value="INTERBANCK">INTERBANCK</option>
+                              <option value="BBVA">BBVA</option>
+                              <option value="SCOTIABANK">SCOTIABANK</option>
+                            </select>
+                          </div>
+
+                          <!-- NRO DE OPERACION -->
+                          <div class="mt-4">
+                            <label for="nro_operacion">Nro de operación</label>
+                            <input type="number" name="nro_operacion" id="nro_operacion" placeholder="Nro de operación" class="form-control" min="1" placeholder="0000000000" required>
+                          </div>
+
 
 
                           <div class="d-grid p-3">
@@ -498,11 +518,25 @@ if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
                         </div>
 
                         <div class="col-md-6">
-                          <div class="h-50" style="display: flex; justify-content: center;">
+                          <!-- IMAGEN -->
+                          <div class="form-group" style="margin-top: 70px;">
+                            <label for="in-image" class="label-img">
+                              <i class="material-icons"></i>
+                              <span class="title" style="display: flex; justify-content: center;">Agregar comprobante</span>
+                              <input type="file" accept=".jpg" id="in-image">
+                              <div class="invalid-feedback">
+                                Selcciona una imagen
+                              </div>
+                              <div class="valid-feedback">
+                                Imagen seleccionada correctamente
+                              </div>
 
-                            <div class="position-relative d-flex align-items-center justify-content-center h-100">
-                              <img class="w-100 position-relative z-index-2 pt-4" style="width: 100%;" id="file-view" src="../../media/constancias_sep/NoImage.jpg" alt="">
-                            </div>
+                              <!-- CONTENEDOR DE LA IMAGEN -->
+                              <div class="img-content">
+
+                                <img class="w-100 position-relative z-index-2 pt-4" id="file-view" src="../../media/constancias_sep/NoImage.jpg" alt="">
+                              </div>
+                            </label>
                           </div>
 
                         </div>
@@ -644,7 +678,7 @@ if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
     const sAlert = new Alert();
 
     const stringQuery = window.location.search;
-    const params  = new URLSearchParams(stringQuery);
+    const params = new URLSearchParams(stringQuery);
     const code = params.get("id");
     const codeType = params.get("type");
     const iddevolucion = atob(code);
@@ -662,9 +696,9 @@ if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
     let newValue;
 
     //Obtiene los datos de la devolución
-    async function getRefundId(id){
-      
-      try{
+    async function getRefundId(id) {
+
+      try {
 
         let url = "../../Controllers/refund.controller.php";
         let params = new FormData();
@@ -674,25 +708,25 @@ if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
 
         let result = await global.sendAction(url, params);
 
-        if(result){
+        if (result) {
 
           console.log(result);
           dataDev = result
 
-          let exp= dataDev.n_expediente_dev;
+          let exp = dataDev.n_expediente_dev;
           let expSplit = exp.split("-");
           let expEx = expSplit[1];
 
-          $("#file-view").setAttribute("src",`../../media/constancias_dev/${result.imagen}`);
+          $("#file-view").setAttribute("src", `../../media/constancias_dev/${result.imagen}`);
 
           //Valor del número de exepdiente
-          $("#n_expediente").value = expEx; 
+          $("#n_expediente").value = expEx;
 
           //Valor del tipo de devolución
           let selectTdev = $("#tipo_devolucion");
           let TOption = Array.from(selectTdev.options).find(option => option.value == result.tipo_devolucion);
 
-          if(TOption){
+          if (TOption) {
             TOption.selected = true;
           }
 
@@ -708,10 +742,9 @@ if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
 
           //Valor de la monto de devolución
           $("#monto_devolucion").value = result.monto_devolucion;
-          
+
         }
-      }
-      catch(e){
+      } catch (e) {
         console.error(e);
       }
     }
@@ -724,23 +757,23 @@ if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
         let url = "";
         let params = new FormData();
 
-        if(type == "sep"){
+        if (type == "sep") {
 
           url = "../../Controllers/separation.controller.php";
-  
+
           params.append("action", "listSeparationById");
           params.append("idseparacion", id);
-        }else{
+        } else {
           url = "../../Controllers/quota.controller.php";
-  
+
           params.append("action", "getQuotasContractReprogram");
           params.append("idcontrato", id);
         }
 
         let result = await global.sendAction(url, params);
 
-        if(result) {
-          
+        if (result) {
+
           let total = result.separacion_monto || result.precio_venta;
           console.log(total)
           $("#monto_total").value = total;
@@ -752,8 +785,8 @@ if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
     }
 
     //Calcula el nuevo monto de la devolución
-    async function calculateNewAmount(){
-      
+    async function calculateNewAmount() {
+
       let montoSep = Number.parseFloat(await getAmount(iddevolucion));
       let porcentaje = Number.parseFloat($("#porcentaje_penalidad").value || 0)
 
@@ -805,7 +838,7 @@ if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
     }
 
     //Obtiene los datos de las devoluciones
-    async function getRefudsAll(){
+    async function getRefudsAll() {
 
       try {
 
@@ -880,7 +913,7 @@ if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
 
         if (result.filasAfect > 0) {
           console.log(result);
-          sAlert.sweetSuccess("El registro fué exstisoso","La devolución fué correctamente registrada",()=>{
+          sAlert.sweetSuccess("El registro fué exstisoso", "La devolución fué correctamente registrada", () => {
             history.back(); //Regresa a la pagina anterior, history.go(-2) seria dos paginas atras
           })
         }
@@ -889,15 +922,42 @@ if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
       }
     }
 
-    $("#detalle").addEventListener("input",(e)=>{
+    $("#nro_operacion").addEventListener("input", (e) => {
+
+
+      let valueInput = e.target.value;
+      let valueInt = Number.parseInt(valueInput);
+
+      console.log(valueInput)
+      if (valueInput && valueInt > 0) {
+
+        clearTimeout(timer)
+        timer = setTimeout(() => {
+
+          let value_path = valueInput.padStart(10, '0');
+          let value = value_path.substring((value_path.length) - 10) // ! Obtiene los ultimos 10 elementos
+          $("#nro_operacion").value = value;
+        }, 1500)
+      }
+    });
+
+    $("#modalidad_pago").addEventListener("change", (e) => {
+
+      valueSelect = e.target.value;
+
+      if (valueSelect == "TRANSFERENCIA") $("#nro_operacion").disabled = false, $("#entidad_bancaria").disabled = false;
+      else $("#nro_operacion").disabled = true, $("#entidad_bancaria").disabled = true
+    });
+
+    $("#detalle").addEventListener("input", (e) => {
 
       let inputValue = e.target.value;
-      let count = inputValue.length.toString().padStart(3,'0');
+      let count = inputValue.length.toString().padStart(3, '0');
 
       $("#count-char").innerHTML = `${count}/200`;
     });
 
-    $("#porcentaje_penalidad").addEventListener("input",()=>{
+    $("#porcentaje_penalidad").addEventListener("input", () => {
 
       calculateNewAmount();
     });
@@ -914,7 +974,7 @@ if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
         let valueFormat = sliceValue.padEnd(6, '0')
         newValue = "DEC-" + valueFormat;
 
-        if(newValue !== dataDev.n_expediente_dev){
+        if (newValue !== dataDev.n_expediente_dev) {
 
           $("#n_expediente").value = valueFormat;
           validateDate("n_expediente_dev", newValue, datarefunds)

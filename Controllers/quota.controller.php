@@ -90,13 +90,15 @@ if(isset($_POST["action"])){
                 "fecha_pago"    =>  $_POST["fecha_pago"], 
                 "monto_pago"    =>  $_POST["monto_pago"],
                 "detalles"      =>  $_POST["detalles"],
-                "tipo_pago"     =>  $_POST["tipo_pago"],
+                "modalidad_pago"    =>  $_POST["modalidad_pago"],
                 "entidad_bancaria"  =>  $_POST["entidad_bancaria"],
+                "nro_operacion" =>  $_POST["nro_operacion"],
                 "imagen"        =>  $nom_img,
                 "idusuario"     =>  1
                 // "idusuario"     =>  $_POST["idusuario"]
             ];
 
+            
             if(move_uploaded_file($_FILES["imagen"]["tmp_name"],$url)){
                 $dataObtained["imagen"] = $nom_img;
             }

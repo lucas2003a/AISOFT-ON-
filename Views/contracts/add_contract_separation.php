@@ -1531,7 +1531,7 @@ if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
 
           if (results.length > 0) {
             dataRepresentsAll = results;
-            console.log(results);
+            console.log("resultados: ",results);
 
             $("#idrepresentante_primario").innerHTML = "";
 
