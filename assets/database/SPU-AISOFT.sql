@@ -2964,6 +2964,7 @@ BEGIN
 END $$
 
 DELIMITER;
+CALL spu_lits_contracts_full_by_id(1);
 
 DELIMITER $$
 

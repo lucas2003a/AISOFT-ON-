@@ -402,7 +402,7 @@ if (!isset($_SESSION["status"]) || !$_SESSION["status"]) {
 
                   <div class="d-flex flex-column h-100">
                     <form class="row needs-validation" id="form-add-separation" novalidate>
-                      <div class="row">
+                    <div class="row">
                         <div class="col-md-6">
 
                           <!-- DATOS GENERALES -->
@@ -410,42 +410,19 @@ if (!isset($_SESSION["status"]) || !$_SESSION["status"]) {
                           <!-- NRO EXPEDIENTE -->
                           <div class="mt-4">
                             <label for="n_expediente" class="form-label">Nº de expediente</label>
-                            <div class="input-group">
-                              <span class="input-group-text">DEC-</span>
-                              <input type="number" class="form-control" id="n_expediente" placeholder="Nº de expediente" value="000000" min="000001" step="1" autofocus required>
-                            </div>
-                            <div class="invalid-feedback">
-                              Necesitas ingresar el nro de expediente.
-                            </div>
-                            <div class="valid-feedback">
-                              Nº de expediente registrado correctamente.
-                            </div>
+                            <input type="text" class="form-control" id="n_expediente" readonly>
                           </div>
 
                           <div class="mt-4">
                             <label for="tipo_devolucion" class="form-label">Tipo de devolución</label>
-                            <select name="tipo_devolucion" id="tipo_devolucion" class="form-select" required>
+                            <select name="tipo_devolucion" id="tipo_devolucion" class="form-select" required autofocus>
                               <option value="">Selecciona un tipo de devolución</option>
                               <option value="POR SEPARACIÓN">Por separación</option>
                               <option value="POR CONTRATO">Por contrato</option>
                             </select>
                           </div>
 
-                          <!-- DETALLE -->
-                          <div class="mt-4">
 
-                            <label for="detalle" class="form-label">Detalle</label>
-                            <div style="position:relative;">
-                              <span id="count-char" style="display: flex; justify-content:end; position:absolute;padding:2px; font-size: 15px;">000/200</span>
-                              <textarea name="detalle" class="form-control" style="padding-top: 25px;" id="detalle" cols="65" rows="3" maxlength="200" required></textarea>
-                            </div>
-                            <div class="invalid-feedback">
-                              Necesitas ingresar un detalle.
-                            </div>
-                            <div class="valid-feedback">
-                              Detalle registrado correctamente.
-                            </div>
-                          </div>
 
                           <!-- PORCENTAJE DE PENALIDAD -->
                           <div class="mt-4">
@@ -462,9 +439,9 @@ if (!isset($_SESSION["status"]) || !$_SESSION["status"]) {
                             </div>
                           </div>
 
-                          <!-- MONTO SEPARACIÓN -->
+                          <!-- MONTO TOTAL -->
                           <div class="mt-4">
-                            <label for="monto_total" class="form-label">Monto de separación</label>
+                            <label for="monto_total" class="form-label">Monto total</label>
                             <input type="text" name="monto_total" class="form-control" id="monto_total" readonly>
                           </div>
 
@@ -479,6 +456,37 @@ if (!isset($_SESSION["status"]) || !$_SESSION["status"]) {
                               Monto de devolución ingresado correctamente.
                             </div>
                           </div>
+
+
+
+                          <!-- IMAGEN -->
+                          <div class="form-group" style="margin-top: 30px;">
+                            <label for="in-image" class="label-img">
+                              <i class="material-icons"></i>
+                              <span class="title" style="display: flex; justify-content: center;">Agregar comprobante</span>
+                              <input type="file" accept=".jpg" id="in-image">
+                              <div class="invalid-feedback">
+                                Selcciona una imagen
+                              </div>
+                              <div class="valid-feedback">
+                                Imagen seleccionada correctamente
+                              </div>
+
+                              <!-- CONTENEDOR DE LA IMAGEN -->
+                              <div class="img-content">
+
+                                <img class="w-100 position-relative z-index-2 pt-4" id="file-view" src="../../media/constancias_sep/NoImage.jpg" alt="">
+                              </div>
+                            </label>
+                          </div>
+                          <div class="d-grid p-3">
+
+                            <button class="btn btn-success" type="submit" id="guardar">Guardar</button>
+                          </div>
+
+                        </div>
+
+                        <div class="col-md-6">
 
                           <!-- MODALIDAD DE PAGO -->
                           <div class="mt-4">
@@ -508,35 +516,32 @@ if (!isset($_SESSION["status"]) || !$_SESSION["status"]) {
                             <input type="number" name="nro_operacion" id="nro_operacion" placeholder="Nro de operación" class="form-control" min="1" placeholder="0000000000" required>
                           </div>
 
-
-
-                          <div class="d-grid p-3">
-
-                            <button class="btn btn-success" type="submit" id="guardar">Guardar</button>
+                          <!-- TIPO DE CAMBIO -->
+                          <div class="mt-4">
+                            <label for="tipo_cambio">Tipo de cambio</label>
+                            <input type="number" name="tipo_cambio" class="form-control" id="tipo_cambio" min="1" step="0.01" required>
                           </div>
 
-                        </div>
+                          <!-- MONEDA DE VENTA -->
+                          <div class="mt-4">
+                            <label for="moneda_venta">Moneda de venta</label>
+                            <input type="text" name="moneda_venta" class="form-control" id="moneda_venta" readonly>
+                          </div>
 
-                        <div class="col-md-6">
-                          <!-- IMAGEN -->
-                          <div class="form-group" style="margin-top: 70px;">
-                            <label for="in-image" class="label-img">
-                              <i class="material-icons"></i>
-                              <span class="title" style="display: flex; justify-content: center;">Agregar comprobante</span>
-                              <input type="file" accept=".jpg" id="in-image">
-                              <div class="invalid-feedback">
-                                Selcciona una imagen
-                              </div>
-                              <div class="valid-feedback">
-                                Imagen seleccionada correctamente
-                              </div>
+                          <!-- DETALLE -->
+                          <div class="mt-4">
 
-                              <!-- CONTENEDOR DE LA IMAGEN -->
-                              <div class="img-content">
-
-                                <img class="w-100 position-relative z-index-2 pt-4" id="file-view" src="../../media/constancias_sep/NoImage.jpg" alt="">
-                              </div>
-                            </label>
+                            <label for="detalle" class="form-label">Detalle</label>
+                            <div style="position:relative;">
+                              <span id="count-char" style="display: flex; justify-content:end; position:absolute;padding:2px; font-size: 15px;">000/200</span>
+                              <textarea name="detalle" class="form-control" style="padding-top: 25px;" id="detalle" cols="65" rows="3" maxlength="200" required></textarea>
+                            </div>
+                            <div class="invalid-feedback">
+                              Necesitas ingresar un detalle.
+                            </div>
+                            <div class="valid-feedback">
+                              Detalle registrado correctamente.
+                            </div>
                           </div>
 
                         </div>
@@ -713,14 +718,10 @@ if (!isset($_SESSION["status"]) || !$_SESSION["status"]) {
           console.log(result);
           dataDev = result
 
-          let exp = dataDev.n_expediente_dev;
-          let expSplit = exp.split("-");
-          let expEx = expSplit[1];
-
           $("#file-view").setAttribute("src", `../../media/constancias_dev/${result.imagen}`);
 
           //Valor del número de exepdiente
-          $("#n_expediente").value = expEx;
+          $("#n_expediente").value = dataDev.n_expediente;
 
           //Valor del tipo de devolución
           let selectTdev = $("#tipo_devolucion");
@@ -729,11 +730,6 @@ if (!isset($_SESSION["status"]) || !$_SESSION["status"]) {
           if (TOption) {
             TOption.selected = true;
           }
-
-          //Valor de la detalle
-          $("#detalle").value = result.detalle
-          $("#detalle").dispatchEvent(new Event("input"))
-
           //Valor de la porcentaje de penalidad
           $("#porcentaje_penalidad").value = result.porcentaje_penalidad;
 
@@ -742,6 +738,23 @@ if (!isset($_SESSION["status"]) || !$_SESSION["status"]) {
 
           //Valor de la monto de devolución
           $("#monto_devolucion").value = result.monto_devolucion;
+
+          // Modalidad de pago
+          $("#modalidad_pago").value = result.modalidad_pago;
+          $("#modalidad_pago").dispatchEvent(new  Event("change"));
+
+          // Entidad bancaria
+          $("#entidad_bancaria").value = result.entidad_bancaria;
+
+          // Nro de operacion
+          $("#nro_operacion").value = result.nro_operacion;
+
+          // Moneda de venta
+          $("#moneda_venta").value = result.moneda_venta;
+
+          //Valor del detalle
+          $("#detalle").value = result.detalle
+          $("#detalle").dispatchEvent(new Event("input"));
 
         }
       } catch (e) {
@@ -890,7 +903,7 @@ if (!isset($_SESSION["status"]) || !$_SESSION["status"]) {
       reader.readAsDataURL(file);
     }
 
-    //Registra una separación
+    //Actualizar una separación
     async function setRefund(iddev) {
 
       try {
@@ -900,13 +913,17 @@ if (!isset($_SESSION["status"]) || !$_SESSION["status"]) {
 
         params.append("action", "setRefund");
         params.append("iddevolucion", iddev);
-        params.append("n_expediente", newValue);
+        params.append("n_expediente", dataDev.n_expediente);
         params.append("idseparacion", dataDev.idseparacion);
         params.append("idcontrato", dataDev.idcontrato);
         params.append("tipo_devolucion", $("#tipo_devolucion").value);
         params.append("detalle", $("#detalle").value);
         params.append("porcentaje_penalidad", $("#porcentaje_penalidad").value);
         params.append("monto_devolucion", $("#monto_devolucion").value);
+        params.append("tipo_cambio", $("#tipo_cambio").value);
+        params.append("modalidad_pago", $("#modalidad_pago").value);
+        params.append("entidad_bancaria", $("#entidad_bancaria").value);
+        params.append("nro_operacion", $("#nro_operacion").value);
         params.append("imagen", $("#in-image").files[0]);
 
         let result = await global.sendAction(url, params);
@@ -914,7 +931,7 @@ if (!isset($_SESSION["status"]) || !$_SESSION["status"]) {
         if (result.filasAfect > 0) {
           console.log(result);
           sAlert.sweetSuccess("El registro fué exstisoso", "La devolución fué correctamente registrada", () => {
-            history.back(); //Regresa a la pagina anterior, history.go(-2) seria dos paginas atras
+            window.location.href = "./index.php";
           })
         }
       } catch (e) {
@@ -962,45 +979,6 @@ if (!isset($_SESSION["status"]) || !$_SESSION["status"]) {
       calculateNewAmount();
     });
 
-    $("#n_expediente").addEventListener("blur", (e) => {
-
-      console.log(lastCode)
-      e.preventDefault();
-      let valueInput = e.target.value;
-
-      if (!lastCode) {
-        lastCode = true;
-        let sliceValue = valueInput.slice(0, 6); //Extrae l valores incluyendo el los del indice 0 y 6
-        let valueFormat = sliceValue.padEnd(6, '0')
-        newValue = "DEC-" + valueFormat;
-
-        if (newValue !== dataDev.n_expediente_dev) {
-
-          $("#n_expediente").value = valueFormat;
-          validateDate("n_expediente_dev", newValue, datarefunds)
-            .then(() => {
-              console.log("no existe");
-            }).catch(() => {
-              $("#n_expediente").focus();
-              lastCode = false;
-            })
-        }
-
-      }
-    });
-
-    $("#n_expediente").addEventListener("input", (e) => {
-
-      e.preventDefault();
-
-      let valueInput = e.target.value;
-
-      if (e.target.dataset.prevVal !== valueInput) {
-        lastCode = false;
-      }
-      e.target.dataset.prevVal = valueInput;
-    });
-
     $("#in-image").addEventListener("change", (e) => {
 
       if (e.target.files.length > 0) {
@@ -1008,16 +986,7 @@ if (!isset($_SESSION["status"]) || !$_SESSION["status"]) {
       }
     });
 
-    $("#file-view").addEventListener("click", (e) => {
-
-      let img = e.target.src;
-      console.log(img)
-      $("#viewer").src = img;
-      $("#viewer").alt = img;
-      $("#show-modal").click();
-    })
-
-    // getTC();
+    getTC();
     getRefundId(iddevolucion);
     getRefudsAll();
     /* --------------------------------- FUNCIÓN DE VALIDACIÓN --------------------------------------------------------- */

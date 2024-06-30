@@ -45,7 +45,7 @@ if (!isset($_SESSION["status"]) || !$_SESSION["status"]) {
   <link href="../../assets/css/nucleo-svg.css" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <!-- CSS Files -->
-  <link id="Viewstyle" href="../../assets/css/soft-ui-dashboard.css?v=1.0.7" rel="stylesheet" />
+  <link id="Viewstyle" href="../../assets/css/soft-ui-dashboard_v2.css?v=1.0.7" rel="stylesheet" />
   <!-- Nepcha Analytics (nepcha.com) -->
   <!-- Nepcha is a easy-to-use web analytics. No cookies and fully compliant with GDPR, CCPA and PECR. -->
   <script defer data-site="YOUR_DOMAIN_HERE" src="https://api.nepcha.com/js/nepcha-analytics.js"></script>
@@ -182,7 +182,7 @@ if (!isset($_SESSION["status"]) || !$_SESSION["status"]) {
 
         <!-- DEVOLUCIONES -->
         <li class="nav-item">
-          <a class="nav-link active" href="../refunds/index.php">
+          <a class="nav-link " href="../refunds/index.php">
             <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
               <svg width="12px" height="12px" viewBox="0 0 42 42" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <title>office</title>
@@ -252,7 +252,7 @@ if (!isset($_SESSION["status"]) || !$_SESSION["status"]) {
 
         <!-- CONTRATOS -->
         <li class="nav-item">
-          <a class="nav-link" href="../contracts/index.php">
+          <a class="nav-link active" href="../contracts/index.php">
             <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
               <svg width="12px" height="12px" viewBox="0 0 42 42" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <title>office</title>
@@ -357,9 +357,10 @@ if (!isset($_SESSION["status"]) || !$_SESSION["status"]) {
         <nav aria-label="breadcrumb">
           <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
             <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="#">Dashboard</a></li>
-            <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Devoluciones</li>
+            <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="#">Contratos</a></li>
+            <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Detalle del contrato</li>
           </ol>
-          <h6 class="font-weight-bolder mb-0" id="cabezera">DEVOLUCIONES </h6>
+          <h6 class="font-weight-bolder mb-0" id="cabezera">DETALLE DEL CONTRATO </h6>
         </nav>
         <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
           <ul class="navbar-nav  justify-content-end">
@@ -394,75 +395,78 @@ if (!isset($_SESSION["status"]) || !$_SESSION["status"]) {
           <div class="card mb-4">
             <div class="card-header pb-0">
               <div class="row">
-                <div class="col-md-3">
 
-                  <h6>Tabla - separaciones</h6>
-                </div>
-                <div class="row d-flex" style="align-items: end;">
+                <h5><strong id="serie-contrato"></strong></h5>
 
-                  <div class="col-md-3 mt-2">
-                    <label for="tipo_devolucion">Tipo de devolución</label>
-                    <select name="tipo_devolucion" class="form-select" id="tipo_devolucion">
-                      <option value="">Tipo de devolución</option>
-                      <option value="POR SEPARACIÓN" selected>Por separación</option>
-                      <option value="POR CONTRATO">Por contrato</option>
-                    </select>
-                  </div>
-
-                  <div class="col-md-3 mt-2">
-                    <label for="fechaInicio" class="form-label">
-                      Fecha de inicio
-                    </label>
-                    <input type="date" name="fechaInicio" class="form-control" id="fechaInicio">
-                  </div>
-                  <div class="col-md-3 mt-2">
-                    <label for="fechaFin" class="form-label">
-                      Fecha de fin
-                    </label>
-                    <input type="date" name="fechaFin" class="form-control" id="fechaFin">
-                  </div>
-
-                  <div class="col-md-3 d-grid mt-2">
-                    <label for="campoCriterio">Nº de expediente </label>
-                    <div class="input-group">
-                      <span class="input-group-text text-body"><i class="fas fa-search" aria-hidden="true"></i></span>
-                      <input type="text" class="form-control" placeholder="Nº de expediente ..." id="n_expediente">
-                    </div>
-                  </div>
-
-                </div>
-                <div class="row d-flex" style="justify-content: space-between; align-items: start;">
-                  <div class="col-md-3 m-2">
-                    <div class="btn-group text-start mt-2">
-                    </div>
-
-                  </div>
-                </div>
               </div>
             </div>
             <hr>
-            <div class="card-body px-0 pt-0 pb-2">
-              <div class="table-responsive text-center m-0">
-                <table class="table align-items-center mb-0 table-hover" id="table-founds">
-                  <thead>
-                    <tr>
-                      <th class="text-uppercase text-secondary text-truncate text-xxs font-weight-bolder opacity-10">#</th>
-                      <th class="text-uppercase text-secondary text-truncate text-xxs font-weight-bolder opacity-10">Nº de expediente</th>
-                      <th class="text-uppercase text-secondary text-truncate text-xxs font-weight-bolder opacity-10">Cliente</th>
-                      <th class="text-uppercase text-secondary text-truncate text-xxs font-weight-bolder opacity-10">Tipo de documento</th>
-                      <th class="text-uppercase text-secondary text-truncate text-xxs font-weight-bolder opacity-10">Nº de documento</th>
-                      <th class="text-uppercase text-secondary text-truncate text-xxs font-weight-bolder opacity-10">Monto de devolución</th>
-                      <th class="text-uppercase text-secondary text-truncate text-xxs font-weight-bolder opacity-10">Fecha de registro</th>
-                      <th class="text-uppercase text-secondary text-truncate text-xxs font-weight-bolder opacity-10">Operaciones</th>
-                    </tr>
-                  </thead>
+
+            <!-- /* -------------------------------------------------------------------------- */
+            /*                               LISTA DE DATOS                               */
+            /* -------------------------------------------------------------------------- */ -->
+            <div class="card-body px-0 pt-0 pb-2" style="margin: 2rem 4rem 4rem 4rem;">
+
+              <div class="row">
+                <div class="col-md-4">
+
+                  <div style="background-color: rgba(108, 117, 125, 0.2);padding:1rem; border-radius: 10px; height: 100%">
+
+                    <!-- CLIENTE -->
+
+                    <div id="data-client">
+                      <h6><strong>Cliente</strong></h6>
+                      <hr>
+                      <ul style="list-style-type: none;" id="list-client">
+                        <!-- RENDER DATOS DEL CLIENTE -->
+                      </ul>
+                    </div>
+
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div style="background-color: rgba(108, 117, 125, 0.2);padding:1rem; border-radius: 10px; height: 100%">
+                    <!-- CONYUGUE -->
+
+                    <div id="data-conyugue">
+                      <h6><strong>Conyugue</strong></h6>
+                      <hr>
+                      <ul style="list-style-type: none;" id="list-conyugue">
+                        <!-- RENDER DATOS DEL CONYUGUE -->
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div style="background-color: rgba(108, 117, 125, 0.2);padding:1rem; border-radius: 10px; height: 100%">
+                    <!-- CONTRATO -->
+
+                    <div id="data-contract">
+                      <h6><strong>Contrato</strong></h6>
+                      <hr>
+                      <ul style="list-style-type: none;" id="list-contract">
+
+                        <!-- RENDER DATOS DEL CONTRATO -->
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- /* -------------------------------------------------------------------------- */
+              /*                         TABLA DE DETALLES                         */
+              /* -------------------------------------------------------------------------- */ -->
+              <div class="table-responsive text-center p-0 mt-4" style="height: 300px;">
+                <table class="table align-items-center mb-0 table-hover caption-top" id="table-detail">
+                  <caption><strong>Detalles del contrato</strong></caption>
                   <tbody>
 
-                    <!-- RENDER -->
+                    <!-- RENDER DETALLES DEL CONTRATO -->
 
                   </tbody>
                 </table>
                 <div id="render-alert">
+
 
 
                 </div>
@@ -545,53 +549,6 @@ if (!isset($_SESSION["status"]) || !$_SESSION["status"]) {
     </div>
   </div>
 
-  <!-- MODAL -->
-  <!-- Button trigger modal -->
-  <!-- Modal -->
-  <div class="modal fade" id="modal_det_sep" tabindex="-1" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-scrollable modal-lg modal-fullscreen-sm-down" role="document">
-      <div class="modal-content">
-        <div class="modal-header bg-secondary">
-          <h5 class="modal-title text-white" id="modalTitle">
-            --
-          </h5>
-          <button type="button" class="btn-close text-dark" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <div style="margin: 5% 10% 5% 10%;">
-            <div class="d-flex row" style="justify-content: space-between;" id="details-refund">
-
-              <div>
-                <h5><strong>Cliente</strong></h6>
-                  <hr>
-                  <div class="row" id="data-client">
-
-                    <!-- RENDER DETALLE CLIENTES DEVOLUCIÓN -->
-                  </div>
-              </div>
-
-              <div class="mt-4">
-                <h5><strong>Devolución</strong></h5>
-                <hr>
-                <div class="row" id="data-refund">
-
-                  <!-- RENDER DETALLE DEVOLUCIÓN -->
-
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="modal-footer">
-          <button type="button" class="btn btn-primary" data-bs-dismiss="modal">
-            Cerrar
-          </button>
-        </div>
-
-      </div>
-    </div>
-  </div>
 
   <!-- SWEET ALERT -->
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -605,7 +562,7 @@ if (!isset($_SESSION["status"]) || !$_SESSION["status"]) {
   <script src="../../assets/js/globalFunctions.js"></script>
   <script src="../../assets/js/sweetAlert.js"></script>
   <script>
-    document.addEventListener("DOMContentLoaded", () => {
+    document.addEventListener("DOMContentLoaded", async function() {
 
       /* INSTANCIAS */
       const global = new FunGlobal();
@@ -614,373 +571,184 @@ if (!isset($_SESSION["status"]) || !$_SESSION["status"]) {
       const $ = id => global.$(id);
       const $All = id => global.$All(id);
 
-      let date = new Date();
-      let minDate = new Date('2024-1-1'); //La fecha se agrega sin 0 a la izquierda
-      let defaultDate = new Date();
+      const stringQuery = window.location.search;
+      const params = new URLSearchParams(stringQuery);
+      const code = params.get("id");
+      const idcontrato = atob(code);
 
-      let fechaInicioValue = "";
-      let fechaFinValue = "";
-      let dateReset = "";
-
-      let timmer;
-
+      let data;
       /* -------------------------------------------------------------------------- */
       /*                                  FUNCIONES                                 */
       /* -------------------------------------------------------------------------- */
 
-      // * Renderiza los datos de una devolución
-      async function renderDetRefund(data) {
+      // * Obtiene los detalles del contrato
+      async function renderDetContract(detail) {
+
+        const jsonObject = JSON.parse(detail);
+
+        const keys = jsonObject.clave;
+        const values = jsonObject.valor;
+        let table = $("#table-detail tbody");
+
+        table.innerHTML = "";
+
+        keys.forEach((key, index) => {
+          
+          let valueGet = values[index];
+          let value = valueGet.trim();
+
+          let html = "";
+
+          html = 
+          ` <tr>
+              <th style="background-color: rgba(108, 117, 125, 0.2);">${key}</th>
+              <td>${value}</td>
+            </tr>
+          `;
+          table.innerHTML += html;
+        });
+      }
+
+      // * Renderiza las lista de datos
+      async function renderList(data) {
 
         for (const key in data) {
-          
-          if(Object.prototype.hasOwnProperty.call(data,key)){
+
+          if (Object.prototype.hasOwnProperty.call(data, key)) {
 
             const array = data[key].data;
-            let list = document.getElementById(data[key].idcontenedor);
-
-            list.innerHTML = "";
+            let lista = document.getElementById(data[key].idlista);
+            lista.innerHTML = "";
 
             array.forEach(element => {
-              
+
               let html = "";
-
               html = `
-              <div class="col-md-6">
-                <div class="mt-2">
-                  <h6><strong>${element.clave}</strong></h6>
-                </div>
-              </div>
-
-              <div class="col-md-6">
-                <div class="mt-2">
-                  <h6>${element.valor}</h6>
-                </div>
-              </div>
+              <li><strong>${element.clave}</strong>
+                <ul>
+                  <p>${element.valor}</p>
+                </ul>
+              </li>
               `;
 
-              list.innerHTML += html;
+              lista.innerHTML += html;
             });
-
           }
         }
       }
 
-      // * Obtiene los registros de una separacion por id
-      async function getSeparation(id) {
+      // * Obiene el contrato por el id
+      async function getContratId(id) {
 
         try {
-          let url = "../../Controllers/refund.controller.php";
-          let params = new FormData();
 
-          params.append("action", "listRefundsById");
-          params.append("iddevolucion", id);
+          const url = `../../Controllers/contract.controller.php`;
+          const params = new FormData();
 
-          let result = await global.sendAction(url, params);
+          params.append("action", "listContractId");
+          params.append("idcontrato", id);
+
+          const result = await global.sendAction(url, params);
 
           if (result) {
-            console.log(result)
 
-            $("#modalTitle").innerHTML = result.n_expediente;
+            $("#serie-contrato").innerText = "";
+            $("#serie-contrato").innerText = result.n_expediente;
 
-            let data = {
+            const isContentNull = (value) => {
+
+              if (!value) return "NO REGISTRADO";
+              else return value;
+            }
+
+            data = {
               cliente: {
-                idcontenedor: "data-client",
-                data:[
-                  {clave:"Cliente", valor: result.cliente},
-                  {clave:"Tipo de documento", valor: result.documento_tipo},
-                  {clave:"Nro de documento", valor: result.documento_nro},
+                idlista: "list-client",
+                data: [{
+                    clave: "Cliente",
+                    valor: result.cliente
+                  },
+                  {
+                    clave: "Tipo de persona",
+                    valor: result.tipo_persona
+                  },
+                  {
+                    clave: "Tipo de documento",
+                    valor: result.documento_tipo
+                  },
+                  {
+                    clave: "Nro de documento",
+                    valor: result.documento_nro
+                  }
                 ]
               },
-              devolucion: {
-                idcontenedor: "data-refund",
-                data:[
-                  {clave:"Nro de expediente (documento devolución)", valor: result.expediente_devuelto},
-                  {clave:"Tipo de devolución", valor: result.tipo_devolucion},
-                  {clave:"Proyecto", valor: result.denominacion},
-                  {clave:"Sublote", valor: result.sublote},
-                  {clave:"Moneda de venta", valor: result.moneda_venta},
-                  {clave:"Monto devolución", valor: result.monto_devolucion},
-                  {clave:"Porcentaje de penalidad", valor: result.porcentaje_penalidad + "%"},
-                  {clave:"Modalidad de pago", valor: result.modalidad_pago},
-                  {clave:"Entidad bancaria", valor: result.entidad_bancaria || "SIN REGISTRAR"},
-                  {clave:"Nro de operación", valor: result.nro_operacion || "SIN REGISTRAR"},
-                  {clave:"Detalle de la devolución", valor: result.detalle},
+              conyugue: {
+                idlista: "list-conyugue",
+                data: [{
+                    clave: "Conyugue",
+                    valor: isContentNull(result.conyugue)
+                  },
+                  {
+                    clave: "Tipo de documento",
+                    valor: isContentNull(result.dc_type)
+                  },
+                  {
+                    clave: "Nro de documento",
+                    valor: isContentNull(result.dc_nro)
+                  }
                 ]
-              }
-            }
-            console.log('data :>> ', data);
-            await renderDetRefund(data);
-          }
+              },
+              contrato: {
+                idlista: "list-contract",
+                data: [{
+                    clave: "Tipo de contrato",
+                    valor: result.tipo_contrato
+                  },
+                  {
+                    clave: "Proyecto",
+                    valor: result.denominacion
+                  },
+                  {
+                    clave: "sublote",
+                    valor: result.sublote
+                  },
+                  {
+                    clave: "Fecha del contrato",
+                    valor: result.fecha_contrato
+                  },
+                  {
+                    clave: "Moneda de venta",
+                    valor: result.moneda_venta
+                  },
+                  {
+                    clave: "Tipo de cambio",
+                    valor: result.tipo_cambio
+                  },
+                  {
+                    clave: "Precio de venta",
+                    valor: result.precio_venta
+                  },
+                  {
+                    clave: "Inicial",
+                    valor: result.inicial
+                  }
+                ]
+              },
+            };
 
-        } catch (e) {
-          console.error(e);
-        }
-      }
-      //Obtiene los datos de las separciones en base a 4 criterios
-      async function getRefunds(tdevolucion, dateStart, dateEnd, nExpedient) {
-
-        try {
-
-          let url = "../../Controllers/refund.controller.php";
-
-          let params = new FormData();
-
-
-          if (!nExpedient) {
-
-            params.append("action", "listRefundsTrefund");
-            params.append("tipo_devolucion", tdevolucion);
-            params.append("fechaInicio", dateStart);
-            params.append("fechaFin", dateEnd);
-          } else {
-            params.append("action", "listRefundsNExpedientes");
-            params.append("tipo_devolucion", tdevolucion);
-            params.append("fechaInicio", dateStart);
-            params.append("fechaFin", dateEnd);
-            params.append("n_expediente", nExpedient)
-
-          }
-
-
-          let results = await global.sendAction(url, params);
-
-          if (results) {
-
-            console.log(results)
-            $("#render-alert").innerHTML = "";
-            $("#table-founds tbody").innerHTML = "";
-
-            if (results.length > 0) {
-              console.log(results);
-
-              let numberRow = 1;
-
-              results.forEach(result => {
-                let newRow = "";
-                let code = btoa(result.iddevolucion);
-                let expedient = btoa(result.n_expediente_dev);
-
-                let moneda = {
-                  SOL: "S/ " + result.monto_devolucion,
-                  USD: "$/ " + result.monto_devolucion
-                };
-                newRow = `
-                  <tr>
-                    <td class="text-xs text-truncate">${numberRow}</td>
-                    <td class="text-xs text-truncate">${result.n_expediente}</td>
-                    <td class="text-xs text-truncate">${result.cliente}</td> 
-                    <td class="text-xs text-truncate">${result.documento_tipo}</td> 
-                    <td class="text-xs text-truncate">${result.documento_nro}</td> 
-                    <td class="text-xs text-truncate">${moneda[result.moneda_venta]}</td> 
-                    <td class="text-xs text-truncate">${result.create_at}</td>
-                    <td>
-                        <a type="button" href="#" data-id="${result.iddevolucion}" class="btn btn-link text-info px-3 mb-0 open-modal" data-bs-toggle="modal" data-bs-target="#modal_det_sep" ><i class="fa-solid fa-eye open-modal" data-id="${result.iddevolucion}"></i></a>
-                        <a type="button" data-id="${result.iddevolucion}" data-expedient="${result.n_expediente}" data-type="${result.devolucion}"class="btn btn-link text-dark px-3 mb-0 edit"><i class="bi bi-pencil-fill edit" data-id="${result.iddevolucion}" data-expedient="${result.n_expediente_dev}"></i></a>
-                    </td>
-                  </tr>
-                  `;
-                $("#table-founds tbody").innerHTML += newRow;
-                ++numberRow;
-              });
-            } else {
-
-              let newAlert = "";
-              newAlert = `
-                  <div class="alert alert-danger text-white" role="alert">
-                      <h4 class="alert-heading">No hay registros</h4>
-                      <hr />
-                      <p class="mb-0">Asegurate de ingresar los datos correctos</p>
-                    </div>
-              `;
-
-              $("#render-alert").innerHTML = newAlert;
-            }
-          } else {
-            let newAlert = "";
-            newAlert = `
-                  <div class="alert alert-danger text-white" role="alert">
-                      <h4 class="alert-heading">No hay registros</h4>
-                      <hr />
-                      <p class="mb-0">Asegurate de ingresar los datos correctos</p>
-                    </div>
-              `;
-
-            $("#render-alert").innerHTML = newAlert;
+            await renderList(data);
+            await renderDetContract(result.det_contrato);
           }
         } catch (e) {
           console.error(e);
         }
       }
 
-      //Cambia la fecha actual hacia 1 mes atrás (fecha por defecto de inicio) 
-      function setDefaultDate() {
 
-        //FECHA POR DEFECTO (1 MES ATRÁS)
-
-        defaultDate.setMonth(defaultDate.getMonth() - 1);
-
-        if (defaultDate.getDate() !== date.getDate()) {
-          defaultDate.getDate(0)
-        }
-
-        const defaultDay = defaultDate.getDate().toString().padStart(2, '0');
-        const defaultMonth = (defaultDate.getMonth() + 1).toString().padStart(2, '0');
-        const defaultYear = defaultDate.getFullYear().toString();
-
-        let defDate = `${defaultYear}-${defaultMonth}-${defaultDay}`;
-
-        dateReset = defDate; //variable que guardará la fecha por defecto
-
-        return defDate;
-      }
-
-      //Actuazliza la fecha, a la fecha actual
-      function setToday() {
-        //FECHA ACTUAL
-
-        const day = date.getDate().toString().padStart(2, '0');
-        const month = (date.getMonth() + 1).toString().padStart(2, '0');
-        const year = date.getFullYear().toString();
-
-        let defToday = `${year}-${month}-${day}`;
-        return defToday;
-      }
-
-      // Configura los valores por defecto de los inputs date
-      async function getDates() {
-
-        //FECHA ACTUAL
-
-        let today = setToday();
-
-        //FECHA MÍNIMA
-        const minDay = minDate.getDate().toString().padStart(2, '0');
-        const minMonth = (minDate.getMonth() + 1).toString().padStart(2, '0');
-        const minYear = minDate.getFullYear().toString();
-
-        let dateBefore = `${minYear}-${minMonth}-${minDay}`;
-
-        //FECHA POR DEFECTO (1 MES ATRÁS)
-
-        let dateDefault = setDefaultDate();
-
-        $("#fechaInicio").min = dateBefore;
-        $("#fechaInicio").value = dateDefault;
-        $("#fechaInicio").max = today;
-        fechaInicioValue = $("#fechaInicio").value;
-
-        $("#fechaFin").value = today;
-        $("#fechaFin").max = today;
-        $("#fechaFin").min = dateBefore;
-        fechaFinValue = $("#fechaFin").value
-
-        let tDevolucion = $("#tipo_devolucion").options[$("#tipo_devolucion").selectedIndex].value;
-        await getRefunds(tDevolucion, dateDefault, today, false);
-      }
-
-      //Valida las fechas de los inputs date
-      function validateDates() {
-
-        return new Promise((resolve, reject) => {
-
-          console.log("incio filtro")
-          console.log(fechaInicioValue)
-          console.log(fechaFinValue)
-
-          let fechaInicioDate = new Date(fechaInicioValue);
-          let fechaFinDate = new Date(fechaFinValue);
-
-          if (fechaInicioDate > fechaFinDate) {
-
-            $("#fechaInicio").value = dateReset;
-            $("#fechaFin").value = setToday();
-            reject()
-          } else {
-
-            resolve()
-          }
-          console.log("fin filtro")
-        })
-      }
-
-
-      $("#fechaInicio").addEventListener("change", (e) => {
-        console.log(e.target.value);
-        fechaInicioValue = e.target.value;
-        validateDates()
-          .then(() => {
-            let tipoPersona = $("#tipo_devolucion").options[$("#tipo_devolucion").selectedIndex].value;
-            let n_expedient = $("#n_expediente").value ? $("#n_expediente").value : false;
-
-            getRefunds(tipoPersona, fechaInicioValue, fechaFinValue, n_expedient);
-          })
-      })
-
-      $("#fechaFin").addEventListener("change", (e) => {
-        console.log(e.target.value);
-        fechaFinValue = e.target.value;
-        validateDates()
-          .then(() => {
-            let tipoPersona = $("#tipo_devolucion").options[$("#tipo_devolucion").selectedIndex].value;
-            let n_expedient = $("#n_expediente").value ? $("#n_expediente").value : false;
-
-            getRefunds(tipoPersona, fechaInicioValue, fechaFinValue, n_expedient);
-          })
-      });
-
-      $("#tipo_devolucion").addEventListener("change", (e) => {
-
-        let option = e.target.options[e.target.selectedIndex].value;
-        console.log(option)
-        if (option) {
-          let n_expedient = $("#n_expediente").value ? $("#n_expediente").value : false;
-
-          getRefunds(option, fechaInicioValue, fechaFinValue, n_expedient);
-        }
-      })
-
-      $("#n_expediente").addEventListener("input", (e) => {
-
-        let input = e.target.value;
-
-        if (input) {
-
-          clearTimeout(timmer);
-
-          timmer = setTimeout(() => {
-            let tpersona = $("#tipo_devolucion").options[$("#tipo_devolucion").selectedIndex].value
-            getRefunds(tpersona, fechaInicioValue, fechaFinValue, input);
-          }, 1000);
-        }
-      });
-
-      $("#table-founds tbody").addEventListener("click", async function(e) {
-
-        e.preventDefault();
-
-        if (e.target.classList.contains("open-modal")) {
-
-          let iddevolucion = e.target.dataset.id;
-          getSeparation(iddevolucion);
-
-        } else if (e.target.classList.contains("edit")) {
-          let iddevolucion = e.target.dataset.id;
-          let expedientE = e.target.dataset.expedient;
-
-          let typeContent = e.target.dataset.type
-          let type = typeContent == "POR CONTRATO" ? "cont" : "sep";
-          let typeCode = btoa(type)
-
-          let code = btoa(iddevolucion);
-          let expedient = btoa(expedientE);
-
-          window.location.href = `./edit_refund.php?id=${code}&expedient=${expedient}&type=${typeCode}`;
-
-
-        }
-      });
-
-      getDates()
+      /* -------------------------------------------------------------------------- */
+      /*                                   EVENTOS                                  */
+      /* -------------------------------------------------------------------------- */
+      await getContratId(idcontrato);
 
     });
   </script>

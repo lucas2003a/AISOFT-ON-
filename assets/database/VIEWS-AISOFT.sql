@@ -441,16 +441,25 @@ AS
         dv.iddevolucion,
         dv.n_expediente,
         ct.n_expediente AS expediente_contrato,
+        COALESCE(ct.n_expediente,sp.n_expediente) AS expediente_devuelto,
         dv.tipo_devolucion,
         dv.idcontrato,
         dv.idseparacion,
+        ac.sublote,
+        py.denominacion,
         COALESCE(ct.idcliente,lc.idcliente) AS idcliente,
         COALESCE(ct.cliente,lc.cliente) AS cliente,
         COALESCE(ct.documento_tipo,lc.documento_tipo) AS documento_tipo,
         COALESCE(ct.documento_nro,lc.documento_nro) AS documento_nro,
-        ct.moneda_venta,
+        COALESCE(ct.moneda_venta,sp.moneda_venta) AS moneda_venta,
         dv.monto_devolucion,
         dv.create_at,
+        dv.imagen,
+        dv.detalle,
+        dv.porcentaje_penalidad,
+        dv.modalidad_pago,
+        dv.entidad_bancaria,
+        dv.nro_operacion,
         dv.inactive_at
     FROM devoluciones dv
     LEFT JOIN vws_list_contracts ct ON ct.idcontrato = dv.idcontrato
@@ -461,6 +470,8 @@ AS
         (dv.idseparacion IS NULL AND cl.idcliente = ct.idcliente)
     )
     INNER JOIN vws_list_clients lc ON lc.idcliente = cl.idcliente
+    INNER JOIN activos ac ON ac.idactivo = COALESCE(ct.idactivo,sp.idactivo)
+    INNER JOIN proyectos py ON py.idproyecto = ac.idproyecto
     ORDER BY dv.iddevolucion DESC;
 
 DELIMITER;

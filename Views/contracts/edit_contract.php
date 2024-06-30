@@ -1452,7 +1452,7 @@ if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
 
           if (result) {
 
-            setContract = result.n_expediente;
+            serieContract = result.n_expediente;
 
             // !Valor del númmero de expediente
             $("#n_expediente").value = result.n_expediente;
@@ -1687,7 +1687,7 @@ if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
 
                 sAlert.sweetSuccess("Éxito", "Registro realizado correctamente", () => {
 
-                  // window.location.href = "./index.php";
+                  window.location.href = "./index.php";
 
                 });
               } else {

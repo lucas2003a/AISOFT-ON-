@@ -105,7 +105,7 @@ if(isset($_POST["action"])){
                         "monto_devolucion"      =>  $_POST ["monto_devolucion"],
                         "tipo_cambio"           =>  $_POST["tipo_cambio"],
                         "modalidad_pago"        =>  $_POST["modalidad_pago"],
-                        "entidad_bancaria"  =>  $_POS["entidad_bancaria"],
+                        "entidad_bancaria"  =>  $_POST["entidad_bancaria"],
                         "nro_operacion"     =>  $_POST["nro_operacion"],
                         "imagen"            =>  $nom_img,
                         "idusuario"         =>  1
@@ -119,6 +119,13 @@ if(isset($_POST["action"])){
 
                     if(move_uploaded_file($_FILES["imagen"]["tmp_name"], $ruta)){
                         $dataObtained["imagen"] = $nom_img;
+                    }
+                }else{
+
+                    $data = $refund->listRefundsById($_POST["iddevolucion"]);
+
+                    if($data){
+                        $dataObtained["imagen"] = $data["imagen"];
                     }
                 }
 

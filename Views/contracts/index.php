@@ -625,7 +625,7 @@ if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
       const $All = id => global.$All(id);
 
       let timmer;
-
+      
       //Descarga el contrato PDF
       async function downloadContract(file, name){
 
@@ -745,7 +745,7 @@ if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
                   <ul class="dropdown-menu">
                     <li><a href="../../Controllers/contract.controller.php?action=downloadPDF&archivo=${element.archivo}&nombre=${fileName}" class="dropdown-item border-radius-md download"><i class="bi bi-arrow-down-square text-danger download"></i>  Descargar</a></li>
                     <li><a href="../refunds/add_refund_contract.php?id=${code}&type=${btoa("contract")}" class="dropdown-item border-radius-md"><i class="fa-solid fa-right-left text-secondary"></i>  Devolver</a></li>
-                    <li><a href="#" class="dropdown-item border-radius-md"><i class="bi bi-arrow-right-square text-success"></i> Ver más</a></li>
+                    <li><a href="./detail_contract.php?id=${code}" class="dropdown-item border-radius-md"><i class="bi bi-arrow-right-square text-success"></i> Ver más</a></li>
                     <li><a href="./edit_contract.php?id=${code}" class="dropdown-item border-radius-md"><i class="bi bi-pencil-fill text-primary"></i> Editar</a></li>
                   </ul>
                 </div>

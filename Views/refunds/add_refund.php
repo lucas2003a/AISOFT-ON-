@@ -673,6 +673,7 @@ if (!isset($_SESSION["status"]) || !$_SESSION["status"]) {
     let lastCode = false;
     let dataClients;
     let newValue;
+    let timer;
 
     // * Obtienie el numero de serie código
     async function getSerieCode() {
@@ -740,9 +741,11 @@ if (!isset($_SESSION["status"]) || !$_SESSION["status"]) {
 
         if (result) {
 
+          console.log('result :>> ', result);
           let total = result.separacion_monto || result.precio_venta;
           $("#monto_total").value = total;
           $("#tipo_devolucion").value = "POR SEPARACIÓN";
+          $("#moneda_venta").value = result.moneda_venta;
           return total;
         }
       } catch (e) {
