@@ -1006,8 +1006,8 @@ if (!isset($_SESSION["status"]) || !$_SESSION["status"]) {
             let newRow = `
             <tr data-index_tr="${element.indice}">
               <td>${numRow}</td>
-              <td class="edit-row select text-truncate" data-subcategoria="subcategoria"data-idcategoria_costo="${element.idcategoria_costo}">${element.subcategoria_costo}</td>
-              <td class="edit-row text text-truncate" data-detalle="detalle">${element.detalle}</td>
+              <td class="select text-truncate" data-subcategoria="subcategoria"data-idcategoria_costo="${element.idcategoria_costo}">${element.subcategoria_costo}</td>
+              <td class="text text-truncate" data-detalle="detalle">${element.detalle}</td>
               <td class="edit-row number cantidad" data-cantidad="cantidad">${element.cantidad}</td>
               <td class="edit-row number precio" data-precio="precio_unitario">${precioUnitarioFormat}</td>
               <td>${numberFormat}</td>
@@ -1059,6 +1059,16 @@ if (!isset($_SESSION["status"]) || !$_SESSION["status"]) {
           let material = $("#material").options[$("#material").selectedIndex].textContent;
           let unidad_medida = $("#material").options[$("#material").selectedIndex].dataset.uni_medida;
 
+          const isEditable = () => {
+            
+            let needMaterial = $("#subcategoria_costo").options[$("#subcategoria_costo").selectedIndex].dataset.material;
+
+            if(needMaterial == "SI"){
+              return true;
+            }else{
+              return false
+            }
+          }
           data = {
             indice: Number.parseInt(index),
             idcategoria_costo: Number.parseInt($("#categoria_costo").value),
@@ -1066,6 +1076,7 @@ if (!isset($_SESSION["status"]) || !$_SESSION["status"]) {
             subcategoria_costo: $("#subcategoria_costo").options[$("#subcategoria_costo").selectedIndex].textContent,
             idmaterial: Number.parseInt($("#material").value),
             detalle: marca + " // " + material + " // " + unidad_medida,
+            detEditable : isEditable(),
             cantidad: Number.parseInt($("#cantidad").value),
             precio_unitario: Number.parseFloat($("#precio_unitario").value)
           }
@@ -1309,39 +1320,44 @@ if (!isset($_SESSION["status"]) || !$_SESSION["status"]) {
         let container = document.getElementById(`render-accordion-${idproyecto}`);
         let button = document.getElementById(`render-button-${idproyecto}`);
 
-        container.innerHTML = "";
-
-        let newContent = "";
-
-        // * Buscador
-
-        container.innerHTML = `
-            <div id="flush-collapse-${idproyecto}" class="accordion-collapse collapse" data-bs-parent="#accordion-proyectos">
-              <input type="text" class="form-control search-content" data-idproyecto="${idproyecto}" placeholder="Buscar..." style="margin-bottom: 10px;"/>
-            </div>
-          `;
-
-        data.forEach(element => {
-
-          if (element.idproyecto == idproyecto) {
-
-            console.log('element :>> ', element);
-            newContent = `
-              <div id="flush-collapse-${idproyecto}" class="accordion-collapse collapse lote-item" data-bs-parent="#accordion-proyectos">
-                <div class="form-check" style="margin: 0px 20px; display:flex; align-content:center;">
-                  <input class="form-check-input form-lotes" type="checkbox" style="height:20px;" data-idactivo="${element.idactivo}" data-idproyecto="${element.idproyecto}" name="data-lotes"/>
-                  <label class="form-check-label" for="sublote" style="font-size:10px; margin-top:10px;"> 
-                    Lote - ${element.sublote}
-                  </label>
-                </div>
+        console.log('container.childNodes.length :>> ', container.childNodes.length);
+        if(container.childNodes.length <= 1){
+          
+          container.innerHTML = "";
+  
+          let newContent = "";
+  
+          // * Buscador
+  
+          container.innerHTML = `
+              <div id="flush-collapse-${idproyecto}" class="accordion-collapse collapse" data-bs-parent="#accordion-proyectos">
+                <input type="text" class="form-control search-content" data-idproyecto="${idproyecto}" placeholder="Buscar..." style="margin-bottom: 10px;"/>
               </div>
-              `;
+            `;
+  
+          data.forEach(element => {
+  
+            if (element.idproyecto == idproyecto) {
+  
+              console.log('element :>> ', element);
+              newContent = `
+                <div id="flush-collapse-${idproyecto}" class="accordion-collapse collapse lote-item" data-bs-parent="#accordion-proyectos">
+                  <div class="form-check" style="margin: 0px 20px; display:flex; align-content:center;">
+                    <input class="form-check-input form-lotes" type="checkbox" style="height:20px;" data-idactivo="${element.idactivo}" data-idproyecto="${element.idproyecto}" name="data-lotes"/>
+                    <label class="form-check-label" for="sublote" style="font-size:10px; margin-top:10px;"> 
+                      Lote - ${element.sublote}
+                    </label>
+                  </div>
+                </div>
+                `;
+  
+              container.innerHTML += newContent;
+            }
+          });
+          
+        }
+        button.dispatchEvent(new Event("click"));
 
-            container.innerHTML += newContent;
-          }
-        });
-
-        button.dispatchEvent(new Event("click"))
 
         document.querySelectorAll(".search-content").forEach(input => {
 

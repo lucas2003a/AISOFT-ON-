@@ -2,10 +2,12 @@
 
 session_start();
 require_once "../Models/User.php";
+require_once "../Models/Permission.php";
 
 if(isset($_POST["action"])){
 
     $user = new User();
+    $permission = new Permission();
 
     switch($_POST["action"]){
 
@@ -27,12 +29,15 @@ if(isset($_POST["action"])){
             
             }else{
 
+                $permissions = $permission->getPermissionByRol($data["idrol"]);
+
                 $passwordEncript = $data["contrasenia"];
                 $_SESSION["idusuario"] = $data["idusuario"];
                 $_SESSION["imagen"] = $data["imagen"];
                 $_SESSION["apellidos"] = $data["apellidos"];
                 $_SESSION["nombres"] = $data["nombres"];
                 $_SESSION["rol"] = $data["rol"];
+                $_SESSION["permissions"] = $permissions;
                 $_SESSION["direccion"] = $data["direccion"];
 
                 if(password_verify($_POST["contrasenia"],$passwordEncript)){
@@ -43,6 +48,7 @@ if(isset($_POST["action"])){
                     $status["message"] = "Usuario logueado correctamente";
 
                     $status["data"] = $data;
+                    $status["permissions"] = $permissions;
 
                     
                         

@@ -3662,9 +3662,6 @@ BEGIN
 END $$
 
 DELIMITER;
-SELECT * from usuarios;
-SELECT * from configuraciones;
-SELECT * from presupuestos;
 
 DELIMITER $$
 CREATE PROCEDURE spu_upset_config
@@ -3695,8 +3692,30 @@ BEGIN
                     VALUES(_clave, _valor);
     END IF;
 END $$
-
 DELIMITER;
+
+/* -------------------------------------------------------------------------- */
+/*                                  PERMISOS                                  */
+/* -------------------------------------------------------------------------- */
+
+
+DELIMITER $$
+
+CREATE PROCEDURE spu_list_permissions
+(
+    IN _idrol INT
+)
+BEGIN
+    SELECT
+        idpermiso, 
+        modulo AS permiso
+        FROM permisos
+        WHERE idrol = _idrol;
+END $$
+DELIMITER ;
+
+
+
 
 CALL spu_list_configs("contrasenia_defectos");
 

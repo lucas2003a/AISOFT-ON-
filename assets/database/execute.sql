@@ -7,7 +7,9 @@ select * from contratos;
 select * from separaciones;
 select * from detalle_cuotas;
 select * from devoluciones;
-set foreign_key_checks = 1;
+select * from roles;
+select * from permisos;
+set foreign_key_checks = 0;
 update usuarios set contrasenia = "$2y$10$6LJpKa/E0MPdYF.z.xJRNu0kaqXDBLesKMUET4a6IsFUShOYJ8zwm";
 
 -- update activos set estado = "SIN VENDER";

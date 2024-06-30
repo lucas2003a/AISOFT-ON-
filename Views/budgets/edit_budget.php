@@ -1301,7 +1301,7 @@ if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
     };
 
     //Renderiza los botones del acordion
-    function renderAccordionButtons(array, arrayContent) {
+    async function renderAccordionButtons(array, arrayContent) {
 
       for (element of array) {
 
@@ -1317,7 +1317,7 @@ if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
           if (element.idproyecto == content.idproyecto) {
 
             newContent += `
-          <div id="flush-collapse-${element.idproyecto}" class="accordion-collapse collapse" data-bs-parent="#accordion-proyectos">
+          <div id="flush-collapse-${element.idproyecto}" class="accordion-collapse lote-item collapse" data-bs-parent="#accordion-proyectos">
             <div class="form-check" style="margin: 0px 20px; display:flex; align-content:center;">
               <input class="form-check-input form-lotes" type="checkbox" style="height:20px;" data-idpresupuesto="${idpresupuesto}" data-idactivo="${content.idactivo}" data-idproyecto="${content.idproyecto}" name="data-lotes" ${checkedAttribute}/>
               <label class="form-check-label" for="sublote" style="font-size:10px; margin-top:10px;"> 
@@ -1339,7 +1339,10 @@ if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
               <label class="form-check-label" for="denominacion" style="font-size:10px;"> <strong>${element.denominacion}</strong> </label>
             </button>
           </div>
-          <div class="scrollable-content">
+          <div class="scrollable-content" id="render-accordion-${element.idproyecto}">
+            <div id="flush-collapse-${element.idproyecto}" class="accordion-collapse collapse" data-bs-parent="#accordion-proyectos">
+                <input type="text" class="form-control search-content" data-idproyecto="${element.idproyecto}" placeholder="Buscar..." style="margin-bottom: 10px;"/>
+              </div>
             ${newContent}
           </div>  
         </h2>
@@ -1370,6 +1373,30 @@ if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
           })
         }
       });
+
+      document.querySelectorAll(".search-content").forEach(input => {
+        input.addEventListener("input",(e)=>{
+
+          let searchTerm = e.target.value.toLowerCase();
+          let idproyecto = e.target.dataset.idproyecto;
+          console.log('idproyecto :>> ', idproyecto);
+          let accordionContent = document.querySelector(`#render-accordion-${idproyecto}`);
+
+          console.log('accordionContent :>> ', accordionContent);
+          let loteItems = accordionContent.querySelectorAll(".lote-item");
+
+          loteItems.forEach(item =>{
+
+            let label = item.querySelector(".form-check-label").textContent.toLowerCase();
+
+            if(label.includes(searchTerm)){
+              item.style.display = "";
+            }else{
+              item.style.display = "none";
+            }
+          })
+        })
+      });
     };
 
     //Obtiene los lotes filtrando los que coninciden con el id lote o los que son null
@@ -1399,7 +1426,7 @@ if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
             }
           })
 
-          renderAccordionButtons(nombresUnicos, results);
+          await renderAccordionButtons(nombresUnicos, results);
         }
 
       } catch (e) {
