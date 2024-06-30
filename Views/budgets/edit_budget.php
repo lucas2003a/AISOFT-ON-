@@ -1057,8 +1057,6 @@ if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
 
           console.log(results)
           let data = JSON.stringify(results);
-          sessionStorage.setItem("dataBudget", data);
-
           dataGetBudget = results;
 
           $("#codigo").value = results.codigo;

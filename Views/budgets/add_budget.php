@@ -16,7 +16,7 @@
 
 session_start();
 
-if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
+if (!isset($_SESSION["status"]) || !$_SESSION["status"]) {
   header("Location:../../index.php");
 }
 ?>
@@ -191,7 +191,7 @@ if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
                   <g transform="translate(-1869.000000, -293.000000)" fill="#FFFFFF" fill-rule="nonzero">
                     <g transform="translate(1716.000000, 291.000000)">
                       <g id="office" transform="translate(153.000000, 2.000000)">
-                      <svg class="color-background" xmlns="http://www.w3.org/2000/svg"  width="50" height="50" fill="currentColor" class="bi bi-backspace-fill" viewBox="0 0 16 16">
+                        <svg class="color-background" xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-backspace-fill" viewBox="0 0 16 16">
                           <path d="M15.683 3a2 2 0 0 0-2-2h-7.08a2 2 0 0 0-1.519.698L.241 7.35a1 1 0 0 0 0 1.302l4.843 5.65A2 2 0 0 0 6.603 15h7.08a2 2 0 0 0 2-2zM5.829 5.854a.5.5 0 1 1 .707-.708l2.147 2.147 2.146-2.147a.5.5 0 1 1 .707.708L9.39 8l2.146 2.146a.5.5 0 0 1-.707.708L8.683 8.707l-2.147 2.147a.5.5 0 0 1-.707-.708L7.976 8z" />
                         </svg>
                       </g>
@@ -416,7 +416,7 @@ if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
                         <div class="m-2">
                           <label for="codigo" class="form-label">Código</label>
                           <input class="form-control" type="text" name="codigo" id="codigo" readonly>
-                          
+
                           <div class="invalid-feedback">
                             Necesitas ingresar el código del presupuesto.
                           </div>
@@ -747,20 +747,21 @@ if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
   <script>
     document.addEventListener("DOMContentLoaded", () => {
 
-      
+
       const global = new FunGlobal();
       const sAlert = new Alert();
 
       const $ = id => global.$(id);
       const $All = id => global.$All(id);
 
+      console.log('sessionStorage.getItem("isRecovered") :>> ', sessionStorage.getItem("isRecovered"));
       if (sessionStorage.getItem("isRecovered") == "true") {
 
         $("#codigo").disabled = true;
         $("#modelo").disabled = true;
         $("#area_construccion").disabled = true;
       } else {
-        
+
         //sessionStorage.setItem("isRecovered","false");
         //sessionStorage.removeItem("dataBudget")
         $("#codigo").disabled = false;
@@ -790,31 +791,32 @@ if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
       let allDataBudget;
       let codeValue;
       let modelValue;
+      let dataHouses;
 
       // * Obtenie el numero de serie código
       async function getSerieCode() {
 
-        try{
+        try {
 
           let url = "../../Controllers/configuration.controller.php";
 
           let params = new FormData();
           params.append("action", "listConfig");
-          params.append("clave","serie-presupuesto");
+          params.append("clave", "serie-presupuesto");
 
           let result = await global.sendAction(url, params);
 
-          if(result){
+          if (result) {
 
             console.log(result)
 
             let alphanum = "PRES-";
             let number = Number.parseInt(result.valor) + 1;
-            let numberString = String(number).toString().padStart(5,'0');
+            let numberString = String(number).toString().padStart(5, '0');
             let serie = alphanum + numberString
             console.log(serie)
 
-            const alpha_serie ={
+            const alpha_serie = {
               "clave": "serie-presupuesto",
               "serie": serie,
               "number": number,
@@ -827,8 +829,7 @@ if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
             return alpha_serie;
           }
 
-        }
-        catch(e){
+        } catch (e) {
           console.error(e)
         }
       }
@@ -934,7 +935,7 @@ if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
 
         try {
 
-          serie = await getSerieCode();
+          let serie = await getSerieCode();
 
           let url = "../../Controllers/budget.controller.php"
 
@@ -942,7 +943,7 @@ if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
           params.append("action", "addBudget");
           params.append("codigo", serie.serie);
           params.append("modelo", modelValue);
-          params.append("area_construccion",area_const);
+          params.append("area_construccion", area_const);
           params.append("clave", serie.clave);
           params.append("valor", serie.number);
 
@@ -1275,29 +1276,12 @@ if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
       };
 
       //Renderiza los botones del acordion
-      function renderAccordionButtons(array, array2) {
+      function renderAccordionButtons(array) {
 
         for (element of array) {
 
           let newButton = "";
-          let newContent = "";
 
-          array2.forEach(element2 => {
-
-            if (element.idproyecto == element2.idproyecto) {
-
-              newContent += `
-            <div id="flush-collapse-${element.idproyecto}" class="accordion-collapse collapse" data-bs-parent="#accordion-proyectos">
-              <div class="form-check" style="margin: 0px 20px; display:flex; align-content:center;">
-                <input class="form-check-input form-lotes" type="checkbox" style="height:20px;" data-idactivo="${element2.idactivo}" data-idproyecto="${element2.idproyecto}" name="data-lotes"/>
-                <label class="form-check-label" for="sublote" style="font-size:10px; margin-top:10px;"> 
-                  Lote - ${element2.sublote}
-                </label>
-              </div>
-            </div>
-            `;
-            }
-          })
 
           newButton = `
         
@@ -1305,12 +1289,12 @@ if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
           <h2 class="accordion-header">
             <div class="form-check form-proyects">
               <input class="form-check-input check-proyects" type="checkbox" style="height:30px;" data-idproyecto="${element.idproyecto}" name="data-proyectos"/>
-              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapse-${element.idproyecto}" aria-expanded="false" aria-controls="flush-collapse-${element.idproyecto}">
-                <label class="form-check-label" for="denominacion" style="font-size:10px;"> <strong>${element.denominacion}</strong> </label>
+              <button class="accordion-button find-accordion collapsed" id="render-button-${element.idproyecto}" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapse-${element.idproyecto}" aria-expanded="false" aria-controls="flush-collapse-${element.idproyecto}" data-idproyecto="${element.idproyecto}">
+                <label class="form-check-label find-accordion" for="denominacion" style="font-size:10px;" data-idproyecto="${element.idproyecto}"> <strong class="find-accordion" data-idproyecto="${element.idproyecto}">${element.denominacion}</strong> </label>
               </button>
             </div>
-            <div class="scrollable-content">
-              ${newContent}
+            <div class="scrollable-content" id="render-accordion-${element.idproyecto}">
+
             </div>  
           </h2>
         </div>
@@ -1320,6 +1304,67 @@ if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
         }
       };
 
+      async function renderContentAccordion(data, idproyecto) {
+
+        let container = document.getElementById(`render-accordion-${idproyecto}`);
+        let button = document.getElementById(`render-button-${idproyecto}`);
+
+        container.innerHTML = "";
+
+        let newContent = "";
+
+        // * Buscador
+
+        container.innerHTML = `
+            <div id="flush-collapse-${idproyecto}" class="accordion-collapse collapse" data-bs-parent="#accordion-proyectos">
+              <input type="text" class="form-control search-content" data-idproyecto="${idproyecto}" placeholder="Buscar..." style="margin-bottom: 10px;"/>
+            </div>
+          `;
+
+        data.forEach(element => {
+
+          if (element.idproyecto == idproyecto) {
+
+            console.log('element :>> ', element);
+            newContent = `
+              <div id="flush-collapse-${idproyecto}" class="accordion-collapse collapse lote-item" data-bs-parent="#accordion-proyectos">
+                <div class="form-check" style="margin: 0px 20px; display:flex; align-content:center;">
+                  <input class="form-check-input form-lotes" type="checkbox" style="height:20px;" data-idactivo="${element.idactivo}" data-idproyecto="${element.idproyecto}" name="data-lotes"/>
+                  <label class="form-check-label" for="sublote" style="font-size:10px; margin-top:10px;"> 
+                    Lote - ${element.sublote}
+                  </label>
+                </div>
+              </div>
+              `;
+
+            container.innerHTML += newContent;
+          }
+        });
+
+        button.dispatchEvent(new Event("click"))
+
+        document.querySelectorAll(".search-content").forEach(input => {
+
+          input.addEventListener("input", (e) => {
+
+            let searchTerm = e.target.value.toLowerCase();
+            let idproyecto = e.target.getAttribute("data-idproyecto");
+            let accordionContent = document.querySelector(`#render-accordion-${idproyecto}`);
+            let loteItems = accordionContent.querySelectorAll(".lote-item");
+
+            loteItems.forEach(item =>{
+
+              let label = item.querySelector(".form-check-label").textContent.toLowerCase();
+
+              if(label.includes(searchTerm)){
+                item.style.display = '';
+              }else{
+                item.style.display = 'none';
+              }
+            });
+          });
+        });
+      }
       //Obtiene los lotes sin presupuesto
       async function getLotsAll() {
 
@@ -1334,6 +1379,8 @@ if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
 
           if (results) {
 
+            dataHouses = results;
+
             results.forEach(result => {
 
               let nombresExist = nombresUnicos.find(nombre => nombre.idproyecto == result.idproyecto && nombre.denominacion == result.denominacion);
@@ -1347,7 +1394,7 @@ if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
             })
 
 
-            renderAccordionButtons(nombresUnicos, results);
+            renderAccordionButtons(nombresUnicos);
           }
 
         } catch (e) {
@@ -1459,7 +1506,9 @@ if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
         });
       };
 
-      $("#area_construccion").addEventListener("input",(e)=>{
+
+
+      $("#area_construccion").addEventListener("input", (e) => {
 
         let inputValue = e.target.value;
         area_const = Number.parseFloat(inputValue)
@@ -1467,14 +1516,14 @@ if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
         console.log(typeof(inputValue))
         console.log(Number.parseFloat($("#area_construccion").value))
 
-        if(inputValue || inputValue > 0){
+        if (inputValue || inputValue > 0) {
           $("#save_budget").disabled = false;
-        }else{
+        } else {
           $("#save_budget").disabled = true;
         }
       });
 
-      $("#material").addEventListener("change",()=>{
+      $("#material").addEventListener("change", () => {
 
         let precio = Number.parseFloat($("#material").options[$("#material").selectedIndex].dataset.precio);
         console.log(precio)
@@ -1585,14 +1634,14 @@ if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
 
       $("#table-det-budgets tbody").addEventListener("click", async function(e) {
         if (e.target.classList.contains("save")) {
-  
+
           let tr = e.target.closest("tr");
           let indexElement = Number.parseInt(e.target.dataset.index);
           console.log("Indice boton :" + indexElement)
 
           convertText(tr, indexElement);
 
-        }else if (e.target.classList.contains("delete")) {
+        } else if (e.target.classList.contains("delete")) {
 
 
           sAlert.sweetConfirm("¿Deseas eliminar el registro?", "", () => {
@@ -1614,7 +1663,7 @@ if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
 
           })
 
-        } 
+        }
       })
 
       $("#codigo").addEventListener("blur", (e) => {
@@ -1626,7 +1675,7 @@ if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
         if (!lastCode) {
 
           lastCode = true;
-          let sliceValue = valueInput.slice(0,3);
+          let sliceValue = valueInput.slice(0, 3);
           let valueFormat = sliceValue.padEnd(3, "0");
           let newValue = "PRES-" + valueFormat;
           codeValue = newValue;
@@ -1648,7 +1697,7 @@ if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
         e.preventDefault();
         let valueInput = e.target.value;
 
-        if(e.target.dataset.prevValue !== valueInput) {
+        if (e.target.dataset.prevValue !== valueInput) {
           lastCode = false;
 
         }
@@ -1691,7 +1740,7 @@ if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
 
           sAlert.sweetSuccess("Datos nuevos", `Registros actualizados : ${counter}`, () => {
 
-            sessionStorage.setItem("isRecovered","false");
+            sessionStorage.setItem("isRecovered", "false");
             sessionStorage.removeItem("dataBudget");
             sessionStorage.removeItem("dataStoraged");
             $("#save_lots").disabled = false;
@@ -1703,7 +1752,7 @@ if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
         $("#save_lots").disabled = false;
       });
 
-      $("#list-proyectos").addEventListener("click", (e) => {
+      $("#list-proyectos").addEventListener("click", async function(e) {
 
         if (e.target.classList.contains("check-proyects")) {
 
@@ -1720,14 +1769,20 @@ if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
 
             }
           });
-        }else if(e.target.classList.contains("form-lotes")){
+        } else if (e.target.classList.contains("form-lotes")) {
           let idproyecto = e.target.dataset.idproyecto;
           let accordionHeader = e.target.closest(".accordion-header")
           let checkAncestro = accordionHeader.querySelector(".check-proyects")
-          
-          if(e.target.checked){
+
+          if (e.target.checked) {
             checkAncestro.checked = true;
           }
+
+        } else if (e.target.classList.contains("find-accordion")) {
+
+          let idproyecto = e.target.dataset.idproyecto;
+
+          await renderContentAccordion(dataHouses, idproyecto);
         }
       });
 
@@ -1779,13 +1834,13 @@ if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
         }
       });
 
-      $("#modelo").addEventListener("blur",(e)=>{
+      $("#modelo").addEventListener("blur", (e) => {
         e.preventDefault();
 
         let modelInput = e.target.value
         console.log(modelInput)
         console.log(e.target.dataset.modelo)
-        if(e.target.dataset.modelo !== modelInput){
+        if (e.target.dataset.modelo !== modelInput) {
           lastModel = false;
 
         }
@@ -1798,7 +1853,7 @@ if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
       renderDetbudgets(dataStorage);
       getBudgetsData();
 
-      if(sessionStorage.getItem("isRecovered") == "false"){
+      if (sessionStorage.getItem("isRecovered") == "false" || sessionStorage.getItem("isRecovered") == null) {
         getSerieCode();
       }
 
@@ -1817,7 +1872,7 @@ if(!isset($_SESSION["status"]) || !$_SESSION["status"]){
         $("#add").disabled = false;
       }
 
-      window.addEventListener("beforeunload",(e)=>{
+      window.addEventListener("beforeunload", (e) => {
 
         e.preventDefault();
         e.returnValue = "¿Estás seguro de que quieres salir?";
