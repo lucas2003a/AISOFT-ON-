@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 30-06-2024 a las 11:02:56
+-- Tiempo de generación: 01-07-2024 a las 09:19:21
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -1580,6 +1580,14 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_onlyLots_sep` (IN `_idproy
         ORDER BY act.sublote;
 END$$
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_permissions` (IN `_idrol` INT)   BEGIN
+    SELECT
+        idpermiso, 
+        modulo AS permiso
+        FROM permisos
+        WHERE idrol = _idrol;
+END$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_list_person` ()   BEGIN
 	SELECT
 		pers.idpersona,
@@ -2545,7 +2553,7 @@ INSERT INTO `activos` (`idactivo`, `idproyecto`, `tipo_activo`, `imagen`, `estad
 (5, 5, 'CASA', '61307ab9cb5e52725e2f126ad3021c06ab1dc0e4jpg', 'SIN VENDER', 5, 'av san juan', 'SOL', 50.00, NULL, NULL, 10, 'partida nro 4', 'null', 'null', '{\"clave\":[\"\"],\"valor\":[\"\"]}', '{\"clave\" :[], \"valor\":[]}', 12, 'TERCEROS', 50000.00, 464.40, 50464.40, '2024-06-19', '2024-06-29', NULL, 1),
 (6, 4, 'LOTE', '098bbe58ee841ed912574df7176763b6a52861f9jpg', 'VENDIDO', 1, 'san juan', 'USD', 60.00, NULL, NULL, 50, 'partida nro 345', NULL, NULL, '{\"clave\":[\"\"],\"valor\":[\"\"]}', '{\"clave\" :[], \"valor\":[]}', NULL, 'A.I.F', 5000.00, NULL, 5000.00, '2024-06-28', '2024-06-28', NULL, 1),
 (7, 5, 'LOTE', '83284b48e3fe4b4eef323f8e48b6a29fcebdc973jpg', 'SIN VENDER', 6, 'san juan', 'SOL', 50.00, NULL, NULL, 10, 'PARTIDA NR 4', NULL, NULL, '{\"clave\":[\"\"],\"valor\":[\"\"]}', '{\"clave\" :[], \"valor\":[]}', NULL, 'A.I.F', 50000.00, NULL, 50000.00, '2024-06-29', '2024-06-29', NULL, 1),
-(8, 4, 'CASA', 'c918919cc90340a8a36c984b57317150bf32a15djpg', 'SIN VENDER', 5, '123', 'SOL', 15.00, 56.00, 58.00, 15, '12', NULL, NULL, '{\"clave\":[\"\"],\"valor\":[\"\"]}', '{\"clave\" :[], \"valor\":[]}', NULL, 'A.I.F', 50000.00, NULL, 50000.00, '2024-06-29', NULL, NULL, 1),
+(8, 4, 'CASA', 'c918919cc90340a8a36c984b57317150bf32a15djpg', 'SIN VENDER', 5, '123', 'SOL', 15.00, 56.00, 58.00, 15, '12', NULL, NULL, '{\"clave\":[\"\"],\"valor\":[\"\"]}', '{\"clave\" :[], \"valor\":[]}', 15, 'A.I.F', 50000.00, NULL, 50000.00, '2024-06-29', '2024-06-30', NULL, 1),
 (9, 4, 'CASA', '5ab0565621442cfb2a1b9fff4068eba95ea5f0d6jpg', 'SIN VENDER', 6, '123', 'SOL', 15.00, 50.00, 50.00, 15, '23', NULL, NULL, '{\"clave\":[\"\"],\"valor\":[\"\"]}', '{\"clave\" :[], \"valor\":[]}', NULL, 'A.I.F', 50000.00, NULL, 50000.00, '2024-06-29', NULL, NULL, 1),
 (10, 3, 'CASA', '093f99213c756bc9319fe257f1c4d83f45681745jpg', 'SIN VENDER', 1, '123', 'SOL', 12.00, 50.00, 50.00, 12, '12', NULL, NULL, '{\"clave\":[\"\"],\"valor\":[\"\"]}', '{\"clave\" :[], \"valor\":[]}', NULL, 'A.I.F', 50000.00, NULL, 50000.00, '2024-06-29', NULL, NULL, 1),
 (11, 3, 'CASA', 'f033614371185e66c15df0b2fa8d6dec5bfe403bjpg', 'SIN VENDER', 2, '123', 'SOL', 14.00, 12.00, 12.00, 14, '56', NULL, NULL, '{\"clave\":[\"\"],\"valor\":[\"\"]}', '{\"clave\" :[], \"valor\":[]}', NULL, 'A.I.F', 40000.00, NULL, 40000.00, '2024-06-29', NULL, NULL, 1),
@@ -2729,7 +2737,7 @@ CREATE TABLE `configuraciones` (
 
 INSERT INTO `configuraciones` (`idconfiguracion`, `clave`, `valor`, `create_at`, `update_at`) VALUES
 (1, 'contrasenia', 'peru2024', '2024-06-18 20:00:47', NULL),
-(8, 'serie-presupuesto', '5', '2024-06-19 15:51:10', '2024-06-29 00:00:00'),
+(8, 'serie-presupuesto', '6', '2024-06-19 15:51:10', '2024-06-30 00:00:00'),
 (9, 'serie-separacion', '7', '2024-06-20 08:13:59', '2024-06-29 00:00:00'),
 (10, 'serie-contrato', '9', '2024-06-20 08:13:59', '2024-06-28 00:00:00'),
 (11, 'serie-devolucion', '1', '2024-06-29 13:31:51', NULL);
@@ -3082,7 +3090,8 @@ INSERT INTO `detalle_costos` (`iddetalle_costo`, `idpresupuesto`, `idsubcategori
 (3, 12, 2, 13, 'Acindar // Bolsa de Arena fina // metro lineal', 1, 94.40, '2024-06-19', NULL, NULL, 1),
 (4, 13, 10, NULL, 'TARRAJEO', 1, 350.00, '2024-06-19', NULL, NULL, 1),
 (5, 13, 10, NULL, 'TARRAJEO', 1, 350.00, '2024-06-19', NULL, NULL, 1),
-(6, 14, 8, 1, 'Pavco // Tubo PVC 1\" // unidad', 30, 25.00, '2024-06-29', NULL, NULL, 1);
+(6, 14, 8, 1, 'Pavco // Tubo PVC 1\" // unidad', 30, 25.00, '2024-06-29', NULL, NULL, 1),
+(7, 15, 2, 29, 'Pavco // Registro roscado de 4\" // tonelada métrica', 3, 13.00, '2024-06-30', '2024-06-30', NULL, 1);
 
 -- --------------------------------------------------------
 
@@ -5293,30 +5302,31 @@ CREATE TABLE `permisos` (
 --
 
 INSERT INTO `permisos` (`idpermiso`, `idrol`, `modulo`, `create_at`, `update_at`, `inactive_at`) VALUES
-(1, 1, 'LISTAR-activos', '2024-06-17', NULL, NULL),
-(2, 1, 'EDITAR-CLIENTES', '2024-06-17', NULL, NULL),
-(3, 1, 'CREAR-VENTAS', '2024-06-17', NULL, NULL),
-(4, 1, 'ELIMINAR-PROYECTOS', '2024-06-17', NULL, NULL),
-(5, 2, 'LISTAR-PROYECTOS', '2024-06-17', NULL, NULL),
-(6, 2, 'EDITAR-activos', '2024-06-17', NULL, NULL),
-(7, 2, 'CREAR-CLIENTES', '2024-06-17', NULL, NULL),
-(8, 2, 'ELIMINAR-VENTAS', '2024-06-17', NULL, NULL),
-(9, 3, 'LISTAR-CLIENTES', '2024-06-17', NULL, NULL),
-(10, 3, 'EDITAR-VENTAS', '2024-06-17', NULL, NULL),
-(11, 3, 'CREAR-activos', '2024-06-17', NULL, NULL),
-(12, 3, 'ELIMINAR-PROYECTOS', '2024-06-17', NULL, NULL),
-(13, 4, 'LISTAR-VENTAS', '2024-06-17', NULL, NULL),
-(14, 4, 'EDITAR-PROYECTOS', '2024-06-17', NULL, NULL),
-(15, 4, 'CREAR-CLIENTES', '2024-06-17', NULL, NULL),
-(16, 4, 'ELIMINAR-activos', '2024-06-17', NULL, NULL),
-(17, 5, 'LISTAR-PROYECTOS', '2024-06-17', NULL, NULL),
-(18, 5, 'EDITAR-activos', '2024-06-17', NULL, NULL),
-(19, 5, 'CREAR-VENTAS', '2024-06-17', NULL, NULL),
-(20, 5, 'ELIMINAR-CLIENTES', '2024-06-17', NULL, NULL),
-(21, 6, 'LISTAR-activos', '2024-06-17', NULL, NULL),
-(22, 6, 'EDITAR-CLIENTES', '2024-06-17', NULL, NULL),
-(23, 6, 'CREAR-VENTAS', '2024-06-17', NULL, NULL),
-(24, 6, 'ELIMINAR-PROYECTOS', '2024-06-17', NULL, NULL);
+(1, 1, 'list_asset', '2024-06-17', NULL, NULL),
+(2, 1, 'edit_clients', '2024-06-17', NULL, NULL),
+(3, 1, 'add_contracts', '2024-06-17', NULL, NULL),
+(4, 1, 'delete_projects', '2024-06-17', NULL, NULL),
+(5, 2, 'list_projects', '2024-06-17', NULL, NULL),
+(6, 2, 'edit_assets', '2024-06-17', NULL, NULL),
+(7, 2, 'add_clients', '2024-06-17', NULL, NULL),
+(8, 2, 'add_refund_contracts', '2024-06-17', NULL, NULL),
+(9, 3, 'list_clientss', '2024-06-17', NULL, NULL),
+(10, 3, 'edit_contracts', '2024-06-17', NULL, NULL),
+(11, 3, 'add_assets', '2024-06-17', NULL, NULL),
+(12, 3, 'delete_projects', '2024-06-17', NULL, NULL),
+(13, 4, 'list_contracts', '2024-06-17', NULL, NULL),
+(14, 4, 'edit_projects', '2024-06-17', NULL, NULL),
+(15, 4, 'add_clients', '2024-06-17', NULL, NULL),
+(16, 4, 'delete_assets', '2024-06-17', NULL, NULL),
+(17, 5, 'list_projects', '2024-06-17', NULL, NULL),
+(18, 5, 'edit_assets', '2024-06-17', NULL, NULL),
+(19, 5, 'add_contracts', '2024-06-17', NULL, NULL),
+(20, 5, 'delete_clients', '2024-06-17', NULL, NULL),
+(21, 6, 'list_assets', '2024-06-17', NULL, NULL),
+(22, 6, 'edit_clients', '2024-06-17', NULL, NULL),
+(23, 6, 'add_separations', '2024-06-17', NULL, NULL),
+(24, 6, 'delete_projects', '2024-06-17', NULL, NULL),
+(25, 2, 'dashboard_admin', '2024-06-17', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -5417,7 +5427,8 @@ CREATE TABLE `presupuestos` (
 INSERT INTO `presupuestos` (`idpresupuesto`, `codigo`, `modelo`, `area_construccion`, `create_at`, `update_at`, `inactive_at`, `idusuario`) VALUES
 (12, 'PRES-00001', 'casa propia', 50.00, '2024-06-19', '2024-06-19', NULL, 1),
 (13, 'PRES-00002', 'casa andina', 50.00, '2024-06-19', NULL, NULL, 1),
-(14, 'PRES-00005', 'casa playa', 56.00, '2024-06-29', NULL, NULL, 1);
+(14, 'PRES-00005', 'casa playa', 56.00, '2024-06-29', NULL, NULL, 1),
+(15, 'PRES-00006', 'casa del estado', 60.00, '2024-06-30', NULL, NULL, 1);
 
 -- --------------------------------------------------------
 
@@ -5760,7 +5771,7 @@ INSERT INTO `roles` (`idrol`, `rol`, `estado`, `create_at`, `update_at`, `inacti
 (1, 'REPRESENTANTE DE VENTAS 1', '1', '2024-06-17', NULL, NULL),
 (2, 'REPRESENTANTE DE VENTAS 2', '1', '2024-06-17', NULL, NULL),
 (3, 'ADMINISTRADOR PRINCIPAL', '1', '2024-06-17', NULL, NULL),
-(4, 'ADMINISTRADOR AASISTENTE', '1', '2024-06-17', NULL, NULL),
+(4, 'ADMINISTRADOR ASISTENTE', '1', '2024-06-17', NULL, NULL),
 (5, 'ADMINISTRADOR SECUNDARIO', '1', '2024-06-17', NULL, NULL),
 (6, 'VENDEDOR', '1', '2024-06-17', NULL, NULL);
 
@@ -6771,7 +6782,7 @@ ALTER TABLE `detalles_contratos`
 -- AUTO_INCREMENT de la tabla `detalle_costos`
 --
 ALTER TABLE `detalle_costos`
-  MODIFY `iddetalle_costo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `iddetalle_costo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT de la tabla `detalle_cuotas`
@@ -6813,7 +6824,7 @@ ALTER TABLE `metricas`
 -- AUTO_INCREMENT de la tabla `permisos`
 --
 ALTER TABLE `permisos`
-  MODIFY `idpermiso` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+  MODIFY `idpermiso` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 
 --
 -- AUTO_INCREMENT de la tabla `personas`

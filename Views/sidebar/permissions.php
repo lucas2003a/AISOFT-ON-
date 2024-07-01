@@ -1,30 +1,36 @@
 <?php
 
-session_start();
+class PermissionsView {
 
-/**
- * * Verfica los permisos en la url
- */
-
-function checkPermissionsURL() {
-
-    $permissions = $_SESSION["permissions"];
+    /**
+     * * Verfica los permisos en la url
+     */
     
-    $currentURL = $_SERVER["REQUEST_URI"];
-    $urlArray = explode("/",$currentURL);
-    $currentPage = $urlArray[count($urlArray)-1];
+    function checkPermissionsURL() {
     
-    $isValid = false;
-    
-    foreach ($permissions as $permission) {
+        $permissions = $_SESSION["permissions"];
         
-        if(stripos($currentPage,$permission)){
-            $isValid = true;
-            break;
-        }else{
-            $isValid = false;
+        $currentURL = $_SERVER["REQUEST_URI"];
+        $urlArray = explode("/",$currentURL);
+        $currentPage = $urlArray[count($urlArray)-1];
+        
+        
+        foreach ($permissions as $permission) {
+            
+            echo "pagina: {$currentPage}<br>";
+            echo "permiso: {$permission["permiso"]}<br>";
+
+            if(stripos($currentPage,$permission["permiso"]) !== false){
+                return true;
+                break;
+            }else{
+                return false;
+            }
+
+            
         }
-    }
+
+}
 }
 
 ?>
