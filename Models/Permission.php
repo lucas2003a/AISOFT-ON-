@@ -24,5 +24,22 @@ class Permission extends Conection{
         }
 
     }
+
+    /**
+     * * Obtiene la ruta del dashboard correspondiente segun el rol del usuario
+     */
+    public function getDashboardByRol($rol = "") {
+
+        switch($rol){
+            case "ADMINISTRADOR PRINCIPAL": 
+                return "dashboard_admin/dashboard_admin.php";
+                break; 
+                
+            default:
+                return "dashboard_user/dashboard_user.php";
+                break;
+            
+        }
+    }
 }
 ?>

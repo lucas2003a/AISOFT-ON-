@@ -41,14 +41,17 @@ if(isset($_POST["action"])){
                 $_SESSION["direccion"] = $data["direccion"];
 
                 if(password_verify($_POST["contrasenia"],$passwordEncript)){
-                    
+                    $home = $permission->getDashboardByRol($data["rol"]);
+
                     $_SESSION["status"] = true;
+                    $_SESSION["home"] = $home;
                     $status["status"] = true;
                     $status["rol"] = $data["rol"];
                     $status["message"] = "Usuario logueado correctamente";
 
                     $status["data"] = $data;
                     $status["permissions"] = $permissions;
+                    $status["home"] = $home;
 
                     
                         

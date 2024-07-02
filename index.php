@@ -1,8 +1,17 @@
 <?php
 
+require_once "./Models/User.php";
+
 if(isset($_SESSION["status"]) && $_SESSION["status"]){
 
-  header("Location: Views/sidebar/sidebar_options.php");
+  $useracces = new Permission();
+  
+  $home = $useracces->getDashboardByRol($_SESSION["rol"]); 
+
+  echo "{$home}";
+
+  header("Location: Views/{$home}");
+
 }
 ?>
 
@@ -197,12 +206,12 @@ if(isset($_SESSION["status"]) && $_SESSION["status"]){
 
           }else{
 
-            console.log(result)
+            console.log(result);
             sAlert.sweetSuccess("Éxito","Acceso correcto");
 
             setTimeout(() => {
               
-              window.location.href = "./Views/sidebar/sidebar_options.php";
+              window.location.href = `./Views/${result.home}`;
             },1500);
           }
 
