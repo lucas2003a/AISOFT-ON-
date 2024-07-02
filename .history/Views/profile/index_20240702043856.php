@@ -1,4 +1,4 @@
-<?php require_once "../sidebar/permissions.php";?>
+<?php include "../sidebar/permissions.php";?>
 <!DOCTYPE html>
 <html lang="es">
 
@@ -43,11 +43,11 @@
     <div class="collapse navbar-collapse  w-auto " id="sidenav-collapse-main">
       <ul class="navbar-nav">
 
-      <?php require_once "../sidebar/sidebar_options.php"; ?>
+      <?php include "../sidebar/sidebar_options.php"; ?>
 
         <!-- CERRAR SESIÓN -->
         <li class="nav-item">
-          <a class="nav-link  " href="../Views/sign-in.html">
+          <a class="nav-link  " href="../../Controllers/user.controller.php?action=destroy">
             <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
               <svg width="12px" height="12px" viewBox="0 0 40 44" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <title>document</title>
