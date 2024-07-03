@@ -1,0 +1,25 @@
+# STAKEHOLDERS
+
+>**IDROL** -> **ROL**
+>>1 -> GERENTE GENERAL
+>>2 -> ASISTENTE TESORERIA
+>>3 -> ADMINISTRADOR
+>>4 -> TESORERO
+>>5 -> ASESOR DE VENTAS
+>>6 -> VENDEDOR
+>>7 -> PRACTICANTE
+>>8 -> TRAMITES Y DESEMBOLSOS
+
+## PERMISOS
+
+>**IDROL** -> **MODULO**
+>>1 -> assets/delete_asset
+>>1 -> assets/detail_asset
+>>1 -> assets/edit_asset
+>>1 -> assets/edit_asset
+>>1 -> assets/index
+>>1 -> budgets/add_budget
+>>1 -> budgets/edit_budget
+>>1 -> budgets/delet_budget
+>>1 -> budgets/index_budget
+\n 

@@ -1,0 +1,156 @@
+# STAKEHOLDERS
+
+>**IDROL** -> **ROL**
+>>1 -> GERENTE GENERAL
+>>2 -> ASISTENTE TESORERIA
+>>3 -> ADMINISTRADOR
+>>4 -> TESORERO
+>>5 -> ASESOR DE VENTAS
+>>6 -> VENDEDOR
+>>7 -> PRACTICANTE
+>>8 -> TRAMITES Y DESEMBOLSOS
+
+## PERMISOS
+
+>**IDROL** -> **MODULO**
+>>*GERENTE GENERAL*
+>>>1 -> assets/delete_asset
+>>>1 -> assets/detail_asset
+>>>1 -> assets/edit_asset
+>>>1 -> assets/add_asset
+>>>1 -> assets/index
+>>>1 -> budgets/add_budget
+>>>1 -> budgets/edit_budget
+>>>1 -> budgets/delete_budget
+>>>1 -> budgets/index
+>>>1 -> clients/add_client
+>>>1 -> clients/delete_client
+>>>1 -> clients/edit_client
+>>>1 -> clients/index
+>>>1 -> contracts/add_contract_separation
+>>>1 -> contracts/add_contract
+>>>1 -> contracts/detail_contract
+>>>1 -> contracts/edit_contract
+>>>1 -> contracts/index
+>>>1 -> dashboard_admin/dashboard_admin
+>>>1 -> monitoring/index
+>>>1 -> profile/index
+>>>1 -> projects/list_clients
+>>>1 -> projects/add_project
+>>>1 -> projects/delete_project
+>>>1 -> projects/edit_project
+>>>1 -> projects/index
+>>>1 -> quotas/add_quotas_credit
+>>>1 -> quotas/detail_quotas
+>>>1 -> quotas/index
+>>>1 -> quotas/pay_quota_cont
+>>>1 -> quotas/pay_quota
+>>>1 -> quotas/reprogram_quotas
+>>>1 -> refunds/add_refund_contract
+>>>1 -> refunds/add_refund
+>>>1 -> refunds/edit_refund
+>>>1 -> refunds/index
+>>>1 -> separations/add_separation
+>>>1 -> separations/delete_separation
+>>>1 -> separations/edit_separation
+>>>1 -> separations/index
+>>>1 -> users/add_user
+>>>1 -> users/edit_user
+>>>1 -> users/delete_user
+>>>1 -> users/index_user
+>>>1 -> users/change_password_user
+>>*ADMINISTRADOR*
+>>>3 -> assets/delete_asset
+>>>3 -> assets/detail_asset
+>>>3 -> assets/edit_asset
+>>>3 -> assets/add_asset
+>>>3 -> assets/index
+>>>3 -> budgets/add_budget
+>>>3 -> budgets/edit_budget
+>>>3 -> budgets/delete_budget
+>>>3 -> budgets/index
+>>>3 -> clients/add_client
+>>>3 -> clients/delete_client
+>>>3 -> clients/edit_client
+>>>3 -> clients/index
+>>>3 -> contracts/add_contract_separation
+>>>3 -> contracts/add_contract
+>>>3 -> contracts/detail_contract
+>>>3 -> contracts/edit_contract
+>>>3 -> contracts/index
+>>>3 -> dashboard_admin/dashboard_admin
+>>>3 -> monitoring/index
+>>>3 -> profile/index
+>>>3 -> projects/list_clients
+>>>3 -> projects/add_project
+>>>3 -> projects/delete_project
+>>>3 -> projects/edit_project
+>>>3 -> projects/index
+>>>3 -> quotas/add_quotas_credit
+>>>3 -> quotas/detail_quotas
+>>>3 -> quotas/index
+>>>3 -> quotas/pay_quota_cont
+>>>3 -> quotas/pay_quota
+>>>3 -> quotas/reprogram_quotas
+>>>3 -> refunds/add_refund_contract
+>>>3 -> refunds/add_refund
+>>>3 -> refunds/edit_refund
+>>>3 -> refunds/index
+>>>3 -> separations/add_separation
+>>>3 -> separations/delete_separation
+>>>3 -> separations/edit_separation
+>>>3 -> separations/index
+>>>3 -> users/add_user
+>>>3 -> users/edit_user
+>>>3 -> users/delete_user
+>>>3 -> users/index_user
+>>>3 -> users/change_password_user
+>>*ASISTENTE TESORERIA*
+>>>2 -> assets/detail_asset
+>>>2 -> assets/index
+>>>2 -> budgets/add_budget
+>>>2 -> budgets/index
+>>>2 -> dashboard_user/dashboard_user
+>>>3 -> contracts/index
+>>>2 -> profile/index
+>>>2 -> projects/list_clients
+>>>2 -> projects/index
+>>>2 -> quotas/detail_quotas
+>>>2 -> quotas/index
+>>>2 -> refunds/index
+>>>2 -> separations/index
+>>*TESORERO*
+>>>4 -> assets/detail_asset
+>>>4 -> assets/index
+>>>4 -> budgets/add_budget
+>>>4 -> budgets/edit_budget
+>>>4 -> budgets/delete_budget
+>>>4 -> budgets/index
+>>>4 -> dashboard_user/dashboard_user
+>>>3 -> contracts/index
+>>>4 -> profile/index
+>>>4 -> projects/list_clients
+>>>4 -> projects/index
+>>>4 -> quotas/detail_quotas
+>>>4 -> quotas/index
+>>>4 -> refunds/index
+>>>4 -> separations/index
+>>*ASESOR DE VENTAS*
+>>>2 -> assets/detail_asset
+>>>2 -> assets/index
+>>>2 -> budgets/add_budget
+>>>2 -> budgets/index
+>>>2 -> dashboard_user/dashboard_user
+>>>3 -> clients/add_client
+>>>3 -> clients/delete_client
+>>>3 -> clients/edit_client
+>>>3 -> clients/index
+>>>3 -> contracts/index
+>>>2 -> profile/index
+>>>2 -> projects/list_clients
+>>>2 -> projects/index
+>>>4 -> quotas/detail_quotas
+>>>4 -> quotas/index
+>>>4 -> refunds/index
+>>>4 -> separations/index
+>>*VENDEDOR*

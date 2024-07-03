@@ -1,0 +1,61 @@
+# STAKEHOLDERS
+
+>**IDROL** -> **ROL**
+>>1 -> GERENTE GENERAL
+>>2 -> ASISTENTE TESORERIA
+>>3 -> ADMINISTRADOR
+>>4 -> TESORERO
+>>5 -> ASESOR DE VENTAS
+>>6 -> VENDEDOR
+>>7 -> PRACTICANTE
+>>8 -> TRAMITES Y DESEMBOLSOS
+
+## PERMISOS
+
+>**IDROL** -> **MODULO**
+>>*GERENTE GENERAL*
+>>>1 -> assets/delete_asset
+>>>1 -> assets/detail_asset
+>>>1 -> assets/edit_asset
+>>>1 -> assets/edit_asset
+>>>1 -> assets/index
+>>>1 -> budgets/add_budget
+>>>1 -> budgets/edit_budget
+>>>1 -> budgets/delete_budget
+>>>1 -> budgets/index
+>>>1 -> clients/add_client
+>>>1 -> clients/delete_client
+>>>1 -> clients/edit_client
+>>>1 -> clients/index
+>>>1 -> contracts/add_contract_separation
+>>>1 -> contracts/add_contract
+>>>1 -> contracts/detail_contract
+>>>1 -> contracts/edit_contract
+>>>1 -> contracts/index
+>>>1 -> contracts/index
+>>>1 -> dashboard_admin/dashboard_admin
+>>>1 -> monitoring/index
+>>>1 -> profile/index
+>>>1 -> projects/add_project
+>>>1 -> projects/delete_project
+>>>1 -> projects/edit_project
+>>>1 -> projects/index
+>>>1 -> quotas/add_quotas_credit
+>>>1 -> quotas/detail_quotas
+>>>1 -> quotas/index
+>>>1 -> quotas/pay_quota_cont
+>>>1 -> quotas/pay_quota
+>>>1 -> quotas/reprogram_quotas
+>>>1 -> refunds/add_refund_contract
+>>>1 -> refunds/add_refund
+>>>1 -> refunds/edit_refund
+>>>1 -> refunds/index
+>>>1 -> separations/add_separation
+>>>1 -> separations/delete_separation
+>>>1 -> separations/edit_separation
+>>>1 -> separations/index
+>>>1 -> users/add_user
+>>>1 -> users/edit_user
+>>>1 -> users/delete_user
+>>>1 -> users/delete_user
+\n 

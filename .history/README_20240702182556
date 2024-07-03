@@ -1,0 +1,16 @@
+# STAKEHOLDERS
+
+>idrol -------- rol
+>>1 -> GERENTE GENERAL
+>>2 -> ASISTENTE TESORERIA
+>>3 -> ADMINISTRADOR
+>>4-> TESORERO
+>>5			    asesor de ventas
+>>6 			vendedor
+>>7 			praticante
+>>8 			tramites y desembolsos
+
+## PERMISOS
+
+idrol 	------- modulo
+1		assets/index
