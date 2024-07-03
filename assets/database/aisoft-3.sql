@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 01-07-2024 a las 09:18:14
+-- Tiempo de generación: 03-07-2024 a las 14:29:54
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -460,6 +460,16 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_get_fullUbigeo` (IN `_distrito`
             AND dept.departamento = _departamento;
 END$$
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_get_lots_status` ()   BEGIN
+	
+    SELECT 
+		(SUM(l_vendidos)) as vendidos,
+        (SUM(l_noVendidos)) as no_vendidos,
+        (SUM(l_separados)) as separados
+		FROM metricas
+		WHERE YEAR(update_at) = YEAR(NOW());
+END$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_get_represents` (IN `_idrepresentante` INT)   BEGIN
 	SELECT 
 		rep.idrepresentante,
@@ -506,6 +516,20 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_get_represents_idAdress` (IN `_
         AND rep.inactive_at IS NULL;
 END$$
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_get_sales` ()   BEGIN
+	SELECT 
+		(COUNT(*)) AS cantidad,
+        datos.mes AS mes		
+		FROM (
+			SELECT		
+				MONTH(fecha_contrato) AS mes
+				FROM contratos
+				WHERE estado = "VIGENTE"
+					AND YEAR(fecha_contrato) = YEAR(NOW())
+            )AS datos
+            GROUP BY datos.mes;
+END$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_get_separation_ById` (IN `_idseparacion` INT)   BEGIN
     DECLARE _tpersona VARCHAR(10);
     SET _tpersona = (
@@ -535,6 +559,17 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_get_ubigeo` (IN `_iddistrito` I
         INNER JOIN provincias AS prov ON prov.idprovincia = dist.idprovincia
         INNER JOIN departamentos AS dept ON dept.iddepartamento = prov.iddepartamento
         WHERE dist.iddistrito = _iddistrito;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_grafic_refunds` ()   BEGIN
+	SELECT 
+		(COUNT(*)) AS cantidad,
+        tipo_devolucion,
+        MONTH(create_at) AS mes
+		FROM devoluciones
+        WHERE YEAR(create_at) = YEAR(NOW())
+        GROUP BY tipo_devolucion, MONTH(create_at);
+			
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `spu_inactive_assets` (IN `_idactivo` INT, IN `_idusuario` INT)   BEGIN
@@ -2546,10 +2581,10 @@ CREATE TABLE `activos` (
 --
 
 INSERT INTO `activos` (`idactivo`, `idproyecto`, `tipo_activo`, `imagen`, `estado`, `sublote`, `direccion`, `moneda_venta`, `area_terreno`, `area_construccion`, `area_techada`, `zcomunes_porcent`, `partida_elect`, `latitud`, `longitud`, `perimetro`, `det_casa`, `idpresupuesto`, `propietario_lote`, `precio_lote`, `precio_construccion`, `precio_venta`, `create_at`, `update_at`, `inactive_at`, `idusuario`) VALUES
-(1, 5, 'LOTE', 'cac10d67f7877a2085c6625203e7f62c88538d2ajpg', 'VENDIDO', 1, 'aav san juan', 'SOL', 50.00, NULL, NULL, 50, 'partida electronica nro 4', NULL, NULL, '{\"clave\":[\"\"],\"valor\":[\"\"]}', '{\"clave\" :[], \"valor\":[]}', NULL, 'TERCEROS', 20000.00, NULL, 20000.00, '2024-06-18', '2024-06-27', NULL, 1),
+(1, 5, 'LOTE', 'cac10d67f7877a2085c6625203e7f62c88538d2ajpg', 'SIN VENDER', 1, 'aav san juan', 'SOL', 50.00, NULL, NULL, 50, 'partida electronica nro 4', NULL, NULL, '{\"clave\":[\"\"],\"valor\":[\"\"]}', '{\"clave\" :[], \"valor\":[]}', NULL, 'TERCEROS', 20000.00, NULL, 20000.00, '2024-06-18', '2024-07-03', NULL, 1),
 (2, 5, 'LOTE', '1aa4959315c6c15dcf073415f5f5a93f7df4d7cajpg', 'VENDIDO', 2, 'aav san juan tijuana', 'SOL', 60.00, 0.00, 0.00, 30, 'partida nro 5', NULL, NULL, '{\"clave\":[\"\"],\"valor\":[\"\"]}', '{\"clave\" :[], \"valor\":[]}', NULL, 'A.I.F', 25000.00, NULL, 25000.00, '2024-06-18', '2024-06-28', NULL, 1),
 (3, 5, 'CASA', '61307ab9cb5e52725e2f126ad3021c06ab1dc0e4jpg', 'VENDIDO', 3, 'av san juan', 'SOL', 50.00, 50.00, 50.00, 10, 'partida nro 4', NULL, NULL, '{\"clave\":[\"\"],\"valor\":[\"\"]}', '{\"clave\" :[], \"valor\":[]}', 14, 'TERCEROS', 50000.00, NULL, 50000.00, '2024-06-19', '2024-06-29', NULL, 1),
-(4, 5, 'CASA', '61307ab9cb5e52725e2f126ad3021c06ab1dc0e4jpg', 'VENDIDO', 4, 'av san juan', 'SOL', 50.00, NULL, NULL, 10, 'partida nro 4', 'null', 'null', '{\"clave\":[\"\"],\"valor\":[\"\"]}', '{\"clave\" :[], \"valor\":[]}', 13, 'TERCEROS', 50000.00, 700.00, 50700.00, '2024-06-19', '2024-06-28', NULL, 1),
+(4, 5, 'CASA', '61307ab9cb5e52725e2f126ad3021c06ab1dc0e4jpg', 'SIN VENDER', 4, 'av san juan', 'SOL', 50.00, NULL, NULL, 10, 'partida nro 4', 'null', 'null', '{\"clave\":[\"\"],\"valor\":[\"\"]}', '{\"clave\" :[], \"valor\":[]}', 13, 'TERCEROS', 50000.00, 700.00, 50700.00, '2024-06-19', '2024-07-03', NULL, 1),
 (5, 5, 'CASA', '61307ab9cb5e52725e2f126ad3021c06ab1dc0e4jpg', 'SIN VENDER', 5, 'av san juan', 'SOL', 50.00, NULL, NULL, 10, 'partida nro 4', 'null', 'null', '{\"clave\":[\"\"],\"valor\":[\"\"]}', '{\"clave\" :[], \"valor\":[]}', 12, 'TERCEROS', 50000.00, 464.40, 50464.40, '2024-06-19', '2024-06-29', NULL, 1),
 (6, 4, 'LOTE', '098bbe58ee841ed912574df7176763b6a52861f9jpg', 'VENDIDO', 1, 'san juan', 'USD', 60.00, NULL, NULL, 50, 'partida nro 345', NULL, NULL, '{\"clave\":[\"\"],\"valor\":[\"\"]}', '{\"clave\" :[], \"valor\":[]}', NULL, 'A.I.F', 5000.00, NULL, 5000.00, '2024-06-28', '2024-06-28', NULL, 1),
 (7, 5, 'LOTE', '83284b48e3fe4b4eef323f8e48b6a29fcebdc973jpg', 'SIN VENDER', 6, 'san juan', 'SOL', 50.00, NULL, NULL, 10, 'PARTIDA NR 4', NULL, NULL, '{\"clave\":[\"\"],\"valor\":[\"\"]}', '{\"clave\" :[], \"valor\":[]}', NULL, 'A.I.F', 50000.00, NULL, 50000.00, '2024-06-29', '2024-06-29', NULL, 1),
@@ -2740,7 +2775,7 @@ INSERT INTO `configuraciones` (`idconfiguracion`, `clave`, `valor`, `create_at`,
 (8, 'serie-presupuesto', '6', '2024-06-19 15:51:10', '2024-06-30 00:00:00'),
 (9, 'serie-separacion', '7', '2024-06-20 08:13:59', '2024-06-29 00:00:00'),
 (10, 'serie-contrato', '9', '2024-06-20 08:13:59', '2024-06-28 00:00:00'),
-(11, 'serie-devolucion', '1', '2024-06-29 13:31:51', NULL);
+(11, 'serie-devolucion', '3', '2024-06-29 13:31:51', '2024-07-03 00:00:00');
 
 -- --------------------------------------------------------
 
@@ -2802,10 +2837,10 @@ CREATE TABLE `contratos` (
 --
 
 INSERT INTO `contratos` (`idcontrato`, `n_expediente`, `tipo_contrato`, `idseparacion`, `idrepresentante_primario`, `idrepresentante_secundario`, `idcliente`, `idconyugue`, `idactivo`, `tipo_cambio`, `estado`, `fecha_contrato`, `precio_venta`, `moneda_venta`, `inicial`, `det_contrato`, `archivo`, `create_at`, `update_at`, `inactive_at`, `idusuario`) VALUES
-(1, 'CONT-00004', 'VENTA DE LOTE', 1, 1, NULL, 1, NULL, NULL, 3.870, 'VIGENTE', '2024-06-27', 20000.00, 'SOL', 500.00, '{\"clave\":[\"1\"],\"valor\":[\"1\"]}', '9590e2cb47dcd69d6d8cf1f80df2899714b1535f.pdf', '2024-06-27', NULL, NULL, 1),
+(1, 'CONT-00004', 'VENTA DE LOTE', 1, 1, NULL, 1, NULL, NULL, 3.870, 'INACTIVO', '2024-06-27', 20000.00, 'SOL', 500.00, '{\"clave\":[\"1\"],\"valor\":[\"1\"]}', '9590e2cb47dcd69d6d8cf1f80df2899714b1535f.pdf', '2024-06-27', NULL, '2024-07-03', 1),
 (2, 'CONT-00005', 'VENTA DE LOTE', 2, 1, NULL, 1, NULL, NULL, 3.800, 'VIGENTE', '2024-06-28', 25000.00, 'SOL', 500.00, '{\"clave\":[\"1\"],\"valor\":[\"2\"]}', '00a925ae7a499407ce38a08e8fb00dbec84f3ee9.pdf', '2024-06-28', NULL, NULL, 1),
 (3, 'CONT-00006', 'VENTA DE CASA', NULL, 1, NULL, 1, NULL, 3, 3.500, 'VIGENTE', '2024-06-28', 50000.00, 'SOL', 500.00, '{\"clave\":[\"1\"],\"valor\":[\"1\"]}', '4aae50989f4a013eb07e774bb3665ec74015d86f.pdf', '2024-06-28', NULL, NULL, 1),
-(4, 'CONT-00007', 'VENTA DE CASA', NULL, 1, NULL, 1, NULL, 4, 3.900, 'VIGENTE', '2024-06-28', 50700.00, 'SOL', 600.00, '{\"clave\":[\"1\"],\"valor\":[\"1\"]}', '4ffd99ced216ab0e5faf44b57f2e35757a9192ec.pdf', '2024-06-28', NULL, NULL, 1),
+(4, 'CONT-00007', 'VENTA DE CASA', NULL, 1, NULL, 1, NULL, 4, 3.900, 'INACTIVO', '2024-06-28', 50700.00, 'SOL', 600.00, '{\"clave\":[\"1\"],\"valor\":[\"1\"]}', '4ffd99ced216ab0e5faf44b57f2e35757a9192ec.pdf', '2024-06-28', NULL, '2024-07-03', 1),
 (5, 'CONT-00008', 'VENTA DE LOTE', 3, 1, NULL, 6, NULL, NULL, 3.830, 'VIGENTE', '2024-06-28', 5000.00, 'USD', 590.00, '{\"clave\":[\"fecha de vencimiento\",\"tramites legales\",\"cmpromiso de pago\"],\"valor\":[\"el contrato vende dentro de 3 años\",\"se hicieron varios tramites\",\"el cliente se compromete a pagar\"]}', 'f177fa693ccfcbe7d206af5bac84ca3079aeb795.pdf', '2024-06-28', '2024-06-29', NULL, 1),
 (6, 'CONT-00009', 'VENTA DE CASA', NULL, 1, NULL, 1, NULL, 5, 3.500, 'INACTIVO', '2024-06-28', 50464.40, 'SOL', 600.00, '{\"clave\":[\"1\"],\"valor\":[\"1\"]}', 'df0065c11ffa9ab5c58581f941cb3e473e3f6b96.pdf', '2024-06-28', NULL, '2024-06-29', 1);
 
@@ -3158,7 +3193,9 @@ CREATE TABLE `devoluciones` (
 
 INSERT INTO `devoluciones` (`iddevolucion`, `n_expediente`, `tipo_devolucion`, `idseparacion`, `idcontrato`, `detalle`, `porcentaje_penalidad`, `monto_devolucion`, `modalidad_pago`, `tipo_cambio`, `entidad_bancaria`, `nro_operacion`, `imagen`, `create_at`, `update_at`, `inactive_at`, `idusuario`) VALUES
 (1, 'DEVC-00004', 'POR CONTRATO', NULL, 6, 'DESISTIÓ DE LA COMPRA', 20, 40371.52, 'EFECTIVO', 3.7500, NULL, NULL, '322079bee345b6bb90dd78891210a3081143dcde.jpg', '2024-06-29', NULL, NULL, 1),
-(2, 'DEVC-00001', 'POR SEPARACIÓN', 4, NULL, 'EL CLIENTE DESISTIÓ DE LA SEPARACIÓN POR NO HABER DINERO', 20, 480.00, 'TRANSFERENCIA', 3.7500, 'INTERBANCK', '0000000956', '2792816130b89e3c6773a9c58d96e58688a148af.jpg', '2024-06-29', '2024-06-29', NULL, 1);
+(2, 'DEVC-00001', 'POR SEPARACIÓN', 4, NULL, 'EL CLIENTE DESISTIÓ DE LA SEPARACIÓN POR NO HABER DINERO', 20, 480.00, 'TRANSFERENCIA', 3.7500, 'INTERBANCK', '0000000956', '2792816130b89e3c6773a9c58d96e58688a148af.jpg', '2024-06-29', '2024-06-29', NULL, 1),
+(3, 'DEVC-00002', 'POR CONTRATO', NULL, 4, 'detalle', 15, 43095.00, 'TRANSFERENCIA', 3.8300, 'BCP', '0000000789', '2c36cd33861b6abd0b0b935cd9f8fcbc5a019bab.jpg', '2024-07-03', NULL, NULL, 1),
+(4, 'DEVC-00003', 'POR CONTRATO', NULL, 1, 'dalle', 15, 17000.00, 'TRANSFERENCIA', 3.8300, 'INTERBANCK', '0000000458', '3e954ccd61be12b8c1fc88057e4957847fd141d8.jpg', '2024-07-03', NULL, NULL, 1);
 
 --
 -- Disparadores `devoluciones`
@@ -5280,7 +5317,7 @@ INSERT INTO `metricas` (`idmetrica`, `idproyecto`, `l_vendidos`, `l_noVendidos`,
 (2, 2, 0, 2, 0, '2024-06-29 23:21:13'),
 (3, 3, 0, 2, 0, '2024-06-29 23:17:53'),
 (4, 4, 1, 2, 0, '2024-06-29 23:16:12'),
-(5, 5, 4, 2, 0, '2024-06-29 13:31:51');
+(5, 5, 2, 4, 0, '2024-07-03 05:40:42');
 
 -- --------------------------------------------------------
 
@@ -5302,31 +5339,228 @@ CREATE TABLE `permisos` (
 --
 
 INSERT INTO `permisos` (`idpermiso`, `idrol`, `modulo`, `create_at`, `update_at`, `inactive_at`) VALUES
-(1, 1, 'list_asset', '2024-06-17', NULL, NULL),
-(2, 1, 'edit_clients', '2024-06-17', NULL, NULL),
-(3, 1, 'add_contracts', '2024-06-17', NULL, NULL),
-(4, 1, 'delete_projects', '2024-06-17', NULL, NULL),
-(5, 2, 'list_projects', '2024-06-17', NULL, NULL),
-(6, 2, 'edit_assets', '2024-06-17', NULL, NULL),
-(7, 2, 'add_clients', '2024-06-17', NULL, NULL),
-(8, 2, 'add_refund_contracts', '2024-06-17', NULL, NULL),
-(9, 3, 'list_clientss', '2024-06-17', NULL, NULL),
-(10, 3, 'edit_contracts', '2024-06-17', NULL, NULL),
-(11, 3, 'add_assets', '2024-06-17', NULL, NULL),
-(12, 3, 'delete_projects', '2024-06-17', NULL, NULL),
-(13, 4, 'list_contracts', '2024-06-17', NULL, NULL),
-(14, 4, 'edit_projects', '2024-06-17', NULL, NULL),
-(15, 4, 'add_clients', '2024-06-17', NULL, NULL),
-(16, 4, 'delete_assets', '2024-06-17', NULL, NULL),
-(17, 5, 'list_projects', '2024-06-17', NULL, NULL),
-(18, 5, 'edit_assets', '2024-06-17', NULL, NULL),
-(19, 5, 'add_contracts', '2024-06-17', NULL, NULL),
-(20, 5, 'delete_clients', '2024-06-17', NULL, NULL),
-(21, 6, 'list_assets', '2024-06-17', NULL, NULL),
-(22, 6, 'edit_clients', '2024-06-17', NULL, NULL),
-(23, 6, 'add_separations', '2024-06-17', NULL, NULL),
-(24, 6, 'delete_projects', '2024-06-17', NULL, NULL),
-(25, 2, 'dashboard_admin', '2024-06-17', NULL, NULL);
+(1, 1, 'assets/index', '2024-06-17', NULL, NULL),
+(2, 1, 'clients/edit_client', '2024-06-17', NULL, NULL),
+(3, 1, 'contracts/add_contracts', '2024-06-17', NULL, NULL),
+(4, 1, 'projects/delete_projects', '2024-06-17', NULL, NULL),
+(5, 2, 'projects/index', '2024-06-17', NULL, NULL),
+(6, 2, 'assets/edit_assets', '2024-06-17', NULL, NULL),
+(7, 2, 'clients/add_client', '2024-06-17', NULL, NULL),
+(8, 2, 'contracts/add_refund_contracts', '2024-06-17', NULL, NULL),
+(9, 3, 'clients/index', '2024-06-17', NULL, NULL),
+(10, 3, 'contracts/edit_contracts', '2024-06-17', NULL, NULL),
+(11, 3, 'assets/add_assets', '2024-06-17', NULL, NULL),
+(12, 3, 'projects/delete_projects', '2024-06-17', NULL, NULL),
+(13, 4, 'contracts/index', '2024-06-17', NULL, NULL),
+(14, 4, 'projects/edit_projects', '2024-06-17', NULL, NULL),
+(15, 4, 'clients/add_client', '2024-06-17', NULL, NULL),
+(16, 4, 'assets/delete_assets', '2024-06-17', NULL, NULL),
+(17, 5, 'projects/index', '2024-06-17', NULL, NULL),
+(18, 5, 'assets/edit_assets', '2024-06-17', NULL, NULL),
+(19, 5, 'contracts/add_contracts', '2024-06-17', NULL, NULL),
+(20, 5, 'clients/delete_client', '2024-06-17', NULL, NULL),
+(21, 6, 'assets/index', '2024-06-17', NULL, NULL),
+(22, 6, 'clients/edit_client', '2024-06-17', NULL, NULL),
+(23, 6, 'separations/add_separations', '2024-06-17', NULL, NULL),
+(24, 6, 'projects/delete_projects', '2024-06-17', NULL, NULL),
+(25, 2, 'dashboard_user/dashboard_user', '2024-06-17', NULL, NULL),
+(26, 1, 'assets/delete_asset', '2024-07-02', NULL, NULL),
+(27, 1, 'assets/detail_asset', '2024-07-02', NULL, NULL),
+(28, 1, 'assets/edit_asset', '2024-07-02', NULL, NULL),
+(29, 1, 'assets/add_asset', '2024-07-02', NULL, NULL),
+(30, 1, 'assets/index', '2024-07-02', NULL, NULL),
+(31, 1, 'budgets/add_budget', '2024-07-02', NULL, NULL),
+(32, 1, 'budgets/edit_budget', '2024-07-02', NULL, NULL),
+(33, 1, 'budgets/delete_budget', '2024-07-02', NULL, NULL),
+(34, 1, 'budgets/index', '2024-07-02', NULL, NULL),
+(35, 1, 'clients/add_client', '2024-07-02', NULL, NULL),
+(36, 1, 'clients/delete_client', '2024-07-02', NULL, NULL),
+(37, 1, 'clients/edit_client', '2024-07-02', NULL, NULL),
+(38, 1, 'clients/index', '2024-07-02', NULL, NULL),
+(39, 1, 'contracts/add_contract_separation', '2024-07-02', NULL, NULL),
+(40, 1, 'contracts/add_contract', '2024-07-02', NULL, NULL),
+(41, 1, 'contracts/detail_contract', '2024-07-02', NULL, NULL),
+(42, 1, 'contracts/edit_contract', '2024-07-02', NULL, NULL),
+(43, 1, 'contracts/index', '2024-07-02', NULL, NULL),
+(44, 1, 'dashboard_admin/dashboard_admin', '2024-07-02', NULL, NULL),
+(45, 1, 'monitoring/index', '2024-07-02', NULL, NULL),
+(46, 1, 'profile/index', '2024-07-02', NULL, NULL),
+(47, 1, 'projects/list_clients', '2024-07-02', NULL, NULL),
+(48, 1, 'projects/add_project', '2024-07-02', NULL, NULL),
+(49, 1, 'projects/delete_project', '2024-07-02', NULL, NULL),
+(50, 1, 'projects/edit_project', '2024-07-02', NULL, NULL),
+(51, 1, 'projects/index', '2024-07-02', NULL, NULL),
+(52, 1, 'quotas/add_quotas_credit', '2024-07-02', NULL, NULL),
+(53, 1, 'quotas/detail_quotas', '2024-07-02', NULL, NULL),
+(54, 1, 'quotas/index', '2024-07-02', NULL, NULL),
+(55, 1, 'quotas/pay_quota_cont', '2024-07-02', NULL, NULL),
+(56, 1, 'quotas/pay_quota', '2024-07-02', NULL, NULL),
+(57, 1, 'quotas/reprogram_quotas', '2024-07-02', NULL, NULL),
+(58, 1, 'refunds/add_refund_contract', '2024-07-02', NULL, NULL),
+(59, 1, 'refunds/add_refund', '2024-07-02', NULL, NULL),
+(60, 1, 'refunds/edit_refund', '2024-07-02', NULL, NULL),
+(61, 1, 'refunds/index', '2024-07-02', NULL, NULL),
+(62, 1, 'separations/add_separation', '2024-07-02', NULL, NULL),
+(63, 1, 'separations/delete_separation', '2024-07-02', NULL, NULL),
+(64, 1, 'separations/edit_separation', '2024-07-02', NULL, NULL),
+(65, 1, 'separations/index', '2024-07-02', NULL, NULL),
+(66, 1, 'users/add_user', '2024-07-02', NULL, NULL),
+(67, 1, 'users/edit_user', '2024-07-02', NULL, NULL),
+(68, 1, 'users/delete_user', '2024-07-02', NULL, NULL),
+(69, 1, 'users/index', '2024-07-02', NULL, NULL),
+(70, 1, 'users/change_password_user', '2024-07-02', NULL, NULL),
+(71, 3, 'assets/delete_asset', '2024-07-02', NULL, NULL),
+(72, 3, 'assets/detail_asset', '2024-07-02', NULL, NULL),
+(73, 3, 'assets/edit_asset', '2024-07-02', NULL, NULL),
+(74, 3, 'assets/add_asset', '2024-07-02', NULL, NULL),
+(75, 3, 'assets/index', '2024-07-02', NULL, NULL),
+(76, 3, 'budgets/add_budget', '2024-07-02', NULL, NULL),
+(77, 3, 'budgets/edit_budget', '2024-07-02', NULL, NULL),
+(78, 3, 'budgets/delete_budget', '2024-07-02', NULL, NULL),
+(79, 3, 'budgets/index', '2024-07-02', NULL, NULL),
+(80, 3, 'clients/add_client', '2024-07-02', NULL, NULL),
+(81, 3, 'clients/delete_client', '2024-07-02', NULL, NULL),
+(82, 3, 'clients/edit_client', '2024-07-02', NULL, NULL),
+(83, 3, 'clients/index', '2024-07-02', NULL, NULL),
+(84, 3, 'contracts/add_contract_separation', '2024-07-02', NULL, NULL),
+(85, 3, 'contracts/add_contract', '2024-07-02', NULL, NULL),
+(86, 3, 'contracts/detail_contract', '2024-07-02', NULL, NULL),
+(87, 3, 'contracts/edit_contract', '2024-07-02', NULL, NULL),
+(88, 3, 'contracts/index', '2024-07-02', NULL, NULL),
+(89, 3, 'dashboard_admin/dashboard_admin', '2024-07-02', NULL, NULL),
+(90, 3, 'monitoring/index', '2024-07-02', NULL, NULL),
+(91, 3, 'profile/index', '2024-07-02', NULL, NULL),
+(92, 3, 'projects/list_clients', '2024-07-02', NULL, NULL),
+(93, 3, 'projects/add_project', '2024-07-02', NULL, NULL),
+(94, 3, 'projects/delete_project', '2024-07-02', NULL, NULL),
+(95, 3, 'projects/edit_project', '2024-07-02', NULL, NULL),
+(96, 3, 'projects/index', '2024-07-02', NULL, NULL),
+(97, 3, 'quotas/add_quotas_credit', '2024-07-02', NULL, NULL),
+(98, 3, 'quotas/detail_quotas', '2024-07-02', NULL, NULL),
+(99, 3, 'quotas/index', '2024-07-02', NULL, NULL),
+(100, 3, 'quotas/pay_quota_cont', '2024-07-02', NULL, NULL),
+(101, 3, 'quotas/pay_quota', '2024-07-02', NULL, NULL),
+(102, 3, 'quotas/reprogram_quotas', '2024-07-02', NULL, NULL),
+(103, 3, 'refunds/add_refund_contract', '2024-07-02', NULL, NULL),
+(104, 3, 'refunds/add_refund', '2024-07-02', NULL, NULL),
+(105, 3, 'refunds/edit_refund', '2024-07-02', NULL, NULL),
+(106, 3, 'refunds/index', '2024-07-02', NULL, NULL),
+(107, 3, 'separations/add_separation', '2024-07-02', NULL, NULL),
+(108, 3, 'separations/delete_separation', '2024-07-02', NULL, NULL),
+(109, 3, 'separations/edit_separation', '2024-07-02', NULL, NULL),
+(110, 3, 'separations/index', '2024-07-02', NULL, NULL),
+(111, 3, 'users/add_user', '2024-07-02', NULL, NULL),
+(112, 3, 'users/edit_user', '2024-07-02', NULL, NULL),
+(113, 3, 'users/delete_user', '2024-07-02', NULL, NULL),
+(114, 3, 'users/index', '2024-07-02', NULL, NULL),
+(115, 3, 'users/change_password_user', '2024-07-02', NULL, NULL),
+(116, 2, 'assets/detail_asset', '2024-07-02', NULL, NULL),
+(117, 2, 'assets/index', '2024-07-02', NULL, NULL),
+(118, 2, 'budgets/add_budget', '2024-07-02', NULL, NULL),
+(119, 2, 'budgets/index', '2024-07-02', NULL, NULL),
+(120, 2, 'dashboard_user/dashboard_user', '2024-07-02', NULL, NULL),
+(121, 2, 'clients/add_client', '2024-07-02', NULL, NULL),
+(122, 2, 'clients/index', '2024-07-02', NULL, NULL),
+(123, 2, 'contracts/index', '2024-07-02', NULL, NULL),
+(124, 2, 'profile/index', '2024-07-02', NULL, NULL),
+(125, 2, 'projects/list_clients', '2024-07-02', NULL, NULL),
+(126, 2, 'projects/index', '2024-07-02', NULL, NULL),
+(127, 2, 'quotas/detail_quotas', '2024-07-02', NULL, NULL),
+(128, 2, 'quotas/index', '2024-07-02', NULL, NULL),
+(129, 2, 'refunds/index', '2024-07-02', NULL, NULL),
+(130, 2, 'separations/index', '2024-07-02', NULL, NULL),
+(131, 4, 'assets/detail_asset', '2024-07-02', NULL, NULL),
+(132, 4, 'assets/index', '2024-07-02', NULL, NULL),
+(133, 4, 'budgets/add_budget', '2024-07-02', NULL, NULL),
+(134, 4, 'budgets/edit_budget', '2024-07-02', NULL, NULL),
+(135, 4, 'budgets/delete_budget', '2024-07-02', NULL, NULL),
+(136, 4, 'budgets/index', '2024-07-02', NULL, NULL),
+(137, 4, 'dashboard_user/dashboard_user', '2024-07-02', NULL, NULL),
+(138, 4, 'clients/add_client', '2024-07-02', NULL, NULL),
+(139, 4, 'clients/index', '2024-07-02', NULL, NULL),
+(140, 4, 'contracts/index', '2024-07-02', NULL, NULL),
+(141, 4, 'profile/index', '2024-07-02', NULL, NULL),
+(142, 4, 'projects/list_clients', '2024-07-02', NULL, NULL),
+(143, 4, 'projects/index', '2024-07-02', NULL, NULL),
+(144, 4, 'quotas/detail_quotas', '2024-07-02', NULL, NULL),
+(145, 4, 'quotas/index', '2024-07-02', NULL, NULL),
+(146, 4, 'refunds/index', '2024-07-02', NULL, NULL),
+(147, 4, 'separations/index', '2024-07-02', NULL, NULL),
+(148, 5, 'assets/detail_asset', '2024-07-02', NULL, NULL),
+(149, 5, 'assets/index', '2024-07-02', NULL, NULL),
+(150, 5, 'budgets/index', '2024-07-02', NULL, NULL),
+(151, 5, 'dashboard_user/dashboard_user', '2024-07-02', NULL, NULL),
+(152, 5, 'clients/add_client', '2024-07-02', NULL, NULL),
+(153, 5, 'clients/delete_client', '2024-07-02', NULL, NULL),
+(154, 5, 'clients/edit_client', '2024-07-02', NULL, NULL),
+(155, 5, 'clients/index', '2024-07-02', NULL, NULL),
+(156, 5, 'contracts/index', '2024-07-02', NULL, NULL),
+(157, 5, 'profile/index', '2024-07-02', NULL, NULL),
+(158, 5, 'projects/list_clients', '2024-07-02', NULL, NULL),
+(159, 5, 'projects/index', '2024-07-02', NULL, NULL),
+(160, 5, 'quotas/detail_quotas', '2024-07-02', NULL, NULL),
+(161, 5, 'quotas/index', '2024-07-02', NULL, NULL),
+(162, 5, 'refunds/index', '2024-07-02', NULL, NULL),
+(163, 5, 'separations/index', '2024-07-02', NULL, NULL),
+(164, 6, 'assets/detail_asset', '2024-07-02', NULL, NULL),
+(165, 6, 'assets/index', '2024-07-02', NULL, NULL),
+(166, 6, 'budgets/index', '2024-07-02', NULL, NULL),
+(167, 6, 'dashboard_user/dashboard_user', '2024-07-02', NULL, NULL),
+(168, 6, 'clients/add_client', '2024-07-02', NULL, NULL),
+(169, 6, 'clients/delete_client', '2024-07-02', NULL, NULL),
+(170, 6, 'clients/edit_client', '2024-07-02', NULL, NULL),
+(171, 6, 'clients/index', '2024-07-02', NULL, NULL),
+(172, 6, 'contracts/index', '2024-07-02', NULL, NULL),
+(173, 6, 'profile/index', '2024-07-02', NULL, NULL),
+(174, 6, 'projects/list_clients', '2024-07-02', NULL, NULL),
+(175, 6, 'projects/index', '2024-07-02', NULL, NULL),
+(176, 6, 'quotas/detail_quotas', '2024-07-02', NULL, NULL),
+(177, 6, 'quotas/index', '2024-07-02', NULL, NULL),
+(178, 6, 'refunds/index', '2024-07-02', NULL, NULL),
+(179, 6, 'separations/index', '2024-07-02', NULL, NULL),
+(180, 7, 'assets/detail_asset', '2024-07-02', NULL, NULL),
+(181, 7, 'assets/index', '2024-07-02', NULL, NULL),
+(182, 7, 'budgets/index', '2024-07-02', NULL, NULL),
+(183, 7, 'dashboard_user/dashboard_user', '2024-07-02', NULL, NULL),
+(184, 7, 'clients/index', '2024-07-02', NULL, NULL),
+(185, 7, 'contracts/index', '2024-07-02', NULL, NULL),
+(186, 7, 'profile/index', '2024-07-02', NULL, NULL),
+(187, 7, 'projects/list_clients', '2024-07-02', NULL, NULL),
+(188, 7, 'projects/index', '2024-07-02', NULL, NULL),
+(189, 7, 'quotas/detail_quotas', '2024-07-02', NULL, NULL),
+(190, 7, 'quotas/index', '2024-07-02', NULL, NULL),
+(191, 7, 'refunds/index', '2024-07-02', NULL, NULL),
+(192, 7, 'separations/index', '2024-07-02', NULL, NULL),
+(193, 8, 'assets/detail_asset', '2024-07-02', NULL, NULL),
+(194, 8, 'assets/index', '2024-07-02', NULL, NULL),
+(195, 8, 'budgets/index', '2024-07-02', NULL, NULL),
+(196, 8, 'dashboard_user/dashboard_user', '2024-07-02', NULL, NULL),
+(197, 8, 'clients/add_client', '2024-07-02', NULL, NULL),
+(198, 8, 'clients/delete_client', '2024-07-02', NULL, NULL),
+(199, 8, 'clients/edit_client', '2024-07-02', NULL, NULL),
+(200, 8, 'clients/index', '2024-07-02', NULL, NULL),
+(201, 8, 'contracts/add_contract_separation', '2024-07-02', NULL, NULL),
+(202, 8, 'contracts/add_contract', '2024-07-02', NULL, NULL),
+(203, 8, 'contracts/detail_contract', '2024-07-02', NULL, NULL),
+(204, 8, 'contracts/edit_contract', '2024-07-02', NULL, NULL),
+(205, 8, 'contracts/index', '2024-07-02', NULL, NULL),
+(206, 8, 'profile/index', '2024-07-02', NULL, NULL),
+(207, 8, 'projects/list_clients', '2024-07-02', NULL, NULL),
+(208, 8, 'projects/index', '2024-07-02', NULL, NULL),
+(209, 8, 'quotas/add_quotas_credit', '2024-07-02', NULL, NULL),
+(210, 8, 'quotas/detail_quotas', '2024-07-02', NULL, NULL),
+(211, 8, 'quotas/index', '2024-07-02', NULL, NULL),
+(212, 8, 'quotas/pay_quota_cont', '2024-07-02', NULL, NULL),
+(213, 8, 'quotas/pay_quota', '2024-07-02', NULL, NULL),
+(214, 8, 'quotas/reprogram_quotas', '2024-07-02', NULL, NULL),
+(215, 8, 'refunds/add_refund_contract', '2024-07-02', NULL, NULL),
+(216, 8, 'refunds/add_refund', '2024-07-02', NULL, NULL),
+(217, 8, 'refunds/edit_refund', '2024-07-02', NULL, NULL),
+(218, 8, 'refunds/index', '2024-07-02', NULL, NULL),
+(219, 8, 'separations/add_separation', '2024-07-02', NULL, NULL),
+(220, 8, 'separations/delete_separation', '2024-07-02', NULL, NULL),
+(221, 8, 'separations/edit_separation', '2024-07-02', NULL, NULL),
+(222, 8, 'separations/index', '2024-07-02', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -5768,12 +6002,14 @@ CREATE TABLE `roles` (
 --
 
 INSERT INTO `roles` (`idrol`, `rol`, `estado`, `create_at`, `update_at`, `inactive_at`) VALUES
-(1, 'REPRESENTANTE DE VENTAS 1', '1', '2024-06-17', NULL, NULL),
-(2, 'REPRESENTANTE DE VENTAS 2', '1', '2024-06-17', NULL, NULL),
-(3, 'ADMINISTRADOR PRINCIPAL', '1', '2024-06-17', NULL, NULL),
-(4, 'ADMINISTRADOR ASISTENTE', '1', '2024-06-17', NULL, NULL),
-(5, 'ADMINISTRADOR SECUNDARIO', '1', '2024-06-17', NULL, NULL),
-(6, 'VENDEDOR', '1', '2024-06-17', NULL, NULL);
+(1, 'GERENTE GENERAL', '1', '2024-06-17', NULL, NULL),
+(2, 'ASISTENTE TESORERIA', '1', '2024-06-17', NULL, NULL),
+(3, 'ADMINISTRADOR', '1', '2024-06-17', NULL, NULL),
+(4, 'TESORERO', '1', '2024-06-17', NULL, NULL),
+(5, 'ASESOR DE VENTAS', '1', '2024-06-17', NULL, NULL),
+(6, 'VENDEDOR', '1', '2024-06-17', NULL, NULL),
+(7, 'PRACTICANTE', '1', '2024-06-17', NULL, NULL),
+(8, 'TRAMISTES Y DESEMBOLSOS', '1', '2024-06-17', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -5834,7 +6070,7 @@ CREATE TABLE `separaciones` (
 --
 
 INSERT INTO `separaciones` (`idseparacion`, `n_expediente`, `idactivo`, `idcliente`, `idconyugue`, `tipo_cambio`, `moneda_venta`, `separacion_monto`, `fecha_pago`, `imagen`, `detalle`, `modalidad_pago`, `entidad_bancaria`, `nro_operacion`, `existe_contrato`, `create_at`, `update_at`, `inactive_at`, `idusuario`) VALUES
-(1, 'SEPC-00004', 1, 1, NULL, 3.8200, 'SOL', 500.00, '2024-06-26', '54e1c995d861af82ace01d68bf599447e58bbe79.jpg', 'SEPARACION DEL LOTE EN BUEN ESTADO', 'EFECTIVO', '', '', b'1', '2024-06-26', '2024-06-27', NULL, 1),
+(1, 'SEPC-00004', 1, 1, NULL, 3.8200, 'SOL', 500.00, '2024-06-26', '54e1c995d861af82ace01d68bf599447e58bbe79.jpg', 'SEPARACION DEL LOTE EN BUEN ESTADO', 'EFECTIVO', '', '', b'0', '2024-06-26', '2024-07-03', NULL, 1),
 (2, 'SEPC-00005', 2, 1, NULL, 3.8200, 'SOL', 600.00, '2024-06-27', 'd926fdf5f208901775425bbda3f93eea8363c896.jpg', 'DETALLES POR LA SEPARCION', 'TRANSFERENCIA', 'INTERBANCK', '0000000136', b'1', '2024-06-27', '2024-06-28', NULL, 1),
 (3, 'SEPC-00006', 6, 6, NULL, 3.8300, 'USD', 600.00, '2024-06-28', '28757805ee0e52025b57c1553fa50efe77d5e6b3.jpg', 'separacion de lote', 'TRANSFERENCIA', 'INTERBANCK', '0000000365', b'1', '2024-06-28', '2024-06-28', NULL, 1),
 (4, 'SEPC-00007', 7, 3, NULL, 3.8400, 'SOL', 600.00, '2024-06-29', '2367cdeb92298e8154826191191387a79b070e9c.jpg', 'QUIERO UN LOTE', 'TRANSFERENCIA', 'BCP', '0000000965', b'0', '2024-06-29', NULL, '2024-06-29', 1);
@@ -6824,7 +7060,7 @@ ALTER TABLE `metricas`
 -- AUTO_INCREMENT de la tabla `permisos`
 --
 ALTER TABLE `permisos`
-  MODIFY `idpermiso` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `idpermiso` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=223;
 
 --
 -- AUTO_INCREMENT de la tabla `personas`
@@ -6872,7 +7108,7 @@ ALTER TABLE `rep_legales_clientes`
 -- AUTO_INCREMENT de la tabla `roles`
 --
 ALTER TABLE `roles`
-  MODIFY `idrol` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `idrol` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT de la tabla `sedes`

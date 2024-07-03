@@ -1,0 +1,331 @@
+<?php
+
+require_once "../Models/Contract.php";
+require_once "../Models/Configuration.php";
+date_default_timezone_set("America/Lima");
+
+if(isset($_POST["action"])){
+
+    $contract = new Contract();
+    $config = new Configuration;
+
+    switch($_POST["action"]){
+
+        case "listContractsAll": 
+            echo json_encode($contracts = $contract->listContracts());
+            break;
+            
+        case "listContractByType": 
+            $type = $_POST["tipo_contrato"];
+
+            echo json_encode($contract->listContractByType($type));
+            break;
+
+        case "listContractsByTypeDate": 
+
+                $dataObtained = [
+                    "tipo_contrato" => $_POST["tipo_contrato"],
+                    "fecha_inicio" => $_POST["fecha_inicio"],
+                    "fecha_fin" => $_POST["fecha_fin"]
+                ];
+
+                echo json_encode($contract->listContractsByTypeDate($dataObtained));
+
+                break;
+
+        case "listContractsByTypeDateNexpediente": 
+
+                $dataObtained = [
+                    "tipo_contrato" => $_POST["tipo_contrato"],
+                    "fecha_inicio" => $_POST["fecha_inicio"],
+                    "fecha_fin" => $_POST["fecha_fin"],
+                    "n_expediente" => $_POST["n_expediente"]
+                ];
+
+                echo json_encode($contract->listContractsByTypeDateNexpediente($dataObtained));
+
+                break;
+
+        case "existContract": 
+
+                $idseparacion = $_POST["idseparacion"];
+
+                echo json_encode($contract->existContract($idseparacion));
+            break;
+
+        case "listContractId": 
+
+                $idcontrato = $_POST["idcontrato"];
+
+                echo json_encode($contract->listContractId($idcontrato));
+
+            break;
+
+        case "addContract": 
+
+                $today = date("dmYhis");
+                $nomFile = null;
+
+                $response = [
+                    "status"  => false,
+                    "message"  => "",
+                    "data"  => []
+                ];
+
+                $dataConfig = [
+                    "clave" => $_POST["clave"],
+                    "valor" => $_POST["valor"]
+                ];
+
+
+                $dataObtained = [
+
+                    "n_expediente"              => $_POST["n_expediente"],
+                    "tipo_contrato"             => $_POST["tipo_contrato"],
+                    "idseparacion"              => $_POST["idseparacion"],
+                    "idrepresentante_primario"  => $_POST["idrepresentante_primario"],
+                    "idrepresentante_secundario"=> $_POST["idrepresentante_secundario"],
+                    "idcliente"                 => $_POST["idcliente"],
+                    "idconyugue"                => $_POST["idconyugue"],
+                    "idactivo"                  => $_POST["idactivo"],
+                    "tipo_cambio"               => $_POST["tipo_cambio"],
+                    "fecha_contrato"            => $_POST["fecha_contrato"],
+                    "precio_venta"              => $_POST["precio_venta"],
+                    "moneda_venta"              => $_POST["moneda_venta"],
+                    "inicial"                   => $_POST["inicial"],
+                    "det_contrato"              => $_POST["det_contrato"],
+                    "archivo"                   => $nomFile,
+                    "idusuario"                 => 1
+                    // "idusuario"         => $_POST["idusuario"]
+                ];
+                
+                if(isset($_FILES["archivo"]) && $_FILES["archivo"]["size"] > 0){
+                    $type = pathinfo($_FILES["archivo"]["name"], PATHINFO_EXTENSION); //Obtiene la extensción del archivo original
+
+                    if($type !== "pdf"){
+                        
+                        $response["status"] = false;
+                        $response["message"] = "Solo se acepta archivos con extensión .pdf";
+                    }else{
+
+                        $nomFile = sha1($today) .".{$type}";
+                        $url = "../media/files/" . $nomFile;
+                        
+                        if(move_uploaded_file($_FILES["archivo"]["tmp_name"], $url)){
+                            $dataObtained["archivo"] = $nomFile;
+                        }
+
+                        $data = $contract->addContract($dataObtained);
+                        
+                        if(!$data){
+                            
+                            $response["status"] = false;
+                            $response["message"] = "Error al registrar el contrato";
+                            }else{
+                                
+    
+                            $response["status"] = true;
+                            $response["message"] = "Registro realizado correctamente";
+                            $response["data"] = $data;
+                            $config->upsetConfig($dataConfig);
+                        }
+                    }
+
+                }
+                
+                echo json_encode($response);
+            break;
+
+        case "setContract": 
+
+                $today = date("dmYhis");
+                $nomFile = null;
+            
+                $response = [
+                    "status"  => false,
+                    "message"  => "",
+                    "data"  => []
+                ];
+
+                $dataObtained = [
+
+                    "idcontrato"                => $_POST["idcontrato"],
+                    "n_expediente"              => $_POST["n_expediente"],
+                    "tipo_contrato"             => $_POST["tipo_contrato"],
+                    "idseparacion"              => $_POST["idseparacion"],
+                    "idrepresentante_primario"  => $_POST["idrepresentante_primario"],
+                    "idrepresentante_secundario"=> $_POST["idrepresentante_secundario"],
+                    "idcliente"                 => $_POST["idcliente"],
+                    "idconyugue"                => $_POST["idconyugue"],
+                    "idactivo"                  => $_POST["idactivo"],
+                    "tipo_cambio"               => $_POST["tipo_cambio"],
+                    "fecha_contrato"            => $_POST["fecha_contrato"],
+                    "precio_venta"              => $_POST["precio_venta"],
+                    "moneda_venta"              => $_POST["moneda_venta"],
+                    "inicial"                   => $_POST["inicial"],
+                    "det_contrato"              => $_POST["det_contrato"],
+                    "archivo"                   => $nomFile,
+                    "idusuario"                 => 1
+                    // "idusuario"         => $_POST["idusuario"]
+                ];
+                
+                if(isset($_FILES["archivo"]) && $_FILES["archivo"]["size"] > 0){
+                    $type = pathinfo($_FILES["archivo"]["name"], PATHINFO_EXTENSION); //Obtiene la extensción del archivo original
+
+                    if($type !== "pdf"){
+                        
+                        $response["status"] = false;
+                        $response["message"] = "Solo se acepta archivos con extensión .pdf";
+                    }else{
+
+                        $nomFile = sha1($today) .".{$type}";
+                        $url = "../media/files/" . $nomFile;
+                        
+                        if(move_uploaded_file($_FILES["archivo"]["tmp_name"], $url)){
+                            $dataObtained["archivo"] = $nomFile;
+                        }
+
+                        $data = $contract->setContract($dataObtained);
+                        
+                        if(!$data){
+                            
+                            $response["status"] = false;
+                            $response["message"] = "Error al actualizar el contrato";
+                            }else{
+                                
+    
+                            $response["status"] = true;
+                            $response["message"] = "Registro actualizar correctamente";
+                            $response["data"] = $data;
+                        }
+                    }
+
+                }else{
+                    $dataBD = $contract->listContractId($dataObtained["idcontrato"]);
+                    $dataObtained["archivo"] = $dataBD["archivo"];
+                    
+                    $data = $contract->setContract($dataObtained);
+
+                    if($data){
+                        $response["status"] = true;
+                        $response["message"] = "Registro actualizar correctamente";
+                        $response["data"] = $data;
+                    }else{
+                        $response["status"] = false;
+                        $response["message"] = "No se pudo actualizar el registro";
+                        $response["data"] = [];
+                    }
+                 }
+
+                echo json_encode($response);
+
+            break;
+        
+        case "inactiveContract": 
+
+                $idcontratoo = [
+
+                    "idcontrato"    =>  $_POST["idcontrato"],
+                    "idusuario"     =>  0
+                ];
+
+                echo json_encode($contract->inactiveContract($idcontrato));
+                
+                break;
+                
+            case "existsContractIdContract": 
+                $idcontrato = $_POST["idcontrato"];
+        
+                echo json_encode($contract->existsContractIdContract($idcontrato));
+
+                break;
+
+            
+
+        /********************************************  DETALLES DE CONTRATO ************************************************************/
+        
+        case "listDetContract": 
+            
+                $idcontrato = $_POST["idcontrato"];
+
+                echo json_encode($contract->listDetContract($idcontrato));
+
+            break;
+
+        case "listDetContractById": 
+
+                $iddetalle_contrato = $_POST["iddetalle_contrato"];
+
+                echo json_encode($contract->listDetContractById($iddetalle_contrato));
+
+                break;
+            break;
+
+        case "addDetContract": 
+            
+                $dataObtained = [
+
+                    "idrepresentante"      => $_POST["idrepresentante"],
+                    "idcontrato"     => $_POST["idcontrato"]
+                ];
+
+                echo json_encode($contract->addDetContract($dataObtained));
+            
+            break;
+        
+        case "setDetContract": 
+            
+                $dataObtained = [
+
+                    "iddetalle_contrato"      => $_POST["iddetalle_contrato"],
+                    "idrepresentante"      => $_POST["idrepresentante"],
+                    "idcontrato"     => $_POST["idcontrato"]
+                ];
+
+                echo json_encode($contract->setDetContract($dataObtained));
+
+            break;
+
+        case "inactiveDetCont": 
+            
+                $iddetalle_contrato = $_POST["iddetalle_contrato"];
+
+                echo json_encode($contract->inactiveDetCont($iddetalle_contrato));
+
+            break;
+
+            /* -------------------------------------------------------------------------- */
+            /*                                  GRÁFICOS                                  */
+            /* -------------------------------------------------------------------------- */
+        case ""         
+
+    }
+}
+
+if(isset($_GET["action"])){
+
+    $contract = new Contract();
+
+    switch($_GET["action"]){
+        case "downloadPDF": 
+
+            $name = $_GET["nombre"];
+            $file = $_GET["archivo"];
+            $url = "../media/files/" . $file;
+            
+            echo json_encode($url);
+            header("Content-Type: application/pdf");
+            header("Content-Disposition: inline; filename=\"".$name.".pdf\""); //inline Manda a la vista previa
+            //header("Content-Disposition: attachment; filename=".$name.".pdf"); // attachment Fuerza la descarga directa
+            // usar \\ y después "" indica que tenga en concideración los caracteres especiales
+
+            readfile($url);
+
+            if(!readfile($url)){
+                echo "Hubo un error: " .error_get_last(); 
+            }
+
+        break;
+    }
+}
+?>

@@ -3714,16 +3714,60 @@ BEGIN
 END $$
 DELIMITER ;
 
+/* -------------------------------------------------------------------------- */
+/*                                  REPORTES                                  */
+/* -------------------------------------------------------------------------- */
 
+DELIMITER $$
 
+CREATE PROCEDURE spu_get_lots_status()
+BEGIN
+	
+    SELECT 
+		(SUM(l_vendidos)) as vendidos,
+        (SUM(l_noVendidos)) as no_vendidos,
+        (SUM(l_separados)) as separados
+		FROM metricas
+		WHERE YEAR(update_at) = YEAR(NOW());
+END $$
 
-CALL spu_list_configs("contrasenia_defectos");
+DELIMITER;
 
-CALL spu_upset_config("contrasenia",3);
+DELIMITER $$
 
-select * from activos;
-insert into configuraciones(clave, valor) values("contrasenia","peru2024");
--- PLANTILLA
+CREATE PROCEDURE spu_get_sales()
+BEGIN
+	SELECT 
+		(COUNT(*)) AS cantidad,
+        datos.mes AS mes		
+		FROM (
+			SELECT		
+				MONTH(fecha_contrato) AS mes
+				FROM contratos
+				WHERE estado = "VIGENTE"
+					AND YEAR(fecha_contrato) = YEAR(NOW())
+            )AS datos
+            GROUP BY datos.mes;
+END $$
+
+DELIMITER;
+
+DELIMITER $$
+
+CREATE PROCEDURE spu_grafic_refunds()
+BEGIN
+	SELECT 
+		(COUNT(*)) AS cantidad,
+        tipo_devolucion,
+        MONTH(create_at) AS mes
+		FROM devoluciones
+        WHERE YEAR(create_at) = YEAR(NOW())
+        GROUP BY tipo_devolucion, MONTH(create_at);
+			
+END $$
+
+DELIMITER;
+
 DELIMITER $$
 
 CREATE PROCEDURE ()
@@ -3732,4 +3776,3 @@ END $$
 
 DELIMITER;
 
-select * from contratos;
