@@ -1,5 +1,7 @@
 <?php
 
+session_start();
+
 require_once "../Models/Client.php";
 
 if (isset($_POST["action"])) {
@@ -47,7 +49,7 @@ if (isset($_POST["action"])) {
                 "iddistrito"      => $_POST["iddistrito"],
                 "direccion"       => $_POST["direccion"],
                 "nacionalidad"    => $_POST["nacionalidad"],
-                "idusuario"       => 1
+                "idusuario"       => $_SESSION["idusuario"]
 
             ];
 
@@ -70,7 +72,7 @@ if (isset($_POST["action"])) {
                 "iddistrito"      => $_POST["iddistrito"],
                 "direccion"       => $_POST["direccion"],
                 "nacionalidad"    => $_POST["nacionalidad"],
-                "idusuario"       => 1
+                "idusuario"       => $_SESSION["idusuario"]
 
             ];
 
@@ -107,7 +109,7 @@ if (isset($_POST["action"])) {
                 "documento_nro"     => $_POST["documento_nro"],
                 "iddistrito"        => $_POST["iddistrito"],
                 "direccion"         => $_POST["direccion"],
-                "idusuario"         => 1,
+                "idusuario"         => $_SESSION["idusuario"],
             ];
 
             echo json_encode($client->setLegalClient($dataObtained));

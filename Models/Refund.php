@@ -171,11 +171,26 @@ class Refund extends Conection{
     /* -------------------------------------------------------------------------- */
 
     /**
-     * Método para generar el gráfico de devoluciones
+     * Método para generar el gráfico de devoluciones (CANTIDAD)
      */
     public function chartRefunds(){
         try{
             $query = $this->conection->prepare("CALL spu_grafic_refunds()");
+            $query->execute();
+
+            return $query->fetchAll(PDO::FETCH_ASSOC);
+        }
+        catch(Exception $e){
+            die($e->getMessage());
+        }
+    }
+
+    /**
+     * Método para generar el gráfico de devoluciones (MONTO)
+     */
+    public function chartRefundsMoney(){
+        try{
+            $query = $this->conection->prepare("CALL spu_grafic_refunds_money()");
             $query->execute();
 
             return $query->fetchAll(PDO::FETCH_ASSOC);

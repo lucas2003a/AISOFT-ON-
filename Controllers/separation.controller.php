@@ -1,5 +1,7 @@
 <?php
 
+session_start();
+
 require_once "../Models/Separation.php";
 require_once "../Models/Configuration.php";
 
@@ -80,7 +82,7 @@ if(isset($_POST["action"])){
                     "modalidad_pago"    => $_POST["modalidad_pago"],
                     "entidad_bancaria"  => $_POST["entidad_bancaria"],
                     "nro_operacion"     => $_POST["nro_operacion"],
-                    "idusuario"         => 1
+                    "idusuario"         => $_SESSION["idusuario"]
                     // "idusuario"     => $_POST["idusuario"]
                 ];
 
@@ -127,7 +129,7 @@ if(isset($_POST["action"])){
                     "modalidad_pago"    => $_POST["modalidad_pago"],
                     "entidad_bancaria"  => $_POST["entidad_bancaria"],
                     "nro_operacion"     => $_POST["nro_operacion"],
-                    "idusuario"         => 1
+                    "idusuario"         => $_SESSION["idusuario"]
                     // "idusuario"     => $_POST["idusuario"]
                 ];
 
@@ -156,7 +158,7 @@ if(isset($_POST["action"])){
                 $dataObtained = [
 
                     "idseparacion"  =>  $_POST["idseparacion"],
-                    "idusuario"     => 1
+                    "idusuario"     => $_SESSION["idusuario"]
                 ];
 
                 echo json_encode($separation->inactiveSeparation($dataObtained));

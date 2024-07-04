@@ -64,6 +64,14 @@ if(isset($_POST["action"])){
             echo json_encode($status);
 
             break;
+
+            /* -------------------------------------------------------------------------- */
+            /*                                  GRÁFICOS                                  */
+            /* -------------------------------------------------------------------------- */
+
+        case 'chartEmployee':
+            echo json_encode($user->chartEmployee());
+            break;
     }
 }
 

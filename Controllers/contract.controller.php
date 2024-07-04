@@ -1,5 +1,7 @@
 <?php
 
+session_start();
+
 require_once "../Models/Contract.php";
 require_once "../Models/Configuration.php";
 date_default_timezone_set("America/Lima");
@@ -95,7 +97,8 @@ if(isset($_POST["action"])){
                     "inicial"                   => $_POST["inicial"],
                     "det_contrato"              => $_POST["det_contrato"],
                     "archivo"                   => $nomFile,
-                    "idusuario"                 => 1
+                    "idusuario"                 => $_SESSION["idusuario"],
+                    "idvendedor"                 => $_POST["idvendedor"]
                     // "idusuario"         => $_POST["idusuario"]
                 ];
                 
@@ -165,7 +168,8 @@ if(isset($_POST["action"])){
                     "inicial"                   => $_POST["inicial"],
                     "det_contrato"              => $_POST["det_contrato"],
                     "archivo"                   => $nomFile,
-                    "idusuario"                 => 1
+                    "idusuario"                 => $_SESSION["idusuario"],
+                    "idvendedor"                 => $_POST["idvendedor"]
                     // "idusuario"         => $_POST["idusuario"]
                 ];
                 
@@ -300,6 +304,11 @@ if(isset($_POST["action"])){
         case "getSales":
 
                 echo json_encode($contract->getSales());
+            break;     
+
+        case "getMoney":
+
+                echo json_encode($contract->chartEmployee());
             break;         
 
     }

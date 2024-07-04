@@ -140,7 +140,7 @@ class Contract extends Conection{
 
         try{
 
-            $query = $this->conection->prepare("CALL spu_add_contract(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+            $query = $this->conection->prepare("CALL spu_add_contract(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
             $query->execute(
                 array(
                     $dataContract["n_expediente"],
@@ -158,7 +158,8 @@ class Contract extends Conection{
                     $dataContract["inicial"],
                     $dataContract["det_contrato"],
                     $dataContract["archivo"],
-                    $dataContract["idusuario"]
+                    $dataContract["idusuario"],
+                    $dataContract["idvendedor"]
                 )
             );
 
@@ -176,7 +177,7 @@ class Contract extends Conection{
 
         try{
 
-            $query = $this->conection->prepare("CALL spu_set_contract(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+            $query = $this->conection->prepare("CALL spu_set_contract(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
             $query->execute(
                 array(
                     $dataContract["idcontrato"],
@@ -195,7 +196,8 @@ class Contract extends Conection{
                     $dataContract["inicial"],
                     $dataContract["det_contrato"],
                     $dataContract["archivo"],
-                    $dataContract["idusuario"]
+                    $dataContract["idusuario"],
+                    $dataContract["idvendedor"]
                 )
             );
 
@@ -329,6 +331,11 @@ class Contract extends Conection{
     /*                                  GRÁFICOS                                  */
     /* -------------------------------------------------------------------------- */
     
+    /**
+     * Método para obtener la cantidad de ventas
+     *
+     * @return void
+     */
     public function getSales() {
         
         try {
@@ -338,6 +345,22 @@ class Contract extends Conection{
             return $query->fetchAll(PDO::FETCH_ASSOC);
 
         } catch (Exception $e) {
+            die($e->getMessage());
+        }
+    }
+
+    /**
+     * Método para obtener la cantidad de ventas hechas por el peronal
+     */
+    public function chartEmployee() {
+        try {
+            $query = $this->conection->prepare("CALL spu_grafic_sellers()");
+            $query->execute();
+
+            return $query->fetchAll(PDO::FETCH_ASSOC);
+
+        } catch (Exception $e) {
+            
             die($e->getMessage());
         }
     }

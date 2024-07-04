@@ -225,5 +225,25 @@ class Quota extends Conection{
 
         }
     }
+
+    /* -------------------------------------------------------------------------- */
+    /*                                  GRÁFICOS                                  */
+    /* -------------------------------------------------------------------------- */
+
+    /**
+     * Método que la suma de las cuotaspara renderizar el gráfico
+     */
+    public function chartQuotas(){
+
+        try {
+            $query = $this->conection->prepare("CALL spu_grafic_quotas()");
+            $query->execute();
+            
+            return $query->fetch(PDO::FETCH_ASSOC);
+
+        } catch (Exception $e) {
+            die($e->getMessage());
+        }
+    }
 }
 ?>

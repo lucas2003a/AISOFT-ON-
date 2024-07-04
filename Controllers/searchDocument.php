@@ -1,4 +1,6 @@
 <?php
+
+session_start();
 // Datos
 $token = "kQjHE7ODyi7jRDDeH0oEvWVXIowht87CS9RpHoQdBLs1LuIzSA6wylTRpMUaBLf5";
 $tokenDEV = "7e172115e78fb88fd9dd583208f04b1628ba0caeb441c47b3f58fc7e275f9069";

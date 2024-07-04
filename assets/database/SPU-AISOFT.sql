@@ -9,7 +9,7 @@ BEGIN
     ORDER BY 2 ASC;
 END $$
 
-DELIMITER;
+DELIMITER ;
 
 -- PROVINCIAS
 DELIMITER $$
@@ -22,7 +22,7 @@ BEGIN
     ORDER BY 3 ASC;
 END $$
 
-DELIMITER;
+DELIMITER ;
 
 -- DISTRITOS
 DELIMITER $$
@@ -35,7 +35,7 @@ BEGIN
     ORDER BY 3 ASC;
 END $$
 
-DELIMITER;
+DELIMITER ;
 
 -- UBGEO
 DELIMITER $$
@@ -56,7 +56,7 @@ BEGIN
         WHERE dist.iddistrito = _iddistrito;
 END $$
 
-DELIMITER;
+DELIMITER ;
 
 DELIMITER $$
 
@@ -82,7 +82,7 @@ BEGIN
             AND dept.departamento = _departamento;
 END $$
 
-DELIMITER;
+DELIMITER ;
 
 -- constructora /////////////////////////////////////////////////////////////////////////////////////////
 DELIMITER $$
@@ -93,7 +93,7 @@ BEGIN
     ORDER BY 2;
 END $$
 
-DELIMITER;
+DELIMITER ;
 
 -- sedes /////////////////////////////////////////////////////////////////////////////////////////////
 DELIMITER $$
@@ -158,7 +158,7 @@ BEGIN
     END IF;
 END $$
 
-DELIMITER;
+DELIMITER ;
 
 DELIMITER $$
 
@@ -189,7 +189,7 @@ BEGIN
         WHERE sed.idconstructora = _idconstructora;
 END $$
 
-DELIMITER;
+DELIMITER ;
 
 use aisoft;
 
@@ -220,7 +220,7 @@ BEGIN
         AND rep.inactive_at IS NULL;
 END $$
 
-DELIMITER;
+DELIMITER ;
 
 DELIMITER $$
 
@@ -248,7 +248,7 @@ BEGIN
         AND rep.inactive_at IS NULL;
 END $$
 
-DELIMITER;
+DELIMITER ;
 
 -- PROYECTOS //////////////////////////////////////////////////////////////////////////////////
 call spu_list_projects_typeAct("lote");
@@ -282,7 +282,7 @@ BEGIN
 	SELECT * FROM vws_list_projects;
 END $$
 
-DELIMITER;
+DELIMITER ;
 
 DELIMITER $$
 
@@ -292,7 +292,7 @@ BEGIN
     WHERE idproyecto = _idproyecto;
 END $$
 
-DELIMITER;
+DELIMITER ;
 
 DELIMITER $$
 
@@ -302,7 +302,7 @@ BEGIN
         WHERE codigo LIKE CONCAT("%", _codigo,"%");
 END $$
 
-DELIMITER;
+DELIMITER ;
 
 DELIMITER $$
 
@@ -326,7 +326,7 @@ BEGIN
 	SELECT ROW_COUNT() AS filasAfect; -- FILAS AFECTADAS
 END $$
 
-DELIMITER;
+DELIMITER ;
 
 DELIMITER $$
 
@@ -362,7 +362,7 @@ BEGIN
 	SELECT ROW_COUNT() AS filasAfect; -- FILAS AFECTADAS
 END $$
 
-DELIMITER;
+DELIMITER ;
 
 DELIMITER $$
 
@@ -384,7 +384,7 @@ BEGIN
     SELECT ROW_COUNT() AS filasAfect;
 END $$
 
-DELIMITER;
+DELIMITER ;
 
 -- LOTES
 DELIMITER $$
@@ -435,7 +435,7 @@ BEGIN
         AND act.inactive_at IS NULL;
 END $$
 
-DELIMITER;
+DELIMITER ;
 
 DELIMITER $$
 
@@ -448,7 +448,7 @@ BEGIN
     WHERE idproyecto = _idproyecto;
 END $$
 
-DELIMITER;
+DELIMITER ;
 
 DELIMITER $$
 
@@ -463,7 +463,7 @@ BEGIN
     AND propietario_lote = _propietario_lote;
 END $$
 
-DELIMITER;
+DELIMITER ;
 
 DELIMITER $$
 
@@ -479,7 +479,7 @@ BEGIN
         AND idproyecto = _idproyecto;
 END $$
 
-DELIMITER;
+DELIMITER ;
 
 DELIMITER $$
 
@@ -559,7 +559,7 @@ BEGIN
 	SELECT ROW_COUNT() as filasAfect;
 END $$
 
-DELIMITER;
+DELIMITER ;
 
 DELIMITER $$
 
@@ -620,7 +620,7 @@ BEGIN
 	SELECT ROW_COUNT() AS filasAfect;
 END$$
 
-DELIMITER;
+DELIMITER ;
 
 DELIMITER $$
 
@@ -641,7 +641,7 @@ BEGIN
 	SELECT ROW_COUNT() AS filasAfect;
 END $$
 
-DELIMITER;
+DELIMITER ;
 
 DELIMITER $$
 
@@ -672,7 +672,7 @@ BEGIN
     END IF;
 END $$
 
-DELIMITER;
+DELIMITER ;
 
 DELIMITER $$
 
@@ -704,7 +704,7 @@ BEGIN
     SELECT ROW_COUNT() AS filasAfect;
 END$$
 
-DELIMITER;
+DELIMITER ;
 
 DELIMITER $$
 
@@ -725,7 +725,7 @@ BEGIN
 
 END $$
 
-DELIMITER;
+DELIMITER ;
 
 CALL spu_list_houses_noBudgets();
 DELIMITER $$
@@ -744,7 +744,7 @@ BEGIN
 			WHERE act.inactive_at IS NULL;
 END $$
 
-DELIMITER;
+DELIMITER ;
 
 DELIMITER $$
 
@@ -763,7 +763,7 @@ BEGIN
             AND act.inactive_at IS NULL;
 END $$
 
-DELIMITER;
+DELIMITER ;
 
 DELIMITER $$
 
@@ -788,7 +788,7 @@ BEGIN
             
 END $$
 
-DELIMITER;
+DELIMITER ;
 
 DELIMITER $$
 
@@ -817,7 +817,7 @@ BEGIN
         ORDER BY act.sublote;
 END $$
 
-DELIMITER;
+DELIMITER ;
 DELIMITER $$
 
 CREATE PROCEDURE spu_list_onlyLots_sep
@@ -845,7 +845,7 @@ BEGIN
         ORDER BY act.sublote;
 END $$
 
-DELIMITER;
+DELIMITER ;
 
 DELIMITER $$
 
@@ -872,7 +872,7 @@ BEGIN
         ORDER BY act.sublote;
 END $$
 
-DELIMITER;
+DELIMITER ;
 
 
 -- PERSONAS    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -997,7 +997,7 @@ BEGIN
     SELECT ROW_COUNT() AS filasAfect;
 END $$
 
-DELIMITER;
+DELIMITER ;
 
 DELIMITER $$
 
@@ -1010,7 +1010,7 @@ BEGIN
     SELECT ROW_COUNT() AS filasAfect;
 END $$
 
-DELIMITER;
+DELIMITER ;
 
 -- CLIENTES ---------------------------------------------------------------------------------------------------------------------------------------
 
@@ -1072,7 +1072,7 @@ BEGIN
         AND cont.estado = "VIGENTE";
 END $$
 
-DELIMITER;
+DELIMITER ;
 
 DELIMITER $$
 
@@ -1106,7 +1106,7 @@ BEGIN
     
 END $$
 
-DELIMITER;
+DELIMITER ;
 
 DELIMITER $$
 
@@ -1125,7 +1125,7 @@ BEGIN
         ORDER BY pers.documento_nro ASC;
 END $$
 
-DELIMITER;
+DELIMITER ;
 
 DELIMITER $$
 
@@ -1182,7 +1182,7 @@ BEGIN
     END IF;
 END$$
 
-DELIMITER;
+DELIMITER ;
 
 DELIMITER $$
 
@@ -1252,7 +1252,7 @@ BEGIN
         
 END$$
 
-DELIMITER;
+DELIMITER ;
 
 DELIMITER $$
 
@@ -1311,7 +1311,7 @@ BEGIN
 		END IF;
 END$$
 
-DELIMITER;
+DELIMITER ;
 
 -- PERSONA NATURAL ///////////////////////////////////////////////////////////////////////////////////////////////////////
 DELIMITER $$
@@ -1373,7 +1373,7 @@ BEGIN
     SELECT ROW_COUNT() AS filasAfect;
 END $$
 
-DELIMITER;
+DELIMITER ;
 
 DELIMITER $$
 
@@ -1421,7 +1421,7 @@ BEGIN
 			SELECT ROW_COUNT() AS filasAfect;
 END $$
 
-DELIMITER;
+DELIMITER ;
 
 -- PERSONA JURÍDICA
 DELIMITER $$
@@ -1475,7 +1475,7 @@ BEGIN
                     );
 END $$
 
-DELIMITER;
+DELIMITER ;
 
 -- REPRESENTANTES
 DELIMITER $$
@@ -1496,7 +1496,7 @@ BEGIN
         AND inactive_at IS NULL;
 END $$
 
-DELIMITER;
+DELIMITER ;
 
 DELIMITER $$
 
@@ -1510,7 +1510,7 @@ BEGIN
     SELECT ROW_COUNT() AS filasAfect;
 END $$
 
-DELIMITER;
+DELIMITER ;
 
 DELIMITER $$
 
@@ -1541,7 +1541,7 @@ BEGIN
 	SELECT ROW_COUNT() AS filasAfect;
 END $$
 
-DELIMITER;
+DELIMITER ;
 
 DELIMITER $$
 
@@ -1580,7 +1580,7 @@ BEGIN
 		SELECT ROW_COUNT() AS filasAfect;
 END $$
 
-DELIMITER;
+DELIMITER ;
 
 DELIMITER $$
 
@@ -1623,7 +1623,7 @@ BEGIN
 	
 END $$
 
-DELIMITER;
+DELIMITER ;
 
 DELIMITER $$
 
@@ -1666,7 +1666,7 @@ BEGIN
     SELECT ROW_COUNT() AS filasAfect;
 END $$
 
-DELIMITER;
+DELIMITER ;
 
 -- CATEGORíAS COSTOS /////////////////////////////////////////////////////////////////////////////////////////
 DELIMITER $$
@@ -1679,7 +1679,7 @@ BEGIN
 		FROM categoria_costos;
 END $$
 
-DELIMITER;
+DELIMITER ;
 
 -- SUBCATEGORIAS COSTOS /////////////////////////////////////////////////////////////////////////////////////////
 DELIMITER $$
@@ -1698,7 +1698,7 @@ BEGIN
         ORDER BY subcat.subcategoria_costo ASC;
 END $$
 
-DELIMITER;
+DELIMITER ;
 
 -- MARCAS /////////////////////////////////////////////////////////////////////////////////////////
 DELIMITER $$
@@ -1712,7 +1712,7 @@ BEGIN
         ORDER BY marca ASC;
 END $$
 
-DELIMITER;
+DELIMITER ;
 
 -- UNIDADES DE MEDIDA /////////////////////////////////////////////////////////////////////////////////////////
 DELIMITER $$
@@ -1723,7 +1723,7 @@ BEGIN
     ORDER BY unidad_medida ASC;
 END $$
 
-DELIMITER;
+DELIMITER ;
 
 -- MATERIALES /////////////////////////////////////////////////////////////////////////////////////////
 DELIMITER $$
@@ -1744,7 +1744,7 @@ BEGIN
         ORDER BY mat.material ASC;
 END $$
 
-DELIMITER;
+DELIMITER ;
 
 -- PRESUPUESTOS /////////////////////////////////////////////////////////////////////////////////////////
 
@@ -1776,7 +1776,7 @@ BEGIN
         ORDER BY pres.codigo ASC;
 END $$
 
-DELIMITER;
+DELIMITER ;
 select * from configuraciones;
 DELIMITER $$
 
@@ -1810,7 +1810,7 @@ BEGIN
         ORDER BY pres.codigo ASC;
 END $$
 
-DELIMITER;
+DELIMITER ;
 
 DELIMITER $$
 
@@ -1844,7 +1844,7 @@ BEGIN
         ORDER BY pres.codigo ASC;
 END $$
 
-DELIMITER;
+DELIMITER ;
 
 DELIMITER $$
 
@@ -1871,7 +1871,7 @@ BEGIN
         ORDER BY pres.codigo ASC;
 END $$
 
-DELIMITER;
+DELIMITER ;
 
 DELIMITER $$
 
@@ -1894,7 +1894,7 @@ BEGIN
             WHERE idpresupuesto = @@last_insert_id;
 END $$
 
-DELIMITER;
+DELIMITER ;
 SELECT  * from presupuestos;
 DELIMITER $$
 
@@ -1940,7 +1940,7 @@ BEGIN
 		WHERE idpresupuesto = _idpresupuesto;
 END $$
 
-DELIMITER;
+DELIMITER ;
 
 DELIMITER $$
 
@@ -1959,7 +1959,7 @@ BEGIN
 	SELECT ROW_COUNT() AS filasAfect;
 END $$
 
-DELIMITER;
+DELIMITER ;
 
 DELIMITER $$
 
@@ -1971,7 +1971,7 @@ BEGIN
     SELECT EXISTS(SELECT 1 FROM activos WHERE idpresupuesto = _idpresupuesto AND inactive_at IS NULL) AS cantidad;
 END
 
-DELIMITER;
+DELIMITER ;
 
 -- DETALLE DE COSTOS /////////////////////////////////////////////////////////////////////////////////////////
 DELIMITER $$
@@ -2013,7 +2013,7 @@ BEGIN
 			ORDER BY cat.categoria_costo, subcat.subcategoria_costo ASC;
 END $$
 
-DELIMITER;
+DELIMITER ;
 
 DELIMITER $$
 
@@ -2050,7 +2050,7 @@ BEGIN
 	SELECT ROW_COUNT() AS filasAfect;
 END $$
 
-DELIMITER;
+DELIMITER ;
 
 DELIMITER $$
 
@@ -2082,7 +2082,7 @@ BEGIN
 	SELECT ROW_COUNT() AS filasAfect;
 END $$
 
-DELIMITER;
+DELIMITER ;
 
 DELIMITER $$
 
@@ -2102,7 +2102,7 @@ BEGIN
     
 END $$
 
-DELIMITER;
+DELIMITER ;
 
 -- RESUMEN DE PRESUPUESTO
 DELIMITER $$
@@ -2121,7 +2121,7 @@ BEGIN
 			cat.idcategoria_costo;
 END $$
 
-DELIMITER;
+DELIMITER ;
 
 DELIMITER $$
 
@@ -2142,7 +2142,7 @@ BEGIN
             subcat.idsubcategoria_costo;
 END $$
 
-DELIMITER;
+DELIMITER ;
 
 -- SEPARACIONES   ////////////////////////////////////////////////////////////////////////////////////////////
 DELIMITER $$
@@ -2161,7 +2161,7 @@ BEGIN
 
 END $$
 
-DELIMITER;
+DELIMITER ;
 
 DELIMITER $$
 
@@ -2193,7 +2193,7 @@ BEGIN
         ORDER BY sp.n_expediente ASC;
 
 END $$
-DELIMITER;
+DELIMITER ;
 
 DELIMITER $$
 CREATE PROCEDURE spu_list_separation_tPersona
@@ -2219,7 +2219,7 @@ BEGIN
     END IF;
 END $$
 
-DELIMITER;
+DELIMITER ;
 
 DELIMITER $$
 
@@ -2260,7 +2260,7 @@ BEGIN
     AND lcj.inactive_at IS NULL;
 END $$
 
-DELIMITER;
+DELIMITER ;
 
 DELIMITER $$
 
@@ -2292,7 +2292,7 @@ BEGIN
     END IF;
 END $$
 
-DELIMITER;
+DELIMITER ;
 
 DELIMITER $$
 
@@ -2349,7 +2349,7 @@ BEGIN
 
     SELECT ROW_COUNT() AS filasAfect;
 END $$
-DELIMITER;
+DELIMITER ;
 SELECT * FROM separaciones;
 DELIMITER $$
 
@@ -2411,7 +2411,7 @@ BEGIN
     SELECT ROW_COUNT() AS filasAfect;
 END $$
 
-DELIMITER;
+DELIMITER ;
 
 DELIMITER $$
 
@@ -2439,7 +2439,7 @@ BEGIN
     END IF;
 END $$
 
-DELIMITER;
+DELIMITER ;
 
 
 -- DEVLOUCIONES   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2452,7 +2452,7 @@ BEGIN
         WHERE inactive_at IS NULL;
 END $$
 
-DELIMITER;
+DELIMITER ;
 
 DELIMITER $$
 
@@ -2470,7 +2470,7 @@ BEGIN
             AND inactive_at IS NULL;
 END $$
 
-DELIMITER;
+DELIMITER ;
 
 DELIMITER $$
 
@@ -2490,7 +2490,7 @@ BEGIN
             AND n_expediente_dev LIKE CONCAT(_n_expediente,'%');
 END $$
 
-DELIMITER;
+DELIMITER ;
 
 DELIMITER $$
 
@@ -2504,7 +2504,7 @@ BEGIN
         WHERE iddevolucion = _iddevolucion;
 END $$
 
-DELIMITER;
+DELIMITER ;
 
 DELIMITER $$
 
@@ -2559,7 +2559,7 @@ BEGIN
     SELECT ROW_COUNT() AS filasAfect;
 END
 
-DELIMITER;
+DELIMITER ;
 
 DELIMITER $$
 
@@ -2603,7 +2603,7 @@ BEGIN
     SELECT ROW_COUNT() AS filasAfect;
 END $$
 
-DELIMITER;
+DELIMITER ;
 
 DELIMITER $$
 
@@ -2623,7 +2623,7 @@ BEGIN
     SELECT ROW_COUNT() AS filasAfect;
 END $$
 
-DELIMITER;
+DELIMITER ;
 -- CONTRATOS  ////////////////////////////////////////////////////////////////////////////////////
 
 DELIMITER $$
@@ -2690,7 +2690,7 @@ BEGIN
         ORDER BY idcontrato DESC;
 END $$
 
-DELIMITER;
+DELIMITER ;
 
 DELIMITER $$
 CREATE PROCEDURE spu_list_contracts_types_date
@@ -2825,7 +2825,7 @@ BEGIN
     AND inactive_at IS NULL) AS existContract;
 END $$
 
-DELIMITER;
+DELIMITER ;
 
 DELIMITER $$
 
@@ -2963,7 +2963,7 @@ BEGIN
 			
 END $$
 
-DELIMITER;
+DELIMITER ;
 CALL spu_lits_contracts_full_by_id(1);
 
 DELIMITER $$
@@ -2985,7 +2985,8 @@ CREATE PROCEDURE spu_add_contract
     IN _inicial 			DECIMAL(8,2),
     IN _det_contrato		JSON,
     IN _archivo             VARCHAR(100),
-    IN _idusuario 			INT
+    IN _idusuario 			INT,
+    IN _idvendedor 			INT
 )
 BEGIN
 
@@ -3005,7 +3006,8 @@ BEGIN
                 inicial,
                 det_contrato,  
                 archivo,
-                idusuario
+                idusuario,
+                idvendedor
 				)
 			VALUES(
                     _n_expediente,
@@ -3023,14 +3025,15 @@ BEGIN
                     _inicial,
                     NULLIF(_det_contrato,""), 
                     _archivo,
-                    _idusuario
+                    _idusuario,
+                    _idvendedor
 				);
                 
 	SELECT @@last_insert_id AS idcontrato;
 
 END $$
 
-DELIMITER;
+DELIMITER ;
 
 DELIMITER $$
 
@@ -3053,7 +3056,8 @@ CREATE PROCEDURE spu_set_contract
     IN _inicial 			DECIMAL(8,2),
     IN _det_contrato		JSON,
     IN _archivo             VARCHAR(100),
-    IN _idusuario 			INT
+    IN _idusuario 			INT,
+    IN _idvendedor 			INT
 )
 BEGIN
 
@@ -3075,6 +3079,7 @@ BEGIN
             inicial 			= _inicial,
             archivo			= _archivo,
             idusuario		= _idusuario,
+            idvendedor 		= _idvendedor,
             update_at		= CURDATE()
         WHERE
 			idcontrato = _idcontrato;
@@ -3082,7 +3087,7 @@ BEGIN
     SELECT _idcontrato AS idcontrato;
 END $$
 
-DELIMITER;
+DELIMITER ;
 DELIMITER $$
 
 CREATE PROCEDURE spu_inactive_contracts
@@ -3102,7 +3107,7 @@ BEGIN
   SELECT ROW_COUNT() AS filasAfect;
 END $$
 
-DELIMITER;
+DELIMITER ;
 
 DELIMITER $$
 
@@ -3116,7 +3121,7 @@ BEGIN
                 );
 END $$
 
-DELIMITER;
+DELIMITER ;
 -- DETALLES DE CONTRATOS  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 DELIMITER $$
@@ -3144,7 +3149,7 @@ BEGIN
         AND dtc.inactive_at IS NULL
         ORDER BY cnt.n_expediente;
 END $$
-DELIMITER;
+DELIMITER ;
 
 DELIMITER $$
 CREATE PROCEDURE spu_list_det_contract_ById
@@ -3243,7 +3248,7 @@ BEGIN
         WHERE ct.idcontrato = _idcontrato;
 END $$
 
-DELIMITER;
+DELIMITER ;
 
 DELIMITER $$
 
@@ -3264,7 +3269,7 @@ BEGIN
     SELECT ROW_COUNT() AS filasAfect;
 END $$
 
-DELIMITER;
+DELIMITER ;
 
 DELIMITER $$
 
@@ -3280,7 +3285,7 @@ BEGIN
         ORDER BY fecha_vencimiento;
 END $$
 
-DELIMITER;
+DELIMITER ;
 
 DELIMITER $$
 
@@ -3319,7 +3324,7 @@ BEGIN
         AND qt.inactive_at IS NULL;
 END $$
 
-DELIMITER;
+DELIMITER ;
 
 DELIMITER $$
 
@@ -3346,7 +3351,7 @@ BEGIN
     END IF;
 END $$
 
-DELIMITER;
+DELIMITER ;
 
 DELIMITER $$
 CREATE PROCEDURE spu_list_quotas_estado_fven
@@ -3375,7 +3380,7 @@ BEGIN
     END IF;
 END $$
 
-DELIMITER;
+DELIMITER ;
 
 DELIMITER $$
 
@@ -3394,7 +3399,7 @@ BEGIN
     SELECT ROW_COUNT() AS filasAfect;
 END $$
 
-DELIMITER;
+DELIMITER ;
 
 -- CUOTAS
 DELIMITER $$
@@ -3413,7 +3418,7 @@ BEGIN
     SELECT ROW_COUNT() AS filasAfect;
 END $$
 
-DELIMITER;
+DELIMITER ;
 
 DELIMITER $$
 
@@ -3491,7 +3496,7 @@ BEGIN
     END CASE;
 END $$
 
-DELIMITER;
+DELIMITER ;
 
 DELIMITER $$
 
@@ -3533,7 +3538,7 @@ BEGIN
     SELECT ROW_COUNT() AS filasAfect;
 END $$
 
-DELIMITER;
+DELIMITER ;
 
 -- USUARIOS ///////////////////////////////////////////////////////////////////////////////////////////////////
 DELIMITER $$
@@ -3563,7 +3568,25 @@ BEGIN
         AND usu.correo = _correo;
 END $$
 
-DELIMITER;
+DELIMITER ;
+
+DELIMITER $$
+CREATE PROCEDURE spu_list_sellers()
+BEGIN
+	SELECT 
+		us.idusuario,
+		pr.apellidos,
+        pr.nombres,
+        pr.documento_tipo,
+        pr.documento_nro
+		FROM usuarios us
+        INNER JOIN personas pr ON pr.idpsersona = ud.idpersona
+        INNER JOIN roles rl ON rl.idrol = us.idrol
+		WHERE us.inactive_at IS NULL
+			AND rl.idrol = us.idrol
+            AND us.idusuario IS NULL;
+END $$
+DELIMITER ;
 
 DELIMITER $$
 CREATE PROCEDURE spu_set_password
@@ -3629,7 +3652,7 @@ BEGIN
     SELECT ROW_COUNT() AS filasAfect;
 END $$
 
-DELIMITER;
+DELIMITER ;
 select * from contratos;
 -- CONFIGURACIONES
 DELIMITER $$
@@ -3661,7 +3684,7 @@ BEGIN
     END IF;
 END $$
 
-DELIMITER;
+DELIMITER ;
 
 DELIMITER $$
 CREATE PROCEDURE spu_upset_config
@@ -3692,7 +3715,7 @@ BEGIN
                     VALUES(_clave, _valor);
     END IF;
 END $$
-DELIMITER;
+DELIMITER ;
 
 /* -------------------------------------------------------------------------- */
 /*                                  PERMISOS                                  */
@@ -3731,7 +3754,7 @@ BEGIN
 		WHERE YEAR(update_at) = YEAR(NOW());
 END $$
 
-DELIMITER;
+DELIMITER ;
 
 DELIMITER $$
 
@@ -3750,7 +3773,7 @@ BEGIN
             GROUP BY datos.mes;
 END $$
 
-DELIMITER;
+DELIMITER ;
 
 DELIMITER $$
 
@@ -3766,13 +3789,75 @@ BEGIN
 			
 END $$
 
-DELIMITER;
+DELIMITER ;
 
 DELIMITER $$
+
+CREATE PROCEDURE spu_grafic_quotas()
+BEGIN
+
+    SELECT 
+        ct.moneda_venta,
+        SUM(dtq.monto_pago) AS monto,
+        MONTH(dtq.fecha_pago) AS mes
+        FROM detalle_cuotas dtq
+        INNER JOIN cuotas qt ON qt.idcuota = dtq.idcuota
+        INNER JOIN contratos ct ON ct.idcontrato = qt.idcontrato 
+        WHERE dtq.inactive_at IS NULL
+            AND qt.inactive_at IS NULL
+            AND qt.estado != "POR CANCELAR"
+            AND ct.estado = "VIGENTE"
+            AND ct.inactive_at IS NULL
+            AND YEAR(dtq.fecha_pago) = YEAR(NOW())
+            GROUP BY MONTH(dtq.fecha_pago), ct.moneda_venta;
+END $$
+
+DELIMITER ;
+
+DELIMITER $$
+
+CREATE PROCEDURE spu_grafic_refunds_money()
+BEGIN
+	SELECT 
+		moneda_venta,
+        SUM(monto_devolucion) AS monto,
+        MONTH(create_at) AS mes
+		FROM
+		vws_list_refunds
+        WHERE inactive_at IS NULL
+			AND YEAR(create_at) = YEAR(NOW())
+            GROUP BY MONTH(create_at), moneda_venta;
+END $$
+
+DELIMITER ;
+
+DELIMITER $$
+CREATE PROCEDURE spu_grafic_sellers()
+BEGIN
+	SELECT 
+        (COUNT(us.idusuario)) AS cantidad,
+		us.idusuario,
+        pr.apellidos,
+        pr.nombres,
+        MONTH(ct.fecha_contrato) AS mes
+		FROM contratos ct
+        INNER JOIN usuarios us ON us.idusuario = ct.idvendedor
+        INNER JOIN personas pr ON pr.idpersona = us.idpersona
+        WHERE ct.estado = 'VIGENTE'
+			AND ct.inactive_at IS NULL
+            AND MONTH(ct.fecha_contrato) = MONTH(NOW())
+            AND us.inactive_at IS NULL
+            GROUP BY MONTH(ct.fecha_contrato), ct.idvendedor; 
+            select* from contratos;
+END $$
+
+DELIMITER ;
+
+DELIMITER ;
 
 CREATE PROCEDURE ()
 BEGIN
 END $$
 
-DELIMITER;
+DELIMITER ;
 

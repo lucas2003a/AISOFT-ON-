@@ -1,5 +1,7 @@
 <?php
 
+session_start();
+
 require_once "../Models/quota.php";
 date_default_timezone_set("America/Lima");
 
@@ -72,7 +74,7 @@ if(isset($_POST["action"])){
                 "idcontrato" => $_POST["idcontrato"],
                 "monto_cuota" => $_POST["monto_cuota"],
                 "fecha_vencimiento" => $_POST["fecha_vencimiento"],
-                "idusuario" => 1
+                "idusuario" => $_SESSION["idusuario"]
                 // "idusuario" => $_POST["idusuario"]
                 ];
 
@@ -109,7 +111,7 @@ if(isset($_POST["action"])){
         case "cancelDetailQuota":
             $dataObtained = [
                 "idcuota" => $_POST["idcuota"],
-                "idusuario" => 1
+                "idusuario" => $_SESSION["idusuario"]
                 // "idusuario" => $_POST["idusuario"]
             ];
 
@@ -119,7 +121,7 @@ if(isset($_POST["action"])){
         case "inactiveQuota":
             $dataObtained = [
                 "idcuota" => $_POST["idcuota"],
-                "idusuario" => 1
+                "idusuario" => $_SESSION["idusuario"]
                 // "idusuario" => $_POST["idusuario"]
             ];
 
@@ -130,5 +132,13 @@ if(isset($_POST["action"])){
             $idcontrato = $_POST["idcontrato"];
 
             echo json_encode($quota->getQuotasContractReprogram($idcontrato));
+    
+            /* -------------------------------------------------------------------------- */
+            /*                                  GRÁFICOS                                  */
+            /* -------------------------------------------------------------------------- */
+
+        case "chartQuotas":
+                echo json_encode($quota->chartQuotas());
+            break;
     }
 }

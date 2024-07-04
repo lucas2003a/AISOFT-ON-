@@ -1,4 +1,4 @@
-<?php include "../sidebar/permissions.php";?>
+<?php include "../sidebar/permissions.php"; ?>
 <!DOCTYPE html>
 <html lang="es">
 
@@ -43,7 +43,7 @@
     <div class="collapse navbar-collapse  w-auto " id="sidenav-collapse-main">
       <ul class="navbar-nav">
 
-        <?php include "../sidebar/sidebar_options.php";?>
+        <?php include "../sidebar/sidebar_options.php"; ?>
 
         <!-- CERRAR SESIÓN -->
         <li class="nav-item">
@@ -88,7 +88,7 @@
             <li class="nav-item d-flex align-items-center">
               <a href="javascript:;" class="nav-link text-body font-weight-bold px-0">
                 <i class="fa fa-user me-sm-1"></i>
-                <span class="d-sm-inline d-none"><?="<strong>" . strtoupper($_SESSION["rol"]) . "</strong>" . " - " . strtolower($_SESSION["apellidos"]) . ", " . strtolower($_SESSION["nombres"])?></span>
+                <span class="d-sm-inline d-none"><?= "<strong>" . strtoupper($_SESSION["rol"]) . "</strong>" . " - " . strtolower($_SESSION["apellidos"]) . ", " . strtolower($_SESSION["nombres"]) ?></span>
               </a>
             </li>
             <li class="nav-item d-xl-none ps-3 d-flex align-items-center">
@@ -243,6 +243,17 @@
                               <div class="valid-feedback">
                                 Conyugue seleccionado correctamente.
                               </div>
+                            </div>
+
+                            <!-- VENDEDOR -->
+                            <div class="mt-2">
+
+                              <label for="idvendedor">Vendedor</label>
+                              <select name="idvendedor" id="idvendedor" class="form-select" required>
+                                <option value="">Seleccione un vendedor</option>
+                              </select>
+                              <div class="invalid-feedback">Selecciona un vendedor</div>
+                              <div class="valid-feedback">Vendedor seleccionado correctamente</div>
                             </div>
 
                             <!-- IDREPRESENTANTE LEGAL -->
@@ -560,7 +571,7 @@
       </footer>
     </div>
   </main>
-  <div class="fixed-plugin">
+  <div class="fixed-plugin d-none">
     <a class="fixed-plugin-button text-dark position-fixed px-3 py-2">
       <i class="fa fa-cog py-2"> </i>
     </a>
@@ -663,6 +674,35 @@
       let jsonDet = "";
       let iframe;
 
+      // * Obtiene a los vendedores
+      async function getVendors() {
+
+        try {
+
+          let url = "../../Controllers/contract.controller.php";
+
+          let params = new FormData();
+
+          params.append("action", "getMoney");
+
+          let results = await global.sendAction(url, params);
+
+          if (results.length > 0) {
+
+            results.forEach(result => {
+
+              let tagOption = document.createElement("option");
+              tagOption.value = result.idusuario;
+              tagOption.innerText = (result.apellidos).toUpperCase() + " " + (result.nombres).toLowerCase();
+
+              $("#idvendedor").appendChild(tagOption);
+            });
+          }
+        } catch (e) {
+          console.error(e);
+        }
+      }
+
       // *  Obtiene el ubigeo
       async function getUbigeo(iddistrito) {
 
@@ -697,9 +737,9 @@
             return new Promise((resolve, reject) => {
               let options = Array.from($("#idsede").options);
 
-              if(options.length > 1){
+              if (options.length > 1) {
                 resolve();
-              }else{
+              } else {
 
                 let interval = setInterval(() => {
 
@@ -904,6 +944,7 @@
           params.append("inicial", $("#monto_inicial").value);
           params.append("det_contrato", jsonDet);
           params.append("archivo", $("#in-doc").files[0]);
+          params.append("idvendedor", $("#idvendedor").value)
           params.append("clave", serie.clave);
           params.append("valor", serie.number);
 
@@ -1769,7 +1810,7 @@
 
       })
 
-      $("#idproyecto").addEventListener("change", async function(e){
+      $("#idproyecto").addEventListener("change", async function(e) {
 
         let idproyecto = e.target.options[e.target.selectedIndex].value;
         let tipo = e.target.options[e.target.selectedIndex].dataset.tipo;
@@ -1784,30 +1825,30 @@
 
           getHouses(idproyecto);
           await getUbigeo(iddistrito)
-          
+
           return new Promise((resolve, reject) => {
-          
-            let options = Array.from($("#idsede").options);
 
-            if(options.length > 1){
-              resolve();
-            }else{
+              let options = Array.from($("#idsede").options);
 
-              let interval = setInterval(() => {
-                
-                options = Array.from($("#idsede").options);
+              if (options.length > 1) {
+                resolve();
+              } else {
 
-                if(options.length > 1){
-                  clearInterval(interval);
-                  resolve();
-                }
-              }, 500);
-            }
-          })
-          .then(() => {
-            $("#idsede").value = idsede;
-            $("#idsede").dispatchEvent(new Event("change"));
-          })
+                let interval = setInterval(() => {
+
+                  options = Array.from($("#idsede").options);
+
+                  if (options.length > 1) {
+                    clearInterval(interval);
+                    resolve();
+                  }
+                }, 500);
+              }
+            })
+            .then(() => {
+              $("#idsede").value = idsede;
+              $("#idsede").dispatchEvent(new Event("change"));
+            })
         }
       });
 
@@ -1901,6 +1942,7 @@
       });
 
       // await getTC();
+      await getVendors();
       await getAllContracts();
       await getSerieCode();
 

@@ -1,4 +1,6 @@
 <?php
+
+session_start();
 require_once "../Models/quota.php";
 require_once "../vendor/autoload.php";
 date_default_timezone_set("America/Lima");
@@ -14,7 +16,7 @@ $today = date("Y-m-d");
 
 if($today == $cronDate){
 
-    $quotaCron = new Quota();
+    /*$quotaCron = new Quota();
 
     $data = $quotaCron->listQuotasAll();
 
@@ -32,7 +34,7 @@ if($today == $cronDate){
 
             $quotaCron->updateQuotasState($dataSend);
         }
-    }
+    } */
 
 }
 ?>

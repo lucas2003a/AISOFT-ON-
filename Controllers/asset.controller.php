@@ -1,5 +1,7 @@
 <?php
 
+session_start();
+
 require_once "../Models/Asset.php";
 
 if (isset($_POST["action"])) {
@@ -69,7 +71,7 @@ if (isset($_POST["action"])) {
                 "precio_lote"           => $_POST["precio_lote"],
                 "precio_construccion"   => $_POST["precio_construccion"],
                 "precio_venta"          => $_POST["precio_venta"],
-                "idusuario"             => 1
+                "idusuario"             => $_SESSION["idusuario"]
                 /* "idusuario"     => $_POST["idusuario"] */
             ];
 
@@ -117,7 +119,7 @@ if (isset($_POST["action"])) {
                 "precio_lote"           => $_POST["precio_lote"],
                 "precio_construccion"    => $_POST["precio_construccion"],
                 "precio_venta"      => $_POST["precio_venta"],
-                "idusuario"         => 1
+                "idusuario"         => $_SESSION["idusuario"]
                 /* "idusuario"     => $_POST["idusuario"] */
             ];
 
@@ -166,7 +168,7 @@ if (isset($_POST["action"])) {
             $dataObtained = [
                 "idactivo" => $_POST["idactivo"],
                 "det_casa" => $_POST["det_casa"],
-                "idusuario" => 1,
+                "idusuario" => $_SESSION["idusuario"],
             ];
 
 
@@ -178,7 +180,7 @@ if (isset($_POST["action"])) {
             $dataObtained = [
                 "idactivo"      => $_POST["idactivo"],
                 "idpresupuesto" => $_POST["idpresupuesto"],
-                "idusuario"      => 1
+                "idusuario"      => $_SESSION["idusuario"]
                 /* "idusuario"      => $_POST["idusuario"], */
             ];
 

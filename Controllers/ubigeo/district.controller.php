@@ -1,5 +1,7 @@
 <?php
 
+session_start();
+
 require_once "../../Models/ubigeo/Distrito.php";
 
 if(isset($_POST["action"])){

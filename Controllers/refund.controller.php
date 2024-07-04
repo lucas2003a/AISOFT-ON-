@@ -1,5 +1,7 @@
 <?php
 
+session_start();
+
 require_once "../Models/Refund.php";
 require_once "../Models/Configuration.php";
 date_default_timezone_set("America/Lima");
@@ -137,7 +139,7 @@ if(isset($_POST["action"])){
                 $dataObtained = [
 
                     "iddevolucion"  =>  $_POST["iddevolucion"],
-                    "idusuario"     => 1
+                    "idusuario"     => $_SESSION["idusuario"]
                 ];
 
                 echo json_encode($refund->inactiveRefund($dataObtained));
@@ -150,6 +152,11 @@ if(isset($_POST["action"])){
         case 'renderChart':
 
                 echo json_encode($refund->chartRefunds());
+            break;
+
+        case 'renderChartMoney':
+
+                echo json_encode($refund->chartRefundsMoney());
             break;
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+session_start();
+
 require_once "../Models/Cost.php";
 
 if(isset($_POST["action"])){
@@ -37,7 +39,7 @@ if(isset($_POST["action"])){
                     "detalle"               => $_POST["detalle"],
                     "cantidad"              => $_POST["cantidad"],
                     "precio_unitario"       => $_POST["precio_unitario"],
-                    "idusuario"             => 1
+                    "idusuario"             => $_SESSION["idusuario"]
                     // "idusuario"             => $_POST["idusuario"]
                 ];
 
@@ -54,7 +56,7 @@ if(isset($_POST["action"])){
                     "detalle"               => $_POST["detalle"],
                     "cantidad"              => $_POST["cantidad"],
                     "precio_unitario"       => $_POST["precio_unitario"],
-                    "idusuario"             => 1
+                    "idusuario"             => $_SESSION["idusuario"]
                     // "idusuario"             => $_POST["idusuario"]
                 ];
 

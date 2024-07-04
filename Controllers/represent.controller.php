@@ -1,5 +1,7 @@
 <?php
 
+session_start();
+
 require_once "../Models/Represent.php";
 
 if(isset($_POST["action"])){

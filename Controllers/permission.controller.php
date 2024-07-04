@@ -1,4 +1,6 @@
-<?php 
+<?php
+
+session_start(); 
 session_start();
 require_once "../Models/Permission.php";
 

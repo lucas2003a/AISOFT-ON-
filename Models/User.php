@@ -25,5 +25,21 @@ class User extends Conection{
             die($e->getMessage());
         }
     }
+
+    /**
+     * Método para listar los usuarios VENDEDORES O ASESORES DE VENTAS
+     */
+    public function chartEmployee(){
+
+        try {
+            $query = $this->conection->prepare("CALL spu_list_sellers()");
+            $query->execute();
+
+            return $query->fetchAll(PDO::FETCH_ASSOC);
+
+        } catch (Exception $e) {
+            die($e->getMessage());
+        }
+    }
 }        
 ?>

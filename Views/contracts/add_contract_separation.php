@@ -1,4 +1,4 @@
-<?php include "../sidebar/permissions.php";?>
+<?php include "../sidebar/permissions.php"; ?>
 <!DOCTYPE html>
 <html lang="es">
 
@@ -43,7 +43,7 @@
     <div class="collapse navbar-collapse  w-auto " id="sidenav-collapse-main">
       <ul class="navbar-nav">
 
-        <?php include "../sidebar/sidebar_options.php";?>
+        <?php include "../sidebar/sidebar_options.php"; ?>
 
         <!-- CERRAR SESIÓN -->
         <li class="nav-item">
@@ -88,7 +88,7 @@
             <li class="nav-item d-flex align-items-center">
               <a href="javascript:;" class="nav-link text-body font-weight-bold px-0">
                 <i class="fa fa-user me-sm-1"></i>
-                <span class="d-sm-inline d-none"><?="<strong>" . strtoupper($_SESSION["rol"]) . "</strong>" . " - " . strtolower($_SESSION["apellidos"]) . ", " . strtolower($_SESSION["nombres"])?></span>
+                <span class="d-sm-inline d-none"><?= "<strong>" . strtoupper($_SESSION["rol"]) . "</strong>" . " - " . strtolower($_SESSION["apellidos"]) . ", " . strtolower($_SESSION["nombres"]) ?></span>
               </a>
             </li>
             <li class="nav-item d-xl-none ps-3 d-flex align-items-center">
@@ -244,6 +244,18 @@
                                 Conyugue seleccionado correctamente.
                               </div>
                             </div>
+
+                            <!-- VENDEDOR -->
+                            <div class="mt-2">
+
+                              <label for="idvendedor">Vendedor</label>
+                              <select name="idvendedor" id="idvendedor" class="form-select" required>
+                                <option value="">Seleccione un vendedor</option>
+                              </select>
+                              <div class="invalid-feedback">Selecciona un vendedor</div>
+                              <div class="valid-feedback">Vendedor seleccionado correctamente</div>
+                            </div>
+
 
                             <!-- IDREPRESENTANTE LEGAL -->
                             <div class="mt-2">
@@ -559,7 +571,7 @@
       </footer>
     </div>
   </main>
-  <div class="fixed-plugin">
+  <div class="fixed-plugin d-none">
     <a class="fixed-plugin-button text-dark position-fixed px-3 py-2">
       <i class="fa fa-cog py-2"> </i>
     </a>
@@ -667,6 +679,35 @@
       let code = params.get("id");
       let idseparacion = atob(code);
 
+      // * Obtiene a los vendedores
+      async function getVendors() {
+
+        try {
+          
+          let url = "../../Controllers/contract.controller.php";
+
+          let params = new FormData();
+
+          params.append("action", "getMoney");
+          
+          let results = await global.sendAction(url, params);
+
+          if(results.length > 0){
+
+            results.forEach(result => {
+              
+              let tagOption = document.createElement("option");
+              tagOption.value = result.idusuario;
+              tagOption.innerText = (result.apellidos).toUpperCase() + " " + (result.nombres).toLowerCase();
+
+              $("#idvendedor").appendChild(tagOption);
+            });
+          }
+        } catch (e) {
+          console.error(e);
+        }
+      }
+
       // * Obtenie el numero de serie código
       async function getSerieCode() {
 
@@ -756,6 +797,13 @@
             if (options.length > 1) {
               resolve();
             } else {
+              let tagOption = document.createElement("option");
+              tagOption.value = result.idseparacion;
+              tagOption.innerText = result.n_expediente;
+              tagOption.dataset.precio_venta = result.precio_venta;
+              tagOption.dataset.moneda_venta = result.moneda_venta;
+
+              $("#idseparacion").appendChild(tagOption);
 
               const interval = setInterval(() => {
 
@@ -958,12 +1006,12 @@
         let reader = new FileReader();
         let file = event.target.files[0];
 
-        
-        reader.onerror = (event)=>{
+
+        reader.onerror = (event) => {
           console.error("Hubo un error: ", reader.error)
         }
 
-        reader.onprogress = (event)=>{
+        reader.onprogress = (event) => {
 
         };
 
@@ -973,19 +1021,21 @@
           iframe.type = "application/json";
           iframe.width = "500";
           iframe.height = "800";
-          
+
           parentIiframe = $("#view-iframe")
           parentIiframe.append(iframe);
 
           let ArrayBuffer = event.target.result;
-          let blob = new Blob([ArrayBuffer],{type:"application/pdf"});
-          
+          let blob = new Blob([ArrayBuffer], {
+            type: "application/pdf"
+          });
+
           let url = window.URL.createObjectURL(blob);
 
           iframe.setAttribute("src", `${url}`);
 
         }
-        
+
         reader.readAsArrayBuffer(file);
 
       }
@@ -1021,6 +1071,7 @@
           params.append("inicial", $("#monto_inicial").value)
           params.append("det_contrato", jsonDet)
           params.append("archivo", $("#in-doc").files[0])
+          params.append("idvendedor", $("#idvendedor").value)
           params.append("clave", serie.clave)
           params.append("valor", serie.number)
 
@@ -1251,7 +1302,7 @@
 
           if (results.length > 0) {
             dataRepresentsAll = results;
-            console.log("resultados: ",results);
+            console.log("resultados: ", results);
 
             $("#idrepresentante_primario").innerHTML = "";
 
@@ -1798,6 +1849,7 @@
         }
       });
 
+      await getVendors();
       await getSerieCode();
       await getTC();
       await getSeparationById(idseparacion);

@@ -1,5 +1,7 @@
 <?php
 
+session_start();
+
 require_once "../Models/Budget.php";
 require_once "../Models/Configuration.php";
 
@@ -42,7 +44,7 @@ if (isset($_POST["action"])) {
                 "codigo"        => $_POST["codigo"],
                 "modelo"        => $_POST["modelo"],
                 "area_construccion" => $_POST["area_construccion"],
-                "idusuario"     => 1
+                "idusuario"     => $_SESSION["idusuario"]
                 /* "idusuario"     => $_POST["idusuario"] */
             ];
 
@@ -63,7 +65,7 @@ if (isset($_POST["action"])) {
                 "codigo"        => $_POST["codigo"],
                 "modelo"        => $_POST["modelo"],
                 "area_construccion" => $_POST["area_construccion"],
-                "idusuario"     => 1
+                "idusuario"     => $_SESSION["idusuario"]
                 /* "idusuario"     => $_POST["idusuario"] */
             ];
 

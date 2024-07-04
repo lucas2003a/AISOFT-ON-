@@ -108,38 +108,62 @@
                 </div>
             </div>
         </nav>
+
         <div class="container-fluid py-4">
             <div class="row">
                 <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4"></div>
             </div>
 
+            <!-- /* -------------------------------------------------------------------------- */
+            /*                        GRÁFICO DE VENTAS CONCRETADAS                       */
+            /* -------------------------------------------------------------------------- */ -->
+
             <div class="row mt-4">
-                <div class="col-lg-6 mb-lg-0 mb-4">
-                    <div class="card z-index-2">
+                <div class="col-md-6 mb-lg-0 mb-4">
+                    <div class="card z-index-2" style="height: 100%;">
                         <div class="card-body">
-                            <div class="bg-gradient-dark border-radius-lg py-3 pe-1 mb-3">
+                            <div class="bg-gradient-dark border-radius-lg py-3 pe-1 mb-3" style="height: 100%;">
 
                                 <div class="chart">
-                                    <canvas id="chart-line" class="chart-canvas" height="170"></canvas>
+                                    <canvas id="chart-line" class="chart-canvas" height="150"></canvas>
                                 </div>
                             </div>
 
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-6 mb-lg-0 mb-4">
-                    <div class="card z-index-2">
+
+                <!-- /* -------------------------------------------------------------------------- */
+                /*                         GRÁFICO DE ESTADO DE LOTES                         */
+                /* -------------------------------------------------------------------------- */ -->
+
+                <div class="col-md-6 mb-lg-0 mb-4">
+                    <div class="card z-index-2" style="height: 100%;">
                         <div class="card-body p-3">
-                            <div class="bg-gradient-dark border-radius-lg py-3 pe-1 mb-3 d-flex justify-content-center align-items-center" style="height: 100%">
+                            <div class="bg-gradient-dark border-radius-lg py-3 pe-1 mb-3" style="height: 100%;">
 
                                 <div class="chart">
-                                    <canvas id="chart-pie" class="chart-canvas p-4"></canvas>
+                                    <canvas id="chart-pie" class="chart-canvas" height="400"></canvas>
                                 </div>
                             </div>
-                            <div class="bg-gradient-dark border-radius-lg py-3 pe-1 mb-3" style="height: 100%">
 
-                                <div class="chart">
-                                    <canvas id="chart-line2" class="chart-canvas" height="170"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- /* -------------------------------------------------------------------------- */
+            /*                          GRÁFICO DE DEVOLUCIONES                                */
+            /* -------------------------------------------------------------------------- */--> 
+
+            <div class="row mt-4">
+                <div class="col-md-12 mb-lg-0 mb-4">
+                    <div class="card z-index-2">
+                        <div class="card-body p-3">
+                            <div class="bg-gradient-dark border-radius-lg py-3 pe-1 mb-3">
+
+                                <div class="chart  h-100">
+                                    <canvas id="chart-line2" class="chart-canvas" height="50"></canvas>
                                 </div>
                             </div>
                         </div>
@@ -147,43 +171,26 @@
                 </div>
             </div>
 
-            <footer class="footer pt-3">
-                <div class="container-fluid">
-                    <div class="row align-items-center justify-content-lg-between">
-                        <div class="col-lg-6 mb-lg-0 mb-4">
-                            <div class="copyright text-center text-sm text-muted text-lg-start">
-                                ©
-                                <script>
-                                    document.write(new Date().getFullYear());
-                                </script>
-                                , made with <i class="fa fa-heart"></i> by
-                                <a href="https://www.creative-tim.com" class="font-weight-bold" target="_blank">Creative Tim</a>
-                                for a better web.
-                            </div>
-                        </div>
-                        <div class="col-lg-6">
-                            <ul class="nav nav-footer justify-content-center justify-content-lg-end">
-                                <li class="nav-item">
-                                    <a href="https://www.creative-tim.com" class="nav-link text-muted" target="_blank">Creative Tim</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="https://www.creative-tim.com/presentation" class="nav-link text-muted" target="_blank">About
-                                        Us</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="https://www.creative-tim.com/blog" class="nav-link text-muted" target="_blank">Blog</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="https://www.creative-tim.com/license" class="nav-link pe-0 text-muted" target="_blank">License</a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </footer>
+            <footer class="footer pt-3  ">
+        <div class="container-fluid">
+          <div class="row align-items-center justify-content-lg-between">
+            <div class="col-lg-6 mb-lg-0 mb-4">
+              <div class="copyright text-center text-sm text-muted text-lg-start">
+                © <script>
+                  document.write(new Date().getFullYear())
+                </script>,
+                auspiciado por
+                <a href="https://aifperu.com/" class="font-weight-bold" target="_blank">A.I.F Contratistas Generales S.A.C</a>
+                (sistema web).
+              </div>
+            </div>
+          </div>
         </div>
+      </footer>
+        </div>
+
     </main>
-    <div class="fixed-plugin">
+    <div class="fixed-plugin d-none">
         <a class="fixed-plugin-button text-dark position-fixed px-3 py-2">
             <i class="fa fa-cog py-2"> </i>
         </a>
@@ -265,8 +272,8 @@
     <script src="../../node_modules/chart.js/dist/chart.umd.js"></script>
     <script src="../../assets/js/globalFunctions.js"></script>
     <script>
-        document.addEventListener("DOMcontentLoaded", () => {
-
+        document.addEventListener("DOMcontentLoaded", async function(){
+            
         });
         const global = new FunGlobal();
 
@@ -276,6 +283,7 @@
         //Gráfico de ventas
         const chartSales = $("#chart-line").getContext("2d");
         const chartRefunds = $("#chart-line2").getContext("2d");
+        chartRefunds.height = window.innerHeight -1111111;
         const chartpie = $("#chart-pie").getContext("2d");
 
         const colors = [
@@ -285,6 +293,10 @@
             "rgba(128, 0, 255, 1)",
             "rgba(0,4,71,10)",
         ];
+
+        /* -------------------------------------------------------------------------- */
+        /*                           RENDERIZADO DE GRÁFICOS                          */
+        /* -------------------------------------------------------------------------- */
 
         // * retorna el mes segun el número enviado
         async function checkMonth(value) {
@@ -314,7 +326,7 @@
             new Chart(chartpie, {
                 type: "pie",
                 data: {
-                    labels: ["Vendidos", "Separados", "Sin vender"],
+                    labels: [ `Vendidos : ${array.vendidos}`, `Separados: ${array.separados}`, `Sin vender: ${array.no_vendidos}`],
                     datasets: [{
                         label: "ventas",
                         tension: 0.4,
@@ -456,7 +468,118 @@
             });
         }
 
-        
+        // * Renderiza las devoluciones en el gráfico
+        async function renderRefunds(refunds) {
+
+            /*
+            //* .map() >=> Obtiene SOLO EL VALOR de la propiedad especifica de un objeto ("mes" en este caso)
+            //* new Set >=> Setea o conserva solo valores unicos (en este caso conserva los números de los meses sin repetir) DEVUELVE UNA ESTRUCTURA DE DATOS UNICOS
+            //* "[...]" >=> Operador de propagación mas corchetes, descompone el resultado obtenido del new Set y lo transforma en un array
+            */
+            let uniqueMonths = [...new Set(refunds.map(result => result.mes))]; // ! Array que almacena los números de los meses
+
+            let monthsLetter = []; // ! Array que almacena los meses en letras
+            let refundsContracts = []; // ! Array que almacena las devoluciones por contratos
+            let refundSeparations = []; // ! Array que almacena las devolusiones por separaciones
+
+            uniqueMonths.sort((min, max) => min - max); // ! Ordena los mese de forma ascendente
+
+            for (let i = 0; i < uniqueMonths.length; i++) {
+                monthsLetter.push(await checkMonth(uniqueMonths[i]));
+            }
+
+            // * Separa las devoluciones por su tipo en dos arrays separados
+            refunds.filter(result => {
+                if (result.tipo_devolucion == 'POR CONTRATO') refundsContracts.push(result);
+                else refundSeparations.push(result);
+            });
+
+
+            new Chart(chartRefunds, {
+
+                type: "line",
+                data: {
+                    labels: monthsLetter.map(month => month), // * Mes
+                    datasets: [{
+                        label: "POR CONTRATO",
+
+                        // * Cantidad de contratos
+                        data: uniqueMonths.map(month => {
+                            let contracts = refundsContracts.find(item => item.mes == month);
+                            return contracts ? contracts.cantidad : 0;
+                        }),
+                        //borderColor: "#fff" // * Color de la linea en un dataset
+                    }, {
+                        label: "POR SEPARACIÓN",
+
+                        // * Cantidad Separaciones
+                        data: uniqueMonths.map(month => {
+                            let separations = refundSeparations.find(item => item.mes == month);
+                            return separations ? separations.cantidad : 0;
+                        })
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    elements: {
+                        line: {
+
+                            tension: 0.1,
+
+                        }
+
+                    },
+                    scales: {
+                        y: {
+                            grid: {
+                                display: true,
+                                lineWidth: 0.1,
+                                color: "#fff"
+                            },
+                            ticks: {
+                                precision: 0,
+                                color: "#fff"
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: true,
+                                lineWidth: 0.1,
+                                color: "#fff"
+                            },
+                            ticks: {
+                                precision: 0,
+                                color: "#fff"
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: true,
+                            labels: {
+
+                                color: "#fff"
+                            }
+                        },
+                        title: {
+                            display: true,
+                            text: "Devoluciones",
+                            color: "#fff",
+                            font: {
+                                size: 20,
+                                weight: "bold"
+                            }
+                        }
+                    }
+                },
+                //plugins: {}
+            });
+        }
+
+        /* -------------------------------------------------------------------------- */
+        /*                              CONSULTA A LA BD                              */
+        /* -------------------------------------------------------------------------- */
+
         //Obtiene las métricas generales de los lotes
         async function listAll() {
             try {
@@ -474,86 +597,6 @@
             } catch (e) {
                 console.error(e);
             }
-        }
-
-        // * Renderiza las devoluciones en el gráfico
-        async function renderRefunds(refunds) {
-
-            for (const refund of refunds) {
-                refund.mes = await checkMonth(refund.mes);
-            }
-
-            let refundsContracts = [];
-            let refundSeparations = [];
-
-            refunds.filter(result => {
-                if (result.tipo_devolucion == 'POR CONTRATO') refundsContracts.push(result);
-                else refundSeparations.push(result);
-            });
-
-            new Chart(chartRefunds, {
-
-                type: "line",
-                data: {
-                    labels: refunds.map(refund => refund.mes),
-                    datasets: [
-                        {
-                        label: "POR CONTRATO", // * Mes
-                        data: refundsContracts.map(contract => contract.cantidad), // * Cantidad de contratos
-                        //borderColor: "#fff" // * Color de la linea en un dataset
-                    },{
-                        label: "POR SEPARACIÓN", // * Mes
-                        data : refundSeparations.map(separation => separation.cantidad) // * Cantidad Separaciones
-                    }
-                ]
-                },
-                options: {
-                    elements:{
-                        line:{
-                            
-                            tension: 0.1                  ,
-
-                        }
-                        
-                    },
-                    scales:{
-                        y:{
-                            grid:{
-                                display:true,
-                                lineWidth:0.1,
-                                color:"#fff"
-                            },
-                            ticks:{
-                                precision:0,
-                                color:"#fff"
-                            }
-                        },
-                        x:{
-                            grid:{
-                                display:true,
-                                lineWidth:0.1,
-                                color:"#fff"
-                            },
-                            ticks:{
-                                precision:0,
-                                color:"#fff"
-                            }
-                        }
-                    },
-                    plugins: {
-                        title:{
-                            display: true,
-                            text: "Devoluciones",
-                            color: "#fff",
-                            font:{
-                                size: 20,
-                                weight: "bold"
-                            }
-                        }
-                    }
-                },
-                //plugins: {}
-            });
         }
 
         //Oteiene los datos de las ventas durante el año
@@ -609,7 +652,7 @@
                     // ! FIN DE DATOS DE PRUEBA
 
                     for (const venta of results) {
-                        
+
                         venta.mes = await checkMonth(venta.mes);
                     }
 
@@ -633,6 +676,90 @@
                 let results = await global.sendAction(url, params);
 
                 if (results.length > 0) {
+                    
+
+                    // ! DATOS DE PRUEBA
+                        tipo1 = "POR CONTRATO";
+                        tipo2 = "POR SEPARACIÓN";
+
+
+                        const newData = [{
+                                cantidad: 3,
+                                tipo_devolucion: tipo2,
+                                mes: 2
+                            },
+                            {
+                                cantidad: 2,
+                                tipo_devolucion: tipo1,
+                                mes: 2
+                            },
+                            {
+                                cantidad: 2,
+                                tipo_devolucion: tipo1,
+                                mes: 3
+                            },
+                            {
+                                cantidad: 3,
+                                tipo_devolucion: tipo2,
+                                mes: 3
+                            },
+                            {
+                                cantidad: 3,
+                                tipo_devolucion: tipo1,
+                                mes: 4
+                            },
+                            {
+                                cantidad: 6,
+                                tipo_devolucion: tipo2,
+                                mes: 4
+                            },
+                            {
+                                cantidad: 5,
+                                tipo_devolucion: tipo1,
+                                mes: 5
+                            },
+                            {
+                                cantidad: 5,
+                                tipo_devolucion: tipo2,
+                                mes: 5
+                            },
+                            {
+                                cantidad: 11,
+                                tipo_devolucion: tipo2,
+                                mes: 8
+                            },
+                            {
+                                cantidad: 9,
+                                tipo_devolucion: tipo1,
+                                mes: 8
+                            },
+                            {
+                                cantidad: 7,
+                                tipo_devolucion: tipo1,
+                                mes: 9
+                            },
+                            {
+                                cantidad: 5,
+                                tipo_devolucion: tipo2,
+                                mes: 9
+                            },
+                            {
+                                cantidad: 4,
+                                tipo_devolucion: tipo2,
+                                mes: 10
+                            },
+                            {
+                                cantidad: 12,
+                                tipo_devolucion: tipo1,
+                                mes: 10
+                            },
+                        ]
+
+                        newData.forEach(currentItem => {
+                            results.push(currentItem);
+                        });
+
+                    // ! FIN DE DATOS DE PRUEBA
 
                     await renderRefunds(results);
                 }
@@ -651,6 +778,9 @@
             }
         }
 
+        /* window.onload = ()=>{
+            
+        }; */
         startUI();
     </script>
     <script>
