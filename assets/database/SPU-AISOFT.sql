@@ -631,10 +631,16 @@ CREATE PROCEDURE spu_set_idpresupuesto
     IN _idusuario 		INT
 )
 BEGIN
+
 	UPDATE activos
 		SET
 			idpresupuesto 	= NULLIF(_idpresupuesto,""),
             idusuario 		= _idusuario,
+            area_construccion = (
+                SELECT idpresupuesto
+                FROM presupuestos
+                    WHERE idpresupuesto = _idpresupuesto
+            ),
             update_at 		= CURDATE()
 		WHERE idactivo = _idactivo;
         
@@ -1700,6 +1706,8 @@ END $$
 
 DELIMITER ;
 
+select * from activos where idactivo = 5;
+
 -- MARCAS /////////////////////////////////////////////////////////////////////////////////////////
 DELIMITER $$
 
@@ -1895,7 +1903,7 @@ BEGIN
 END $$
 
 DELIMITER ;
-SELECT  * from presupuestos;
+
 DELIMITER $$
 
 CREATE PROCEDURE spu_count_budgets

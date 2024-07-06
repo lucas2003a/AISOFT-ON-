@@ -136,8 +136,8 @@
                 
                 <div class="col-md-6">
                   <div class="btn-group text-start">
-                    <button type="button" class="btn btn-sm bg-gradient-success opacity-10" id="generate-excel"><i class="fa-solid fa-file-excel"></i></button>
-                    <button type="button" class="btn btn-sm bg-gradient-danger opacity-10" id="generate-pdf"><i class="bi bi-filetype-pdf"></i></button>
+                    <!-- <button type="button" class="btn btn-sm bg-gradient-success opacity-10" id="generate-excel"><i class="fa-solid fa-file-excel"></i></button>
+                    <button type="button" class="btn btn-sm bg-gradient-danger opacity-10" id="generate-pdf"><i class="bi bi-filetype-pdf"></i></button> -->
                     <a type="button" class="btn btn-sm btn-outline-success" href="./add_asset.php" id="add-asset">AGREGAR LOTE</a>
                   </div>
                   
@@ -414,24 +414,6 @@ document.addEventListener("DOMContentLoaded",()=>{
     }
   }
 
-  //Genera u archivo PDF
-  async function generatePdf(id){
-
-    let codeID = btoa(id);
-    let url = `../../reports/reports_pdf.php?action=reportLots&idproyecto=${codeID}`;
-
-    window.location.href = url;
-  }
-
-  //Genera un archivo excel
-  async function generateExcel(id){
-
-    let codeID = btoa(id);
-    let url = `../../reports/reports_excel.php?idproyecto=${codeID}`;
-
-    window.location.href = url;
-  }
-
   $("#in-sublote").addEventListener("input",()=>{
 
       clearTimeout(timer);
@@ -450,17 +432,6 @@ document.addEventListener("DOMContentLoaded",()=>{
           }
         },1500)
     });
-
-      
-  $("#generate-excel").addEventListener("click",()=>{
-
-    generateExcel(idProyecto);
-  });
-
-  $("#generate-pdf").addEventListener("click",()=>{
-
-    generatePdf(idProyecto);
-  });
 
   $("#propietario_lote").addEventListener("change",()=>{
 

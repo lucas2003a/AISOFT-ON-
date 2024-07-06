@@ -1436,7 +1436,31 @@
 
     $("#form_det_budget").addEventListener("submit", (e) => {
       e.preventDefault(e)
-      validateForm("#form_det_budget", storageData);
+      //validateForm("#form_det_budget", storageData);
+      'use strict'
+
+        const form = document.querySelector("#form_det_budget")
+
+        if (!form.checkValidity()) {
+              event.preventDefault() //=> FRENA EL ENVÍO DEL FORMULARIO
+              event.stopPropagation() //=> FRENA LA PROPAGACIÓN DE DATOS EN EL FORMULARIO
+              form.reportValidity();
+
+            } else {
+
+              event.preventDefault();
+
+              storageData();
+
+              let timer = setTimeout(() => {
+                form.reset();
+                form.classList.remove("was-validated");
+                
+              }, 500);
+              
+            }
+
+            form.classList.add('was-validated')
     })
 
     $("#modelo").addEventListener("blur", (e) => {

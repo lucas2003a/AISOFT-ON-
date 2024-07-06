@@ -53,13 +53,14 @@ $sheet->setCellValue("R5","Total");
 $sheet->setCellValue("O7",$lotesVend);
 $sheet->setCellValue("P7",$lotesNoVend);
 $sheet->setCellValue("Q7",$loteSsep);
-$sheet->setCellValue("R7",$loteTotal
-);
+$sheet->setCellValue("R7",$loteTotal);
 
 $sheet->getColumnDimension("O")->setWidth(20);
 $sheet->getColumnDimension("P")->setWidth(20);
 $sheet->getColumnDimension("Q")->setWidth(20);
 $sheet->getColumnDimension("R")->setWidth(20);
+
+
 
 $sheet->mergeCells("O5:O6");
 $sheet->mergeCells("P5:P6");
@@ -163,6 +164,9 @@ $styleHeader1Fill =[
         "outline" => [
             "borderStyle" => Border::BORDER_THIN,
             "color" => ["argb" => "FF000000"]
+        ],
+        "font" =>[
+            "color" => ["argb" => "FFFFFF"]
         ]
     ]
 ];

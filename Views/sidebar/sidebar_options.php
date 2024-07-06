@@ -2,6 +2,10 @@
 
 
 $permissions = $_SESSION["permissions"];
+
+/* -------------------------------------------------------------------------- */
+/*                        //! OPCIONES DEL SIDEBAR                            */
+/* -------------------------------------------------------------------------- */
 $modules =  [
   "dashboard_admin" => [
     "name" => "Dashboard",
@@ -37,6 +41,27 @@ $modules =  [
                 </g>
               </svg>",
     "url" => "../dashboard_user/dashboard_user.php",
+    "active" => false
+  ],
+  "projects" => [
+    "name" => "Proyectos",
+    "icon" => "<svg width='12px' height='12px' viewBox='0 0 42 42' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'>
+                <title>office</title>
+                <g stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'>
+                  <g transform='translate(-1869.000000, -293.000000)' fill='#FFFFFF' fill-rule='nonzero'>
+                    <g transform='translate(1716.000000, 291.000000)'>
+                      <g id='office' transform='translate(153.000000, 2.000000)'>
+                        <path class='color-background opacity-6' d='M12.25,17.5 L8.75,17.5 L8.75,1.75 C8.75,0.78225 9.53225,0 10.5,0 L31.5,0 C32.46775,0 33.25,0.78225 33.25,1.75 L33.25,12.25 L29.75,12.25 L29.75,3.5 L12.25,3.5 L12.25,17.5 Z'></path>
+                        <svg class='color-background' xmlns='http://www.w3.org/2000/svg' width='50' height='50' fill='currentColor' class='bi bi-calculator' viewBox='0 0 16 16'>
+                          <path d='M12 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1zM4 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z' />
+                          <path d='M4 2.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5h-7a.5.5 0 0 1-.5-.5zm0 4a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm0 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm0 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm3-6a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm0 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm0 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm3-6a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm0 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5z' />
+                        </svg>
+                      </g>
+                    </g>
+                  </g>
+                </g>
+              </svg>",
+    "url" => "../projects/index.php",
     "active" => false
   ],
   "budgets" => [
@@ -80,6 +105,26 @@ $modules =  [
     "url" => "../clients/index.php",
     "active" => false
   ],
+  "separations" => [
+    "name" => "Separaciones",
+    "icon" => "<svg width='12px' height='12px' viewBox='0 0 42 42' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'>
+                <title>office</title>
+                <g stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'>
+                  <g transform='translate(-1869.000000, -293.000000)' fill='#FFFFFF' fill-rule='nonzero'>
+                    <g transform='translate(1716.000000, 291.000000)'>
+                      <g id='office' transform='translate(153.000000, 2.000000)'>
+                        <svg class='color-background' xmlns='http://www.w3.org/2000/svg' width='50' height='50' fill='currentColor' class='bi bi-list-stars' viewBox='0 0 16 16'>
+                          <path fill-rule='evenodd' d='M5 11.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5' />
+                          <path d='M2.242 2.194a.27.27 0 0 1 .516 0l.162.53c.035.115.14.194.258.194h.551c.259 0 .37.333.164.493l-.468.363a.28.28 0 0 0-.094.3l.173.569c.078.256-.213.462-.423.3l-.417-.324a.27.27 0 0 0-.328 0l-.417.323c-.21.163-.5-.043-.423-.299l.173-.57a.28.28 0 0 0-.094-.299l-.468-.363c-.206-.16-.095-.493.164-.493h.55a.27.27 0 0 0 .259-.194zm0 4a.27.27 0 0 1 .516 0l.162.53c.035.115.14.194.258.194h.551c.259 0 .37.333.164.493l-.468.363a.28.28 0 0 0-.094.3l.173.569c.078.255-.213.462-.423.3l-.417-.324a.27.27 0 0 0-.328 0l-.417.323c-.21.163-.5-.043-.423-.299l.173-.57a.28.28 0 0 0-.094-.299l-.468-.363c-.206-.16-.095-.493.164-.493h.55a.27.27 0 0 0 .259-.194zm0 4a.27.27 0 0 1 .516 0l.162.53c.035.115.14.194.258.194h.551c.259 0 .37.333.164.493l-.468.363a.28.28 0 0 0-.094.3l.173.569c.078.255-.213.462-.423.3l-.417-.324a.27.27 0 0 0-.328 0l-.417.323c-.21.163-.5-.043-.423-.299l.173-.57a.28.28 0 0 0-.094-.299l-.468-.363c-.206-.16-.095-.493.164-.493h.55a.27.27 0 0 0 .259-.194z' />
+                        </svg>
+                      </g>
+                    </g>
+                  </g>
+                </g>
+              </svg>",
+    "url" => "../separations/index.php",
+    "active" => false
+  ],
   "contracts" => [
     "name" => "Contratos",
     "icon" => "<svg width='12px' height='12px' viewBox='0 0 42 42' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'>
@@ -98,66 +143,6 @@ $modules =  [
                 </g>
               </svg>",
     "url" => "../contracts/index.php",
-    "active" => false
-  ],
-  "monitoring" => [
-    "name" => "Monitoreo",
-    "icon" => "<svg width='12px' height='12px' viewBox='0 0 42 42' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'>
-                <title>office</title>
-                <g stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'>
-                  <g transform='translate(-1869.000000, -293.000000)' fill='#FFFFFF' fill-rule='nonzero'>
-                    <g transform='translate(1716.000000, 291.000000)'>
-                      <g id='office' transform='translate(153.000000, 2.000000)'>
-                        <svg class='color-background' xmlns='http://www.w3.org/2000/svg' width='50' height='50' fill='currentColor' class='bi bi-eye' viewBox='0 0 16 16'>
-                          <path d='M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8M1.173 8a13 13 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5s3.879 1.168 5.168 2.457A13 13 0 0 1 14.828 8q-.086.13-.195.288c-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5s-3.879-1.168-5.168-2.457A13 13 0 0 1 1.172 8z' />
-                          <path d='M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5M4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0' />
-                        </svg>
-                      </g>
-                    </g>
-                  </g>
-                </g>
-              </svg>",
-    "url" => "../monitoring/index.php",
-    "active" => false
-  ],
-  "projects" => [
-    "name" => "Proyectos",
-    "icon" => "<svg width='12px' height='12px' viewBox='0 0 42 42' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'>
-                <title>office</title>
-                <g stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'>
-                  <g transform='translate(-1869.000000, -293.000000)' fill='#FFFFFF' fill-rule='nonzero'>
-                    <g transform='translate(1716.000000, 291.000000)'>
-                      <g id='office' transform='translate(153.000000, 2.000000)'>
-                        <path class='color-background opacity-6' d='M12.25,17.5 L8.75,17.5 L8.75,1.75 C8.75,0.78225 9.53225,0 10.5,0 L31.5,0 C32.46775,0 33.25,0.78225 33.25,1.75 L33.25,12.25 L29.75,12.25 L29.75,3.5 L12.25,3.5 L12.25,17.5 Z'></path>
-                        <svg class='color-background' xmlns='http://www.w3.org/2000/svg' width='50' height='50' fill='currentColor' class='bi bi-calculator' viewBox='0 0 16 16'>
-                          <path d='M12 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1zM4 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z' />
-                          <path d='M4 2.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5h-7a.5.5 0 0 1-.5-.5zm0 4a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm0 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm0 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm3-6a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm0 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm0 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm3-6a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm0 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5z' />
-                        </svg>
-                      </g>
-                    </g>
-                  </g>
-                </g>
-              </svg>",
-    "url" => "../projects/index.php",
-    "active" => false
-  ],
-  "profile" => [
-    "name" => "Perfil",
-    "icon" => "<svg width='12px' height='12px' viewBox='0 0 46 42' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'>
-                <title>customer-support</title>
-                <g stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'>
-                  <g transform='translate(-1717.000000, -291.000000)' fill='#FFFFFF' fill-rule='nonzero'>
-                    <g transform='translate(1716.000000, 291.000000)'>
-                      <g transform='translate(1.000000, 0.000000)'>
-                        <path class='color-background opacity-6' d='M45,0 L26,0 C25.447,0 25,0.447 25,1 L25,20 C25,20.379 25.214,20.725 25.553,20.895 C25.694,20.965 25.848,21 26,21 C26.212,21 26.424,20.933 26.6,20.8 L34.333,15 L45,15 C45.553,15 46,14.553 46,14 L46,1 C46,0.447 45.553,0 45,0 Z'></path>
-                        <path class='color-background' d='M22.883,32.86 C20.761,32.012 17.324,31 13,31 C8.676,31 5.239,32.012 3.116,32.86 C1.224,33.619 0,35.438 0,37.494 L0,41 C0,41.553 0.447,42 1,42 L25,42 C25.553,42 26,41.553 26,41 L26,37.494 C26,35.438 24.776,33.619 22.883,32.86 Z'></path>
-                        <path class='color-background' d='M13,28 C17.432,28 21,22.529 21,18 C21,13.589 17.411,10 13,10 C8.589,10 5,13.589 5,18 C5,22.529 8.568,28 13,28 Z'></path>
-                      </g>
-                    </g>
-                  </g>
-                </g>
-              </svg>",
-    "url" => "../profile/index.php",
     "active" => false
   ],
   "quotas" => [
@@ -199,26 +184,6 @@ $modules =  [
     "url" => "../refunds/index.php",
     "active" => false
   ],
-  "separations" => [
-    "name" => "Separaciones",
-    "icon" => "<svg width='12px' height='12px' viewBox='0 0 42 42' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'>
-                <title>office</title>
-                <g stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'>
-                  <g transform='translate(-1869.000000, -293.000000)' fill='#FFFFFF' fill-rule='nonzero'>
-                    <g transform='translate(1716.000000, 291.000000)'>
-                      <g id='office' transform='translate(153.000000, 2.000000)'>
-                        <svg class='color-background' xmlns='http://www.w3.org/2000/svg' width='50' height='50' fill='currentColor' class='bi bi-list-stars' viewBox='0 0 16 16'>
-                          <path fill-rule='evenodd' d='M5 11.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5' />
-                          <path d='M2.242 2.194a.27.27 0 0 1 .516 0l.162.53c.035.115.14.194.258.194h.551c.259 0 .37.333.164.493l-.468.363a.28.28 0 0 0-.094.3l.173.569c.078.256-.213.462-.423.3l-.417-.324a.27.27 0 0 0-.328 0l-.417.323c-.21.163-.5-.043-.423-.299l.173-.57a.28.28 0 0 0-.094-.299l-.468-.363c-.206-.16-.095-.493.164-.493h.55a.27.27 0 0 0 .259-.194zm0 4a.27.27 0 0 1 .516 0l.162.53c.035.115.14.194.258.194h.551c.259 0 .37.333.164.493l-.468.363a.28.28 0 0 0-.094.3l.173.569c.078.255-.213.462-.423.3l-.417-.324a.27.27 0 0 0-.328 0l-.417.323c-.21.163-.5-.043-.423-.299l.173-.57a.28.28 0 0 0-.094-.299l-.468-.363c-.206-.16-.095-.493.164-.493h.55a.27.27 0 0 0 .259-.194zm0 4a.27.27 0 0 1 .516 0l.162.53c.035.115.14.194.258.194h.551c.259 0 .37.333.164.493l-.468.363a.28.28 0 0 0-.094.3l.173.569c.078.255-.213.462-.423.3l-.417-.324a.27.27 0 0 0-.328 0l-.417.323c-.21.163-.5-.043-.423-.299l.173-.57a.28.28 0 0 0-.094-.299l-.468-.363c-.206-.16-.095-.493.164-.493h.55a.27.27 0 0 0 .259-.194z' />
-                        </svg>
-                      </g>
-                    </g>
-                  </g>
-                </g>
-              </svg>",
-    "url" => "../separations/index.php",
-    "active" => false
-  ],
   "users" => [
     "name" => "Usuarios",
     "icon" => "<svg width='12px' height='12px' viewBox='0 0 42 42' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'>
@@ -237,18 +202,58 @@ $modules =  [
               </svg>",
     "url" => "../users/index.php",
     "active" => false
+  ],
+  "monitoring" => [
+    "name" => "Monitoreo",
+    "icon" => "<svg width='12px' height='12px' viewBox='0 0 42 42' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'>
+                <title>office</title>
+                <g stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'>
+                  <g transform='translate(-1869.000000, -293.000000)' fill='#FFFFFF' fill-rule='nonzero'>
+                    <g transform='translate(1716.000000, 291.000000)'>
+                      <g id='office' transform='translate(153.000000, 2.000000)'>
+                        <svg class='color-background' xmlns='http://www.w3.org/2000/svg' width='50' height='50' fill='currentColor' class='bi bi-eye' viewBox='0 0 16 16'>
+                          <path d='M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8M1.173 8a13 13 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5s3.879 1.168 5.168 2.457A13 13 0 0 1 14.828 8q-.086.13-.195.288c-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5s-3.879-1.168-5.168-2.457A13 13 0 0 1 1.172 8z' />
+                          <path d='M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5M4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0' />
+                        </svg>
+                      </g>
+                    </g>
+                  </g>
+                </g>
+              </svg>",
+    "url" => "../monitoring/index.php",
+    "active" => false
+  ],
+  "profile" => [
+    "name" => "Perfil",
+    "icon" => "<svg width='12px' height='12px' viewBox='0 0 46 42' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'>
+                <title>customer-support</title>
+                <g stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'>
+                  <g transform='translate(-1717.000000, -291.000000)' fill='#FFFFFF' fill-rule='nonzero'>
+                    <g transform='translate(1716.000000, 291.000000)'>
+                      <g transform='translate(1.000000, 0.000000)'>
+                        <path class='color-background opacity-6' d='M45,0 L26,0 C25.447,0 25,0.447 25,1 L25,20 C25,20.379 25.214,20.725 25.553,20.895 C25.694,20.965 25.848,21 26,21 C26.212,21 26.424,20.933 26.6,20.8 L34.333,15 L45,15 C45.553,15 46,14.553 46,14 L46,1 C46,0.447 45.553,0 45,0 Z'></path>
+                        <path class='color-background' d='M22.883,32.86 C20.761,32.012 17.324,31 13,31 C8.676,31 5.239,32.012 3.116,32.86 C1.224,33.619 0,35.438 0,37.494 L0,41 C0,41.553 0.447,42 1,42 L25,42 C25.553,42 26,41.553 26,41 L26,37.494 C26,35.438 24.776,33.619 22.883,32.86 Z'></path>
+                        <path class='color-background' d='M13,28 C17.432,28 21,22.529 21,18 C21,13.589 17.411,10 13,10 C8.589,10 5,13.589 5,18 C5,22.529 8.568,28 13,28 Z'></path>
+                      </g>
+                    </g>
+                  </g>
+                </g>
+              </svg>",
+    "url" => "../profile/index.php",
+    "active" => false
   ]
 ];
 
-$acces_array = [];
+$acces_array = []; // ! Arrayque guarda los accesos
 
-$key_modules = array_keys($modules);
+$key_modules = array_keys($modules); // ! Obteniendo solo las claves ("dashboard_admin","projects" ...)
 foreach ($key_modules as $module) {
 
   $existModule = false;
 
   foreach ($acces_array as $acces) {
 
+    // ! Verifica si existe el modulo en el array de accesos
     if (isset($acces["name"]) && $acces["name"] == $module) {
 
       $existModule = true;
@@ -256,6 +261,7 @@ foreach ($key_modules as $module) {
     }
   }
 
+  // ! Verifica si el modulo no existe agreaga los elementos al array de accesos
   if (!$existModule) {
 
     foreach ($permissions as $permission) {
@@ -279,20 +285,18 @@ foreach ($key_modules as $module) {
  */
 foreach ($permissions as $permission) {
 
-  //$arrayKey = explode("/",$acces["url"]);
-  //$currentItem = $arrayKey[count($arrayKey) -2] . "/" . $arrayKey[count($arrayKey) -1];
 
+  // ! Obtiene la URL
   $currentURL = $_SERVER["REQUEST_URI"];
   $parsed_url = parse_url($currentURL);
   $path = $parsed_url["path"];
 
-  $directory = dirname($path);
-  $file = basename($path);
-  $folder = basename($directory);
+  $directory = dirname($path);    // ! Nomber del direcctorio
+  $file = basename($path);        // ! nombre del archivo
+  $folder = basename($directory); // ! Nombre de la carpeta del diectorio
 
-  $currentPath = $folder . "/" . $file;
-
-  $currentItem = $permission["permiso"] . ".php";
+  $currentPath = $folder . "/" . $file;           // ! URL actual del navegador
+  $currentItem = $permission["permiso"] . ".php"; // ! URL obtenida de los permisos
 
   if ($currentItem == $currentPath) {
 
@@ -304,9 +308,21 @@ foreach ($permissions as $permission) {
       $currentUrlFile = $explodeUrlFile[1];
 
       if ($currentFolder == $currentUrlFile) {
+        
+          $acces["active"] = true;
+          break 2;
+        
+      }else{
+        if ($currentFolder == "assets") {
 
-        $acces["active"] = true;
-        break 2;
+          foreach ($acces_array as &$arr2) {
+            if ($arr2["name"] == "Proyectos") {
+
+              $arr2["active"] = true;
+              break 3;
+            }
+          }
+        }
       }
     }
   }

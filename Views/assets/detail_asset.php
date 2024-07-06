@@ -409,6 +409,7 @@
                   <h6 class="mb-0">Detalles de constricción</h6>
                 </div>
                 <div class="col-6 text-end">
+                <button type="button" class="btn btn-lg mb-0 bg-gradient-success opacity-10" id="generate-excel" title="Generar reporte Excel del presupuesto"><i class="fa-solid fa-file-excel"></i></button>
                   <button class="btn bg-gradient-dark mb-0" id="add"><i class="fas fa-plus"></i>&nbsp;&nbsp;Agregar</button>
                   <button type="button" class="btn bg-gradient-info mb-0" id="save"><i class="fa-solid fa-floppy-disk"></i> Guardar</button>
                 </div>
@@ -1241,6 +1242,13 @@
 
         }
       }
+
+      $("#generate-excel").addEventListener("click",()=>{
+        let idactivoObt = dataDetAsset.idactivo;
+        let idactivo = btoa(idactivoObt);
+
+        window.location.href = `../../reports/report_budget_excel.php?id=${idactivo}`;
+      });
 
       $("#add").addEventListener("click", () => {
 

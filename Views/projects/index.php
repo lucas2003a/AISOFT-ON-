@@ -44,7 +44,7 @@
     <div class="collapse navbar-collapse  w-auto " id="sidenav-collapse-main">
       <ul class="navbar-nav">
 
-        
+
         <?php include "../sidebar/sidebar_options.php"; ?>
 
         <!-- CERRAR SESIÓN -->
@@ -84,21 +84,18 @@
         </nav>
         <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
           <div class="ms-md-auto pe-md-3 d-flex align-items-center">
-            <div class="input-group">
-              <span class="input-group-text text-body"><i class="fas fa-search" aria-hidden="true"></i></span>
-              <input type="text" class="form-control" placeholder="Escribe el códgo..." id="in-codigo">
-            </div>
+            
           </div>
           <ul class="navbar-nav  justify-content-end">
             <li class="nav-item d-flex align-items-center">
-              <a class="btn btn-outline-success btn-sm mb-0 me-3" href="./add_project.php">AGREGAR PROYECTO</a>
+              
             </li>
 
             <!-- DATOS DEL USUARIO -->
             <li class="nav-item d-flex align-items-center">
               <a href="javascript:;" class="nav-link text-body font-weight-bold px-0">
                 <i class="fa fa-user me-sm-1"></i>
-                <span class="d-sm-inline d-none"><?="<strong>" . strtoupper($_SESSION["rol"]) . "</strong>" . " - " . strtolower($_SESSION["apellidos"]) . ", " . strtolower($_SESSION["nombres"])?></span>
+                <span class="d-sm-inline d-none"><?= "<strong>" . strtoupper($_SESSION["rol"]) . "</strong>" . " - " . strtolower($_SESSION["apellidos"]) . ", " . strtolower($_SESSION["nombres"]) ?></span>
               </a>
             </li>
             <li class="nav-item d-xl-none ps-3 d-flex align-items-center">
@@ -110,7 +107,7 @@
                 </div>
               </a>
             </li>
-            
+
 
           </ul>
         </div>
@@ -120,10 +117,32 @@
     <!-- End Navbar -->
     <div class="container py-4">
 
+      <div class="card text-end p-4">
+        <div class="d-flex justify-content-between">
+          <div class="align-content-end">
+          <button type="button" class="btn btn-sm bg-gradient-danger opacity-10 mb-0" id="generate-pdf" title="Generar reporte PDF de los proyectos"><i class="bi bi-filetype-pdf"></i></button>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="input-group">
+                <span class="input-group-text text-body"><i class="fas fa-search" aria-hidden="true"></i></span>
+                <input type="text" class="form-control" placeholder="Escribe el códgo..." id="in-codigo">
+              </div>
+
+            </div>
+            <div class="col-md-6">
+
+            <a class="btn btn-outline-success btn-sm mb-0 me-3" href="./add_project.php">AGREGAR PROYECTO</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
       <!-- RENDER -->
       <div class="row mt-4" id="card-project">
 
-      
+
         <!-- CARD PROYECTOS -->
       </div>
 
@@ -143,14 +162,14 @@
           </div>
         </div>
       </footer>
-      
+
     </div>
   </main>
   <div class="fixed-plugin d-none">
     <a class="fixed-plugin-button text-dark position-fixed px-3 py-2">
       <i class="fa fa-cog py-2"> </i>
     </a>
-    
+
     <!-- CONFIGURACIONES DEL PANEL -->
     <div class="card shadow-lg ">
       <div class="card-header pb-0 pt-3 ">
@@ -201,7 +220,7 @@
         </div>
       </div>
     </div>
-   
+
   </div>
   <!--   Core JS Files   -->
   <script src="../../assets/js/core/popper.min.js"></script>
@@ -211,7 +230,6 @@
   <script src="../../assets/js/plugins/chartjs.min.js"></script>
   <script src="../../assets/js/globalFunctions.js"></script>
   <script>
-
     const global = new FunGlobal();
 
     const $ = id => global.$(id);
@@ -220,28 +238,28 @@
     const cardProject = $("#card-project");
     const inCodigo = $("#in-codigo");
 
-    let dataProject;            //VARIABLE QUE ALMACENA LOS DATOS OBTENIDOS DE LA CONSULTA
-    
+    let dataProject; //VARIABLE QUE ALMACENA LOS DATOS OBTENIDOS DE LA CONSULTA
+
     let timer;
 
     /**
      * FUNCION QUE CONTIENE EL RENDER DE LOS CARDS
      */
-     async function renderCard(item){
-        
-        let newCard = ``;
-    
-        let newImage = item.imagen == null ? "NoImage.jpg" : item.imagen;
+    async function renderCard(item) {
 
-        let code = btoa(item.idproyecto);   //=>CODFICA EL VALOR EN BASE 64
-        let name = btoa(item.denominacion);   //=>CODFICA EL VALOR
+      let newCard = ``;
 
-        let options = item.l_total == 0 ? `
+      let newImage = item.imagen == null ? "NoImage.jpg" : item.imagen;
+
+      let code = btoa(item.idproyecto); //=>CODFICA EL VALOR EN BASE 64
+      let name = btoa(item.denominacion); //=>CODFICA EL VALOR
+
+      let options = item.l_total == 0 ? `
             <li><a class="dropdown-item border-radius-md" href='./edit_project.php?id=${code}'><img src="../../assets/img/iconos/lapiz-blue.png" style="width: 24px;"> Editar</a></li>
             <li><a class="dropdown-item border-radius-md" href="./delete_project.php?id=${code}"><img src="../../assets/img/iconos/delete.png"style="width: 24px;"> Eliminar</a></li>` :
-            `<li><a class="dropdown-item border-radius-md" href='./edit_project.php?id=${code}'><img src="../../assets/img/iconos/lapiz-blue.png" style="width: 24px;"> Editar</a></li>`;
+        `<li><a class="dropdown-item border-radius-md" href='./edit_project.php?id=${code}'><img src="../../assets/img/iconos/lapiz-blue.png" style="width: 24px;"> Editar</a></li>`;
 
-            newCard = `
+      newCard = `
             <div class="col-lg-6 mb-lg-0 mb-4 mt-4">
               <div class="card">
                 <div class="col-lg-12 col-12 my-auto text-end p-2">
@@ -297,127 +315,126 @@
 
 
             `;
-            cardProject.innerHTML += newCard;
+      cardProject.innerHTML += newCard;
 
     }
 
     /**
      * RENDERIZA EL CARD DE ERROR (ALERTA)
      */
-    async function renderCardError(header,body){
-        let newCardErr = ``;
+    async function renderCardError(header, body) {
+      let newCardErr = ``;
 
-        newCardErr = `
+      newCardErr = `
             <div class="alert alert-danger m-4 text-white" role="alert">
                 <strong class="text-white">${header}</strong> ${body}
             </div>
             `;
-            cardProject.innerHTML += newCardErr;   
+      cardProject.innerHTML += newCardErr;
     }
 
     /**
      * Función para listar los proyectos
      */
-    async function listProyects(){
+    async function listProyects() {
 
-      try{
-        
+      try {
+
         let url = `../../controllers/project.controller.php`
         let params = new FormData();
 
-        params.append("action","listProject");
+        params.append("action", "listProject");
 
         let results = await global.sendAction(url, params);
 
-        if(results){
+        if (results) {
 
           dataProject = results;
 
-            if(dataProject.length > 0){
+          if (dataProject.length > 0) {
 
-              cardProject.innerHTML = "";
+            cardProject.innerHTML = "";
 
-              for(let project of dataProject){
-                console.log(project);
+            for (let project of dataProject) {
+              console.log(project);
 
-                await renderCard(project);
-              }
-              
-            }else{
-              renderCardError("Hemos tenido porblemas con la conexión","Recarga la página o vuelve a intentarlo después.")
-          } 
+              await renderCard(project);
+            }
+
+          } else {
+            renderCardError("Hemos tenido porblemas con la conexión", "Recarga la página o vuelve a intentarlo después.")
+          }
         }
 
-      }catch(e){
+      } catch (e) {
         console.error(e);
       }
     }
-    
+
     /**
      * Función para renderizar los cards según su código
      */
-    async function searchProject(code){
+    async function searchProject(code) {
 
-      try{
+      try {
 
         let url = `../../Controllers/project.controller.php`;
         let params = new FormData();
-  
-        params.append("action","listProjectCode");
-        params.append("codigo",code);
 
-        results = await global.sendAction(url ,params);
+        params.append("action", "listProjectCode");
+        params.append("codigo", code);
 
-        if(results){
+        results = await global.sendAction(url, params);
 
-          if(results.length > 0){
+        if (results) {
 
-            for(result of results){
+          if (results.length > 0) {
 
-            //console.log(data);
-            await renderCard(result);
+            for (result of results) {
+
+              //console.log(data);
+              await renderCard(result);
 
             }
-          }else{
+          } else {
 
-            await renderCardError("El código ingresado no existe","Asgurate de haber el escrito el código correcto.")
+            await renderCardError("El código ingresado no existe", "Asgurate de haber el escrito el código correcto.")
           }
         }
-      }
-      catch(e){
+      } catch (e) {
         console.error(e);
       }
     }
 
+    $("#generate-pdf").addEventListener("click",()=>{
+
+      window.location.href = "../../reports/reports_pdf.php?action=reportsProjects";
+    })
     /**
      * Evento input es la caja de texto "in-codigo" => Ejecuta el debounce
      */
-    $("#in-codigo").addEventListener("input",()=>{
+    $("#in-codigo").addEventListener("input", () => {
 
-        clearTimeout(timer); //RESETEA EL TIEMPO
+      clearTimeout(timer); //RESETEA EL TIEMPO
 
-        timer = setTimeout(()=>{ //CONSIGURA EL TIEMPO
+      timer = setTimeout(() => { //CONSIGURA EL TIEMPO
 
-            let codigo = $("#in-codigo").value;
+        let codigo = $("#in-codigo").value;
 
-            if(codigo != ""){  //SI EL INPUT ESTÀ VACÍO
+        if (codigo != "") { //SI EL INPUT ESTÀ VACÍO
 
-                cardProject.innerHTML = "";
-                searchProject(codigo);
-            }else{
-                listProyects();
-            }
+          cardProject.innerHTML = "";
+          searchProject(codigo);
+        } else {
+          listProyects();
+        }
 
-        }, 500);
+      }, 500);
     });
 
 
 
     listProyects();
-
-
-    
-
   </script>
   <script>
     var win = navigator.platform.indexOf('Win') > -1;

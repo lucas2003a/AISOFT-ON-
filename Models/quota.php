@@ -239,7 +239,7 @@ class Quota extends Conection{
             $query = $this->conection->prepare("CALL spu_grafic_quotas()");
             $query->execute();
             
-            return $query->fetch(PDO::FETCH_ASSOC);
+            return $query->fetchAll(PDO::FETCH_ASSOC);
 
         } catch (Exception $e) {
             die($e->getMessage());

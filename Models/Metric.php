@@ -43,5 +43,24 @@ class Metric extends Conection{
             die($e->getMessage());
         }
     }
+
+    /**
+     * * Obtiene la descipción de todos los proyectos
+    */
+
+    /* -------------------------------------------------------------------------- */
+    /*                                  REPORTES                                  */
+    /* -------------------------------------------------------------------------- */
+    public function reportsProjects()
+    {
+        try {
+            $query = $this->conection->prepare("CALL spu_reports_projects()");
+            $query->execute();
+
+            return $query->fetchAll(PDO::FETCH_ASSOC);
+        } catch (Exception $e) {
+            die($e->getMessage());
+        }
+    }
 }
 ?>

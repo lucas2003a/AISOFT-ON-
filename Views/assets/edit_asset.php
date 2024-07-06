@@ -1054,8 +1054,8 @@
           } else {
             event.preventDefault();
             sAlert.sweetConfirm("Datos nuevos", "¿Deseas actualizar el registro?", () => {
-
               setAsset(idActivo); //Ejecuta la función
+
             });
           }
 

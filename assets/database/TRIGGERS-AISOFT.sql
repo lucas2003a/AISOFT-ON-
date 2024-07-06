@@ -414,3 +414,21 @@ BEGIN
 	END IF;
 END $$
 DELIMITER ;
+
+DELIMITER $$
+
+CREATE TRIGGER trgr_update_idpresupuesto AFTER UPDATE ON presupuestos
+FOR EACH ROW
+BEGIN
+	DECLARE _idactivo INT;
+
+	SET _idactivo = (SELECT idactivo FROM activos where idpresupuesto = NEW.idpresupuesto);
+
+	UPDATE activos
+		SET
+			area_construccion = NEW.area_construccion,
+			update_at = CURDATE(),
+			idusuario = NEW.idusuario
+		WHERE idactivo = _idactivo;
+END $$
+DELIMITER ;

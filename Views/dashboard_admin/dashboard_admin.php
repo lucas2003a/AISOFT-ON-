@@ -117,15 +117,16 @@
 
             <div class="row mt-4">
                 <!-- /* -------------------------------------------------------------------------- */
-                /*                        GRÁFICO DE VENTAS CONCRETADAS                       */
-                /* -------------------------------------------------------------------------- */ -->
+                /*                         GRÁFICO DE EGRESOS POR DEVOLUCIONES                    */
+                /* -------------------------------------------------------------------------- */-->
+                
                 <div class="col-md-6 mb-lg-0 mb-4">
                     <div class="card z-index-2" style="height: 100%;">
                         <div class="card-body">
                             <div class="bg-gradient-dark border-radius-lg py-3 pe-1 mb-3" style="height: 100%;">
 
                                 <div class="chart">
-                                    <canvas id="chart-dev" class="chart-canvas" height="50"></canvas>
+                                    <canvas id="chart-dev" class="chart-canvas" height="150"></canvas>
                                 </div>
                             </div>
 
@@ -143,7 +144,7 @@
                             <div class="bg-gradient-dark border-radius-lg py-3 pe-1 mb-3" style="height: 100%;">
 
                                 <div class="chart">
-                                    <canvas id="chart-quotas" class="chart-canvas" height="400"></canvas>
+                                    <canvas id="chart-quotas" class="chart-canvas" height="150"></canvas>
                                 </div>
                             </div>
 
@@ -171,14 +172,14 @@
                 </div>
 
                 <!-- /* -------------------------------------------------------------------------- */
-                /*                         GRÁFICO DE EGRESOS POR DEVOLUCIONES                    */
-                /* -------------------------------------------------------------------------- */-->
+                /*                        GRÁFICO DE VENTAS CONCRETADAS                       */
+                /* -------------------------------------------------------------------------- */ -->
                 <div class="col-md-6 mb-lg-0 mb-4">
                     <div class="card z-index-2">
                         <div class="card-body p-3">
                             <div class="bg-gradient-dark border-radius-lg py-3 pe-1 mb-3">
 
-                                <div class="chart  h-100">
+                                <div class="chart">
                                     <canvas id="chart-line" class="chart-canvas" height="100"></canvas>
 
                                 </div>
@@ -446,7 +447,7 @@
                 data: {
                     labels: monthsLetter.map(month => month), // * Mes
                     datasets: [{
-                        label: "POR CONTRATO",
+                        label: "Por contrato",
 
                         // * Cantidad de contratos
                         data: uniqueMonths.map(month => {
@@ -455,7 +456,7 @@
                         }),
                         //borderColor: "#fff" // * Color de la linea en un dataset
                     }, {
-                        label: "POR SEPARACIÓN",
+                        label: "Por separación",
 
                         // * Cantidad Separaciones
                         data: uniqueMonths.map(month => {
@@ -523,12 +524,194 @@
 
         // * Renderiza las cuotas en el gráfico
         async function renderQuotas(quotas) {
-            
+           
+            let monthsLetter = [];
+            let quotasSoles = [];
+            let quotasUSD = [];
+
+            let uniqueMonths = [...new Set(quotas.map(quota => quota.mes))];
+            uniqueMonths.sort((a, b) => a - b); // * Ordenamiento de forma ascendente
+
+            for (let i = 0; i < uniqueMonths.length; i++) {
+
+                monthsLetter[i] = await checkMonth(uniqueMonths[i]);
+                
+            }
+
+            /* -------------------------------------------------------------------------- */
+
+            quotas.filter(quota =>{
+
+                if(quota.moneda_venta == "SOL"){
+                    quotasSoles.push(quota);
+                }else{
+                    quotasUSD.push(quota);
+                }
+            });
+
+            new Chart(chartQuotas,{
+                
+                type: "line",
+                data:{
+                    labels: monthsLetter.map(month =>month),
+                    datasets: [
+                        {
+                            label: "Soles",
+                            data:uniqueMonths.map(month =>{
+                                let isFound = quotasSoles.find(item => item.mes == month);
+                                return isFound ? isFound.monto : 0;
+                            })
+                        },{
+                            label: "Dolares",
+                            data: uniqueMonths.map(month =>{
+                                let isFound = quotasUSD.find(item => item.mes == month);
+                                return isFound ? isFound.monto : 0;
+                            })
+                        }
+                    ]
+                },
+                options:{
+                    responsive: true,
+                    scales: {
+                        y:{
+                            display: true,
+                            beginAtZero : true,
+                            grid: {
+                                display: true,
+                                lineWidth: 0.1,
+                                color: "#fff"
+                            },
+                            ticks: {
+                                color: "#fff"
+                            }
+                        },
+                        x:{
+                            grid: {
+                                display: true,
+                                lineWidth: 0.1,
+                                color: "#fff"
+                            },
+                            ticks: {
+                                color: "#fff"
+                            }
+                        }
+                    },
+                    plugins:{
+                        legend:{
+                            display: true,
+                            labels:{
+
+                                color : "#fff",
+                                
+                            }
+                        },
+                        title: {
+                            display: true,
+                            text: "Monto por pagos de cuotas",
+                            color : "#fff",
+                            font: {
+                                weight: "bold",
+                                size: 20    
+                            }
+                        }
+                    }
+                }
+            })
         }
 
         // * Renderiza los egresos por devoluciones en el gráfico
         async function renderExpenses(expenses) {
             
+            let monthsLetter = [];
+            let refundsSoles = [];
+            let refundsUSD = [];
+            let uniqueMonths = [...new Set(expenses.map(expense => expense.mes))];
+
+            uniqueMonths.sort((min, max)=> min - max);
+            console.log('uniqueMonths :>> ', uniqueMonths);
+
+            /* -------------------------------------------------------------------------- */
+            for (let i = 0; i < uniqueMonths.length; i++) {
+                monthsLetter[i] = await checkMonth(uniqueMonths[i]);
+            }
+
+            expenses.filter(expense =>{
+                if(expense.moneda_venta == "SOL"){
+                    refundsSoles.push(expense);
+                }else{
+                    refundsUSD.push(expense);
+                }
+            });
+
+            console.log('refundsSoles :>> ', refundsSoles);
+            console.log('refundsUSD :>> ', refundsUSD);
+            new Chart(chartDev,{
+                type: "line",
+                data:{
+                    labels: monthsLetter.map(month =>month),
+                    datasets: [
+                        {
+                            label: "Soles",
+                            data:uniqueMonths.map(month =>{
+                                let isFound = refundsSoles.find(item => item.mes == month);
+                                return isFound ? isFound.monto : 0;
+                            })
+                        },
+                        {
+                            label: "Dolares",
+                            data: uniqueMonths.map(month =>{
+                                let isFound = refundsUSD.find(item => item.mes == month);
+                                return isFound ? isFound.monto : 0;
+                            })
+                        }
+                    ]
+                },
+                options:{
+                    responsive: true,
+                    scales:{
+                        y:{
+                            display: true,
+                            beginAtZero: true,
+                            lineWidth: 0.1,
+                            grid:{
+                                display: true,
+                                color: "#fff"
+                            },
+                            ticks:{
+                                color: "#fff"
+                            }
+                        },
+                        x:{
+                            display: true,
+                            lineWidth: 0.1,
+                            grid:{
+                                display: true,
+                                color: "#fff"
+                            },
+                            ticks:{
+                                color: "#fff"
+                            }
+                        }
+                    },
+                    plugins:{
+                        legend:{
+                            display: true,
+                            labels:{
+                                color: "#fff"
+                            }
+                        },
+                        title: {
+                            display: true,
+                            text:"Monto por pagos de devoluciones",
+                            color: "#fff",
+                            font: {
+                                size: 20,
+                                weight: "bold"
+                            }
+                        }
+                    }
+                }
+            });
         }
 
         /* -------------------------------------------------------------------------- */
@@ -536,7 +719,7 @@
         /* -------------------------------------------------------------------------- */
 
 
-        //Oteiene los datos de las ventas durante el año
+        // * Obtiene los datos de las ventas durante el año
         async function listYearlySales() {
             try {
                 let url = `../../Controllers/contract.controller.php`;
@@ -737,7 +920,7 @@
 
                 params.append("action","renderChartMoney");
 
-                let results = global.sendAction(url, params);
+                let results = await global.sendAction(url, params);
 
                 if(results.length > 0){
                     console.log('results :  >> ', results);   

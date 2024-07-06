@@ -134,7 +134,9 @@ class Cost extends Conection {
     }
 
 
-    //              REPORTES        //////////////////
+    /**------------------------------------------------------------------------
+     *!                           REPORTES
+     *------------------------------------------------------------------------**/
 
     /**
      * Obtiene un resumen de costos por categoria por el idpresupuesto
@@ -160,6 +162,21 @@ class Cost extends Conection {
         try{
             $query = $this->conection->prepare("CALL spu_resume_budget_subcatgory(?)");
             $query->execute(array($idpresupuesto));
+
+            return $query->fetchAll(PDO::FETCH_ASSOC);
+        }
+        catch(Exception $e){
+            die($e->getMessage());
+        }
+    }
+
+    
+
+    public function getResumeDet($idactivo = 0){
+
+        try{
+            $query = $this->conection->prepare("CALL spu_reports_det_budgets(?)");
+            $query->execute(array($idactivo));
 
             return $query->fetchAll(PDO::FETCH_ASSOC);
         }
