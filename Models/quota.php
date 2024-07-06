@@ -245,5 +245,23 @@ class Quota extends Conection{
             die($e->getMessage());
         }
     }
+
+    /**=======================================================================================================================
+     *                                                    ! REPORTES
+     *=======================================================================================================================**/
+
+     public function reportQuotas($idcontrato = 0){
+
+        try {
+            $query = $this->conection->prepare("CALL spu_reports_cuotas(?)");
+            $query->execute(array($idcontrato));
+            
+            return $query->fetchAll(PDO::FETCH_ASSOC);
+
+        } catch (Exception $e) {
+            die($e->getMessage());
+        }
+     }
+
 }
 ?>

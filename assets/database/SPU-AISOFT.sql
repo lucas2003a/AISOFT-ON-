@@ -3861,7 +3861,41 @@ END $$
 
 DELIMITER ;
 
+DELIMITER $$
+
+DROP PROCEDURE spu_reports_cuotas
+(
+    IN _idcontrato INT
+)
+BEGIN
+    SELECT ct.idcuota,
+            ct.idcontrato,
+            ct.monto_cuota,
+            ct.estado,
+            ct.fecha_vencimiento,
+			COALESCE(rs.fecha_pago,'0000-00-00') AS fecha_pago, -- // ! Inidica la fecha que fué pagada la cuota
+            COALESCE(rs.monto,0.00) AS monto_pagado,
+            COALESCE((ct.monto_cuota - rs.monto),0.00) AS monto_restante
+        FROM cuotas AS ct
+        LEFT JOIN (
+            SELECT 
+				idcuota,
+				SUM(monto_pago) AS monto,
+                MAX(fecha_pago) AS fecha_pago
+				FROM detalle_cuotas
+                WHERE inactive_at IS NULL 
+                GROUP BY idcuota
+                ORDER BY iddetalle_cuota DESC 
+        ) AS rs ON rs.idcuota = ct.idcuota
+        WHERE ct.idcontrato = 7;
+        
+    SELECT * FROM detalle_cuotas;
+    SELECT * FROM cuotas;
+END $$
+
 DELIMITER ;
+
+DELIMITER $$
 
 CREATE PROCEDURE ()
 BEGIN

@@ -20,7 +20,7 @@ $spreadsheet = new Spreadsheet();
 $cost = new Cost;
 $asset = new Asset();
 
-$spreadsheet->getProperties()->setCreator("A.I.F Contratistas Generales S.A.C")->setTitle("Reporte_de_estado_de_lotes");
+$spreadsheet->getProperties()->setCreator("A.I.F Contratistas Generales S.A.C")->setTitle("Reporte_de_detalles_presupuestos");
 $spreadsheet->setActiveSheetIndex(0);
 $sheet = $spreadsheet->getActiveSheet();
 
@@ -451,7 +451,7 @@ try {
     $moneyResume->applyFromArray($styleMoney);
 
     header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-    header('Content-Disposition: attachment;filename="Presupuesto_lot5.xlsx"');
+    header('Content-Disposition: attachment;filename="Presupuesto_LT'. "_" . $sublote."_" . $denominacion. '.xlsx"');
     header('Cache-Control: max-age=0');
     
     $writer = IOFactory::createWriter($spreadsheet,"Xlsx");

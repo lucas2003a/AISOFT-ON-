@@ -153,7 +153,8 @@
               <div class="card-body px-0 pt-0 pb-2">
                 <div class="row mt-4 mb-4">
                   <div class="col-md-6 d-flex align-items-end">
-                    <a class="btn btn-outline-success btn-sm mb-0 me-3" href="./add_asset.php" id="generate-report">Generar-reporte</a>
+                    <buttton class="btn btn-outline-danger btn-sm mb-0 me-3" id="generate-report-pdf">Generar  PDF</buttton>
+                    <buttton class="btn btn-outline-success btn-sm mb-0 me-3" id="generate-report-excel">Generar respote Excel</buttton>
                     <a class="btn btn-outline-info btn-sm mb-0 me-3" href="" id="go-reprogram">Reprogramar</a>
                   </div>
                   <div class="col-md-6">
@@ -477,6 +478,12 @@
           console.error(e);
         }
       }
+
+      $("#generate-report-pdf").addEventListener("click",()=>{
+
+        let url = `../../reports/reports_pdf.php?action=reportsQuotas&id=${btoa(idcontrato)}`;
+        window.location.href = url;
+      });
 
       $("#fecha_vencimiento").addEventListener("change",(e)=>{
         console.log(e.target.value)
