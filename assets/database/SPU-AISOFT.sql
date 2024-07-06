@@ -3863,7 +3863,7 @@ DELIMITER ;
 
 DELIMITER $$
 
-DROP PROCEDURE spu_reports_cuotas
+CREATE PROCEDURE spu_reports_cuotas
 (
     IN _idcontrato INT
 )
@@ -3872,7 +3872,7 @@ BEGIN
             ct.idcontrato,
             ct.monto_cuota,
             ct.estado,
-            ct.fecha_vencimiento,
+			ct.fecha_vencimiento,
 			COALESCE(rs.fecha_pago,'0000-00-00') AS fecha_pago, -- // ! Inidica la fecha que fué pagada la cuota
             COALESCE(rs.monto,0.00) AS monto_pagado,
             COALESCE((ct.monto_cuota - rs.monto),0.00) AS monto_restante
