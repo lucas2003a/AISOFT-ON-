@@ -176,7 +176,3 @@ ORDER BY
 
 END $$
 DELIMITER ;
-call spu_calculate_debt(2);
-select * from detalle_cuotas where idcuota = 2;
-select * from cuotas where idcuota = 2;
-select * from contratos where idcontrato = 2;
