@@ -89,7 +89,7 @@
             <li class="nav-item d-flex align-items-center">
               <a href="javascript:;" class="nav-link text-body font-weight-bold px-0">
                 <i class="fa fa-user me-sm-1"></i>
-                <span class="d-sm-inline d-none"><?="<strong>" . strtoupper($_SESSION["rol"]) . "</strong>" . " - " . strtolower($_SESSION["apellidos"]) . ", " . strtolower($_SESSION["nombres"])?></span>
+                <span class="d-sm-inline d-none"><?= "<strong>" . strtoupper($_SESSION["rol"]) . "</strong>" . " - " . strtolower($_SESSION["apellidos"]) . ", " . strtolower($_SESSION["nombres"]) ?></span>
               </a>
             </li>
             <li class="nav-item d-xl-none ps-3 d-flex align-items-center">
@@ -153,7 +153,7 @@
               <div class="card-body px-0 pt-0 pb-2">
                 <div class="row mt-4 mb-4">
                   <div class="col-md-6 d-flex align-items-end">
-                    <buttton class="btn btn-outline-danger btn-sm mb-0 me-3" id="generate-report-pdf">Generar  PDF</buttton>
+                    <buttton class="btn btn-outline-danger btn-sm mb-0 me-3" id="generate-report-pdf">Generar PDF</buttton>
                     <buttton class="btn btn-outline-success btn-sm mb-0 me-3" id="generate-report-excel">Generar respote Excel</buttton>
                     <a class="btn btn-outline-info btn-sm mb-0 me-3" href="" id="go-reprogram">Reprogramar</a>
                   </div>
@@ -311,75 +311,93 @@
 
       let fechaMax;
       let fechaMin;
+      let moneda = "";
 
       $("#go-reprogram").href = `./reprogram_quotas.php?id=${code}`;
 
+      async function getContractId(id) {
+
+        try {
+          let url = "../../Controllers/contract.controller.php";
+
+          let params = new FormData();
+          params.append("action", "listContractId");
+          params.append("idcontrato", id);
+
+          let result = await global.sendAction(url, params);
+
+          if (result) {
+            console.log(result)
+            moneda = result.moneda_venta == "SOL" ? "S/ " : "$/ ";
+          }
+        } catch (e) {
+          console.error(e);
+        }
+      }
+
       //Obtiene las cuotas en base al estado y a la fecha de vencimiento
-      async function getQuotasStateDate(){
+      async function getQuotasStateDate() {
 
-        try{
+        try {
           let url = "../../Controllers/quota.controller.php";
           let params = new FormData();
 
-          params.append("action","getQuotasStateDate");
-          params.append("idcontrato",idcontrato);
-          params.append("estado",$("#estado").value);
-          params.append("fecha_vencimiento",$("#fecha_vencimiento").value);
+          params.append("action", "getQuotasStateDate");
+          params.append("idcontrato", idcontrato);
+          params.append("estado", $("#estado").value);
+          params.append("fecha_vencimiento", $("#fecha_vencimiento").value);
 
           let results = await global.sendAction(url, params);
 
-          if(results.length > 0){
+          if (results.length > 0) {
             renderTable(results);
           }
 
-        }
-        catch(e){
+        } catch (e) {
           console.error(e);
         }
       }
-      
+
       //Obtiene las cuotas en base al estado
-      async function getQuotasState(){
+      async function getQuotasState() {
 
-        try{
+        try {
           let url = "../../Controllers/quota.controller.php";
           let params = new FormData();
 
-          params.append("action","getQuotasState");
-          params.append("idcontrato",idcontrato);
-          params.append("estado",$("#estado").value);
+          params.append("action", "getQuotasState");
+          params.append("idcontrato", idcontrato);
+          params.append("estado", $("#estado").value);
 
           let results = await global.sendAction(url, params);
 
-          if(results.length > 0){
+          if (results.length > 0) {
             renderTable(results);
           }
 
-        }
-        catch(e){
+        } catch (e) {
           console.error(e);
         }
       }
-      
-      //Anula la el pago de una cuota
-      async function cancelDetailQuota(id){
 
-        try{
+      //Anula la el pago de una cuota
+      async function cancelDetailQuota(id) {
+
+        try {
           let url = "../../Controllers/quota.controller.php";
 
           let params = new FormData();
-          params.append("action","cancelDetailQuota");
-          params.append("idcuota",id);
+          params.append("action", "cancelDetailQuota");
+          params.append("idcuota", id);
 
           let results = await global.sendAction(url, params);
 
           if (results) {
-            sAlert.sweetSuccess("Pago anulado correctamente","",()=>{
+            sAlert.sweetSuccess("Pago anulado correctamente", "", () => {
               getQuotas(idcontrato);
             });
           }
-        }
-        catch(e){
+        } catch (e) {
           console.error(e);
         }
       }
@@ -400,20 +418,20 @@
 
           let deuda = element.deuda ? `<strong>${element.deuda}</strong>` : "0.00";
           let payDisabled = element.cancelado < element.monto_cuota ? "" : "disabled";
-          let cancelDisabled = element.cancelado ? "" :"disabled";
+          let cancelDisabled = element.cancelado ? "" : "disabled";
 
           let disabledPay = ""
-          if(index > 0){
+          if (index > 0) {
 
-            disabledPay = element.estado == "POR CANCELAR" && array[index-1].estado !== "CANCELADO" ? "disabled" : "";
+            disabledPay = element.estado == "POR CANCELAR" && array[index - 1].estado !== "CANCELADO" ? "disabled" : "";
           }
 
           let code = btoa(element.idcuota);
           let row = `
           <tr>
             <td>${numRow}</td>
-            <td>${element.monto_cuota}</td>
-            <td>${deuda}</td>
+            <td>${moneda + element.monto_cuota}</td>
+            <td>${moneda + deuda}</td>
             <td>${element.fecha_vencimiento}</td>
             <td>${fechaPago}</td>
             ${trEstado}
@@ -429,7 +447,7 @@
       };
 
       //Obiene datos de las cuotas
-      async function getQuotas(id){
+      async function getQuotas(id) {
 
         try {
 
@@ -444,6 +462,7 @@
           if (results.data.length > 0) {
             console.log(results)
             let dataRender = results.data
+            
             renderTable(dataRender)
 
             //reduce trabaja con 2, con lo que realiza el filtro especificado
@@ -453,21 +472,21 @@
 
             fechaAprox = dataRender.find(data => data.deuda > 0);
 
-            let isCount = results.data.reduce((total, cuota) =>total +  Number.parseFloat(cuota.deuda || 0) , 0);
+            let isCount = results.data.reduce((total, cuota) => total + Number.parseFloat(cuota.deuda || 0), 0);
 
             console.log(isCount);
 
-            if(!isCount){
+            if (!isCount) {
 
               $("#go-reprogram").classList.add("disabled");
-            }else{
+            } else {
 
               $("#go-reprogram").classList.remove("disabled");
             }
 
-            if(fechaAprox){
+            if (fechaAprox) {
 
-              $("#text-deuda").innerText = fechaAprox.monto_cuota;
+              $("#text-deuda").innerText = moneda + fechaAprox.monto_cuota;
               $("#text-fecha").innerText = fechaAprox.fecha_vencimiento;
               $("#fecha_vencimiento").min = fechaMin.fecha_vencimiento;
               $("#fecha_vencimiento").max = fechaMax.fecha_vencimiento;
@@ -479,40 +498,41 @@
         }
       }
       console.log('idcontrato :>> ', idcontrato);
-      $("#generate-report-excel").addEventListener("click",()=>{
+      $("#generate-report-excel").addEventListener("click", () => {
         let url = `../../reports/excel_quotas.php?id=${btoa(idcontrato)}`;
         window.location.href = url;
       });
 
-      $("#generate-report-pdf").addEventListener("click",()=>{
+      $("#generate-report-pdf").addEventListener("click", () => {
 
         let url = `../../reports/reports_pdf.php?action=reportsQuotas&id=${btoa(idcontrato)}`;
         window.location.href = url;
       });
 
-      $("#fecha_vencimiento").addEventListener("change",(e)=>{
+      $("#fecha_vencimiento").addEventListener("change", (e) => {
         console.log(e.target.value)
         getQuotasStateDate();
       });
 
-      $("#estado").addEventListener("change",()=>{
+      $("#estado").addEventListener("change", () => {
         getQuotasState();
       });
 
-      $("#table-quotas tbody").addEventListener("click",async function(e){
+      $("#table-quotas tbody").addEventListener("click", async function(e) {
 
-        if(e.target.classList.contains("cancel")){
+        if (e.target.classList.contains("cancel")) {
           let idcuota = e.target.dataset.id;
 
           sAlert.sweetConfirm("¿Deseas anular el pago?", "", async function() {
-             
-             await cancelDetailQuota(idcuota);
-           })
+
+            await cancelDetailQuota(idcuota);
+          })
 
         }
       });
 
-      getQuotas(idcontrato);
+      await getContractId(idcontrato);
+      await getQuotas(idcontrato);
 
     });
   </script>

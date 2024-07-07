@@ -148,7 +148,12 @@ SELECT
     ct.nro_cuota,
     ct.monto_cuota,
     CASE 
-        WHEN @calculate = 0 THEN @calculate := cn.precio_venta - cn.inicial -- SE DESCUENTA EL MONTO DE LA INICIAL
+        WHEN @calculate = 0 THEN 
+			CASE WHEN cn.precio_venta = ct.monto_cuota THEN
+				@calculate := cn.precio_venta
+            ELSE
+				@calculate := cn.precio_venta - cn.inicial -- SE DESCUENTA EL MONTO DE LA INICIAL
+			END
         ELSE @calculate
     END AS precio_venta,
     @monto := dtc.monto_pago AS monto_pago,
@@ -171,4 +176,7 @@ ORDER BY
 
 END $$
 DELIMITER ;
-call spu_calculate_debt(7);
+call spu_calculate_debt(2);
+select * from detalle_cuotas where idcuota = 2;
+select * from cuotas where idcuota = 2;
+select * from contratos where idcontrato = 2;

@@ -124,7 +124,6 @@
                 </div>
                 <div class="row d-flex space-between">
                   <div class="col-md-6">
-                    <a class="btn btn-outline-success btn-sm mb-0 me-3" href="./add_asset.php" id="add-asset">Generar reporte</a>
                   </div>
                   <div class="col-md-6">
                     <div class="input-group">
