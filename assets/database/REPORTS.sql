@@ -138,41 +138,103 @@ CREATE PROCEDURE spu_calculate_debt
 )
 BEGIN
    -- Variables de sesión
-SET @calculate := 0;
-SET @monto := 0;
+    SET @calculate := 0;
+    SET @monto := 0;
 
--- Ejecución
-SELECT 
-    ct.idcuota,
-    dtc.iddetalle_cuota,
-    ct.nro_cuota,
-    ct.monto_cuota,
-    CASE 
-        WHEN @calculate = 0 THEN 
-			CASE WHEN cn.precio_venta = ct.monto_cuota THEN
-				@calculate := cn.precio_venta
-            ELSE
-				@calculate := cn.precio_venta - cn.inicial -- SE DESCUENTA EL MONTO DE LA INICIAL
-			END
-        ELSE @calculate
-    END AS precio_venta,
-    @monto := dtc.monto_pago AS monto_pago,
-    @calculate := CASE 
-                    WHEN @calculate = cn.precio_venta THEN cn.precio_venta - dtc.monto_pago
-                    ELSE @calculate - (dtc.monto_pago)
-                  END AS saldo
-FROM 
-    detalle_cuotas dtc
-    INNER JOIN cuotas ct ON ct.idcuota = dtc.idcuota
-    INNER JOIN contratos cn ON cn.idcontrato = ct.idcontrato
-WHERE 
-    cn.idcontrato = _idcontrato
-    AND ct.inactive_at IS NULL
-    AND dtc.inactive_at IS NULL
-GROUP BY 
-    dtc.iddetalle_cuota
-ORDER BY 
-    ct.fecha_vencimiento, dtc.iddetalle_cuota;
-
+    -- Ejecución
+    SELECT 
+        ct.idcuota,
+        dtc.iddetalle_cuota,
+        ct.nro_cuota,
+        ct.monto_cuota,
+        CASE 
+            WHEN @calculate = 0 THEN 
+                CASE WHEN cn.precio_venta = ct.monto_cuota THEN
+                    @calculate := cn.precio_venta
+                ELSE
+                    @calculate := cn.precio_venta - cn.inicial -- SE DESCUENTA EL MONTO DE LA INICIAL
+                END
+            ELSE @calculate
+        END AS precio_venta,
+        @monto := dtc.monto_pago AS monto_pago,
+        @calculate := CASE 
+                        WHEN @calculate = cn.precio_venta THEN cn.precio_venta - dtc.monto_pago
+                        ELSE @calculate - (dtc.monto_pago)
+                    END AS saldo
+    FROM 
+        detalle_cuotas dtc
+        INNER JOIN cuotas ct ON ct.idcuota = dtc.idcuota
+        INNER JOIN contratos cn ON cn.idcontrato = ct.idcontrato
+    WHERE 
+        cn.idcontrato = _idcontrato
+        AND ct.inactive_at IS NULL
+        AND dtc.inactive_at IS NULL
+    GROUP BY 
+        dtc.iddetalle_cuota
+    ORDER BY 
+        ct.fecha_vencimiento, dtc.iddetalle_cuota;
 END $$
+DELIMITER ;
+
+DELIMITER $$
+CREATE PROCEDURE spu_calculate_clients
+(
+    IN _idproyecto INT
+)
+BEGIN
+    SELECT DISTINCT
+            "CONTRATO" AS tipo,
+            cn.idcontrato,
+            cn.idactivo,
+            cn.idproyecto,
+            cn.sublote,
+            cn.denominacion,
+            cn.cliente,
+            cn.tipo_persona,
+            cn.documento_tipo,
+            cn.documento_nro,
+            cn.precio_venta
+        FROM vws_list_contracts cn 
+        WHERE cn.estado = "VIGENTE"
+        AND cn.idproyecto = _idproyecto 
+        AND cn.inactive_at IS NULL
+        AND NOT EXISTS(
+            SELECT 1
+                FROM separaciones   
+                WHERE idactivo = cn.idactivo
+                AND  existe_contrato = 0
+                AND inactive_at IS  NULL
+        )
+        UNION
+        SELECT DISTINCT
+            "SEPARACION" AS tipo,
+            sp.idseparacion,
+            sp.idactivo,
+            ac.idproyecto,
+            ac.sublote,
+            py.denominacion,
+            cl.cliente,
+            cl.tipo_persona,
+            cl.documento_tipo,
+            cl.documento_nro,
+            ac.precio_venta
+        FROM separaciones sp
+        INNER JOIN (
+            SELECT 
+                cl.idcliente,
+                cl.tipo_persona,
+                COALESCE(CONCAT(UPPER(ps.apellidos),', ',LOWER(ps.nombres)),pj.razon_social) AS cliente,
+                COALESCE(ps.documento_tipo,pj.documento_tipo) AS documento_tipo,
+                COALESCE(ps.documento_nro,pj.documento_nro) AS documento_nro
+                FROM clientes cl
+                LEFT JOIN personas ps ON ps.idpersona = cl.idpersona
+                LEFT JOIN personas_juridicas pj ON pj.idpersona_juridica = cl.idpersona_juridica
+        )AS cl ON cl.idcliente = sp.idcliente
+        INNER JOIN activos ac ON ac.idactivo = sp.idactivo
+        INNER JOIN proyectos py ON py.idproyecto = ac.idproyecto
+        AND sp.inactive_at IS NULL
+        AND ac.idproyecto = _idproyecto
+        AND sp.existe_contrato = 0;
+END
+
 DELIMITER ;

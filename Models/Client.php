@@ -369,4 +369,24 @@ class Client extends Conection
             die($e->getMessage());
         }
     }
+
+    /**=======================================================================================================================
+     *                                                    REPORTES
+     *=======================================================================================================================**/
+
+     /**
+      * Métdo para obtener los clientes por proyecto
+      */
+      public function calculateClients($idproyecto)
+      {
+        try {
+            $query = $this->conection->prepare("CALL spu_calculate_clients(?)");
+            $query->execute(array($idproyecto));
+
+            return $query->fetchAll(PDO::FETCH_ASSOC);
+
+        } catch (Exception $e) {
+            die($e->getMessage());
+        }
+      }
 }

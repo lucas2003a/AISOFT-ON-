@@ -3618,6 +3618,38 @@ BEGIN
 END $$
 DELIMITER ;
 
+DELIMITER $$
+CREATE PROCEDURE spu_get_user
+(
+    IN idusuario INT
+)
+BEGIN
+    SELECT 
+            us.idusuario,
+            us.imagen,
+            us.correo,
+            ps.nombres,
+            ps.apellidos,
+            ps.documento_tipo,
+            ps.documento_nro,
+            ps.estado_civil,
+            dis.iddistrito,
+            dis.distrito,
+            pr.idprovincia,
+            pr.provincia,
+            dp.iddepartamento,
+            dp.departamento,
+            ps.direccion,
+            ps.nacionalidad
+        FROM usuarios as us
+        INNER JOIN personas ps ON us.idusuario
+        INNER JOIN distritos dis ON dis.iddistrito = ps.iddistrito
+        INNER JOIN provincias pr ON pr.idprovincia = dis.idprovincia
+        INNER JOIN departamentos dp ON dp.iddepartamento = pr.iddepartamento
+        WHERE idsuario = _idusuario;
+END $$
+DELIMITER ;
+
 -- ACTTUALIZACIONES
 DELIMITER $$
 CREATE PROCEDURE spu_list_updates

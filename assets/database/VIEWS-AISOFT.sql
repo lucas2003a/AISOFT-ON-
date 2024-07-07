@@ -373,6 +373,7 @@ CREATE VIEW vws_list_contracts
         ct.n_expediente,
         ct.idcliente,
         ct.idconyugue,
+        ct.tipo_contrato,
         cl.tipo_persona,
         ac.idactivo,
         ac.sublote,
@@ -388,7 +389,9 @@ CREATE VIEW vws_list_contracts
         ct.moneda_venta,
         ct.inicial,
         ct.tipo_cambio,
-        ct.fecha_contrato  
+        ct.fecha_contrato,
+        ct.estado,
+        ct.inactive_at  
         FROM contratos ct
         LEFT JOIN separaciones sp ON sp.idseparacion = ct.idseparacion
         LEFT JOIN clientes cl ON(
@@ -475,58 +478,6 @@ AS
     ORDER BY dv.iddevolucion DESC;
 
 DELIMITER;
-/* DELIMITER $$
-
-CREATE VIEW vws_list_refunds AS
-    SELECT
-        dev.iddevolucion,
-        dev.tipo_devolucion,
-        dev.n_expediente AS n_expediente_dev,
-        sep.idseparacion,
-        cnt.idcontrato,
-        cnt.n_expediente AS n_expediente_cont,
-        sep.n_expediente AS n_expediente_sep,
-        dev.detalle,
-        dev.monto_devolucion,
-        dev.porcentaje_penalidad,
-        sep.separacion_monto,
-        act.sublote,
-        proy.idsede,
-        proy.denominacion,
-        COALESCE(
-            persj.tipo_persona,
-            persn.tipo_persona
-        ) AS tipo_persona,
-        COALESCE(persj.cliente, persn.cliente) AS cliente,
-        COALESCE(
-            persj.documento_tipo,
-            persn.documento_tipo
-        ) AS documento_tipo,
-        COALESCE(
-            persj.documento_nro,
-            persn.documento_nro
-        ) AS documento_nro,
-        dev.imagen,
-        dev.create_at,
-        dev.inactive_at,
-        usuPers.nombres
-    FROM
-        devoluciones dev
-        LEFT JOIN separaciones sep ON sep.idseparacion = dev.idseparacion
-        LEFT JOIN vws_list_separations_tpersona_juridica AS persj ON persj.idseparacion = dev.idseparacion
-        LEFT JOIN vws_list_separations_tpersona_natural AS persn ON persn.idseparacion = dev.idseparacion
-        INNER JOIN usuarios usu ON usu.idusuario = dev.idusuario
-        INNER JOIN activos act ON act.idactivo = sep.idactivo
-        LEFT JOIN contratos cnt ON cnt.idcontrato = dev.idcontrato
-        INNER JOIN proyectos proy ON proy.idproyecto = act.idproyecto
-        INNER JOIN personas AS usuPers ON usuPers.idpersona = usu.idpersona
-    ORDER BY dev.iddevolucion DESC;
-
-DELIMITER; */
-SELECT * from vws_list_refunds;
-SELECT * from devoluciones;
-SELECT * from contratos;
-
 
 DELIMITER $$
 CREATE VIEW vws_clients_natural
@@ -590,11 +541,3 @@ CREATE VIEW vws_list_quotas
         WHERE detc.inactive_at IS NULL
         GROUP BY qt.idcuota
 DELIMITER ;
-
-use aisoft;
-select * from cuotas;
-
-
-update usuarios set contrasenia = "$2y$10$8Hfxze.TOef0XhG/Uk/t4uzH77BXCSeF5Cl9fC0tuktcTIG3WBh2u";
-
-select * from usuarios inner join roles WHERE roles.idrol = usuarios.idrol;

@@ -1,4 +1,4 @@
-<?php include "../sidebar/permissions.php";?>
+<?php include "../sidebar/permissions.php"; ?>
 <!DOCTYPE html>
 <html lang="es">
 
@@ -43,7 +43,7 @@
     <div class="collapse navbar-collapse  w-auto " id="sidenav-collapse-main">
       <ul class="navbar-nav">
 
-      <?php include "../sidebar/sidebar_options.php"; ?>
+        <?php include "../sidebar/sidebar_options.php"; ?>
 
         <!-- CERRAR SESIÓN -->
         <li class="nav-item">
@@ -76,19 +76,19 @@
       <div class="container-fluid py-1 px-3">
         <nav aria-label="breadcrumb">
           <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
-          <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="#">Dashboard</a></li>
+            <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="#">Dashboard</a></li>
             <li class="breadcrumb-item text-sm text-dark active" aria-current="page">CLientes</li>
           </ol>
           <h6 class="font-weight-bolder mb-0" id="cabezera">CIENTES </h6>
         </nav>
         <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
-          
+
           <ul class="navbar-nav  justify-content-end">
-            
+
             <li class="nav-item d-flex align-items-center">
               <a href="javascript:;" class="nav-link text-body font-weight-bold px-0">
                 <i class="fa fa-user me-sm-1"></i>
-                <span class="d-sm-inline d-none"><?="<strong>" . strtoupper($_SESSION["rol"]) . "</strong>" . " - " . strtolower($_SESSION["apellidos"]) . ", " . strtolower($_SESSION["nombres"])?></span>
+                <span class="d-sm-inline d-none"><?= "<strong>" . strtoupper($_SESSION["rol"]) . "</strong>" . " - " . strtolower($_SESSION["apellidos"]) . ", " . strtolower($_SESSION["nombres"]) ?></span>
               </a>
             </li>
             <li class="nav-item d-xl-none ps-3 d-flex align-items-center">
@@ -100,7 +100,7 @@
                 </div>
               </a>
             </li>
-            
+
           </ul>
         </div>
       </div>
@@ -109,60 +109,283 @@
     <!-- End Navbar -->
     <div class="container py-4">
 
-    <!-- CONTENIDO -->
+      <!-- CONTENIDO -->
 
-    <div class="row">
-        <div class="col-12">
+      <div class="container-fluid">
+      <div class="page-header min-height-300 border-radius-xl mt-4" style="background-image: url('../assets/img/curved-images/curved0.jpg'); background-position-y: 50%;">
+        <span class="mask bg-gradient-primary opacity-6"></span>
+      </div>
+      <div class="card card-body blur shadow-blur mx-4 mt-n6 overflow-hidden">
+        <div class="row gx-4">
+          <div class="col-auto">
+            <div class="avatar avatar-xl position-relative">
+              <img src="../assets/img/bruce-mars.jpg" alt="profile_image" class="w-100 border-radius-lg shadow-sm">
+            </div>
+          </div>
+          <div class="col-auto my-auto">
+            <div class="h-100">
+              <h5 class="mb-1">
+                Alec Thompson
+              </h5>
+              <p class="mb-0 font-weight-bold text-sm">
+                CEO / Co-Founder
+              </p>
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-6 my-sm-auto ms-sm-auto me-sm-0 mx-auto mt-3">
+            
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="container-fluid py-4">
+      <div class="row">
+        <!-- <!--======================================================================================================================-->
+        <!-- <!--=============================================== DATOS DEL USUARIO ====================================================-->
+        <!-- <!--======================================================================================================================-->
+
+        <div class="col-12 col-xl-6">
+          <div class="card h-100">
+            <div class="card-header pb-0 p-3">
+              <h6 class="mb-0">Datos del usuario</h6>
+              <hr>
+            </div>
+            <div class="card-body p-3">
+              <h6 class="text-uppercase text-body text-xs font-weight-bolder">Cuenta</h6>
+              <ul class="list-group">
+                <li class="list-group-item border-0 px-0">
+                  <div class="form-check form-switch ps-0">
+                    <label class="form-check-label text-body ms-3 text-truncate w-80 mb-0" for="flexSwitchCheckDefault"><strong>Correo: </strong> <span id="correoText">Email me when someone follows me</span></label>
+                  </div>
+                </li>
+                <li class="list-group-item border-0 px-0">
+                  <div class="form-check form-switch ps-0">
+                    <label class="form-check-label text-body ms-3 text-truncate w-80 mb-0" for="flexSwitchCheckDefault1"><strong id="sedeText">Sede: </strong><span>Representante por sede</span></label>
+                  </div>
+                </li>
+                <li class="list-group-item border-0 px-0">
+                  <div class="form-check form-switch ps-0">
+                    <label class="form-check-label text-body ms-3 text-truncate w-80 mb-0" for="flexSwitchCheckDefault2"><strong id="representateText">Representante: </strong><span>Representante por sede</span></label>
+                  </div>
+                </li>
+                <li class="list-group-item border-0 px-0">
+                  <div class="form-check form-switch ps-0">
+                    <label class="form-check-label text-body ms-3 text-truncate w-80 mb-0" for="flexSwitchCheckDefault2"><strong id="rolText">Rol: </strong><span>Rol del usuario</span></label>
+                  </div>
+                </li>
+              </ul>
+              
+            </div>
+          </div>
+        </div>
+
+        <!-- <!--======================================================================================================================-->
+        <!-- <!--=============================================== DATOS PERSONAALES ====================================================-->
+        <!-- <!--======================================================================================================================-->
+        <div class="col-12 col-xl-6">
+          <div class="card h-100">
+            <div class="card-header pb-0 p-3">
+            <div class="card-header pb-0 p-3">
+              <h6 class="mb-0">Datos del usuario</h6>
+              <hr>
+            </div>
+            </div>
+            <div class="card-body p-3">
+            <h6 class="text-uppercase text-body text-xs font-weight-bolder">Usuario</h6>
+              <ul class="list-group">
+                <li class="list-group-item border-0 px-0">
+                  <div class="form-check form-switch ps-0">
+                    <label class="form-check-label text-body ms-3 text-truncate w-80 mb-0" for="flexSwitchCheckDefault"><strong>Nombres y apellidos: </strong> <span id="namesText">Atuncar Valerio lucas</span></label>
+                  </div>
+                </li>
+                <li class="list-group-item border-0 px-0">
+                  <div class="form-check form-switch ps-0">
+                    <label class="form-check-label text-body ms-3 text-truncate w-80 mb-0" for="flexSwitchCheckDefault1"><strong id="tdocText">Tipo de documento: </strong><span>DNI</span></label>
+                  </div>
+                </li>
+                <li class="list-group-item border-0 px-0">
+                  <div class="form-check form-switch ps-0">
+                    <label class="form-check-label text-body ms-3 text-truncate w-80 mb-0" for="flexSwitchCheckDefault2"><strong id="ndocText">Nro de documento: </strong><span>77068570</span></label>
+                  </div>
+                </li>
+                <li class="list-group-item border-0 px-0">
+                  <div class="form-check form-switch ps-0">
+                    <label class="form-check-label text-body ms-3 text-truncate w-80 mb-0" for="flexSwitchCheckDefault2"><strong id="direccionText">Dirección: </strong><span>Av jaun c lavarde </span></label>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="col-12 mt-4">
           <div class="card mb-4">
-            <div class="card-header pb-0">
+            <div class="card-header pb-0 p-3">
+              <h6 class="mb-1">Projects</h6>
+              <p class="text-sm">Architects design houses</p>
+            </div>
+            <div class="card-body p-3">
               <div class="row">
-                <div class="col-md-6">
-
-                  <h6>Tabla - clientes</h6>
-                </div>
-                <div class="col-md-6">
-                  <div class="text-end">
-                    <button type="button" class="btn btn-lg bg-gradient-success opacity-10" id="generate-excel"><i class="fa-solid fa-file-excel"></i></button>
-                    <button type="button" class="btn btn-lg bg-gradient-danger opacity-10" id="generate-pdf"><i class="bi bi-filetype-pdf"></i></button>
+                <div class="col-xl-3 col-md-6 mb-xl-0 mb-4">
+                  <div class="card card-blog card-plain">
+                    <div class="position-relative">
+                      <a class="d-block shadow-xl border-radius-xl">
+                        <img src="../assets/img/home-decor-1.jpg" alt="img-blur-shadow" class="img-fluid shadow border-radius-xl">
+                      </a>
+                    </div>
+                    <div class="card-body px-1 pb-0">
+                      <p class="text-gradient text-dark mb-2 text-sm">Project #2</p>
+                      <a href="javascript:;">
+                        <h5>
+                          Modern
+                        </h5>
+                      </a>
+                      <p class="mb-4 text-sm">
+                        As Uber works through a huge amount of internal management turmoil.
+                      </p>
+                      <div class="d-flex align-items-center justify-content-between">
+                        <button type="button" class="btn btn-outline-primary btn-sm mb-0">View Project</button>
+                        <div class="avatar-group mt-2">
+                          <a href="javascript:;" class="avatar avatar-xs rounded-circle" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Elena Morison">
+                            <img alt="Image placeholder" src="../assets/img/team-1.jpg">
+                          </a>
+                          <a href="javascript:;" class="avatar avatar-xs rounded-circle" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Ryan Milly">
+                            <img alt="Image placeholder" src="../assets/img/team-2.jpg">
+                          </a>
+                          <a href="javascript:;" class="avatar avatar-xs rounded-circle" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Nick Daniel">
+                            <img alt="Image placeholder" src="../assets/img/team-3.jpg">
+                          </a>
+                          <a href="javascript:;" class="avatar avatar-xs rounded-circle" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Peterson">
+                            <img alt="Image placeholder" src="../assets/img/team-4.jpg">
+                          </a>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
-              </div>
-              <div class="row">
-                <div class="col-md-3">
-                  
-                  <select name="tipo_persona" class="form-select" id="documento_tipo">
-                    <option value="NATURAL">Tipo de persona</option>
-                  </select>
+                <div class="col-xl-3 col-md-6 mb-xl-0 mb-4">
+                  <div class="card card-blog card-plain">
+                    <div class="position-relative">
+                      <a class="d-block shadow-xl border-radius-xl">
+                        <img src="../assets/img/home-decor-2.jpg" alt="img-blur-shadow" class="img-fluid shadow border-radius-lg">
+                      </a>
+                    </div>
+                    <div class="card-body px-1 pb-0">
+                      <p class="text-gradient text-dark mb-2 text-sm">Project #1</p>
+                      <a href="javascript:;">
+                        <h5>
+                          Scandinavian
+                        </h5>
+                      </a>
+                      <p class="mb-4 text-sm">
+                        Music is something that every person has his or her own specific opinion about.
+                      </p>
+                      <div class="d-flex align-items-center justify-content-between">
+                        <button type="button" class="btn btn-outline-primary btn-sm mb-0">View Project</button>
+                        <div class="avatar-group mt-2">
+                          <a href="javascript:;" class="avatar avatar-xs rounded-circle" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Nick Daniel">
+                            <img alt="Image placeholder" src="../assets/img/team-3.jpg">
+                          </a>
+                          <a href="javascript:;" class="avatar avatar-xs rounded-circle" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Peterson">
+                            <img alt="Image placeholder" src="../assets/img/team-4.jpg">
+                          </a>
+                          <a href="javascript:;" class="avatar avatar-xs rounded-circle" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Elena Morison">
+                            <img alt="Image placeholder" src="../assets/img/team-1.jpg">
+                          </a>
+                          <a href="javascript:;" class="avatar avatar-xs rounded-circle" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Ryan Milly">
+                            <img alt="Image placeholder" src="../assets/img/team-2.jpg">
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
-            <div class="card-body px-0 pt-0 pb-2">
-              <div class="table-responsive text-center p-0">
-                  <table class="table align-items-center mb-0 table-hover" id="table-assets">
-                    <thead>
-                    <tr>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">#</th>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Denominación</th>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Estado</th>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Sublote</th>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Direccion</th>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Operaciones</th>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10"></th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    
-                  <!-- RENDER -->
-
-                  </tbody>
-                </table>
+                <div class="col-xl-3 col-md-6 mb-xl-0 mb-4">
+                  <div class="card card-blog card-plain">
+                    <div class="position-relative">
+                      <a class="d-block shadow-xl border-radius-xl">
+                        <img src="../assets/img/home-decor-3.jpg" alt="img-blur-shadow" class="img-fluid shadow border-radius-xl">
+                      </a>
+                    </div>
+                    <div class="card-body px-1 pb-0">
+                      <p class="text-gradient text-dark mb-2 text-sm">Project #3</p>
+                      <a href="javascript:;">
+                        <h5>
+                          Minimalist
+                        </h5>
+                      </a>
+                      <p class="mb-4 text-sm">
+                        Different people have different taste, and various types of music.
+                      </p>
+                      <div class="d-flex align-items-center justify-content-between">
+                        <button type="button" class="btn btn-outline-primary btn-sm mb-0">View Project</button>
+                        <div class="avatar-group mt-2">
+                          <a href="javascript:;" class="avatar avatar-xs rounded-circle" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Peterson">
+                            <img alt="Image placeholder" src="../assets/img/team-4.jpg">
+                          </a>
+                          <a href="javascript:;" class="avatar avatar-xs rounded-circle" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Nick Daniel">
+                            <img alt="Image placeholder" src="../assets/img/team-3.jpg">
+                          </a>
+                          <a href="javascript:;" class="avatar avatar-xs rounded-circle" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Ryan Milly">
+                            <img alt="Image placeholder" src="../assets/img/team-2.jpg">
+                          </a>
+                          <a href="javascript:;" class="avatar avatar-xs rounded-circle" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Elena Morison">
+                            <img alt="Image placeholder" src="../assets/img/team-1.jpg">
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-xl-3 col-md-6 mb-xl-0 mb-4">
+                  <div class="card h-100 card-plain border">
+                    <div class="card-body d-flex flex-column justify-content-center text-center">
+                      <a href="javascript:;">
+                        <i class="fa fa-plus text-secondary mb-3"></i>
+                        <h5 class=" text-secondary"> New project </h5>
+                      </a>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
+      <footer class="footer pt-3  ">
+        <div class="container-fluid">
+          <div class="row align-items-center justify-content-lg-between">
+            <div class="col-lg-6 mb-lg-0 mb-4">
+              <div class="copyright text-center text-sm text-muted text-lg-start">
+                © <script>
+                  document.write(new Date().getFullYear())
+                </script>,
+                made with <i class="fa fa-heart"></i> by
+                <a href="https://www.creative-tim.com" class="font-weight-bold" target="_blank">Creative Tim</a>
+                for a better web.
+              </div>
+            </div>
+            <div class="col-lg-6">
+              <ul class="nav nav-footer justify-content-center justify-content-lg-end">
+                <li class="nav-item">
+                  <a href="https://www.creative-tim.com" class="nav-link text-muted" target="_blank">Creative Tim</a>
+                </li>
+                <li class="nav-item">
+                  <a href="https://www.creative-tim.com/presentation" class="nav-link text-muted" target="_blank">About Us</a>
+                </li>
+                <li class="nav-item">
+                  <a href="https://www.creative-tim.com/blog" class="nav-link text-muted" target="_blank">Blog</a>
+                </li>
+                <li class="nav-item">
+                  <a href="https://www.creative-tim.com/license" class="nav-link pe-0 text-muted" target="_blank">License</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </footer>
+    </div>
 
-    <footer class="footer pt-3  ">
+      <footer class="footer pt-3  ">
         <div class="container-fluid">
           <div class="row align-items-center justify-content-lg-between">
             <div class="col-lg-6 mb-lg-0 mb-4">
@@ -248,44 +471,44 @@
   <script src="../../assets/js/globalFunctions.js"></script>
   <script src="../../assets/js/sweetAlert.js"></script>
   <script>
-document.addEventListener("DOMContentLoaded",()=>{
+    document.addEventListener("DOMContentLoaded", () => {
 
-  /* INSTANCIAS */
-  const global = new FunGlobal();
+      /* INSTANCIAS */
+      const global = new FunGlobal();
 
-  const $ = id => global.$(id);
-  const $All = id => global.$All(id);
+      const $ = id => global.$(id);
+      const $All = id => global.$All(id);
 
-  /* VALOR EN LA URL */
-  const stringQuery = window.location.search;
-  const url = new URLSearchParams(stringQuery);
-  const code = url.get("id");
-  const codeName = url.get("name");
+      /* VALOR EN LA URL */
+      const stringQuery = window.location.search;
+      const url = new URLSearchParams(stringQuery);
+      const code = url.get("id");
+      const codeName = url.get("name");
 
-  const idProyecto = atob(code); //DECOFICA EL VALOR
-  const name = atob(codeName);
+      const idProyecto = atob(code); //DECOFICA EL VALOR
+      const name = atob(codeName);
 
-  let timer;
+      let timer;
 
-  function renderAssets(results){
+      function renderAssets(results) {
 
-    let numberRow = 1;
+        let numberRow = 1;
 
-    $("#table-assets tbody").innerHTML = "";
+        $("#table-assets tbody").innerHTML = "";
 
-    let newRow = ``;
+        let newRow = ``;
 
-    if(results.length > 0){
-      
-      results.forEach(asset =>{
-        
-        let code = btoa(asset.idactivo) //CODIFICACIÓN
-  
-        let IconStatus = asset.estado == "SIN VENDER" ?  `<span class="badge badge-sm bg-gradient-danger">${asset.estado}</span>` : 
-                                        asset.estado = "VENDIDO" ? `<span class="badge badge-sm bg-gradient-success">${asset.estado}</span>`: 
-                                                                  `<span class="badge badge-sm bg-gradient-secondary">${asset.estado}</span>` ;
-  
-        newRow = `
+        if (results.length > 0) {
+
+          results.forEach(asset => {
+
+            let code = btoa(asset.idactivo) //CODIFICACIÓN
+
+            let IconStatus = asset.estado == "SIN VENDER" ? `<span class="badge badge-sm bg-gradient-danger">${asset.estado}</span>` :
+              asset.estado = "VENDIDO" ? `<span class="badge badge-sm bg-gradient-success">${asset.estado}</span>` :
+              `<span class="badge badge-sm bg-gradient-secondary">${asset.estado}</span>`;
+
+            newRow = `
                 <tr>
                   <td>
                     <div class="d-flex px-2 py-1">
@@ -315,111 +538,109 @@ document.addEventListener("DOMContentLoaded",()=>{
                     </td>
                 </tr>           
         `;
-        numberRow ++;
+            numberRow++;
 
-        $("#table-assets tbody").innerHTML += newRow;
-      });
+            $("#table-assets tbody").innerHTML += newRow;
+          });
 
-    }else{
-      newRow =`
+        } else {
+          newRow = `
       <div class="alert alert-danger m-4 text-white" role="alert">
           <strong class="text-white">No existe sublotes</strong> Asegurate de que existan los registros.
       </div>
       `;
-      $("#table-assets tbody").innerHTML += newRow;
-    }
-    
+          $("#table-assets tbody").innerHTML += newRow;
+        }
 
-  }
-
-
-  async function getAssets(id){
-
-    try{
-
-      $("#add-asset").setAttribute("href",`./add_asset.php?idproy=${code}&name=${codeName}`);
-
-      let url ="../../../../Controllers/asset.controller.php";
-      let params = new FormData();
-  
-      params.append("action","listAssetProjectId");
-      params.append("idproyecto",id);
-
-      results = await global.sendAction(url, params);
-
-      if(results){
-
-        $("#cabezera").innerText +=` ${name}`;
-        renderAssets(results);
 
       }
-    }
-    catch(e){
-      console.error(e);
-    }
-  }
 
-  async function searchAsset(idproy,sublote){
-    try{
 
-      let url = `../../../../Controllers/asset.controller.php`;
-      let params = new FormData();
+      async function getAssets(id) {
 
-      params.append("action", "listAssetPAcode");
-      params.append("idproyecto",idproy);
-      params.append("sublote",sublote);
+        try {
 
-      let results = await global.sendAction(url, params);
+          $("#add-asset").setAttribute("href", `./add_asset.php?idproy=${code}&name=${codeName}`);
 
-      if(results){
-        console.log(results)
-        renderAssets(results);
+          let url = "../../../../Controllers/asset.controller.php";
+          let params = new FormData();
+
+          params.append("action", "listAssetProjectId");
+          params.append("idproyecto", id);
+
+          results = await global.sendAction(url, params);
+
+          if (results) {
+
+            $("#cabezera").innerText += ` ${name}`;
+            renderAssets(results);
+
+          }
+        } catch (e) {
+          console.error(e);
+        }
       }
-    }
-    catch(e){
-      console.error(e);
-    }
-  }
 
-  //Genera u archivo PDF
-  async function generatePdf(id){
+      async function searchAsset(idproy, sublote) {
+        try {
 
-    let codeID = btoa(id);
-    let url = `../../../../reports/reports_pdf.php?action=reportLots&idproyecto=${codeID}`;
+          let url = `../../../../Controllers/asset.controller.php`;
+          let params = new FormData();
 
-    window.location.href = url;
-  }
+          params.append("action", "listAssetPAcode");
+          params.append("idproyecto", idproy);
+          params.append("sublote", sublote);
 
-  //Genera un archivo excel
-  async function generateExcel(id){
+          let results = await global.sendAction(url, params);
 
-    let codeID = btoa(id);
-    let url = `../../../../reports/reports_excel.php?idproyecto=${codeID}`;
+          if (results) {
+            console.log(results)
+            renderAssets(results);
+          }
+        } catch (e) {
+          console.error(e);
+        }
+      }
 
-    window.location.href = url;
-  }
+      //Genera u archivo PDF
+      async function generatePdf(id) {
 
-  $("#in-sublote").addEventListener("input",()=>{
+        let codeID = btoa(id);
+        let url = `../../../../reports/reports_pdf.php?action=reportLots&idproyecto=${codeID}`;
 
-      clearTimeout(timer);
+        window.location.href = url;
+      }
 
-        timer = setTimeout(()=>{
+      //Genera un archivo excel
+      async function generateExcel(id) {
+
+        let codeID = btoa(id);
+        let url = `../../../../reports/reports_excel.php?idproyecto=${codeID}`;
+
+        window.location.href = url;
+      }
+
+      $("#in-sublote").addEventListener("input", () => {
+
+        clearTimeout(timer);
+
+        timer = setTimeout(() => {
 
           let sublote = $("#in-sublote").value;
 
-          if(sublote != ""){
+          if (sublote != "") {
 
-            searchAsset(idProyecto,sublote);
+            searchAsset(idProyecto, sublote);
 
-          }else{
+          } else {
 
             getAssets(idProyecto);
           }
-        },1500)
-    });
+        }, 1500)
+      });
 
-    //Menù */*/*/
-    /* $("#goDashboard").addEventListener("click",()=>{
+      //Menù */*/*/
+      /* $("#goDashboard").addEventListener("click",()=>{
     
     window.location.href = `../../dashboard.php?id=${code}&name=${codeName}`;
     
@@ -430,19 +651,19 @@ document.addEventListener("DOMContentLoaded",()=>{
     window.location.href = `../../projects/index.php?id=${code}&name=${codeName}`;
     
   }); */
-      
-  $("#generate-excel").addEventListener("click",()=>{
 
-    generateExcel(idProyecto);
-  });
+      $("#generate-excel").addEventListener("click", () => {
 
-  $("#generate-pdf").addEventListener("click",()=>{
+        generateExcel(idProyecto);
+      });
 
-    generatePdf(idProyecto);
-  });
+      $("#generate-pdf").addEventListener("click", () => {
 
-    /* getAssets(idProyecto); */
-});
+        generatePdf(idProyecto);
+      });
+
+      /* getAssets(idProyecto); */
+    });
   </script>
   <script>
     var win = navigator.platform.indexOf('Win') > -1;

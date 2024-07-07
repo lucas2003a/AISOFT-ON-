@@ -204,5 +204,12 @@ if (isset($_POST["action"])) {
 
             echo json_encode($client->getClientsForSaleId($idcliente));
             break;
+
+        case 'calculateClients':
+            
+            $idproyecto = $_POST["idproyecto"];
+
+            echo json_encode($client->calculateClients($idproyecto));
+            break;
     }
 }

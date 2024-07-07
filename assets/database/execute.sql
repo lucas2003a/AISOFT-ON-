@@ -8,7 +8,7 @@ select * from separaciones;
 select * from detalle_cuotas;
 select * from devoluciones;
 select * from roles;
-select * from permisos;
+select * from permisos order by modulo;
 select * from usuarios;
 set foreign_key_checks = 0;
 update usuarios set contrasenia = "$2y$10$6LJpKa/E0MPdYF.z.xJRNu0kaqXDBLesKMUET4a6IsFUShOYJ8zwm";
@@ -887,3 +887,20 @@ INSERT INTO permisos(idrol, modulo) VALUES
 (8, 'separations/index');
 
 select * from permisos;
+
+INSERT INTO permisos(idrol, modulo) VALUES
+(1, 'assets/list_clients');
+INSERT INTO permisos(idrol, modulo) VALUES
+(2, 'assets/list_clients');
+INSERT INTO permisos(idrol, modulo) VALUES
+(3, 'assets/list_clients');
+INSERT INTO permisos(idrol, modulo) VALUES
+(4, 'assets/list_clients');
+INSERT INTO permisos(idrol, modulo) VALUES
+(5, 'assets/list_clients');
+INSERT INTO permisos(idrol, modulo) VALUES
+(6, 'assets/list_clients');
+INSERT INTO permisos(idrol, modulo) VALUES
+(7, 'assets/list_clients');
+INSERT INTO permisos(idrol, modulo) VALUES
+(8, 'assets/list_clients');
