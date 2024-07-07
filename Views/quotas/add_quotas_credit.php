@@ -350,6 +350,7 @@
           let params = new FormData();
           params.append("action", "addQuota");
           params.append("idcontrato", obj.idcontrato);
+          params.append("nro_cuota", obj.nro_cuota);
           params.append("monto_cuota", obj.monto_cuota);
           params.append("fecha_vencimiento", obj.fecha_vencimiento);
 
@@ -406,6 +407,7 @@
 
         let newDate = new Date(fecha_vencimiento);
         let nMonth = 1;
+        let nCuota = 1;
         for (i = 0; i < ncuotas; i++) {
 
           newDate.setMonth(newDate.getMonth() + 1, newDate.getDate())
@@ -419,12 +421,14 @@
           let monto = saldo_contrato > cuotasTotal ? monto_cuota + (i == 0 ? monto_ajuste : 0) : monto_cuota;
           let object = {
             idcontrato: contratoId,
+            nro_cuota: nCuota,
             monto_cuota: monto.toFixed(2),
             fecha_vencimiento: calFven
           };
           dataRender.push(object);
 
           nMonth++;
+          nCuota++;
         }
         await renderTable()
       }

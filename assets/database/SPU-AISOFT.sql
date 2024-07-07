@@ -2879,6 +2879,7 @@ BEGIN
         rs.moneda_venta,
         rs.inicial,
         rs.archivo,
+        rs.idvendedor,
         rs.nombres
         FROM (
             SELECT  
@@ -2908,6 +2909,7 @@ BEGIN
                 cnt.moneda_venta,
                 cnt.inicial,
                 cnt.archivo,
+                cnt.idvendedor,
                 per.nombres
                 FROM contratos cnt
                 INNER JOIN separaciones sp ON sp.idseparacion = cnt.idseparacion
@@ -2946,6 +2948,7 @@ BEGIN
                 cnt.moneda_venta,
                 cnt.inicial,
                 cnt.archivo,
+                cnt.idvendedor,
                 per.nombres
                 FROM contratos cnt
                 LEFT JOIN separaciones sp ON sp.idseparacion = cnt.idseparacion
@@ -3305,6 +3308,7 @@ BEGIN
     SELECT  
             detc.iddetalle_cuota,
             qt.idcuota,
+            qt.nro_cuota,
             ct.idcontrato,
             ct.n_expediente,
             qt.monto_cuota,
@@ -3415,13 +3419,14 @@ DELIMITER $$
 CREATE PROCEDURE spu_add_quota
 (
     IN _idcontrato INT,
+    IN _nro_cuota INT,
     IN _monto_cuota DECIMAL(8,2),
     IN _fecha_vencimiento DATE,
     IN _idusuario INT
 )
 BEGIN
-    INSERT INTO cuotas(idcontrato, monto_cuota, fecha_vencimiento, idusuario)
-                VALUES(_idcontrato, _monto_cuota, _fecha_vencimiento, _idusuario);
+    INSERT INTO cuotas(idcontrato, nro_cuota, monto_cuota, fecha_vencimiento, idusuario)
+                VALUES(_idcontrato, _nro_cuota, _monto_cuota, _fecha_vencimiento, _idusuario);
                 
     SELECT ROW_COUNT() AS filasAfect;
 END $$
@@ -3861,39 +3866,7 @@ END $$
 
 DELIMITER ;
 
-DELIMITER $$
 
-CREATE PROCEDURE spu_reports_cuotas
-(
-    IN _idcontrato INT
-)
-BEGIN
-    SELECT ct.idcuota,
-            ct.idcontrato,
-            ct.monto_cuota,
-            ct.estado,
-			ct.fecha_vencimiento,
-			COALESCE(rs.fecha_pago,'0000-00-00') AS fecha_pago, -- // ! Inidica la fecha que fué pagada la cuota
-            COALESCE(rs.monto,0.00) AS monto_pagado,
-            COALESCE((ct.monto_cuota - rs.monto),0.00) AS monto_restante
-        FROM cuotas AS ct
-        LEFT JOIN (
-            SELECT 
-				idcuota,
-				SUM(monto_pago) AS monto,
-                MAX(fecha_pago) AS fecha_pago
-				FROM detalle_cuotas
-                WHERE inactive_at IS NULL 
-                GROUP BY idcuota
-                ORDER BY iddetalle_cuota DESC 
-        ) AS rs ON rs.idcuota = ct.idcuota
-        WHERE ct.idcontrato = 7;
-        
-    SELECT * FROM detalle_cuotas;
-    SELECT * FROM cuotas;
-END $$
-
-DELIMITER ;
 
 DELIMITER $$
 

@@ -72,6 +72,7 @@ if(isset($_POST["action"])){
         case "addQuota":
             $dataObtained = [
                 "idcontrato" => $_POST["idcontrato"],
+                "nro_cuota" => $_POST["nro_cuota"],
                 "monto_cuota" => $_POST["monto_cuota"],
                 "fecha_vencimiento" => $_POST["fecha_vencimiento"],
                 "idusuario" => $_SESSION["idusuario"]

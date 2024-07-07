@@ -564,9 +564,11 @@ DELIMITER ;
 SELECT * from vws_clientes_legal;
 select * from clientes;
 DELIMITER $$
-CREATE VIEW vws_list_quotas
+CREATE VIEW vws_list_quotas 
     AS
-        SELECT  qt.idcuota,
+        SELECT  
+            qt.nro_cuota,
+            qt.idcuota,
             ct.idcontrato,
             ct.n_expediente,
             qt.monto_cuota,
@@ -590,7 +592,7 @@ CREATE VIEW vws_list_quotas
 DELIMITER ;
 
 use aisoft;
-select * from roles;
+select * from cuotas;
 
 
 update usuarios set contrasenia = "$2y$10$8Hfxze.TOef0XhG/Uk/t4uzH77BXCSeF5Cl9fC0tuktcTIG3WBh2u";

@@ -1,4 +1,4 @@
-<?php include "../sidebar/permissions.php";?>
+<?php include "../sidebar/permissions.php"; ?>
 <!DOCTYPE html>
 <html lang="es">
 
@@ -43,7 +43,7 @@
     <div class="collapse navbar-collapse  w-auto " id="sidenav-collapse-main">
       <ul class="navbar-nav">
 
-        <?php include "../sidebar/sidebar_options.php";?>
+        <?php include "../sidebar/sidebar_options.php"; ?>
 
         <!-- CERRAR SESIÓN -->
         <li class="nav-item">
@@ -88,7 +88,7 @@
             <li class="nav-item d-flex align-items-center">
               <a href="javascript:;" class="nav-link text-body font-weight-bold px-0">
                 <i class="fa fa-user me-sm-1"></i>
-                <span class="d-sm-inline d-none"><?="<strong>" . strtoupper($_SESSION["rol"]) . "</strong>" . " - " . strtolower($_SESSION["apellidos"]) . ", " . strtolower($_SESSION["nombres"])?></span>
+                <span class="d-sm-inline d-none"><?= "<strong>" . strtoupper($_SESSION["rol"]) . "</strong>" . " - " . strtolower($_SESSION["apellidos"]) . ", " . strtolower($_SESSION["nombres"]) ?></span>
               </a>
             </li>
             <li class="nav-item d-xl-none ps-3 d-flex align-items-center">
@@ -232,7 +232,7 @@
                             <!-- IDCONYUGUE -->
                             <div class="mt-2">
                               <label for="idconyugue">Conyugue</label>
-                              <select name="idconyugue" id="idconyugue" class="form-select input-contract" required>
+                              <select name="idconyugue" id="idconyugue" class="form-select input-contract">
                                 <option value="">Selecciona un conyugue</option>
                               </select>
                               <div class="invalid-feedback">
@@ -241,6 +241,17 @@
                               <div class="valid-feedback">
                                 Conyugue seleccionado correctamente.
                               </div>
+                            </div>
+
+                            <!-- VENDEDOR -->
+                            <div class="mt-2">
+
+                              <label for="idvendedor">Vendedor</label>
+                              <select name="idvendedor" id="idvendedor" class="form-select" required>
+                                <option value="">Seleccione un vendedor</option>
+                              </select>
+                              <div class="invalid-feedback">Selecciona un vendedor</div>
+                              <div class="valid-feedback">Vendedor seleccionado correctamente</div>
                             </div>
 
                             <!-- IDREPRESENTANTE LEGAL -->
@@ -692,6 +703,35 @@
       let isEdit = false;
       let serieContract;
 
+      // * Obtiene a los vendedores
+      async function getVendors() {
+
+        try {
+
+          let url = "../../Controllers/contract.controller.php";
+
+          let params = new FormData();
+
+          params.append("action", "getMoney");
+
+          let results = await global.sendAction(url, params);
+
+          if (results.length > 0) {
+
+            results.forEach(result => {
+
+              let tagOption = document.createElement("option");
+              tagOption.value = result.idusuario;
+              tagOption.innerText = (result.apellidos).toUpperCase() + " " + (result.nombres).toLowerCase();
+
+              $("#idvendedor").appendChild(tagOption);
+            });
+          }
+        } catch (e) {
+          console.error(e);
+        }
+      }
+
       // * Retorna una promesa
       function returnPromise(array) {
 
@@ -825,64 +865,64 @@
                 });
             }
 
-          }).then(()=>{
+          }).then(() => {
 
             // !Valor del tipo de cambio
             $("#tipo_cambio").value = result.tipo_cambio;
-    
+
             // !Valor de la fecha del contrato
             $("#fecha_contrato").value = result.fecha_contrato;
-    
+
             // !Valor de la moneda de venta
             $("#moneda_venta").value = result.moneda_venta;
             console.log("moneda de venta : " + result.moneda_venta)
-    
+
             // !Valor del monto de incial
             $("#monto_inicial").value = Number.parseFloat(result.inicial);
             console.log(Number.parseFloat(result.inicial))
-    
+
             // !Valor de los detalles
             let object = JSON.parse(result.det_contrato);
-    
+
             let keys = object.clave;
             let values = object.valor;
-    
+
             for (index = 0; index < keys.length; index++) {
-    
-    
+
+
               let key = keys[index];
               let value = values[index];
-    
+
               // !Si las claves ni los valores están vacíos
               if (key && value) {
-    
-    
-    
+
+
+
                 // !Verifica si es el ultimo elemento del array
                 if (index == 0) {
-    
-    
+
+
                   $("#input-key").value = key;
                   $("#input-value").value = value;
-    
-    
-    
+
+
+
                   // !Sino ....
                 } else {
                   let content_det = $("#content-det");
                   let content_det_first_child = $("#content-det").firstChild;
-    
+
                   let template = $("#det-clone-less").content.cloneNode(true);
                   let lessButton = $("#new-button").content.cloneNode(true);
-    
+
                   template.querySelector(".input-key").value = key;
                   template.querySelector(".input-value").value = value;
-    
+
                   content_det.insertBefore(template, content_det_first_child);
                 }
               }
             };
-    
+
             // !URL del archivo
             $("#in-doc").disabled = result.archivo ? true : false;
             $("#frame").src = "../../media/files/" + result.archivo;
@@ -899,17 +939,17 @@
 
           .then(() => {
 
-            return new Promise((resolve, reject)=>{
+            return new Promise((resolve, reject) => {
 
               let options = Array.from($("#idproyecto").options);
 
-              if(options.length > 1){
+              if (options.length > 1) {
                 resolve();
-              }else{
+              } else {
 
-                const interval = setInterval(()=>{
+                const interval = setInterval(() => {
 
-                  if(options.length > 1){
+                  if (options.length > 1) {
                     clearInterval(interval);
                     resolve();
                   }
@@ -1030,9 +1070,34 @@
               $("#idcliente").dispatchEvent(new Event("change"));
               reolve();
             })
+          }).then(() => {
+            return new Promise((resolve, reject) => {
+              let options = Array.from($("#idvendedor").options);
+              if (options.length > 1) {
+                resolve();
+              }else{
+                const interval = setInterval(() => {
+                  let options = Array.from($("#idvendedor").options);
+                  if (options.length > 1) {
+                    clearInterval(interval);
+                    resolve();
+                  }
+                },100);
+              }
+            });
+          }).then(() => {
+            return new Promise((resolve, reject) => {
+              let options = Array.from($("#idvendedor").options);
+
+              options.forEach(option => {
+                
+                if(option.value == result.idvendedor) option.selected = true,console.log('option.value :>> ', option.value);
+
+                resolve();
+              });
+              
+            });
           })
-
-
           .then(async function() {
 
             await selectRepresentsIdsede(result);
@@ -1171,7 +1236,7 @@
           let result = await global.sendAction(url, params);
 
           if (result) {
-
+            console.log('result :>> ', result);
             serieContract = result.n_expediente;
 
             // !Valor del númmero de expediente
@@ -1203,7 +1268,7 @@
                     }, 100)
                   }
                 })
-                
+
                 // ! Creo la opción de separación
                 .then(() => {
                   return new Promise((resolve, reject) => {
@@ -1219,10 +1284,10 @@
                     newTag.dataset.precio_venta = result.precio_venta;
                     newTag.dataset.moneda_venta = result.moneda_venta;
 
-                    if(options.length > 1){
-                      
+                    if (options.length > 1) {
+
                       referenceParent.insertBefore(newTag, referenceNode);
-                    }else{
+                    } else {
                       $("#idseparacion").append(newTag);
                     }
                     resolve();
@@ -1283,6 +1348,39 @@
                     resolve();
                     $("#idcliente").dispatchEvent(new Event("change"));
                   })
+                }).then(() => {
+                  
+                  return new Promise((resolve, reject) => {
+                    
+                    options = Array.from($("#idvendedor").options);
+  
+                    if(options.length > 1){
+                      
+                      resolve();
+                    }else{
+                      
+                      const interval = setInterval(() => {
+                        
+                        options = Array.from($("#idvendedor").options);
+                        if(options.length > 1){
+                          clearInterval(interval);
+                          resolve();
+                        }
+                      }, 100);
+                    }
+                  });
+                }).then(() => {
+                  
+                  return new Promise((resolve, reject) => {
+                    
+                    options = Array.from($("#idconyugue").options);
+                    
+                    options.forEach(option => {
+                      
+                      if(option.value == result.idvendedor) option.selected = true;
+                      resolve();
+                    });
+                  });
                 })
                 .then(async function() {
 
@@ -1390,6 +1488,7 @@
           params.append("inicial", $("#monto_inicial").value)
           params.append("det_contrato", jsonDet)
           params.append("archivo", $("#in-doc").files[0])
+          params.append("idvendedor", $("#idvendedor").value)
 
           let result = await global.sendAction(url, params);
 
@@ -2022,7 +2121,7 @@
       $("#idproyecto").addEventListener("change", (e) => {
 
         getHouses(idproyecto);
-        
+
       });
 
       $("#idseparacion").addEventListener("change", (e) => {
@@ -2108,6 +2207,7 @@
 
       /*await getToday();
       await getAllContracts(); */
+      await getVendors();
       await listDetContracts(idcontrato);
       await getContractId(idcontrato);
 
@@ -2130,7 +2230,6 @@
               event.preventDefault() //=> FRENA EL ENVÍO DEL FORMULARIO
               event.stopPropagation() //=> FRENA LA PROPAGACIÓN DE DATOS EN EL FORMULARIO
               form.reportValidity();
-              setContract(idcontrato)();
             } else {
               event.preventDefault();
               sAlert.sweetConfirm("Datos nuevos", "¿Deseas actualizar el registro?", () => {

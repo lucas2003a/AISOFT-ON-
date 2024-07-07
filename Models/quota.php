@@ -130,10 +130,11 @@ class Quota extends Conection{
     public function addQuota($dataQuotas = []){
         try{
             
-            $query = $this->conection->prepare("CALL spu_add_quota(?,?,?,?)");
+            $query = $this->conection->prepare("CALL spu_add_quota(?,?,?,?,?)");
             $query->execute(
                 array(
                     $dataQuotas['idcontrato'],
+                    $dataQuotas['nro_cuota'],
                     $dataQuotas['monto_cuota'],
                     $dataQuotas['fecha_vencimiento'],
                     $dataQuotas['idusuario']
@@ -250,6 +251,9 @@ class Quota extends Conection{
      *                                                    ! REPORTES
      *=======================================================================================================================**/
 
+     /**
+      * Método para hacer el reporte PDF del cronográma de pagos
+      */
      public function reportQuotas($idcontrato = 0){
 
         try {
@@ -262,6 +266,37 @@ class Quota extends Conection{
             die($e->getMessage());
         }
      }
+
+     /**
+      * Método pra realizar el repote en Excel del cronográma de pagos (Extendido)
+      */
+      public function reportQuotasExcel($idcontrato = 0){
+
+        try {
+            $query = $this->conection->prepare("CALL spu_reports_cuotas_extend(?)");
+            $query->execute(array($idcontrato));
+
+            return $query->fetchAll(PDO::FETCH_ASSOC);
+        } catch (Exception $e) {
+            die($e->getMessage());
+        }
+      }
+
+      /**
+       * Método que complementa el reporte en Excel del cronográma de pagos
+       */
+      public function reportQuotasExcelComplement($idcontrato = 0){
+        try {
+            $query = $this->conection->prepare("CALL spu_calculate_debt(?)");
+            $query->execute(array($idcontrato));
+
+            return $query->fetchAll(PDO::FETCH_ASSOC);
+
+        } catch (Exception $e) {
+            die($e->getMessage());
+        }
+      }
+
 
 }
 ?>

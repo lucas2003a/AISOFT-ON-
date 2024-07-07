@@ -454,6 +454,7 @@ CREATE TABLE cuotas
 (
 	idcuota 				INT PRIMARY KEY AUTO_INCREMENT,
     idcontrato		        INT  			NOT NULL,
+    nro_cuota               INT             NOT NULL,
     monto_cuota 			DECIMAL(8,2) 	NOT NULL,
     fecha_vencimiento 		DATE 			NOT NULL,
     estado                  VARCHAR(20) NOT NULL DEFAULT "POR CANCELAR",

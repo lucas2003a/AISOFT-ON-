@@ -20,7 +20,7 @@ $spreadsheet = new Spreadsheet();
 $cost = new Cost;
 $asset = new Asset();
 
-$spreadsheet->getProperties()->setCreator("A.I.F Contratistas Generales S.A.C")->setTitle("Reporte_de_detalles_presupuestos");
+$spreadsheet->getProperties()->setCreator("A.I.F Contratistas Generales S.A.C")->setTitle("Informe_de_presupuesto");
 $spreadsheet->setActiveSheetIndex(0);
 $sheet = $spreadsheet->getActiveSheet();
 
@@ -461,3 +461,4 @@ try {
     
     $sheet->setCellValue("A1","{$e}");
 }
+?>

@@ -830,6 +830,7 @@
           let params = new FormData();
           params.append("action", "addQuota");
           params.append("idcontrato", obj.idcontrato);
+          params.append("nro_cuota", obj.nro_cuota);
           params.append("monto_cuota", obj.monto_cuota);
           params.append("fecha_vencimiento", obj.fecha_vencimiento);
 
@@ -985,6 +986,7 @@
 
               dataForm = {
                 "idcontrato": idcontrato,
+                "nro_cuota": 1,
                 "monto_cuota": precioVenta,
                 "fecha_vencimiento": $("#fecha_contrato").value
               };

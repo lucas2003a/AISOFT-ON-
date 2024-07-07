@@ -22,9 +22,6 @@ END$$
 
 DELIMITER;
 
--- // ! Para que funcione tiene que obenter el idactivo y el idpresupuesto(del lote)
--- // ! El id presupuesto va para call spu_resume_budget_subcatgory(?)
--- // ! El idactivo va para call spu_reports_det_budgets(?)
 DELIMITER $$
 
 CREATE PROCEDURE spu_reports_det_budgets
@@ -47,7 +44,7 @@ BEGIN
         INNER JOIN activos a ON a.idpresupuesto = ps.idpresupuesto
         INNER JOIN subcategoria_costos sc ON sc.idsubcategoria_costo = dtc.idsubcategoria_costo
         INNER JOIN categoria_costos ct ON ct.idcategoria_costo = sc.idcategoria_costo
-        WHERE a.idactivo = 5
+        WHERE a.idactivo = _idactivo
             AND dtc.inactive_at IS NULL
             AND ps.inactive_at IS NULL;
 END $$
@@ -56,11 +53,124 @@ DELIMITER;
 
 DELIMITER $$
 
-CREATE FUNCTION JSON_ARRAYAGG(next_value TEXT) RETURNS TEXT
+CREATE PROCEDURE spu_reports_cuotas
+(
+    IN _idcontrato INT
+)
 BEGIN
-
+    SELECT ct.idcuota,
+            ct.idcontrato,
+            ct.monto_cuota,
+            ct.estado,
+			ct.fecha_vencimiento,
+			COALESCE(rs.fecha_pago,'0000-00-00') AS fecha_pago, -- // ! Inidica la fecha que fué pagada la cuota
+            COALESCE(rs.monto,0.00) AS monto_pagado,
+            COALESCE((ct.monto_cuota - rs.monto),0.00) AS monto_restante
+        FROM cuotas AS ct
+        LEFT JOIN (
+            SELECT 
+				idcuota,
+				SUM(monto_pago) AS monto,
+                MAX(fecha_pago) AS fecha_pago
+				FROM detalle_cuotas
+                WHERE inactive_at IS NULL 
+                GROUP BY idcuota
+                ORDER BY iddetalle_cuota DESC 
+        ) AS rs ON rs.idcuota = ct.idcuota
+        WHERE ct.idcontrato = _idcontrato;
+END $$
 
 DELIMITER ;
 
-CREATE PROCEDURE 
-call spu_resume_budget_category(12);
+DELIMITER $$
+CREATE PROCEDURE spu_reports_cuotas_extend
+(
+	IN _idcontrato INT
+)
+BEGIN
+	SET @before_idcuota := NULL;
+    SET @before_iddetalle:= NULL;
+    
+    
+	SELECT 
+    
+    ct.nro_cuota,
+    @before_idcuota AS ultimoid,
+    @before_iddetalle AS ultimoiddetalle,
+    CASE
+		 WHEN @before_idcuota = dt.idcuota THEN
+            (
+                SELECT @calc := (ct2.monto_cuota - dtc2.monto_pago)
+                FROM detalle_cuotas dtc2
+                INNER JOIN cuotas ct2 ON ct2.idcuota = dtc2.idcuota
+                WHERE dtc2.iddetalle_cuota = @before_iddetalle
+                ORDER BY ct2.fecha_vencimiento,dtc2.iddetalle_cuota ASC
+            )  
+        ELSE
+         @calc := ct.monto_cuota  
+    END AS monto_cuota,
+    @before_iddetalle := dt.iddetalle_cuota AS iddetalle_cuota,
+    @before_idcuota := dt.idcuota AS idcuota,
+    ct.estado,
+    ct.fecha_vencimiento,
+    dt.fecha_pago,
+    dt.monto_pago,
+    dt.modalidad_pago,
+    dt.entidad_bancaria,
+    dt.nro_operacion,
+    dt.detalles,
+    ROUND((@calc - dt.monto_pago),2) AS calculo
+FROM detalle_cuotas dt
+INNER JOIN cuotas ct ON ct.idcuota = dt.idcuota
+INNER JOIN contratos cnt ON cnt.idcontrato = ct.idcontrato
+WHERE ct.inactive_at IS NULL
+    AND dt.inactive_at IS NULL
+    AND cnt.idcontrato = _idcontrato
+ORDER BY ct.fecha_vencimiento,dt.iddetalle_cuota ASC;
+END $$
+
+DELIMITER ;
+
+DELIMITER $$
+CREATE PROCEDURE spu_calculate_debt
+(
+	IN _idcontrato INT
+)
+BEGIN
+   -- Variables de sesión
+SET @calculate := 0;
+SET @monto := 0;
+
+-- Ejecución
+SELECT 
+    ct.idcuota,
+    dtc.iddetalle_cuota,
+    ct.nro_cuota,
+    ct.monto_cuota,
+    CASE 
+        WHEN @calculate = 0 THEN @calculate := cn.precio_venta
+        ELSE @calculate
+    END AS precio_venta,
+    ct.fecha_vencimiento,
+    dtc.fecha_pago,
+    @monto := dtc.monto_pago AS monto_pago,
+    @calculate := CASE 
+                    WHEN @calculate = cn.precio_venta THEN cn.precio_venta - dtc.monto_pago
+                    ELSE @calculate - (dtc.monto_pago + @monto)
+                  END AS saldo
+FROM 
+    detalle_cuotas dtc
+    INNER JOIN cuotas ct ON ct.idcuota = dtc.idcuota
+    INNER JOIN contratos cn ON cn.idcontrato = ct.idcontrato
+WHERE 
+    cn.idcontrato = _idcontrato
+    AND ct.inactive_at IS NULL
+    AND dtc.inactive_at IS NULL
+GROUP BY 
+    dtc.iddetalle_cuota
+ORDER BY 
+    ct.fecha_vencimiento, dtc.iddetalle_cuota;
+
+END $$
+DELIMITER ;
+call spu_calculate_debt(7);
