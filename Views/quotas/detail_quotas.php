@@ -478,6 +478,11 @@
           console.error(e);
         }
       }
+      console.log('idcontrato :>> ', idcontrato);
+      $("#generate-report-excel").addEventListener("click",()=>{
+        let url = `../../reports/excel_quotas.php?id=${btoa(idcontrato)}`;
+        window.location.href = url;
+      });
 
       $("#generate-report-pdf").addEventListener("click",()=>{
 

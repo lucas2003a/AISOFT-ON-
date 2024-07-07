@@ -148,15 +148,13 @@ SELECT
     ct.nro_cuota,
     ct.monto_cuota,
     CASE 
-        WHEN @calculate = 0 THEN @calculate := cn.precio_venta
+        WHEN @calculate = 0 THEN @calculate := cn.precio_venta - cn.inicial -- SE DESCUENTA EL MONTO DE LA INICIAL
         ELSE @calculate
     END AS precio_venta,
-    ct.fecha_vencimiento,
-    dtc.fecha_pago,
     @monto := dtc.monto_pago AS monto_pago,
     @calculate := CASE 
                     WHEN @calculate = cn.precio_venta THEN cn.precio_venta - dtc.monto_pago
-                    ELSE @calculate - (dtc.monto_pago + @monto)
+                    ELSE @calculate - (dtc.monto_pago)
                   END AS saldo
 FROM 
     detalle_cuotas dtc
