@@ -112,278 +112,144 @@
       <!-- CONTENIDO -->
 
       <div class="container-fluid">
-      <div class="page-header min-height-300 border-radius-xl mt-4" style="background-image: url('../assets/img/curved-images/curved0.jpg'); background-position-y: 50%;">
-        <span class="mask bg-gradient-primary opacity-6"></span>
-      </div>
-      <div class="card card-body blur shadow-blur mx-4 mt-n6 overflow-hidden">
-        <div class="row gx-4">
-          <div class="col-auto">
-            <div class="avatar avatar-xl position-relative">
-              <img src="../assets/img/bruce-mars.jpg" alt="profile_image" class="w-100 border-radius-lg shadow-sm">
-            </div>
-          </div>
-          <div class="col-auto my-auto">
-            <div class="h-100">
-              <h5 class="mb-1">
-                Alec Thompson
-              </h5>
-              <p class="mb-0 font-weight-bold text-sm">
-                CEO / Co-Founder
-              </p>
-            </div>
-          </div>
-          <div class="col-lg-4 col-md-6 my-sm-auto ms-sm-auto me-sm-0 mx-auto mt-3">
-            
-          </div>
+        <div class="page-header min-height-300 border-radius-xl mt-4" style="background-image: url('../../assets/img/curved-images/curved0.jpg'); background-position-y: 50%;">
+          <span class="mask bg-gradient-primary opacity-6"></span>
         </div>
-      </div>
-    </div>
-    <div class="container-fluid py-4">
-      <div class="row">
-        <!-- <!--======================================================================================================================-->
-        <!-- <!--=============================================== DATOS DEL USUARIO ====================================================-->
-        <!-- <!--======================================================================================================================-->
+        <div class="card card-body blur shadow-blur mx-4 mt-n6 overflow-hidden">
+          <div class="row gx-4">
+            <div class="col-auto">
+              <div class="avatar avatar-xl position-relative">
+                <img src="../../assets/iconos/perfil-del-usuario.png" alt="profile_image" id="profile_image" class="w-100 border-radius-lg shadow-sm">
+              </div>
+            </div>
+            <div class="col-auto my-auto">
+              <div class="h-100">
+                <h5 class="mb-1" id="user_name">
+                  --
+                </h5>
+                <p class="mb-0 font-weight-bold text-sm" id="user_rol">
+                  --
+                </p>
+              </div>
+            </div>
+            <div class="col-lg-4 col-md-6 my-sm-auto ms-sm-auto me-sm-0 mx-auto mt-3">
 
-        <div class="col-12 col-xl-6">
-          <div class="card h-100">
-            <div class="card-header pb-0 p-3">
-              <h6 class="mb-0">Datos del usuario</h6>
-              <hr>
             </div>
-            <div class="card-body p-3">
-              <h6 class="text-uppercase text-body text-xs font-weight-bolder">Cuenta</h6>
-              <ul class="list-group">
-                <li class="list-group-item border-0 px-0">
-                  <div class="form-check form-switch ps-0">
-                    <label class="form-check-label text-body ms-3 text-truncate w-80 mb-0" for="flexSwitchCheckDefault"><strong>Correo: </strong> <span id="correoText">Email me when someone follows me</span></label>
-                  </div>
-                </li>
-                <li class="list-group-item border-0 px-0">
-                  <div class="form-check form-switch ps-0">
-                    <label class="form-check-label text-body ms-3 text-truncate w-80 mb-0" for="flexSwitchCheckDefault1"><strong id="sedeText">Sede: </strong><span>Representante por sede</span></label>
-                  </div>
-                </li>
-                <li class="list-group-item border-0 px-0">
-                  <div class="form-check form-switch ps-0">
-                    <label class="form-check-label text-body ms-3 text-truncate w-80 mb-0" for="flexSwitchCheckDefault2"><strong id="representateText">Representante: </strong><span>Representante por sede</span></label>
-                  </div>
-                </li>
-                <li class="list-group-item border-0 px-0">
-                  <div class="form-check form-switch ps-0">
-                    <label class="form-check-label text-body ms-3 text-truncate w-80 mb-0" for="flexSwitchCheckDefault2"><strong id="rolText">Rol: </strong><span>Rol del usuario</span></label>
-                  </div>
-                </li>
-              </ul>
-              
+          </div>
+        </div>
+      </div>
+      <div class="container-fluid py-4">
+        <div class="row">
+          <!-- <!--======================================================================================================================-->
+          <!-- <!--=============================================== DATOS DEL USUARIO ====================================================-->
+          <!-- <!--======================================================================================================================-->
+
+          <div class="col-12 col-xl-6">
+            <div class="card h-100">
+              <div class="card-header pb-0 p-3">
+                <h6 class="mb-0">Datos del usuario</h6>
+                <hr>
+              </div>
+              <div class="card-body p-3">
+                <h6 class="text-uppercase text-body text-xs font-weight-bolder">Cuenta</h6>
+                <ul class="list-group">
+                  <li class="list-group-item border-0 px-0">
+                    <div class="form-check form-switch ps-0">
+                      <label class="form-check-label text-body ms-3 text-truncate w-80 mb-0" for="flexSwitchCheckDefault"><strong>Correo: </strong> <span id="correoText"> -- </span></label>
+                    </div>
+                  </li>
+                  <li class="list-group-item border-0 px-0">
+                    <div class="form-check form-switch ps-0">
+                      <label class="form-check-label text-body ms-3 text-truncate w-80 mb-0" for="flexSwitchCheckDefault1"><strong>Sede: </strong><span id="sedeText"> -- </span></label>
+                    </div>
+                  </li>
+                  <li class="list-group-item border-0 px-0">
+                    <div class="form-check form-switch ps-0">
+                      <label class="form-check-label text-body ms-3 text-truncate w-80 mb-0" for="flexSwitchCheckDefault2"><strong>Rol: </strong><span id="rolText"> -- </span></label>
+                    </div>
+                  </li>
+                </ul>
+
+              </div>
+            </div>
+          </div>
+
+          <!-- <!--======================================================================================================================-->
+          <!-- <!--=============================================== DATOS PERSONAALES ====================================================-->
+          <!-- <!--======================================================================================================================-->
+          <div class="col-12 col-xl-6">
+            <div class="card h-100">
+              <div class="card-header pb-0 p-3">
+                <h6 class="mb-0">Datos personales</h6>
+                <hr>
+              </div>
+              <div class="card-body p-3">
+                <h6 class="text-uppercase text-body text-xs font-weight-bolder">Usuario</h6>
+                <ul class="list-group">
+                  <li class="list-group-item border-0 px-0">
+                    <div class="form-check form-switch ps-0">
+                      <label class="form-check-label text-body ms-3 text-truncate w-80 mb-0" for="flexSwitchCheckDefault"><strong>Nombres y apellidos: </strong> <span id="namesText"> -- </span></label>
+                    </div>
+                  </li>
+                  <li class="list-group-item border-0 px-0">
+                    <div class="form-check form-switch ps-0">
+                      <label class="form-check-label text-body ms-3 text-truncate w-80 mb-0" for="flexSwitchCheckDefault1"><strong>Tipo de documento: </strong><span id="tdocText"> -- </span></label>
+                    </div>
+                  </li>
+                  <li class="list-group-item border-0 px-0">
+                    <div class="form-check form-switch ps-0">
+                      <label class="form-check-label text-body ms-3 text-truncate w-80 mb-0" for="flexSwitchCheckDefault2"><strong>Nro de documento: </strong><span id="ndocText"> -- </span></label>
+                    </div>
+                  </li>
+                  <li class="list-group-item border-0 px-0">
+                    <div class="form-check form-switch ps-0">
+                      <label class="form-check-label text-body ms-3 text-truncate w-80 mb-0" for="flexSwitchCheckDefault2"><strong>Dirección: </strong><span id="direccionText"> -- </span></label>
+                    </div>
+                  </li>
+                </ul>
+              </div>
             </div>
           </div>
         </div>
 
-        <!-- <!--======================================================================================================================-->
-        <!-- <!--=============================================== DATOS PERSONAALES ====================================================-->
-        <!-- <!--======================================================================================================================-->
-        <div class="col-12 col-xl-6">
-          <div class="card h-100">
-            <div class="card-header pb-0 p-3">
-            <div class="card-header pb-0 p-3">
-              <h6 class="mb-0">Datos del usuario</h6>
-              <hr>
-            </div>
-            </div>
-            <div class="card-body p-3">
-            <h6 class="text-uppercase text-body text-xs font-weight-bolder">Usuario</h6>
-              <ul class="list-group">
-                <li class="list-group-item border-0 px-0">
-                  <div class="form-check form-switch ps-0">
-                    <label class="form-check-label text-body ms-3 text-truncate w-80 mb-0" for="flexSwitchCheckDefault"><strong>Nombres y apellidos: </strong> <span id="namesText">Atuncar Valerio lucas</span></label>
-                  </div>
-                </li>
-                <li class="list-group-item border-0 px-0">
-                  <div class="form-check form-switch ps-0">
-                    <label class="form-check-label text-body ms-3 text-truncate w-80 mb-0" for="flexSwitchCheckDefault1"><strong id="tdocText">Tipo de documento: </strong><span>DNI</span></label>
-                  </div>
-                </li>
-                <li class="list-group-item border-0 px-0">
-                  <div class="form-check form-switch ps-0">
-                    <label class="form-check-label text-body ms-3 text-truncate w-80 mb-0" for="flexSwitchCheckDefault2"><strong id="ndocText">Nro de documento: </strong><span>77068570</span></label>
-                  </div>
-                </li>
-                <li class="list-group-item border-0 px-0">
-                  <div class="form-check form-switch ps-0">
-                    <label class="form-check-label text-body ms-3 text-truncate w-80 mb-0" for="flexSwitchCheckDefault2"><strong id="direccionText">Dirección: </strong><span>Av jaun c lavarde </span></label>
-                  </div>
-                </li>
-              </ul>
+        <div class="card mt-4 mb-4 d-none" id="card-sales">
+          <div class="card-header pb-0">
+            <div class="row">
+              <div class="col-md-6">
+
+                <h6><strong>Ultimas ventas</strong></h6>
+
+              </div>
             </div>
           </div>
-        </div>
-        <div class="col-12 mt-4">
-          <div class="card mb-4">
-            <div class="card-header pb-0 p-3">
-              <h6 class="mb-1">Projects</h6>
-              <p class="text-sm">Architects design houses</p>
-            </div>
-            <div class="card-body p-3">
-              <div class="row">
-                <div class="col-xl-3 col-md-6 mb-xl-0 mb-4">
-                  <div class="card card-blog card-plain">
-                    <div class="position-relative">
-                      <a class="d-block shadow-xl border-radius-xl">
-                        <img src="../assets/img/home-decor-1.jpg" alt="img-blur-shadow" class="img-fluid shadow border-radius-xl">
-                      </a>
-                    </div>
-                    <div class="card-body px-1 pb-0">
-                      <p class="text-gradient text-dark mb-2 text-sm">Project #2</p>
-                      <a href="javascript:;">
-                        <h5>
-                          Modern
-                        </h5>
-                      </a>
-                      <p class="mb-4 text-sm">
-                        As Uber works through a huge amount of internal management turmoil.
-                      </p>
-                      <div class="d-flex align-items-center justify-content-between">
-                        <button type="button" class="btn btn-outline-primary btn-sm mb-0">View Project</button>
-                        <div class="avatar-group mt-2">
-                          <a href="javascript:;" class="avatar avatar-xs rounded-circle" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Elena Morison">
-                            <img alt="Image placeholder" src="../assets/img/team-1.jpg">
-                          </a>
-                          <a href="javascript:;" class="avatar avatar-xs rounded-circle" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Ryan Milly">
-                            <img alt="Image placeholder" src="../assets/img/team-2.jpg">
-                          </a>
-                          <a href="javascript:;" class="avatar avatar-xs rounded-circle" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Nick Daniel">
-                            <img alt="Image placeholder" src="../assets/img/team-3.jpg">
-                          </a>
-                          <a href="javascript:;" class="avatar avatar-xs rounded-circle" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Peterson">
-                            <img alt="Image placeholder" src="../assets/img/team-4.jpg">
-                          </a>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-xl-3 col-md-6 mb-xl-0 mb-4">
-                  <div class="card card-blog card-plain">
-                    <div class="position-relative">
-                      <a class="d-block shadow-xl border-radius-xl">
-                        <img src="../assets/img/home-decor-2.jpg" alt="img-blur-shadow" class="img-fluid shadow border-radius-lg">
-                      </a>
-                    </div>
-                    <div class="card-body px-1 pb-0">
-                      <p class="text-gradient text-dark mb-2 text-sm">Project #1</p>
-                      <a href="javascript:;">
-                        <h5>
-                          Scandinavian
-                        </h5>
-                      </a>
-                      <p class="mb-4 text-sm">
-                        Music is something that every person has his or her own specific opinion about.
-                      </p>
-                      <div class="d-flex align-items-center justify-content-between">
-                        <button type="button" class="btn btn-outline-primary btn-sm mb-0">View Project</button>
-                        <div class="avatar-group mt-2">
-                          <a href="javascript:;" class="avatar avatar-xs rounded-circle" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Nick Daniel">
-                            <img alt="Image placeholder" src="../assets/img/team-3.jpg">
-                          </a>
-                          <a href="javascript:;" class="avatar avatar-xs rounded-circle" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Peterson">
-                            <img alt="Image placeholder" src="../assets/img/team-4.jpg">
-                          </a>
-                          <a href="javascript:;" class="avatar avatar-xs rounded-circle" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Elena Morison">
-                            <img alt="Image placeholder" src="../assets/img/team-1.jpg">
-                          </a>
-                          <a href="javascript:;" class="avatar avatar-xs rounded-circle" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Ryan Milly">
-                            <img alt="Image placeholder" src="../assets/img/team-2.jpg">
-                          </a>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-xl-3 col-md-6 mb-xl-0 mb-4">
-                  <div class="card card-blog card-plain">
-                    <div class="position-relative">
-                      <a class="d-block shadow-xl border-radius-xl">
-                        <img src="../assets/img/home-decor-3.jpg" alt="img-blur-shadow" class="img-fluid shadow border-radius-xl">
-                      </a>
-                    </div>
-                    <div class="card-body px-1 pb-0">
-                      <p class="text-gradient text-dark mb-2 text-sm">Project #3</p>
-                      <a href="javascript:;">
-                        <h5>
-                          Minimalist
-                        </h5>
-                      </a>
-                      <p class="mb-4 text-sm">
-                        Different people have different taste, and various types of music.
-                      </p>
-                      <div class="d-flex align-items-center justify-content-between">
-                        <button type="button" class="btn btn-outline-primary btn-sm mb-0">View Project</button>
-                        <div class="avatar-group mt-2">
-                          <a href="javascript:;" class="avatar avatar-xs rounded-circle" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Peterson">
-                            <img alt="Image placeholder" src="../assets/img/team-4.jpg">
-                          </a>
-                          <a href="javascript:;" class="avatar avatar-xs rounded-circle" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Nick Daniel">
-                            <img alt="Image placeholder" src="../assets/img/team-3.jpg">
-                          </a>
-                          <a href="javascript:;" class="avatar avatar-xs rounded-circle" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Ryan Milly">
-                            <img alt="Image placeholder" src="../assets/img/team-2.jpg">
-                          </a>
-                          <a href="javascript:;" class="avatar avatar-xs rounded-circle" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Elena Morison">
-                            <img alt="Image placeholder" src="../assets/img/team-1.jpg">
-                          </a>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-xl-3 col-md-6 mb-xl-0 mb-4">
-                  <div class="card h-100 card-plain border">
-                    <div class="card-body d-flex flex-column justify-content-center text-center">
-                      <a href="javascript:;">
-                        <i class="fa fa-plus text-secondary mb-3"></i>
-                        <h5 class=" text-secondary"> New project </h5>
-                      </a>
-                    </div>
-                  </div>
-                </div>
+          <hr>
+          <div class="card-body px-0 pt-0 pb-2">
+            <div class="table-responsive text-center p-0">
+              <table class="table align-items-center mb-0 table-hover" id="table-sales">
+                <thead>
+                  <tr>
+                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">#</th>
+                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Nº expediente</th>
+                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Proyecto</th>
+                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Sublote</th>
+                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Fecha del contrato</th>
+                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Monto de venta</th>
+                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Precio de venta</th>
+                  </tr>
+                </thead>
+                <tbody>
+
+                  <!-- RENDER -->
+
+                </tbody>
+              </table>
+              <div id="render-error">
+
               </div>
             </div>
           </div>
         </div>
       </div>
-      <footer class="footer pt-3  ">
-        <div class="container-fluid">
-          <div class="row align-items-center justify-content-lg-between">
-            <div class="col-lg-6 mb-lg-0 mb-4">
-              <div class="copyright text-center text-sm text-muted text-lg-start">
-                © <script>
-                  document.write(new Date().getFullYear())
-                </script>,
-                made with <i class="fa fa-heart"></i> by
-                <a href="https://www.creative-tim.com" class="font-weight-bold" target="_blank">Creative Tim</a>
-                for a better web.
-              </div>
-            </div>
-            <div class="col-lg-6">
-              <ul class="nav nav-footer justify-content-center justify-content-lg-end">
-                <li class="nav-item">
-                  <a href="https://www.creative-tim.com" class="nav-link text-muted" target="_blank">Creative Tim</a>
-                </li>
-                <li class="nav-item">
-                  <a href="https://www.creative-tim.com/presentation" class="nav-link text-muted" target="_blank">About Us</a>
-                </li>
-                <li class="nav-item">
-                  <a href="https://www.creative-tim.com/blog" class="nav-link text-muted" target="_blank">Blog</a>
-                </li>
-                <li class="nav-item">
-                  <a href="https://www.creative-tim.com/license" class="nav-link pe-0 text-muted" target="_blank">License</a>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </footer>
-    </div>
 
       <footer class="footer pt-3  ">
         <div class="container-fluid">
@@ -459,6 +325,7 @@
       </div>
     </div>
   </div>
+
   <!-- SWEET ALERT -->
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
@@ -471,7 +338,7 @@
   <script src="../../assets/js/globalFunctions.js"></script>
   <script src="../../assets/js/sweetAlert.js"></script>
   <script>
-    document.addEventListener("DOMContentLoaded", () => {
+    document.addEventListener("DOMContentLoaded", async function() {
 
       /* INSTANCIAS */
       const global = new FunGlobal();
@@ -479,190 +346,84 @@
       const $ = id => global.$(id);
       const $All = id => global.$All(id);
 
-      /* VALOR EN LA URL */
-      const stringQuery = window.location.search;
-      const url = new URLSearchParams(stringQuery);
-      const code = url.get("id");
-      const codeName = url.get("name");
-
-      const idProyecto = atob(code); //DECOFICA EL VALOR
-      const name = atob(codeName);
-
-      let timer;
-
-      function renderAssets(results) {
-
-        let numberRow = 1;
-
-        $("#table-assets tbody").innerHTML = "";
-
-        let newRow = ``;
-
-        if (results.length > 0) {
-
-          results.forEach(asset => {
-
-            let code = btoa(asset.idactivo) //CODIFICACIÓN
-
-            let IconStatus = asset.estado == "SIN VENDER" ? `<span class="badge badge-sm bg-gradient-danger">${asset.estado}</span>` :
-              asset.estado = "VENDIDO" ? `<span class="badge badge-sm bg-gradient-success">${asset.estado}</span>` :
-              `<span class="badge badge-sm bg-gradient-secondary">${asset.estado}</span>`;
-
-            newRow = `
-                <tr>
-                  <td>
-                    <div class="d-flex px-2 py-1">
-                      <div class="d-flex flex-column justify-content-center">
-                        <h6 class="mb-0 text-sm">${numberRow}</h6>
-                      </div>
-                    </div>
-                  </td>
-                  <td>
-                    <p class="text-xs font-weight-bold mb-0">${asset.denominacion}</p>
-                    </td>
-                    <td class="align-middle text-center text-sm">
-                      ${IconStatus}
-                    </td>
-                    <td>
-                      <p class="text-xs font-weight-bold mb-0">${asset.sublote}</p>
-                    </td>
-                  <td>
-                    <p class="text-xs font-weight-bold mb-0">${asset.direccion}</p>
-                  </td>
-                  <td class="align-middle">
-                    <div class="btn-group">
-                        <a type="button" href="./delete_asset.php?id=${code}" class="btn btn-danger btn-sm" id="btn-delete"><i class="bi bi-trash-fill"></i></a>
-                        <a type="button" href="./edit_asset.php?id=${code}" class="btn btn-primary btn-sm" id="btn-edit"><i class="bi bi-pencil-fill"></i></a>
-                        <a type="button" href="./detail_asset.php?id=${code}" class="btn btn-success btn-sm"><i class="bi bi-arrow-right-square"></i></a>
-                        </div>
-                    </td>
-                </tr>           
-        `;
-            numberRow++;
-
-            $("#table-assets tbody").innerHTML += newRow;
-          });
-
-        } else {
-          newRow = `
-      <div class="alert alert-danger m-4 text-white" role="alert">
-          <strong class="text-white">No existe sublotes</strong> Asegurate de que existan los registros.
-      </div>
-      `;
-          $("#table-assets tbody").innerHTML += newRow;
-        }
-
-
-      }
-
-
-      async function getAssets(id) {
+      async function getLastSales(){
 
         try {
-
-          $("#add-asset").setAttribute("href", `./add_asset.php?idproy=${code}&name=${codeName}`);
-
-          let url = "../../../../Controllers/asset.controller.php";
+          
+          let url = "../../Controllers/user.controller.php";
           let params = new FormData();
+          params.append("action", "getSalesEmployee");
 
-          params.append("action", "listAssetProjectId");
-          params.append("idproyecto", id);
+          let results = await global.sendAction(url, params);
 
-          results = await global.sendAction(url, params);
+          if(results.length > 0){
 
-          if (results) {
+            let table = document.getElementById("table-sales");
 
-            $("#cabezera").innerText += ` ${name}`;
-            renderAssets(results);
+            table.innerHTML = "";
 
+            let number = 1;
+            results.forEach(element =>{
+              let html = "";
+              html += `
+              <tr>
+                <td class="text-small">${number}</td>
+                <td class="text-small">${element.n_expediente}</td>
+                <td class="text-small">${element.denominacion}</td>
+                <td class="text-small">${element.sublote}</td>
+                <td class="text-small">${element.fecha_contrato}</td>
+                <td class="text-small">${element.monto_venta}</td>
+                <td class="text-small">${element.precio_venta}</td>
+              </tr>
+              `;
+              number++;
+              table.innerHTML += html;
+            });
           }
         } catch (e) {
           console.error(e);
         }
       }
 
-      async function searchAsset(idproy, sublote) {
+      //* Obtiene los datos del usuario 
+      async function getUser() {
+
         try {
 
-          let url = `../../../../Controllers/asset.controller.php`;
-          let params = new FormData();
+          let url = "../../Controllers/user.controller.php";
 
-          params.append("action", "listAssetPAcode");
-          params.append("idproyecto", idproy);
-          params.append("sublote", sublote);
+          let params = new FormData();
+          params.append("action", "getUser");
 
           let results = await global.sendAction(url, params);
 
           if (results) {
-            console.log(results)
-            renderAssets(results);
+            console.log(results);
+
+            $("#user_name").innerText = `${results.apellidos.toUpperCase()}, ${results.nombres.toLowerCase()}`;
+            $("#user_rol").innerText = results.rol;
+            $("#profile_image").src = `../../${results.imagen ? "media/users/" + results.imagen : "assets/iconos/perfil-del-usuario.png"}`;
+            $("#correoText").innerText = results.correo;
+            $("#sedeText").innerText = results.sede;
+            $("#rolText").innerText = results.rol;
+
+            $("#namesText").innerText = `${results.apellidos.toUpperCase()}, ${results.nombres.toLowerCase()}`;
+            $("#tdocText").innerText = results.documento_tipo;
+            $("#ndocText").innerText = results.documento_nro;
+            $("#direccionText").innerText = results.direccion;
+
+            if(results.rol == "VENDEDOR" || results.rol == "ASESOR DE VENTAS"){
+              $("#card-sales").classList.remove("d-none");
+              await getLastSales();
+            }else{
+              $("#card-sales").classList.add("d-none");
+            }
           }
         } catch (e) {
           console.error(e);
         }
       }
-
-      //Genera u archivo PDF
-      async function generatePdf(id) {
-
-        let codeID = btoa(id);
-        let url = `../../../../reports/reports_pdf.php?action=reportLots&idproyecto=${codeID}`;
-
-        window.location.href = url;
-      }
-
-      //Genera un archivo excel
-      async function generateExcel(id) {
-
-        let codeID = btoa(id);
-        let url = `../../../../reports/reports_excel.php?idproyecto=${codeID}`;
-
-        window.location.href = url;
-      }
-
-      $("#in-sublote").addEventListener("input", () => {
-
-        clearTimeout(timer);
-
-        timer = setTimeout(() => {
-
-          let sublote = $("#in-sublote").value;
-
-          if (sublote != "") {
-
-            searchAsset(idProyecto, sublote);
-
-          } else {
-
-            getAssets(idProyecto);
-          }
-        }, 1500)
-      });
-
-      //Menù */*/*/
-      /* $("#goDashboard").addEventListener("click",()=>{
-    
-    window.location.href = `../../dashboard.php?id=${code}&name=${codeName}`;
-    
-  });
-
-  $("#goProjects").addEventListener("click",()=>{
-    
-    window.location.href = `../../projects/index.php?id=${code}&name=${codeName}`;
-    
-  }); */
-
-      $("#generate-excel").addEventListener("click", () => {
-
-        generateExcel(idProyecto);
-      });
-
-      $("#generate-pdf").addEventListener("click", () => {
-
-        generatePdf(idProyecto);
-      });
-
-      /* getAssets(idProyecto); */
+      await getUser();
     });
   </script>
   <script>

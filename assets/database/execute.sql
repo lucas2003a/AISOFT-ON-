@@ -76,11 +76,13 @@ INSERT INTO permisos(idrol, modulo) VALUES
 
  */
 
+select * from usuarios;
 ## PERMISOS
 
 /* -------------------------------------------------------------------------- */
 /*                          **IDROL** - **MODULO**                          */
 /* -------------------------------------------------------------------------- */
+    
 /* --------------------------- *GERENTE GENERAL* -------------------------- */
 
 INSERT INTO permisos(idrol, modulo) VALUES

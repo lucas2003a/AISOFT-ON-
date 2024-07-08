@@ -72,6 +72,19 @@ if(isset($_POST["action"])){
         case 'chartEmployee':
             echo json_encode($user->chartEmployee());
             break;
+
+        case 'getUser':
+            
+                $idusuario = $_SESSION["idusuario"];
+                echo json_encode($user->getUser($idusuario));
+            break;
+
+        case 'getSalesEmployee':
+                
+                $idusuario = $_SESSION["idusuario"];
+
+                echo json_encode($user->getSalesEmployee($idusuario));
+            break;
     }
 }
 

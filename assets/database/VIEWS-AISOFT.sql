@@ -367,7 +367,7 @@ DELIMITER;
 
 DELIMITER $$
 CREATE VIEW vws_list_contracts
-    AS
+AS
     SELECT 
         ct.idcontrato,
         ct.n_expediente,
@@ -391,7 +391,8 @@ CREATE VIEW vws_list_contracts
         ct.tipo_cambio,
         ct.fecha_contrato,
         ct.estado,
-        ct.inactive_at  
+        ct.inactive_at,
+        ct.idvendedor  
         FROM contratos ct
         LEFT JOIN separaciones sp ON sp.idseparacion = ct.idseparacion
         LEFT JOIN clientes cl ON(

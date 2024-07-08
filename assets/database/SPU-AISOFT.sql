@@ -3619,9 +3619,10 @@ END $$
 DELIMITER ;
 
 DELIMITER $$
+
 CREATE PROCEDURE spu_get_user
 (
-    IN idusuario INT
+    IN _idusuario INT
 )
 BEGIN
     SELECT 
@@ -3630,6 +3631,7 @@ BEGIN
             us.correo,
             ps.nombres,
             ps.apellidos,
+            rl.rol,
             ps.documento_tipo,
             ps.documento_nro,
             ps.estado_civil,
@@ -3640,16 +3642,144 @@ BEGIN
             dp.iddepartamento,
             dp.departamento,
             ps.direccion,
-            ps.nacionalidad
+            ps.nacionalidad,
+            (
+                SELECT 
+                    CONCAT('Sede ',dp2.departamento,'/',pr2.provincia) AS sede
+                    FROM sedes sd2
+                    INNER JOIN distritos dis2 ON dis2.iddistrito = sd2.iddistrito
+                    INNER JOIN provincias pr2 ON pr2.idprovincia = dis2.idprovincia
+                    INNER JOIN departamentos dp2 ON dp2.iddepartamento = pr2.iddepartamento
+                    WHERE sd2.idsede = us.idsede
+            ) AS sede
         FROM usuarios as us
-        INNER JOIN personas ps ON us.idusuario
+        INNER JOIN personas ps ON ps.idpersona = us.idpersona
         INNER JOIN distritos dis ON dis.iddistrito = ps.iddistrito
         INNER JOIN provincias pr ON pr.idprovincia = dis.idprovincia
         INNER JOIN departamentos dp ON dp.iddepartamento = pr.iddepartamento
-        WHERE idsuario = _idusuario;
+        INNER JOIN sedes sd ON sd.idsede = us.idsede
+        INNER JOIN roles rl ON rl.idrol = us.idrol
+        WHERE us.idusuario = _idusuario;
 END $$
 DELIMITER ;
 
+DELIMITER $$
+CREATE PROCEDURE spu_get_last_sales
+(
+    IN _idusuario INT
+)
+BEGIN
+    SELECT 
+        cn.idcontrato,
+        cn.n_expediente,
+        cn.denominacion,
+        cn.sublote,
+        cn.fecha_contrato,
+        cn.moneda_venta,
+        cn.precio_venta
+        FROM vws_list_contracts cn
+        INNER JOIN usuarios ON us.idusuario = cn.idvendedor
+        WHERE us.idusuario = _idusuario
+        ORDER BY cn.fecha_contrato DESC
+        LIMIT 5;
+END $$
+DELIMITER ;
+
+DELIMITER $$
+CREATE PROCEDURE spu_add_user
+(
+    IN _imagen          VARCHAR(100),
+    IN _nombres         VARCHAR(40),
+    IN _apellidos       VARCHAR(40),
+    IN _documento_tipo  VARCHAR(30),
+    IN _documento_nro   VARCHAR(12),
+    IN _estado_civil    VARCHAR(10),
+    IN _iddistrito      INT,
+    IN _direccion       VARCHAR(60),
+    IN _nacionalidad    VARCHAR(20),
+    IN _correo      VARCHAR(60),
+    IN _contrasenia VARCHAR(60),
+    IN _idrol       INT,
+    IN _idsede      INT
+)
+BEGIN
+    DECLARE _existUser BIT;
+    DECLARE _idpersonAdd  INT;
+    
+    SET _existUser = (
+        SELECT idpersona FROM personas
+        WHERE inactive_at IS NULL
+        AND documento_nro = "77068570"
+    );
+
+    IF _existUser > 0 THEN
+        INSERT INTO usuarios(
+            imagen,
+            idpersona,
+            correo,
+            contrasenia,
+            idrol,
+            idsede
+        )
+        VALUES(
+            _imagen,
+            _existUser,
+            _correo,
+            _contrasenia,
+            _idrol,
+            _idsede
+        );
+
+        SELECT ROW_COUNT() AS filasAfect;
+    ELSE
+       INSERT INTO personas
+       (
+        nombres,
+        apellidos,
+        documento_tipo,
+        documento_nro,
+        estado_civil,
+        iddistrito,
+        direccion,
+        nacionalidad
+       )
+       VALUES(
+        _nombres,
+        _apellidos,
+        _documento_tipo,
+        _documento_nro,
+        _estado_civil,
+        _iddistrito,
+        _direccion,
+        _nacionalidad
+       );
+
+       SET _idpersonAdd = (SELECT @@last_insert_id);
+
+        INSERT INTO usuarios(
+            imagen,
+            idpersona,
+            correo,
+            contrasenia,
+            idrol,
+            idsede
+        )
+        VALUES(
+            _imagen,
+            _idpersonAdd,
+            _correo,
+            _contrasenia,
+            _idrol,
+            _idsede
+        );
+
+        SELECT ROW_COUNT() AS filasAfect;        
+
+    END IF;
+END $$
+DELIMITER ;
+
+call spu_add_user()
 -- ACTTUALIZACIONES
 DELIMITER $$
 CREATE PROCEDURE spu_list_updates
