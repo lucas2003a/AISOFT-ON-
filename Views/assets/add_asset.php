@@ -285,62 +285,64 @@
                               </div>
                             </div>
 
-                            <!-- PRESUPUESTO -->
-                            <div class="mt-4">
-                              <label for="idpresupuesto" class="form-label">Presupuesto</label>
-                              <select class="form-select custom-select-scroll" id="idpresupuesto">
-                                <option value="">Presupuesto</option>
-                              </select>
-                              <div class="invalid-feedback">
-                                Necesitas ingresar el presupuesto.
-                              </div>
-                              <div class="valid-feedback">
-                                Presupuesto registrado correctamente.
-                              </div>
-                            </div>
-
-                            <!-- PRECIO CONSTRUCCION -->
-                            <div class="mt-4">
-                              <label for="precio_construccion" class="form-label">Precio de la construcción</label>
-                              <input type="number" class="form-control" id="precio_construccion" placeholder="Precio de construcción" maxlength="7" minlength="7" min="1.00" step="0.01" readonly>
-                              <div class="invalid-feedback">
-                                Necesitas ingresar el precio de construcción.
-                              </div>
-                              <div class="valid-feedback">
-                                Precio de construcción registrado correctamente.
-                              </div>
-                            </div>
-
-                            <!-- PRECIO VENTA -->
-                            <div class="mt-4">
-                              <label for="precio_venta" class="form-label">Precio de la venta</label>
-                              <input type="number" class="form-control" id="precio_venta" placeholder="Precio de venta" maxlength="8" minlength="8" min="1.00" step="0.01" required>
-                              <div class="invalid-feedback">
-                                Necesitas ingresar el precio de venta.
-                              </div>
-                              <div class="valid-feedback">
-                                Precio de venta registrado correctamente.
-                              </div>
-                            </div>
-
                             <!-- PRTIDA ELECTRÓNICA -->
                             <div class="mt-4">
-                              <label for="partida-elect" class="form-label">Partida electrónica</label>
+                                <label for="partida-elect" class="form-label">Partida electrónica</label>
 
-                              <textarea name="partida-elect" class="form-control" id="partida-elect" cols="38" rows="3" required></textarea>
-                              <div class="invalid-feedback">
-                                Necesitas ingresar la partida electrónica.
+                                <textarea name="partida-elect" class="form-control" id="partida-elect" cols="38" rows="3" required></textarea>
+                                <div class="invalid-feedback">
+                                  Necesitas ingresar la partida electrónica.
+                                </div>
+                                <div class="valid-feedback">
+                                  Partida electrónica registrada correctamente.
+                                </div>
                               </div>
-                              <div class="valid-feedback">
-                                Partida electrónica registrada correctamente.
-                              </div>
+
                             </div>
-                          </div>
+                            <div class="col-md-6">
+                              <!-- PRESUPUESTO -->
+                              <div class="">
+                                <label for="idpresupuesto" class="form-label">Presupuesto</label>
+                                <select class="form-select custom-select-scroll" id="idpresupuesto">
+                                  <option value="">Presupuesto</option>
+                                </select>
+                                <div class="invalid-feedback">
+                                  Necesitas ingresar el presupuesto.
+                                </div>
+                                <div class="valid-feedback">
+                                  Presupuesto registrado correctamente.
+                                </div>
+                              </div>
 
-                          <div class="col-md-6">
+                              <!-- PRECIO CONSTRUCCION -->
+                              <div class="mt-4">
+                                <label for="precio_construccion" class="form-label">Precio de la construcción</label>
+                                <input type="number" class="form-control" id="precio_construccion" placeholder="Precio de construcción" maxlength="7" minlength="7" min="1.00" step="0.01" readonly>
+                                <div class="invalid-feedback">
+                                  Necesitas ingresar el precio de construcción.
+                                </div>
+                                <div class="valid-feedback">
+                                  Precio de construcción registrado correctamente.
+                                </div>
+                              </div>
+
+                              <!-- PRECIO VENTA -->
+                              <div class="mt-4">
+                                <label for="precio_venta" class="form-label">Precio de la venta</label>
+                                <input type="number" class="form-control" id="precio_venta" placeholder="Precio de venta" maxlength="8" minlength="8" min="1.00" step="0.01" required>
+                                <div class="invalid-feedback">
+                                  Necesitas ingresar el precio de venta.
+                                </div>
+                                <div class="valid-feedback">
+                                  Precio de venta registrado correctamente.
+                                </div>
+                              </div>
+
+                              
+                            
 
                             <!-- ÁREA COSNTRUCCIÓN -->
-                             <div class="mt-2">
+                             <div class="mt-4">
                               <label for="area_construccion">Área de construcción (m2)</label>
                               <input type="number" id="area_construccion" class="form-control form-area" min="1" step="0.01" required>
                               <div class="invalid-feedback">
@@ -363,54 +365,58 @@
                               </div>
                              </div>
 
-                            <!-- LATITUD -->
-                            <div>
-                              <label for="latitud" class="form-label">Latitud</label>
+                             <div class="d-none">
 
-                              <input type="text" name="partida-elect" class="form-control" id="latitud" placeholder="Latitud">
-                              <div class="invalid-feedback">
-                                Necesitas ingresar la latitud.
-                              </div>
-                              <div class="valid-feedback">
-                                Latitud registrada correctamente.
-                              </div>
-                            </div>
+                               <!-- LATITUD -->
+                               <div>
+                                 <label for="latitud" class="form-label">Latitud</label>
+   
+                                 <input type="text" name="partida-elect" class="form-control" id="latitud" placeholder="Latitud">
+                                 <div class="invalid-feedback">
+                                   Necesitas ingresar la latitud.
+                                 </div>
+                                 <div class="valid-feedback">
+                                   Latitud registrada correctamente.
+                                 </div>
+                               </div>
+   
+                               <!-- LONGITUD -->
+                               <div class="mt-4">
+                                 <label for="longitud" class="form-label">Longitud</label>
+   
+                                 <input type="text" name="longitud" class="form-control" id="longitud" placeholder="Longitud">
+                                 <div class="invalid-feedback">
+                                   Necesitas ingresar la longitud.
+                                 </div>
+                                 <div class="valid-feedback">
+                                   Longitud registrada correctamente.
+                                 </div>
+                               </div>
+                               <!-- PERIMTETRO -->
+                               <label for="longitud" class="form-label">Perímetro</label>
+                               <div id="perim">
+                                 <div id="patern">
+   
+                                   <div class="row">
+                                     <div class="col-md-11">
+   
+                                       <div class="row">
+                                         <div class="col-md-6 mb-2">
+                                           <input type="text" class="form-control perim-key" name="clave" id="clave">
+                                         </div>
+                                         <div class="col-md-6">
+                                           <input type="text" class="form-control perim-value" name="valor" id="valor">
+                                         </div>
+                                       </div>
+                                     </div>
+                                     <div class="col-md-1">
+                                       <button type="button" class="btn btn-success pluss" id="add-textBox">+</button>
+                                     </div>
+                                   </div>
+                                 </div>
+                               </div>
+                             </div>
 
-                            <!-- LONGITUD -->
-                            <div class="mt-4">
-                              <label for="longitud" class="form-label">Longitud</label>
-
-                              <input type="text" name="longitud" class="form-control" id="longitud" placeholder="Longitud">
-                              <div class="invalid-feedback">
-                                Necesitas ingresar la longitud.
-                              </div>
-                              <div class="valid-feedback">
-                                Longitud registrada correctamente.
-                              </div>
-                            </div>
-                            <!-- PERIMTETRO -->
-                            <label for="longitud" class="form-label">Perímetro</label>
-                            <div id="perim">
-                              <div id="patern">
-
-                                <div class="row">
-                                  <div class="col-md-11">
-
-                                    <div class="row">
-                                      <div class="col-md-6 mb-2">
-                                        <input type="text" class="form-control perim-key" name="clave" id="clave">
-                                      </div>
-                                      <div class="col-md-6">
-                                        <input type="text" class="form-control perim-value" name="valor" id="valor">
-                                      </div>
-                                    </div>
-                                  </div>
-                                  <div class="col-md-1">
-                                    <button type="button" class="btn btn-success pluss" id="add-textBox">+</button>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
                           </div>
                         </div>
                         <div class="d-flex justify-content-center">

@@ -133,11 +133,13 @@ CREATE TABLE usuarios
     update_at			DATE 				NULL,
     inactive_at			DATE 				NULL,
     CONSTRAINT fk_idpersona FOREIGN KEY(idpersona) REFERENCES personas(idpersona),
+    CONSTRAINT uk_idpersona_usu UNIQUE(idpersona),
     CONSTRAINT uk_correo_us UNIQUE(correo),
     CONSTRAINT fk_idrol_usu FOREIGN KEY(idrol) REFERENCES roles(idrol),
     CONSTRAINT fk_idsede_usu FOREIGN KEY(idsede) REFERENCES sedes(idsede)
 )ENGINE = INNODB;
-	
+
+
 -- PROYECTOS
 CREATE TABLE proyectos(
 	idproyecto 				INT PRIMARY KEY AUTO_INCREMENT,

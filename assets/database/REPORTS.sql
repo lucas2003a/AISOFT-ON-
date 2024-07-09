@@ -59,6 +59,7 @@ CREATE PROCEDURE spu_reports_cuotas
 )
 BEGIN
     SELECT ct.idcuota,
+            ct.nro_cuota,
             ct.idcontrato,
             ct.monto_cuota,
             ct.estado,
@@ -77,7 +78,8 @@ BEGIN
                 GROUP BY idcuota
                 ORDER BY iddetalle_cuota DESC 
         ) AS rs ON rs.idcuota = ct.idcuota
-        WHERE ct.idcontrato = _idcontrato;
+        WHERE ct.idcontrato = _idcontrato
+        ORDER BY ct.fecha_vencimiento ASC;
 END $$
 
 DELIMITER ;
@@ -196,7 +198,7 @@ BEGIN
             cn.precio_venta
         FROM vws_list_contracts cn 
         WHERE cn.estado = "VIGENTE"
-        AND cn.idproyecto = _idproyecto 
+        AND cn.idproyecto = _idproyecto
         AND cn.inactive_at IS NULL
         AND NOT EXISTS(
             SELECT 1
@@ -205,6 +207,7 @@ BEGIN
                 AND  existe_contrato = 0
                 AND inactive_at IS  NULL
         )
+        GROUP BY cn.idactivo
         UNION
         SELECT DISTINCT
             "SEPARACION" AS tipo,
@@ -235,6 +238,6 @@ BEGIN
         AND sp.inactive_at IS NULL
         AND ac.idproyecto = _idproyecto
         AND sp.existe_contrato = 0;
-END
+END$$
 
 DELIMITER ;

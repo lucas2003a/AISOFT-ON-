@@ -300,7 +300,7 @@
 
         let html = '';
         let num = 1;
-        $("#table-clients").innerHTML = "";
+        $("#table-clients tbody").innerHTML = "";
         arr.forEach(element => {
 
           let code = btoa(element.idproyecto)
@@ -324,7 +324,7 @@
           `;
           num++;
 
-          $("#table-clients").innerHTML += html;
+          $("#table-clients tbody").innerHTML += html;
         });
       }
 

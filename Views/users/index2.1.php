@@ -1,5 +1,4 @@
-<?php include "../sidebar/permissions.php"; ?>
-
+<?php include "../sidebar/permissions.php";?>
 <!DOCTYPE html>
 <html lang="es">
 
@@ -44,8 +43,7 @@
     <div class="collapse navbar-collapse  w-auto " id="sidenav-collapse-main">
       <ul class="navbar-nav">
 
-        <?php include "../sidebar/sidebar_options.php"; ?>
-
+      <?php include "../sidebar/sidebar_options.php";?>
 
         <!-- CERRAR SESIÓN -->
         <li class="nav-item">
@@ -68,7 +66,7 @@
             <span class="nav-link-text ms-1">Cerrar sesión</span>
           </a>
         </li>
-        
+
       </ul>
     </div>
   </aside>
@@ -79,18 +77,20 @@
         <nav aria-label="breadcrumb">
           <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
           <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="#">Dashboard</a></li>
-            <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="#">Proyectos</a></li>
-            <li class="breadcrumb-item text-sm text-dark active" aria-current="page"> Lotes </li>
+            <li class="breadcrumb-item text-sm text-dark active" aria-current="page">CLientes</li>
           </ol>
-          <h6 class="font-weight-bolder mb-0" id="cabezera">LOTES - </h6>
+          <h6 class="font-weight-bolder mb-0" id="cabezera">CIENTES </h6>
         </nav>
         <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
           <div class="ms-md-auto pe-md-3 d-flex align-items-center">
-            
+            <div class="input-group">
+              <span class="input-group-text text-body"><i class="fas fa-search" aria-hidden="true"></i></span>
+              <input type="text" class="form-control" placeholder="Escribe el Sublote..." id="in-sublote">
+            </div>
           </div>
           <ul class="navbar-nav  justify-content-end">
             <li class="nav-item d-flex align-items-center">
-              
+              <a class="btn btn-outline-success btn-sm mb-0 me-3" target="_blank" href="./add_asset.php" id="add-asset">AGREGAR CLIENTE</a>
             </li>
 
             <!-- DATOS DEL USUARIO -->
@@ -128,53 +128,32 @@
               <div class="row">
                 <div class="col-md-6">
 
-                  <h6><strong>Tabla - lotes</strong></h6>
-                  
+                  <h6>Tabla - clientes</h6>
+                </div>
+                <div class="col-md-6">
+                  <div class="text-end">
+                    <button type="button" class="btn btn-lg bg-gradient-success opacity-10" id="generate-excel"><i class="fa-solid fa-file-excel"></i></button>
+                    <button type="button" class="btn btn-lg bg-gradient-danger opacity-10" id="generate-pdf"><i class="bi bi-filetype-pdf"></i></button>
+                  </div>
                 </div>
               </div>
               <div class="row">
-                
-                <div class="col-md-6">
-                  <div class="btn-group text-start">
-                    <a type="button" class="btn btn-sm btn-outline-success" href="./add_asset.php" id="add-asset">AGREGAR LOTE</a>
-                  </div>
-                  <div class="mt-2 mb-4">
-                      <a class="text-body text-sm font-weight-bold mb-0 icon-move-right mt-auto" id="go_to_list" href="./list_clients.php">
-                        Ver lista de clientes
-                        <i class="fas fa-arrow-right text-sm ms-1" aria-hidden="true"></i>
-                      </a>
-                    </div>
+                <div class="col-md-3">
                   
-                </div>
-
-                <div class="row">
-                  <div class="col-md-6">
-                    <label for="propietario_lote" class="form-label">Propietarios</label>
-                    <select name="propietario_lote" id="propietario_lote" class="form-select">
-                      <option value="A.I.F" selected>A.I.F</option>
-                      <option value="TERCEROS">Terceros</option>
-                    </select>
-                  </div>
-                  <div class="col-md-6">
-                    <label for="" class="form-label">Busqueda</label>
-                    <div class="input-group">
-                      <span class="input-group-text text-body"><i class="fas fa-search" aria-hidden="true"></i></span>
-                      <input type="text" class="form-control" placeholder="Escribe el Sublote..." id="in-sublote">
-                    </div>
-                  </div>
+                  <select name="tipo_persona" class="form-select" id="documento_tipo">
+                    <option value="NATURAL">Tipo de persona</option>
+                  </select>
                 </div>
               </div>
             </div>
-            <hr>
             <div class="card-body px-0 pt-0 pb-2">
               <div class="table-responsive text-center p-0">
                   <table class="table align-items-center mb-0 table-hover" id="table-assets">
                     <thead>
                     <tr>
                       <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">#</th>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Propietario</th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Denominación</th>
                       <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Estado</th>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Tipo</th>
                       <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Sublote</th>
                       <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Direccion</th>
                       <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Operaciones</th>
@@ -187,9 +166,6 @@
 
                   </tbody>
                 </table>
-                <div id="render-error">
-
-                </div>
               </div>
             </div>
           </div>
@@ -212,7 +188,6 @@
           </div>
         </div>
       </footer>
-
     </div>
   </main>
   <div class="fixed-plugin d-none">
@@ -270,9 +245,7 @@
         </div>
       </div>
     </div>
-
   </div>
- 
   <!-- SWEET ALERT -->
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
@@ -309,18 +282,18 @@ document.addEventListener("DOMContentLoaded",()=>{
     let numberRow = 1;
 
     $("#table-assets tbody").innerHTML = "";
-    $("#render-error").innerHTML = "";
 
     let newRow = ``;
 
     if(results.length > 0){
+      
       results.forEach(asset =>{
         
         let code = btoa(asset.idactivo) //CODIFICACIÓN
   
-        let IconStatus = asset.estado == "SIN VENDER" ?  `<span class="badge badge-sm bg-danger">${asset.estado}</span>` : 
-                                        asset.estado == "VENDIDO" ? `<span class="badge badge-sm bg-success">${asset.estado}</span>`: 
-                                                                  `<span class="badge badge-sm bg-warning">${asset.estado}</span>` ;
+        let IconStatus = asset.estado == "SIN VENDER" ?  `<span class="badge badge-sm bg-gradient-danger">${asset.estado}</span>` : 
+                                        asset.estado = "VENDIDO" ? `<span class="badge badge-sm bg-gradient-success">${asset.estado}</span>`: 
+                                                                  `<span class="badge badge-sm bg-gradient-secondary">${asset.estado}</span>` ;
   
         newRow = `
                 <tr>
@@ -332,10 +305,7 @@ document.addEventListener("DOMContentLoaded",()=>{
                     </div>
                   </td>
                   <td>
-                    <p class="text-xs font-weight-bold mb-0">${asset.propietario_lote}</p>
-                    </td>
-                  <td>
-                    <p class="text-xs font-weight-bold mb-0">${asset.tipo_activo}</p>
+                    <p class="text-xs font-weight-bold mb-0">${asset.denominacion}</p>
                     </td>
                     <td class="align-middle text-center text-sm">
                       ${IconStatus}
@@ -348,9 +318,9 @@ document.addEventListener("DOMContentLoaded",()=>{
                   </td>
                   <td class="align-middle">
                     <div class="btn-group">
-                        <a type="button" href="./delete_asset.php?id=${code}" class="btn btn-link text-danger text-gradient px-3 mb-0" id="btn-delete"><i class="bi bi-trash-fill"></i></a>
-                        <a type="button" href="./edit_asset.php?id=${code}" class="btn btn-link text-dark px-3 mb-0" id="btn-edit"><i class="bi bi-pencil-fill"></i></a>
-                        <a type="button" href="./detail_asset.php?id=${code}" class="btn btn-link text-success px-3 mb-0"><i class="bi bi-arrow-right-square"></i></a>
+                        <a type="button" href="./delete_asset.php?id=${code}" class="btn btn-danger btn-sm" id="btn-delete"><i class="bi bi-trash-fill"></i></a>
+                        <a type="button" href="./edit_asset.php?id=${code}" class="btn btn-primary btn-sm" id="btn-edit"><i class="bi bi-pencil-fill"></i></a>
+                        <a type="button" href="./detail_asset.php?id=${code}" class="btn btn-success btn-sm"><i class="bi bi-arrow-right-square"></i></a>
                         </div>
                     </td>
                 </tr>           
@@ -363,10 +333,10 @@ document.addEventListener("DOMContentLoaded",()=>{
     }else{
       newRow =`
       <div class="alert alert-danger m-4 text-white" role="alert">
-          <strong class="text-white">No existe lotes</strong> Asegurate de que existan los registros.
+          <strong class="text-white">No existe sublotes</strong> Asegurate de que existan los registros.
       </div>
       `;
-      $("#render-error").innerHTML += newRow;
+      $("#table-assets tbody").innerHTML += newRow;
     }
     
 
@@ -378,20 +348,18 @@ document.addEventListener("DOMContentLoaded",()=>{
     try{
 
       $("#add-asset").setAttribute("href",`./add_asset.php?idproy=${code}&name=${codeName}`);
-      $("#go_to_list").setAttribute("href",`./list_clients.php?id=${code}&name=${codeName}`)
 
-      let url ="../../Controllers/asset.controller.php";
+      let url ="../../../../Controllers/asset.controller.php";
       let params = new FormData();
   
       params.append("action","listAssetProjectId");
       params.append("idproyecto",id);
-      params.append("propietario_lote",$("#propietario_lote").value);
 
       results = await global.sendAction(url, params);
 
       if(results){
-        $("#cabezera").innerHTML = "";
-        $("#cabezera").innerText +=`LOTES - ${name}`;
+
+        $("#cabezera").innerText +=` ${name}`;
         renderAssets(results);
 
       }
@@ -404,7 +372,7 @@ document.addEventListener("DOMContentLoaded",()=>{
   async function searchAsset(idproy,sublote){
     try{
 
-      let url = `../../Controllers/asset.controller.php`;
+      let url = `../../../../Controllers/asset.controller.php`;
       let params = new FormData();
 
       params.append("action", "listAssetPAcode");
@@ -421,6 +389,24 @@ document.addEventListener("DOMContentLoaded",()=>{
     catch(e){
       console.error(e);
     }
+  }
+
+  //Genera u archivo PDF
+  async function generatePdf(id){
+
+    let codeID = btoa(id);
+    let url = `../../../../reports/reports_pdf.php?action=reportLots&idproyecto=${codeID}`;
+
+    window.location.href = url;
+  }
+
+  //Genera un archivo excel
+  async function generateExcel(id){
+
+    let codeID = btoa(id);
+    let url = `../../../../reports/reports_excel.php?idproyecto=${codeID}`;
+
+    window.location.href = url;
   }
 
   $("#in-sublote").addEventListener("input",()=>{
@@ -442,13 +428,30 @@ document.addEventListener("DOMContentLoaded",()=>{
         },1500)
     });
 
-  $("#propietario_lote").addEventListener("change",()=>{
-
-    $("#table-assets tbody").innerHTML = "";
-    getAssets(idProyecto);
+    //Menù */*/*/
+    /* $("#goDashboard").addEventListener("click",()=>{
+    
+    window.location.href = `../../dashboard.php?id=${code}&name=${codeName}`;
+    
   });
 
-    getAssets(idProyecto);
+  $("#goProjects").addEventListener("click",()=>{
+    
+    window.location.href = `../../projects/index.php?id=${code}&name=${codeName}`;
+    
+  }); */
+      
+  $("#generate-excel").addEventListener("click",()=>{
+
+    generateExcel(idProyecto);
+  });
+
+  $("#generate-pdf").addEventListener("click",()=>{
+
+    generatePdf(idProyecto);
+  });
+
+    /* getAssets(idProyecto); */
 });
   </script>
   <script>

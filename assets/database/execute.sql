@@ -3,11 +3,14 @@ USE aisoft;
 DROP TABLE sustentos_cuotas, cuotas, detalle_gastos, presupuestos, desembolsos, sustentos_sep, separaciones, contratos, viviendas, lotes;
 
 select * from configuraciones;
+select * from subcategoria_costos;
+select * from marcas;
 select * from contratos;
 select * from separaciones;
 select * from detalle_cuotas;
 select * from devoluciones;
 select * from roles;
+select * from actualizaciones;
 select * from permisos order by modulo;
 select * from usuarios;
 set foreign_key_checks = 0;

@@ -417,7 +417,7 @@
             `<td class="text-danger"><strong>${element.estado}</strong></td>`;
 
           let deuda = element.deuda ? `<strong>${element.deuda}</strong>` : "0.00";
-          let payDisabled = element.cancelado < element.monto_cuota ? "" : "disabled";
+          let payDisabled = !element.cancelado || Number.parseFloat(element.cancelado) < Number.parseFloat(element.monto_cuota) ? "" : "disabled";
           let cancelDisabled = element.cancelado ? "" : "disabled";
 
           let disabledPay = ""
@@ -479,9 +479,11 @@
             if (!isCount) {
 
               $("#go-reprogram").classList.add("disabled");
+              $("#generate-report-excel").classList.add("disabled");
             } else {
 
               $("#go-reprogram").classList.remove("disabled");
+              $("#generate-report-excel").classList.remove("disabled");
             }
 
             if (fechaAprox) {

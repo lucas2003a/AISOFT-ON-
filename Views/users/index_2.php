@@ -45,7 +45,7 @@
       <ul class="navbar-nav">
 
         <?php include "../sidebar/sidebar_options.php"; ?>
-        <!-- CERRAR SESIÓN -->
+<!-- CERRAR SESIÓN -->
         <li class="nav-item">
           <a class="nav-link  " href="../../Controllers/user.controller.php?action=destroy">
             <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
@@ -77,9 +77,9 @@
         <nav aria-label="breadcrumb">
           <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
             <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="#">Dashboard</a></li>
-            <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Usuarios</li>
+            <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Clientes</li>
           </ol>
-          <h6 class="font-weight-bolder mb-0" id="cabezera">USUARIOS </h6>
+          <h6 class="font-weight-bolder mb-0" id="cabezera">CLIENTES </h6>
         </nav>
         <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
 
@@ -88,7 +88,7 @@
             <li class="nav-item d-flex align-items-center">
               <a href="javascript:;" class="nav-link text-body font-weight-bold px-0">
                 <i class="fa fa-user me-sm-1"></i>
-                <span class="d-sm-inline d-none"><?= "<strong>" . strtoupper($_SESSION["rol"]) . "</strong>" . " - " . strtolower($_SESSION["apellidos"]) . ", " . strtolower($_SESSION["nombres"]) ?></span>
+                <span class="d-sm-inline d-none"><?="<strong>" . strtoupper($_SESSION["rol"]) . "</strong>" . " - " . strtolower($_SESSION["apellidos"]) . ", " . strtolower($_SESSION["nombres"])?></span>
               </a>
             </li>
             <li class="nav-item d-xl-none ps-3 d-flex align-items-center">
@@ -118,7 +118,7 @@
               <div class="row">
                 <div class="col-md-6">
 
-                  <h6>Tabla - usuarios</h6>
+                  <h6>Tabla - clientes</h6>
                 </div>
                 <div class="col-md-6">
 
@@ -128,7 +128,7 @@
               <div class="row d-flex" style="justify-content: space-between;">
 
                 <div class="col-md-3 d-grid">
-                  <a class="btn btn-outline-success btn-sm mb-0 me-3" href="./add_user.php" id="add-asset">AGREGAR USUARIO</a>
+                  <a class="btn btn-outline-success btn-sm mb-0 me-3" href="./add_client.php" id="add-asset">AGREGAR CLIENTE</a>
                 </div>
 
                 <div class="col-md-6">
@@ -136,13 +136,19 @@
                   <div class="row">
 
                     <div class="col-md-6">
+
+                      <select name="tipo_persona" class="form-select" id="tipo_persona">
+                        <option value="NATURAL" selected>Tipo de persona</option>
+                        <option value="JURÍDICA">Jurídica</option>
+                        <option value="NATURAL">Natural</option>
+                      </select>
                     </div>
 
                     <div class="col-md-6">
                       <div class="ms-md-auto pe-md-3 d-flex align-items-center">
                         <div class="input-group">
                           <span class="input-group-text text-body"><i class="fas fa-search" aria-hidden="true"></i></span>
-                          <input type="text" class="form-control" placeholder="Ingrese el correo..." id="in-correo">
+                          <input type="text" class="form-control" placeholder="Nº documento..." id="in-doumento-tipo">
                         </div>
                       </div>
                     </div>
@@ -155,15 +161,14 @@
             <div class="card-body px-0 pt-0 pb-2 mt-4">
               <div class="table-responsive text-center p-0">
                 <hr>
-                <table class="table align-items-center mb-0 table-hover" id="table-users">
+                <table class="table align-items-center mb-0 table-hover" id="table-clients">
                   <thead>
                     <tr>
                       <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">#</th>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Usuario</th>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Correo</th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Tipo de persona</th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Cliente</th>
                       <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Tipo de documento</th>
                       <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Nº de documento</th>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Rol</th>
                       <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Operaciones</th>
                     </tr>
                   </thead>
@@ -313,12 +318,11 @@
                     <thead>
                       <tr>
                         <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">#</th>
-                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Usuario</th>
-                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Correo</th>
-                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Tipo de documento</th>
-                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Nº de documento</th>
-                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Rol</th>
-                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Operaciones</th>
+                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Proyecto</th>
+                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Sublote</th>
+                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Deuda</th>
+                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Monto pagado</th>
+                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Saldo</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -410,92 +414,373 @@
       const $All = id => global.$All(id);
 
       let timer;
-      let table = $("#table-users tbody");
-      let dataUsers = [];
 
-      async function renderUsers(arr) {
-
-        let row = 1;
-        table.innerHTML = "";
-
-        arr.forEach(item => {
-          let html = "";
-          html = `
-          <tr>
-            <td class="text-sm">${row}</td>
-            <td class="text-sm">${item.usuario}</td>
-            <td class="text-sm">${item.correo}</td>
-            <td class="text-sm">${item.documento_tipo}</td>
-            <td class="text-sm">${item.documento_nro}</td>
-            <td class="text-sm">${item.rol}</td>
-            <td>
-              <div class="btn-group">
-                  <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" data-bs-auto-close="true" aria-expanded="false">
-                          
-                  </button>
-                  <ul class="dropdown-menu">
-                    <li><a href="./delete_user.php?id=${btoa(item.idusuario)}" class="dropdown-item border-radius-md download"><i class="bi bi-arrow-down-square text-danger download"></i>  Eliminar</a></li>
-                    <li><a href="#" class="dropdown-item border-radius-md"><i class="fa-solid fa-right-left text-secondary"></i>  Cambiar contraseña</a></li>
-                    <li><a href="#" class="dropdown-item border-radius-md"><i class="bi bi-arrow-right-square text-success"></i> Ver más</a></li>
-                    <li><a href="./edit_user.php?id=${btoa(item.idusuario)}" class="dropdown-item border-radius-md"><i class="bi bi-pencil-fill text-primary"></i> Editar</a></li>
-                  </ul>
-                </div>
-            </td>
-          </tr>
-          `;
-          row++;
-          table.innerHTML += html;
-        });
-      }
-
-      async function getUsers() {
+      //Obtiene los datos del o los reppresentantes legales
+      async function getRepresents(id) {
 
         try {
 
-          let url = "../../Controllers/user.controller.php";
+          let url = "../../Controllers/client.controller.php";
           let params = new FormData();
-          params.append("action", "listUsers");
 
-          let results = await global.sendAction(url, params);
+          params.append("action", "getRepresents");
+          params.append("idpersona_juridica", id);
 
-          if (results.length > 0) {
-            dataUsers = results;
-            console.log(dataUsers)
-            renderUsers(results);
+          results = await global.sendAction(url, params);
+
+          if (results) {
+
+            console.log(results)
+            return results;
+          } else {
+            console.log("no hay resultados")
           }
         } catch (e) {
           console.error(e);
         }
       }
 
-      async function filterUsers(value) {
+      async function getClientModal(id) {
 
-        let dataFiletered = dataUsers.filter(user => {
-          return user.correo.toLowerCase().includes(value.toLowerCase());
-        })
+        try {
 
-        renderUsers(dataFiletered);
+          let url = "../../Controllers/client.controller.php";
+          let params = new FormData();
+
+          params.append("action", "listClientById");
+          params.append("idcliente", id);
+
+          results = await global.sendAction(url, params);
+
+          if (results) {
+
+            console.log(results);
+            dataClient = results;
+
+            $("#data-client-modal").innerHTML = "";
+
+            for (let key in dataClient) {
+
+              if (dataClient[key] == undefined) {
+                dataClient[key] = "POR REGISTRAR";
+              }
+            }
+
+            let row = "";
+            row = `
+            <li class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg">
+              <div class="d-flex flex-column">
+                <h6 class="mb-1 text-dark font-weight-bold text-sm">Tipo persona</h6>
+              </div>
+              <div class="d-flex align-items-center text-sm">
+                    ${dataClient.tipo_persona}
+                </div>
+            </li>
+
+            <li class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg">
+              <div class="d-flex flex-column">
+                <h6 class="mb-1 text-dark font-weight-bold text-sm">Tipo de documento</h6>
+              </div>
+              <div class="d-flex align-items-center text-sm">
+                    ${dataClient.documento_tipo}
+                </div>
+            </li>
+
+            <li class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg">
+              <div class="d-flex flex-column">
+                <h6 class="mb-1 text-dark font-weight-bold text-sm">Tipo de documento</h6>
+              </div>
+              <div class="d-flex align-items-center text-sm">
+                    ${dataClient.documento_nro}
+                </div>
+            </li>
+        `;
+
+            if (dataClient.tipo_persona == "JURÍDICA") {
+              $("#modalTitle").innerHTML = dataClient.razon_social;
+
+              row += `
+
+            <li class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg">
+              <div class="d-flex flex-column">
+                <h6 class="mb-1 text-dark font-weight-bold text-sm">Razón social</h6>
+              </div>
+              <div class="d-flex align-items-center text-sm">
+                    ${dataClient.razon_social}
+                </div>
+            </li>
+
+            <hr>
+            <h6><strong>Datos del representante :</strong></h6>
+            <br>`;
+
+              let dataRepresents = await getRepresents(dataClient.idpersona_juridica);
+
+              console.log(dataRepresents);
+              dataRepresents.forEach(represent => {
+
+                row += `
+              <li class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg">
+                <div class="d-flex flex-column">
+                  <h6 class="mb-1 text-dark font-weight-bold text-sm">Nombres y apellidos</h6>
+                </div>
+                <div class="d-flex align-items-center text-sm">
+                      ${represent.representante_legal || "POR REGISTRAR"}
+                  </div>
+              </li>
+  
+              <li class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg">
+                <div class="d-flex flex-column">
+                  <h6 class="mb-1 text-dark font-weight-bold text-sm">Tipo de documento</h6>
+                </div>
+                <div class="d-flex align-items-center text-sm">
+                      ${represent.documento_tipo || "POR REGISTRAR"}
+                  </div>
+              </li>
+  
+              <li class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg">
+                <div class="d-flex flex-column">
+                  <h6 class="mb-1 text-dark font-weight-bold text-sm">Nº de documento</h6>
+                </div>
+                <div class="d-flex align-items-center text-sm">
+                      ${represent.documento_nro || "POR REGISTRAR"}
+                  </div>
+              </li>
+  
+              <li class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg">
+                <div class="d-flex flex-column">
+                  <h6 class="mb-1 text-dark font-weight-bold text-sm">Cargo</h6>
+                </div>
+                <div class="d-flex align-items-center text-sm">
+                      ${represent.cargo || "POR REGISTRAR"}
+                  </div>
+              </li>
+  
+              <li class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg">
+                <div class="d-flex flex-column">
+                  <h6 class="mb-1 text-dark font-weight-bold text-sm">Partida electrónica</h6>
+                </div>
+                <div class="d-flex align-items-center text-sm">
+                      ${represent.partida_elect || "POR REGISTRAR"}
+                  </div>
+              </li>
+              <hr>
+              `;
+              });
+
+            } else {
+              $("#modalTitle").innerHTML = dataClient.apellidos + ", " + dataClient.nombres;
+              row += `
+            <li class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg">
+              <div class="d-flex flex-column">
+                <h6 class="mb-1 text-dark font-weight-bold text-sm">Apellidos</h6>
+              </div>
+              <div class="d-flex align-items-center text-sm">
+                    ${dataClient.apellidos}
+                </div>
+            </li>
+
+            <li class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg">
+              <div class="d-flex flex-column">
+                <h6 class="mb-1 text-dark font-weight-bold text-sm">Nombres</h6>
+              </div>
+              <div class="d-flex align-items-center text-sm">
+                    ${dataClient.nombres}
+                </div>
+            </li>
+
+            <li class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg">
+              <div class="d-flex flex-column">
+                <h6 class="mb-1 text-dark font-weight-bold text-sm">Estado civil</h6>
+              </div>
+              <div class="d-flex align-items-center text-sm">
+                    ${dataClient.estado_civil}
+                </div>
+            </li>
+
+            <li class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg">
+              <div class="d-flex flex-column">
+                <h6 class="mb-1 text-dark font-weight-bold text-sm">Nacionalidad</h6>
+              </div>
+              <div class="d-flex align-items-center text-sm">
+                    ${dataClient.nacionalidad}
+                </div>
+            </li>
+
+            `;
+            }
+
+            $("#data-client-modal").innerHTML += row;
+          }
+        } catch (e) {
+          console.error(e);
+        }
+      };
+
+      function renderClients(results) {
+
+        let numberRow = 1;
+
+        $("#table-clients tbody").innerHTML = "";
+        $("#render-error").innerHTML = "";
+
+        let newRow = ``;
+
+        if (results.length > 0) {
+          console.log(results)
+          results.forEach(client => {
+
+            let code = btoa(client.idcliente) //CODIFICACIÓN
+
+            let clientNames = client.tipo_persona == "NATURAL" ? `<strong class="text-uppercase">${client.apellidos}</strong>, ${client.nombres}` :
+              `<strong class="text-uppercase">${client.razon_social}</strong>`;
+            newRow = `
+                <tr>
+                  <td>
+                    <div class="d-flex px-2 py-1">
+                      <div class="d-flex flex-column justify-content-center">
+                        <h6 class="mb-0 text-sm">${numberRow}</h6>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <p class="text-xs font-weight-bold mb-0">${client.tipo_persona}</p>
+                    </td>
+                    <td class="align-middle text-center text-sm">
+                      ${clientNames}
+                    </td>
+                    <td>
+                      <p class="text-xs font-weight-bold mb-0">${client.documento_tipo}</p>
+                    </td>
+                  <td>
+                    <p class="text-xs font-weight-bold mb-0">${client.documento_nro}</p>
+                  </td>
+                  <td class="align-middle">
+                    <div class="btn-group">
+                        <a type="button" href="./delete_client.php?id=${code}" class="btn btn-link text-danger text-gradient px-3 mb-0"><i class="bi bi-trash-fill"></i></a>
+                        <a type="button" href="./edit_client.php?id=${code}" class="btn btn-link text-dark px-3 mb-0"><i class="bi bi-pencil-fill"></i></a>
+                        <a type="button" href="#" class="btn btn-link text-success px-3 mb-0 openModal" data-bs-toggle="modal" data-bs-target="#data_full_client" data-id="${client.idcliente}"><i class="bi bi-arrow-right-square openModal" data-id="${client.idcliente}"></i></a>
+                      </div>
+                  </td>
+              </tr>           
+        `;
+            numberRow++;
+
+            $("#table-clients tbody").innerHTML += newRow;
+          });
+
+        } else {
+          newRow = `
+      <div class="alert alert-danger m-4 text-white" role="alert">
+          <strong class="text-white">No existe clientes</strong> Asegurate de que existan los registros.
+      </div>
+      `;
+          $("#render-error").innerHTML += newRow;
+        }
+
+
       }
 
-      $("#in-correo").addEventListener("input", (e) => {
+      async function getClients() {
 
-        let inputValue = e.target.value
+        try {
+
+          /* $("#add-asset").setAttribute("href",`./add_asset.php?idproy=${code}&name=${codeName}`); */
+
+          let url = "../../Controllers/client.controller.php";
+          let params = new FormData();
+
+          params.append("action", "listClienTperson");
+          params.append("tipo_persona", $("#tipo_persona").value);
+
+          results = await global.sendAction(url, params);
+
+          if (results) {
+
+            /* $("#cabezera").innerText +=` ${name}`; */
+            renderClients(results);
+
+          }
+        } catch (e) {
+          console.error(e);
+        }
+      }
+
+      async function searchClients(dnro) {
+        try {
+
+          let url = `../../Controllers/client.controller.php`;
+          let params = new FormData();
+
+          params.append("action", "listClientDnro");
+          params.append("tipo_persona", $("#tipo_persona").value);
+          params.append("documento_nro", dnro);
+
+          let results = await global.sendAction(url, params);
+
+          if (results) {
+            renderClients(results);
+          }
+        } catch (e) {
+          console.error(e);
+        }
+      }
+
+      //Genera u archivo PDF
+      async function generatePdf(id) {
+
+        let codeID = btoa(id);
+        let url = `../../reports/reports_pdf.php?action=reportLots&idproyecto=${codeID}`;
+
+        window.location.href = url;
+      }
+
+      //Genera un archivo excel
+      async function generateExcel(id) {
+
+        let codeID = btoa(id);
+        let url = `../../reports/reports_excel.php?idproyecto=${codeID}`;
+
+        window.location.href = url;
+      }
+
+      $("#in-doumento-tipo").addEventListener("input", () => {
 
         clearTimeout(timer);
 
-
         timer = setTimeout(() => {
-          if (!inputValue) {
-            getUsers();
+
+          let dnro = $("#in-doumento-tipo").value;
+
+          if (dnro != "") {
+
+            searchClients(dnro);
+
           } else {
 
-            filterUsers(inputValue);
+            getClients();
           }
-        }, 1500);
+        }, 1500)
       });
 
-      getUsers();
+      $("#tipo_persona").addEventListener("change", () => {
 
+        getClients();
+
+      });
+
+
+      $("#table-clients tbody").addEventListener("click", (e) => {
+
+        if (e.target.classList.contains("openModal")) {
+
+          let idCliente = e.target.dataset.id;
+
+          getClientModal(idCliente);
+        }
+      });
+
+      getClients();
     });
   </script>
   <script>

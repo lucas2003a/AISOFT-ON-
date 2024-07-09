@@ -92,6 +92,7 @@ CREATE VIEW vws_list_assets_short AS
 SELECT  act.idactivo, 
         proy.idproyecto, 
         act.propietario_lote, 
+        act.tipo_activo,
         act.estado, 
         act.sublote, 
         act.direccion, 
@@ -110,77 +111,9 @@ FROM
     AND act.inactive_at IS NULL
 ORDER BY act.sublote ASC;
 
-$$
+END $$
 
-DELIMITER;
-
--- CLIENTES
-/*DELIMITER $$
-
-CREATE VIEW vws_list_clients AS
-SELECT
-    clien.idcliente,
-    clien.tipo_persona,
-    clien.apellidos,
-    clien.nombres,
-    clien.documento_tipo,
-    clien.documento_nro,
-    clien.estado_civil,
-    clien.razon_social,
-    clien.representante_legal,
-    clien.documento_t_representante,
-    clien.documento_nro_representante,
-    clien.partida_elect,
-    dist.distrito,
-    prov.provincia,
-    dept.departamento,
-    clien.direccion,
-    usu.nombres AS usuario
-FROM
-    clientes AS clien
-    INNER JOIN distritos AS dist ON dist.iddistrito = clien.iddistrito
-    INNER JOIN provincias AS prov ON prov.idprovincia = dist.idprovincia
-    INNER JOIN departamentos AS dept ON dept.iddepartamento = prov.iddepartamento
-    INNER JOIN usuarios AS usu ON usu.idusuario = clien.idusuario
-WHERE
-    clien.inactive_at IS NULL
-ORDER BY clien.documento_nro ASC; 
-
-
-DELIMITER;*/
-
-/* DELIMITER $$
-
-CREATE VIEW vws_list_inactive_clients AS
-SELECT
-    clien.idcliente,
-    clien.tipo_persona,
-    clien.apellidos,
-    clien.nombres,
-    clien.documento_tipo,
-    clien.documento_nro,
-    clien.estado_civil,
-    clien.razon_social,
-    clien.representante_legal,
-    clien.documento_t_representante,
-    clien.documento_nro_representante,
-    clien.partida_elect,
-    dist.distrito,
-    prov.provincia,
-    dept.departamento,
-    clien.direccion,
-    usu.nombres AS usuario
-FROM
-    clientes AS clien
-    INNER JOIN distritos AS dist ON dist.iddistrito = clien.iddistrito
-    INNER JOIN provincias AS prov ON prov.idprovincia = dist.idprovincia
-    INNER JOIN departamentos AS dept ON dept.iddepartamento = prov.iddepartamento
-    INNER JOIN usuarios AS usu ON usu.idusuario = clien.idusuario
-WHERE
-    clien.inactive_at IS NOT NULL
-ORDER BY clien.documento_nro ASC;
-
-DELIMITER; */
+DELIMITER ;
 
 -- SEPARACIONES
 DELIMITER $$

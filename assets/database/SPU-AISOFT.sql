@@ -7,7 +7,7 @@ CREATE PROCEDURE spu_list_departaments()
 BEGIN
 	SELECT * FROM departamentos
     ORDER BY 2 ASC;
-END $$
+END$$
 
 DELIMITER ;
 
@@ -20,7 +20,7 @@ BEGIN
     FROM provincias 
     WHERE iddepartamento = _iddepartamento
     ORDER BY 3 ASC;
-END $$
+END$$
 
 DELIMITER ;
 
@@ -33,7 +33,7 @@ BEGIN
     FROM distritos
     WHERE idprovincia = _idprovincia
     ORDER BY 3 ASC;
-END $$
+END$$
 
 DELIMITER ;
 
@@ -54,7 +54,7 @@ BEGIN
         INNER JOIN provincias AS prov ON prov.idprovincia = dist.idprovincia
         INNER JOIN departamentos AS dept ON dept.iddepartamento = prov.iddepartamento
         WHERE dist.iddistrito = _iddistrito;
-END $$
+END$$
 
 DELIMITER ;
 
@@ -80,7 +80,7 @@ BEGIN
 				dist.distrito = _distrito
             AND prov.provincia = _provincia
             AND dept.departamento = _departamento;
-END $$
+END$$
 
 DELIMITER ;
 
@@ -91,7 +91,7 @@ CREATE PROCEDURE spu_list_companies()
 BEGIN
 	SELECT * FROM vws_list_companies
     ORDER BY 2;
-END $$
+END$$
 
 DELIMITER ;
 
@@ -156,7 +156,7 @@ BEGIN
             INNER JOIN departamentos AS dept ON dept.iddepartamento = prov.iddepartamento
             WHERE prov.idprovincia = _idprovincia;
     END IF;
-END $$
+END$$
 
 DELIMITER ;
 
@@ -187,7 +187,7 @@ BEGIN
         INNER JOIN provincias AS prov ON prov.idprovincia = dist.idprovincia
         INNER JOIN departamentos AS dept ON dept.iddepartamento = prov.iddepartamento
         WHERE sed.idconstructora = _idconstructora;
-END $$
+END$$
 
 DELIMITER ;
 
@@ -218,7 +218,7 @@ BEGIN
         INNER JOIN sedes AS sed ON sed.idsede = rep.idsede
         WHERE rep.idrepresentante = _idrepresentante
         AND rep.inactive_at IS NULL;
-END $$
+END$$
 
 DELIMITER ;
 
@@ -246,7 +246,7 @@ BEGIN
         INNER JOIN sedes AS sed ON sed.idsede = rep.idsede
         WHERE rep.idsede = _idsede
         AND rep.inactive_at IS NULL;
-END $$
+END$$
 
 DELIMITER ;
 
@@ -273,14 +273,14 @@ BEGIN
             GROUP BY py.idproyecto
             ORDER BY py.denominacion ASC;
     
-END $$
+END$$
 DELIMITER ;
 
 DELIMITER $$
 CREATE PROCEDURE spu_list_projects()
 BEGIN
 	SELECT * FROM vws_list_projects;
-END $$
+END$$
 
 DELIMITER ;
 
@@ -290,7 +290,7 @@ CREATE PROCEDURE spu_list_projects_id(IN _idproyecto INT)
 BEGIN
 	SELECT * FROM vws_list_projects
     WHERE idproyecto = _idproyecto;
-END $$
+END$$
 
 DELIMITER ;
 
@@ -300,7 +300,7 @@ CREATE PROCEDURE spu_list_projects_by_code(IN _codigo VARCHAR(20)) -- POR CÓDIG
 BEGIN
 		SELECT * FROM vws_list_projects
         WHERE codigo LIKE CONCAT("%", _codigo,"%");
-END $$
+END$$
 
 DELIMITER ;
 
@@ -324,7 +324,7 @@ BEGIN
 				(_idsede, _imagen, _codigo, _denominacion, NULLIF(_latitud,""), NULLIF(_longitud, ""), _iddistrito, _direccion, _idusuario);
                 
 	SELECT ROW_COUNT() AS filasAfect; -- FILAS AFECTADAS
-END $$
+END$$
 
 DELIMITER ;
 
@@ -360,7 +360,7 @@ BEGIN
 			idproyecto = _idproyecto;
             
 	SELECT ROW_COUNT() AS filasAfect; -- FILAS AFECTADAS
-END $$
+END$$
 
 DELIMITER ;
 
@@ -382,7 +382,7 @@ BEGIN
 			idproyecto = _idproyecto;
     
     SELECT ROW_COUNT() AS filasAfect;
-END $$
+END$$
 
 DELIMITER ;
 
@@ -433,7 +433,7 @@ BEGIN
         INNER JOIN personas AS pers ON pers.idpersona = usu.idpersona
         WHERE act.idactivo = _idactivo
         AND act.inactive_at IS NULL;
-END $$
+END$$
 
 DELIMITER ;
 
@@ -446,7 +446,7 @@ CREATE PROCEDURE spu_list_assets_idProject
 BEGIN
 	SELECT * FROM vws_list_assets_short
     WHERE idproyecto = _idproyecto;
-END $$
+END$$
 
 DELIMITER ;
 
@@ -461,7 +461,7 @@ BEGIN
 	SELECT * FROM vws_list_assets_short
     WHERE idproyecto = _idproyecto
     AND propietario_lote = _propietario_lote;
-END $$
+END$$
 
 DELIMITER ;
 
@@ -477,7 +477,7 @@ BEGIN
 		FROM vws_list_assets_short
         WHERE sublote LIKE CONCAT(_sublote,"%")
         AND idproyecto = _idproyecto;
-END $$
+END$$
 
 DELIMITER ;
 
@@ -557,7 +557,7 @@ BEGIN
                 );
                 
 	SELECT ROW_COUNT() as filasAfect;
-END $$
+END$$
 
 DELIMITER ;
 
@@ -645,7 +645,7 @@ BEGIN
 		WHERE idactivo = _idactivo;
         
 	SELECT ROW_COUNT() AS filasAfect;
-END $$
+END$$
 
 DELIMITER ;
 
@@ -676,7 +676,7 @@ BEGIN
 	ELSE 
 		(SELECT COUNT(*) -2 AS filasAfect FROM activos WHERE idactivo = _idactivo);
     END IF;
-END $$
+END$$
 
 DELIMITER ;
 
@@ -729,7 +729,7 @@ BEGIN
 			AND act.inactive_at IS NULL
             AND act.tipo_activo = "CASA";
 
-END $$
+END$$
 
 DELIMITER ;
 
@@ -748,7 +748,7 @@ BEGIN
             INNER JOIN proyectos proy ON proy.idproyecto = act.idproyecto
             INNER JOIN presupuestos pres ON pres.idpresupuesto = act.idpresupuesto
 			WHERE act.inactive_at IS NULL;
-END $$
+END$$
 
 DELIMITER ;
 
@@ -767,7 +767,7 @@ BEGIN
             INNER JOIN presupuestos pres ON pres.idpresupuesto = act.idpresupuesto
 			WHERE act.idpresupuesto = _idpresupuesto
             AND act.inactive_at IS NULL;
-END $$
+END$$
 
 DELIMITER ;
 
@@ -792,7 +792,7 @@ BEGIN
             )
             AND act.tipo_activo = "CASA";
             
-END $$
+END$$
 
 DELIMITER ;
 
@@ -821,7 +821,7 @@ BEGIN
         AND JSON_ARRAY(JSON_EXTRACT(det_casa,'$.valor')) = 0
         AND act.precio_venta > 0
         ORDER BY act.sublote;
-END $$
+END$$
 
 DELIMITER ;
 DELIMITER $$
@@ -849,7 +849,7 @@ BEGIN
         AND JSON_ARRAY(JSON_EXTRACT(det_casa,'$.valor')) = 0
         AND act.precio_venta > 0
         ORDER BY act.sublote;
-END $$
+END$$
 
 DELIMITER ;
 
@@ -876,7 +876,7 @@ BEGIN
         AND proy.idproyecto = _idproyecto
         AND act.precio_venta > 0
         ORDER BY act.sublote;
-END $$
+END$$
 
 DELIMITER ;
 
@@ -903,7 +903,7 @@ BEGIN
         INNER JOIN 	departamentos AS dept ON dept.iddepartamento = prov.iddepartamento
         WHERE pers.inactive_at IS NULL
         ORDER BY pers.idpersona DESC;
-END $$
+END$$
 
 DELIMTER;
 
@@ -920,17 +920,22 @@ BEGIN
         pers.documento_nro,
         pers.estado_civil,
         dist.iddistrito,
+        dist.distrito,
         prov.idprovincia,
-        dept.iddepartamento
-		FROM pesonas AS pers
+        prov.provincia,
+        dept.iddepartamento,
+        dept.departamento,
+        pers.nacionalidad,
+        pers.direccion
+		FROM personas AS pers
         INNER JOIN 	distritos AS dist ON dist.iddistrito = pers.iddistrito
         INNER JOIN 	provincias AS prov ON prov.idprovincia = dist.idprovincia
         INNER JOIN 	departamentos AS dept ON dept.iddepartamento = prov.iddepartamento
         WHERE pers.inactive_at IS NULL AND pers.documento_nro LIKE CONCAT(_documento_nro,'%')
         ORDER BY pers.idpersona DESC;
-END $$
+END$$
 
-DELIMTER;
+DELIMITER;
 
 DELIMITER $$
 
@@ -968,7 +973,7 @@ BEGIN
                     );
                     
 	SELECT ROW_COUNT() AS filasAfect;
-END $$
+END$$
 
 DELIMTER;
 
@@ -1001,7 +1006,7 @@ BEGIN
 		WHERE idpersona = _idpersona;
 	
     SELECT ROW_COUNT() AS filasAfect;
-END $$
+END$$
 
 DELIMITER ;
 
@@ -1014,7 +1019,7 @@ BEGIN
 	WHERE idpersona = _idpersona;
     
     SELECT ROW_COUNT() AS filasAfect;
-END $$
+END$$
 
 DELIMITER ;
 
@@ -1048,7 +1053,7 @@ BEGIN
         WHERE cont.estado = 'VIGENTE'
         AND cont.inactive_at IS NULL;
     
-END $$
+END$$
 DELIMITER ;
 CALL spu_list_clients_contract();
 DELIMITER $$
@@ -1076,7 +1081,7 @@ BEGIN
         LEFT JOIN vws_clients_natural cn ON cn.idcliente = sep.idcliente
         WHERE sep.idcliente = _idcliente
         AND cont.estado = "VIGENTE";
-END $$
+END$$
 
 DELIMITER ;
 
@@ -1110,7 +1115,7 @@ BEGIN
         AND (cl.documento_nro LIKE CONCAT(_documento_nro,'%') OR cn.documento_nro LIKE CONCAT(_documento_nro,'%'))
         AND cont.inactive_at IS NULL;
     
-END $$
+END$$
 
 DELIMITER ;
 
@@ -1129,7 +1134,7 @@ BEGIN
         WHERE clien.inactive_at IS NULL
         AND pers.inactive_at IS NULL
         ORDER BY pers.documento_nro ASC;
-END $$
+END$$
 
 DELIMITER ;
 
@@ -1377,7 +1382,7 @@ BEGIN
                     );
 	
     SELECT ROW_COUNT() AS filasAfect;
-END $$
+END$$
 
 DELIMITER ;
 
@@ -1425,7 +1430,7 @@ BEGIN
 			WHERE idcliente = _idcliente;
             
 			SELECT ROW_COUNT() AS filasAfect;
-END $$
+END$$
 
 DELIMITER ;
 
@@ -1479,7 +1484,7 @@ BEGIN
                         _idpersona_juridica,
                         _idusuario
                     );
-END $$
+END$$
 
 DELIMITER ;
 
@@ -1500,7 +1505,7 @@ BEGIN
 		FROM rep_legales_clientes
         WHERE idpersona_juridica = _idpersona_juridica 
         AND inactive_at IS NULL;
-END $$
+END$$
 
 DELIMITER ;
 
@@ -1514,7 +1519,7 @@ BEGIN
         WHERE idrepresentante = _idrepresentante;
 	
     SELECT ROW_COUNT() AS filasAfect;
-END $$
+END$$
 
 DELIMITER ;
 
@@ -1545,7 +1550,7 @@ BEGIN
         WHERE idrepresentante = _idrepresentante;
         
 	SELECT ROW_COUNT() AS filasAfect;
-END $$
+END$$
 
 DELIMITER ;
 
@@ -1584,7 +1589,7 @@ BEGIN
                 );
                 
 		SELECT ROW_COUNT() AS filasAfect;
-END $$
+END$$
 
 DELIMITER ;
 
@@ -1627,7 +1632,7 @@ BEGIN
         
 		SELECT ROW_COUNT() AS filasAfect;
 	
-END $$
+END$$
 
 DELIMITER ;
 
@@ -1670,7 +1675,7 @@ BEGIN
 	END IF;
     
     SELECT ROW_COUNT() AS filasAfect;
-END $$
+END$$
 
 DELIMITER ;
 
@@ -1683,7 +1688,7 @@ BEGIN
 		idcategoria_costo,
         categoria_costo
 		FROM categoria_costos;
-END $$
+END$$
 
 DELIMITER ;
 
@@ -1702,7 +1707,7 @@ BEGIN
         INNER JOIN categoria_costos cat ON cat.idcategoria_costo  = subcat.idcategoria_costo
         WHERE subcat.idcategoria_costo = _idcategoria_costo 
         ORDER BY subcat.subcategoria_costo ASC;
-END $$
+END$$
 
 DELIMITER ;
 
@@ -1718,7 +1723,7 @@ BEGIN
         marca
 		FROM marcas
         ORDER BY marca ASC;
-END $$
+END$$
 
 DELIMITER ;
 
@@ -1729,7 +1734,7 @@ CREATE PROCEDURE spu_list_units_measuraments()
 BEGIN
 	SELECT * FROM unidades_medida
     ORDER BY unidad_medida ASC;
-END $$
+END$$
 
 DELIMITER ;
 
@@ -1750,7 +1755,7 @@ BEGIN
         INNER JOIN unidades_medida unimed ON unimed.idunidad_medida = mat.idunidad_medida
         WHERE marc.idmarca = _idmarca
         ORDER BY mat.material ASC;
-END $$
+END$$
 
 DELIMITER ;
 
@@ -1782,7 +1787,7 @@ BEGIN
 		AND detcost.inactive_at IS NULL
         GROUP BY pres.idpresupuesto
         ORDER BY pres.codigo ASC;
-END $$
+END$$
 
 DELIMITER ;
 select * from configuraciones;
@@ -1816,7 +1821,7 @@ BEGIN
         AND detcost.inactive_at IS NULL
         GROUP BY pres.idpresupuesto
         ORDER BY pres.codigo ASC;
-END $$
+END$$
 
 DELIMITER ;
 
@@ -1850,7 +1855,7 @@ BEGIN
         AND detcost.inactive_at IS NULL
         GROUP BY pres.idpresupuesto
         ORDER BY pres.codigo ASC;
-END $$
+END$$
 
 DELIMITER ;
 
@@ -1877,7 +1882,7 @@ BEGIN
         AND pres.area_construccion = _area_construida
         GROUP BY pres.idpresupuesto
         ORDER BY pres.codigo ASC;
-END $$
+END$$
 
 DELIMITER ;
 
@@ -1900,7 +1905,7 @@ BEGIN
             area_construccion
             FROM presupuestos
             WHERE idpresupuesto = @@last_insert_id;
-END $$
+END$$
 
 DELIMITER ;
 
@@ -1914,7 +1919,7 @@ BEGIN
 	SELECT COUNT(idpresupuesto)
 		FROM presupuestos
 		WHERE idpresupuesto = _idpresuspuesto;
-END $$
+END$$
 
 DELIMTER;
 
@@ -1946,7 +1951,7 @@ BEGIN
         area_construccion
         FROM presupuestos
 		WHERE idpresupuesto = _idpresupuesto;
-END $$
+END$$
 
 DELIMITER ;
 
@@ -1965,7 +1970,7 @@ BEGIN
         WHERE idpresupuesto = _idpresupuesto;
         
 	SELECT ROW_COUNT() AS filasAfect;
-END $$
+END$$
 
 DELIMITER ;
 
@@ -2019,7 +2024,7 @@ BEGIN
 			WHERE detcost.idpresupuesto = _idpresupuesto
 			AND detcost.inactive_at IS NULL
 			ORDER BY cat.categoria_costo, subcat.subcategoria_costo ASC;
-END $$
+END$$
 
 DELIMITER ;
 
@@ -2056,7 +2061,7 @@ BEGIN
 							);
                             
 	SELECT ROW_COUNT() AS filasAfect;
-END $$
+END$$
 
 DELIMITER ;
 
@@ -2088,7 +2093,7 @@ BEGIN
 			iddetalle_costo = _iddetalle_costo;
             
 	SELECT ROW_COUNT() AS filasAfect;
-END $$
+END$$
 
 DELIMITER ;
 
@@ -2108,7 +2113,7 @@ BEGIN
         
 	SELECT ROW_COUNT() AS filasAfect;
     
-END $$
+END$$
 
 DELIMITER ;
 
@@ -2127,7 +2132,7 @@ BEGIN
         WHERE detcost.idpresupuesto = _idpresupuesto
         GROUP BY 
 			cat.idcategoria_costo;
-END $$
+END$$
 
 DELIMITER ;
 
@@ -2148,7 +2153,7 @@ BEGIN
         GROUP BY 
 			cat.idcategoria_costo,
             subcat.idsubcategoria_costo;
-END $$
+END$$
 
 DELIMITER ;
 
@@ -2167,7 +2172,7 @@ BEGIN
         FROM separaciones
         ORDER BY n_expediente ASC;
 
-END $$
+END$$
 
 DELIMITER ;
 
@@ -2200,7 +2205,7 @@ BEGIN
         AND ac.estado = "SEPARADO"
         ORDER BY sp.n_expediente ASC;
 
-END $$
+END$$
 DELIMITER ;
 
 DELIMITER $$
@@ -2225,7 +2230,7 @@ BEGIN
             AND inactive_at_client IS NULL
             AND create_at BETWEEN _fechaInicio AND _fechaFin;
     END IF;
-END $$
+END$$
 
 DELIMITER ;
 
@@ -2266,7 +2271,7 @@ BEGIN
     WHERE
     sep.idactivo = _idactivo
     AND lcj.inactive_at IS NULL;
-END $$
+END$$
 
 DELIMITER ;
 
@@ -2298,7 +2303,7 @@ BEGIN
            AND n_expediente LIKE CONCAT(_campoCriterio,'%')
            OR documento_nro LIKE CONCAT(_campoCriterio,'%');
     END IF;
-END $$
+END$$
 
 DELIMITER ;
 
@@ -2356,7 +2361,7 @@ BEGIN
         );
 
     SELECT ROW_COUNT() AS filasAfect;
-END $$
+END$$
 DELIMITER ;
 SELECT * FROM separaciones;
 DELIMITER $$
@@ -2400,7 +2405,7 @@ BEGIN
         WHERE idseparacion = _idseparacion;
     
     SELECT ROW_COUNT() AS filasAfect;
-END $$
+END$$
 
 DELIMITER $$
 
@@ -2417,7 +2422,7 @@ BEGIN
         WHERE idseparacion = _idseparacion;
     
     SELECT ROW_COUNT() AS filasAfect;
-END $$
+END$$
 
 DELIMITER ;
 
@@ -2445,7 +2450,7 @@ BEGIN
         SELECT * FROM vws_list_separations_tpersona_juridica_full
             WHERE idseparacion = _idseparacion;
     END IF;
-END $$
+END$$
 
 DELIMITER ;
 
@@ -2458,7 +2463,7 @@ BEGIN
     SELECT * 
         FROM vws_list_refunds
         WHERE inactive_at IS NULL;
-END $$
+END$$
 
 DELIMITER ;
 
@@ -2476,7 +2481,7 @@ BEGIN
         WHERE tipo_devolucion = _tipo_devolucion
             AND create_at BETWEEN _fechaInicio AND _fechaFin
             AND inactive_at IS NULL;
-END $$
+END$$
 
 DELIMITER ;
 
@@ -2496,7 +2501,7 @@ BEGIN
             AND create_at BETWEEN _fechaInicio AND _fechaFin
             AND inactive_at IS NULL
             AND n_expediente_dev LIKE CONCAT(_n_expediente,'%');
-END $$
+END$$
 
 DELIMITER ;
 
@@ -2510,7 +2515,7 @@ BEGIN
     SELECT * 
         FROM vws_list_refunds
         WHERE iddevolucion = _iddevolucion;
-END $$
+END$$
 
 DELIMITER ;
 
@@ -2609,7 +2614,7 @@ BEGIN
             iddevolucion = _iddevolucion;
     
     SELECT ROW_COUNT() AS filasAfect;
-END $$
+END$$
 
 DELIMITER ;
 
@@ -2629,7 +2634,7 @@ BEGIN
             iddevolucion = _iddevolucion;
 
     SELECT ROW_COUNT() AS filasAfect;
-END $$
+END$$
 
 DELIMITER ;
 -- CONTRATOS  ////////////////////////////////////////////////////////////////////////////////////
@@ -2642,7 +2647,7 @@ BEGIN
         n_expediente
         FROM contratos;
 
-END $$
+END$$
 DELIMITER ;
 DELIMITER $$
 
@@ -2696,7 +2701,7 @@ BEGIN
                 AND cnt.inactive_at IS NULL
         ) AS resultado
         ORDER BY idcontrato DESC;
-END $$
+END$$
 
 DELIMITER ;
 
@@ -2756,7 +2761,7 @@ BEGIN
         ) AS resultado
         WHERE resultado.fecha_contrato BETWEEN _fecha_inicio AND _fecha_fin
         ORDER BY idcontrato DESC;
-END $$
+END$$
 DELIMITER ;
 
 DELIMITER $$
@@ -2818,7 +2823,7 @@ BEGIN
         ) AS resultado
         WHERE resultado.fecha_contrato BETWEEN _fecha_inicio AND _fecha_fin
         ORDER BY idcontrato DESC;
-END $$
+END$$
 DELIMITER ;
 
 DELIMITER $$
@@ -2831,7 +2836,7 @@ BEGIN
     SELECT EXISTS(SELECT 1 FROM contratos
     WHERE idseparacion = _idseparacion
     AND inactive_at IS NULL) AS existContract;
-END $$
+END$$
 
 DELIMITER ;
 
@@ -2972,7 +2977,7 @@ BEGIN
         LEFT JOIN personas pery ON pery.idpersona = cly.idpersona
         WHERE rs.idcontrato = _idcontrato;
 			
-END $$
+END$$
 
 DELIMITER ;
 CALL spu_lits_contracts_full_by_id(1);
@@ -3042,7 +3047,7 @@ BEGIN
                 
 	SELECT @@last_insert_id AS idcontrato;
 
-END $$
+END$$
 
 DELIMITER ;
 
@@ -3096,7 +3101,7 @@ BEGIN
 			idcontrato = _idcontrato;
 
     SELECT _idcontrato AS idcontrato;
-END $$
+END$$
 
 DELIMITER ;
 DELIMITER $$
@@ -3116,7 +3121,7 @@ BEGIN
 			idcontrato = _idcontrato;
             
   SELECT ROW_COUNT() AS filasAfect;
-END $$
+END$$
 
 DELIMITER ;
 
@@ -3130,7 +3135,7 @@ BEGIN
     SELECT EXISTS(SELECT 1 FROM contratos 
                 WHERE idcontrato = _idcontrato AND inactive_at IS NULL
                 );
-END $$
+END$$
 
 DELIMITER ;
 -- DETALLES DE CONTRATOS  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -3159,7 +3164,7 @@ BEGIN
         WHERE cnt.idcontrato = _idcontrato
         AND dtc.inactive_at IS NULL
         ORDER BY cnt.n_expediente;
-END $$
+END$$
 DELIMITER ;
 
 DELIMITER $$
@@ -3185,7 +3190,7 @@ BEGIN
         WHERE dtc.iddetalle_contrato = _iddetalle_contrato
         AND dtc.inactive_at IS NULL
         ORDER BY cnt.n_expediente;
-END $$
+END$$
 DELIMITER ;
 
 DELIMITER $$
@@ -3199,7 +3204,7 @@ BEGIN
                         VALUES (_idrepresentante, _idcontrato);
     
     SELECT ROW_COUNT() AS filasAfect;
-END $$
+END$$
 DELIMITER ;
 
 DELIMITER $$
@@ -3219,7 +3224,7 @@ BEGIN
             iddetalle_contrato = _iddetalle_contrato;
     
     SELECT ROW_COUNT() AS filasAfect;
-END $$
+END$$
 DELIMITER ;
 
 DELIMITER $$
@@ -3235,7 +3240,7 @@ BEGIN
             iddetalle_contrato = _iddetalle_contrato;
     
     SELECT ROW_COUNT() AS filasAfect;
-END $$
+END$$
 DELIMITER ;
 
 -- CUOTAS /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -3257,7 +3262,7 @@ BEGIN
         FROM vws_list_quotas lq
         INNER JOIN contratos ct ON ct.idcontrato = lq.idcontrato
         WHERE ct.idcontrato = _idcontrato;
-END $$
+END$$
 
 DELIMITER ;
 
@@ -3278,7 +3283,7 @@ BEGIN
         AND idcontrato = _idcontrato;
 
     SELECT ROW_COUNT() AS filasAfect;
-END $$
+END$$
 
 DELIMITER ;
 
@@ -3294,7 +3299,7 @@ BEGIN
         WHERE idcontrato = _idcontrato
         AND inactive_at IS NULL
         ORDER BY fecha_vencimiento;
-END $$
+END$$
 
 DELIMITER ;
 
@@ -3334,7 +3339,7 @@ BEGIN
         WHERE detc.inactive_at IS NULL
         AND qt.idcuota = _idcuota
         AND qt.inactive_at IS NULL;
-END $$
+END$$
 
 DELIMITER ;
 
@@ -3361,7 +3366,7 @@ BEGIN
             AND inactive_at IS NULL
             ORDER BY fecha_vencimiento;
     END IF;
-END $$
+END$$
 
 DELIMITER ;
 
@@ -3390,7 +3395,7 @@ BEGIN
             AND inactive_at IS NULL
             ORDER BY fecha_vencimiento;
     END IF;
-END $$
+END$$
 
 DELIMITER ;
 
@@ -3409,7 +3414,7 @@ BEGIN
         idcuota = _idcuota;
     
     SELECT ROW_COUNT() AS filasAfect;
-END $$
+END$$
 
 DELIMITER ;
 
@@ -3429,7 +3434,7 @@ BEGIN
                 VALUES(_idcontrato, _nro_cuota, _monto_cuota, _fecha_vencimiento, _idusuario);
                 
     SELECT ROW_COUNT() AS filasAfect;
-END $$
+END$$
 
 DELIMITER ;
 
@@ -3507,7 +3512,7 @@ BEGIN
         ELSE
             SELECT (_countUpdate) AS filasAfect;
     END CASE;
-END $$
+END$$
 
 DELIMITER ;
 
@@ -3534,7 +3539,7 @@ BEGIN
 
 
     SELECT ROW_COUNT() AS filasAfect;
-END $$
+END$$
 
 CREATE PROCEDURE spu_inactive_quota
 (
@@ -3549,7 +3554,7 @@ BEGIN
         WHERE idcuota = _idcuota;
 
     SELECT ROW_COUNT() AS filasAfect;
-END $$
+END$$
 
 DELIMITER ;
 
@@ -3579,7 +3584,7 @@ BEGIN
         INNER JOIN sedes sd ON sd.idsede = usu.idsede
         WHERE usu.inactive_at IS NULL
         AND usu.correo = _correo;
-END $$
+END$$
 
 DELIMITER ;
 
@@ -3598,7 +3603,7 @@ BEGIN
 		WHERE us.inactive_at IS NULL
 			AND rl.idrol = us.idrol
             AND us.idusuario IS NULL;
-END $$
+END$$
 DELIMITER ;
 
 DELIMITER $$
@@ -3615,7 +3620,7 @@ BEGIN
             idusuario = _idusuario;
 
     SELECT ROW_COUNT() AS filasAfect;
-END $$
+END$$
 DELIMITER ;
 
 DELIMITER $$
@@ -3631,7 +3636,9 @@ BEGIN
             us.correo,
             ps.nombres,
             ps.apellidos,
+            rl.idrol,
             rl.rol,
+            ps.idpersona,
             ps.documento_tipo,
             ps.documento_nro,
             ps.estado_civil,
@@ -3643,15 +3650,11 @@ BEGIN
             dp.departamento,
             ps.direccion,
             ps.nacionalidad,
-            (
-                SELECT 
-                    CONCAT('Sede ',dp2.departamento,'/',pr2.provincia) AS sede
-                    FROM sedes sd2
-                    INNER JOIN distritos dis2 ON dis2.iddistrito = sd2.iddistrito
-                    INNER JOIN provincias pr2 ON pr2.idprovincia = dis2.idprovincia
-                    INNER JOIN departamentos dp2 ON dp2.iddepartamento = pr2.iddepartamento
-                    WHERE sd2.idsede = us.idsede
-            ) AS sede
+            sb.sede,
+            sb.idsede AS idsede_sede,
+            sb.iddepartamento AS iddepartamento_sede,
+            sb.idprovincia AS idprovincia_sede,
+            sb.iddistrito AS iddistrito_sede
         FROM usuarios as us
         INNER JOIN personas ps ON ps.idpersona = us.idpersona
         INNER JOIN distritos dis ON dis.iddistrito = ps.iddistrito
@@ -3659,8 +3662,20 @@ BEGIN
         INNER JOIN departamentos dp ON dp.iddepartamento = pr.iddepartamento
         INNER JOIN sedes sd ON sd.idsede = us.idsede
         INNER JOIN roles rl ON rl.idrol = us.idrol
+        INNER JOIN (
+            SELECT 
+                    sd2.idsede,
+                    CONCAT('Sede ',dp2.departamento,'/',pr2.provincia) AS sede,
+                    dp2.iddepartamento,
+                    pr2.idprovincia,
+                    dis2.iddistrito
+                    FROM sedes sd2
+                    INNER JOIN distritos dis2 ON dis2.iddistrito = sd2.iddistrito
+                    INNER JOIN provincias pr2 ON pr2.idprovincia = dis2.idprovincia
+                    INNER JOIN departamentos dp2 ON dp2.iddepartamento = pr2.iddepartamento
+        )AS sb ON sb.idsede = us.idsede
         WHERE us.idusuario = _idusuario;
-END $$
+END$$
 DELIMITER ;
 
 DELIMITER $$
@@ -3682,7 +3697,7 @@ BEGIN
         WHERE us.idusuario = _idusuario
         ORDER BY cn.fecha_contrato DESC
         LIMIT 5;
-END $$
+END$$
 DELIMITER ;
 
 DELIMITER $$
@@ -3703,13 +3718,13 @@ CREATE PROCEDURE spu_add_user
     IN _idsede      INT
 )
 BEGIN
-    DECLARE _existUser BIT;
+    DECLARE _existUser INT;
     DECLARE _idpersonAdd  INT;
     
     SET _existUser = (
         SELECT idpersona FROM personas
         WHERE inactive_at IS NULL
-        AND documento_nro = "77068570"
+        AND documento_nro = _documento_nro
     );
 
     IF _existUser > 0 THEN
@@ -3776,10 +3791,98 @@ BEGIN
         SELECT ROW_COUNT() AS filasAfect;        
 
     END IF;
-END $$
+END$$
 DELIMITER ;
 
-call spu_add_user()
+DELIMITER $$
+CREATE PROCEDURE spu_set_user
+(
+    IN _idusuario       INT,
+    IN _imagen          VARCHAR(100),
+    IN _idpersona       INT,
+    IN _nombres         VARCHAR(40),
+    IN _apellidos       VARCHAR(40),
+    IN _documento_tipo  VARCHAR(30),
+    IN _documento_nro   VARCHAR(12),
+    IN _estado_civil    VARCHAR(10),
+    IN _iddistrito      INT,
+    IN _direccion       VARCHAR(60),
+    IN _nacionalidad    VARCHAR(20),
+    IN _correo      VARCHAR(60),
+    IN _idrol       INT,
+    IN _idsede      INT
+)
+BEGIN
+
+    DECLARE _count1 INT;
+    DECLARE _count2 INT;
+
+    UPDATE personas 
+        SET
+            nombres     = _nombres,
+            apellidos   = _apellidos,
+            documento_tipo  = _documento_tipo,
+            documento_nro   = _documento_nro,
+            estado_civil    = _estado_civil,
+            iddistrito      = _iddistrito,
+            direccion       = _direccion,
+            nacionalidad    = _nacionalidad,
+            update_at       = CURDATE()
+        WHERE idpersona = _idpersona;
+
+        SET _count1 = (SELECT ROW_COUNT());
+
+    UPDATE usuarios 
+        SET
+            imagen      = _imagen,
+            idpersona   = _idpersona,
+            correo      = _correo,
+            idrol       = _idrol,
+            idsede      = _idsede,
+            update_at   = CURDATE()
+        WHERE idusuario = _idusuario;
+
+        SET _count2 = (SELECT ROW_COUNT());
+
+    IF _count1 = 0 THEN
+        SELECT _count1 AS filasAfect;
+    ELSE
+        SELECT _count2 AS filasAfect;
+    END IF;
+
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE PROCEDURE spu_list_users()
+BEGIN
+    SELECT 
+        us.idusuario,
+        CONCAT(UPPER(ps.apellidos),', ',LOWER(ps.nombres)) AS usuario,
+        us.correo,
+        ps.documento_tipo,
+        ps.documento_nro,
+        rl.rol
+        FROM usuarios us
+        INNER JOIN personas ps ON ps.idpersona = us.idpersona
+        INNER JOIN roles rl ON rl.idrol = us.idrol;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE PROCEDURE spu_inactive_user
+(
+    IN _idusuario INT
+)
+BEGIN
+    UPDATE usuarios        
+        SET 
+            inactive_at = CURDATE()
+        WHERE idusuario = _idusuario;
+END$$
+DELIMITER ;
+
+
 -- ACTTUALIZACIONES
 DELIMITER $$
 CREATE PROCEDURE spu_list_updates
@@ -3798,7 +3901,7 @@ BEGIN
         FROM actualizaciones
         WHERE DATE(create_at) BETWEEN _fechaInicio AND _fechaFin
         ORDER BY create_at DESC;
-END $$
+END$$
 DELIMITER ;
 
 DELIMITER $$
@@ -3825,13 +3928,22 @@ BEGIN
                 );
 
     SELECT ROW_COUNT() AS filasAfect;
-END $$
+END$$
 
 DELIMITER ;
-select * from contratos;
+
+-- //--------------------------------------- ROLES -------------------------------------------
+
+DELIMITER $$
+CREATE PROCEDURE spu_list_rols()
+BEGIN
+    SELECT * FROM roles;
+END$$
+DELIMITER ;
 -- CONFIGURACIONES
 DELIMITER $$
 
+-- // ACTUALIZACIONES
 CREATE PROCEDURE spu_list_configs
 (
     IN _clave VARCHAR(100)
@@ -3857,7 +3969,7 @@ BEGIN
         
         SELECT 0 AS valor;
     END IF;
-END $$
+END$$
 
 DELIMITER ;
 
@@ -3889,7 +4001,7 @@ BEGIN
         INSERT INTO configuraciones(clave, valor)
                     VALUES(_clave, _valor);
     END IF;
-END $$
+END$$
 DELIMITER ;
 
 /* -------------------------------------------------------------------------- */
@@ -3909,7 +4021,7 @@ BEGIN
         modulo AS permiso
         FROM permisos
         WHERE idrol = _idrol;
-END $$
+END$$
 DELIMITER ;
 
 /* -------------------------------------------------------------------------- */
@@ -3927,7 +4039,7 @@ BEGIN
         (SUM(l_separados)) as separados
 		FROM metricas
 		WHERE YEAR(update_at) = YEAR(NOW());
-END $$
+END$$
 
 DELIMITER ;
 
@@ -3946,7 +4058,7 @@ BEGIN
 					AND YEAR(fecha_contrato) = YEAR(NOW())
             )AS datos
             GROUP BY datos.mes;
-END $$
+END$$
 
 DELIMITER ;
 
@@ -3962,7 +4074,7 @@ BEGIN
         WHERE YEAR(create_at) = YEAR(NOW())
         GROUP BY tipo_devolucion, MONTH(create_at);
 			
-END $$
+END$$
 
 DELIMITER ;
 
@@ -3985,7 +4097,7 @@ BEGIN
             AND ct.inactive_at IS NULL
             AND YEAR(dtq.fecha_pago) = YEAR(NOW())
             GROUP BY MONTH(dtq.fecha_pago), ct.moneda_venta;
-END $$
+END$$
 
 DELIMITER ;
 
@@ -4002,7 +4114,7 @@ BEGIN
         WHERE inactive_at IS NULL
 			AND YEAR(create_at) = YEAR(NOW())
             GROUP BY MONTH(create_at), moneda_venta;
-END $$
+END$$
 
 DELIMITER ;
 
@@ -4024,7 +4136,7 @@ BEGIN
             AND us.inactive_at IS NULL
             GROUP BY MONTH(ct.fecha_contrato), ct.idvendedor; 
             select* from contratos;
-END $$
+END$$
 
 DELIMITER ;
 
@@ -4034,7 +4146,7 @@ DELIMITER $$
 
 CREATE PROCEDURE ()
 BEGIN
-END $$
+END$$
 
 DELIMITER ;
 

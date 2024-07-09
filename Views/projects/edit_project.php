@@ -1,4 +1,4 @@
-<?php require_once "../sidebar/permissions.php"?>
+<?php require_once "../sidebar/permissions.php" ?>
 
 <!DOCTYPE html>
 <html lang="es">
@@ -89,7 +89,7 @@
             <li class="nav-item d-flex align-items-center">
               <a href="javascript:;" class="nav-link text-body font-weight-bold px-0">
                 <i class="fa fa-user me-sm-1"></i>
-                <span class="d-sm-inline d-none"><?="<strong>" . strtoupper($_SESSION["rol"]) . "</strong>" . " - " . strtolower($_SESSION["apellidos"]) . ", " . strtolower($_SESSION["nombres"])?></span>
+                <span class="d-sm-inline d-none"><?= "<strong>" . strtoupper($_SESSION["rol"]) . "</strong>" . " - " . strtolower($_SESSION["apellidos"]) . ", " . strtolower($_SESSION["nombres"]) ?></span>
               </a>
             </li>
             <li class="nav-item d-xl-none ps-3 d-flex align-items-center">
@@ -117,7 +117,7 @@
             <div class="card-body" style="padding: 50px">
               <div class="row">
                 <div class="h-50" style="display: flex; justify-content: center;">
-                  
+
                   <!-- IMAGEN PRINCIPAL -->
 
                   <div class="position-relative d-flex align-items-center justify-content-center h-100">
@@ -211,6 +211,49 @@
                             </div>
                           </div>
 
+                          <div class="d-none">
+                            <!-- UBICACIÓN Y MEDIDAS-->
+
+                            <!-- LATITUD -->
+                            <div class="mt-4">
+                              <label for="latitud" class="form-label">Latitud</label>
+                              <input type="text" class="form-control" id="latitud">
+                              <div class="valid-feedback">
+                                <!-- -- -->
+                              </div>
+                            </div>
+
+                            <!-- LONGITUD -->
+                            <div class="mt-4  ">
+                              <label for="longitud" class="form-label">Longitud</label>
+                              <input type="text" class="form-control" id="longitud">
+                              <div class="valid-feedback">
+                                <!-- -- -->
+                              </div>
+                            </div>
+                          </div>
+
+
+
+
+
+
+
+                        </div>
+
+                        <div class="col-md-6">
+                          <!-- DIRECCIÓN -->
+                          <div class="mt-4">
+                            <label for="direccion" class="form-label">Dirección</label>
+                            <input type="text" class="form-control" id="direccion" placeholder="Dirección" readonly required>
+                            <div class="invalid-feedback">
+                              Necesitas ingresar una dirección.
+                            </div>
+                            <div class="valid-feedback">
+                              Dirección ingresada correctamente.
+                            </div>
+                          </div>
+
                           <!-- CODIGO -->
                           <div class="mt-4">
                             <label for="codigo" class="form-label">Código</label>
@@ -232,47 +275,8 @@
                             </div>
                             <div class="valid-feedback">
                               Denominación ingresada correctamente.
-                            </div>
+                            </div
                           </div>
-
-
-
-
-
-                        </div>
-
-                        <div class="col-md-6">
-                          <!-- DIRECCIÓN -->
-                          <div class="mt-4">
-                            <label for="direccion" class="form-label">Dirección</label>
-                            <input type="text" class="form-control" id="direccion" placeholder="Dirección" readonly required>
-                            <div class="invalid-feedback">
-                              Necesitas ingresar una dirección.
-                            </div>
-                            <div class="valid-feedback">
-                              Dirección ingresada correctamente.
-                            </div>
-                          </div>
-                          <!-- UBICACIÓN Y MEDIDAS-->
-
-                          <!-- LATITUD -->
-                          <div class="mt-4">
-                            <label for="latitud" class="form-label">Latitud</label>
-                            <input type="text" class="form-control" id="latitud">
-                            <div class="valid-feedback">
-                              <!-- -- -->
-                            </div>
-                          </div>
-
-                          <!-- LONGITUD -->
-                          <div class="mt-4  ">
-                            <label for="longitud" class="form-label">Longitud</label>
-                            <input type="text" class="form-control" id="longitud">
-                            <div class="valid-feedback">
-                              <!-- -- -->
-                            </div>
-                          </div>
-
                           <div class="d-grid p-3">
 
                             <button class="btn btn-success" type="submit" id="guardar">Guardar</button>
@@ -589,12 +593,12 @@
         if (code != dataProject.codigo) {
 
           searchInfo(AllProjects, "codigo", code)
-          .then(()=>{
-            $("#denominacion").focus();
-          })
-          .catch(()=>{
-            $("#codigo").focus();
-          });
+            .then(() => {
+              $("#denominacion").focus();
+            })
+            .catch(() => {
+              $("#codigo").focus();
+            });
 
         } else {
           $("#denominacion").removeAttribute("readonly");
@@ -614,12 +618,12 @@
         if (denominacion != dataProject.denominacion) {
 
           searchInfo(AllProjects, "denominacion", denominacion)
-          .then(()=>{
-            $("#direccion").focus();
-          })
-          .catch(()=>{
-            $("#denominacion").focus();
-          })
+            .then(() => {
+              $("#direccion").focus();
+            })
+            .catch(() => {
+              $("#denominacion").focus();
+            })
 
         } else {
           $("#direccion").removeAttribute("readonly");
@@ -632,17 +636,17 @@
 
       let inputValue = e.target.value;
 
-      if(!inputValue){
+      if (!inputValue) {
         $("#guardar").disabled = true;
-        
-      }else{
+
+      } else {
 
         clearTimeout(timer);
-  
+
         timer = setTimeout(() => {
-  
+
           if (e !== "") {
-  
+
             $("#guardar").removeAttribute("disabled");
           }
         }, 1500);

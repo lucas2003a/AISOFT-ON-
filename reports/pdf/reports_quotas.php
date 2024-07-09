@@ -26,35 +26,12 @@
             </strong>
         </div>
     </page_footer>
+    <div style="display:none">
 
-    <div style="margin-left: 0mm;margin-right: 10mm;margin-bottom: 10mm;">
-        <table>
-            <tbody>
-                <?=$moneda= $dataContract["moneda_venta"] == "SOL" ? "S/." : "$/.";?>
-
-                <tr>
-                    <th>Cliente</th>
-                    <td><?=$dataContract["cliente"]?></td>
-                </tr>
-                <tr>
-                    <th>Proyecto</th>
-                    <td><?=$dataContract["denominacion"]?></td>
-                </tr>
-                <tr>
-                    <th>Sublote</th>
-                    <td><?=$dataContract["sublote"]?></td>
-                </tr>
-                <tr>
-                    <th>Moneda de venta</th>
-                    <td><?=$moneda . $dataContract["moneda_venta"]?></td>
-                </tr>
-                <tr>
-                    <th>Sublote</th>
-                    <td><?=$moneda . $dataContract["precio_venta"]?></td>
-                </tr>
-            </tbody>
-        </table>
+        <?php $moneda= $dataContract["moneda_venta"] == "SOL" ? "S/." : "$/.";?>
     </div>
+
+    
     <div style="margin-left: 0;">
 
             <table>

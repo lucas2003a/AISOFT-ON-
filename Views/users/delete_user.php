@@ -44,8 +44,7 @@
     <div class="collapse navbar-collapse  w-auto " id="sidenav-collapse-main">
       <ul class="navbar-nav">
 
-        <?php include "../sidebar/sidebar_options.php"; ?>
-
+      <?php include "../sidebar/sidebar_options.php"; ?>
 
         <!-- CERRAR SESIÓN -->
         <li class="nav-item">
@@ -68,7 +67,7 @@
             <span class="nav-link-text ms-1">Cerrar sesión</span>
           </a>
         </li>
-        
+
       </ul>
     </div>
   </aside>
@@ -79,21 +78,16 @@
         <nav aria-label="breadcrumb">
           <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
           <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="#">Dashboard</a></li>
-            <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="#">Proyectos</a></li>
-            <li class="breadcrumb-item text-sm text-dark active" aria-current="page"> Lotes </li>
+          <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="#">CLientes</a></li>
+            <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Eliminar clientes</li>
           </ol>
-          <h6 class="font-weight-bolder mb-0" id="cabezera">LOTES - </h6>
+          <h6 class="font-weight-bolder mb-0" id="cabezera">ELIMINAR 
+            CIENTES </h6>
         </nav>
         <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
-          <div class="ms-md-auto pe-md-3 d-flex align-items-center">
-            
-          </div>
+          
           <ul class="navbar-nav  justify-content-end">
-            <li class="nav-item d-flex align-items-center">
-              
-            </li>
-
-            <!-- DATOS DEL USUARIO -->
+            
             <li class="nav-item d-flex align-items-center">
               <a href="javascript:;" class="nav-link text-body font-weight-bold px-0">
                 <i class="fa fa-user me-sm-1"></i>
@@ -110,7 +104,6 @@
               </a>
             </li>
             
-
           </ul>
         </div>
       </div>
@@ -121,81 +114,46 @@
 
     <!-- CONTENIDO -->
 
-    <div class="row">
-        <div class="col-12">
-          <div class="card mb-4">
-            <div class="card-header pb-0">
-              <div class="row">
-                <div class="col-md-6">
-
-                  <h6><strong>Tabla - lotes</strong></h6>
-                  
-                </div>
-              </div>
-              <div class="row">
-                
-                <div class="col-md-6">
-                  <div class="btn-group text-start">
-                    <a type="button" class="btn btn-sm btn-outline-success" href="./add_asset.php" id="add-asset">AGREGAR LOTE</a>
-                  </div>
-                  <div class="mt-2 mb-4">
-                      <a class="text-body text-sm font-weight-bold mb-0 icon-move-right mt-auto" id="go_to_list" href="./list_clients.php">
-                        Ver lista de clientes
-                        <i class="fas fa-arrow-right text-sm ms-1" aria-hidden="true"></i>
-                      </a>
-                    </div>
-                  
-                </div>
-
+    <div class="col-lg-12 mb-lg-0 mb-4 mt-4">
+            <div class="card">
+              <div class="card-body" style="padding: 50px">
                 <div class="row">
-                  <div class="col-md-6">
-                    <label for="propietario_lote" class="form-label">Propietarios</label>
-                    <select name="propietario_lote" id="propietario_lote" class="form-select">
-                      <option value="A.I.F" selected>A.I.F</option>
-                      <option value="TERCEROS">Terceros</option>
-                    </select>
-                  </div>
-                  <div class="col-md-6">
-                    <label for="" class="form-label">Busqueda</label>
-                    <div class="input-group">
-                      <span class="input-group-text text-body"><i class="fas fa-search" aria-hidden="true"></i></span>
-                      <input type="text" class="form-control" placeholder="Escribe el Sublote..." id="in-sublote">
+                  <div class="col-lg-12">
+                    <div class="d-flex flex-column h-100">
+                      <form class="row needs-validation" id="form-add-project" novalidate>
+                        <div class="row">
+                          <div class="col-md-12" id="card-body">
+
+                            <!-- REGISTRO -->
+                              <div  class="card-title m-4"><h2 style="text-align: center; text-transform: uppercase;"><strong  id="card-title"></strong></h2></div>
+                              <hr>
+                              <div id="data-client">
+
+                              <!-- RENDER DATOS DEL CLIENTE -->
+                              </div>
+                              
+                              <div class="m-4" style="display:flex; justify-content: center;">
+                                <h4 class="ask-footer text-danger">¿Deseas eliminarlo?</h4>
+                              </div>
+                              <div style ="display: flex; justify-content: center;">
+                                <div>
+                                  <div class="btn-group">                                    
+                                      <button type="button" class="btn btn-danger" id="eliminar">Eliminar</button>
+                                      <button type="button" class="btn btn-success" id="cancelar">Cancelar</button>
+                                  </div>
+                                </div>
+                                
+                              </div>
+                          </div>                                    
+                        </div>
+                      </form>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-            <hr>
-            <div class="card-body px-0 pt-0 pb-2">
-              <div class="table-responsive text-center p-0">
-                  <table class="table align-items-center mb-0 table-hover" id="table-assets">
-                    <thead>
-                    <tr>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">#</th>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Propietario</th>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Estado</th>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Tipo</th>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Sublote</th>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Direccion</th>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Operaciones</th>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10"></th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    
-                  <!-- RENDER -->
-
-                  </tbody>
-                </table>
-                <div id="render-error">
-
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
-      </div>
-
+        
     <footer class="footer pt-3  ">
         <div class="container-fluid">
           <div class="row align-items-center justify-content-lg-between">
@@ -205,27 +163,24 @@
                   document.write(new Date().getFullYear())
                 </script>,
                 auspiciado por
-                <a href="https://aifperu.com/" class="font-weight-bold" target="_blank">A.I.F Contratistas Generales S.A.C</a>
+                <a href="https://www.creative-tim.com" class="font-weight-bold" target="_blank">A.I.F Contratistas Generales S.A.C</a>
                 (sistema web).
               </div>
             </div>
           </div>
         </div>
       </footer>
-
     </div>
   </main>
   <div class="fixed-plugin d-none">
     <a class="fixed-plugin-button text-dark position-fixed px-3 py-2">
       <i class="fa fa-cog py-2"> </i>
     </a>
-
-    <!-- CONFIGURACIONES DEL PANEL -->
     <div class="card shadow-lg ">
       <div class="card-header pb-0 pt-3 ">
         <div class="float-start">
-          <h5 class="mt-3 mb-0">Configurar tu interfáz</h5>
-          <p>Mira las opciones de configuración</p>
+          <h5 class="mt-3 mb-0">Soft UI Configurator</h5>
+          <p>See our dashboard options.</p>
         </div>
         <div class="float-end mt-4">
           <button class="btn btn-link text-dark p-0 fixed-plugin-close-button">
@@ -256,8 +211,8 @@
           <p class="text-sm">Puedes escojer entre dos tipos de sidebar.</p>
         </div>
         <div class="d-flex">
-          <button class="btn bg-gradient-primary w-100 px-3 mb-2 active" data-class="bg-transparent" onclick="sidebarType(this)">Transparente</button>
-          <button class="btn bg-gradient-primary w-100 px-3 mb-2 ms-2" data-class="bg-white" onclick="sidebarType(this)">Blanco</button>
+          <button class="btn bg-gradient-primary w-100 px-3 mb-2 active" data-class="bg-transparent" onclick="sidebarType(this)">Transparent</button>
+          <button class="btn bg-gradient-primary w-100 px-3 mb-2 ms-2" data-class="bg-white" onclick="sidebarType(this)">White</button>
         </div>
         <p class="text-sm d-xl-none d-block mt-2">Solo puedes cambiar la transparecia del seidebar en la vista de escritorio.</p>
 
@@ -270,9 +225,7 @@
         </div>
       </div>
     </div>
-
   </div>
- 
   <!-- SWEET ALERT -->
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
@@ -289,111 +242,175 @@ document.addEventListener("DOMContentLoaded",()=>{
 
   /* INSTANCIAS */
   const global = new FunGlobal();
+  const sAlert = new Alert();
 
   const $ = id => global.$(id);
   const $All = id => global.$All(id);
 
-  /* VALOR EN LA URL */
-  const stringQuery = window.location.search;
-  const url = new URLSearchParams(stringQuery);
-  const code = url.get("id");
-  const codeName = url.get("name");
+  let dataClient;
+  let dataClients;
 
-  const idProyecto = atob(code); //DECOFICA EL VALOR
-  const name = atob(codeName);
+  let url = window.location.search;
+  let stringQuery = new URLSearchParams(url);
+  let code = stringQuery.get("id");
+  let idCliente = atob(code);
 
-  let timer;
-
-  function renderAssets(results){
-
-    let numberRow = 1;
-
-    $("#table-assets tbody").innerHTML = "";
-    $("#render-error").innerHTML = "";
-
-    let newRow = ``;
-
-    if(results.length > 0){
-      results.forEach(asset =>{
-        
-        let code = btoa(asset.idactivo) //CODIFICACIÓN
-  
-        let IconStatus = asset.estado == "SIN VENDER" ?  `<span class="badge badge-sm bg-danger">${asset.estado}</span>` : 
-                                        asset.estado == "VENDIDO" ? `<span class="badge badge-sm bg-success">${asset.estado}</span>`: 
-                                                                  `<span class="badge badge-sm bg-warning">${asset.estado}</span>` ;
-  
-        newRow = `
-                <tr>
-                  <td>
-                    <div class="d-flex px-2 py-1">
-                      <div class="d-flex flex-column justify-content-center">
-                        <h6 class="mb-0 text-sm">${numberRow}</h6>
-                      </div>
-                    </div>
-                  </td>
-                  <td>
-                    <p class="text-xs font-weight-bold mb-0">${asset.propietario_lote}</p>
-                    </td>
-                  <td>
-                    <p class="text-xs font-weight-bold mb-0">${asset.tipo_activo}</p>
-                    </td>
-                    <td class="align-middle text-center text-sm">
-                      ${IconStatus}
-                    </td>
-                    <td>
-                      <p class="text-xs font-weight-bold mb-0">${asset.sublote}</p>
-                    </td>
-                  <td>
-                    <p class="text-xs font-weight-bold mb-0">${asset.direccion}</p>
-                  </td>
-                  <td class="align-middle">
-                    <div class="btn-group">
-                        <a type="button" href="./delete_asset.php?id=${code}" class="btn btn-link text-danger text-gradient px-3 mb-0" id="btn-delete"><i class="bi bi-trash-fill"></i></a>
-                        <a type="button" href="./edit_asset.php?id=${code}" class="btn btn-link text-dark px-3 mb-0" id="btn-edit"><i class="bi bi-pencil-fill"></i></a>
-                        <a type="button" href="./detail_asset.php?id=${code}" class="btn btn-link text-success px-3 mb-0"><i class="bi bi-arrow-right-square"></i></a>
-                        </div>
-                    </td>
-                </tr>           
-        `;
-        numberRow ++;
-
-        $("#table-assets tbody").innerHTML += newRow;
-      });
-
-    }else{
-      newRow =`
-      <div class="alert alert-danger m-4 text-white" role="alert">
-          <strong class="text-white">No existe lotes</strong> Asegurate de que existan los registros.
-      </div>
-      `;
-      $("#render-error").innerHTML += newRow;
-    }
-    
-
-  }
-
-
-  async function getAssets(id){
+  //Obtiene los datos del cliente
+  async function getClient(id){
 
     try{
 
-      $("#add-asset").setAttribute("href",`./add_asset.php?idproy=${code}&name=${codeName}`);
-      $("#go_to_list").setAttribute("href",`./list_clients.php?id=${code}&name=${codeName}`)
-
-      let url ="../../Controllers/asset.controller.php";
+      let url ="../../Controllers/client.controller.php";
       let params = new FormData();
   
-      params.append("action","listAssetProjectId");
-      params.append("idproyecto",id);
-      params.append("propietario_lote",$("#propietario_lote").value);
+      params.append("action","listClientById");
+      params.append("idcliente",id);
 
       results = await global.sendAction(url, params);
 
       if(results){
-        $("#cabezera").innerHTML = "";
-        $("#cabezera").innerText +=`LOTES - ${name}`;
-        renderAssets(results);
 
+        console.log(results);
+        dataClient = results;
+
+        let row = "";
+        row = `
+            <div class="row">
+              <div class="col-md-6">
+                <h3><strong>Tipo de persona :</strong></h3>
+              </div>
+              <div class="col-md-6">
+                <h4 id="sublote"> ${dataClient.tipo_persona} </h4>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-6">
+                <h3><strong>Tipo de documento :</strong></h3>
+              </div>
+              <div class="col-md-6">
+                <h4 id="sublote"> ${dataClient.documento_tipo} </h4>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-6">
+                <h3><strong>Nº de documento :</strong></h3>
+              </div>
+              <div class="col-md-6">
+                <h4 id="sublote"> ${dataClient.documento_nro} </h4>
+              </div>
+            </div>
+        `;
+        if(dataClient.tipo_persona == "JURÍDICA"){
+          $("#card-title").innerHTML = dataClient.razon_social;
+
+          row += `
+
+              <div class="row">
+                <div class="col-md-6">
+                  <h3><strong>Razón social :</strong></h3>
+                </div>
+                <div class="col-md-6">
+                  <h4 id="sublote"> ${dataClient.razon_social} </h4>
+                </div>
+              </div>
+
+              <hr>
+              <h3><strong>Razón Datos del representante :</strong></h3>
+              <br>
+
+              <div class="row">
+                <div class="col-md-6">
+                  <h3><strong>Nombres y apellidos :</strong></h3>
+                </div>
+                <div class="col-md-6">
+                  <h4 id="sublote"> ${dataClient.representante_legal} </h4>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-6">
+                  <h3><strong>Tipo de documento :</strong></h3>
+                </div>
+                <div class="col-md-6">
+                  <h4 id="sublote"> ${dataClient.repDocumento_tipo} </h4>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-6">
+                  <h3><strong>Nº de documento :</strong></h3>
+                </div>
+                <div class="col-md-6">
+                  <h4 id="sublote"> ${dataClient.repDocumento_nro} </h4>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-6">
+                  <h3><strong>Cargo :</strong></h3>
+                </div>
+                <div class="col-md-6">
+                  <h4 id="sublote"> ${dataClient.cargo} </h4>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-6">
+                  <h3><strong>Partida electrónica :</strong></h3>
+                </div>
+                <div class="col-md-6">
+                  <h4 id="sublote"> ${dataClient.partida_elect} </h4>
+                </div>
+              </div>
+              `;
+
+        }else{
+          $("#card-title").innerHTML = dataClient.apellidos + ", " + dataClient.nombres;
+          row += `
+              <div class="row">
+                <div class="col-md-6">
+                  <h3><strong>Apellidos :</strong></h3>
+                </div>
+                <div class="col-md-6">
+                  <h4 id="sublote"> ${dataClient.apellidos} </h4>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-6">
+                  <h3><strong>Nombres :</strong></h3>
+                </div>
+                <div class="col-md-6">
+                  <h4 id="sublote"> ${dataClient.nombres} </h4>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-6">
+                  <h3><strong>Estado civil :</strong></h3>
+                </div>
+                <div class="col-md-6">
+                  <h4 id="sublote"> ${dataClient.estado_civil} </h4>
+                </div>
+              </div>
+              
+              <div class="row">
+                <div class="col-md-6">
+                  <h3><strong>Nombres :</strong></h3>
+                </div>
+                <div class="col-md-6">
+                  <h4 id="sublote"> ${dataClient.nacionalidad} </h4>
+                </div>
+              </div>
+
+              `;
+          
+          
+        }
+
+        $("#data-client").innerHTML += row;
       }
     }
     catch(e){
@@ -401,54 +418,55 @@ document.addEventListener("DOMContentLoaded",()=>{
     }
   }
 
-  async function searchAsset(idproy,sublote){
+  //Agrega un cliente
+  async function deleteClient(id){
+
     try{
 
-      let url = `../../Controllers/asset.controller.php`;
+      let url = "../../Controllers/client.controller.php";
+
       let params = new FormData();
+      params.append("action","inactiveClient")
+      params.append("idcliente",id)
+      
+      let result = await global.sendAction(url, params);
 
-      params.append("action", "listAssetPAcode");
-      params.append("idproyecto",idproy);
-      params.append("sublote",sublote);
+      if(result){
 
-      let results = await global.sendAction(url, params);
+        console.log(result.filasAfect);
+        if(result.filasAfect > 0){
 
-      if(results){
-        console.log(results)
-        renderAssets(results);
+          sAlert.sweetSuccess("Se elminó el registro","El registro se ha eliminado de forma exitosa",()=>{
+    
+            window.location.href = "./index.php";
+          });
+
+        }else{
+          sAlert.sweetError("No se eliminó el registro","Vuelve a intentarlo");
+        }
+
+      }else{
+        sAlert.sweetError("No se eliminó el registro","Vuelve a intentarlo");
       }
     }
     catch(e){
+      
       console.error(e);
     }
   }
 
-  $("#in-sublote").addEventListener("input",()=>{
+  $("#eliminar").addEventListener("click",()=>{
 
-      clearTimeout(timer);
-
-        timer = setTimeout(()=>{
-
-          let sublote = $("#in-sublote").value;
-
-          if(sublote != ""){
-
-            searchAsset(idProyecto,sublote);
-
-          }else{
-
-            getAssets(idProyecto);
-          }
-        },1500)
-    });
-
-  $("#propietario_lote").addEventListener("change",()=>{
-
-    $("#table-assets tbody").innerHTML = "";
-    getAssets(idProyecto);
+    deleteClient(idCliente);
   });
 
-    getAssets(idProyecto);
+  $("#cancelar").addEventListener("click",()=>{
+
+    window.location.href = "./index.php";
+  });
+  
+  getClient(idCliente);
+  
 });
   </script>
   <script>

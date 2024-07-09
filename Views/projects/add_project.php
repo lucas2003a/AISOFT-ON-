@@ -214,6 +214,49 @@
                             </div>
                           </div>
 
+                          
+
+
+
+
+
+                        </div>
+
+                        <div class="col-md-6">
+                          <!-- DIRECCIÓN -->
+                          <div class="mt-4">
+                            <label for="direccion" class="form-label">Dirección</label>
+                            <input type="text" class="form-control" id="direccion" placeholder="Dirección" readonly required>
+                            <div class="invalid-feedback">
+                              Necesitas ingresar una dirección.
+                            </div>
+                            <div class="valid-feedback">
+                              Dirección ingresada correctamente.
+                            </div>
+                          </div>
+                          <!-- UBICACIÓN Y MEDIDAS-->
+
+                          <div class="d-none">
+
+                            <!-- LATITUD -->
+                            <div class="mt-4">
+                              <label for="latitud" class="form-label">Latitud</label>
+                              <input type="text" class="form-control" id="latitud">
+                              <div class="valid-feedback">
+                                <!-- -- -->
+                              </div>
+                            </div>
+  
+                            <!-- LONGITUD -->
+                            <div class="mt-4  ">
+                              <label for="longitud" class="form-label">Longitud</label>
+                              <input type="text" class="form-control" id="longitud">
+                              <div class="valid-feedback">
+                                <!-- -- -->
+                              </div>
+                            </div>
+                          </div>
+
                           <!-- CODIGO -->
                           <div class="mt-4">
                             <label for="codigo" class="form-label">Código</label>
@@ -237,46 +280,6 @@
                               Denominación ingresada correctamente.
                             </div>
                           </div>
-
-
-
-
-
-                        </div>
-
-                        <div class="col-md-6">
-                          <!-- DIRECCIÓN -->
-                          <div class="mt-4">
-                            <label for="direccion" class="form-label">Dirección</label>
-                            <input type="text" class="form-control" id="direccion" placeholder="Dirección" readonly required>
-                            <div class="invalid-feedback">
-                              Necesitas ingresar una dirección.
-                            </div>
-                            <div class="valid-feedback">
-                              Dirección ingresada correctamente.
-                            </div>
-                          </div>
-                          <!-- UBICACIÓN Y MEDIDAS-->
-
-                          <!-- LATITUD -->
-                          <div class="mt-4">
-                            <label for="latitud" class="form-label">Latitud</label>
-                            <input type="text" class="form-control" id="latitud">
-                            <div class="valid-feedback">
-                              <!-- -- -->
-                            </div>
-                          </div>
-
-                          <!-- LONGITUD -->
-                          <div class="mt-4  ">
-                            <label for="longitud" class="form-label">Longitud</label>
-                            <input type="text" class="form-control" id="longitud">
-                            <div class="valid-feedback">
-                              <!-- -- -->
-                            </div>
-                          </div>
-
-
                           <div class="d-grid p-3">
 
                             <button class="btn btn-success" type="submit" id="guardar" disabled>Guardar</button>

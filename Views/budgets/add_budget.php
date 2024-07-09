@@ -259,7 +259,7 @@
 
                       <div class="col-md-3">
                         <label for="cantidad" class="form-label">Cantidad</label>
-                        <input type="number" name="cantidad" id="cantidad" min="1.0" class="form-control" required>
+                        <input type="number" name="cantidad" id="cantidad" min="0.01" step="0.01" class="form-control" required>
                         <div class="invalid-feedback">
                           Necesitas ingresar la cantidad.
                         </div>
@@ -270,7 +270,7 @@
 
                       <div class="col-md-3">
                         <label for="precio_unitario" class="form-label">Precio Unitario</label>
-                        <input type="number" name="precio_unitario" id="precio_unitario" class="form-control" value="0.00" min="1.00" step="0.01" required>
+                        <input type="number" name="precio_unitario" id="precio_unitario" class="form-control" value="0.00" min="0.01" step="0.01" required>
                         <div class="invalid-feedback">
                           Necesitas ingresar el precio unitario.
                         </div>
