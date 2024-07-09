@@ -166,7 +166,7 @@
             </div>
             <hr>
             <div class="card-body px-0 pt-0 pb-2">
-              <div class="table-responsive text-center p-0">
+              <div class="table-responsive text-center p-0" style="height: 300px;">
                 <table class="table align-items-center mb-0 table-hover" id="table-separations">
                   <thead>
                     <tr>
