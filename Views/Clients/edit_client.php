@@ -78,11 +78,11 @@
         <nav aria-label="breadcrumb">
           <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
             <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="#">Dashboard</a></li>
-            <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="#">CLientes</a></li>
+            <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="#">Clientes</a></li>
             <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Editar clientes</li>
           </ol>
           <h6 class="font-weight-bolder mb-0" id="cabezera">EDITAR
-            CIENTES </h6>
+            CLIENTES </h6>
         </nav>
         <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
 
@@ -121,7 +121,7 @@
             <div class="card-header">
               
               <div class="row">
-                <div class="col-md-4">
+                <div class="col-md-3">
                   <!-- TIPO DE PERSONA -->
                   <div class="mt-4">
                     <label for="tipo_persona" class="form-label">Tipo de persona</label>
@@ -137,7 +137,7 @@
                     </div>
                   </div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-3">
                   
                   <!-- DOCUMENTO TIPO -->
                   <div class="mt-4">
@@ -158,7 +158,7 @@
                 <div class="col-md-4 mt-4">
                   <label for="documento_nro" class="form-label">Nº de documento</label>
                   <div class="row">
-                    <div class="col-md-9">
+                    <div class="col-md-8">
     
                       <input type="text" name="documento_nro" id="documento_nro" class="form-control" placeholder="Nº documento" required>
                       <div class="invalid-feedback">
@@ -168,7 +168,7 @@
                         Nº de documento ingresado correctamente.
                       </div>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-4">
                       <button type="submit" class="btn btn-success" id="buscar" disabled>Buscar</button>
     
                     </div>
@@ -177,9 +177,9 @@
                 </div>
               </div>
             </div>
+            <hr>
             <div class="card-body">
               <div class="row">
-                <hr>
                 <div class="col-md-6">
     
                   <!-- DATOS GENERALES -->

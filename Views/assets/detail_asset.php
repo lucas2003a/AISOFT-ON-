@@ -122,7 +122,7 @@
           <!-- IMAGEN -->
           <div class="row">
             <div class="col-xl-6 mb-xl-0 mb-4">
-              <div class="card bg-transparent shadow-xl" style="height: 100%;">
+              <div class="card bg-transparent shadow-xl " style="height: 100%;">
                 <div class="overflow-hidden position-relative border-radius-xl" style="background-image: url('../../assets/img/curved-images/curved14.jpg');" id="imagen">
                   <span class="mask bg-gradient-dark" id="mask"></span>
                   <div class="card-body position-relative z-index-1 p-3">
@@ -876,7 +876,7 @@
 
             $("#cabezera").innerHTML += `${result.sublote} - ${result.denominacion}`;
 
-            $("#imagen").setAttribute("style", `background-image: url('../../media/lotes/${imagen}');background-size: cover; background-repeat: no-repeat; height:12rem; width: 100%`);
+            $("#imagen").setAttribute("style", `background-image: url('../../media/lotes/${imagen}');background-size: cover; background-repeat: no-repeat; height:100%; width: 100%`);
             $("#mask").classList.remove("bg-gradient-dark");
             $("#moneda_venta").innerText = result.moneda_venta;
             $("#precio_lote").innerText = result.precio_lote;

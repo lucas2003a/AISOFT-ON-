@@ -611,46 +611,6 @@
 
                 if (results.length > 0) {
 
-
-
-                    // ! Datos de prueba BORRAR
-                    let nuevas_ventas = [{
-                            mes: 2,
-                            cantidad: 15
-                        },
-                        {
-                            mes: 9,
-                            cantidad: 13
-                        },
-                        {
-                            mes: 3,
-                            cantidad: 12
-                        },
-                        {
-                            mes: 2,
-                            cantidad: 12
-                        },
-                        {
-                            mes: 8,
-                            cantidad: 19
-                        },
-                        {
-                            mes: 5,
-                            cantidad: 18
-                        },
-                        {
-                            mes: 4,
-                            cantidad: 15
-                        },
-                    ]
-
-                    nuevas_ventas.forEach(currentItem => {
-
-                        results.push(currentItem);
-                    });
-
-                    // ! FIN DE DATOS DE PRUEBA
-
                     for (const venta of results) {
 
                         venta.mes = await checkMonth(venta.mes);
@@ -676,90 +636,6 @@
                 let results = await global.sendAction(url, params);
 
                 if (results.length > 0) {
-                    
-
-                    // ! DATOS DE PRUEBA
-                        tipo1 = "POR CONTRATO";
-                        tipo2 = "POR SEPARACIÓN";
-
-
-                        const newData = [{
-                                cantidad: 3,
-                                tipo_devolucion: tipo2,
-                                mes: 2
-                            },
-                            {
-                                cantidad: 2,
-                                tipo_devolucion: tipo1,
-                                mes: 2
-                            },
-                            {
-                                cantidad: 2,
-                                tipo_devolucion: tipo1,
-                                mes: 3
-                            },
-                            {
-                                cantidad: 3,
-                                tipo_devolucion: tipo2,
-                                mes: 3
-                            },
-                            {
-                                cantidad: 3,
-                                tipo_devolucion: tipo1,
-                                mes: 4
-                            },
-                            {
-                                cantidad: 6,
-                                tipo_devolucion: tipo2,
-                                mes: 4
-                            },
-                            {
-                                cantidad: 5,
-                                tipo_devolucion: tipo1,
-                                mes: 5
-                            },
-                            {
-                                cantidad: 5,
-                                tipo_devolucion: tipo2,
-                                mes: 5
-                            },
-                            {
-                                cantidad: 11,
-                                tipo_devolucion: tipo2,
-                                mes: 8
-                            },
-                            {
-                                cantidad: 9,
-                                tipo_devolucion: tipo1,
-                                mes: 8
-                            },
-                            {
-                                cantidad: 7,
-                                tipo_devolucion: tipo1,
-                                mes: 9
-                            },
-                            {
-                                cantidad: 5,
-                                tipo_devolucion: tipo2,
-                                mes: 9
-                            },
-                            {
-                                cantidad: 4,
-                                tipo_devolucion: tipo2,
-                                mes: 10
-                            },
-                            {
-                                cantidad: 12,
-                                tipo_devolucion: tipo1,
-                                mes: 10
-                            },
-                        ]
-
-                        newData.forEach(currentItem => {
-                            results.push(currentItem);
-                        });
-
-                    // ! FIN DE DATOS DE PRUEBA
 
                     await renderRefunds(results);
                 }

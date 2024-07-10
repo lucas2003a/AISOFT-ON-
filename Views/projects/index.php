@@ -269,7 +269,6 @@
                     </a>
                     <ul class="dropdown-menu px-2 py-3 ms-sm-n4 ms-n5" aria-labelledby="dropdownTable">
                       ${options}
-                      <li><a class="dropdown-item border-radius-md "href="./${item.idproyecto}"><img src="../../assets/img/iconos/planet-earth.png" style="width: 24px;"> Mapa</a></li>
                     </ul>
                   </div>
                 </div>

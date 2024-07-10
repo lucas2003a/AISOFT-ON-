@@ -344,9 +344,9 @@
 
               let html = "";
               html = `
-              <li><strong>${element.clave}</strong>
+              <li><strong>${element.clave || "SIN REGISTRAR"}</strong>
                 <ul>
-                  <p>${element.valor}</p>
+                  <p>${element.valor || "SIN REGISTRAR"}</p>
                 </ul>
               </li>
               `;

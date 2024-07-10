@@ -125,9 +125,9 @@
 
                 </div>
               </div>
-              <div class="row d-flex" style="justify-content: space-between;">
+              <div class="row d-flex align-items-end" style="justify-content: space-between;">
 
-                <div class="col-md-3 d-grid">
+                <div class="col-md-3 d-flex align-items-end">
                   <a class="btn btn-outline-success btn-sm mb-0 me-3" href="./add_client.php" id="add-asset">AGREGAR CLIENTE</a>
                 </div>
 
@@ -136,7 +136,7 @@
                   <div class="row">
 
                     <div class="col-md-6">
-
+                      <label for="tipo_persona">Tipo de persona</label>
                       <select name="tipo_persona" class="form-select" id="tipo_persona">
                         <option value="NATURAL" selected>Tipo de persona</option>
                         <option value="JURÍDICA">Jurídica</option>
@@ -145,6 +145,7 @@
                     </div>
 
                     <div class="col-md-6">
+                      <label for="nro_documento">Nro de documento</label>
                       <div class="ms-md-auto pe-md-3 d-flex align-items-center">
                         <div class="input-group">
                           <span class="input-group-text text-body"><i class="fas fa-search" aria-hidden="true"></i></span>
@@ -632,8 +633,8 @@
 
             let code = btoa(client.idcliente) //CODIFICACIÓN
 
-            let clientNames = client.tipo_persona == "NATURAL" ? `<strong class="text-uppercase">${client.apellidos}</strong>, ${client.nombres}` :
-              `<strong class="text-uppercase">${client.razon_social}</strong>`;
+            let clientNames = client.tipo_persona == "NATURAL" ? `${client.apellidos.toLowerCase()}, ${client.nombres.toLowerCase()}` :
+              `${client.razon_social.toLowerCase()}`;
             newRow = `
                 <tr>
                   <td>

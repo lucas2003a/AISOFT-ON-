@@ -416,6 +416,14 @@
                 valor: result.modalidad_pago
               },
               {
+                clave: "Entidad Bancaria",
+                valor: result.entidad_bancaria || "SIN REGISTRAR"
+              },
+              {
+                clave: "Número de operación",
+                valor: result.nro_operacion || "SIN REGISTRAR"
+              },
+              {
                 clave: "Comprobante",
                 valor: "../../media/constancias_sep/" + result.imagen
               },
@@ -423,6 +431,7 @@
 
             $("#modalTitle").innerHTML = result.n_expediente;
 
+            divDetails.innerHTML = "";
             content.forEach(element => {
               let html = ``;
 
@@ -526,7 +535,7 @@
                   <tr>
                     <td class="text-xs">${numberRow}</td>
                     <td class="text-xs">${result.n_expediente}</td>
-                    <td class="text-xs">${result.cliente}</td> 
+                    <td class="text-xs">${result.cliente.toLowerCase()}</td> 
                     <td class="text-xs">${result.documento_tipo}</td> 
                     <td class="text-xs">${result.documento_nro}</td> 
                     <td class="text-xs">${result.separacion_monto}</td>

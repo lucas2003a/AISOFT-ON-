@@ -452,8 +452,8 @@
             <tr>
               <td class="text-sm">${numRow}</td>
               <td class="text-sm">${element.n_expediente}</td>
-              <td class="text-sm">${element.estado}</td>
-              <td class="text-sm">${element.cliente}</td>
+              <td class="text-sm">${element.estado.toLowerCase()}</td>
+              <td class="text-sm">${element.cliente.toLowerCase()}</td>
               <td class="text-sm">${element.documento_tipo}</td>
               <td class="text-sm">${element.documento_nro}</td>
               <td class="text-sm">${element.fecha_contrato}</td>

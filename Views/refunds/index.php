@@ -489,7 +489,7 @@
                   <tr>
                     <td class="text-xs text-truncate">${numberRow}</td>
                     <td class="text-xs text-truncate">${result.n_expediente}</td>
-                    <td class="text-xs text-truncate">${result.cliente}</td> 
+                    <td class="text-xs text-truncate">${result.cliente.toLowerCase()}</td> 
                     <td class="text-xs text-truncate">${result.documento_tipo}</td> 
                     <td class="text-xs text-truncate">${result.documento_nro}</td> 
                     <td class="text-xs text-truncate">${moneda[result.moneda_venta]}</td> 

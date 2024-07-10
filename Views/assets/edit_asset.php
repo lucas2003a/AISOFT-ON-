@@ -299,8 +299,33 @@
 
                             </div>
                             <div class="col-md-6">
+
+                            <!-- ÁREA COSNTRUCCIÓN -->
+                            <div class="">
+                              <label for="area_construccion">Área de construcción (m2)</label>
+                              <input type="number" id="area_construccion" class="form-control form-area" min="1" step="0.01" required>
+                              <div class="invalid-feedback">
+                                Registra el área de construcción
+                              </div>
+                              <div class="valid-feedback">
+                                Área de construcción registrada correctamente.
+                              </div>
+                             </div>
+
+                            <!-- ÁREA TECHADA -->
+                             <div class="mt-4">
+                              <label for="area_techada">Àrea techada  (m2)</label>
+                              <input type="number" name="area_techada" id="area_techada" class="form-control" min="1" step="0.01" required>
+                              <div class="invalid-feedback">
+                                Registra el área techada
+                              </div>
+                              <div class="valid-feedback">
+                                Área techada registrada correctamente.
+                              </div>
+                             </div>
+
                               <!-- PRESUPUESTO -->
-                              <div class="">
+                              <div class="mt-4">
                                 <label for="idpresupuesto" class="form-label">Presupuesto</label>
                                 <select class="form-select custom-select-scroll" id="idpresupuesto">
                                   <option value="">Presupuesto</option>
@@ -340,29 +365,7 @@
                               
                             
 
-                            <!-- ÁREA COSNTRUCCIÓN -->
-                             <div class="mt-4">
-                              <label for="area_construccion">Área de construcción (m2)</label>
-                              <input type="number" id="area_construccion" class="form-control form-area" min="1" step="0.01" required>
-                              <div class="invalid-feedback">
-                                Registra el área de construcción
-                              </div>
-                              <div class="valid-feedback">
-                                Área de construcción registrada correctamente.
-                              </div>
-                             </div>
-
-                            <!-- ÁREA TECHADA -->
-                             <div class="mt-4">
-                              <label for="area_techada">Àrea techada  (m2)</label>
-                              <input type="number" name="area_techada" id="area_techada" class="form-control" min="1" step="0.01" required>
-                              <div class="invalid-feedback">
-                                Registra el área techada
-                              </div>
-                              <div class="valid-feedback">
-                                Área techada registrada correctamente.
-                              </div>
-                             </div>
+                            
 
                              <div class="d-none">
 

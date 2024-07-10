@@ -120,7 +120,7 @@
               <div class="row">
                 <div class="col-md-6 mb-4">
 
-                  <h6 id="n_serie_contrato">CONT-00001</h6>
+                  <h6 id="n_serie_contrato"> -- </h6>
                 </div>
                 <div class="row d-flex space-between">
                   <div class="col-md-6">
@@ -153,9 +153,9 @@
               <div class="card-body px-0 pt-0 pb-2">
                 <div class="row mt-4 mb-4">
                   <div class="col-md-6 d-flex align-items-end">
-                    <buttton class="btn btn-outline-danger btn-sm mb-0 me-3" id="generate-report-pdf">Generar PDF</buttton>
-                    <buttton class="btn btn-outline-success btn-sm mb-0 me-3" id="generate-report-excel">Generar respote Excel</buttton>
-                    <a class="btn btn-outline-info btn-sm mb-0 me-3" href="" id="go-reprogram">Reprogramar</a>
+                    <buttton class="btn btn-outline-danger btn-sm mb-0 me-3" id="generate-report-pdf" title="Generar reporte PDF de las cuotas existentes">Reporte PDF</buttton>
+                    <buttton class="btn btn-outline-success btn-sm mb-0 me-3" id="generate-report-excel" title="Generar reporte Excel de las cuotas PAGADAS">Reporte Excel</buttton>
+                    <a class="btn btn-outline-info btn-sm mb-0 me-3" href="" id="go-reprogram" title="Reprogramar el pago de cuotas pagadas">Reprogramar</a>
                   </div>
                   <div class="col-md-6">
                     <div class="row">
@@ -329,6 +329,7 @@
           if (result) {
             console.log(result)
             moneda = result.moneda_venta == "SOL" ? "S/ " : "$/ ";
+            $("#n_serie_contrato").innerText = result.n_expediente;
           }
         } catch (e) {
           console.error(e);
@@ -474,16 +475,23 @@
 
             let isCount = results.data.reduce((total, cuota) => total + Number.parseFloat(cuota.deuda || 0), 0);
 
-            console.log(isCount);
+            let isCountForExcel = results.data.find(result => result.estado == "CANCELADO");
+
+            if(isCountForExcel){
+
+              $("#generate-report-excel").classList.remove("disabled"); 
+            }else{
+
+              $("#generate-report-excel").classList.add("disabled");
+            }
+
 
             if (!isCount) {
 
               $("#go-reprogram").classList.add("disabled");
-              $("#generate-report-excel").classList.add("disabled");
             } else {
-
+              
               $("#go-reprogram").classList.remove("disabled");
-              $("#generate-report-excel").classList.remove("disabled");
             }
 
             if (fechaAprox) {

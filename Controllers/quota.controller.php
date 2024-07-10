@@ -133,6 +133,7 @@ if(isset($_POST["action"])){
             $idcontrato = $_POST["idcontrato"];
 
             echo json_encode($quota->getQuotasContractReprogram($idcontrato));
+            break;
     
             /* -------------------------------------------------------------------------- */
             /*                                  GRÁFICOS                                  */

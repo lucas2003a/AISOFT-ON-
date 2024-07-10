@@ -156,7 +156,7 @@
                     </select>
                   </div>
                   <div class="col-md-6">
-                    <label for="" class="form-label">Busqueda</label>
+                    <label for="" class="form-label">Búsqueda</label>
                     <div class="input-group">
                       <span class="input-group-text text-body"><i class="fas fa-search" aria-hidden="true"></i></span>
                       <input type="text" class="form-control" placeholder="Escribe el Sublote..." id="in-sublote">

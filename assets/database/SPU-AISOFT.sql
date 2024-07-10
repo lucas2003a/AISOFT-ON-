@@ -2242,35 +2242,44 @@ CREATE PROCEDURE spu_list_separation_ByIdAsset
 )
 BEGIN
 
-    SELECT 
-        lcn.idseparacion,
-        lcn.idcliente,
-        lcn.cliente,
-        lcn.documento_nro,
-        lcn.documento_tipo,
-        lcn.tipo_persona,
-        lcn.existe_contrato
-    FROM
-        vws_list_separations_tpersona_natural_full lcn
-        LEFT JOIN separaciones sep ON sep.idseparacion = lcn.idseparacion
-    WHERE
-        sep.idactivo = _idactivo
-        AND lcn.inactive_at IS NULL
-    UNION
-    SELECT 
-        lcj.idseparacion,
-        lcj.idcliente,
-        lcj.cliente,
-        lcj.documento_nro,
-        lcj.documento_tipo,
-        lcj.tipo_persona,
-        lcj.existe_contrato
-    FROM
-        vws_list_separations_tpersona_juridica_full lcj
-        LEFT JOIN separaciones sep ON sep.idseparacion = lcj.idseparacion
-    WHERE
-    sep.idactivo = _idactivo
-    AND lcj.inactive_at IS NULL;
+	DECLARE _isSeparation BIT;
+    
+    SET _isSeparation = (SELECT 1 FROM separaciones WHERE idactivo = _idactivo);
+    
+    IF _isSeparation > 0 THEN 
+		SELECT 
+			lcn.idseparacion,
+			lcn.idcliente,
+			lcn.cliente,
+			lcn.documento_nro,
+			lcn.documento_tipo,
+			lcn.tipo_persona,
+			lcn.existe_contrato
+		FROM
+			vws_list_separations_tpersona_natural_full lcn
+			LEFT JOIN separaciones sep ON sep.idseparacion = lcn.idseparacion
+		WHERE
+			sep.idactivo = _idactivo
+			AND lcn.inactive_at IS NULL
+		UNION
+		SELECT 
+			lcj.idseparacion,
+			lcj.idcliente,
+			lcj.cliente,
+			lcj.documento_nro,
+			lcj.documento_tipo,
+			lcj.tipo_persona,
+			lcj.existe_contrato
+		FROM
+			vws_list_separations_tpersona_juridica_full lcj
+			LEFT JOIN separaciones sep ON sep.idseparacion = lcj.idseparacion
+		WHERE
+		sep.idactivo = _idactivo
+		AND lcj.inactive_at IS NULL;
+    ELSE
+		SELECT * FROM vws_list_contracts WHERE idactivo = _idactivo;
+    END IF;
+    
 END$$
 
 DELIMITER ;

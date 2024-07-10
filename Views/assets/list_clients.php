@@ -145,10 +145,18 @@
                 </div>
 
                 <div class="col-md-6">
-                  <label for="" class="form-label">Busqueda</label>
-                  <div class="input-group">
-                    <span class="input-group-text text-body"><i class="fas fa-search" aria-hidden="true"></i></span>
-                    <input type="text" class="form-control" placeholder="Escribe nº de documeto" id="in-doc">
+                  <div class="row">
+                    <div class="col-md-6">
+
+                    </div>
+                    <div class="col-md-6">
+
+                      <label for="" class="form-label">Búsqueda</label>
+                      <div class="input-group">
+                        <span class="input-group-text text-body"><i class="fas fa-search" aria-hidden="true"></i></span>
+                        <input type="text" class="form-control" placeholder="Escribe nº de documeto" id="in-doc">
+                      </div>
+                    </div>
                   </div>
                 </div>
 
@@ -309,7 +317,7 @@
               <td class="text-sm">${num}</td>
               <td class="text-sm">${element.sublote}</td>
               <td class="text-sm">${element.tipo}</td>
-              <td class="text-sm">${element.cliente}</td>
+              <td class="text-sm">${element.cliente.toLowerCase()}</td>
               <td class="text-sm">${element.documento_tipo}</td>
               <td class="text-sm">${element.documento_nro}</td>
               <td class="text-sm">${element.tipo_persona}</td>
